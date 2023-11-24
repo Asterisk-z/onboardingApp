@@ -126,9 +126,9 @@ import Error404Modern from "../pages/error/404-modern";
 import Error504Modern from "../pages/error/504-modern";
 import Error504Classic from "../pages/error/504-classic";
 
-import Login from "../pages/auth/Login";
-import Register from "../pages/auth/Register";
-import ForgotPassword from "../pages/auth/ForgotPassword";
+import Login from "../main/auth/Login";
+import Register from "../main/auth/Register";
+import ForgotPassword from "../main/auth/ForgotPassword";
 import Success from "../pages/auth/Success";
 
 import Layout from "../layout/Index";

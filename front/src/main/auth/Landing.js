@@ -83,9 +83,9 @@ const Landing = ({ ...props }) => {
 
                 <p>By clicking “Agree”, you confirm that you have read and understood the foregoing and consent to the collection, use, storage, processing, transfer and disclosure of your personal information in accordance with the Exchange’s Privacy Policy</p>
 
-                <div className="flex-button">
+                <div className="flex-button ">
+                  <button className="rjt-btn" onClick={() => handleOptionClick('reject')}>Reject</button>
                   <button onClick={() => handleOptionClick('accept')}>Accept</button>
-                  <button onClick={() => handleOptionClick('reject')}>Reject</button>
                 </div>
                 <div className="flex-button">
                   <button onClick={handleContinueClick} disabled={!selectedOption}> Confirm and Continue</button>

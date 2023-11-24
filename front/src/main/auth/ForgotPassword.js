@@ -2,7 +2,7 @@ import React from "react";
 import Logo from "../../images/logo.png";
 import LogoDark from "../../images/logo-dark.png";
 import Head from "../../layout/head/Head";
-import AuthFooter from "./AuthFooter";
+import AuthFooter from "../../pages/auth/AuthFooter";
 import { Block, BlockContent, BlockDes, BlockHead, BlockTitle, Button, PreviewCard } from "../../components/Component";
 import { Link } from "react-router-dom";
 
@@ -10,13 +10,8 @@ const ForgotPassword = () => {
   return (
     <>
       <Head title="Forgot-Password" />
+      <div className="login-block">
         <Block className="nk-block-middle nk-auth-body  wide-xs">
-          <div className="brand-logo pb-4 text-center">
-            <Link to={process.env.PUBLIC_URL + "/"} className="logo-link">
-              <img className="logo-light logo-img logo-img-lg" src={Logo} alt="logo" />
-              <img className="logo-dark logo-img logo-img-lg" src={LogoDark} alt="logo-dark" />
-            </Link>
-          </div>
           <PreviewCard className="card-bordered" bodyClass="card-inner-lg">
             <BlockHead>
               <BlockContent>
@@ -47,13 +42,13 @@ const ForgotPassword = () => {
               </div>
             </form>
             <div className="form-note-s2 text-center pt-4">
-              <Link to={`${process.env.PUBLIC_URL}/auth-login`}>
+              <Link to={`${process.env.PUBLIC_URL}/login`}>
                 <strong>Return to login</strong>
               </Link>
             </div>
           </PreviewCard>
         </Block>
-        <AuthFooter />
+      </div>
     </>
   );
 };

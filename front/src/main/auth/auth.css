@@ -28,6 +28,11 @@ a {
     color:#1D326C;
 }
 
+.flex {
+    display: flex;
+    gap: 4px;
+}
+
 .flex-button {
     display: flex;
     width: 100%;
@@ -55,4 +60,59 @@ a {
 .flex-button button:focus {
     background-color: red;
     color: #fff;
+}
+
+.flex-button .rjt-btn {
+    color: #1D326C;
+    outline: none;
+    border: 1px solid #1D326C;
+    background-color: transparent;
+    padding: 5px 7px;
+    border-radius: 5px;
+}
+
+.login-block {
+    background-image: url(../../images/fmdq/Login-bg.png);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    background-repeat: repeat;
+}
+
+.w-50 {
+    width: 50%;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.g-4 {
+    gap: 4;
+}
+
+select{
+    outline: none;
+    height: 40px;
+    border: 1px solid #dbdfea;
+    border-radius: 5px;
+}
+
+.checkbox-flex {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 10px;
+    font-size: 12px;
+}
+
+@media (max-width: 768px){
+    .flex {
+        display: flex;
+        flex-direction: column;
+    }
+    .w-50 {
+        width: 100%;
+    }
 }
