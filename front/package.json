@@ -1,6 +1,6 @@
 {
   "name": "MROIS",
-  "homepage": "http://localhost:3000/breeze/admin",
+  "homepage": "http://localhost:3000/front/",
   "version": "1.7.1",
   "private": true,
   "dependencies": {

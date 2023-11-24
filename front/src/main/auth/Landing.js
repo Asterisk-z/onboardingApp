@@ -16,7 +16,7 @@ const Landing = ({ ...props }) => {
 
   const handleContinueClick = () => {
     if (selectedOption === 'accept') {
-      navigate('/breeze/login');
+      navigate(process.env.PUBLIC_URL+'/login');
     } else if (selectedOption === 'reject') {
       window.location.href = 'https://fmdqgroup.com/exchange/membership/' ;
     }
