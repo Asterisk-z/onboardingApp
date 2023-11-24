@@ -1,0 +1,58 @@
+.padding {
+    padding: 20px;
+}
+
+.image {
+    width: 200px;
+}
+
+.title-header {
+    text-align: center;
+    color: white;
+    padding: 10px; 
+    border-radius: 5px;
+    background: #1D326C;
+    width: 100%;
+}
+
+.title {
+    color: #1D326C;
+    margin-top: 20px;
+}
+
+b {
+    color:black
+}
+
+a {
+    color:#1D326C;
+}
+
+.flex-button {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    margin: 10px 0;
+}
+
+.flex-button button {
+    color: #fff;
+    outline: none;
+    border: 1px solid #1D326C;
+    background-color: #1D326C;
+    padding: 5px 7px;
+    border-radius: 5px;
+}
+
+.flex-button button:hover {
+    color: #000;
+    border: 1px solid #1D326C;
+    background-color: transparent;
+}
+
+.flex-button button:focus {
+    background-color: red;
+    color: #fff;
+}

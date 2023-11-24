@@ -1,138 +1,95 @@
-import React from "react";
+import React, { useState, } from "react";
+import { useNavigate } from 'react-router-dom';
 import { Block, BlockDes, BlockHead, BlockHeadContent, BlockTitle, PreviewCard } from "../../components/Component";
 import Content from "../../layout/content/Content";
 import Head from "../../layout/head/Head";
+import Logo from "../../images/fmdq/FMDQ-Logo.png";
+import "./auth.css";
 
 const Landing = ({ ...props }) => {
+  const navigate = useNavigate();
+  const [selectedOption, setSelectedOption] = useState(null);
+
+  const handleOptionClick = (option) => {
+    setSelectedOption(option);
+  };
+
+  const handleContinueClick = () => {
+    if (selectedOption === 'accept') {
+      navigate('/breeze/login');
+    } else if (selectedOption === 'reject') {
+      window.location.href = 'https://fmdqgroup.com/exchange/membership/' ;
+    }
+  };
+
   return (
     <React.Fragment>
-      <Head title="Landing &amp; Conditions" />
+      <Head title="Privacy Notice" />
       <Content>
-        <div className="content-page wide-md m-auto">
+        <div className="content-page wide-md m-auto padding">
           <BlockHead size="lg" wide="xs" className="mx-auto">
             <BlockHeadContent className="text-center">
-              <BlockTitle tag="h2" className="fw-normal">
-                Landing &amp; Policy
-              </BlockTitle>
-              <BlockDes>
-                <p className="lead">
-                  We are on a mission to make the web a better place. The following terms, as well as our Policy and
-                  Terms of Service, apply to all users.
-                </p>
-                <p className="text-soft ff-italic">Last Update: Nov 12, 2019</p>
-              </BlockDes>
+              <img src={Logo} alt="fmdq logo" className="image" />
             </BlockHeadContent>
           </BlockHead>
           <Block>
             <PreviewCard className="card-bordered">
               <div className="entry">
-                <h3>Terms and Conditions</h3>
+                <h4 className="title-header">FMDQ Privacy Notice</h4>
+                <h4 className="title">Consent Requirement</h4>
                 <p>
-                  We’ve decided to make these Terms available under a <strong>Creative Commons</strong> license. You can
-                  grab a copy of these Terms and other legal documents on Github. You’re more than welcome to copy them,
-                  adapt them, and repurpose them for your own use.
+                FMDQ Securities Exchange Limited (the “Exchange”) is (i) committed to treating your personal information as private and confidential, and (ii) dedicated to ensuring that personal information provided is treated in accordance with best practice and extant regulation. The Exchange will process your personal information where consent has been provided or in accordance with the law. You may withdraw your consent at any given time and inform the Exchange in writing of the withdrawal. However, the withdrawal of the consent shall not affect the lawfulness of processing based on consent before withdrawal.
                 </p>
-                <h4>Introduction</h4>
+
                 <p>
-                  These Website Standard Terms and Conditions written on this webpage shall manage your use of our
-                  website, Webiste Name accessible at Website.com.
+                  We hereby request that you provide the Exchange with your consent to collect and process your personal information by clicking the applicable check box further below.
                 </p>
+        
+                <h4 className="title">Collectable Information</h4>
                 <p>
-                  These Terms will be applied fully and affect to your use of this Website. By using this Website, you
-                  agreed to accept all terms and conditions written in here. You must not use this Website if you
-                  disagree with any of these Website Standard Terms and Conditions.
+                  We collect personal information directly from you and where lawful and reasonable, we may collect personal information about you from third parties and publicly available sources such as government and regulatory agencies. The personal information that we collect include (but are not limited to) your name, address, age, gender, account details, passport details, bank verification number, biometric information, telephone number, email address, occupation, and other information that the Exchange deems necessary for provision of its services to you.
                 </p>
-                <p>Minors or people below 18 years old are not allowed to use this Website.</p>
-                <h4>Intellectual Property Rights</h4>
+                
+                <h4 className="title">Purpose of Collection of Personal Information</h4>
                 <p>
-                  Other than the content you own, under these Terms, Company Name and/or its licensors own all the
-                  intellectual property rights and materials contained in this Website.
+                  Your information will be collected and processed for the purpose of onboarding you as a Member of the Exchange and in continuing our business relationship with you. The Exchange will also collect and process your personal information to comply with applicable law, regulatory requirements, and as a self-regulatory organisation.
                 </p>
-                <p>
-                  You are granted limited license only for purposes of viewing the material contained on this Website.
-                </p>
-                <h4>Restrictions</h4>
-                <p>You are specifically restricted from all of the following:</p>
-                <ul className="list list-sm list-checked">
-                  <li>Publishing any Website material in any other media;</li>
-                  <li>Selling, sublicensing and/or otherwise commercializing any Website material;</li>
-                  <li>Publicly performing and/or showing any Website material;</li>
-                  <li>Using this Website in any way that is or may be damaging to this Website;</li>
-                  <li>Using this Website in any way that impacts user access to this Website;</li>
-                  <li>
-                    Using this Website contrary to applicable laws and regulations, or in any way may cause harm to the
-                    Website, or to any person or business entity;
-                  </li>
-                  <li>
-                    Engaging in any data mining, data harvesting, data extracting or any other similar activity in
-                    relation to this Website;
-                  </li>
-                  <li>Using this Website to engage in any advertising or marketing.</li>
-                  <li>
-                    Certain areas of this Website are restricted from being access by you and Company Name may further
-                    restrict access by you to any areas of this Website, at any time, in absolute discretion. Any user
-                    ID and password you may have for this Website are confidential and you must maintain confidentiality
-                    as well.
-                  </li>
-                </ul>
-                <h4>Your Content</h4>
-                <p>
-                  In these Website Standard Terms and Conditions, “Your Content” shall mean any audio, video text,
-                  images or other material you choose to display on this Website. By displaying Your Content, you grant
-                  Company Name a non-exclusive, worldwide irrevocable, sub licensable license to use, reproduce, adapt,
-                  publish, translate and distribute it in any and all media.
-                </p>
-                <p>
-                  Your Content must be your own and must not be invading any third-party"s rights. Company Name reserves
-                  the right to remove any of Your Content from this Website at any time without notice.
-                </p>
-                <h4>No warranties</h4>
-                <p>
-                  This Website is provided “as is,” with all faults, and Company Name express no representations or
-                  warranties, of any kind related to this Website or the materials contained on this Website. Also,
-                  nothing contained on this Website shall be interpreted as advising you.
-                </p>
-                <h4>Limitation of liability</h4>
-                <p>
-                  In no event shall Company Name, nor any of its officers, directors and employees, shall be held liable
-                  for anything arising out of or in any way connected with your use of this Website whether such
-                  liability is under contract. Company Name, including its officers, directors and employees shall not
-                  be held liable for any indirect, consequential or special liability arising out of or in any way
-                  related to your use of this Website.
-                </p>
-                <h4>Indemnification</h4>
-                <p>
-                  You hereby indemnify to the fullest extent Company Name from and against any and/or all liabilities,
-                  costs, demands, causes of action, damages and expenses arising in any way related to your breach of
-                  any of the provisions of these Terms.
-                </p>
-                <h4>Severability</h4>
-                <p>
-                  If any provision of these Terms is found to be invalid under any applicable law, such provisions shall
-                  be deleted without affecting the remaining provisions herein.
-                </p>
-                <h4>Variation of Terms</h4>
-                <p>
-                  Company Name is permitted to revise these Terms at any time as it sees fit, and by using this Website
-                  you are expected to review these Terms on a regular basis.
-                </p>
-                <h4>Assignment</h4>
-                <p>
-                  The Company Name is allowed to assign, transfer, and subcontract its rights and/or obligations under
-                  these Terms without any notification. However, you are not allowed to assign, transfer, or subcontract
-                  any of your rights and/or obligations under these Terms.
-                </p>
-                <h4>Entire Agreement</h4>
-                <p>
-                  These Terms constitute the entire agreement between Company Name and you in relation to your use of
-                  this Website, and supersede all prior agreements and understandings.
-                </p>
-                <h4>Governing Law &amp; Jurisdiction</h4>
-                <p>
-                  These Terms will be governed by and interpreted in accordance with the laws of the State of Country,
-                  and you submit to the non-exclusive jurisdiction of the state and federal courts located in Country
-                  for the resolution of any disputes.
-                </p>
+
+                <h4 className="title">Technical Methods Used to Collect and Store Information</h4>
+                <p>The methods and mediums used by the Exchange in the collection of personal information include: (a) Online forms embedded on the Member Regulation Oversight Information System; (b) Contracts and Agreements; (c) Surveys and Questionnaires; (d) Interviews; (e) Other systems to which access has been granted by virtue of your membership; and (f) Website visits. Your personal information will be retained and stored for the period in which it is needed for the purposes set out in this Notice or in line with relevant legal and regulatory requirements.</p>
+
+                <h4 className="title">Third Party Access to Personal Information</h4>
+                <p>The Exchange is the recipient of your personal data. In the course of providing services to you, the data collected may be shared with other FMDQ associated entities under FMDQ Group and service providers engaged by us. We will not disclose your personal information to external organisations that are not our service providers unless you give us your consent, or required by law to do so, or where necessary to the conclusion of performance of our obligations to you. In addition, we may transfer your personal information out of Nigeria in line with the requirements of the Nigeria Data Protection Regulation, 2019. We may also share your information where there is a regulatory or statutory obligation to disclose such personal information in accordance with the provisions of applicable laws.</p>
+
+                <h4 className="title">Principles Governing Data Processing</h4>
+                <p>The collection and use of your personal information by the Exchange is guided by certain principles which include, data accuracy, data authorisation, data limitation, data security, data confidentiality, data retention, and data accountability.</p>
+
+                <h4 className="title">Available Remedies in the Event of Violation and Timeframe for Remedy</h4>
+                <p>You have a right to withdraw consent for processing your personal information in cases where consent has previously been given, and the right to rectify inaccurate and incomplete information at any time, and the Exchange shall upon receipt of such request, ensure same is rectified without delay and at least within one month. You also have the right to request from the Exchange, access and the ability to rectify your personal information, restriction of the processing of your personal information, request for deletion of your personal information or to object to the processing as well the right to data portability.</p>
+                <p>The Member can also contact the Exchange's Data Protection Officer:</p>
+                <b>Contact Name: Babajide Bayode</b>
+                <br/>
+                <b>Email: privacypolicy@fmdqgroup.com</b>
+
+                <h4 className="title">Limitation of Liability Clause</h4>
+                <p>The Exchange will not be liable for any inaccurate personal information provided by the Member.</p>
+
+                <h4 className="title">Changes to our Privacy Notice</h4>
+                <p>Due to constant changes in technology and regulatory requirements, we may need to change or update this Notice from time to time. You will always be able to find the most recent version of this Notice on this system.</p>
+
+                <h4 className="title">Additional Information</h4>
+                <p>For additional information on the Exchange’s Privacy Policy please visit our website: <a href="https://www.fmdqgroup.com/privacy-policy/" target="_blank" rel="noreferrer" style={{ color: '#1D326C'}}>www.fmdqgroup.com/privacy-policy</a></p>
+                
+
+                <p>By clicking “Agree”, you confirm that you have read and understood the foregoing and consent to the collection, use, storage, processing, transfer and disclosure of your personal information in accordance with the Exchange’s Privacy Policy</p>
+
+                <div className="flex-button">
+                  <button onClick={() => handleOptionClick('accept')}>Accept</button>
+                  <button onClick={() => handleOptionClick('reject')}>Reject</button>
+                </div>
+                <div className="flex-button">
+                  <button onClick={handleContinueClick} disabled={!selectedOption}> Confirm and Continue</button>
+                </div>
               </div>
             </PreviewCard>
           </Block>
