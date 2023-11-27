@@ -1,13 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Logo from "../../images/logo.png";
-import LogoDark from "../../images/logo-dark.png";
 import Head from "../../layout/head/Head";
-import AuthFooter from "../../pages/auth/AuthFooter";
 import {
   Block,
   BlockContent,
-  BlockDes,
   BlockHead,
   BlockTitle,
   Button,
