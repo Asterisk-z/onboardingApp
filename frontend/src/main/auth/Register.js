@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Head from "../../layout/head/Head";
 import {
   Block,
-  BlockContent,
+  BlockHeadContent,
   BlockHead,
   BlockTitle,
   Button,
@@ -13,6 +13,7 @@ import {
 import { Spinner } from "reactstrap";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import Logo from "../../images/fmdq/FMDQ-Logo.png";
 
 const Register = () => {
   const [passState, setPassState] = useState(false);
@@ -35,9 +36,10 @@ const Register = () => {
           </div>
           <PreviewCard className="card-bordered" bodyClass="card-inner">
             <BlockHead>
-              <BlockContent>
-                <BlockTitle tag="h4">Register</BlockTitle>
-              </BlockContent>
+            <BlockHeadContent className="text-center">
+              <img src={Logo} alt="fmdq logo" className="image" />
+              <h4 className="mrois-title">Members Registration Oversight Information System (MROIS)</h4>
+            </BlockHeadContent>
             </BlockHead>
             <form className="is-alter" onSubmit={handleSubmit(handleFormSubmit)}>
               <div className="d-flex flex-row g-4" >

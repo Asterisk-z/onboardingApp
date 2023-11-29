@@ -1,10 +1,11 @@
 import React from "react";
-import Logo from "../../images/logo.png";
+
 import LogoDark from "../../images/logo-dark.png";
 import Head from "../../layout/head/Head";
 import AuthFooter from "../../pages/auth/AuthFooter";
-import { Block, BlockContent, BlockDes, BlockHead, BlockTitle, Button, PreviewCard } from "../../components/Component";
+import { Block, BlockContent, BlockHeadContent, BlockDes, BlockHead, BlockTitle, Button, PreviewCard } from "../../components/Component";
 import { Link } from "react-router-dom";
+import Logo from "../../images/fmdq/FMDQ-Logo.png";
 
 const ForgotPassword = () => {
   return (
@@ -15,6 +16,10 @@ const ForgotPassword = () => {
           <PreviewCard className="card-bordered" bodyClass="card-inner-lg">
             <BlockHead>
               <BlockContent>
+                <BlockHeadContent className="text-center">
+                  <img src={Logo} alt="fmdq logo" className="image" />
+                  <h4 className="mrois-title">Members Registration Oversight Information System (MROIS)</h4>
+                </BlockHeadContent>
                 <BlockTitle tag="h5">Reset password</BlockTitle>
                 <BlockDes>
                   <p>If you forgot your password, well, then we’ll email you instructions to reset your password.</p>
