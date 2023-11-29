@@ -51,10 +51,11 @@ const Login = () => {
         <PreviewCard className="card-bordered" bodyClass="card-inner-lg">
           <BlockHead>
             <BlockContent>
+              <div className="logo-div">
+                <img className="logo" src={Logo} alt="fmdq logo"/>
+                <h4>Members Registration Oversight Information System (MROIS)</h4>
+              </div>
               <BlockTitle tag="h4">Sign-In</BlockTitle>
-              <BlockDes>
-                <p>Access MROIS using your email and password.</p>
-              </BlockDes>
             </BlockContent>
           </BlockHead>
           {errorVal && (

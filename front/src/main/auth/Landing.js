@@ -25,11 +25,13 @@ const Landing = ({ ...props }) => {
   return (
     <React.Fragment>
       <Head title="Privacy Notice" />
-      <Content>
+      <div className="landing">
+        <Content>
         <div className="content-page wide-md m-auto padding">
           <BlockHead size="lg" wide="xs" className="mx-auto">
             <BlockHeadContent className="text-center">
               <img src={Logo} alt="fmdq logo" className="image" />
+              <h4 className="mrois-title">Members Registration Oversight Information System (MROIS)</h4>
             </BlockHeadContent>
           </BlockHead>
           <Block>
@@ -94,7 +96,9 @@ const Landing = ({ ...props }) => {
             </PreviewCard>
           </Block>
         </div>
-      </Content>
+        </Content>
+      </div>
+      
     </React.Fragment>
   );
 };
