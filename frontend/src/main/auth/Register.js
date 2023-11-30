@@ -36,10 +36,10 @@ const Register = () => {
           </div>
           <PreviewCard className="card-bordered" bodyClass="card-inner">
             <BlockHead>
-            <BlockHeadContent className="text-center">
-              <img src={Logo} alt="fmdq logo" className="image" />
-              <h4 className="mrois-title">Members Registration Oversight Information System (MROIS)</h4>
-            </BlockHeadContent>
+            <div className="logo-div">
+                <img className="logo" src={Logo} alt="fmdq logo"/>
+                <h4>Members Registration Oversight Information System (MROIS)</h4>
+            </div>
             </BlockHead>
             <form className="is-alter" onSubmit={handleSubmit(handleFormSubmit)}>
               <div className="d-flex flex-row g-4" >
