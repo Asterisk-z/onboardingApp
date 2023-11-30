@@ -6,7 +6,18 @@ import App from "./App";
 import "./assets/scss/dashlite.scss";
 import "./assets/scss/style-email.scss";
 
+import axios from "axios";
+import { Provider } from "react-redux";
+
 import reportWebVitals from "./reportWebVitals";
+
+// import store from "./redux/app/store";
+
+axios.defaults.baseURL = process.env.REACT_APP_APP_API;
+
+const accessToken = localStorage.getItem("access-token");
+
+axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

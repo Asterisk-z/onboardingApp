@@ -95,7 +95,7 @@ const ModalsPage = () => {
                       </button>
                     }
                   >
-                    Modal title
+                    Modal TESTING
                   </ModalHeader>
                   <ModalBody>
                     <p>
