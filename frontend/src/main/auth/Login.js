@@ -16,14 +16,24 @@ import {} from "reactstrap"
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { AiOutlineArrowRight } from "react-icons/ai";
+import { useNavigate } from 'react-router-dom';
+
+
+
+
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const [passState, setPassState] = useState(false);
   const [errorVal, setError] = useState("");
   const [modalSuccess, setModalSuccess] = useState(false);
-  const toggleSuccess = () => setModalSuccess(!modalSuccess);
-
+  // const toggleSuccess = () => ;
+  const navigate = useNavigate();
+  
+  const handleProceed = () => {
+    setModalSuccess(!modalSuccess)
+    navigate(process.env.PUBLIC_URL+'/form');
+  }
   const onFormSubmit = (formData) => {
     setLoading(true);
     const loginName = "info@softnio.com";
@@ -120,7 +130,7 @@ const Login = () => {
               </div>
             </div>
             <div className="form-group">
-              <Button onClick={toggleSuccess} size="lg" className="btn-block"  color="primary">
+              <Button onClick={handleProceed} size="lg" className="btn-block"  color="primary">
                 {loading ? <Spinner size="sm" color="light" /> : "Sign in"}
               </Button>
             </div>
@@ -131,7 +141,7 @@ const Login = () => {
         </PreviewCard>
       </Block>
     </div>
-    <Modal isOpen={modalSuccess} toggle={toggleSuccess}>
+    <Modal isOpen={modalSuccess} toggle={handleProceed}>
       <ModalBody className="modal-body-lg text-center">
         <div className="nk-modal">
           <Icon className="nk-modal-icon icon-circle icon-circle-xxl ni ni-check bg-success"></Icon>
@@ -142,7 +152,7 @@ const Login = () => {
             </div>
           </div>
           <div className="nk-modal-action">
-            <Button color="primary" size="lg" className="btn-mw" onClick={toggleSuccess}>
+            <Button color="primary" size="lg" className="btn-mw" onClick={handleProceed}>
               Proceed<span><AiOutlineArrowRight /></span>
             </Button>
           </div>

@@ -129,6 +129,7 @@ import Error504Classic from "../pages/error/504-classic";
 import Login from "../main/auth/Login";
 import Register from "../main/auth/Register";
 import ForgotPassword from "../main/auth/ForgotPassword";
+import Form from "../main/forms/Form";
 import Success from "../pages/auth/Success";
 
 import Layout from "../layout/Index";
@@ -327,6 +328,7 @@ const Router = () => {
             <Route path="auth-reset" element={<ForgotPassword />}></Route>
             <Route path="auth-register" element={<Register />}></Route>
             <Route path="login" element={<Login />}></Route>
+            <Route path="form" element={<Form />}></Route>
             <Route index element={<Landing />}></Route>
         
 
