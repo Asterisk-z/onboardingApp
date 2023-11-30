@@ -72,13 +72,42 @@ a {
 }
 
 .login-block {
-    background-image: url(../../images/fmdq/Login-bg.png);
+    background-image: url(../../images/fmdq/MROIS-bg.png);
     height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     background-size: cover;
     background-repeat: repeat;
+}
+
+.landing {
+    background-image: url(../../images/fmdq/MROIS-bg.png);
+    background-size: cover;
+    background-repeat: repeat;
+}
+
+.mrois-title {
+    color: #fff;
+    margin-top: 10px;
+}
+
+.logo-div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo-div h4 {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.logo {
+    width: 200px;
+    margin: 0 auto;
 }
 
 .w-50 {

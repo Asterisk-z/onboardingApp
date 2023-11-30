@@ -155,7 +155,7 @@ const UserSettings = (props) => {
     username: "",
     password: "",
     rePassword: "",
-    terms: false,
+    terms: true,
   });
 
   const onInputChange = (e) => {
@@ -394,10 +394,16 @@ const Header = (props) => {
             <span className="number">03</span> <h5>Step 3</h5>
           </a>
         </li>
-        <li className={props.current === 4 ? "last done" : "last"}>
+        <li className={props.current >= 4 ? "done" : ""}>
           <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
             <span className="current-info audible">current step: </span>
             <span className="number">04</span> <h5>Step 4</h5>
+          </a>
+        </li>
+        <li className={props.current === 5 ? "last done" : "last"}>
+          <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
+            <span className="current-info audible">current step: </span>
+            <span className="number">05</span> <h5>Step 5</h5>
           </a>
         </li>
       </ul>
@@ -406,6 +412,16 @@ const Header = (props) => {
 };
 
 const Success = (props) => {
+  return (
+    <div className="d-flex justify-content-center align-items-center p-3">
+      <BlockTitle tag="h6" className="text-center">
+        Thank you for submitting form
+      </BlockTitle>
+    </div>
+  );
+};
+
+const Fourth = (props) => {
   return (
     <div className="d-flex justify-content-center align-items-center p-3">
       <BlockTitle tag="h6" className="text-center">

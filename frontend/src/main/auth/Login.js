@@ -11,14 +11,18 @@ import {
   Icon,
   PreviewCard,
 } from "../../components/Component";
-import { Form, Spinner, Alert } from "reactstrap";
+import { Form, Spinner, Alert, Modal, ModalBody, ModalFooter } from "reactstrap";
+import {} from "reactstrap"
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { AiOutlineArrowRight } from "react-icons/ai";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const [passState, setPassState] = useState(false);
   const [errorVal, setError] = useState("");
+  const [modalSuccess, setModalSuccess] = useState(false);
+  const toggleSuccess = () => setModalSuccess(!modalSuccess);
 
   const onFormSubmit = (formData) => {
     setLoading(true);
@@ -51,10 +55,11 @@ const Login = () => {
         <PreviewCard className="card-bordered" bodyClass="card-inner-lg">
           <BlockHead>
             <BlockContent>
+              <div className="logo-div">
+                <img className="logo" src={Logo} alt="fmdq logo"/>
+                <h4>Members Registration Oversight Information System (MROIS)</h4>
+              </div>
               <BlockTitle tag="h4">Sign-In</BlockTitle>
-              <BlockDes>
-                <p>Access MROIS using your email and password.</p>
-              </BlockDes>
             </BlockContent>
           </BlockHead>
           {errorVal && (
@@ -64,7 +69,7 @@ const Login = () => {
               </Alert>
             </div>
           )}
-          <Form className="is-alter" onSubmit={handleSubmit(onFormSubmit)}>
+          <Form className="is-alter" onSubmit={handleSubmit()}>
             <div className="form-group">
               <div className="form-label-group">
                 <label className="form-label" htmlFor="default-01">
@@ -115,18 +120,43 @@ const Login = () => {
               </div>
             </div>
             <div className="form-group">
-              <Button size="lg" className="btn-block" type="submit" color="primary">
+              <Button onClick={toggleSuccess} size="lg" className="btn-block"  color="primary">
                 {loading ? <Spinner size="sm" color="light" /> : "Sign in"}
               </Button>
             </div>
           </Form>
           <div className="form-note-s2 text-center pt-4">
-            New on our platform? <Link to={`${process.env.PUBLIC_URL}/auth-register`}>Create an account</Link>
+            New on MROIS? <Link to={`${process.env.PUBLIC_URL}/auth-register`}>Create an account</Link>
           </div>
         </PreviewCard>
       </Block>
     </div>
-      
+    <Modal isOpen={modalSuccess} toggle={toggleSuccess}>
+      <ModalBody className="modal-body-lg text-center">
+        <div className="nk-modal">
+          <Icon className="nk-modal-icon icon-circle icon-circle-xxl ni ni-check bg-success"></Icon>
+          <h4 className="nk-modal-title">Success!</h4>
+          <div className="nk-modal-text">
+            <div className="caption-text">
+              Proceed to Application
+            </div>
+          </div>
+          <div className="nk-modal-action">
+            <Button color="primary" size="lg" className="btn-mw" onClick={toggleSuccess}>
+              Proceed<span><AiOutlineArrowRight /></span>
+            </Button>
+          </div>
+        </div>
+      </ModalBody>
+      <ModalFooter className="bg-light">
+        <div className="text-center w-100">
+          <p>
+            Members Registration Oversight Information System (MROIS)
+          </p>
+        </div>
+      </ModalFooter>
+    </Modal>
   </>;
 };
+// type="submit"
 export default Login;
