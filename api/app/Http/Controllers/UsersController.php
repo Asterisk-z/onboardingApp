@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Utility;
 use App\Models\User;
-use Exception;
-use Firebase\JWT\JWT;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -53,6 +51,6 @@ class UsersController extends Controller
 
         $data['password'] = Hash::make($request->input('password'));
         $createUser = User::create($data);
-        return successResponse('Registration Successful', $createUser);
+        return successResponse('Registration Successful', Utility::arrayKeysToCamelCase($createUser->toArray()));
     }
 }
