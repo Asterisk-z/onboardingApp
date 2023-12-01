@@ -13,6 +13,8 @@ class CreateInstitutionsTable extends Migration
      */
     public function up()
     {
+        if(Schema::hasTable('institutions'))
+            return;
         Schema::create('institutions', function (Blueprint $table) {
             $table->id();
             $table->string('title')->nullable();

@@ -13,6 +13,8 @@ class CreatePortalsTable extends Migration
      */
     public function up()
     {
+        if(Schema::hasTable('portals'))
+            return;
         Schema::create('portals', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();

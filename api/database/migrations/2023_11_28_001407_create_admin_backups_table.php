@@ -13,6 +13,8 @@ class CreateAdminBackupsTable extends Migration
      */
     public function up()
     {
+        if(Schema::hasTable('admin_backups'))
+            return;
         Schema::create('admin_backups', function (Blueprint $table) {
             $table->id();
             $table->timestamps();

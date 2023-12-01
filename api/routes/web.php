@@ -14,8 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
-Route::post('/user/login', [UsersController::class, 'login']);
-Route::post('/user/register', [UsersController::class, 'register']);
+Route::group( ['prefix' => 'auth'], function (){
+    Route::post('/login', [UsersController::class, 'login']);
+    Route::post('/register', [UsersController::class, 'register']);
+});
 
 Route::get('/', function () {
     return view('welcome');

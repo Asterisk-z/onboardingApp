@@ -13,6 +13,8 @@ class CreateMembershipsTable extends Migration
      */
     public function up()
     {
+        if(Schema::hasTable('memberships'))
+            return;
         Schema::create('memberships', function (Blueprint $table) {
             $table->id();
             $table->integer('inst_id')->unique()->nullable();

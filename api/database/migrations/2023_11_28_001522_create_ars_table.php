@@ -13,6 +13,8 @@ class CreateArsTable extends Migration
      */
     public function up()
     {
+        if(Schema::hasTable('ars'))
+            return;
         Schema::create('ars', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
