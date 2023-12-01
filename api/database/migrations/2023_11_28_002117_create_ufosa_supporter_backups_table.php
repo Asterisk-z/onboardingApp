@@ -13,6 +13,8 @@ class CreateUfosaSupporterBackupsTable extends Migration
      */
     public function up()
     {
+        if(Schema::hasTable('ufosa_supporter_backups'))
+            return;
         Schema::create('ufosa_supporter_backups', function (Blueprint $table) {
             $table->string('nominee_email');
             $table->string('supporter_email');
