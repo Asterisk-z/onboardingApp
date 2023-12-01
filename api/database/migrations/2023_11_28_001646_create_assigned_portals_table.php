@@ -13,6 +13,8 @@ class CreateAssignedPortalsTable extends Migration
      */
     public function up()
     {
+        if(Schema::hasTable('assigned_portals'))
+            return;
         Schema::create('assigned_portals', function (Blueprint $table) {
             $table->id();
             $table->timestamps();

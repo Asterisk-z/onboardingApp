@@ -13,6 +13,8 @@ class CreateArticlesTable extends Migration
      */
     public function up()
     {
+        if(Schema::hasTable('articles'))
+            return;
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
             $table->timestamps();

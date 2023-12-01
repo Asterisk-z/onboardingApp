@@ -13,6 +13,8 @@ class CreateCheckboxesTable extends Migration
      */
     public function up()
     {
+        if(Schema::hasTable('checkboxes'))
+            return;
         Schema::create('checkboxes', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
