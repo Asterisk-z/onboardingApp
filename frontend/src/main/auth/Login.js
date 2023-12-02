@@ -18,7 +18,7 @@ import { Link } from "react-router-dom";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { useNavigate } from 'react-router-dom';
 
-
+ 
 
 
 
@@ -27,11 +27,10 @@ const Login = () => {
   const [passState, setPassState] = useState(false);
   const [errorVal, setError] = useState("");
   const [modalSuccess, setModalSuccess] = useState(false);
-  // const toggleSuccess = () => ;
+  const toggleSuccess = () => setModalSuccess(!modalSuccess);
   const navigate = useNavigate();
   
   const handleProceed = () => {
-    setModalSuccess(!modalSuccess)
     navigate(process.env.PUBLIC_URL+'/form');
   }
   const onFormSubmit = (formData) => {
@@ -130,7 +129,7 @@ const Login = () => {
               </div>
             </div>
             <div className="form-group">
-              <Button onClick={handleProceed} size="lg" className="btn-block"  color="primary">
+              <Button onClick={toggleSuccess} size="lg" className="btn-block"  color="primary">
                 {loading ? <Spinner size="sm" color="light" /> : "Sign in"}
               </Button>
             </div>

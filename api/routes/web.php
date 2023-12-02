@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,11 +12,6 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
  */
-
-Route::group( ['prefix' => 'auth'], function (){
-    Route::post('/login', [UsersController::class, 'login']);
-    Route::post('/register', [UsersController::class, 'register']);
-});
 
 Route::get('/', function () {
     return view('welcome');

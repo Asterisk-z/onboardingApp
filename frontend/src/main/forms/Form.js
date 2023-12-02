@@ -13,6 +13,7 @@ import {
 import { useForm } from "react-hook-form";
 import { Steps, Step } from "react-step-builder";
 import { Row, Col,  Button } from "reactstrap";
+import { HeaderLogo } from "../../pages/components/HeaderLogo";
 
 
 const PersonalForm = (props) => {
@@ -442,17 +443,24 @@ const Form = () => {
   const [errorVal, setError] = useState("");
   const [modalSuccess, setModalSuccess] = useState(false);
   const toggleSuccess = () => setModalSuccess(!modalSuccess);
+  const styles = {
+    color: {
+      color: "#ffffff",
+    },
+    
+  }
 
 
   return <>
     <Head title="Form" />
+    <HeaderLogo />
     <div className="login-block">
       <Block size="lg">
           <BlockHead>
-            <BlockHeadContent>
-              <BlockTitle tag="h5">Wizard Form - Basic</BlockTitle>
-              <p>A basic demonstration of wizard form basic.</p>
-            </BlockHeadContent>
+            <div style={styles.color}>
+              <h2 style={styles.color}>Complete Application</h2>
+              <p>Please fill forms to complete your application</p>
+            </div>
           </BlockHead>
           <PreviewCard>
             <div className="nk-wizard nk-wizard-simple is-alter wizard clearfix">

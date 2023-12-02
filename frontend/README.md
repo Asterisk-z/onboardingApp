@@ -1,4 +1,4 @@
-**Documentation for React Dashlite application**
+**Documentation for React application**
 
 **React Quick Start:**
 
@@ -49,9 +49,9 @@ Installing the React CLI:
 
 2.  To Install just run the command **_npm install create-react-app_**
 
-Running React-Dashlite:
+Running React-Admin:
 
-1.  Download and extract Dashlite themes from themeforest.net
+1.  Download and extract admin themes from 
 
 2.  Extract it and then go in to the extracted folder.
 
