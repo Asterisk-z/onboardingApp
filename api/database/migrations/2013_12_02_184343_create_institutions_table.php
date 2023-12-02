@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAdminBackupsTable extends Migration
+class CreateInstitutionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateAdminBackupsTable extends Migration
      */
     public function up()
     {
-        if(Schema::hasTable('admin_backups'))
-            return;
-        Schema::create('admin_backups', function (Blueprint $table) {
+        Schema::create('institutions', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->nullable();
+            $table->tinyInteger('is_del')->default(0);
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreateAdminBackupsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('admin_backups');
+        Schema::dropIfExists('institutions');
     }
 }

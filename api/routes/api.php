@@ -17,3 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth')->get('/user', function (Request $request) {
     return auth()->user();
 });
+
+Route::middleware(['auth'])->group(function () {
+    
+});

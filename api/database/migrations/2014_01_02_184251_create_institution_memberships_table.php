@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateArsTable extends Migration
+class CreateInstitutionMembershipsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateArsTable extends Migration
      */
     public function up()
     {
-        if(Schema::hasTable('ars'))
-            return;
-        Schema::create('ars', function (Blueprint $table) {
+        Schema::create('institution_memberships', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('institution_id')->constrained('institutions')->onDelete('cascade');
+            $table->foreignId('membership_category_id')->constrained('membership_categories')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreateArsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ars');
+        Schema::dropIfExists('institution_memberships');
     }
 }

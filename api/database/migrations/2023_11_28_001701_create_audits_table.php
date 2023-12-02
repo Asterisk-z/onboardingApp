@@ -17,6 +17,9 @@ class CreateAuditsTable extends Migration
             return;
         Schema::create('audits', function (Blueprint $table) {
             $table->id();
+            $table->string('user');
+            $table->text('action_performed');
+            $table->string('ip_address');
             $table->timestamps();
         });
     }

@@ -17,10 +17,10 @@ class CreateRolesTable extends Migration
             return;
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
-            $table->string('role');
+            $table->string('name');
+            $table->tinyInteger('is_del')->default(0);
             $table->timestamps();
             $table->softDeletes();
-
         });
     }
 
