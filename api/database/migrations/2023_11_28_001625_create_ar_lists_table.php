@@ -13,6 +13,8 @@ class CreateArListsTable extends Migration
      */
     public function up()
     {
+        if(Schema::hasTable('ar_lists'))
+            return;
         Schema::create('ar_lists', function (Blueprint $table) {
             $table->id();
             $table->timestamps();

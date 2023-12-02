@@ -13,6 +13,8 @@ class CreatePdfHighlightsTable extends Migration
      */
     public function up()
     {
+        if(Schema::hasTable('pdf_highlights'))
+            return;
         Schema::create('pdf_highlights', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id')->nullable();

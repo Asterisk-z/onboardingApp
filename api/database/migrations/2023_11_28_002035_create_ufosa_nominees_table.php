@@ -13,6 +13,8 @@ class CreateUfosaNomineesTable extends Migration
      */
     public function up()
     {
+        if(Schema::hasTable('ufosa_nominees'))
+            return;
         Schema::create('ufosa_nominees', function (Blueprint $table) {
             $table->id();
             $table->string('email')->unique();

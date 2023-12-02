@@ -13,6 +13,8 @@ class CreatePortalUsersTable extends Migration
      */
     public function up()
     {
+        if(Schema::hasTable('portal_users'))
+            return;
         Schema::create('portal_users', function (Blueprint $table) {
             $table->id();
             $table->string('firstname');

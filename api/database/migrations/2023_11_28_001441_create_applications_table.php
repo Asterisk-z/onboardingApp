@@ -13,6 +13,8 @@ class CreateApplicationsTable extends Migration
      */
     public function up()
     {
+        if(Schema::hasTable('applications'))
+            return;
         Schema::create('applications', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
