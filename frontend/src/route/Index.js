@@ -324,7 +324,7 @@ const Router = () => {
         </Route>
 
         <Route path={`${process.env.PUBLIC_URL}`} element={<LayoutNoSidebar />}>
-          <Route path="auth-success" element={<Success />}></Route>
+            <Route path="auth-success" element={<Success />}></Route>
             <Route path="auth-reset" element={<ForgotPassword />}></Route>
             <Route path="auth-register" element={<Register />}></Route>
             <Route path="login" element={<Login />}></Route>
