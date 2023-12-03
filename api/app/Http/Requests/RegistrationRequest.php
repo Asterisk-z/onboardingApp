@@ -25,8 +25,8 @@ class RegistrationRequest extends FormRequest
     public function rules()
     {
         return [
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
+            'firstName' => 'required|string',
+            'lastName' => 'required|string',
             'nationality' => 'required|exists:nationalities,code',
             'category' => 'required|exists:membership_categories,id',
             'email' => [

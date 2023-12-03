@@ -13,6 +13,7 @@ class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
+    protected $with = ['role', 'userNationality']; // almost all use of user model requires this information.
     /**
      * The attributes that are mass assignable.
      *
@@ -46,23 +47,27 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [
-            
+
         ];
     }
 
-    public function complaints(){
+    public function complaints()
+    {
         return $this->hasMany(Complaint::class, 'user_id');
     }
 
-    public function comments(){
+    public function comments()
+    {
         return $this->hasMany(ComplaintComment::class, 'user_id');
     }
 
-    public function role(){
+    public function role()
+    {
         return $this->belongsTo(Role::class, 'role_id');
     }
 
-    public function userNationality(){
+    public function userNationality()
+    {
         return $this->belongsTo(Nationality::class, 'nationality', 'code');
     }
 }

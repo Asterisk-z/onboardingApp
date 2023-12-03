@@ -52,7 +52,8 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('authMultipleRoles:' . $serializedRoles)->group(function () {
         Route::group(['prefix' => 'ar'], function () {
-            Route::post('/add', [ARController::class, 'addAR']);
+            Route::post('/add', [ARController::class, 'add']);
+            Route::get('/list', [ARController::class, 'list']);
         });
     });
 
