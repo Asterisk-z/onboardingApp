@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\AR;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegistrationRequest extends FormRequest
+class AddARRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,8 +28,9 @@ class RegistrationRequest extends FormRequest
         return [
             'first_name' => 'required|string',
             'last_name' => 'required|string',
+            'position_id' => 'required|exists:positions,id',
             'nationality' => 'required|exists:nationalities,code',
-            'category' => 'required|exists:membership_categories,id',
+            'role_id' => 'required|in:' . Role::ARAUTHORISER . ',' . Role::ARINPUTTER,
             'email' => [
                 'email',
                 'required',
@@ -47,7 +49,6 @@ class RegistrationRequest extends FormRequest
                     }
                 }
             ],
-            'password' => 'required|string|min:6'
         ];
     }
 }

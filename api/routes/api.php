@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\ARController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\UsersController;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -30,7 +32,7 @@ Route::middleware('auth')->group(function () {
 
     //MEG ROUTES
 
-    Route::middleware('meg')->group(function () {
+    Route::middleware('authRole:' . Role::MEG)->group(function () {
         Route::group(['prefix' => 'complaint'], function () {
             Route::post('/feedback', [ComplaintController::class, 'feedback']);
             Route::post('/status', [ComplaintController::class, 'changeStatus']);
@@ -42,5 +44,16 @@ Route::middleware('auth')->group(function () {
     //FSD ROUTES
 
     //MBG ROUTES
+
+
+    // AR ROUTES
+    $roles = [Role::ARAUTHORISER, Role::ARINPUTTER];
+    $serializedRoles = serialize($roles);
+
+    Route::middleware('authMultipleRoles:' . $serializedRoles)->group(function () {
+        Route::group(['prefix' => 'ar'], function () {
+            Route::post('/add', [ARController::class, 'addAR']);
+        });
+    });
 
 });
