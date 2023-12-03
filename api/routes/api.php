@@ -27,7 +27,8 @@ Route::get('/categories', [MemberCategoryController::class, 'index']);
 
 Route::middleware('auth')->group(function () {
 
-    Route::group(['prefix' => 'complaint'], public function () {
+
+    Route::group(['prefix' => 'complaint'], function () {
         Route::post('/store', [ComplaintController::class, 'store']);
         Route::get('/', [ComplaintController::class, 'index']);
     });
@@ -35,11 +36,12 @@ Route::middleware('auth')->group(function () {
     //MEG ROUTES
 
     Route::middleware('meg')->group(function () {
-        Route::group(['prefix' => 'complaint'], public function () {
+        Route::group(['prefix' => 'complaint'], function () {
             Route::post('/feedback', [ComplaintController::class, 'feedback']);
             Route::post('/status', [ComplaintController::class, 'changeStatus']);
         });
     });
+
 
     //MSG ROUTES
 
