@@ -13,7 +13,7 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        if(Schema::hasTable('users'))
+        if (Schema::hasTable('users'))
             return;
 
         Schema::create('users', function (Blueprint $table) {
@@ -29,12 +29,14 @@ class CreateUsersTable extends Migration
             $table->integer('role_id');
             $table->string('reg_id')->nullable();
             $table->string('img')->nullable();
+
             $table->string('created_by')->default('self')->comment('Self: This is for applicants, Other users would have the id of the creator');
             $table->string('approval_status')->default('pending')->comment('pending, approved, declined');
             $table->string('approval_status_by')->default('self')->comment('Self: This is for applicants, Other users would have the id of the creator');
+
             $table->tinyInteger('is_del')->default(0);
             $table->json('update_payload')->nullable();
-            $table->timestamp('verified_at')->nullable();            
+            $table->timestamp('verified_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
