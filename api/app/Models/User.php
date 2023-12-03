@@ -70,4 +70,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->belongsTo(Nationality::class, 'nationality', 'code');
     }
+
+    public function institution()
+    {
+        return $this->belongsTo(Institution::class, 'institution_id');
+    }
 }
