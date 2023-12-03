@@ -1,54 +1,58 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Head from "../../layout/head/Head";
-import Countries from "../../utils/Country";
-import Categories from "../../utils/Category";
 import { registerUser } from "./../../redux/stores/authenticate/authStore";
-
-import {
-  Block,
-  BlockHeadContent,
-  BlockHead,
-  BlockTitle,
-  Button,
-  Icon,
-  PreviewCard,
-} from "../../components/Component";
+import { loadAllCategories } from "./../../redux/stores/memberCategory/category";
+import { loadAllCountries } from "./../../redux/stores/nationality/country";
+import { Block, BlockHeadContent, BlockHead, BlockTitle, Button, Icon, PreviewCard } from "../../components/Component";
 import { Spinner } from "reactstrap";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import Logo from "../../images/fmdq/FMDQ-Logo.png";
 
 const Register = ({ drawer }) => {
-  const dispatch = useDispatch();
-  const [passState, setPassState] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const { register, handleSubmit, formState: { errors } } = useForm();
-  const navigate = useNavigate();
 
-  const handleFormSubmit = async (values) => {
-   
-    try {
-      setLoading(true);
+    const dispatch = useDispatch();
+    const [passState, setPassState] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const { register, handleSubmit, formState: { errors } } = useForm();
+    const navigate = useNavigate();
+
+    const categories = useSelector((state) => state?.category?.list) || null;
+    const countries = useSelector((state) => state?.country?.list) || null;
       
-      const resp = await dispatch(registerUser(values));
+    const handleFormSubmit = async (values) => {
+    
+      try {
+        setLoading(true);
+        
+        const resp = await dispatch(registerUser(values));
 
-      if (resp.payload?.message == "success") {
-        
-          setTimeout(() => {
-            navigate(`${process.env.PUBLIC_URL}/login`);
-            setLoading(false);
-          }, 1000);
-        
-      } else {
+        if (resp.payload?.message == "success") {
+          
+            setTimeout(() => {
+              navigate(`${process.env.PUBLIC_URL}/login`);
+              setLoading(false);
+            }, 1000);
+          
+        } else {
+          setLoading(false);
+        }
+      } catch (error) {
         setLoading(false);
       }
-    } catch (error) {
-      setLoading(false);
-    }
 
-  };
+    };
+    useEffect(() => {
+      dispatch(loadAllCategories());
+      dispatch(loadAllCountries());
+    }, [dispatch]);
+  
+  
+    const $categories = categories ? JSON.parse(categories) : null;
+    const $countries = countries ? JSON.parse(countries) : null;
+
   return <>
     
     <Head title="Register" />
@@ -63,11 +67,11 @@ const Register = ({ drawer }) => {
           <PreviewCard className="card-bordered" bodyClass="card-inner">
             <BlockHead>
             <div className="logo-div">
-                <img className="logo" src={Logo} alt="fmdq logo"/>
+              <img className="logo" src={Logo} alt="fmdq logo" />
                 <h4>Members Registration Oversight Information System (MROIS)</h4>
             </div>
             </BlockHead>
-            <form form={register}  initialValues={{ remember: true, }} className="is-alter" onSubmit={handleSubmit(handleFormSubmit)}>
+            <form  className="is-alter" onSubmit={handleSubmit(handleFormSubmit)}>
               <div className="d-flex flex-row g-4" >
                 <div className="form-group w-50">
                 <label className="form-label" >
@@ -106,9 +110,9 @@ const Register = ({ drawer }) => {
                 <div className="form-control-select">
                     <select className="form-control form-select" {...register('nationality', { required: true })}>
                       <option value="">Select A Country</option>
-                      {Countries && Countries?.map((country) => (
-                        <option key={country} value={country}>
-                          {country}
+                      {$countries && $countries?.map((country) => (
+                        <option key={country.code} value={country.code}>
+                          {country.name}
                         </option>
                       ))}
                     </select>
@@ -126,9 +130,9 @@ const Register = ({ drawer }) => {
                     <select 
                     className="form-control form-select" style={{width: '100%'}}  {...register('category', { required: true })}>
                       <option value="">Select A Category</option>
-                      {Categories && Categories?.map((category) => (
-                        <option key={category.key} value={category.key}>
-                          {category.value}
+                      {$categories && $categories?.map((category) => (
+                        <option key={category.id} value={category.id}>
+                          {category.name}
                         </option>
                       ))}
                     </select>
@@ -139,22 +143,41 @@ const Register = ({ drawer }) => {
                 
               </div>
 
-              <div className="form-group">
-                <div className="form-label-group">
-                  <label className="form-label" >
-                    Email
-                  </label>
+              <div className="d-flex flex-row g-4" >
+                <div className="form-group w-50">
+                  <div className="form-label-group">
+                    <label className="form-label" >
+                      Email
+                    </label>
+                  </div>
+                  <div className="form-control-wrap">
+                    <input
+                      type="email"
+                      bssize="lg" 
+                      {...register('email', { required: true })}
+                      className="form-control-lg form-control"
+                      placeholder="Enter your email address" />
+                    {errors.email && <p className="invalid">Email field is required</p>}
+                  </div>
                 </div>
-                <div className="form-control-wrap">
-                  <input
-                    type="email"
-                    bssize="lg"
-                    {...register('email', { required: true })}
-                    className="form-control-lg form-control"
-                    placeholder="Enter your email address" />
-                  {errors.email && <p className="invalid">Email field is required</p>}
+                <div className="form-group w-50">
+                  <div className="form-label-group">
+                    <label className="form-label" >
+                      Phone Number
+                    </label>
+                  </div>
+                  <div className="form-control-wrap">
+                    <input
+                      type="text"
+                      bssize="lg"
+                      {...register('phone', { required: true, minLength: 11, valueAsNumber: true })}
+                      className="form-control-lg form-control"
+                      placeholder="Enter your email address" />
+                    {errors.phone && <p className="invalid">{`This field is required`}</p>}
+                  </div>
                 </div>
               </div>
+              {/* type,message,ref */}
               <div className="d-flex flex-row g-4">
                 <div className="form-group w-50">
                   <div className="form-label-group">

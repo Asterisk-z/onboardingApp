@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ARController;
 use App\Http\Controllers\ComplaintController;
+use App\Http\Controllers\MemberCategoryController;
+use App\Http\Controllers\NationalityController;
 use App\Http\Controllers\UsersController;
 use App\Models\Role;
 use Illuminate\Http\Request;
@@ -22,6 +24,9 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('/login', [UsersController::class, 'login']);
     Route::post('/register', [UsersController::class, 'register']);
 });
+
+Route::get('/nationalities', [NationalityController::class, 'index']);
+Route::get('/categories', [MemberCategoryController::class, 'index']);
 
 Route::middleware('auth')->group(function () {
 
@@ -47,9 +52,6 @@ Route::middleware('auth')->group(function () {
 
 
     // AR ROUTES
-    $roles = [Role::ARAUTHORISER, Role::ARINPUTTER];
-    $serializedRoles = serialize($roles);
-
     Route::middleware('authRole:' . Role::ARAUTHORISER . ',' . Role::ARINPUTTER)->group(function () {
         Route::group(['prefix' => 'ar'], function () {
             Route::post('/add', [ARController::class, 'add']);
