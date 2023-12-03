@@ -31,7 +31,7 @@ const Homepage = () => {
   return (
     <React.Fragment>
       <Head title="Homepage"></Head>
-      <Content>
+      {/* <Content>
         <BlockHead size="sm">
           <BlockBetween>
             <BlockHeadContent>
@@ -164,7 +164,7 @@ const Homepage = () => {
             </Col>
           </Row>
         </Block>
-      </Content>
+      </Content> */}
     </React.Fragment>
   );
 };

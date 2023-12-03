@@ -130,6 +130,7 @@ import Login from "../main/auth/Login";
 import Register from "../main/auth/Register";
 import ForgotPassword from "../main/auth/ForgotPassword";
 import Form from "../main/forms/Form";
+import Complaint from "../main/pages/Complaint" 
 import Success from "../pages/auth/Success";
 
 import Layout from "../layout/Index";
@@ -178,6 +179,9 @@ const Router = () => {
         <Route exact path={`${process.env.PUBLIC_URL}/ecommerce/integration`} component={EcomIntegration}></Route> */}
 
         <Route path={`${process.env.PUBLIC_URL}`} element={<Layout />}>
+
+
+          <Route path="complaint" element={<Complaint />}></Route>
           
           {/*Dashboards*/}
           {/* <Route index element={<Homepage />}></Route> */}
