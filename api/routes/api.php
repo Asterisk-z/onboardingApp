@@ -50,7 +50,7 @@ Route::middleware('auth')->group(function () {
     $roles = [Role::ARAUTHORISER, Role::ARINPUTTER];
     $serializedRoles = serialize($roles);
 
-    Route::middleware('authMultipleRoles:' . $serializedRoles)->group(function () {
+    Route::middleware('authRole:' . Role::ARAUTHORISER . ',' . Role::ARINPUTTER)->group(function () {
         Route::group(['prefix' => 'ar'], function () {
             Route::post('/add', [ARController::class, 'add']);
             Route::get('/list', [ARController::class, 'list']);
