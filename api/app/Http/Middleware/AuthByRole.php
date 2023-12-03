@@ -16,11 +16,12 @@ class AuthByRole
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next, $role)
+    public function handle(Request $request, Closure $next, ...$roles)
     {
-        if ($request->user()->role_id != $role) {
+        if (!in_array($request->user()->role_id, $roles)) {
             return errorResponse("999", "Unauthorized Access", [], Response::HTTP_UNAUTHORIZED);
         }
+
 
         return $next($request);
     }
