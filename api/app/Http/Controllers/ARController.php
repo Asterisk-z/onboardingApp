@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class ARController extends Controller
 {
-    public function addAR(AddARRequest $request)
+    public function add(AddARRequest $request)
     {
 
 
@@ -29,5 +29,12 @@ class ARController extends Controller
         return successResponse('Successful', UserResource::make($user));
 
 
+    }
+
+    public function list(Request $request)
+    {
+        $users = User::where('institution_id', $request->user()->institution_id)->get();
+
+        return successResponse('Successful', UserResource::collection($users));
     }
 }
