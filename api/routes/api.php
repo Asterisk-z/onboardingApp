@@ -54,6 +54,7 @@ Route::middleware('auth')->group(function () {
         Route::group(['prefix' => 'ar'], function () {
             Route::post('/add', [ARController::class, 'add']);
             Route::get('/list', [ARController::class, 'list']);
+            Route::get('/search', [ARController::class, 'search']);
         });
     });
 
