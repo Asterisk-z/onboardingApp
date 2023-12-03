@@ -136,7 +136,12 @@ import Layout from "../layout/Index";
 import LayoutNoSidebar from "../layout/Index-nosidebar";
 
 
-import Landing from "../main/auth/Landing";
+import MainLayout from "../main/layout/Index";
+import MainLayoutNoSidebar from "../main/layout/Index-nosidebar";
+
+
+import Landing from "main/auth/Landing";
+import UserHomepage from "main/pages/Homepage";
 
 const Router = () => {
   const location = useLocation();
@@ -323,7 +328,7 @@ const Router = () => {
           <Route path="svg-icons" element={<SVGIconPage />}></Route>
         </Route>
 
-        <Route path={`${process.env.PUBLIC_URL}`} element={<LayoutNoSidebar />}>
+        <Route path={`${process.env.PUBLIC_URL}`} element={<MainLayoutNoSidebar />}>
             <Route path="auth-success" element={<Success />}></Route>
             <Route path="auth-reset" element={<ForgotPassword />}></Route>
             <Route path="auth-register" element={<Register />}></Route>
@@ -341,6 +346,10 @@ const Router = () => {
             <Route path="*" element={<Error404Modern />}></Route>
             
             <Route path="invoice-print/:invoiceId" element={<InvoicePrint />}></Route>
+        </Route>
+        
+        <Route path={`${process.env.PUBLIC_URL}`} element={<Layout />}>
+          <Route path="user-dashboard" element={<UserHomepage />}></Route>
         </Route>
       </Routes>
   );

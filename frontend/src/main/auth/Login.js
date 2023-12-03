@@ -1,58 +1,61 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Logo from "../../images/fmdq/FMDQ-Logo.png";
 import Head from "../../layout/head/Head";
-import {
-  Block,
-  BlockContent,
-  BlockDes,
-  BlockHead,
-  BlockTitle,
-  Button,
-  Icon,
-  PreviewCard,
-} from "../../components/Component";
+import { Block, BlockContent, BlockDes, BlockHead, BlockTitle, Button, Icon, PreviewCard } from "../../components/Component";
 import { Form, Spinner, Alert, Modal, ModalBody, ModalFooter } from "reactstrap";
 import {} from "reactstrap"
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { useNavigate } from 'react-router-dom';
+import { loginUser } from "./../../redux/stores/authenticate/authStore";
 
 
 const Login = () => {
+  const [modalSuccess, setModalSuccess] = useState(false);
+  const toggleSuccess = () => setModalSuccess(!modalSuccess);
+
   const [loading, setLoading] = useState(false);
   const [passState, setPassState] = useState(false);
   const [errorVal, setError] = useState("");
-  const [modalSuccess, setModalSuccess] = useState(false);
-  const toggleSuccess = () => setModalSuccess(!modalSuccess);
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
   
-  const handleProceed = () => {
-    navigate(process.env.PUBLIC_URL+'/form');
-  }
-  const onFormSubmit = (formData) => {
+  const { register, handleSubmit, formState: { errors } } = useForm();
+  
+  const handleProceed = () => navigate(process.env.PUBLIC_URL+'/form');
+  
+
+  const handleFormSubmit = async (formData) => {
     setLoading(true);
-    const loginName = "test@gmail.com";
-    const pass = "123456";
-    if (formData.name === loginName && formData.passcode === pass) {
-      localStorage.setItem("accessToken", "token");
-      setTimeout(() => {
-        window.history.pushState(
-          `${process.env.PUBLIC_URL ? process.env.PUBLIC_URL : "/"}`,
-          "auth-login",
-          `${process.env.PUBLIC_URL ? process.env.PUBLIC_URL : "/"}`
-        );
-        window.location.reload();
-      }, 1000);
-    } else {
-      setTimeout(() => {
-        setError("Cannot login with credentials");
+    
+      try {
+        setLoading(true);
+        
+        const resp = await dispatch(loginUser(formData));
+        
+        if (resp.payload?.message == "success") {
+          
+            // setTimeout(() => {
+            //   navigate(`${process.env.PUBLIC_URL}/user-dashboard`);
+            //   setLoading(false);
+            // }, 1000);
+          
+          setLoading(false);
+        } else {
+          setLoading(false);
+        }
+      } catch (error) {
         setLoading(false);
-      }, 1000);
-    }
+        setTimeout(() => {
+          setError("Cannot login with credentials");
+          setLoading(false);
+        }, 1000);
+      }
   };
 
-  const {  register, handleSubmit, formState: { errors } } = useForm();
 
   return <>
     <Head title="Login" />
@@ -75,27 +78,25 @@ const Login = () => {
               </Alert>
             </div>
           )}
-          <Form className="is-alter" onSubmit={handleSubmit()}>
+          <Form className="is-alter" onSubmit={handleSubmit(handleFormSubmit)}>
             <div className="form-group">
               <div className="form-label-group">
-                <label className="form-label" htmlFor="default-01">
+                <label className="form-label" >
                   Email/ID
                 </label>
               </div>
               <div className="form-control-wrap">
-                <input
-                  type="text"
-                  id="default-01"
-                  {...register('name', { required: "This field is required" })}
-                  defaultValue="info@softnio.com"
+                <input 
+                  type="email"
+                  {...register('email', { required: "This field is required" })}
                   placeholder="Enter your email address or username"
                   className="form-control-lg form-control" />
-                {errors.name && <span className="invalid">{errors.name.message}</span>}
+                {errors.email && <span className="invalid">{errors.email.message}</span>}
               </div>
             </div>
             <div className="form-group">
               <div className="form-label-group">
-                <label className="form-label" htmlFor="password">
+                <label className="form-label" >
                   Password
                 </label>
                 <Link className="link link-primary link-sm" to={`${process.env.PUBLIC_URL}/auth-reset`}>
@@ -118,15 +119,14 @@ const Login = () => {
                 <input
                   type={passState ? "text" : "password"}
                   id="password"
-                  {...register('passcode', { required: "This field is required" })}
-                  defaultValue="123456"
-                  placeholder="Enter your passcode"
+                  {...register('password', { required: "This field is required" })}
+                  placeholder="Enter your password"
                   className={`form-control-lg form-control ${passState ? "is-hidden" : "is-shown"}`} />
-                {errors.passcode && <span className="invalid">{errors.passcode.message}</span>}
+                {errors.password && <span className="invalid">{errors.password.message}</span>}
               </div>
             </div>
             <div className="form-group">
-              <Button onClick={toggleSuccess} size="lg" className="btn-block"  color="primary">
+              <Button type="submit" size="lg" className="btn-block"  color="primary">
                 {loading ? <Spinner size="sm" color="light" /> : "Sign in"}
               </Button>
             </div>

@@ -29,21 +29,22 @@ class RegistrationRequest extends FormRequest
             'lastName' => 'required|string',
             'nationality' => 'required|exists:nationalities,code',
             'category' => 'required|exists:membership_categories,id',
-            'email' => ['email' , 'required',
+            'email' => ['email', 'required',
                 function ($attribute, $value, $fail) {
-                    if(User::where('email', $value)->where('is_del', false)->exists()) {
+                    if (User::where('email', $value)->where('is_del', false)->exists()) {
                         $fail('The email has been taken.');
                     }
-                }
+                },
             ],
-            'phone' => ['required','regex:/^(070|080|091|090|081|071)\d{8}$/',
-                    function ($attribute, $value, $fail) {
-                        if(User::where('phone', $value)->where('is_del', false)->exists()) {
-                            $fail('The phone has been taken.');
-                        }
+            // 'phone' => ['required','regex:/^(070|080|091|090|081|071)\d{8}$/',
+            'phone' => ['required',
+                function ($attribute, $value, $fail) {
+                    if (User::where('phone', $value)->where('is_del', false)->exists()) {
+                        $fail('The phone has been taken.');
                     }
-                ],
-            'password' => 'required|string|min:6'
+                },
+            ],
+            'password' => 'required|string|min:6',
         ];
     }
 }

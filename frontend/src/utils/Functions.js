@@ -55,17 +55,20 @@ export function errorHandler(error, toastStatus, messageType = "Error") {
 
 export function successHandler(data, message, messageType = "Success") {
 
-    toast.success(<div className="toastr-text"><h5>{`${messageType}`}</h5><p>{`${message}`}</p></div>, {
-        position: "top-right",
-        autoClose: false,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: false,
-        closeButton: <span className="btn-trigger toast-close-button" role="button"><Icon name="cross"></Icon></span>,
-    });
-    
+    if (message) {
+        toast.success(<div className="toastr-text"><h5>{`${messageType}`}</h5><p>{`${message}`}</p></div>, {
+            position: "top-right",
+            autoClose: false,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: false,
+            closeButton: <span className="btn-trigger toast-close-button" role="button"><Icon name="cross"></Icon></span>,
+        });
+        
+    }
+
 //   message && toast[messageType](message);
     return {
         message: "success",
