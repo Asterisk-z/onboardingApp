@@ -18,7 +18,7 @@ class CreateComplaintsTable extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('complaint_type_id')->constrained('complaint_types')->onDelete('cascade');
             $table->text('body');
-            $table->string('document');
+            $table->string('document')->nullable();
             $table->string('status')->default('NEW')->comment('NEW, ONGOING, CLOSED');
             $table->timestamps();
             $table->softDeletes();
