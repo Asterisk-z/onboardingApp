@@ -18,4 +18,12 @@ class Role extends Model
     const MBG = 4;
     const ARINPUTTER = 5;
     const ARAUTHORISER = 6;
+
+    public function toArray()
+    {
+        return [
+            "id" => $this->id,
+            "name" => $this->name
+        ];
+    }
 }
