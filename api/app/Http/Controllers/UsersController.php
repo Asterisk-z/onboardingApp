@@ -3,6 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Utility;
+use App\Http\Requests\RegistrationRequest;
+use App\Http\Resources\UserResource;
+use App\Models\Institution;
+use App\Models\InstitutionMembership;
+use App\Models\Position;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -15,7 +21,7 @@ class UsersController extends Controller
     {
         $request->validate([
             'email' => 'required|email',
-            'password' => 'required|string|min:6',
+            'password' => 'required|string',
         ]);
 
         if(! $user = User::where('email', $request->email)->first()){
@@ -32,25 +38,37 @@ class UsersController extends Controller
                 'type' => 'Bearer',
                 'token' =>  $token,
                 'expires_in'=>  config('jwt.ttl') * 60
-            ]
+            ],
+            'user' => UserResource::make($user)
         ];
 
         return successResponse('Login Successful', $data);
     }
 
-    public function register(Request $request): JsonResponse
+    public function register(RegistrationRequest $request): JsonResponse
     {
-        $data = $request->validate([
-            'firstName' => 'required|string',
-            'lastName' => 'required|string',
-            'nationality' => 'required|string',
-            'category' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6',
+        $institution = Institution::create();
+        $position = Position::first();
+
+        InstitutionMembership::create([
+            'institution_id' => $institution->id,
+            'membership_category_id' => $request->input('category')
+        ]);
+        
+        $user = User::create([
+            'first_name' => $request->input('firstName'),
+            'last_name' => $request->input('lastName'),
+            'nationality' => $request->input('nationality'),
+            'email' => $request->input('email'),
+            'phone' => $request->input('phone'),
+            'password' => Hash::make($request->input('password')),
+            'role_id' => Role::ARINPUTTER,
+            'institution_id' => $institution->id,
+            'position_id' => $position ? $position->id : null
         ]);
 
-        $data['password'] = Hash::make($request->input('password'));
-        $createUser = User::create($data);
-        return successResponse('Registration Successful', Utility::arrayKeysToCamelCase($createUser->toArray()));
+        //TODO::SEND MAIL ??? 
+
+        return successResponse('Registration Successful', UserResource::make($user));
     }
 }
