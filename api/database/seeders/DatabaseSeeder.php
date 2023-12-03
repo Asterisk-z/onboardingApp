@@ -17,5 +17,6 @@ class DatabaseSeeder extends Seeder
         $this->call(MembershipCategories::class);
         $this->call(Positions::class);
         $this->call(Roles::class);
+        $this->call(ComplaintTypes::class);
     }
 }
