@@ -15,6 +15,8 @@ class AuditController extends Controller
     public function index()
     {
         //
+        $audits = Audit::orderBy('action_time', 'DESC')->get();
+        return response()->json($audits);
     }
 
     /**
@@ -25,6 +27,36 @@ class AuditController extends Controller
     public function create()
     {
         //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function userLog(Request $request)
+    {
+        // Check if the user is authenticated
+        if (!auth()->check()) {
+            return response()->json(['message' => 'User not authenticated'], 401);
+        }
+
+        // Validation, if needed
+        $validatedData = $request->validate([
+            'user' => 'required',
+        ]);
+
+        // Fetch all audits where the 'user' field matches the authenticated user's email
+        $userEmail = auth()->user()->email;
+
+        $audits = Audit::where('user', $userEmail)->get();
+
+        // Check if any records are found
+        if ($audits->isEmpty()) {
+            return response()->json(['message' => 'No audit logs found for this user'], 404);
+        }
+
+        return response()->json($audits);
     }
 
     /**
