@@ -33,34 +33,21 @@ const Register = ({ drawer }) => {
       setLoading(true);
       
       const resp = await dispatch(registerUser(values));
-      console.log(register)
-      console.log(resp.payload?.message)
-      resetFields();
-      
+
       if (resp.payload?.message == "success") {
-        // setSuccess(true);
-        // register.resetFields();
-        // dispatch(loadAllCustomer({ page: 1, count: 10, status: true }));
         
-        if (isAdmin !== true) {
           setTimeout(() => {
-            // window.location.href = "/customer/login";
-            // setSuccess(false);
+            navigate(`${process.env.PUBLIC_URL}/login`);
             setLoading(false);
-          }, 5000);
-        } else {
-          // setSuccess(false);
-          setLoading(false);
-        }
+          }, 1000);
+        
       } else {
         setLoading(false);
       }
     } catch (error) {
       setLoading(false);
     }
-    // setTimeout(() => {
-    //   navigate(`${process.env.PUBLIC_URL}/auth-success`);
-    // }, 1000);
+
   };
   return <>
     
@@ -78,7 +65,6 @@ const Register = ({ drawer }) => {
             <div className="logo-div">
                 <img className="logo" src={Logo} alt="fmdq logo"/>
                 <h4>Members Registration Oversight Information System (MROIS)</h4>
-              {/* <h2>{`${process.env.REACT_APP_APP_API}`}</h2> */}
             </div>
             </BlockHead>
             <form form={register}  initialValues={{ remember: true, }} className="is-alter" onSubmit={handleSubmit(handleFormSubmit)}>

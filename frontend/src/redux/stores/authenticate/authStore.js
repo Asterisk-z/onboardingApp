@@ -24,10 +24,6 @@ export const registerUser = createAsyncThunk(
         url: `auth/register`,
         data: values,
       });
-        if (data) {
-            console.log('help')
-            console.log(data)
-        }
       return successHandler(data, "Register Successfully Done and Sent Email");
     } catch (error) {
       return errorHandler(error, true);

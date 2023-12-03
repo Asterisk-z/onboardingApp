@@ -18,9 +18,6 @@ import { Link } from "react-router-dom";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { useNavigate } from 'react-router-dom';
 
- 
-
-
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
@@ -35,7 +32,7 @@ const Login = () => {
   }
   const onFormSubmit = (formData) => {
     setLoading(true);
-    const loginName = "info@softnio.com";
+    const loginName = "test@gmail.com";
     const pass = "123456";
     if (formData.name === loginName && formData.passcode === pass) {
       localStorage.setItem("accessToken", "token");
