@@ -23,6 +23,8 @@ class UserResource extends JsonResource
             'nationality' => $this->userNationality->name,
             'role' => $this->role,
             'position' => '',
+            'approval_status' => $this->approval_status,
+            'update_payload' => $this->update_payload,
             'regId' => $this->reg_id,
             'img' => '',
             'institution' => '',
