@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Helpers\ResponseStatusCodes;
 use App\Models\Role;
 use Closure;
 use Illuminate\Http\Request;
@@ -19,7 +20,7 @@ class AuthByRole
     public function handle(Request $request, Closure $next, ...$roles)
     {
         if (!in_array($request->user()->role_id, $roles)) {
-            return errorResponse("999", "Unauthorized Access", [], Response::HTTP_UNAUTHORIZED);
+            return errorResponse(ResponseStatusCodes::UNAUTHORIZED, "Unauthorized Access", [], Response::HTTP_UNAUTHORIZED);
         }
 
 

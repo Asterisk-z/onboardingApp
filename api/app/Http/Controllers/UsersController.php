@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ResponseStatusCodes;
 use App\Helpers\Utility;
 use App\Http\Requests\RegistrationRequest;
 use App\Http\Resources\UserResource;
@@ -24,20 +25,20 @@ class UsersController extends Controller
             'password' => 'required|string',
         ]);
 
-        if(! $user = User::where('email', $request->email)->first()){
-            return errorResponse("99", "Incorrect login credentials.", [], Response::HTTP_UNAUTHORIZED);
+        if (!$user = User::where('email', $request->email)->first()) {
+            return errorResponse(ResponseStatusCodes::INVALID_AUTH_CREDENTIAL, "Incorrect login credentials.", [], Response::HTTP_UNAUTHORIZED);
         }
 
-        if(! Hash::check($request->password, $user->password)){
-            return errorResponse("99", "Incorrect login credentials.", [], Response::HTTP_UNAUTHORIZED);
+        if (!Hash::check($request->password, $user->password)) {
+            return errorResponse(ResponseStatusCodes::INVALID_AUTH_CREDENTIAL, "Incorrect login credentials.", [], Response::HTTP_UNAUTHORIZED);
         }
 
         $token = auth()->login($user);
         $data = [
             'authorization' => [
                 'type' => 'Bearer',
-                'token' =>  $token,
-                'expires_in'=>  config('jwt.ttl') * 60
+                'token' => $token,
+                'expires_in' => config('jwt.ttl') * 60
             ],
             'user' => UserResource::make($user)
         ];
@@ -54,7 +55,7 @@ class UsersController extends Controller
             'institution_id' => $institution->id,
             'membership_category_id' => $request->input('category')
         ]);
-        
+
         $user = User::create([
             'first_name' => $request->input('firstName'),
             'last_name' => $request->input('lastName'),
