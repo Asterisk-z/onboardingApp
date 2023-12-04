@@ -7,6 +7,7 @@ import Footer from "./footer/Footer";
 import AppRoot from "./global/AppRoot";
 import AppMain from "./global/AppMain";
 import AppWrap from "./global/AppWrap";
+import UserProvider from "./provider/AuthUser";
 
 import checkTokenExp from "../utils/checkTokenExp";
 
@@ -22,19 +23,22 @@ const Layout = ({title, ...props}) => {
   checkTokenExp(accessToken, loggedUser);
 
   return (
-    <FileManagerProvider>
-      <Head title={!title && 'Loading'} />
-      <AppRoot>
-        <AppMain>
-          <Sidebar fixed />
-          <AppWrap>
-            <Header fixed />
-              <Outlet />
-            <Footer />
-          </AppWrap>
-        </AppMain>
-      </AppRoot>
-    </FileManagerProvider>
+    <UserProvider>
+      <FileManagerProvider>
+        <Head title={!title && 'Loading'} />
+        <AppRoot>
+          <AppMain>
+            <Sidebar fixed />
+            <AppWrap>
+              <Header fixed />
+                <Outlet />
+              <Footer />
+            </AppWrap>
+          </AppMain>
+        </AppRoot>
+      </FileManagerProvider>      
+    </UserProvider>
+
   );
 };
 export default Layout;

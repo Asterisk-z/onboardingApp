@@ -141,20 +141,21 @@ import Error504Classic from "../pages/error/504-classic";
 
 
 
-import Login from "../main/auth/Login";
-import Logout from "../main/auth/Logout";
-import Register from "../main/auth/Register";
-import ForgotPassword from "../main/auth/ForgotPassword";
-import Form from "../main/forms/Form";
-import Complaint from "../main/pages/Complaint" 
-import Success from "../pages/auth/Success";
+import Login from "main/auth/Login";
+import Logout from "main/auth/Logout";
+import Register from "main/auth/Register";
+import ForgotPassword from "main/auth/ForgotPassword";
+import Form from "main/forms/Form";
+import Complaint from "main/pages/Complaint" 
+import AuditLog from "main/pages/AuditLog" 
+import Success from "pages/auth/Success";
 
-import Layout from "../layout/Index";
-import LayoutNoSidebar from "../layout/Index-nosidebar";
+import Layout from "layout/Index";
+import LayoutNoSidebar from "layout/Index-nosidebar";
 
 
-import MainLayout from "../main/layout/Index";
-import MainLayoutNoSidebar from "../main/layout/Index-nosidebar";
+import MainLayout from "main/layout/Index";
+import MainLayoutNoSidebar from "main/layout/Index-nosidebar";
 
 
 import Landing from "main/auth/Landing";
@@ -371,6 +372,7 @@ const Router = () => {
         <Route path={`${process.env.PUBLIC_URL}`} element={<Layout />}>
           <Route path="dashboard" element={<UserHomepage />}></Route>
           <Route path="complaint" element={<Complaint />}></Route>
+          <Route path="audit-log" element={<AuditLog />}></Route>
         </Route>
       </Routes>
   );

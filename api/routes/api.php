@@ -29,7 +29,7 @@ Route::get('/categories', [MemberCategoryController::class, 'index']);
 
 Route::middleware('auth')->group(function () {
 
-    Route::group(['prefix' => 'complaint'], public function () {
+    Route::group(['prefix' => 'complaint'], function () {
         Route::post('/store', [ComplaintController::class, 'store']);
         Route::get('/', [ComplaintController::class, 'index']);
     });
@@ -51,7 +51,7 @@ Route::middleware('auth')->group(function () {
 
     // AR ROUTES
     Route::middleware('authRole:' . Role::ARAUTHORISER . ',' . Role::ARINPUTTER)->group(function () {
-        Route::group(['prefix' => 'ar'], public function () {
+        Route::group(['prefix' => 'ar'], function () {
             Route::post('/add', [ARController::class, 'add']);
             Route::get('/list', [ARController::class, 'list']);
             Route::get('/search', [ARController::class, 'search']);

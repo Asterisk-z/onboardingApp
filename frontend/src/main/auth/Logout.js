@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from 'react-router-dom';
 
 function Logout(props) {
-    const navigate = useNavigate()
+        const navigate = useNavigate()
 	useEffect(() => {
 		localStorage.clear();
 		toast.success("Logged Out");
