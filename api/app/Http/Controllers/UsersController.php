@@ -29,6 +29,7 @@ class UsersController extends Controller
             Audit::create([
                 'user' => $request->email,
                 'action_performed' => 'Failed Login',
+                'description' => 'Failed to login',
                 'ip_address' => $request->ip(),
             ]);
             // message
@@ -40,6 +41,7 @@ class UsersController extends Controller
             Audit::create([
                 'user' => $request->email,
                 'action_performed' => 'Failed Login',
+                'description' => 'Wrong Password',
                 'ip_address' => $request->ip(),
             ]);
             return errorResponse("99", "Incorrect login credentials.", [], Response::HTTP_UNAUTHORIZED);
@@ -58,6 +60,7 @@ class UsersController extends Controller
         Audit::create([
             'user' => auth()->user()->email,
             'action_performed' => 'Successful Login',
+            'description' => 'Login Successfull',
             'ip_address' => $request->ip(),
         ]);
 
@@ -94,6 +97,7 @@ class UsersController extends Controller
             'user' => $request->email,
             'action_performed' => 'Successful User Registration',
             // 'action_time' => now(),
+            'description' => 'Registration Successful',
             'ip_address' => $request->ip(),
         ]);
         return successResponse('Registration Successful', UserResource::make($user));
