@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ResponseStatusCodes;
+use App\Helpers\Utility;
 use App\Http\Requests\RegistrationRequest;
 use App\Http\Resources\UserResource;
 use App\Models\Audit;
@@ -25,24 +27,11 @@ class UsersController extends Controller
         ]);
 
         if (!$user = User::where('email', $request->email)->first()) {
-            // log activity
-            Audit::create([
-                'user' => $request->email,
-                'action_performed' => 'Failed Login',
-                'ip_address' => $request->ip(),
-            ]);
-            // message
-            return errorResponse("99", "Incorrect login credentials.", [], Response::HTTP_UNAUTHORIZED);
+            return errorResponse(ResponseStatusCodes::INVALID_AUTH_CREDENTIAL, "Incorrect login credentials.", [], Response::HTTP_UNAUTHORIZED);
         }
 
         if (!Hash::check($request->password, $user->password)) {
-            //
-            Audit::create([
-                'user' => $request->email,
-                'action_performed' => 'Failed Login',
-                'ip_address' => $request->ip(),
-            ]);
-            return errorResponse("99", "Incorrect login credentials.", [], Response::HTTP_UNAUTHORIZED);
+            return errorResponse(ResponseStatusCodes::INVALID_AUTH_CREDENTIAL, "Incorrect login credentials.", [], Response::HTTP_UNAUTHORIZED);
         }
 
         $token = auth()->login($user);
@@ -50,7 +39,7 @@ class UsersController extends Controller
             'authorization' => [
                 'type' => 'Bearer',
                 'token' => $token,
-                'expires_in' => config('jwt.ttl') * 60,
+                'expires_in' => config('jwt.ttl') * 60
             ],
             'user' => UserResource::make($user),
         ];

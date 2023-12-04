@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Helpers\ResponseStatusCodes;
 use App\Models\Role;
 use Closure;
 use Illuminate\Http\Request;
@@ -18,8 +19,8 @@ class AuthMeg
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->user()->role_id != Role::MEG){
-           return errorResponse("999", "Unauthorized Access", [], Response::HTTP_UNAUTHORIZED);
+        if ($request->user()->role_id != Role::MEG) {
+            return errorResponse(ResponseStatusCodes::UNAUTHORIZED, "Unauthorized Access", [], Response::HTTP_UNAUTHORIZED);
         }
 
         return $next($request);

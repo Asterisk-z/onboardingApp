@@ -13,6 +13,10 @@ class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    const APPROVED = "approved";
+    const DECLINED = "declined";
+    const PENDING = "pending";
+
     protected $with = ['role', 'userNationality']; // almost all use of user model requires this information.
     /**
      * The attributes that are mass assignable.

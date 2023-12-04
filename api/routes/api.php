@@ -54,9 +54,11 @@ Route::middleware('auth')->group(function () {
     // AR ROUTES
     Route::middleware('authRole:' . Role::ARAUTHORISER . ',' . Role::ARINPUTTER)->group(function () {
         Route::group(['prefix' => 'ar'], function () {
-            Route::post('/add', [ARController::class, 'add']);
             Route::get('/list', [ARController::class, 'list']);
             Route::get('/search', [ARController::class, 'search']);
+            Route::get('/view/{ARUser}', [ARController::class, 'view']);
+            Route::post('/add', [ARController::class, 'add']);
+            Route::post('/update/{ARUser}', [ARController::class, 'update']);
         });
     });
 
