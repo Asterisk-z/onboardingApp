@@ -10,4 +10,17 @@ class MembershipCategory extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
+
+    public function toArray()
+    {
+        return [
+            "id" => $this->id,
+            "name" => $this->name
+        ];
+    }
+
+    public function institutions()
+    {
+        return $this->belongsToMany(Institution::class, 'institution_memberships', 'membership_category_id', 'institution_id');
+    }
 }
