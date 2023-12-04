@@ -1,15 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { toast } from "react-toastify";
 import { errorHandler, successHandler } from "../../../utils/Functions";
-import queryGenerator from "../../../utils/QueryGenerator";
-const initialState = {
-                    list: null,
-                    user: null,
-                    total: null,
-                    error: "",
-                    loading: false,
-};
+const initialState = { list: null, user: null, total: null, error: "", loading: false };
 
 export const registerUser = createAsyncThunk(
   "authenticate/registerUser",
