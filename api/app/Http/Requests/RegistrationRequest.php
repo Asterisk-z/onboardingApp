@@ -40,14 +40,14 @@ class RegistrationRequest extends FormRequest
             ],
             'phone' => [
                 'required',
-                'regex:/^(070|080|091|090|081|071)\d{8}$/',
+                // 'regex:/^(070|080|091|090|081|071)\d{8}$/',
                 function ($attribute, $value, $fail) {
                     if (User::where('phone', $value)->where('is_del', false)->exists()) {
                         $fail('The phone has been taken.');
                     }
-                }
+                },
             ],
-            'password' => 'required|string|min:6'
+            'password' => 'required|string|min:6',
         ];
     }
 }

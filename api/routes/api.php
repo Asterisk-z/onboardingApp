@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ARController;
 use App\Http\Controllers\ComplaintController;
+use App\Http\Controllers\ComplaintTypeController;
 use App\Http\Controllers\MemberCategoryController;
 use App\Http\Controllers\NationalityController;
 use App\Http\Controllers\UsersController;
@@ -26,6 +27,7 @@ Route::group(['prefix' => 'auth'], function () {
 
 Route::get('/nationalities', [NationalityController::class, 'index']);
 Route::get('/categories', [MemberCategoryController::class, 'index']);
+Route::get('/complaint-types', [ComplaintTypeController::class, 'index']);
 
 Route::middleware('auth')->group(function () {
 

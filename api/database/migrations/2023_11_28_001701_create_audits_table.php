@@ -13,13 +13,15 @@ class CreateAuditsTable extends Migration
      */
     public function up()
     {
-        if (Schema::hasTable('audits'))
+        if (Schema::hasTable('audits')) {
             return;
+        }
+
         Schema::create('audits', function (Blueprint $table) {
             $table->id();
             $table->string('user');
             $table->text('action_performed');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->string('ip_address');
             $table->timestamps();
         });
