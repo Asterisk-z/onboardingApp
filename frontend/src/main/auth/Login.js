@@ -38,10 +38,10 @@ const Login = () => {
         
         if (resp.payload?.message == "success") {
           
-            // setTimeout(() => {
-            //   navigate(`${process.env.PUBLIC_URL}/user-dashboard`);
-            //   setLoading(false);
-            // }, 1000);
+            setTimeout(() => {
+              navigate(`${process.env.PUBLIC_URL}/dashboard`);
+              setLoading(false);
+            }, 1000);
           
           setLoading(false);
         } else {

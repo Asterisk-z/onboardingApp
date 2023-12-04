@@ -26,7 +26,7 @@ export function errorHandler(error, toastStatus, messageType = "Error") {
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
-      progress: false,
+      progress: true,
       closeButton: <span className="btn-trigger toast-close-button" role="button"><Icon name="cross"></Icon></span>,
     });
     return {
@@ -42,7 +42,7 @@ export function errorHandler(error, toastStatus, messageType = "Error") {
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
-            progress: false,
+            progress: true,
             closeButton: <span className="btn-trigger toast-close-button" role="button"><Icon name="cross"></Icon></span>,
         });
     return {
@@ -58,12 +58,12 @@ export function successHandler(data, message, messageType = "Success") {
     if (message) {
         toast.success(<div className="toastr-text"><h5>{`${messageType}`}</h5><p>{`${message}`}</p></div>, {
             position: "top-right",
-            autoClose: false,
+            autoClose: true,
             hideProgressBar: true,
             closeOnClick: true,
             pauseOnHover: true,
             draggable: true,
-            progress: false,
+            progress: true,
             closeButton: <span className="btn-trigger toast-close-button" role="button"><Icon name="cross"></Icon></span>,
         });
         

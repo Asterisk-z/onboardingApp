@@ -1,5 +1,5 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import Sidebar from "./sidebar/Sidebar";
 import Head from "./head/Head";
 import Header from "./header/Header";
@@ -15,7 +15,11 @@ import FileManagerProvider from "../pages/app/file-manager/components/Context";
 const Layout = ({title, ...props}) => {
   
   const accessToken = localStorage.getItem("access-token");
-  // checkTokenExp(accessToken);
+  const loggedUser = localStorage.getItem("logger");
+  if(!accessToken || !loggedUser ) {
+      window.location.href = `${process.env.PUBLIC_URL}/logout`;
+  }
+  checkTokenExp(accessToken, loggedUser);
 
   return (
     <FileManagerProvider>
