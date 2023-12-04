@@ -1,5 +1,6 @@
 <?php
 
+use App\Helpers\ResponseStatusCodes;
 use PHPOpenSourceSaver\JWTAuth\JWTGuard;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -23,7 +24,7 @@ if (!function_exists('successResponse')) {
     {
         return response()->json([
             "status" => true,
-            "statusCode" => "00",
+            "statusCode" => ResponseStatusCodes::OK,
             "message" => $message,
             "data" => $data
         ], Response::HTTP_OK);
