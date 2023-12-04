@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\AuditController;
-use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,11 +16,6 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'auth'], function () {
     Route::post('/login', [UsersController::class, 'login']);
     Route::post('/register', [UsersController::class, 'register']);
-});
-
-Route::group(['prefix' => 'audit'], function () {
-    Route::post('/all-logs', [AuditController::class, 'index']);
-    Route::post('/user-logs', [AuditController::class, 'userLog']);
 });
 
 Route::get('/', function () {

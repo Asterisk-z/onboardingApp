@@ -8,9 +8,15 @@ import AppRoot from "./global/AppRoot";
 import AppMain from "./global/AppMain";
 import AppWrap from "./global/AppWrap";
 
+import checkTokenExp from "../utils/checkTokenExp";
+
 import FileManagerProvider from "../pages/app/file-manager/components/Context";
 
 const Layout = ({title, ...props}) => {
+  
+  const accessToken = localStorage.getItem("access-token");
+  // checkTokenExp(accessToken);
+
   return (
     <FileManagerProvider>
       <Head title={!title && 'Loading'} />
