@@ -22,10 +22,12 @@ class UserResource extends JsonResource
             'phone' => $this->phone,
             'nationality' => $this->userNationality->name,
             'role' => $this->role,
-            'position' => '',
+            'position' => null,
+            'approval_status' => $this->approval_status,
+            'update_payload' => $this->update_payload,
             'regId' => $this->reg_id,
-            'img' => '',
-            'institution' => '',
+            'img' => null,
+            'institution' => $this->institution,
             'createdAt' => $this->created_at
         ];
     }

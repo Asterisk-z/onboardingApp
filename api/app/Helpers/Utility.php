@@ -35,4 +35,17 @@ class Utility
         return (float) number_format((float) $number, 3, '.', '');
     }
 
+
+    public static function generatePassword($length = 12)
+    {
+        $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@$&()_';
+        $password = '';
+
+        // Loop to randomly select characters from the $characters string
+        for ($i = 0; $i < $length; $i++) {
+            $password .= $characters[rand(0, strlen($characters) - 1)];
+        }
+
+        return $password;
+    }
 }

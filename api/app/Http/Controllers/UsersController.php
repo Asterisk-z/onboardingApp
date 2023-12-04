@@ -86,6 +86,7 @@ class UsersController extends Controller
             'email' => $request->input('email'),
             'phone' => $request->input('phone'),
             'password' => Hash::make($request->input('password')),
+            'approval_status' => 'approved',
             'role_id' => Role::ARINPUTTER,
             'institution_id' => $institution->id,
             'position_id' => $position ? $position->id : null
