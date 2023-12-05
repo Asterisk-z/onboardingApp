@@ -78,4 +78,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->belongsTo(Institution::class, 'institution_id');
     }
+
+    public function passwords()
+    {
+        return $this->hasMany(PasswordHistory::class);
+    }
 }

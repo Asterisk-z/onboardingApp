@@ -4,6 +4,7 @@ namespace App\Http\Requests\AR;
 
 use App\Models\Role;
 use App\Models\User;
+use App\Rules\EmailValidation;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateARRequest extends FormRequest
@@ -48,6 +49,7 @@ class UpdateARRequest extends FormRequest
             'email' => [
                 'sometimes',
                 'email',
+                new EmailValidation
             ],
             'phone' => [
                 'sometimes',

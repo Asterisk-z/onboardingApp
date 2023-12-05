@@ -4,6 +4,7 @@ namespace App\Http\Requests\AR;
 
 use App\Models\Role;
 use App\Models\User;
+use App\Rules\EmailValidation;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AddARRequest extends FormRequest
@@ -38,7 +39,8 @@ class AddARRequest extends FormRequest
                     if (User::where('email', $value)->where('is_del', false)->exists()) {
                         $fail('The email has been taken.');
                     }
-                }
+                },
+                new EmailValidation
             ],
             'phone' => [
                 'required',
