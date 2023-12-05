@@ -63,6 +63,7 @@
         <div class="content">
             <p>Hello {{$user->first_name}},</p>
             <p>{!! $info !!}</p>
+            <p>Kindly <a href="{{config('app.url')}}">here</a> to use the MROIS system.</p>
             <p>Regards,</p>
             <p style="margin-top: -15px;">The MROIS Team</p>
         </div>

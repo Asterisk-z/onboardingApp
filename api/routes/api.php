@@ -54,6 +54,7 @@ Route::middleware('auth')->group(function () {
         Route::group(['prefix' => 'complaint'], function () {
             Route::post('/feedback', [ComplaintController::class, 'feedback']);
             Route::post('/status', [ComplaintController::class, 'changeStatus']);
+            Route::get('/all', [ComplaintController::class, 'allComplaints']);
         });
     });
 

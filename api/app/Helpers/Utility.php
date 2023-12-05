@@ -77,4 +77,9 @@ class Utility
 
         return true;
     }
+
+    public static function getUsersByCategory($category)
+    {
+        return User::where('role_id', $category)->get();
+    }
 }
