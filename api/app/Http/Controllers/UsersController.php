@@ -9,9 +9,11 @@ use App\Http\Resources\UserResource;
 use App\Models\Audit;
 use App\Models\Institution;
 use App\Models\InstitutionMembership;
+use App\Models\MembershipCategory;
 use App\Models\Position;
 use App\Models\Role;
 use App\Models\User;
+use App\Notifications\InfoNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -100,6 +102,11 @@ class UsersController extends Controller
             'description' => 'Registration Successful',
             'ip_address' => $request->ip(),
         ]);
-        return successResponse('Registration Successful', UserResource::make($user));
+
+        $membership = MembershipCategory::find($request->input('category'));
+
+        //TODO::Send user email
+        $user->notify(new InfoNotification());
+        return successResponse("You have successfully signed up as a".$membership ? $membership->name : "member".". Kindly check your mail to proceed with completion of the membership form", UserResource::make($user));
     }
 }

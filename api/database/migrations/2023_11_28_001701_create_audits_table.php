@@ -21,7 +21,6 @@ class CreateAuditsTable extends Migration
             $table->id();
             $table->string('user');
             $table->text('action_performed');
-            $table->string('description')->nullable();
             $table->string('ip_address');
             $table->timestamps();
         });
