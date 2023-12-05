@@ -18,6 +18,7 @@ axios.defaults.baseURL = process.env.REACT_APP_APP_API;
 const accessToken = localStorage.getItem("access-token");
 
 axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+
 axios.defaults.headers.common["Access-Control-Allow-Origin"] = `*`;
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

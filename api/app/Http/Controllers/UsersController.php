@@ -9,9 +9,11 @@ use App\Http\Resources\UserResource;
 use App\Models\Audit;
 use App\Models\Institution;
 use App\Models\InstitutionMembership;
+use App\Models\MembershipCategory;
 use App\Models\Position;
 use App\Models\Role;
 use App\Models\User;
+use App\Notifications\InfoNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -27,11 +29,24 @@ class UsersController extends Controller
         ]);
 
         if (!$user = User::where('email', $request->email)->first()) {
-            return errorResponse(ResponseStatusCodes::INVALID_AUTH_CREDENTIAL, "Incorrect login credentials.", [], Response::HTTP_UNAUTHORIZED);
+            // log activity
+            Audit::create([
+                'user' => $request->email,
+                'action_performed' => 'Failed Login',
+                'ip_address' => $request->ip(),
+            ]);
+            // message
+            return errorResponse("99", "Incorrect login credentials.", [], Response::HTTP_UNAUTHORIZED);
         }
 
         if (!Hash::check($request->password, $user->password)) {
-            return errorResponse(ResponseStatusCodes::INVALID_AUTH_CREDENTIAL, "Incorrect login credentials.", [], Response::HTTP_UNAUTHORIZED);
+            //
+            Audit::create([
+                'user' => $request->email,
+                'action_performed' => 'Failed Login',
+                'ip_address' => $request->ip(),
+            ]);
+            return errorResponse("99", "Incorrect login credentials.", [], Response::HTTP_UNAUTHORIZED);
         }
 
         $token = auth()->login($user);
@@ -47,6 +62,7 @@ class UsersController extends Controller
         Audit::create([
             'user' => auth()->user()->email,
             'action_performed' => 'Successful Login',
+            'description' => 'Login Successfull',
             'ip_address' => $request->ip(),
         ]);
 
@@ -83,8 +99,14 @@ class UsersController extends Controller
             'user' => $request->email,
             'action_performed' => 'Successful User Registration',
             // 'action_time' => now(),
+            'description' => 'Registration Successful',
             'ip_address' => $request->ip(),
         ]);
-        return successResponse('Registration Successful', UserResource::make($user));
+
+        $membership = MembershipCategory::find($request->input('category'));
+
+        //TODO::Send user email
+        $user->notify(new InfoNotification());
+        return successResponse("You have successfully signed up as a".$membership ? $membership->name : "member".". Kindly check your mail to proceed with completion of the membership form", UserResource::make($user));
     }
 }
