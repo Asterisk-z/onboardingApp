@@ -189,7 +189,6 @@ const MenuSub = ({ icon, link, text, sub, sidebarToggle, mobileView, ...props })
 };
 
 
-
 const UserMenu = ({ sidebarToggle, mobileView }) => {
   const [data, setMenuData] = useState(navData);
   

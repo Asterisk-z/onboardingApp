@@ -16,11 +16,12 @@ const Register = ({ drawer }) => {
     const dispatch = useDispatch();
     const [passState, setPassState] = useState(false);
     const [loading, setLoading] = useState(false);
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors }, getValues, setError, clearErrors } = useForm();
     const navigate = useNavigate();
 
     const categories = useSelector((state) => state?.category?.list) || null;
     const countries = useSelector((state) => state?.country?.list) || null;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
       
     const handleFormSubmit = async (values) => {
     
@@ -53,6 +54,26 @@ const Register = ({ drawer }) => {
     const $categories = categories ? JSON.parse(categories) : null;
     const $countries = countries ? JSON.parse(countries) : null;
 
+    const passwordPolicy = (event) => {
+      
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
+        const isValidPassword = passwordRegex.test(getValues('password'));
+        
+        if (!isValidPassword) {
+            setError("password", { type: "password",  message: "Uppercase, lowercase, numbers and 8 characters"  }, { shouldFocus: false })
+            return
+        }
+        if (getValues('confirm_password') !== getValues('password')) {
+            setError("password", { type: "password",  message: "Password does not match"  }, { shouldFocus: false })
+            setError("confirm_password", { type: "confirm_password",  message: "Password does not match"  }, { shouldFocus: false })
+            return
+        }
+      
+        clearErrors('password')
+        clearErrors('confirm_password')
+        
+    }
+    
   return <>
     
     <Head title="Register" />
@@ -78,11 +99,7 @@ const Register = ({ drawer }) => {
                  First Name
                 </label>
                 <div className="form-control-wrap">
-                  <input
-                    type="text"
-                    {...register('firstName', { required: true })}
-                    placeholder="Enter your first name"
-                    className="form-control-lg form-control" />
+                  <input type="text" {...register('firstName', { required: true })} placeholder="Enter your first name" className="form-control-lg form-control" />
                   {errors.firstName && <p className="invalid">First Name field is required</p>}
                 </div>
               </div>
@@ -91,11 +108,7 @@ const Register = ({ drawer }) => {
                  Last Name
                 </label>
                 <div className="form-control-wrap">
-                  <input
-                    type="text"
-                    {...register('lastName', { required: true })}
-                    placeholder="Enter your last name"
-                    className="form-control-lg form-control" />
+                  <input type="text" {...register('lastName', { required: true })} placeholder="Enter your last name" className="form-control-lg form-control" />
                   {errors.lastName && <p className="invalid">Last Name field is required</p>}
                 </div>
               </div>
@@ -151,12 +164,7 @@ const Register = ({ drawer }) => {
                     </label>
                   </div>
                   <div className="form-control-wrap">
-                    <input
-                      type="email"
-                      bssize="lg" 
-                      {...register('email', { required: true })}
-                      className="form-control-lg form-control"
-                      placeholder="Enter your email address" />
+                    <input type="email" bssize="lg"  {...register('email', { required: true })} className="form-control-lg form-control" placeholder="Enter your email address" />
                     {errors.email && <p className="invalid">Email field is required</p>}
                   </div>
                 </div>
@@ -167,12 +175,7 @@ const Register = ({ drawer }) => {
                     </label>
                   </div>
                   <div className="form-control-wrap">
-                    <input
-                      type="text"
-                      bssize="lg"
-                      {...register('phone', { required: true, minLength: 11, valueAsNumber: true })}
-                      className="form-control-lg form-control"
-                      placeholder="Enter your email address" />
+                    <input type="text" bssize="lg" {...register('phone', { required: true, minLength: 11, valueAsNumber: true })} className="form-control-lg form-control" placeholder="Enter your email address" />
                     {errors.phone && <p className="invalid">{`This field is required`}</p>}
                   </div>
                 </div>
@@ -186,24 +189,11 @@ const Register = ({ drawer }) => {
                     </label>
                   </div>
                   <div className="form-control-wrap">
-                    <a
-                      href="#password"
-                      onClick={(ev) => {
-                        ev.preventDefault();
-                        setPassState(!passState);
-                      }}
-                      className={`form-icon lg form-icon-right passcode-switch ${passState ? "is-hidden" : "is-shown"}`}
-                    >
+                    <a href="#password" onClick={(ev) => {   ev.preventDefault();   setPassState(!passState); }} className={`form-icon lg form-icon-right passcode-switch ${passState ? "is-hidden" : "is-shown"}`}>
                       <Icon name="eye" className="passcode-icon icon-show"></Icon>
-
                       <Icon name="eye-off" className="passcode-icon icon-hide"></Icon>
                     </a>
-                    <input
-                      type={passState ? "text" : "password"}
-                      id="password"
-                      {...register('password', { required: "This field is required" })}
-                      placeholder="Enter your password"
-                      className={`form-control-lg form-control ${passState ? "is-hidden" : "is-shown"}`} />
+                    <input type={passState ? "text" : "password"} id="password" onKeyUp={passwordPolicy} {...register('password', { required: "This field is required" })} placeholder="Enter your password" className={`form-control-lg form-control ${passState ? "is-hidden" : "is-shown"}`} />
                     {errors.password && <span className="invalid">{errors.password.message}</span>}
                   </div>
                 </div>
@@ -215,7 +205,7 @@ const Register = ({ drawer }) => {
                   </div>
                   <div className="form-control-wrap">
                     <a
-                      href="#con_password"
+                      href="#confirm_password"
                       onClick={(ev) => {
                         ev.preventDefault();
                         setPassState(!passState);
@@ -223,15 +213,9 @@ const Register = ({ drawer }) => {
                       className={`form-icon lg form-icon-right passcode-switch ${passState ? "is-hidden" : "is-shown"}`}
                     >
                       <Icon name="eye" className="passcode-icon icon-show"></Icon>
-
                       <Icon name="eye-off" className="passcode-icon icon-hide"></Icon>
                     </a>
-                    <input
-                      type={passState ? "text" : "password"}
-                      id="con_password"
-                      {...register('password', { required: "This field is required" })}
-                      placeholder="Confirm your password"
-                      className={`form-control-lg form-control ${passState ? "is-hidden" : "is-shown"}`} />
+                    <input  type={passState ? "text" : "password"}  id="confirm_password"  {...register('confirm_password', { required: "This field is required" })}  onKeyUp={passwordPolicy}  placeholder="Confirm your password"  className={`form-control-lg form-control ${passState ? "is-hidden" : "is-shown"}`} />
                     {errors.passcode && <span className="invalid">{errors.passcode.message}</span>}
                   </div>
                 </div>
