@@ -447,6 +447,9 @@ const Form = () => {
     color: {
       color: "#ffffff",
     },
+    scroll: {
+      overFlow: "scroll",
+    }
     
   }
 
@@ -455,10 +458,10 @@ const Form = () => {
     <Head title="Form" />
     <HeaderLogo />
     <div className="login-block">
-      <Block size="lg">
+      <Block style={styles.scroll} size="lg">
           <BlockHead>
             <div style={styles.color}>
-              <h2 style={styles.color}>Complete Application</h2>
+              <h2 style={styles.color}>Dealing Member (Banks) Application</h2>
               <p>Please fill forms to complete your application</p>
             </div>
           </BlockHead>
