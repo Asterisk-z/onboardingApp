@@ -4,15 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Content from "../layout/content/Content";
 import { useForm } from "react-hook-form";
-import { Modal, ModalHeader, ModalBody, ModalFooter, Nav, NavLink, NavItem, TabContent, TabPane, Card, Spinner} from "reactstrap";
-import { Block, OrderTable, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect } from "components/Component";
+import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner} from "reactstrap";
+import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect } from "components/Component";
 import { loadAllComplaintTypes } from "../../redux/stores/complaints/complaintTypes";
 import { sendComplaint } from "../../redux/stores/complaints/complaint";
 
 import { orderData } from "components/table/TableData";
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge } from "reactstrap";
-// import Icon from "../icon/Icon";
-// import Button from "../button/Button";
+
 
 const ComplainTable = () => {
   const DropdownTrans = () => {
