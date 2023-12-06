@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ARController;
+use App\Http\Controllers\AuditController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\ComplaintTypeController;
 use App\Http\Controllers\MemberCategoryController;
@@ -51,10 +52,15 @@ Route::middleware('auth')->group(function () {
     //MEG ROUTES
 
     Route::middleware('authRole:' . Role::MEG)->group(function () {
+        // complaint
         Route::group(['prefix' => 'complaint'], function () {
             Route::post('/feedback', [ComplaintController::class, 'feedback']);
             Route::post('/status', [ComplaintController::class, 'changeStatus']);
             Route::get('/all', [ComplaintController::class, 'allComplaints']);
+        });
+        // audit
+        Route::group(['prefix' => 'audits'], function () {
+            Route::post('/audit-logs', [AuditController::class, 'index']);
         });
     });
 
@@ -74,5 +80,4 @@ Route::middleware('auth')->group(function () {
             Route::post('/update/{ARUser}', [ARController::class, 'update']);
         });
     });
-
 });
