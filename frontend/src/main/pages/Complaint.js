@@ -242,7 +242,7 @@ const Complaint = ({ drawer }) => {
                             </div>
                             <div className="form-group">
                                 <label className="form-label" htmlFor="phone-no">
-                                    Upload Document
+                                    Upload Document (*csv, pdf)
                                 </label>
                                 <div className="form-control-wrap">
                                     <input type="file" className="form-control"  {...register('document', { })} onChange={handleFileChange}/>

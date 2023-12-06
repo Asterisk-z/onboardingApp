@@ -68,7 +68,7 @@ const Register = ({ drawer }) => {
             <BlockHead>
             <div className="logo-div">
               <img className="logo" src={Logo} alt="fmdq logo" />
-                <h4>Members Registration Oversight Information System (MROIS)</h4>
+                <h4>Members Registration Oversight Information System (MROIS) Registration Form</h4>
             </div>
             </BlockHead>
             <form  className="is-alter" onSubmit={handleSubmit(handleFormSubmit)}>
@@ -172,7 +172,8 @@ const Register = ({ drawer }) => {
                       bssize="lg"
                       {...register('phone', { required: true, minLength: 11, valueAsNumber: true })}
                       className="form-control-lg form-control"
-                      placeholder="Enter your email address" />
+                      maxLength={11}
+                      placeholder="Enter your phone number" />
                     {errors.phone && <p className="invalid">{`This field is required`}</p>}
                   </div>
                 </div>
