@@ -1,11 +1,15 @@
 <?php
 namespace App\Helpers;
 
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 class Utility
 {
+    
     public static function arrayKeysToCamelCase($array): array
     {
         $result = [];
@@ -47,5 +51,35 @@ class Utility
         }
 
         return $password;
+    }
+
+    public static function checkPasswordExpiry(User $user) : bool
+    {
+        $password = $user->passwords()->orderByDesc('id')->first();
+
+        if(! $password)
+            return true;
+
+        if(Carbon::parse($password->created_at)->addMonths(config('app.password_expiry')) <= Carbon::now())
+            return false;
+
+        return true;
+    }
+
+    public static function checkPasswordPolicy($user, $password)
+    {
+        $passwords = $user->passwords()->latest()->take(config('app.unique_password'))->pluck('password');
+
+        foreach($passwords as $old_password){
+            if(Hash::check($password, $old_password))
+                return false;
+        }
+
+        return true;
+    }
+
+    public static function getUsersByCategory($category)
+    {
+        return User::where('role_id', $category)->get();
     }
 }

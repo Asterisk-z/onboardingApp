@@ -2,13 +2,11 @@
 
 namespace App\Http\Middleware;
 
-use App\Helpers\ResponseStatusCodes;
-use App\Models\Role;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AuthMeg
+class AuthenticatePasswordReset
 {
     /**
      * Handle an incoming request.
@@ -19,10 +17,8 @@ class AuthMeg
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->user()->role_id != Role::MEG) {
-            return errorResponse(ResponseStatusCodes::UNAUTHORIZED, "Unauthorized Access", [], Response::HTTP_UNAUTHORIZED);
-        }
-
+        passwordReset()->authenticate();
+        
         return $next($request);
     }
 }

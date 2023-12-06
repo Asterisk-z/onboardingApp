@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\User;
+use App\Rules\EmailValidation;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RegistrationRequest extends FormRequest
@@ -37,6 +38,7 @@ class RegistrationRequest extends FormRequest
                         $fail('The email has been taken.');
                     }
                 },
+                new EmailValidation
             ],
             'phone' => [
                 'required',
@@ -47,7 +49,7 @@ class RegistrationRequest extends FormRequest
                     }
                 },
             ],
-            'password' => 'required|string|min:6',
+            'password' => 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/'
         ];
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAuditsTable extends Migration
+class CreatePasswordHistoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,10 @@ class CreateAuditsTable extends Migration
      */
     public function up()
     {
-        if (Schema::hasTable('audits')) {
-            return;
-        }
-
-        Schema::create('audits', function (Blueprint $table) {
+        Schema::create('password_histories', function (Blueprint $table) {
             $table->id();
-            $table->string('user');
-            $table->text('action_performed');
-            $table->string('ip_address');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('password');
             $table->timestamps();
         });
     }
@@ -33,6 +28,6 @@ class CreateAuditsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('audits');
+        Schema::dropIfExists('password_histories');
     }
 }
