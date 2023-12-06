@@ -251,7 +251,6 @@ const Complaint = ({ drawer }) => {
                             </div>
                             <div className="form-group">
                                 <Button color="primary" type="submit"  size="lg">
-                                    
                                     {loading ? <Spinner size="sm" color="light" /> : "File Complain"}
                                 </Button>
                             </div>
