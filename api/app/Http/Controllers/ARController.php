@@ -100,7 +100,63 @@ class ARController extends Controller
         $ARUser->update_payload = $validated;
         $ARUser->save();
 
-        //TODO::SEND MAIL to MEG for approval
+        //TODO::SEND MAIL to authoriser for approval
+
+        return successResponse('Successful', UserResource::make($ARUser));
+
+    }
+
+    public function cancelUpdate(User $ARUser)
+    {
+
+        if ($ARUser->update_authoriser_id || $ARUser->update_payload) {
+            $ARUser->update_authoriser_id = null;
+            $ARUser->update_payload = null;
+            $ARUser->save();
+
+            //TODO::SEND MAIL to authoriser for approval
+        }
+
+        return successResponse('Successful', UserResource::make($ARUser));
+
+    }
+
+    public function processUpdate(Request $request, User $ARUser)
+    {
+        if ($ARUser->update_authoriser_id != $request->user()->id) {
+            return errorResponse(ResponseStatusCodes::UNAUTHORIZED, "You are not allowed to perform this action");
+        }
+
+        $request->validate([
+            'action' => 'required|in:approve,decline',
+        ]);
+
+        if ($request->action == 'approve') {
+            $data = $ARUser->update_payload;
+
+            if (is_string($data)) {
+                // Convert the string to an array if needed
+                $data = json_decode($data, true);
+            }
+
+            if (isset($data['email'])) {
+                if (User::where('email', $data['email'])->where('is_del', false)->where('id', '!=', $ARUser->id)->exists()) {
+                    return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'Update failed. The email has already been taken.');
+                }
+            }
+
+            if (isset($data['phone'])) {
+                if (User::where('phone', $data['phone'])->where('is_del', false)->where('id', '!=', $ARUser->id)->exists()) {
+                    return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'Update failed. The phone has been taken.');
+                }
+            }
+
+            $ARUser->update($data);
+        }
+
+        $ARUser->update_authoriser_id = null;
+        $ARUser->update_payload = null;
+        $ARUser->save();
 
         return successResponse('Successful', UserResource::make($ARUser));
 

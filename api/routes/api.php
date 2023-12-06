@@ -59,6 +59,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/view/{ARUser}', [ARController::class, 'view']);
             Route::post('/add', [ARController::class, 'add']);
             Route::post('/update/{ARUser}', [ARController::class, 'update']);
+            Route::post('/cancel-update/{ARUser}', [ARController::class, 'cancelUpdate']);
+            Route::post('/process-update/{ARUser}', [ARController::class, 'processUpdate']);
         });
     });
 
