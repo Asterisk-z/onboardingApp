@@ -12,17 +12,28 @@ import {
 } from "../../components/Component";
 import { useForm } from "react-hook-form";
 import { Steps, Step } from "react-step-builder";
-import { Row, Col,  Button } from "reactstrap";
+import { Row, Col, Button } from "reactstrap";
 import { HeaderLogo } from "../../pages/components/HeaderLogo";
 
 
 const PersonalForm = (props) => {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
+    companyName: "",
+    rcNumber: "",
+    officeAddress: "",
+    emailAddress: "",
+    secondaryEmail: "",
+    mobileNumber: "",
+    secondaryNumber: "",
+    incorporationDate: "",
+    incorporationPlace: "",
+    website: "",
+    businessNature: "",
+    capital: "",
+    shareCapital: "",
+    name: "",
     phone: "",
-    city: "",
+    email: "",
   });
 
   const onInputChange = (e) => {
@@ -44,35 +55,290 @@ const PersonalForm = (props) => {
       <Row className="gy-4">
         <Col md="6">
           <div className="form-group">
-            <label className="form-label" htmlFor="first-name">
-              First Name
+            <label className="form-label" htmlFor="company-name">
+              Company Name
             </label>
             <div className="form-control-wrap">
               <input
                 type="text"
-                id="first-name"
+                id="company-name"
                 className="form-control"
-                {...register('firstName', { required: true })}
+                {...register('companyName', { required: true })}
                 onChange={(e) => onInputChange(e)}
-                defaultValue={formData.firstName} />
-              {errors.firstName && <span className="invalid">This field is required</span>}
+                defaultValue={formData.companyName} />
+              {errors.companyName && <span className="invalid">This field is required</span>}
             </div>
           </div>
         </Col>
         <Col md="6">
           <div className="form-group">
-            <label className="form-label" htmlFor="last-name">
-              Last Name
+            <label className="form-label" htmlFor="rc-number">
+              RC Number
             </label>
             <div className="form-control-wrap">
               <input
                 type="text"
-                id="last-name"
+                id="rc-number"
                 className="form-control"
-                {...register('lastName', { required: true })}
+                {...register('rcNumber', { required: true })}
                 onChange={(e) => onInputChange(e)}
-                defaultValue={formData.lastName} />
-              {errors.lastName && <span className="invalid">This field is required</span>}
+                defaultValue={formData.rcNumber} />
+              {errors.rcNumber && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="office-address">
+              Registered Office Address
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                id="office-address"
+                className="form-control"
+                {...register('officeAddress', { required: true })}
+                onChange={(e) => onInputChange(e)}
+                defaultValue={formData.officeAddress} />
+              {errors.officeAddress && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="email-address">
+              Company Email Address
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                id="email-address"
+                className="form-control"
+                {...register('email', {
+                  required: true,
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: "Invalid email address",
+                  },
+                })}
+                onChange={(e) => onInputChange(e)}
+                defaultValue={formData.emailAddress} />
+              {errors.email && errors.email.type === "required" && (
+                <span className="invalid">This field is required</span>
+              )}
+              {errors.emailAddress && errors.emailAddress.type === "pattern" && (
+                <span className="invalid">{errors.emailAddress.message}</span>
+              )}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="secondary-email">
+              Secondary Company Email Address
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                id="secondary-email"
+                className="form-control"
+                {...register('email', {
+                  required: true,
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: "Invalid email address",
+                  },
+                })}
+                onChange={(e) => onInputChange(e)}
+                defaultValue={formData.secondaryEmail} />
+              {errors.secondaryEmail && errors.secondaryEmail.type === "required" && (
+                <span className="invalid">This field is required</span>
+              )}
+              {errors.secondaryEmail && errors.secondaryEmail.type === "pattern" && (
+                <span className="invalid">{errors.secondaryEmail.message}</span>
+              )}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="mobile-number">
+              Company Telephone/Mobile Number
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                id="mobile-number"
+                className="form-control"
+                {...register('firstName', { required: true })}
+                onChange={(e) => onInputChange(e)}
+                defaultValue={formData.mobileNumber} />
+              {errors.mobileNumber && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="secondary-number">
+              Secondary Telephone/Mobile Number
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                id="secondary-number"
+                className="form-control"
+                {...register('secondaryNumber', { required: true })}
+                onChange={(e) => onInputChange(e)}
+                defaultValue={formData.secondaryNumber} />
+              {errors.secondaryNumber && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="incorporation-date">
+              Date of Incorporation
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="date"
+                id="incorporation-date"
+                className="form-control"
+                {...register('incorporationDate', { required: true })}
+                onChange={(e) => onInputChange(e)}
+                defaultValue={formData.incorporationDate} />
+              {errors.incorporationDate && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="incorporation-place">
+              Place of Incorporation
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                id="incorporation-place"
+                className="form-control"
+                {...register('incorporationPlace', { required: true })}
+                onChange={(e) => onInputChange(e)}
+                defaultValue={formData.incorporationPlace} />
+              {errors.incorporationPlace && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="website">
+              Corporate Website Address
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                id="website"
+                className="form-control"
+                {...register('website', { required: true })}
+                onChange={(e) => onInputChange(e)}
+                defaultValue={formData.website} />
+              {errors.website && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="business-nature">
+              Nature of Business
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                id="business-nature"
+                className="form-control"
+                {...register('businessNature', { required: true })}
+                onChange={(e) => onInputChange(e)}
+                defaultValue={formData.businessNature} />
+              {errors.businessNature && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="capital">
+              Authorised Share Capital
+            </label>
+            <div style={{ display: 'flex', width: '100%' }}>
+              <select style={{ height: '35px', width: '15%', marginRight: '10px', paddingLeft: '5px' }}>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+              </select>
+              <input
+                type="text"
+                className="form-control"
+                style={{ width: '85%' }}
+                {...register('capital', { required: true })}
+                onChange={(e) => onInputChange(e)}
+                defaultValue={formData.capital} />
+              {errors.capital && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="share-capital">
+              Paid-up Share Capital
+            </label>
+            <div style={{ display: 'flex', width: '100%' }}>
+              <select style={{ height: '35px', width: '15%', marginRight: '10px', paddingLeft: '5px' }}>
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+              </select>
+              <input
+                type="text"
+                className="form-control"
+                style={{ width: '85%' }}
+                {...register('share-capital', { required: true })}
+                onChange={(e) => onInputChange(e)}
+                defaultValue={formData.shareCapital} />
+              {errors.shareCapital && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="name">
+              Name
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                id="name"
+                className="form-control"
+                {...register('name', { required: true })}
+                onChange={(e) => onInputChange(e)}
+                defaultValue={formData.name} />
+              {errors.name && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="phone-no">
+              Mobile Number
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="number"
+                id="phone-no"
+                className="form-control"
+                {...register('phone', { required: true })}
+                onChange={(e) => onInputChange(e)}
+                defaultValue={formData.phone} />
+              {errors.phone && <span className="invalid">This field is required</span>}
             </div>
           </div>
         </Col>
@@ -101,40 +367,6 @@ const PersonalForm = (props) => {
               {errors.email && errors.email.type === "pattern" && (
                 <span className="invalid">{errors.email.message}</span>
               )}
-            </div>
-          </div>
-        </Col>
-        <Col md="6">
-          <div className="form-group">
-            <label className="form-label" htmlFor="phone-no">
-              Mobile Number
-            </label>
-            <div className="form-control-wrap">
-              <input
-                type="number"
-                id="phone-no"
-                className="form-control"
-                {...register('phone', { required: true })}
-                onChange={(e) => onInputChange(e)}
-                defaultValue={formData.phone} />
-              {errors.phone && <span className="invalid">This field is required</span>}
-            </div>
-          </div>
-        </Col>
-        <Col md="6">
-          <div className="form-group">
-            <label className="form-label" htmlFor="city">
-              City
-            </label>
-            <div className="form-control-wrap">
-              <input
-                type="text"
-                id="city"
-                className="form-control"
-                {...register('city', { required: true })}
-                onChange={(e) => onInputChange(e)}
-                defaultValue={formData.city} />
-              {errors.city && <span className="invalid">This field is required</span>}
             </div>
           </div>
         </Col>
@@ -281,7 +513,7 @@ const PaymentInfo = (props) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const {  register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
   const submitForm = (data) => {
     //window.location.reload();
@@ -450,7 +682,7 @@ const Form = () => {
     scroll: {
       overFlow: "scroll",
     }
-    
+
   }
 
 
@@ -458,24 +690,24 @@ const Form = () => {
     <Head title="Form" />
     <HeaderLogo />
     <div className="login-block">
-      <Block style={styles.scroll} size="lg">
-          <BlockHead>
-            <div style={styles.color}>
-              <h2 style={styles.color}>Dealing Member (Banks) Application</h2>
-              <p>Please fill forms to complete your application</p>
-            </div>
-          </BlockHead>
-          <PreviewCard>
-            <div className="nk-wizard nk-wizard-simple is-alter wizard clearfix">
-              <Steps config={config}>
-                <Step component={PersonalForm} />
-                <Step component={UserSettings} />
-                <Step component={PaymentInfo} />
-                <Step component={Success} />
-              </Steps>
-            </div>
-          </PreviewCard>
-        </Block>
+      <Block className="nk-block-middle nk-auth-body  wide-xl">
+        <BlockHead>
+          <div style={styles.color}>
+            <h2 style={styles.color}>Dealing Member (Banks) Application</h2>
+            <p>Please fill forms to complete your application</p>
+          </div>
+        </BlockHead>
+        <PreviewCard>
+          <div className="nk-wizard nk-wizard-simple is-alter wizard clearfix">
+            <Steps config={config}>
+              <Step component={PersonalForm} />
+              <Step component={UserSettings} />
+              <Step component={PaymentInfo} />
+              <Step component={Success} />
+            </Steps>
+          </div>
+        </PreviewCard>
+      </Block>
     </div>
 
   </>;
