@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\MailContents;
+use App\Helpers\ResponseStatusCodes;
 use App\Helpers\Utility;
 use App\Http\Requests\RegistrationRequest;
 use App\Http\Resources\UserResource;
+use App\Models\Audit;
 use App\Models\Institution;
 use App\Models\InstitutionMembership;
+use App\Models\MembershipCategory;
 use App\Models\Position;
 use App\Models\Role;
-use App\Models\Audit;
 use App\Models\User;
-use App\Services\AuditLogger;
+use App\Notifications\InfoNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -27,44 +30,38 @@ class UsersController extends Controller
         ]);
 
         if (!$user = User::where('email', $request->email)->first()) {
-            // log activity
-            Audit::create([
-                'user' => $request->email,
-                'action_performed' => 'Failed Login',
-                'action_time' => now(),
-                'ip_address' => $request->ip()
-            ]);
-            // message
-            return errorResponse("99", "Incorrect login credentials.", [], Response::HTTP_UNAUTHORIZED);
+            logAction($request->email, 'Failed Login', 'Failed Login - Incorrect Email', $request->ip());
+            return errorResponse(ResponseStatusCodes::INVALID_AUTH_CREDENTIAL, "Incorrect login credentials.", [], Response::HTTP_UNAUTHORIZED);
         }
 
         if (!Hash::check($request->password, $user->password)) {
-            //
-            Audit::create([
-                'user' => $request->email,
-                'action_performed' => 'Failed Login',
-                'action_time' => now(),
-                'ip_address' => $request->ip()
-            ]);
-            return errorResponse("99", "Incorrect login credentials.", [], Response::HTTP_UNAUTHORIZED);
+            logAction($request->email, 'Failed Login', 'Failed Login - Incorrect Password', $request->ip());
+            return errorResponse(ResponseStatusCodes::INVALID_AUTH_CREDENTIAL, "Incorrect login credentials.", [], Response::HTTP_UNAUTHORIZED);
+        }
+
+        //check if user is verified, force if otherwise. 
+        if(! $user->verified_at){
+            logAction($request->email, 'Failed Login', 'Failed Login - Not yet reset passwword', $request->ip());
+            return errorResponse(ResponseStatusCodes::FORCE_PASSWORD_RESET, "Please reset your password to continue.");
+        }
+
+        //check password policy
+        if(! Utility::checkPasswordExpiry($user)){ 
+            logAction($request->email, 'Failed Login', 'Failed Login - Password expired', $request->ip());
+            return errorResponse(ResponseStatusCodes::FORCE_PASSWORD_RESET, "In a bid to keep you safe, you are required to reset your password.");
         }
 
         $token = auth()->login($user);
         $data = [
             'authorization' => [
                 'type' => 'Bearer',
-                'token' =>  $token,
-                'expires_in' =>  config('jwt.ttl') * 60
+                'token' => $token,
+                'expires_in' => config('jwt.ttl') * 60
             ],
-            'user' => UserResource::make($user)
+            'user' => UserResource::make($user),
         ];
-        // log activity
-        Audit::create([
-            'user' => auth()->user()->email,
-            'action_performed' => 'Successful Login',
-            'action_time' => now(),
-            'ip_address' => $request->ip()
-        ]);
+
+        logAction(auth()->user()->email, 'Successful Login', 'Login Successfull', $request->ip());
 
         return successResponse('Login Successful', $data);
     }
@@ -76,7 +73,7 @@ class UsersController extends Controller
 
         InstitutionMembership::create([
             'institution_id' => $institution->id,
-            'membership_category_id' => $request->input('category')
+            'membership_category_id' => $request->input('category'),
         ]);
 
         $user = User::create([
@@ -89,18 +86,19 @@ class UsersController extends Controller
             'approval_status' => 'approved',
             'role_id' => Role::ARINPUTTER,
             'institution_id' => $institution->id,
-            'position_id' => $position ? $position->id : null
+            'position_id' => $position ? $position->id : null,
+            'verified_at' => now()
         ]);
 
-        //TODO::SEND MAIL ???
-
-        // log activity
-        Audit::create([
-            'user' => $request->email,
-            'action_performed' => 'Successful User Registration',
-            'action_time' => now(),
-            'ip_address' => $request->ip()
+        $user->passwords()->create([
+            'password' => Hash::make($request->input('password'))
         ]);
-        return successResponse('Registration Successful', UserResource::make($user));
+
+        logAction($request->email, 'Successful User Registration', 'Registration Successful', $request->ip());
+
+        $membership = MembershipCategory::find($request->input('category'));
+
+        $user->notify(new InfoNotification(MailContents::signupMail($user->email, $user->created_at->format('Y-m-d')), MailContents::signupMailSubject()));
+        return successResponse("You have successfully signed up as a".$membership ? $membership->name : "member".". Kindly check your mail to proceed with completion of the membership form", UserResource::make($user));
     }
 }

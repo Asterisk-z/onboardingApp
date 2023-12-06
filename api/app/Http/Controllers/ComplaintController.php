@@ -2,22 +2,78 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\MailContents;
+use App\Helpers\Utility;
 use App\Models\Complaint;
+use App\Models\Role;
+use App\Notifications\InfoNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
 class ComplaintController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
+        $request->validate([
+            'status' => 'sometimes|in:NEW,ONGOING,CLOSED'
+        ]);
+
+        $status = $request->input('status');
         $user = $request->user();
-        $complaints = $user->complaints;
-        return successResponse('Your complaint has been submitted.', $complaints);
+
+        switch ($status) {
+            case 'NEW':
+                $complaints = $user->complaints()->where('status', 'NEW')->get();
+                break;
+            case 'ONGOING':
+                $complaints = $user->complaints()->where('status', 'ONGOING')->get();
+                break;
+            case 'CLOSED':
+                $complaints = $user->complaints()->where('status', 'CLOSED')->get();
+                break;
+            default:
+                $complaints = $user->complaints;
+                break;
+        }
+
+        return successResponse('Here you go.', $complaints);
+    }
+
+        /**
+     * Display a listing of the resource.
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function allComplaints(Request $request)
+    {
+        $request->validate([
+            'status' => 'sometimes|in:NEW,ONGOING,CLOSED'
+        ]);
+
+        $status = $request->input('status');
+
+        switch ($status) {
+            case 'NEW':
+                $complaints = Complaint::where('status', 'NEW')->get();
+                break;
+            case 'ONGOING':
+                $complaints = Complaint::where('status', 'ONGOING')->get();
+                break;
+            case 'CLOSED':
+                $complaints = Complaint::where('status', 'CLOSED')->get();
+                break;
+            default:
+                $complaints = Complaint::all();
+                break;
+        }
+
+        return successResponse('Here you go.', $complaints);
     }
 
     /**
@@ -42,8 +98,11 @@ class ComplaintController extends Controller
             'complaint_type_id' => $request->input('complaint_type')
         ]);
 
-        //TODO::Notify MEG
+        $MEGs = Utility::getUsersByCategory(Role::MEG);
+        if(count($MEGs))
+            Notification::send($MEGs, new InfoNotification(MailContents::complaintSubmitMail($user->first_name." ".$user->last_name, $user->institution->name ?? null, $request->input('body')), MailContents::complaintSubmitSubject()));
 
+        logAction($request->user()->email, 'New Complaint', 'Logged a new complaint', $request->ip());
         return successResponse('Your complaint has been submitted.');
     }
 
@@ -72,8 +131,8 @@ class ComplaintController extends Controller
             "status" => $request->input('status') ?? "ONGOING"
         ]);
 
-        //TODO::Notify complainer
-
+        $comment->complaint->user->notify(new InfoNotification(MailContents::complaintCommentMail($request->input('comment'), $request->input('status')), MailContents::complaintCommentSubject()));
+        logAction($request->user()->email, 'Complaint Feedback', 'Made comment on a complaint', $request->ip());
         return successResponse('Your comment has been submitted.');
     }
 
@@ -90,10 +149,14 @@ class ComplaintController extends Controller
             "status" => "required|in:ONGOING,CLOSED"
         ]);
 
-        Complaint::find($request->input('complaint_id'))->update([
+        $complaint = Complaint::find($request->input('complaint_id'));
+        
+        $complaint->update([
             "status" => $request->input('status')
         ]);
 
+        $complaint->user->notify(new InfoNotification(MailContents::complaintStatusMail($request->input('status')), MailContents::complaintStatusSubject()));
+        logAction($request->user()->email, 'Change Complaint status', 'Change Complaint status', $request->ip());
         return successResponse('Status changed successfully.');
     }
 }

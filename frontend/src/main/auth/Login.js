@@ -127,7 +127,7 @@ const Login = () => {
             </div>
             <div className="form-group">
               <Button type="submit" size="lg" className="btn-block"  color="primary">
-                {loading ? <Spinner size="sm" color="light" /> : "Sign in"}
+                {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Sign in"}
               </Button>
             </div>
           </Form>

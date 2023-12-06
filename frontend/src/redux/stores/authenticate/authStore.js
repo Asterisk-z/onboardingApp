@@ -1,15 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { toast } from "react-toastify";
 import { errorHandler, successHandler } from "../../../utils/Functions";
-import queryGenerator from "../../../utils/QueryGenerator";
-const initialState = {
-                    list: null,
-                    user: null,
-                    total: null,
-                    error: "",
-                    loading: false,
-};
+const initialState = { list: null, user: null, total: null, error: "", loading: false };
 
 export const registerUser = createAsyncThunk(
   "authenticate/registerUser",
@@ -24,7 +16,7 @@ export const registerUser = createAsyncThunk(
         url: `auth/register`,
         data: values,
       });
-      return successHandler(data, "You have successfully signed up as a member. Kindly check your mail to proceed with completion of the membership form");
+      return successHandler(data, data.message);
     } catch (error) {
       return errorHandler(error, true);
     }

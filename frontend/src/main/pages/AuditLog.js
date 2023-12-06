@@ -54,19 +54,6 @@ const Homepage = () => {
                                 Activity Log
                             </BlockTitle>
                         </BlockHeadContent>
-                        <BlockHeadContent>
-                            <div className="toggle-wrap nk-block-tools-toggle">
-                                <div className="toggle-expand-content" style={{ display: sm ? "block" : "none" }}>
-                                    <ul className="nk-block-tools g-3">
-                                        <li className="nk-block-tools-opt">
-                                            <Button color="primary">
-                                                <span onClick={toggleForm}>Add Complaint</span>
-                                            </Button>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </BlockHeadContent>
                     </BlockBetween>
                 </BlockHead>
                 {/* <Block>

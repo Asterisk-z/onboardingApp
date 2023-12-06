@@ -18,5 +18,6 @@ class DatabaseSeeder extends Seeder
         $this->call(Positions::class);
         $this->call(Roles::class);
         $this->call(ComplaintTypes::class);
+        $this->call(UserSeeder::class);
     }
 }
