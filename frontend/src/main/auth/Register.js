@@ -228,7 +228,7 @@ const Register = ({ drawer }) => {
               
               <div className="form-group">
                 <Button type="submit" color="primary" size="lg" className="btn-block">
-                  {loading ? <Spinner size="sm" color="light" /> : "Register"}
+                {loading ? ( <span><Spinner size="sm" color="light" /> Processing...</span>) : "Register"}
                 </Button>
               </div>
             </form>
