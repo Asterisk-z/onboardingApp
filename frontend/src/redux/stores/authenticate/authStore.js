@@ -16,7 +16,7 @@ export const registerUser = createAsyncThunk(
         url: `auth/register`,
         data: values,
       });
-      return successHandler(data, "You have successfully signed up as a member. Kindly check your mail to proceed with completion of the membership form");
+      return successHandler(data, data.message);
     } catch (error) {
       return errorHandler(error, true);
     }
