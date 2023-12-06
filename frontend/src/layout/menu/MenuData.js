@@ -25,6 +25,21 @@ const menu = [
         link: "/ecommerce/products",
       },
       {
+      icon: "tile-thumb-fill",
+      text: "Projects",
+      active: false,
+      subMenu: [
+          {
+            text: "Project Cards",
+            link: "/project-card",
+          },
+          {
+            text: "Project List",
+            link: "/project-list",
+          },
+        ],
+      },
+      {
         icon: "users-fill",
         text: "Customers",
         link: "/ecommerce/customer",

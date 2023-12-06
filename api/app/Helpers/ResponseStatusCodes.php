@@ -3,12 +3,10 @@ namespace App\Helpers;
 
 class ResponseStatusCodes
 {
-    const INVALID_AUTH_CREDENTIAL = 99;
-    const UNAUTHORIZED = 999;
-
-    const BAD_REQUEST = 1;
-
-
-
+    const INVALID_AUTH_CREDENTIAL = '99';
+    const FORCE_PASSWORD_RESET = '666';
+    const UNAUTHORIZED = '999';
+    const OK = '00';
+    const BAD_REQUEST = '01';
 
 }

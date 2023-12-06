@@ -56,6 +56,10 @@ return [
 
     'asset_url' => env('ASSET_URL', null),
 
+    'password_expiry' => env('PASSWORD_EXPIRY', 1),
+
+    'unique_password' => env('UNIQUE_PASSWORD', 5),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

@@ -1,21 +1,22 @@
-// import jwt_decode from "jwt-decode";
+import React from "react";
+import { useNavigate } from 'react-router-dom';
 
-const checkTokenExp = (token) => {
+const checkTokenExp = (token, user) => {
   try {
-    // let amoth = ``;
+    const navigate = useNavigate()
+    if(!token || !user ) {
+        navigate(`${process.env.PUBLIC_URL}/logout`);
+    }
     const decoded = token.split('.')[1]
     const de = atob(decoded)
+    const deOject = JSON.parse(de);
 
-    console.log(de);
-    // if (jwtDecode(token).exp * 1000 < Date.now()) {
-    //   if (customer) {
-    //     return (window.location.href = "customer/logout");
-    //   } else {
-    //     return (window.location.href = "/admin/auth/logout");
-    //   }
-    // } else {
-    // }
+    if (deOject.exp * 1000 < Date.now()) {
+        navigate(`${process.env.PUBLIC_URL}/logout`);
+    }
+
   } catch (error) {
+        navigate(`${process.env.PUBLIC_URL}/logout`);
   }
 };
 

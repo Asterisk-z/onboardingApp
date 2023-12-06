@@ -10,6 +10,7 @@ use App\Http\Requests\AR\UpdateARRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class ARController extends Controller
 {
@@ -56,7 +57,7 @@ class ARController extends Controller
         $validated['institution_id'] = $request->user()->institution_id;
 
         $password = Utility::generatePassword();
-        $validated['password'] = \Hash::make($password);
+        $validated['password'] = Hash::make($password);
         $validated['created_by'] = $request->user()->id;
 
 

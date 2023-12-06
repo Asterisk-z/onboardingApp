@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\User;
+use App\Rules\EmailValidation;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RegistrationRequest extends FormRequest
@@ -37,17 +38,18 @@ class RegistrationRequest extends FormRequest
                         $fail('The email has been taken.');
                     }
                 },
+                new EmailValidation
             ],
             'phone' => [
                 'required',
-                'regex:/^(070|080|091|090|081|071)\d{8}$/',
+                // 'regex:/^(070|080|091|090|081|071)\d{8}$/',
                 function ($attribute, $value, $fail) {
                     if (User::where('phone', $value)->where('is_del', false)->exists()) {
                         $fail('The phone has been taken.');
                     }
-                }
+                },
             ],
-            'password' => 'required|string|min:6'
+            'password' => 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/'
         ];
     }
 }

@@ -11,7 +11,7 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable;
 
     const APPROVED = "approved";
     const DECLINED = "declined";
@@ -50,9 +50,8 @@ class User extends Authenticatable implements JWTSubject
 
     public function getJWTCustomClaims()
     {
-        return [
-
-        ];
+        return [];
+        return [];
     }
 
     public function complaints()
@@ -78,5 +77,10 @@ class User extends Authenticatable implements JWTSubject
     public function institution()
     {
         return $this->belongsTo(Institution::class, 'institution_id');
+    }
+
+    public function passwords()
+    {
+        return $this->hasMany(PasswordHistory::class);
     }
 }

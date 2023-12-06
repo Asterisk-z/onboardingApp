@@ -1,15 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { toast } from "react-toastify";
 import { errorHandler, successHandler } from "../../../utils/Functions";
-import queryGenerator from "../../../utils/QueryGenerator";
-const initialState = {
-                    list: null,
-                    user: null,
-                    total: null,
-                    error: "",
-                    loading: false,
-};
+const initialState = { list: null, user: null, total: null, error: "", loading: false };
 
 export const registerUser = createAsyncThunk(
   "authenticate/registerUser",
@@ -44,11 +36,10 @@ export const loginUser = createAsyncThunk(
         url: `auth/login`,
         data: values,
       });
-      if(data) {
-        
+      if(data) {    
         localStorage.setItem("access-token", data.data.authorization.token);
-        localStorage.setItem("role", data.data.user.role);
-        localStorage.setItem("user", data.data.user.email);
+        localStorage.setItem("role", data.data.user?.role?.name?.split(' ').join(''));
+        localStorage.setItem("user_mail", data.data.user.email);
         localStorage.setItem("firstName", data.data.user.firstName);
         localStorage.setItem("id", data.data.user.id);
         localStorage.setItem("logger", btoa(JSON.stringify(data.data.user)));

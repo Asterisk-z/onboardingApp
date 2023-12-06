@@ -5,13 +5,18 @@ import Logo from "../logo/Logo";
 import Menu from "../menu/Menu";
 import Toggle from "./Toggle";
 import EcommerceMenu from "../menu/EcommerceMenu";
+import UserMenu from "../menu/UserMenu";
+import AdminMenu from "../menu/AdminMenu";
 
 import { useTheme, useThemeUpdate } from '../provider/Theme';
+import { useUser, useUserUpdate } from '../provider/AuthUser';
 
 const Sidebar = ({ fixed, className, ...props }) => {
 
   const theme = useTheme();
   const themeUpdate = useThemeUpdate();
+  const aUser = useUser();
+  const aUserUpdate = useUserUpdate();
 
   const [mouseEnter, setMouseEnter] = useState(false);
 
@@ -50,11 +55,16 @@ const Sidebar = ({ fixed, className, ...props }) => {
         </div>
         <div className="nk-sidebar-content" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
           <SimpleBar className="nk-sidebar-menu">
-            {window.location.pathname.split("/")[2] === "ecommerce" ? (
+            {aUser.role == "ARINPUTER" || aUser.role == "ARAUTHORISER"  ? (
+              <UserMenu />
+            ) : (
+              <AdminMenu />
+            )}
+            {/* {window.location.pathname.split("/")[2] === "ecommerce" ? (
               <EcommerceMenu />
             ) : (
               <Menu />
-            )}
+            )} */}
           </SimpleBar>
         </div>
       </div>

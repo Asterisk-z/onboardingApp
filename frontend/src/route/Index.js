@@ -126,19 +126,36 @@ import Error404Modern from "../pages/error/404-modern";
 import Error504Modern from "../pages/error/504-modern";
 import Error504Classic from "../pages/error/504-classic";
 
-import Login from "../main/auth/Login";
-import Register from "../main/auth/Register";
-import ForgotPassword from "../main/auth/ForgotPassword";
-import Form from "../main/forms/Form";
-import Complaint from "../main/pages/Complaint" 
-import Success from "../pages/auth/Success";
-
-import Layout from "../layout/Index";
-import LayoutNoSidebar from "../layout/Index-nosidebar";
 
 
-import MainLayout from "../main/layout/Index";
-import MainLayoutNoSidebar from "../main/layout/Index-nosidebar";
+
+
+
+
+
+
+
+
+
+
+
+
+
+import Login from "main/auth/Login";
+import Logout from "main/auth/Logout";
+import Register from "main/auth/Register";
+import ForgotPassword from "main/auth/ForgotPassword";
+import Form from "main/forms/Form";
+import Complaint from "main/pages/Complaint" 
+import AuditLog from "main/pages/AuditLog" 
+import Success from "pages/auth/Success";
+
+import Layout from "layout/Index";
+import LayoutNoSidebar from "layout/Index-nosidebar";
+
+
+import MainLayout from "main/layout/Index";
+import MainLayoutNoSidebar from "main/layout/Index-nosidebar";
 
 
 import Landing from "main/auth/Landing";
@@ -181,7 +198,6 @@ const Router = () => {
         <Route path={`${process.env.PUBLIC_URL}`} element={<Layout />}>
 
 
-          <Route path="complaint" element={<Complaint />}></Route>
           
           {/*Dashboards*/}
           {/* <Route index element={<Homepage />}></Route> */}
@@ -337,6 +353,7 @@ const Router = () => {
             <Route path="auth-reset" element={<ForgotPassword />}></Route>
             <Route path="auth-register" element={<Register />}></Route>
             <Route path="login" element={<Login />}></Route>
+            <Route path="logout" element={<Logout />}></Route>
             <Route path="form" element={<Form />}></Route>
             <Route index element={<Landing />}></Route>
         
@@ -353,7 +370,9 @@ const Router = () => {
         </Route>
         
         <Route path={`${process.env.PUBLIC_URL}`} element={<Layout />}>
-          <Route path="user-dashboard" element={<UserHomepage />}></Route>
+          <Route path="dashboard" element={<UserHomepage />}></Route>
+          <Route path="complaint" element={<Complaint />}></Route>
+          <Route path="audit-log" element={<AuditLog />}></Route>
         </Route>
       </Routes>
   );
