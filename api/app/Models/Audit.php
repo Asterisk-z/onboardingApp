@@ -10,7 +10,7 @@ class Audit extends Model
     use HasFactory;
 
     // protected $guarded = ['id'];
-    protected $table = 'audit';
+    protected $table = 'audits';
     public $timestamps = false;
     protected $guarded = [];
 }
