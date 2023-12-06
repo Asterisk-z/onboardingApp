@@ -75,6 +75,9 @@ Route::middleware('auth')->group(function () {
             Route::post('/cancel-update/{ARUser}', [ARController::class, 'cancelUpdate']);
             Route::post('/process-update/{ARUser}', [ARController::class, 'processUpdate']);
 
+            Route::get('/transfer', [ARController::class, 'listTransfer']);
+            Route::get('/change-status', [ARController::class, 'listStatusChange']);
+
             Route::post('/transfer/{ARUser}', [ARController::class, 'transfer']);
             Route::post('/change-status/{ARUser}', [ARController::class, 'changeStatus']);
         });

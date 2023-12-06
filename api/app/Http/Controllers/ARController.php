@@ -202,6 +202,44 @@ class ARController extends Controller
 
     }
 
+    public function listTransfer(Request $request)
+    {
+        // check if there is pending transfer request
+        $query = ARTransferRequest::where('new_institution_id', $request->user()->institution_id);
+
+        if ($request->status) {
+            $query = $query->where('approval_status', $request->status);
+        }
+
+        $records = $query->latest()->get();
+
+        return successResponse('Successful', ARTransferRequestResource::collection($records));
+
+    }
+
+    public function listStatusChange(Request $request)
+    {
+        // Get the institution ID of the authenticated user
+        $institution_id = $request->user()->institution_id;
+
+        // Build the query for ARDeactivationRequest
+        $query = ARDeactivationRequest::whereHas('ar', function ($subQuery) use ($institution_id) {
+            // Use the relationship to filter based on institution ID
+            $subQuery->where('institution_id', $institution_id);
+        });
+
+        // Check if there is a specific approval status in the request
+        if ($request->status) {
+            $query = $query->where('approval_status', $request->status);
+        }
+
+
+        $records = $query->latest()->get();
+
+        return successResponse('Successful', ARDeactivationRequestResource::collection($records));
+
+    }
+
 
     public function transfer(TransferARRequest $request, User $ARUser)
     {
@@ -286,6 +324,8 @@ class ARController extends Controller
         return successResponse('Successful', ARTransferRequestResource::make($record));
 
     }
+
+
 
     public function changeStatus(ChangeStatusARRequest $request, User $ARUser)
     {
