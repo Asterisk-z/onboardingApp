@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ARMailContents;
 use App\Helpers\ResponseStatusCodes;
 use App\Helpers\Utility;
 use App\Http\Requests\AR\AddARRequest;
@@ -17,8 +18,10 @@ use App\Models\AR\ARTransferRequest;
 use App\Models\Position;
 use App\Models\Role;
 use App\Models\User;
+use App\Notifications\InfoNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Notification;
 
 class ARController extends Controller
 {
@@ -71,7 +74,22 @@ class ARController extends Controller
 
         $user = User::create($validated);
 
-        //TODO::SEND MAIL to user and MEG for approval
+        $regID = $user->getRegID();
+
+        $logMessage = "Added a new AR $user->email ($regID)";
+        logAction($request->user()->email, 'Add AR', $logMessage, $request->ip());
+
+
+        $MEGs = Utility::getUsersByCategory(Role::MEG);
+        if (count($MEGs))
+            Notification::send($MEGs, new InfoNotification(ARMailContents::applicationMEGBody($user), ARMailContents::applicationMEGSubject()));
+
+
+        // copy 
+        $MBGs = Utility::getUsersByCategory(Role::MBG);
+        if (count($MBGs))
+            Notification::send($MBGs, new InfoNotification(ARMailContents::applicationMEGBody($user), ARMailContents::applicationMEGSubject()));
+
 
         return successResponse('Successful', UserResource::make($user));
     }
@@ -127,13 +145,21 @@ class ARController extends Controller
         $ARUser->update_payload = $validated;
         $ARUser->save();
 
-        //TODO::SEND MAIL to authoriser for approval
+        $regID = $ARUser->getRegID();
+        $logMessage = "Updated the AR record of $ARUser->email ($regID)";
+        logAction($request->user()->email, 'Update AR', $logMessage, $request->ip());
+
+
+        $authoriserUser = User::find($authoriserID);
+        $authoriserUser->notify(new InfoNotification(ARMailContents::updateAuthoriserBody($authoriserUser, $ARUser), ARMailContents::updateAuthoriserSubject()));
+
+
 
         return successResponse('Successful', UserResource::make($ARUser));
 
     }
 
-    public function cancelUpdate(User $ARUser)
+    public function cancelUpdate(Request $request, User $ARUser)
     {
 
         if ($ARUser->update_authoriser_id || $ARUser->update_payload) {
@@ -141,7 +167,9 @@ class ARController extends Controller
             $ARUser->update_payload = null;
             $ARUser->save();
 
-            //TODO::SEND MAIL to authoriser for approval
+            $regID = $ARUser->getRegID();
+            $logMessage = "Cancelled the AR update of $ARUser->email ($regID)";
+            logAction($request->user()->email, 'Cancel AR Update', $logMessage, $request->ip());
         }
 
         return successResponse('Successful', UserResource::make($ARUser));
@@ -157,6 +185,8 @@ class ARController extends Controller
         $request->validate([
             'action' => 'required|in:approve,decline',
         ]);
+
+        $regID = $ARUser->getRegID();
 
         if ($request->action == 'approve') {
             $data = $ARUser->update_payload;
@@ -178,8 +208,7 @@ class ARController extends Controller
                 }
             }
 
-
-
+            $updateParams = $data;
 
             // if position is set, remove it from update data
             if (isset($data['position'])) {
@@ -191,12 +220,31 @@ class ARController extends Controller
                 unset($data['role']);
             }
 
+            $oldRecord = $ARUser;
+
             $ARUser->update($data);
+
+            $logTitle = 'Approve AR Update';
+            $logMessage = "Approved the AR update of $ARUser->email ($regID)";
+
+
+            $MEGs = Utility::getUsersByCategory(Role::MEG);
+            if (count($MEGs))
+                Notification::send($MEGs, new InfoNotification(ARMailContents::updatedMEGBody($oldRecord, $updateParams), ARMailContents::updatedMEGSubject()));
+
+
+
+        } else {
+            $logTitle = 'Decline AR Update';
+            $logMessage = "Declined the AR update of $ARUser->email ($regID)";
         }
 
         $ARUser->update_authoriser_id = null;
         $ARUser->update_payload = null;
         $ARUser->save();
+
+        logAction($request->user()->email, $logTitle, $logMessage, $request->ip());
+
 
         return successResponse('Successful', UserResource::make($ARUser));
 
@@ -219,10 +267,8 @@ class ARController extends Controller
 
     public function listStatusChange(Request $request)
     {
-        // Get the institution ID of the authenticated user
         $institution_id = $request->user()->institution_id;
 
-        // Build the query for ARDeactivationRequest
         $query = ARDeactivationRequest::whereHas('ar', function ($subQuery) use ($institution_id) {
             // Use the relationship to filter based on institution ID
             $subQuery->where('institution_id', $institution_id);
@@ -316,7 +362,15 @@ class ARController extends Controller
         $record->request_reason = $reason;
         $record->save();
 
-        //TODO::SEND MAIL to authoriser for approval
+
+        $regID = $ARUser->getRegID();
+        $logMessage = "Requested AR transfer of $ARUser->email ($regID)";
+        logAction($request->user()->email, 'Request AR Transfer', $logMessage, $request->ip());
+
+
+        $authoriserUser = User::find($authoriserID);
+        $authoriserUser->notify(new InfoNotification(ARMailContents::transferAuthoriserBody($authoriserUser, $ARUser), ARMailContents::transferAuthoriserSubject()));
+
 
         $record->refresh();
 
@@ -363,9 +417,29 @@ class ARController extends Controller
 
         $record->refresh();
 
-        //TODO::SEND MAIL to authoriser for approval
+        $regID = $ARUser->getRegID();
+
+        $logActionType = ($validated['request_type'] == "activate") ? "Activation" : "Deactivation";
+
+        $logMessage = "Requested AR $logActionType of $ARUser->email ($regID)";
+        logAction($request->user()->email, "Request AR $logActionType", $logMessage, $request->ip());
+
+        $authoriserUser = User::find($authoriserID);
+        $authoriserUser->notify(new InfoNotification(ARMailContents::changeStatusAuthoriserBody($authoriserUser, $ARUser, $logActionType), ARMailContents::changeStatusAuthoriserSubject($logActionType)));
+
 
         return successResponse('Successful', ARDeactivationRequestResource::make($record));
 
+    }
+
+
+    public function test()
+    {
+        // $user = User::find(3);
+        // $auth = User::find(1);
+        // $info = "Approval";
+        // $updateParams = $auth->getBasicData(true);
+
+        // return ARMailContents::updatedMEGBody($user, $updateParams);
     }
 }

@@ -40,13 +40,13 @@ class UsersController extends Controller
         }
 
         //check if user is verified, force if otherwise. 
-        if(! $user->verified_at){
+        if (!$user->verified_at) {
             logAction($request->email, 'Failed Login', 'Failed Login - Not yet reset passwword', $request->ip());
             return errorResponse(ResponseStatusCodes::FORCE_PASSWORD_RESET, "Please reset your password to continue.");
         }
 
         //check password policy
-        if(! Utility::checkPasswordExpiry($user)){ 
+        if (!Utility::checkPasswordExpiry($user)) {
             logAction($request->email, 'Failed Login', 'Failed Login - Password expired', $request->ip());
             return errorResponse(ResponseStatusCodes::FORCE_PASSWORD_RESET, "In a bid to keep you safe, you are required to reset your password.");
         }
@@ -99,6 +99,7 @@ class UsersController extends Controller
         $membership = MembershipCategory::find($request->input('category'));
 
         $user->notify(new InfoNotification(MailContents::signupMail($user->email, $user->created_at->format('Y-m-d')), MailContents::signupMailSubject()));
-        return successResponse("You have successfully signed up as a".$membership ? $membership->name : "member".". Kindly check your mail to proceed with completion of the membership form", UserResource::make($user));
+
+        return successResponse("You have successfully signed up as a" . $membership ? $membership->name : "member" . ". Kindly check your mail to proceed with completion of the membership form", UserResource::make($user));
     }
 }
