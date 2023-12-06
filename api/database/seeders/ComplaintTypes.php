@@ -15,14 +15,14 @@ class ComplaintTypes extends Seeder
     public function run()
     {
         $types = [
-            ["name" => "Registration Problems"],
+            ["name" => "Regstration Problems"],
             ["name" => "Fraudulent Activity"],
-            ["name" => "Inaccurate Remittance"],
-            ["name" => "Indiscipline"],
+            ["name" => "Inacurrate Remittance"],
+            ["name" => "Indiscipline"]
         ];
 
-        foreach ($types as $type) {
-            if (ComplaintType::where('name', $type['name'])->exists()) {
+        foreach($types as $type){
+            if(ComplaintType::where('name', $type['name'])->exists()){
                 continue;
             }
 

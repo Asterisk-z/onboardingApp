@@ -7,6 +7,7 @@ use App\Helpers\ResponseStatusCodes;
 use App\Helpers\Utility;
 use App\Http\Requests\RegistrationRequest;
 use App\Http\Resources\UserResource;
+use App\Models\Audit;
 use App\Models\Institution;
 use App\Models\InstitutionMembership;
 use App\Models\MembershipCategory;
@@ -38,14 +39,14 @@ class UsersController extends Controller
             return errorResponse(ResponseStatusCodes::INVALID_AUTH_CREDENTIAL, "Incorrect login credentials.", [], Response::HTTP_UNAUTHORIZED);
         }
 
-        //check if user is verified, force if otherwise.
-        if (!$user->verified_at) {
-            logAction($request->email, 'Failed Login', 'Failed Login - Not yet reset password', $request->ip());
+        //check if user is verified, force if otherwise. 
+        if(! $user->verified_at){
+            logAction($request->email, 'Failed Login', 'Failed Login - Not yet reset passwword', $request->ip());
             return errorResponse(ResponseStatusCodes::FORCE_PASSWORD_RESET, "Please reset your password to continue.");
         }
 
         //check password policy
-        if (!Utility::checkPasswordExpiry($user)) {
+        if(! Utility::checkPasswordExpiry($user)){ 
             logAction($request->email, 'Failed Login', 'Failed Login - Password expired', $request->ip());
             return errorResponse(ResponseStatusCodes::FORCE_PASSWORD_RESET, "In a bid to keep you safe, you are required to reset your password.");
         }
@@ -55,7 +56,7 @@ class UsersController extends Controller
             'authorization' => [
                 'type' => 'Bearer',
                 'token' => $token,
-                'expires_in' => config('jwt.ttl') * 60,
+                'expires_in' => config('jwt.ttl') * 60
             ],
             'user' => UserResource::make($user),
         ];
@@ -86,11 +87,11 @@ class UsersController extends Controller
             'role_id' => Role::ARINPUTTER,
             'institution_id' => $institution->id,
             'position_id' => $position ? $position->id : null,
-            'verified_at' => now(),
+            'verified_at' => now()
         ]);
 
         $user->passwords()->create([
-            'password' => Hash::make($request->input('password')),
+            'password' => Hash::make($request->input('password'))
         ]);
 
         logAction($request->email, 'Successful User Registration', 'Registration Successful', $request->ip());
@@ -98,6 +99,6 @@ class UsersController extends Controller
         $membership = MembershipCategory::find($request->input('category'));
 
         $user->notify(new InfoNotification(MailContents::signupMail($user->email, $user->created_at->format('Y-m-d')), MailContents::signupMailSubject()));
-        return successResponse("You have successfully signed up as a" . $membership ? $membership->name : "member" . ". Kindly check your mail to proceed with completion of the membership form", UserResource::make($user));
+        return successResponse("You have successfully signed up as a".$membership ? $membership->name : "member".". Kindly check your mail to proceed with completion of the membership form", UserResource::make($user));
     }
 }
