@@ -25,15 +25,15 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('/login', [UsersController::class, 'login']);
     Route::post('/register', [UsersController::class, 'register']);
 
-    Route::prefix('password')->group(function() {
+    Route::prefix('password')->group(function () {
         Route::post('/change', [PasswordController::class, 'changePassword'])->middleware('throttle:10,5');
 
-        Route::prefix('reset')->group(function() {
+        Route::prefix('reset')->group(function () {
             Route::post('/initiate', [PasswordController::class, 'forgotPassword']);
             Route::post('/otp', [PasswordController::class, 'validateForgotPasswordOtp'])->middleware('throttle:10,5');
             Route::post('/complete', [PasswordController::class, 'resetPassword'])->middleware('passwordReset');
         });
-        
+
     });
 });
 
@@ -74,6 +74,9 @@ Route::middleware('auth')->group(function () {
             Route::post('/update/{ARUser}', [ARController::class, 'update']);
             Route::post('/cancel-update/{ARUser}', [ARController::class, 'cancelUpdate']);
             Route::post('/process-update/{ARUser}', [ARController::class, 'processUpdate']);
+
+            Route::post('/transfer/{ARUser}', [ARController::class, 'transfer']);
+            Route::post('/change-status/{ARUser}', [ARController::class, 'changeStatus']);
         });
     });
 
