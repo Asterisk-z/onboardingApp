@@ -96,56 +96,92 @@ const CustomCheckbox = React.forwardRef(({ onClick, ...rest }, ref) => (
 ));
 
 const DropdownExample = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  // const [isOpen, setIsOpen] = useState(false);
   
-  const toggle = () => {setIsOpen(!isOpen)};
+  // const toggle = () => {setIsOpen(!isOpen)};
+  const [isDropdownVisible, setDropdownVisible] = useState(false);
 
+  const handleButtonClick = () => {
+    setDropdownVisible(!isDropdownVisible);
+    console.log(isDropdownVisible)
+  };
+  const styles = {
+    dropdownContainer: {
+      position: "relative",
+      display: "inline-block",
+      // height: "300px"
+    },
+    
+    dropdownContent: {
+      display: "block",
+      position: "absolute",
+      top: "70%",
+      left: "0",
+      height: "300px",
+      width: "300px",
+      backgroundColor: "red",
+      border: "1px solid #ccc",
+      boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
+      padding: "8px",
+      zIndex: "1000"
+    }
+    
+  }
   return (
-    <Dropdown isOpen={true} toggle={toggle}>
-      <DropdownToggle className="btn-action" color="primary">
-        <span>Dropdown Button</span>
-      </DropdownToggle>
-      <DropdownMenu>
-        <ul className="link-list-opt">
-          <li>
-            <DropdownItem
-              tag="a"
-              href="#links"
-              onClick={(ev) => ev.preventDefault()}
-            >
-              <span>Profile Settings</span>
-            </DropdownItem>
-          </li>
-          <li>
-            <DropdownItem
-              tag="a"
-              href="#links"
-              onClick={(ev) => ev.preventDefault()}
-            >
-              <span>Notifications</span>
-            </DropdownItem>
-          </li>
-          <li>
-            <DropdownItem
-              tag="a"
-              href="#links"
-              onClick={(ev) => ev.preventDefault()}
-            >
-              <span>Another Action</span>
-            </DropdownItem>
-          </li>
-          <li>
-            <DropdownItem
-              tag="a"
-              href="#links"
-              onClick={(ev) => ev.preventDefault()}
-            >
-              <span>Something else here</span>
-            </DropdownItem>
-          </li>
-        </ul>
-      </DropdownMenu>
-    </Dropdown>
+    // <Dropdown isOpen={true} toggle={toggle}>
+    //   <DropdownToggle className="btn-action" color="primary">
+    //     <span>Dropdown Button</span>
+    //   </DropdownToggle>
+    //   <DropdownMenu>
+    //     <ul className="link-list-opt">
+    //       <li>
+    //         <DropdownItem
+    //           tag="a"
+    //           href="#links"
+    //           onClick={(ev) => ev.preventDefault()}
+    //         >
+    //           <span>Profile Settings</span>
+    //         </DropdownItem>
+    //       </li>
+    //       <li>
+    //         <DropdownItem
+    //           tag="a"
+    //           href="#links"
+    //           onClick={(ev) => ev.preventDefault()}
+    //         >
+    //           <span>Notifications</span>
+    //         </DropdownItem>
+    //       </li>
+    //       <li>
+    //         <DropdownItem
+    //           tag="a"
+    //           href="#links"
+    //           onClick={(ev) => ev.preventDefault()}
+    //         >
+    //           <span>Another Action</span>
+    //         </DropdownItem>
+    //       </li>
+    //       <li>
+    //         <DropdownItem
+    //           tag="a"
+    //           href="#links"
+    //           onClick={(ev) => ev.preventDefault()}
+    //         >
+    //           <span>Something else here</span>
+    //         </DropdownItem>
+    //       </li>
+    //     </ul>
+    //   </DropdownMenu>
+    // </Dropdown>
+    <div style={styles.dropdownContainer}>
+      <button onClick={handleButtonClick}>Toggle Dropdown</button>
+      {isDropdownVisible && 
+      <div  style={styles.dropdownContent}>
+          <p>Item 1</p>
+          <p>Item 2</p>
+          <p>Item 3</p>
+      </div>}
+    </div>
   )
 }
 
