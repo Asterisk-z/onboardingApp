@@ -1,138 +1,29 @@
 import React, { useEffect, useState } from "react";
-import Head from "../layout/head/Head";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import Content from "../layout/content/Content";
 import { useForm } from "react-hook-form";
-import { Modal, ModalHeader, ModalBody, ModalFooter, Nav, NavLink, NavItem, TabContent, TabPane, Card, Spinner} from "reactstrap";
-import { Block, OrderTable, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect } from "components/Component";
-import { loadAllComplaintTypes } from "../../redux/stores/complaints/complaintTypes";
-import { sendComplaint } from "../../redux/stores/complaints/complaint";
+import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner} from "reactstrap";
+import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
+import { loadAllComplaintTypes } from "redux/stores/complaints/complaintTypes";
+import { sendComplaint, loadAllComplaints } from "redux/stores/complaints/complaint";
 
-import { orderData } from "components/table/TableData";
-import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge } from "reactstrap";
-// import Icon from "../icon/Icon";
-// import Button from "../button/Button";
+import { DataTableData, dataTableColumns, dataTableColumns2, userData, orderData } from "components/table/TableData";
+import Content from "layout/content/Content";
+import Head from "layout/head/Head";
+import ComplaintTableUser from './ComplaintTableUser'
 
-const ComplainTable = () => {
-  const DropdownTrans = () => {
-    return (
-      <UncontrolledDropdown>
-        <DropdownToggle tag="a" className="text-soft dropdown-toggle btn btn-icon btn-trigger">
-          <Icon name="more-h"></Icon>
-        </DropdownToggle>
-        <DropdownMenu end>
-          <ul className="link-list-plain">
-            <li>
-              <DropdownItem
-                tag="a"
-                href="#dropdownitem"
-                onClick={(ev) => {
-                  ev.preventDefault();
-                }}
-              >
-                View
-              </DropdownItem>
-            </li>
-            <li>
-              <DropdownItem
-                tag="a"
-                href="#dropdownitem"
-                onClick={(ev) => {
-                  ev.preventDefault();
-                }}
-              >
-                Invoice
-              </DropdownItem>
-            </li>
-            <li>
-              <DropdownItem
-                tag="a"
-                href="#dropdownitem"
-                onClick={(ev) => {
-                  ev.preventDefault();
-                }}
-              >
-                Print
-              </DropdownItem>
-            </li>
-          </ul>
-        </DropdownMenu>
-      </UncontrolledDropdown>
-    );
-  };
-  return (
-    <table className="table table-orders">
-      <thead className="tb-odr-head">
-        <tr className="tb-odr-item">
-          <th className="tb-odr-info">
-            <span className="tb-odr-id">Ticket ID</span>
-            <span className="tb-odr-date d-none d-md-inline-block">Date Create</span>
-          </th>
-          <th className="tb-odr-amount">
-            <span className="tb-odr-total">Description</span>
-            <span className="tb-odr-status d-none d-md-inline-block">Status</span>
-          </th>
-          <th className="tb-odr-action">&nbsp;</th>
-        </tr>
-      </thead>
-      <tbody className="tb-odr-body">
-        {orderData.map((item) => {
-          return (
-            <tr className="tb-odr-item" key={item.id}>
-              <td className="tb-odr-info">
-                <span className="tb-odr-id">
-                  <a
-                    href="#id"
-                    onClick={(ev) => {
-                      ev.preventDefault();
-                    }}
-                  >
-                    {item.id}
-                  </a>
-                </span>
-                <span className="tb-odr-date">{item.date}</span>
-              </td>
-              <td className="tb-odr-amount">
-                <span className="tb-odr-total">
-                  <span className="amount">${item.amount}</span>
-                </span>
-                <span className="tb-odr-status">
-                  <Badge
-                    className="badge-dot"
-                    color={
-                      item.status === "Complete" ? "success" : item.status === "Pending" ? "warning" : "danger"
-                    }
-                  >
-                    {item.status}
-                  </Badge>
-                </span>
-              </td>
-              <td className="tb-odr-action">
-                <div className="tb-odr-btns d-none d-md-inline">
-                  <Button color="primary" className="btn-sm">
-                    View
-                  </Button>
-                </div>
-                <DropdownTrans />
-              </td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
-  );
-};
+
 
 const Complaint = ({ drawer }) => {
         
+    const [counter, setCounter] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [complainFile, setComplainFile] = useState([]);
     const [sm, updateSm] = useState(false);
     const [modalForm, setModalForm] = useState(false);
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors }, resetField } = useForm();
     const complaintType = useSelector((state) => state?.complaintType?.list) || null;
 
     const toggleForm = () => setModalForm(!modalForm);
@@ -148,7 +39,7 @@ const Complaint = ({ drawer }) => {
         formData.append('complaint_type', values.complaint_type)
         formData.append('body', values.body)
         formData.append('document', complainFile)
-        console.log(complainFile)
+        
         try {
             setLoading(true);
             
@@ -156,9 +47,12 @@ const Complaint = ({ drawer }) => {
 
             if (resp.payload?.message == "success") {
                 setTimeout(() => {
-                  navigate(`${process.env.PUBLIC_URL}/complaint`);
                   setLoading(false);
                   setModalForm(!modalForm)
+                  resetField('complaint_type')
+                  resetField('body')
+                  resetField('document')
+                  setCounter(!counter)
                 }, 1000);
             
             } else {
@@ -172,9 +66,44 @@ const Complaint = ({ drawer }) => {
     }; 
 
     const handleFileChange = (event) => {
-		setComplainFile(event.target.files[0]);
+		  setComplainFile(event.target.files[0]);
     };
+
+const ComplainTable = () => {
     
+    const dispatch = useDispatch();
+    const complaints = useSelector((state) => state?.complaint?.list) || null;
+    useEffect(() => {
+        dispatch(loadAllComplaints());
+    }, [counter, dispatch]);
+  
+    
+    const $complaints = complaints ? JSON.parse(complaints) : null;
+  
+    return (
+        <React.Fragment>
+            <Content>
+
+
+                <Block size="xl">
+                    <BlockHead>
+                        <BlockHeadContent>
+                            <BlockTitle tag="h4">Complaint History</BlockTitle>
+                            {/* <p>{complaints}</p> */}
+                        </BlockHeadContent>
+                    </BlockHead>
+
+                    <PreviewCard>
+                        {$complaints && <ComplaintTableUser data={$complaints} expandableRows pagination actions />}
+                    </PreviewCard>
+                </Block>
+
+
+            </Content>
+        </React.Fragment>
+    );
+}
+
 
     return (
         <React.Fragment>
@@ -242,7 +171,7 @@ const Complaint = ({ drawer }) => {
                             </div>
                             <div className="form-group">
                                 <label className="form-label" htmlFor="phone-no">
-                                    Upload Document
+                                    Upload Document (*csv, pdf)
                                 </label>
                                 <div className="form-control-wrap">
                                     <input type="file" className="form-control"  {...register('document', { })} onChange={handleFileChange}/>
@@ -251,8 +180,7 @@ const Complaint = ({ drawer }) => {
                             </div>
                             <div className="form-group">
                                 <Button color="primary" type="submit"  size="lg">
-                                    
-                                    {loading ? <Spinner size="sm" color="light" /> : "File Complain"}
+                                    {loading ? ( <span><Spinner size="sm" color="light" /> Processing...</span>) : "File Complain"}
                                 </Button>
                             </div>
                         </form>
@@ -262,11 +190,6 @@ const Complaint = ({ drawer }) => {
                     </ModalFooter>
                 </Modal>
                 <Block size="lg">
-                    <BlockHead>
-                        <BlockHeadContent>
-                            <BlockTitle tag="h4">Complains History</BlockTitle>
-                        </BlockHeadContent>
-                    </BlockHead>
                     <Card className="card-bordered card-preview">
                         <ComplainTable />
                     </Card>

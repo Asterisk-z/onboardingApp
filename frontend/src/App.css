@@ -1,0 +1,19 @@
+#customSelectDropdown{
+    background-color: #1D326C !important;
+    color: #fff !important;
+    font-weight: 900 !important;
+}
+
+#customSelectDropdown option {
+    background-color: #fff;
+    color: black;
+    font-weight: 900 !important;
+    padding: 20px;
+}
+
+.customMroisDatatable .dlfHg div:first-child {
+    overflow: unset !important;
+}
+.customMroisDatatable.hXLGuA {
+    overflow: unset !important;
+}

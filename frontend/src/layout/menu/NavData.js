@@ -12,21 +12,26 @@ const navData = [
     subPanel: [
       {
         icon: "dashboard-fill",
-        text: "ADDashboard",
-        link: "/",
+        text: "Dashboard",
+        link: "/admin-dashboard",
+      },
+      {
+        icon: "dashboard-fill",
+        text: "Complaints",
+        link: "/admin-complaint",
       },
       {
       icon: "tile-thumb-fill",
-      text: "Projects",
+      text: "Activity Log",
       active: false,
       subMenu: [
           {
-            text: "Project Cards",
-            link: "/project-card",
+            text: "All Logs",
+            link: "/admin-audit-log",
           },
           {
-            text: "Project List",
-            link: "/project-list",
+            text: "User Log",
+            link: "/user-audit-log",
           },
         ],
       },

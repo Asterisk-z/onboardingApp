@@ -58,7 +58,7 @@ a {
 }
 
 .flex-button button:focus {
-    background-color: red;
+    background-color: #CC9933;
     color: #fff;
 }
 
@@ -88,7 +88,7 @@ a {
 }
 
 .mrois-title {
-    color: #fff;
+    /* color: #fff; */
     margin-top: 10px;
 }
 
@@ -144,4 +144,9 @@ select{
     .w-50 {
         width: 100%;
     }
+}
+
+.entry p {
+    text-align: justify;
+    text-justify: inter-word;
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ARController;
+use App\Http\Controllers\AuditController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\ComplaintTypeController;
 use App\Http\Controllers\MemberCategoryController;
@@ -33,7 +34,6 @@ Route::group(['prefix' => 'auth'], function () {
             Route::post('/otp', [PasswordController::class, 'validateForgotPasswordOtp'])->middleware('throttle:10,5');
             Route::post('/complete', [PasswordController::class, 'resetPassword'])->middleware('passwordReset');
         });
-
     });
 });
 
@@ -43,18 +43,27 @@ Route::get('/complaint-types', [ComplaintTypeController::class, 'index']);
 
 Route::middleware('auth')->group(function () {
 
-    Route::group(['prefix' => 'complaint'], function () {
+    Route::group(['prefix' => 'complaint'],  function () {
         Route::post('/store', [ComplaintController::class, 'store']);
         Route::get('/', [ComplaintController::class, 'index']);
     });
 
-    //MEG ROUTES
+    //
+    Route::group(['prefix' => 'user'],  function () {
+        Route::get('/logs', [AuditController::class, 'userLog']);
+    });
 
-    Route::middleware('authRole:' . Role::MEG)->group(function () {
+    //MEG ROUTES
+    Route::middleware('authRole:' . Role::MEG)->group( function () {
+        // complaint
         Route::group(['prefix' => 'complaint'], function () {
             Route::post('/feedback', [ComplaintController::class, 'feedback']);
             Route::post('/status', [ComplaintController::class, 'changeStatus']);
             Route::get('/all', [ComplaintController::class, 'allComplaints']);
+        });
+        // audit
+        Route::group(['prefix' => 'audits'], function () {
+            Route::get('/logs', [AuditController::class, 'index']);
         });
     });
 
@@ -64,7 +73,7 @@ Route::middleware('auth')->group(function () {
 
     //MBG ROUTES
 
-    // AR ROUTES
+    //AR ROUTES
     Route::middleware('authRole:' . Role::ARAUTHORISER . ',' . Role::ARINPUTTER)->group(function () {
         Route::group(['prefix' => 'ar'], function () {
             Route::get('/list', [ARController::class, 'list']);
@@ -82,5 +91,4 @@ Route::middleware('auth')->group(function () {
             Route::post('/change-status/{ARUser}', [ARController::class, 'changeStatus']);
         });
     });
-
 });

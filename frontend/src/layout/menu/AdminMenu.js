@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import menu from "./MenuData";
+import navData from "./NavData";
 import { NavLink, Link } from "react-router-dom";
 import Icon from "../../components/icon/Icon";
 import classNames from "classnames";
@@ -15,34 +15,22 @@ const MenuHeading = ({ heading }) => {
 const MenuItem = ({ icon, link, text, sub, subPanel, panel, newTab, mobileView, sidebarToggle, badge, ...props }) => {
   let currentUrl;
 
-  const toggleActionSidebar = (e) => {
-    if (!sub && !newTab && mobileView) {
-      sidebarToggle(e);
-    }
-  };
+  const toggleActionSidebar = (e) => (!sub && !newTab && mobileView) ? sidebarToggle(e) : null;
 
-  if (window.location.pathname !== undefined) {
-    currentUrl = window.location.pathname;
-  } else {
-    currentUrl = null;
-  }
+  currentUrl = (window.location.pathname !== undefined) ?  window.location.pathname : null;
 
   const menuHeight = (el) => {
     var totalHeight = [];
     for (var i = 0; i < el.length; i++) {
-      var margin =
-        parseInt(window.getComputedStyle(el[i]).marginTop.slice(0, -2)) +
-        parseInt(window.getComputedStyle(el[i]).marginBottom.slice(0, -2));
-      var padding =
-        parseInt(window.getComputedStyle(el[i]).paddingTop.slice(0, -2)) +
-        parseInt(window.getComputedStyle(el[i]).paddingBottom.slice(0, -2));
+      var margin =  parseInt(window.getComputedStyle(el[i]).marginTop.slice(0, -2)) + parseInt(window.getComputedStyle(el[i]).marginBottom.slice(0, -2));
+      var padding = parseInt(window.getComputedStyle(el[i]).paddingTop.slice(0, -2)) + parseInt(window.getComputedStyle(el[i]).paddingBottom.slice(0, -2));
       var height = el[i].clientHeight + margin + padding;
       totalHeight.push(height);
     }
     totalHeight = totalHeight.reduce((sum, value) => (sum += value));
     return totalHeight;
   };
-
+  
   const makeParentActive = (el, childHeight) => {
     let element = el.parentElement.parentElement.parentElement;
     let wrap = el.parentElement.parentElement;
@@ -143,12 +131,7 @@ const MenuItem = ({ icon, link, text, sub, subPanel, panel, newTab, mobileView, 
   return (
     <li className={menuItemClass} onClick={(e) => toggleActionSidebar(e)}>
       {newTab ? (
-        <Link
-          to={`${process.env.PUBLIC_URL + link}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="nk-menu-link"
-        >
+        <Link to={`${process.env.PUBLIC_URL + link}`} target="_blank" rel="noopener noreferrer" className="nk-menu-link">
           {icon ? (
             <span className="nk-menu-icon">
               <Icon name={icon} />
@@ -185,128 +168,39 @@ const PanelItem = ({ icon, link, text, subPanel, index, data, setMenuData, ...pr
     "nk-menu-item": true,
   });
 
-  if (data === menu) {
-    return (
-      <li className={menuItemClass}>
-        <Link
-          to={`${process.env.PUBLIC_URL}${link}`}
-          className="nk-menu-link"
-          onClick={() => setMenuData([menu[index]])}
-        >
-          {icon ? (
-            <span className="nk-menu-icon">
-              <Icon name={icon} />
-            </span>
-          ) : null}
-          <span className="nk-menu-text">{text}</span>
-          <span className="nk-menu-badge">HOT</span>
-        </Link>
-      </li>
-    );
-  } else {
     return (
       <React.Fragment>
         {subPanel.map((item) => (
-          <MenuItem
-            key={item.text}
-            link={item.link}
-            icon={item.icon}
-            text={item.text}
-            sub={item.subMenu}
-            badge={item.badge}
-          />
+          <MenuItem key={item.text} link={item.link} icon={item.icon} text={item.text} sub={item.subMenu} badge={item.badge} />
         ))}
-        <MenuHeading heading="Return to" />
-        <li className={menuItemClass}>
-          <Link to={`${process.env.PUBLIC_URL}/`} className="nk-menu-link" onClick={() => setMenuData(menu)}>
-            <span className="nk-menu-icon">
-              <Icon name="dashlite-alt" />
-            </span>
-            <span className="nk-menu-text">Main Dashboard</span>
-          </Link>
-        </li>
-        <li className={menuItemClass}>
-          <Link to={`${process.env.PUBLIC_URL}/`} className="nk-menu-link" onClick={() => setMenuData(menu)}>
-            <span className="nk-menu-icon">
-              <Icon name="layers-fill" />
-            </span>
-            <span className="nk-menu-text">All Components</span>
-          </Link>
-        </li>
       </React.Fragment>
     );
-  }
+  
 };
 
 const MenuSub = ({ icon, link, text, sub, sidebarToggle, mobileView, ...props }) => {
   return (
     <ul className="nk-menu-sub" style={props.style}>
       {sub.map((item) => (
-        <MenuItem
-          link={item.link}
-          icon={item.icon}
-          text={item.text}
-          sub={item.subMenu}
-          key={item.text}
-          newTab={item.newTab}
-          badge={item.badge}
-          sidebarToggle={sidebarToggle}
-          mobileView={mobileView}
-        />
+        <MenuItem link={item.link} icon={item.icon} text={item.text} sub={item.subMenu} key={item.text} newTab={item.newTab} badge={item.badge} sidebarToggle={sidebarToggle} mobileView={mobileView} />
       ))}
     </ul>
   );
 };
 
-const AdminMenu = ({ sidebarToggle, mobileView }) => {
-  const [data, setMenuData] = useState(menu);
 
-  useEffect(() => {
-    data.forEach((item, index) => {
-      if (item.panel) {
-        let found = item.subPanel.find((sPanel) => process.env.PUBLIC_URL + sPanel.link === window.location.pathname);
-        if (found) {
-          setMenuData([menu[index]]);
-        }
-      }
-    });
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
+const UserMenu = ({ sidebarToggle, mobileView }) => {
+  const [data, setMenuData] = useState(navData);
+  
   return (
     <ul className="nk-menu">
       {data.map((item, index) =>
-        item.heading ? (
-          <MenuHeading heading={item.heading} key={item.heading} />
-        ) : item.panel ? (
-          <PanelItem
-            key={item.text}
-            link={item.link}
-            icon={item.icon}
-            text={item.text}
-            index={index}
-            panel={item.panel}
-            subPanel={item.subPanel}
-            data={data}
-            setMenuData={setMenuData}
-            sidebarToggle={sidebarToggle}
-          />
-        ) : (
-          <MenuItem
-            key={item.text}
-            link={item.link}
-            icon={item.icon}
-            text={item.text}
-            sub={item.subMenu}
-            badge={item.badge}
-            panel={item.panel}
-            subPanel={item.subPanel}
-            sidebarToggle={sidebarToggle}
-            mobileView={mobileView}
-          />
-        )
+        item.heading ? (<MenuHeading heading={item.heading} key={item.heading} />) : (item.panel && item.isAdmin) ? (
+          <PanelItem key={item.text} link={item.link} icon={item.icon} text={item.text} index={index} panel={item.panel} subPanel={item.subPanel} data={data} setMenuData={setMenuData} sidebarToggle={sidebarToggle}/>
+        ) : ''
       )}
     </ul>
   );
 };
 
-export default AdminMenu;
+export default UserMenu;

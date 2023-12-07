@@ -17,9 +17,12 @@ export function stringShorter(str, length) {
 }
 
 export function errorHandler(error, toastStatus, messageType = "Error") {
-  if (error.response?.data?.error) {
-    //   toastStatus && toast.error(error.response.data.error);
-    toast.error(<div className="toastr-text"><h5>{`${messageType}`}</h5><p>{`${error.response.data.error}`}</p></div>, {
+  const errors = error.response?.data?.errors ? error.response?.data?.errors : null;
+  const errorMessage = (typeof errors === 'object') ? Object.values(errors)[0][0] : "";
+
+  if (error.response?.data?.message) {
+    
+    toast.error(<div className="toastr-text"><h5>{`${messageType}`}</h5><p>{`${error.response.data.message}  -  ${errorMessage}`}</p></div>, {
       position: "top-right",
       autoClose: true,
       hideProgressBar: true,
@@ -34,7 +37,7 @@ export function errorHandler(error, toastStatus, messageType = "Error") {
       error: error.response.data.error,
     };
   } else {
-    //   toastStatus && toast.warning("Something went wrong, Please try again");
+    
         toast.warning(<div className="toastr-text"><h5>{`${"Warning"}`}</h5><p>{`${"Something went wrong, Please try again"}`}</p></div>, {
             position: "top-right",
             autoClose: true,

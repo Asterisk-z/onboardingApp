@@ -7,8 +7,8 @@ const App = () => {
   return (
     <ThemeProvider>
     {/* <UserProvider> */}
-          <ToastContainer autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss pauseOnHover theme="colored" />
           <Router />
+          <ToastContainer autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss pauseOnHover theme="colored" />
     {/* </UserProvider> */}
     </ThemeProvider>
   );

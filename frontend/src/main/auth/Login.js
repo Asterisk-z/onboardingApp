@@ -39,7 +39,8 @@ const Login = () => {
         if (resp.payload?.message == "success") {
           
             setTimeout(() => {
-              navigate(`${process.env.PUBLIC_URL}/dashboard`);
+              // navigate(`${process.env.PUBLIC_URL}/dashboard`);
+              window.location.href = `${process.env.PUBLIC_URL}/dashboard`
               setLoading(false);
             }, 1000);
           
@@ -127,7 +128,7 @@ const Login = () => {
             </div>
             <div className="form-group">
               <Button type="submit" size="lg" className="btn-block"  color="primary">
-                {loading ? <Spinner size="sm" color="light" /> : "Sign in"}
+                {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Sign in"}
               </Button>
             </div>
           </Form>
