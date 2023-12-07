@@ -51,7 +51,7 @@ const Homepage = () => {
               </Card>
             </Col>
             <Col xxl="3" sm="6">
-              <Card>
+              <Card className="color2">
                 <div className="nk-ecwg nk-ecwg6">
                   <div className="card-inner">
                     <div className="card-title-group">
@@ -69,7 +69,7 @@ const Homepage = () => {
               </Card>
             </Col>
             <Col xxl="3" sm="6">
-              <Card>
+              <Card className="color4">
                 <div className="nk-ecwg nk-ecwg6">
                   <div className="card-inner">
                     <div className="card-title-group">
@@ -87,7 +87,7 @@ const Homepage = () => {
               </Card>
             </Col>
             <Col xxl="3" sm="6">
-              <Card>
+              <Card className="color3">
                 <div className="nk-ecwg nk-ecwg6">
                   <div className="card-inner">
                     <div className="card-title-group">

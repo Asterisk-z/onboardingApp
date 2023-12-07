@@ -20,17 +20,40 @@
 
 .color1 {
     background-color: #1D326C !important;
+    color: #fff !important;
 }
 
-.color2 {
+.color1 .title {
+    color: #fff !important;
+}
 
+.color1 .amount {
+    color: #fff !important;
+}
+
+
+.color2 {
+    background-color: #CC9933 !important;
+}
+
+.color2 .title {
+    color: #fff !important;
+}
+
+.color2 .amount {
+    color: #fff !important;
 }
 
 .color3 {
-
+    background-color: #667085 !important;
 }
 
-.color1 {
-
+.color3 .title {
+    color: #fff !important;
 }
+
+.color3 .amount {
+    color: #fff !important;
+}
+
 
