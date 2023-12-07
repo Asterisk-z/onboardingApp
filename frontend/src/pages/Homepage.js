@@ -141,6 +141,7 @@ const Homepage = () => {
             <Col xxl="3" sm="6">
               <DataCard
                 title="Today's Visitors"
+                style={{backgroundColor: "red"}}
                 percentChange={"2.63"}
                 up={false}
                 chart={<DefaultVisitorChart />}

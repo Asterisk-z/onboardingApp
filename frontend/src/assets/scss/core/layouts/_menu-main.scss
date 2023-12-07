@@ -157,7 +157,8 @@ $menu-main-sub-toggle-icon-rtl: $ni-chevron-left !default;
             }
         }
         .is-light & {
-            color: $base-text;
+            color: #fff;
+            // $base-text
 
         }
         @if($menu_dark_theme_option==true) {

@@ -13,6 +13,7 @@ import {
   Col,
   BlockBetween,
 } from "components/Component";
+import "../../App.css"
 
 const Homepage = () => {
   const [sm, updateSm] = useState(false);
@@ -32,16 +33,16 @@ const Homepage = () => {
         <Block>
           <Row className="g-gs">
             <Col xxl="3" sm="6">
-              <DataCard title="Today's Order"   amount={"0"}/>
+              <DataCard className= "color1" title="Today's Order"   amount={"0"}/>
             </Col>
             <Col xxl="3" sm="6">
-              <DataCard title="Today's Revenue" amount={"0"}/>
+              <DataCard style={{backgroundColor:"blue"}} title="Today's Revenue" amount={"0"}/>
             </Col>
             <Col xxl="3" sm="6">
-              <DataCard title="Today's Customers"   amount={"0"}/>
+              <DataCard style={{backgroundColor:"purple"}} title="Today's Customers"   amount={"0"}/>
             </Col>
             <Col xxl="3" sm="6">
-              <DataCard title="Today's Visitors" amount={"0"}/>
+              <DataCard style={{backgroundColor:"black"}} title="Today's Visitors" amount={"0"}/>
             </Col>
             {/* <Col xxl="8">
               <RecentOrders />

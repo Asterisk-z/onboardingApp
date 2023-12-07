@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import exportFromJSON from "export-from-json";
 import CopyToClipboard from "react-copy-to-clipboard";
-import { Col, Modal, ModalBody, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge } from "reactstrap";
+import { Col, Modal, ModalBody, Row, Button } from "reactstrap";
 import { DataTablePagination } from "components/Component";
 import moment from "moment";
-import Icon from "components/icon/Icon";
 
 const Export = ({ data }) => {
   const [modal, setModal] = useState(false);
@@ -62,24 +61,24 @@ const Export = ({ data }) => {
   );
 };
 
-const ExpandableRowComponent = ({ data }) => {
-  return (
-    <ul className="dtr-details p-2 border-bottom ms-1">
-      <li className="d-block d-sm-none">
-        <span className="dtr-title">Company</span> <span className="dtr-data">{data.company}</span>
-      </li>
-      <li className="d-block d-sm-none">
-        <span className="dtr-title ">Gender</span> <span className="dtr-data">{data.gender}</span>
-      </li>
-      <li>
-        <span className="dtr-title">Start Date</span> <span className="dtr-data">{data.startDate}</span>
-      </li>
-      <li>
-        <span className="dtr-title">Salary</span> <span className="dtr-data">{data.salary}</span>
-      </li>
-    </ul>
-  );
-};
+// const ExpandableRowComponent = ({ data }) => {
+//   return (
+//     <ul className="dtr-details p-2 border-bottom ms-1">
+//       <li className="d-block d-sm-none">
+//         <span className="dtr-title">Company</span> <span className="dtr-data">{data.company}</span>
+//       </li>
+//       <li className="d-block d-sm-none">
+//         <span className="dtr-title ">Gender</span> <span className="dtr-data">{data.gender}</span>
+//       </li>
+//       <li>
+//         <span className="dtr-title">Start Date</span> <span className="dtr-data">{data.startDate}</span>
+//       </li>
+//       <li>
+//         <span className="dtr-title">Salary</span> <span className="dtr-data">{data.salary}</span>
+//       </li>
+//     </ul>
+//   );
+// };
 
 const CustomCheckbox = React.forwardRef(({ onClick, ...rest }, ref) => (
   <div className="custom-control custom-control-sm custom-checkbox notext">
@@ -95,79 +94,39 @@ const CustomCheckbox = React.forwardRef(({ onClick, ...rest }, ref) => (
   </div>
 ));
 
+const tableColumn = [
+      {
+        name: "ID",
+        selector: (row) => row.id,
+        sortable: true,
+      },
+      // {
+      //   name: "User",
+      //   selector: (row) => row.user,
+      //   sortable: true,
+      //   hide: 370,
+      // },
+      {
+        name: "Description",
+        selector: (row) => row.description,
+        sortable: [true],
+        hide: "sm",
+      },
+      {
+        name: "ip_address",
+        selector: (row) => row.ip_address,
+        sortable: true,
+        hide: "sm",
+      },
+      {
+        name: "Date Created",
+        selector: (row) => moment(row.created_at).format('MMM. DD, YYYY HH:mm'),
+        sortable: true,
+        hide: "md",
+      },
+  ];
 
-
-const DropdownTrans = () => {
-  return (
-    <UncontrolledDropdown direction="right">
-      <DropdownToggle className="dropdown-toggle btn" color="secondary">Action</DropdownToggle>
-
-      <DropdownMenu>
-        <ul className="link-list-opt">
-          <li>
-            <DropdownItem tag="a" href="#links" onClick={(ev) => ev.preventDefault()}>
-              <Icon name="pen"></Icon>
-              <span>Edit</span>
-            </DropdownItem>
-          </li>
-          <li>
-            <DropdownItem tag="a" href="#links" onClick={(ev) => ev.preventDefault()}>
-              <Icon name="eye"></Icon>
-              <span>View</span>
-            </DropdownItem>
-          </li>
-          <li>
-            <DropdownItem tag="a" href="#links" onClick={(ev) => ev.preventDefault()}>
-              <Icon name="trash"></Icon>
-              <span>Delete</span>
-            </DropdownItem>
-          </li>
-        </ul>
-      </DropdownMenu>
-    </UncontrolledDropdown>
-
-  );
-};
-
-const complainColumn = [
-  {
-    name: "Ticket ID",
-    selector: (row) => row.id,
-    sortable: true,
-  },
-  {
-    name: "Body",
-    selector: (row) => row.body,
-    sortable: true,
-    hide: 370,
-  },
-  {
-    name: "Status",
-    selector: (row) => { return (<><Badge color="success">{`${row.status}`}</Badge></>) },
-    sortable: true,
-    hide: "sm",
-  },
-  {
-    name: "Comments",
-    selector: (row) => { return (<><Badge color="gray">{`${row.comment.length} Comments`}</Badge></>) },
-    sortable: true,
-    hide: "sm",
-  },
-  {
-    name: "Date Created",
-    selector: (row) => moment(row.createdAt).format('MMM. DD, YYYY HH:mm'),
-    sortable: true,
-    hide: "md",
-  },
-  {
-    name: "Action",
-    selector: (row) => (<> <DropdownTrans /></>),
-    sortable: true,
-    hide: "md",
-  },
-];
-
-const ComplaintTableUser = ({ data, pagination, actions, className, selectableRows, expandableRows }) => {
+const UserActivities = ({ data, pagination, actions, className, selectableRows, expandableRows }) => {
   const [tableData, setTableData] = useState(data);
   const [searchText, setSearchText] = useState("");
   const [rowsPerPageS, setRowsPerPage] = useState(10);
@@ -219,7 +178,7 @@ const ComplaintTableUser = ({ data, pagination, actions, className, selectableRo
         </Col>
         <Col className="col-5 text-end" sm="8">
           <div className="datatable-filter">
-
+            
             <div className="d-flex justify-content-end g-2">
               {actions && <Export data={data} />}
               <div className="dataTables_length" id="DataTables_Table_0_length">
@@ -247,11 +206,11 @@ const ComplaintTableUser = ({ data, pagination, actions, className, selectableRo
       </Row>
       <DataTable
         data={tableData}
-        columns={complainColumn}
+        columns={tableColumn}
         className={className + ' customMroisDatatable'} id='customMroisDatatable'
         selectableRows={selectableRows}
         selectableRowsComponent={CustomCheckbox}
-        expandableRowsComponent={ExpandableRowComponent}
+        // expandableRowsComponent={ExpandableRowComponent}
         expandableRows={mobileView}
         noDataComponent={<div className="p-2">There are no records found</div>}
         sortIcon={
@@ -277,4 +236,4 @@ const ComplaintTableUser = ({ data, pagination, actions, className, selectableRo
   );
 };
 
-export default ComplaintTableUser;
+export default UserActivities;
