@@ -151,6 +151,8 @@ import AuditLog from "main/pages/AuditLog"
 import Success from "pages/auth/Success";
 
 import Layout from "layout/Index";
+import AdminLayout from "layout/AdminLayout";
+import UserLayout from "layout/UserLayout";
 import LayoutNoSidebar from "layout/Index-nosidebar";
 
 
@@ -369,10 +371,16 @@ const Router = () => {
             <Route path="invoice-print/:invoiceId" element={<InvoicePrint />}></Route>
         </Route>
         
-        <Route path={`${process.env.PUBLIC_URL}`} element={<Layout />}>
+        <Route path={`${process.env.PUBLIC_URL}`} element={<UserLayout />}>
           <Route path="dashboard" element={<UserHomepage />}></Route>
           <Route path="complaint" element={<Complaint />}></Route>
           <Route path="audit-log" element={<AuditLog />}></Route>
+        </Route>
+
+        <Route path={`${process.env.PUBLIC_URL}`} element={<AdminLayout />}>
+          <Route path="admin-dashboard" element={<UserHomepage />}></Route>
+          <Route path="admin-complaint" element={<Complaint />}></Route>
+          <Route path="admin-audit-log" element={<AuditLog />}></Route>
         </Route>
       </Routes>
   );

@@ -12,24 +12,29 @@ const navData = [
     subPanel: [
       {
         icon: "dashboard-fill",
-        text: "ADDashboard",
-        link: "/",
+        text: "Dashboard",
+        link: "/admin-dashboard",
       },
       {
-      icon: "tile-thumb-fill",
-      text: "Projects",
-      active: false,
-      subMenu: [
-          {
-            text: "Project Cards",
-            link: "/project-card",
-          },
-          {
-            text: "Project List",
-            link: "/project-list",
-          },
-        ],
+        icon: "dashboard-fill",
+        text: "Complaints",
+        link: "/admin-complaint",
       },
+      // {
+      // icon: "tile-thumb-fill",
+      // text: "Projects",
+      // active: false,
+      // subMenu: [
+      //     {
+      //       text: "Project Cards",
+      //       link: "/project-card",
+      //     },
+      //     {
+      //       text: "Project List",
+      //       link: "/project-list",
+      //     },
+      //   ],
+      // },
     ],
   },
   {
