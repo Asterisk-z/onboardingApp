@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Head from "../layout/head/Head";
 import Content from "../layout/content/Content";
-import DataCard from "components/partials/default/DataCard";
+import { Card } from "reactstrap";
 import {
   Block,
   BlockHead,
@@ -33,16 +33,76 @@ const Homepage = () => {
         <Block>
           <Row className="g-gs">
             <Col xxl="3" sm="6">
-              <DataCard className= "color1" title="Today's Order"   amount={"0"}/>
+              <Card className="color1">
+                <div className="nk-ecwg nk-ecwg6">
+                  <div className="card-inner">
+                    <div className="card-title-group">
+                      <div className="card-title">
+                        <h6 className="title">{"Today's Order"}</h6>
+                      </div>
+                    </div>
+                    <div className="data">
+                      <div className="data-group">
+                        <div className="amount">{"0"}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Card>
             </Col>
             <Col xxl="3" sm="6">
-              <DataCard style={{backgroundColor:"blue"}} title="Today's Revenue" amount={"0"}/>
+              <Card>
+                <div className="nk-ecwg nk-ecwg6">
+                  <div className="card-inner">
+                    <div className="card-title-group">
+                      <div className="card-title">
+                        <h6 className="title">{"Today's Revenue"}</h6>
+                      </div>
+                    </div>
+                    <div className="data">
+                      <div className="data-group">
+                        <div className="amount">{"0"}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Card>
             </Col>
             <Col xxl="3" sm="6">
-              <DataCard style={{backgroundColor:"purple"}} title="Today's Customers"   amount={"0"}/>
+              <Card>
+                <div className="nk-ecwg nk-ecwg6">
+                  <div className="card-inner">
+                    <div className="card-title-group">
+                      <div className="card-title">
+                        <h6 className="title">{"Today's Customers"}</h6>
+                      </div>
+                    </div>
+                    <div className="data">
+                      <div className="data-group">
+                        <div className="amount">{"0"}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Card>
             </Col>
             <Col xxl="3" sm="6">
-              <DataCard style={{backgroundColor:"black"}} title="Today's Visitors" amount={"0"}/>
+              <Card>
+                <div className="nk-ecwg nk-ecwg6">
+                  <div className="card-inner">
+                    <div className="card-title-group">
+                      <div className="card-title">
+                        <h6 className="title">{"Today's Visitors"}</h6>
+                      </div>
+                    </div>
+                    <div className="data">
+                      <div className="data-group">
+                        <div className="amount">{"0"}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Card>
             </Col>
             {/* <Col xxl="8">
               <RecentOrders />
