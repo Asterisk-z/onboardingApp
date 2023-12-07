@@ -114,7 +114,7 @@ const tableColumn = [
         hide: "sm",
       },
       {
-        name: "ip_address",
+        name: "IP Address",
         selector: (row) => row.ip_address,
         sortable: true,
         hide: "sm",
@@ -135,11 +135,14 @@ const AllActivities = ({ data, pagination, actions, className, selectableRows, e
 
   useEffect(() => {
     let defaultData = tableData;
+    // console.log(searchText, defaultData)
     if (searchText !== "") {
       defaultData = data.filter((item) => {
-        return item.name.toLowerCase().includes(searchText.toLowerCase());
+        // return item.name.toLowerCase().includes(searchText.toLowerCase());
+        return (Object.values(item).join('').toLowerCase()).includes(searchText.toLowerCase())
       });
       setTableData(defaultData);
+      // setTableData(defaultData);
     } else {
       setTableData(data);
     }

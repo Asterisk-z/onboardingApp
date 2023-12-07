@@ -38,6 +38,20 @@ export const sendComplaint = createAsyncThunk(
     }
   }
 );
+
+export const loadAllUsersComplaints = createAsyncThunk(
+  "complaint/loadAllUsersComplaints",
+  async (arg) => {
+    try {
+      const { data } = await axios.get(`complaint`);
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
+    }
+  }
+);
+
+
 const complaintStore = createSlice({
   name: "complaint",
   initialState,
