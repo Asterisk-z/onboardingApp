@@ -12,22 +12,18 @@ class ARMailContents
 
     public static function approvedARBody(User $ARUser, string $password): string
     {
-        //TODO: add password change link
-
-        $link = env("APP_FRONTEND_URL");
+        $link = config("app.front_end_url");
 
         if ($link) {
             $link = $link . '?email=' . $ARUser->email;
         }
 
-        $name = $ARUser->first_name . " " . $ARUser->last_name;
         $company = $ARUser->institution->name;
         $regID = $ARUser->getRegID();
 
-        return "<p>Dear $name,</p>
-            <p>
+        return "<p>
                 Please be informed that you have been selected as an Authorised Representative for the  $company.
-            </p>
+                </p>
             
             <p>
                 Your FMDQ unique identification number is <b>$regID</b> and your login details for the MROIS portal is given below:
@@ -37,15 +33,7 @@ class ARMailContents
             </p>
             
             <p>
-                Click <a href='$link'>this link</a> to reset the password.  
-            </p>
-            
-            <p>
                 Please not that your ID would be required in future correspondence with FMDQ. We advise that you keep it safely.
-            </p>
-            <p>
-                Regards,<br>
-                FMDQ Securities Exchange
             </p>";
     }
 
@@ -62,11 +50,8 @@ class ARMailContents
         $company = $ARUser->institution->name;
         $regID = $ARUser->getRegID();
 
-
-
-        $message = "<p>Dear MEG,</p>
-            <p>
-                Please be informed that there is a new Authorised Representative for the  $company.
+        $message = "<p>
+                Please be informed that there is a new Authorised Representative for $company.
             </p>
             
             <p>
@@ -76,17 +61,7 @@ class ARMailContents
                 First Name: $ARUser->first_name <br>
                 Email: $ARUser->email <br>
                 ID number: $regID 
-            </p>
-            
-            <p>
-                Click <a href='$link'>this link</a> to login to the MROIS portal and approve/reject this application. 
-            </p>
-
-            <p>
-                Regards,<br>
-                FMDQ Securities Exchange
-            </p>
-            ";
+            </p>";
 
         return $message;
     }
@@ -98,18 +73,12 @@ class ARMailContents
         return "Authorised Representative Transfer";
     }
 
-    public static function transferAuthoriserBody(User $authorizerUser, User $ARUser): string
+    public static function transferAuthoriserBody(User $ARUser): string
     {
         $regID = $ARUser->getRegID();
-        $name = $authorizerUser->getFullName();
-        return "
-        <p>
-            Dear $name,
-        </p>
-        <p>
+        return "<p>
             Kindly login to the “MROIS portal” to approve the transfer of <b>$regID</b>
-        </p>
-        ";
+        </p>";
     }
 
     public static function changeStatusAuthoriserSubject(string $action): string
@@ -117,18 +86,12 @@ class ARMailContents
         return "Authorised Representative $action";
     }
 
-    public static function changeStatusAuthoriserBody(User $authorizerUser, User $ARUser, string $action): string
+    public static function changeStatusAuthoriserBody(User $ARUser, string $action): string
     {
         $regID = $ARUser->getRegID();
-        $name = $authorizerUser->getFullName();
-        return "
-        <p>
-            Dear $name,
-        </p>
-        <p>
+        return "<p>
             Kindly login to the “MROIS portal” to approve/reject the <b>$action</b> of <b>$regID</b>
-        </p>
-        ";
+        </p>";
     }
 
     public static function updateAuthoriserSubject(): string
@@ -136,15 +99,10 @@ class ARMailContents
         return "Authorised Representative Update";
     }
 
-    public static function updateAuthoriserBody(User $authorizerUser, User $ARUser): string
+    public static function updateAuthoriserBody(User $ARUser): string
     {
         $regID = $ARUser->getRegID();
-        $name = $authorizerUser->getFullName();
-        return "
-        <p>
-            Dear $name,
-        </p>
-        <p>
+        return "<p>
             Kindly login to the “MROIS portal” to approve/reject the <bUpdate</b> of <b>$regID</b>
         </p>
         ";
@@ -161,11 +119,7 @@ class ARMailContents
         $basicData = $oldUserDetails->getBasicData(true);
         $basicDataStr = prettifyJson($basicData);
         $updateFieldsStr = prettifyJson($updateFields);
-        return "
-        <p>
-            Dear MEG,
-        </p>
-        <p>
+        return "<p>
             This is to inform you of an AR update:
         </p>
 

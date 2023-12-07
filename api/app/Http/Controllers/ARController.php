@@ -21,7 +21,7 @@ use App\Models\User;
 use App\Notifications\InfoNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Notification;
+use Illuminate\Support\Facades\Notification;
 
 class ARController extends Controller
 {
@@ -52,7 +52,6 @@ class ARController extends Controller
             ->where('last_name', $request->last_name)
             ->get();
 
-
         return successResponse('Successful', UserResource::collection($users));
     }
 
@@ -60,8 +59,6 @@ class ARController extends Controller
     {
         return successResponse('Successful', UserResource::make($ARUser));
     }
-
-
     public function add(AddARRequest $request)
     {
         $validated = $request->validated();
@@ -71,25 +68,18 @@ class ARController extends Controller
         $validated['password'] = Hash::make($password);
         $validated['created_by'] = $request->user()->id;
 
-
         $user = User::create($validated);
 
         $regID = $user->getRegID();
 
-        $logMessage = "Added a new AR $user->email ($regID)";
+        $logMessage = "Added a new AR - $user->email ($regID)";
         logAction($request->user()->email, 'Add AR', $logMessage, $request->ip());
 
-
         $MEGs = Utility::getUsersByCategory(Role::MEG);
+        $Ccs = Utility::getUsersEmailByCategory(Role::MBG);
+
         if (count($MEGs))
-            Notification::send($MEGs, new InfoNotification(ARMailContents::applicationMEGBody($user), ARMailContents::applicationMEGSubject()));
-
-
-        // copy 
-        $MBGs = Utility::getUsersByCategory(Role::MBG);
-        if (count($MBGs))
-            Notification::send($MBGs, new InfoNotification(ARMailContents::applicationMEGBody($user), ARMailContents::applicationMEGSubject()));
-
+            Notification::send($MEGs, new InfoNotification(ARMailContents::applicationMEGBody($user), ARMailContents::applicationMEGSubject(), $Ccs));
 
         return successResponse('Successful', UserResource::make($user));
     }
@@ -97,8 +87,6 @@ class ARController extends Controller
     public function update(UpdateARRequest $request, User $ARUser)
     {
         $validated = $request->validated();
-
-
         $authoriserID = $validated['ar_authoriser_id'];
 
         if ($authoriserID == $ARUser->id) {
@@ -146,14 +134,11 @@ class ARController extends Controller
         $ARUser->save();
 
         $regID = $ARUser->getRegID();
-        $logMessage = "Updated the AR record of $ARUser->email ($regID)";
+        $logMessage = "Updated the AR record of - $ARUser->email ($regID)";
         logAction($request->user()->email, 'Update AR', $logMessage, $request->ip());
 
-
         $authoriserUser = User::find($authoriserID);
-        $authoriserUser->notify(new InfoNotification(ARMailContents::updateAuthoriserBody($authoriserUser, $ARUser), ARMailContents::updateAuthoriserSubject()));
-
-
+        $authoriserUser->notify(new InfoNotification(ARMailContents::updateAuthoriserBody($ARUser), ARMailContents::updateAuthoriserSubject()));
 
         return successResponse('Successful', UserResource::make($ARUser));
 
@@ -286,7 +271,6 @@ class ARController extends Controller
 
     }
 
-
     public function transfer(TransferARRequest $request, User $ARUser)
     {
         $validated = $request->validated();
@@ -300,7 +284,6 @@ class ARController extends Controller
         if ($existingRecord) {
             return errorResponse(ResponseStatusCodes::DUPLICATE_REQUEST, 'There is a pending transfer request for this AR', ARTransferRequestResource::make($existingRecord));
         }
-
 
         $authoriserID = $validated['ar_authoriser_id'];
 
@@ -324,7 +307,6 @@ class ARController extends Controller
             }
         }
 
-
         // if position_id is set, add to json
         if (isset($validated['position_id'])) {
             $position = Position::find($validated['position_id']);
@@ -345,7 +327,6 @@ class ARController extends Controller
 
         $reason = null;
 
-
         // remove unneeded data
         unset($validated['ar_authoriser_id']);
         if (isset($validated['reason'])) {
@@ -362,24 +343,18 @@ class ARController extends Controller
         $record->request_reason = $reason;
         $record->save();
 
-
         $regID = $ARUser->getRegID();
         $logMessage = "Requested AR transfer of $ARUser->email ($regID)";
         logAction($request->user()->email, 'Request AR Transfer', $logMessage, $request->ip());
 
-
         $authoriserUser = User::find($authoriserID);
-        $authoriserUser->notify(new InfoNotification(ARMailContents::transferAuthoriserBody($authoriserUser, $ARUser), ARMailContents::transferAuthoriserSubject()));
-
+        $authoriserUser->notify(new InfoNotification(ARMailContents::transferAuthoriserBody($ARUser), ARMailContents::transferAuthoriserSubject()));
 
         $record->refresh();
-
 
         return successResponse('Successful', ARTransferRequestResource::make($record));
 
     }
-
-
 
     public function changeStatus(ChangeStatusARRequest $request, User $ARUser)
     {
@@ -394,7 +369,6 @@ class ARController extends Controller
             return errorResponse(ResponseStatusCodes::DUPLICATE_REQUEST, 'There is a pending ' . $existingRecord->request_type . ' request for this AR.', ARDeactivationRequestResource::make($existingRecord));
         }
 
-
         $authoriserID = $validated['ar_authoriser_id'];
 
         if ($authoriserID == $ARUser->id) {
@@ -405,7 +379,6 @@ class ARController extends Controller
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'You can not be used as the authoriser');
         }
 
-
         $record = new ARDeactivationRequest();
         $record->ar_user_id = $ARUser->id;
         $record->requester_user_id = $request->user()->id;
@@ -413,7 +386,6 @@ class ARController extends Controller
         $record->request_type = $validated['request_type'];
         $record->request_reason = $validated['reason'];
         $record->save();
-
 
         $record->refresh();
 
@@ -425,21 +397,9 @@ class ARController extends Controller
         logAction($request->user()->email, "Request AR $logActionType", $logMessage, $request->ip());
 
         $authoriserUser = User::find($authoriserID);
-        $authoriserUser->notify(new InfoNotification(ARMailContents::changeStatusAuthoriserBody($authoriserUser, $ARUser, $logActionType), ARMailContents::changeStatusAuthoriserSubject($logActionType)));
-
+        $authoriserUser->notify(new InfoNotification(ARMailContents::changeStatusAuthoriserBody($ARUser, $logActionType), ARMailContents::changeStatusAuthoriserSubject($logActionType)));
 
         return successResponse('Successful', ARDeactivationRequestResource::make($record));
 
-    }
-
-
-    public function test()
-    {
-        // $user = User::find(3);
-        // $auth = User::find(1);
-        // $info = "Approval";
-        // $updateParams = $auth->getBasicData(true);
-
-        // return ARMailContents::updatedMEGBody($user, $updateParams);
     }
 }

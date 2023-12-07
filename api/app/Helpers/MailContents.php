@@ -60,7 +60,7 @@ class MailContents
     }
 
     public static function newMembershipSignupMail($name, $category) : string {
-        return "<p>Dear Team, A new applicant has successfully signed up on the MROIS porta:</p>
+        return "<p>A new applicant has successfully signed up on the MROIS porta:</p>
 
         <ul>
             <li><strong>Name:</strong> {$name}</li>
