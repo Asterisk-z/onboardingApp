@@ -51,6 +51,92 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+export const passwordResetInitiate = createAsyncThunk(
+  "authenticate/passwordResetInitiate",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+        url: `auth/password/reset/initiate`,
+        data: values,
+      });
+      return successHandler(data, data.message);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
+
+export const passwordResetOtp = createAsyncThunk(
+  "authenticate/passwordResetOtp",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+        url: `auth/password/reset/otp`,
+        data: values,
+      });
+      
+      localStorage.setItem('reset-token', data.data.reset.reset_token)
+      return successHandler(data, data.message);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
+
+export const passwordChange = createAsyncThunk(
+  "authenticate/passwordChange",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json;charset=UTF-8",
+          "Authorization": "Bearer "+localStorage.getItem('reset-token')
+        },
+        url: `auth/password/change`,
+        data: values,
+      });
+      return successHandler(data, data.message);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
+
+export const passwordResetComplete = createAsyncThunk(
+  "authenticate/passwordResetComplete",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+        url: `auth/password/reset/complete`,
+        data: values,
+      });
+      return successHandler(data, data.message);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
 
 const authStore = createSlice({
   name: "authenticate",
@@ -98,6 +184,67 @@ const authStore = createSlice({
       state.loading = false;
       state.error = action.payload.message;
     });
+
+    // ====== builders for passwordResetInitiate ======
+
+    builder.addCase(passwordResetInitiate.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(passwordResetInitiate.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(passwordResetInitiate.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+    
+    // ====== builders for passwordResetOtp ======
+
+    builder.addCase(passwordResetOtp.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(passwordResetOtp.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(passwordResetOtp.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+    
+    // ====== builders for passwordResetComplete ======
+
+    builder.addCase(passwordResetComplete.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(passwordResetComplete.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(passwordResetComplete.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+    
+    // ====== builders for passwordChange ======
+
+    builder.addCase(passwordChange.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(passwordChange.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(passwordChange.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+    
   },
 });
 

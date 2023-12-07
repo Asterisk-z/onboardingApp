@@ -145,6 +145,7 @@ import Login from "main/auth/Login";
 import Logout from "main/auth/Logout";
 import Register from "main/auth/Register";
 import ForgotPassword from "main/auth/ForgotPassword";
+import PasswordUpdate from "main/auth/PasswordUpdate";
 import Form from "main/forms/Form";
 import Complaint from "main/pages/Complaint" 
 import AuditLog from "main/pages/AuditLog" 
@@ -351,7 +352,8 @@ const Router = () => {
         </Route>
 
         <Route path={`${process.env.PUBLIC_URL}`} element={<MainLayoutNoSidebar />}>
-            <Route path="auth-success" element={<Success />}></Route>
+            {/* <Route path="auth-success" element={<Success />}></Route> */}
+            <Route path="auth-password-update" element={<PasswordUpdate />}></Route>
             <Route path="auth-reset" element={<ForgotPassword />}></Route>
             <Route path="auth-register" element={<Register />}></Route>
             <Route path="login" element={<Login />}></Route>

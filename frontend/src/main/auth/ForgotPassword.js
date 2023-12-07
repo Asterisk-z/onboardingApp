@@ -1,13 +1,75 @@
-import React from "react";
-
-import LogoDark from "../../images/logo-dark.png";
-import Head from "../../layout/head/Head";
-import AuthFooter from "../../pages/auth/AuthFooter";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate,Link } from "react-router-dom";
+import { Spinner } from "reactstrap";
+import { useForm } from "react-hook-form";
+import Head from "layout/head/Head";
 import { Block, BlockContent, BlockHeadContent, BlockDes, BlockHead, BlockTitle, Button, PreviewCard } from "../../components/Component";
-import { Link } from "react-router-dom";
-import Logo from "../../images/fmdq/FMDQ-Logo.png";
+import Logo from "images/fmdq/FMDQ-Logo.png";
+import { passwordResetInitiate, passwordResetOtp } from "./../../redux/stores/authenticate/authStore";
 
 const ForgotPassword = () => {
+
+  const [loading, setLoading] = useState(false);
+  const [mailSent, setMailSent] = useState(false);
+  const [passState, setPassState] = useState(false);
+  const [errorVal, setError] = useState("");
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+  
+  const { register, handleSubmit, formState: { errors } } = useForm();
+  
+
+  const handleFormSubmit = async (formData) => {
+    setLoading(true);
+    
+      try {
+        setLoading(true);
+        if (formData.email && formData.otp) {
+          const resp = await dispatch(passwordResetOtp(formData));
+          
+          if (resp.payload?.message == "success") {
+            setTimeout(() => {
+              navigate(`${process.env.PUBLIC_URL}/auth-password-update`);
+              setLoading(false);
+            }, 1000);
+              setLoading(false);
+          }
+        } else {
+
+          const resp = await dispatch(passwordResetInitiate(formData));
+          
+          if (resp.payload?.message == "success") {
+              localStorage.setItem('reset-password-email', formData.email)
+              setMailSent(true)
+              setLoading(false);
+          }
+        }
+        console.log(formData)
+        
+        // if (resp.payload?.message == "success") {
+        //     localStorage.setItem('reset-password-email', formData.email)
+            // setTimeout(() => {
+            //   navigate(`${process.env.PUBLIC_URL}/auth-otp-check`);
+            //   setLoading(false);
+            // }, 1000);
+            
+          
+        //   setLoading(false);
+        // } else {
+        //   setLoading(false);
+        // }
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        setTimeout(() => {
+          // setError("Cannot login with credentials");
+          setLoading(false);
+        }, 1000);
+      }
+  };
+  
   return (
     <>
       <Head title="Forgot-Password" />
@@ -26,23 +88,26 @@ const ForgotPassword = () => {
                 </BlockDes>
               </BlockContent>
             </BlockHead>
-            <form>
+            <form onSubmit={handleSubmit(handleFormSubmit)}>
               <div className="form-group">
                 <div className="form-label-group">
-                  <label className="form-label" htmlFor="default-01">
+                  <label className="form-label">
                     Email
                   </label>
                 </div>
-                <input
-                  type="text"
-                  className="form-control form-control-lg"
-                  id="default-01"
-                  placeholder="Enter your email address"
-                />
+                <input type="email"  {...register('email', { required: "This field is required" })} readOnly={mailSent} className="form-control form-control-lg" placeholder="Enter your email address"/>
               </div>
+              {mailSent && <div className="form-group">
+                <div className="form-label-group">
+                  <label className="form-label">
+                    OTP
+                  </label>
+                </div>
+                <input type="text"  {...register('otp', { required: "This field is required" })} className="form-control form-control-lg" placeholder="Enter OTP" />
+              </div>}
               <div className="form-group">
-                <Button color="primary" size="lg" className="btn-block" onClick={(ev) => ev.preventDefault()}>
-                  Send Reset Link
+                <Button color="primary" size="lg" type="submit" className="btn-block" >
+                  {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Send Reset Link"}
                 </Button>
               </div>
             </form>
