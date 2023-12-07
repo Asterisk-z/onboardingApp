@@ -92,7 +92,7 @@ const Homepage = () => {
                   <div className="card-inner">
                     <div className="card-title-group">
                       <div className="card-title">
-                        <h6 className="title">{"Today's Visitors"}</h6>
+                        <h6 className="title">{"Today's Visitor"}</h6>
                       </div>
                     </div>
                     <div className="data">
