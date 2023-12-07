@@ -39,7 +39,8 @@ const Login = () => {
         if (resp.payload?.message == "success") {
           
             setTimeout(() => {
-              navigate(`${process.env.PUBLIC_URL}/dashboard`);
+              // navigate(`${process.env.PUBLIC_URL}/dashboard`);
+              window.location.href = `${process.env.PUBLIC_URL}/dashboard`
               setLoading(false);
             }, 1000);
           

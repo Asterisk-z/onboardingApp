@@ -173,15 +173,25 @@ const DropdownExample = () => {
     //     </ul>
     //   </DropdownMenu>
     // </Dropdown>
-    <div style={styles.dropdownContainer}>
-      <button onClick={handleButtonClick}>Toggle Dropdown</button>
-      {isDropdownVisible && 
-      <div  style={styles.dropdownContent}>
-          <p>Item 1</p>
-          <p>Item 2</p>
-          <p>Item 3</p>
-      </div>}
-    </div>
+    // <div style={styles.dropdownContainer}>
+    //   <button onClick={handleButtonClick}>Toggle Dropdown</button>
+    //   {isDropdownVisible && 
+    //   <div  style={styles.dropdownContent}>
+    //       <p>Item 1</p>
+    //       <p>Item 2</p>
+    //       <p>Item 3</p>
+    //   </div>}
+    // </div>
+    <select
+      name="action"
+      className="custom-select custom-select-sm form-control form-control-sm"
+      onChange={(e) => e.preventDefault()} value={'Action'}
+        >
+          <option value="Action">Action</option>
+          <option value="View" onClick={(ev) => ev.preventDefault()}>View</option>
+          <option value="Edit" onClick={(ev) => ev.preventDefault()}>Edit</option>
+          <option value="Delete" onClick={(ev) => ev.preventDefault()}>Delete</option>
+        </select>
   )
 }
 

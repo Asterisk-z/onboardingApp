@@ -12,108 +12,11 @@ import Content from "layout/content/Content";
 import Head from "layout/head/Head";
 import ComplaintTableUser from './ComplaintTableUser'
 
-const ComplainTable = () => {
-    
-    const dispatch = useDispatch();
-    const complaints = useSelector((state) => state?.complaint?.list) || null;
-    useEffect(() => {
-        dispatch(loadAllComplaints());
-    }, [dispatch]);
-  
-    
-    const $complaints = complaints ? JSON.parse(complaints) : null;
-  
-    return (
-    <React.Fragment>
-      <Content>
 
-
-        <Block size="xl">
-          <BlockHead>
-            <BlockHeadContent>
-              <BlockTitle tag="h4">Complaint History</BlockTitle>
-                <p>{complaints}</p>
-                {/* <DropdownTrans/> */}
-            </BlockHeadContent>
-          </BlockHead>
-
-          <PreviewCard>
-            {$complaints && <ComplaintTableUser data={$complaints} expandableRows pagination actions />}
-            
-            {/* <ComplaintTableUser data={DataTableData} columns={dataTableColumns} expandableRows pagination actions /> */}
-          </PreviewCard>
-        </Block>
-
-
-      </Content>
-    </React.Fragment>
-  );
-
-  // return (
-  //   <table className="table table-orders">
-  //     <thead className="tb-odr-head">
-  //       <tr className="tb-odr-item">
-  //         <th className="tb-odr-info">
-  //           <span className="tb-odr-id">Ticket ID</span>
-  //           <span className="tb-odr-date d-none d-md-inline-block">Date Create</span>
-  //         </th>
-  //         <th className="tb-odr-amount">
-  //           <span className="tb-odr-total">Description</span>
-  //           <span className="tb-odr-status d-none d-md-inline-block">Status</span>
-  //         </th>
-  //         <th className="tb-odr-action">&nbsp;</th>
-  //       </tr>
-  //     </thead>
-  //     <tbody className="tb-odr-body">
-  //       {orderData.map((item) => {
-  //         return (
-  //           <tr className="tb-odr-item" key={item.id}>
-  //             <td className="tb-odr-info">
-  //               <span className="tb-odr-id">
-  //                 <a
-  //                   href="#id"
-  //                   onClick={(ev) => {
-  //                     ev.preventDefault();
-  //                   }}
-  //                 >
-  //                   {item.id}
-  //                 </a>
-  //               </span>
-  //               <span className="tb-odr-date">{item.date}</span>
-  //             </td>
-  //             <td className="tb-odr-amount">
-  //               <span className="tb-odr-total">
-  //                 <span className="amount">${item.amount}</span>
-  //               </span>
-  //               <span className="tb-odr-status">
-  //                 <Badge
-  //                   className="badge-dot"
-  //                   color={
-  //                     item.status === "Complete" ? "success" : item.status === "Pending" ? "warning" : "danger"
-  //                   }
-  //                 >
-  //                   {item.status}
-  //                 </Badge>
-  //               </span>
-  //             </td>
-  //             <td className="tb-odr-action">
-                // <div className="tb-odr-btns d-none d-md-inline">
-                //   <Button color="primary" className="btn-sm">
-                //     View
-                //   </Button>
-                // </div>
-  //               <DropdownTrans />
-  //             </td>
-  //           </tr>
-  //         );
-  //       })}
-  //     </tbody>
-  //   </table>
-  // );
-};
 
 const Complaint = ({ drawer }) => {
         
+    const [counter, setCounter] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
@@ -144,12 +47,12 @@ const Complaint = ({ drawer }) => {
 
             if (resp.payload?.message == "success") {
                 setTimeout(() => {
-                  navigate(`${process.env.PUBLIC_URL}/complaint`);
                   setLoading(false);
                   setModalForm(!modalForm)
                   resetField('complaint_type')
                   resetField('body')
                   resetField('document')
+                  setCounter(!counter)
                 }, 1000);
             
             } else {
@@ -165,7 +68,42 @@ const Complaint = ({ drawer }) => {
     const handleFileChange = (event) => {
 		  setComplainFile(event.target.files[0]);
     };
+
+const ComplainTable = () => {
     
+    const dispatch = useDispatch();
+    const complaints = useSelector((state) => state?.complaint?.list) || null;
+    useEffect(() => {
+        dispatch(loadAllComplaints());
+    }, [counter, dispatch]);
+  
+    
+    const $complaints = complaints ? JSON.parse(complaints) : null;
+  
+    return (
+        <React.Fragment>
+            <Content>
+
+
+                <Block size="xl">
+                    <BlockHead>
+                        <BlockHeadContent>
+                            <BlockTitle tag="h4">Complaint History</BlockTitle>
+                            {/* <p>{complaints}</p> */}
+                        </BlockHeadContent>
+                    </BlockHead>
+
+                    <PreviewCard>
+                        {$complaints && <ComplaintTableUser data={$complaints} expandableRows pagination actions />}
+                    </PreviewCard>
+                </Block>
+
+
+            </Content>
+        </React.Fragment>
+    );
+}
+
 
     return (
         <React.Fragment>

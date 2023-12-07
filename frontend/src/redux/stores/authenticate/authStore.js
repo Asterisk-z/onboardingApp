@@ -104,7 +104,6 @@ export const passwordChange = createAsyncThunk(
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json;charset=UTF-8",
-          "Authorization": "Bearer "+localStorage.getItem('reset-token')
         },
         url: `auth/password/change`,
         data: values,
@@ -126,10 +125,12 @@ export const passwordResetComplete = createAsyncThunk(
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json;charset=UTF-8",
+          "Authorization": "Bearer "+localStorage.getItem('reset-token')
         },
         url: `auth/password/reset/complete`,
         data: values,
       });
+      localStorage.clear();
       return successHandler(data, data.message);
     } catch (error) {
       return errorHandler(error, true);
