@@ -43,18 +43,18 @@ Route::get('/complaint-types', [ComplaintTypeController::class, 'index']);
 
 Route::middleware('auth')->group(function () {
 
-    Route::group(['prefix' => 'complaint'], function () {
+    Route::group(['prefix' => 'complaint'],  function () {
         Route::post('/store', [ComplaintController::class, 'store']);
         Route::get('/', [ComplaintController::class, 'index']);
     });
 
     //
-    Route::group(['prefix' => 'user'], function () {
-        Route::post('/logs', [AuditController::class, 'userLog']);
+    Route::group(['prefix' => 'user'],  function () {
+        Route::get('/logs', [AuditController::class, 'userLog']);
     });
 
     //MEG ROUTES
-    Route::middleware('authRole:' . Role::MEG)->group(function () {
+    Route::middleware('authRole:' . Role::MEG)->group( function () {
         // complaint
         Route::group(['prefix' => 'complaint'], function () {
             Route::post('/feedback', [ComplaintController::class, 'feedback']);
@@ -63,7 +63,7 @@ Route::middleware('auth')->group(function () {
         });
         // audit
         Route::group(['prefix' => 'audits'], function () {
-            Route::post('/logs', [AuditController::class, 'index']);
+            Route::get('/logs', [AuditController::class, 'index']);
         });
     });
 

@@ -20,21 +20,21 @@ const navData = [
         text: "Complaints",
         link: "/admin-complaint",
       },
-      // {
-      // icon: "tile-thumb-fill",
-      // text: "Projects",
-      // active: false,
-      // subMenu: [
-      //     {
-      //       text: "Project Cards",
-      //       link: "/project-card",
-      //     },
-      //     {
-      //       text: "Project List",
-      //       link: "/project-list",
-      //     },
-      //   ],
-      // },
+      {
+      icon: "tile-thumb-fill",
+      text: "Activity Log",
+      active: false,
+      subMenu: [
+          {
+            text: "All Logs",
+            link: "/admin-audit-log",
+          },
+          {
+            text: "User Log",
+            link: "/user-audit-log",
+          },
+        ],
+      },
     ],
   },
   {

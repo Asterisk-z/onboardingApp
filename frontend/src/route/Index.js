@@ -146,10 +146,14 @@ import Logout from "main/auth/Logout";
 import Register from "main/auth/Register";
 import ForgotPassword from "main/auth/ForgotPassword";
 import PasswordUpdate from "main/auth/PasswordUpdate";
+import PasswordReset from "main/auth/PasswordChange";
 import Form from "main/forms/Form";
 import Complaint from "main/pages/Complaint" 
 import AuditLog from "main/pages/AuditLog" 
+import AdminAuditLog from "main/pages/Admin/AdminAuditLog" 
+import UserAuditLog from "main/pages/Admin/AuditLog" 
 import Success from "pages/auth/Success";
+
 
 import Layout from "layout/Index";
 import AdminLayout from "layout/AdminLayout";
@@ -353,6 +357,7 @@ const Router = () => {
 
         <Route path={`${process.env.PUBLIC_URL}`} element={<MainLayoutNoSidebar />}>
             {/* <Route path="auth-success" element={<Success />}></Route> */}
+            <Route path="auth-password-reset" element={<PasswordReset />}></Route>
             <Route path="auth-password-update" element={<PasswordUpdate />}></Route>
             <Route path="auth-reset" element={<ForgotPassword />}></Route>
             <Route path="auth-register" element={<Register />}></Route>
@@ -382,7 +387,8 @@ const Router = () => {
         <Route path={`${process.env.PUBLIC_URL}`} element={<AdminLayout />}>
           <Route path="admin-dashboard" element={<UserHomepage />}></Route>
           <Route path="admin-complaint" element={<Complaint />}></Route>
-          <Route path="admin-audit-log" element={<AuditLog />}></Route>
+          <Route path="admin-audit-log" element={<AdminAuditLog />}></Route>
+          <Route path="user-audit-log" element={<UserAuditLog />}></Route>
         </Route>
       </Routes>
   );
