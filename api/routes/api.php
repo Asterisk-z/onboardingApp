@@ -26,15 +26,14 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('/login', [UsersController::class, 'login']);
     Route::post('/register', [UsersController::class, 'register']);
 
-    Route::prefix('password')->group(function() {
+    Route::prefix('password')->group(function () {
         Route::post('/change', [PasswordController::class, 'changePassword'])->middleware('throttle:10,5');
 
-        Route::prefix('reset')->group(function() {
+        Route::prefix('reset')->group(function () {
             Route::post('/initiate', [PasswordController::class, 'forgotPassword']);
             Route::post('/otp', [PasswordController::class, 'validateForgotPasswordOtp'])->middleware('throttle:10,5');
             Route::post('/complete', [PasswordController::class, 'resetPassword'])->middleware('passwordReset');
         });
-        
     });
 });
 
@@ -49,8 +48,12 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [ComplaintController::class, 'index']);
     });
 
-    //MEG ROUTES
+    //
+    Route::group(['prefix' => 'user'], function () {
+        Route::post('/logs', [AuditController::class, 'userLog']);
+    });
 
+    //MEG ROUTES
     Route::middleware('authRole:' . Role::MEG)->group(function () {
         // complaint
         Route::group(['prefix' => 'complaint'], function () {
@@ -60,7 +63,7 @@ Route::middleware('auth')->group(function () {
         });
         // audit
         Route::group(['prefix' => 'audits'], function () {
-            Route::post('/audit-logs', [AuditController::class, 'index']);
+            Route::post('/logs', [AuditController::class, 'index']);
         });
     });
 
@@ -70,7 +73,7 @@ Route::middleware('auth')->group(function () {
 
     //MBG ROUTES
 
-    // AR ROUTES
+    //AR ROUTES
     Route::middleware('authRole:' . Role::ARAUTHORISER . ',' . Role::ARINPUTTER)->group(function () {
         Route::group(['prefix' => 'ar'], function () {
             Route::get('/list', [ARController::class, 'list']);

@@ -15,7 +15,7 @@ class AuditController extends Controller
     public function index()
     {
         //
-        $audits = Audit::orderBy('action_time', 'DESC')->get();
+        $audits = Audit::orderBy('created_at', 'DESC')->get();
         return response()->json($audits);
     }
 
