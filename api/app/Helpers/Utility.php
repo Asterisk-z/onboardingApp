@@ -82,4 +82,10 @@ class Utility
     {
         return User::where('role_id', $category)->get();
     }
+
+    public static function getUsersEmailByCategory($category)
+    {
+        return User::where('role_id', $category)->pluck('email');
+    }
+
 }

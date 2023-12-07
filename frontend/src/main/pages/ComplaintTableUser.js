@@ -177,7 +177,8 @@ const ComplaintTableUser = ({ data, pagination, actions, className, selectableRo
     let defaultData = tableData;
     if (searchText !== "") {
       defaultData = data.filter((item) => {
-        return item.name.toLowerCase().includes(searchText.toLowerCase());
+        // return item.name.toLowerCase().includes(searchText.toLowerCase());
+        return (Object.values(item).join('').toLowerCase()).includes(searchText.toLowerCase())
       });
       setTableData(defaultData);
     } else {
