@@ -11,6 +11,11 @@ class ARTransferRequest extends Model
 {
     use HasFactory;
 
+    const PENDING = 'pending';
+    const APPROVED = 'approved';
+    const DECLINED = 'declined';
+
+
     public function ar()
     {
         return $this->belongsTo(User::class, 'ar_user_id');
