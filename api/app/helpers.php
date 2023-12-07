@@ -70,3 +70,18 @@ if (!function_exists('logAction')) {
         ]);
     }
 }
+
+
+if (!function_exists('prettifyJson')) {
+    function prettifyJson(array $data)
+    {
+
+        // Format JSON for better readability
+        $formattedJson = json_encode($data, JSON_PRETTY_PRINT);
+
+        // Remove curly braces
+        $formattedJson = str_replace(['{', '}'], '', $formattedJson);
+
+        return nl2br($formattedJson);
+    }
+}

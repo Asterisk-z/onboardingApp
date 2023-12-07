@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ARController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,3 +22,6 @@ Route::group(['prefix' => 'auth'], function () {
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('/ar/test', [ARController::class, 'test']);

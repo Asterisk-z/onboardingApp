@@ -41,13 +41,13 @@ class UsersController extends Controller
         }
 
         //check if user is verified, force if otherwise. 
-        if(! $user->verified_at){
+        if (!$user->verified_at) {
             logAction($request->email, 'Failed Login', 'Failed Login - Not yet reset passwword', $request->ip());
             return errorResponse(ResponseStatusCodes::FORCE_PASSWORD_RESET, "Please reset your password to continue.");
         }
 
         //check password policy
-        if(! Utility::checkPasswordExpiry($user)){ 
+        if (!Utility::checkPasswordExpiry($user)) {
             logAction($request->email, 'Failed Login', 'Failed Login - Password expired', $request->ip());
             return errorResponse(ResponseStatusCodes::FORCE_PASSWORD_RESET, "In a bid to keep you safe, you are required to reset your password.");
         }
