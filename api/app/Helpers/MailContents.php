@@ -55,4 +55,17 @@ class MailContents
         </ul>";
     }
 
+    public static function newMembershipSignupSubject(): string {
+        return "New Membership Signup";
+    }
+
+    public static function newMembershipSignupMail($name, $category) : string {
+        return "<p>A new applicant has successfully signed up on the MROIS porta:</p>
+
+        <ul>
+            <li><strong>Name:</strong> {$name}</li>
+            <li><strong>Category:</strong> {$category}</li>
+        </ul>";
+    }
+
 }

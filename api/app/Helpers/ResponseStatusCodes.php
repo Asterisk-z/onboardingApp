@@ -8,5 +8,6 @@ class ResponseStatusCodes
     const UNAUTHORIZED = '999';
     const OK = '00';
     const BAD_REQUEST = '01';
+    const DUPLICATE_REQUEST = '02'; //Request has been made before by same or different user.
 
 }

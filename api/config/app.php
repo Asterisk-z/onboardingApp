@@ -54,6 +54,8 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'front_end_url' => env("APP_FRONTEND_URL", "http://localhost:8000"),
+
     'asset_url' => env('ASSET_URL', null),
 
     'password_expiry' => env('PASSWORD_EXPIRY', 1),

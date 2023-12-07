@@ -51,7 +51,6 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
-        return [];
     }
 
     public function complaints()
@@ -82,5 +81,57 @@ class User extends Authenticatable implements JWTSubject
     public function passwords()
     {
         return $this->hasMany(PasswordHistory::class);
+    }
+
+
+    public function getFullName(): string
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
+
+    public function getBasicData($includePosition = false): array
+    {
+        $data = [
+            'id' => $this->id,
+            'firstName' => $this->first_name,
+            'lastName' => $this->last_name,
+            'email' => $this->email,
+            'phone' => $this->phone,
+            'nationality' => $this->userNationality->name,
+            'role' => $this->role->name,
+            'approval_status' => $this->approval_status,
+            'regId' => $this->reg_id,
+            'institution' => $this->institution->name,
+            'createdAt' => $this->created_at
+        ];
+
+
+        // if ($includePosition) {
+        //     $data['position'] = $this->position->name;
+        // }
+
+        return $data;
+    }
+
+    /**
+     * getRegID returns the regID if existing. Else, it created one and updates the user record.
+     * @return string
+     **/
+    public function getRegID(): string
+    {
+        if ($this->reg_id) {
+            return $this->reg_id;
+        }
+
+        return $this->createRegID();
+    }
+
+    private function createRegID(): string
+    {
+        $this->reg_id = 'FMDQ/' . str_pad($this->id, 4, "0", STR_PAD_LEFT) . date("Ymd", strtotime($this->created_at));
+
+        $this->update(['reg_id' => $this->reg_id]);
+
+        return $this->reg_id;
     }
 }
