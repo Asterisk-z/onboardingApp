@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import exportFromJSON from "export-from-json";
 import CopyToClipboard from "react-copy-to-clipboard";
-import { Col, Modal, ModalBody, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
+import { Col, Modal, ModalBody, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem,  Badge } from "reactstrap";
 import { DataTablePagination } from "components/Component";
 import moment from "moment";
 import Icon from "components/icon/Icon";
@@ -95,140 +95,36 @@ const CustomCheckbox = React.forwardRef(({ onClick, ...rest }, ref) => (
   </div>
 ));
 
-const DropdownExample = () => {
-  // const [isOpen, setIsOpen] = useState(false);
-  
-  // const toggle = () => {setIsOpen(!isOpen)};
-  const [isDropdownVisible, setDropdownVisible] = useState(false);
 
-  const handleButtonClick = () => {
-    setDropdownVisible(!isDropdownVisible);
-    console.log(isDropdownVisible)
-  };
-  const styles = {
-    dropdownContainer: {
-      position: "relative",
-      display: "inline-block",
-      // height: "300px"
-    },
-    
-    dropdownContent: {
-      display: "block",
-      position: "absolute",
-      top: "70%",
-      left: "0",
-      height: "300px",
-      width: "300px",
-      backgroundColor: "red",
-      border: "1px solid #ccc",
-      boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
-      padding: "8px",
-      zIndex: "1000"
-    }
-    
-  }
-  return (
-    // <Dropdown isOpen={true} toggle={toggle}>
-    //   <DropdownToggle className="btn-action" color="primary">
-    //     <span>Dropdown Button</span>
-    //   </DropdownToggle>
-    //   <DropdownMenu>
-    //     <ul className="link-list-opt">
-    //       <li>
-    //         <DropdownItem
-    //           tag="a"
-    //           href="#links"
-    //           onClick={(ev) => ev.preventDefault()}
-    //         >
-    //           <span>Profile Settings</span>
-    //         </DropdownItem>
-    //       </li>
-    //       <li>
-    //         <DropdownItem
-    //           tag="a"
-    //           href="#links"
-    //           onClick={(ev) => ev.preventDefault()}
-    //         >
-    //           <span>Notifications</span>
-    //         </DropdownItem>
-    //       </li>
-    //       <li>
-    //         <DropdownItem
-    //           tag="a"
-    //           href="#links"
-    //           onClick={(ev) => ev.preventDefault()}
-    //         >
-    //           <span>Another Action</span>
-    //         </DropdownItem>
-    //       </li>
-    //       <li>
-    //         <DropdownItem
-    //           tag="a"
-    //           href="#links"
-    //           onClick={(ev) => ev.preventDefault()}
-    //         >
-    //           <span>Something else here</span>
-    //         </DropdownItem>
-    //       </li>
-    //     </ul>
-    //   </DropdownMenu>
-    // </Dropdown>
-    // <div style={styles.dropdownContainer}>
-    //   <button onClick={handleButtonClick}>Toggle Dropdown</button>
-    //   {isDropdownVisible && 
-    //   <div  style={styles.dropdownContent}>
-    //       <p>Item 1</p>
-    //       <p>Item 2</p>
-    //       <p>Item 3</p>
-    //   </div>}
-    // </div>
-    <select
-      name="action"
-      className="custom-select custom-select-sm form-control form-control-sm"
-      onChange={(e) => e.preventDefault()} value={'Action'}
-        >
-          <option value="Action">Action</option>
-          <option value="View" onClick={(ev) => ev.preventDefault()}>View</option>
-          <option value="Edit" onClick={(ev) => ev.preventDefault()}>Edit</option>
-          <option value="Delete" onClick={(ev) => ev.preventDefault()}>Delete</option>
-        </select>
-  )
-}
 
 const DropdownTrans = () => {
     return (
-                <UncontrolledDropdown direction="right">
-                  <div className="btn-group">
-                    <Button color="secondary">Action</Button>
-                    <DropdownToggle className="dropdown-toggle-split" color="secondary">
-                      <Icon name="chevron-right"></Icon>
-                    </DropdownToggle>
-                  </div>
-                  <DropdownMenu>
-                    <ul className="link-list-opt">
-                      <li>
-                        <DropdownItem tag="a" href="#links" onClick={(ev) => ev.preventDefault()}>
-                          <span>Profile Settings</span>
-                        </DropdownItem>
-                      </li>
-                      <li>
-                        <DropdownItem tag="a" href="#links" onClick={(ev) => ev.preventDefault()}>
-                          <span>Notifications</span>
-                        </DropdownItem>
-                      </li>
-                      <li>
-                        <DropdownItem tag="a" href="#links" onClick={(ev) => ev.preventDefault()}>
-                          <span>Another Action</span>
-                        </DropdownItem>
-                      </li>
-                      <li>
-                        <DropdownItem tag="a" href="#links" onClick={(ev) => ev.preventDefault()}>
-                          <span>Something else here</span>
-                        </DropdownItem>
-                      </li>
-                    </ul>
-                  </DropdownMenu>
-                </UncontrolledDropdown>
+          <UncontrolledDropdown direction="right">
+            <DropdownToggle className="dropdown-toggle btn" color="secondary">Action</DropdownToggle>
+
+            <DropdownMenu>
+              <ul className="link-list-opt">
+                <li>
+                  <DropdownItem tag="a" href="#links" onClick={(ev) => ev.preventDefault()}>
+                    <Icon name="pen"></Icon>
+                    <span>Edit</span>
+                  </DropdownItem>
+                </li>
+                <li>
+                <DropdownItem tag="a" href="#links" onClick={(ev) => ev.preventDefault()}>
+                  <Icon name="eye"></Icon>
+                    <span>View</span>
+                  </DropdownItem>
+                </li>
+                <li>
+                  <DropdownItem tag="a" href="#links" onClick={(ev) => ev.preventDefault()}>
+                    <Icon name="trash"></Icon>
+                    <span>Delete</span>
+                  </DropdownItem>
+                </li>
+              </ul>
+            </DropdownMenu>
+          </UncontrolledDropdown>
 
     );
   };
@@ -247,7 +143,13 @@ const complainColumn = [
       },
       {
         name: "Status",
-        selector: (row) => row.status,
+        selector: (row) => { return (<><Badge color="success">{`${row.status}`}</Badge></>) },
+        sortable: true,
+        hide: "sm",
+      },
+      {
+        name: "Comments",
+        selector: (row) => { return (<><Badge color="gray">{`${row.comment.length} Comments`}</Badge></>) },
         sortable: true,
         hide: "sm",
       },
@@ -259,7 +161,7 @@ const complainColumn = [
       },
       {
         name: "Action",
-        selector: (row) => (<DropdownExample/>),
+        selector: (row) => (<> <DropdownTrans/></>),
         sortable: true,
         hide: "md",
       },
@@ -317,6 +219,7 @@ const ComplaintTableUser = ({ data, pagination, actions, className, selectableRo
         </Col>
         <Col className="col-5 text-end" sm="8">
           <div className="datatable-filter">
+            
             <div className="d-flex justify-content-end g-2">
               {actions && <Export data={data} />}
               <div className="dataTables_length" id="DataTables_Table_0_length">
@@ -345,7 +248,7 @@ const ComplaintTableUser = ({ data, pagination, actions, className, selectableRo
       <DataTable
         data={tableData}
         columns={complainColumn}
-        className={className}
+        className={className + ' customMroisDatatable'} id='customMroisDatatable'
         selectableRows={selectableRows}
         selectableRowsComponent={CustomCheckbox}
         expandableRowsComponent={ExpandableRowComponent}
