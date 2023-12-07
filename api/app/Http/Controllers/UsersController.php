@@ -69,6 +69,12 @@ class UsersController extends Controller
 
     public function register(RegistrationRequest $request): JsonResponse
     {
+
+        // $form_id = $request->form_id;
+
+        // $form_value = $request->form_value;
+
+        // //////////////////////////////////////////////////////////////
         $institution = Institution::create();
         $position = Position::first();
 
