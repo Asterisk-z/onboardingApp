@@ -11,6 +11,6 @@ class Audit extends Model
 
     // protected $guarded = ['id'];
     protected $table = 'audits';
-    public $timestamps = false;
+    // public $timestamps = false;
     protected $guarded = [];
 }
