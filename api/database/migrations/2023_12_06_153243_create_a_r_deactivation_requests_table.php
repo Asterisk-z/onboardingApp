@@ -18,7 +18,6 @@ class CreateARDeactivationRequestsTable extends Migration
 
             $table->enum('approval_status', ['pending', 'approved', 'declined'])->default('pending')->comment('pending, approved, declined');
 
-
             $table->foreignId('ar_user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('requester_user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('authoriser_id')->constrained('users')->onDelete('cascade');
