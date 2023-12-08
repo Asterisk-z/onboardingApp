@@ -511,7 +511,7 @@ class ARController extends Controller
     }
 
 
-    public function processTransferByMBG(Request $request, ARTransferRequest $record)
+    public function processTransferByMEG(Request $request, ARTransferRequest $record)
     {
         $request->validate([
             'action' => 'required|in:approve,decline'

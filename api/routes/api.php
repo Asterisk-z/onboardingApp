@@ -71,7 +71,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/transfer', [ARController::class, 'listTransferMEG']);
 
             Route::post('/process-add/{ARUser}', [ARController::class, 'processAddByMEG']);
-            Route::post('/process-transfer/{record}', [ARController::class, 'processTransferByMBG']);
+            Route::post('/process-transfer/{record}', [ARController::class, 'processTransferByMEG']);
 
         });
     });
