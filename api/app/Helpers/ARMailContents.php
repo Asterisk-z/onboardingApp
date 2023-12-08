@@ -18,7 +18,7 @@ class ARMailContents
             $link = $link . '?email=' . $ARUser->email;
         }
 
-        $company = $ARUser->institution->name;
+        $company = $ARUser->institution->name ?? "a company";
         $regID = $ARUser->getRegID();
 
         return "<p>
@@ -47,7 +47,7 @@ class ARMailContents
 
         $link = env("APP_FRONTEND_URL");
 
-        $company = $ARUser->institution->name;
+        $company = $ARUser->institution->name ?? "a company";
         $regID = $ARUser->getRegID();
 
         $message = "<p>
@@ -133,5 +133,100 @@ class ARMailContents
                 $updateFieldsStr
         </p>
         ";
+    }
+
+
+
+    public static function deactivationMEGSubject(): string
+    {
+        return "Authorised Representative Deactivation";
+    }
+
+    public static function deactivationMEGBody(User $ARUser): string
+    {
+
+        $company = $ARUser->institution->name ?? "a company";
+        $regID = $ARUser->getRegID();
+
+        $message = "<p>
+                Please be informed that an Authorised Representative for $company has been deactivated.
+            </p>
+            
+            <p>
+                The AR details is given below:
+                <br>
+                Surname: $ARUser->last_name <br>
+                First Name: $ARUser->first_name <br>
+                Email: $ARUser->email <br>
+                ID number: $regID <br>
+                Status: <b>Deactivated</b>
+            </p>";
+
+        return $message;
+    }
+
+    public static function activationMEGSubject(): string
+    {
+        return "Authorised Representative Re-activated";
+    }
+
+    public static function activationMEGBody(User $ARUser): string
+    {
+
+        $company = $ARUser->institution->name ?? "a company";
+        $regID = $ARUser->getRegID();
+
+        $message = "<p>
+                Please be informed that an Authorised Representative for $company has been re-activated.
+            </p>
+            
+            <p>
+                The AR details is given below:
+                <br>
+                Surname: $ARUser->last_name <br>
+                First Name: $ARUser->first_name <br>
+                Email: $ARUser->email <br>
+                ID number: $regID <br>
+                Status: <b>Activated</b>
+            </p>";
+
+        return $message;
+    }
+
+    public static function transferDeclineRequesterSubject(): string
+    {
+        return "Authorised Representative Transfer Declined";
+    }
+
+    public static function transferDeclineRequesterBody(User $ARUser, $reason): string
+    {
+        $regID = $ARUser->getRegID();
+
+        $message = "<p>
+                Please be informed that the transfer of AR $regID was declined.
+            </p>
+            
+            <p>
+                Reason: $reason
+            </p>";
+
+        return $message;
+    }
+
+
+    public static function transferApprovedMEGSubject(): string
+    {
+        return "Authorised Representative Transfer";
+    }
+
+    public static function transferApprovedMEGBody(User $ARUser): string
+    {
+        $regID = $ARUser->getRegID();
+
+        $message = "<p>
+                Kindly login to the “MROIS portal” to approve a transferred Authorised Representative with AR ID $regID
+            </p>";
+
+        return $message;
     }
 }
