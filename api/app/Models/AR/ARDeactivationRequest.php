@@ -10,6 +10,13 @@ class ARDeactivationRequest extends Model
 {
     use HasFactory;
 
+    const PENDING = 'pending';
+    const APPROVED = 'approved';
+    const DECLINED = 'declined';
+
+    const REQUEST_TYPE_ACTIVATE = 'activate';
+    const REQUEST_TYPE_DEACTIVATE = 'deactivate';
+
 
     public function ar()
     {

@@ -28,6 +28,7 @@ class UserResource extends JsonResource
             'regId' => $this->reg_id,
             'img' => null,
             'institution' => $this->institution,
+            'is_active' => $this->is_active,
             'createdAt' => $this->created_at
         ];
     }

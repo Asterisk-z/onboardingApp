@@ -43,18 +43,19 @@ Route::get('/complaint-types', [ComplaintTypeController::class, 'index']);
 
 Route::middleware('auth')->group(function () {
 
-    Route::group(['prefix' => 'complaint'],  function () {
+    Route::group(['prefix' => 'complaint'], function () {
         Route::post('/store', [ComplaintController::class, 'store']);
         Route::get('/', [ComplaintController::class, 'index']);
     });
 
     //
-    Route::group(['prefix' => 'user'],  function () {
+    Route::group(['prefix' => 'user'], function () {
         Route::get('/logs', [AuditController::class, 'userLog']);
     });
 
     //MEG ROUTES
-    Route::middleware('authRole:' . Role::MEG)->group( function () {
+    //Route::middleware('authRole:' . Role::MEG)->group(function () { 
+    Route::middleware('authRole:' . Role::ARAUTHORISER)->group(function () { //Todo: remove
         // complaint
         Route::group(['prefix' => 'complaint'], function () {
             Route::post('/feedback', [ComplaintController::class, 'feedback']);
@@ -64,6 +65,15 @@ Route::middleware('auth')->group(function () {
         // audit
         Route::group(['prefix' => 'audits'], function () {
             Route::get('/logs', [AuditController::class, 'index']);
+        });
+
+        Route::group(['prefix' => 'meg/ar'], function () {
+            Route::get('/list', [ARController::class, 'listMEG']);
+            Route::get('/transfer', [ARController::class, 'listTransferMEG']);
+
+            Route::post('/process-add/{ARUser}', [ARController::class, 'processAddByMEG']);
+            Route::post('/process-transfer/{record}', [ARController::class, 'processTransferByMBG']);
+
         });
     });
 
@@ -88,7 +98,11 @@ Route::middleware('auth')->group(function () {
             Route::get('/change-status', [ARController::class, 'listStatusChange']);
 
             Route::post('/transfer/{ARUser}', [ARController::class, 'transfer']);
+            Route::post('/process-transfer/{record}', [ARController::class, 'processTransfer']);
+
+
             Route::post('/change-status/{ARUser}', [ARController::class, 'changeStatus']);
+            Route::post('/process-change-status/{record}', [ARController::class, 'processChangeStatus']);
         });
     });
 });

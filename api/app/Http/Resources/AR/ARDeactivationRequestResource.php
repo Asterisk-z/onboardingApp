@@ -17,6 +17,7 @@ class ARDeactivationRequestResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'request_type' => $this->request_type,
             'approval_status' => $this->approval_status,
             'ar_user_id' => $this->ar_user_id,
             'requester_user_id' => $this->requester_user_id,
