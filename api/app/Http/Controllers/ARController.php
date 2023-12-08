@@ -459,10 +459,8 @@ class ARController extends Controller
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'This request has already been approved or declined');
         }
 
-
         $ARUser = $record->ar;
         $regID = $ARUser->getRegID();
-
 
         if ($request->action == 'decline') {
 
@@ -478,7 +476,6 @@ class ARController extends Controller
 
             $ARRequester = $record->requester;
             $ARRequester->notify(new InfoNotification(ARMailContents::transferDeclineRequesterBody($ARUser, $request->reason), ARMailContents::transferDeclineRequesterSubject(), [$request->user()->email]));
-
 
             return successResponse('Successful', ARTransferRequestResource::make($record));
 
@@ -529,10 +526,8 @@ class ARController extends Controller
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'This request has not been authorised.');
         }
 
-
         $ARUser = $record->ar;
         $regID = $ARUser->getRegID();
-
 
         if ($request->action == 'decline') {
 
@@ -547,7 +542,6 @@ class ARController extends Controller
 
             $ARRequester = $record->requester;
             $ARRequester->notify(new InfoNotification(ARMailContents::transferDeclineRequesterBody($ARUser, $request->reason), ARMailContents::transferDeclineRequesterSubject(), [$request->user()->email]));
-
 
             return successResponse('Successful', ARTransferRequestResource::make($record));
 
@@ -589,7 +583,6 @@ class ARController extends Controller
             $data['institution_id'] = $request->new_institution_id;
             $ARUser->update($data);
 
-
             $record->mbg_approval_status = ARTransferRequest::APPROVED;
             $record->save();
 
@@ -601,7 +594,6 @@ class ARController extends Controller
         }
 
         return successResponse('Successful', ARTransferRequestResource::make($record));
-
     }
 
     public function changeStatus(ChangeStatusARRequest $request, User $ARUser)

@@ -16,11 +16,16 @@ class ComplaintComment extends Model
         return [
             "id" => $this->id,
             "comment" => $this->comment,
+            "commenter" => $this->user,
             'createdAt' => $this->created_at
         ];
     }
 
     public function complaint(){
         return $this->belongsTo(Complaint::class);
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class);
     }
 }

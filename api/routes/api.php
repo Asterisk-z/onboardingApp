@@ -99,7 +99,6 @@ Route::middleware('auth')->group(function () {
             Route::post('/transfer/{ARUser}', [ARController::class, 'transfer']);
             Route::post('/process-transfer/{record}', [ARController::class, 'processTransfer']);
 
-
             Route::post('/change-status/{ARUser}', [ARController::class, 'changeStatus']);
             Route::post('/process-change-status/{record}', [ARController::class, 'processChangeStatus']);
         });
