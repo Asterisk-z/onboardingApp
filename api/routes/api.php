@@ -54,8 +54,7 @@ Route::middleware('auth')->group(function () {
     });
 
     //MEG ROUTES
-    //Route::middleware('authRole:' . Role::MEG)->group(function () { 
-    Route::middleware('authRole:' . Role::ARAUTHORISER)->group(function () { //Todo: remove
+    Route::middleware('authRole:' . Role::MEG)->group(function () {
         // complaint
         Route::group(['prefix' => 'complaint'], function () {
             Route::post('/feedback', [ComplaintController::class, 'feedback']);
