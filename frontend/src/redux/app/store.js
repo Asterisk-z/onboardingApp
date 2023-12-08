@@ -5,6 +5,7 @@ import countryReducer from "../stores/nationality/country";
 import complaintReducer from "../stores/complaints/complaint";
 import complaintTypeReducer from "../stores/complaints/complaintTypes";
 import activityReducer from "../stores/activity/audit";
+import arUsersReducer from "../stores/authorize/representative";
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     complaint: complaintReducer,
     complaintType: complaintTypeReducer,
     activity: activityReducer,
+    arUsers: arUsersReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -60,6 +60,11 @@ const navData = [
         text: "Activity Log",
         link: "/audit-log",
       },
+      {
+        icon: "tile-thumb-fill",
+        text: "Authorized Representatives",
+        link: "/auth-representatives",
+      },
       // {
       // icon: "tile-thumb-fill",
       // text: "Projects",

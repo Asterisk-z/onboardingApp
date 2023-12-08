@@ -298,30 +298,33 @@ const SendFeedback = (props) => {
   );
 };
 
-const ComplaintTableUser = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState }) => {
-    const complainColumn = [
+const AuthRepTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState }) => {
+    const authRepColumn = [
     {
-        name: "Ticket ID",
+        name: "User ID",
         selector: (row) => row.id,
         sortable: true,
     },
     {
-        name: "Body",
-        selector: (row) => row.body,
+        name: "Name",
+        selector: (row) => (`${row.firstName} ${row.lastName}`),
         sortable: true,
-        hide: 370,
     },
     {
-        name: "Status",
-        selector: (row) => { return (<><Badge color="success">{`${row.status}`}</Badge></>) },
+        name: "Email",
+        selector: (row) => (`${row.email}`),
         sortable: true,
-        hide: "sm",
     },
     {
-        name: "Comments",
-        selector: (row) => { return (<><Badge color="gray">{`${row.comment.length} Comments`}</Badge></>) },
+        name: "Phone",
+        selector: (row) => (`${row.phone}`),
         sortable: true,
-        hide: "sm",
+    },
+    {
+        name: "Role",
+        selector: (row) => { return (<><Badge color="success">{`${row.role.name}`}</Badge></>) },
+        sortable: true,
+        // hide: "sm",
     },
     {
         name: "Date Created",
@@ -332,7 +335,7 @@ const ComplaintTableUser = ({ data, pagination, actions, className, selectableRo
     {
         name: "Action",
         selector: (row) => (<>
-                        <SendFeedback complaint={row} updateParentParent={updateParent} />
+                        {/* <SendFeedback complaint={row} updateParentParent={updateParent} /> */}
                     </>),
         sortable: true,
         hide: "md",
@@ -418,7 +421,7 @@ const ComplaintTableUser = ({ data, pagination, actions, className, selectableRo
       </Row>
       <DataTable
         data={tableData}
-        columns={complainColumn}
+        columns={authRepColumn}
         className={className + ' customMroisDatatable'} id='customMroisDatatable'
         selectableRows={selectableRows}
         expandableRows={mobileView}
@@ -446,4 +449,4 @@ const ComplaintTableUser = ({ data, pagination, actions, className, selectableRo
   );
 };
 
-export default ComplaintTableUser;
+export default AuthRepTable;

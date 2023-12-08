@@ -4,14 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner} from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
 import { loadAllComplaintTypes } from "redux/stores/complaints/complaintTypes";
-import { loadAllUsersComplaints } from "redux/stores/complaints/complaint";
+import { userLoadUserARs } from "redux/stores/authorize/representative";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
-import AdminComplaintTable from './Tables/AdminComplaintTable'
+import AuthRepTable from './Tables/AuthRepTable'
 
 
 
-const Complaint = ({ drawer }) => {
+const AuthRepresentative = ({ drawer }) => {
         
     const [counter, setCounter] = useState(false);
     const dispatch = useDispatch();
@@ -23,9 +23,9 @@ const Complaint = ({ drawer }) => {
 
     const toggleForm = () => setModalForm(!modalForm);
 
-    useEffect(() => {
-        dispatch(loadAllComplaintTypes());
-    }, [dispatch]);
+    // useEffect(() => {
+    //     dispatch(loadAllComplaintTypes());
+    // }, [dispatch]);
 
     const $complaintType = complaintType ? JSON.parse(complaintType) : null;
   
@@ -35,16 +35,16 @@ const Complaint = ({ drawer }) => {
         setParentState(newState);
     };
 
-    const UserCompTable = () => {
+    const TableData = () => {
        
         const dispatch = useDispatch();
-        const complaints = useSelector((state) => state?.complaint?.list) || null;
+        const authorize_reps = useSelector((state) => state?.arUsers?.list) || null;
         useEffect(() => {
-            dispatch(loadAllUsersComplaints());
+            dispatch(userLoadUserARs());
         }, [dispatch,parentState]);
     
         
-        const $complaints = complaints ? JSON.parse(complaints) : null;
+        const $authorize_reps = authorize_reps ? JSON.parse(authorize_reps) : null;
         
         return (
             <React.Fragment>
@@ -54,14 +54,14 @@ const Complaint = ({ drawer }) => {
                     <Block size="xl">
                         <BlockHead>
                             <BlockHeadContent>
-                                <BlockTitle tag="h4">Complaint History</BlockTitle>
-                                {/* <p>{complaints}</p> */}
+                                {/* <BlockTitle tag="h4">List</BlockTitle> */}
+                                <p>{authorize_reps}</p>
                                 {/* {<p>{parentState}</p>} */}
                             </BlockHeadContent>
                         </BlockHead>
 
                         <PreviewCard>
-                            {$complaints && <AdminComplaintTable  updateParent={updateParentState} parentState={parentState} data={$complaints} expandableRows pagination actions />}
+                            {$authorize_reps && <AuthRepTable  updateParent={updateParentState} parentState={parentState} data={$authorize_reps} expandableRows pagination actions />}
                         </PreviewCard>
                     </Block>
 
@@ -80,7 +80,7 @@ const Complaint = ({ drawer }) => {
                     <BlockBetween>
                         <BlockHeadContent>
                             <BlockTitle page tag="h3">
-                                Complaints
+                                Authorised Representatives
                             </BlockTitle>
                         </BlockHeadContent>
                         <BlockHeadContent>
@@ -89,11 +89,11 @@ const Complaint = ({ drawer }) => {
                 </BlockHead>
                 <Block size="lg">
                     <Card className="card-bordered card-preview">
-                        <UserCompTable/>
+                        <TableData/>
                     </Card>
                 </Block>
             </Content>
         </React.Fragment>
     );
 };
-export default Complaint;
+export default AuthRepresentative;

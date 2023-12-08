@@ -6,7 +6,7 @@ import { Block, BlockHead, BlockHeadContent, BlockTitle, BlockBetween,  PreviewC
 import { loadAllUserLog } from "redux/stores/activity/audit";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
-import AuditTableUser from './tables/AuditTableUser'
+import AuditTableUser from './Tables/AuditTableUser'
 
 
 
