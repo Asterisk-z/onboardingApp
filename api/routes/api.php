@@ -54,8 +54,7 @@ Route::middleware('auth')->group(function () {
     });
 
     //MEG ROUTES
-    //Route::middleware('authRole:' . Role::MEG)->group(function () { 
-    Route::middleware('authRole:' . Role::ARAUTHORISER)->group(function () { //Todo: remove
+    Route::middleware('authRole:' . Role::MEG)->group(function () { 
         // complaint
         Route::group(['prefix' => 'complaint'], function () {
             Route::post('/feedback', [ComplaintController::class, 'feedback']);
@@ -72,7 +71,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/transfer', [ARController::class, 'listTransferMEG']);
 
             Route::post('/process-add/{ARUser}', [ARController::class, 'processAddByMEG']);
-            Route::post('/process-transfer/{record}', [ARController::class, 'processTransferByMBG']);
+            Route::post('/process-transfer/{record}', [ARController::class, 'processTransferByMEG']);
 
         });
     });
