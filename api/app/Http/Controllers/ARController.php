@@ -29,7 +29,6 @@ class ARController extends Controller
 
     public function listMEG(Request $request)
     {
-
         $query = User::whereNotNull('institution_id');
 
         if ($request->approval_status) {
@@ -45,11 +44,8 @@ class ARController extends Controller
         return successResponse('Successful', UserResource::collection($users));
     }
 
-
-
     public function list(Request $request)
     {
-
         $query = User::where('institution_id', $request->user()->institution_id);
 
         if ($request->approval_status) {
@@ -99,9 +95,18 @@ class ARController extends Controller
         $MBGs = Utility::getUsersEmailByCategory(Role::MBG);
         $BLGs = Utility::getUsersEmailByCategory(Role::BLG);
 
+        logger(json_encode($MBGs));
+
+        logger(json_encode($BLGs));
+
         $CCs = array_merge($MBGs, $BLGs);
 
+        logger(json_encode($CCs));
+
         $MEGs = Utility::getUsersByCategory(Role::MEG);
+
+        logger(json_encode($MEGs));
+
         if (count($MEGs))
             Notification::send($MEGs, new InfoNotification(ARMailContents::applicationMEGBody($user), ARMailContents::applicationMEGSubject(), $CCs));
 
@@ -137,7 +142,6 @@ class ARController extends Controller
 
 
             $ARUser->notify(new InfoNotification(ARMailContents::approvedARBody($ARUser, $password), ARMailContents::approvedARSubject()));
-
         } else {
 
             $ARUser->approval_status = User::DECLINED;
@@ -210,7 +214,6 @@ class ARController extends Controller
         $authoriserUser->notify(new InfoNotification(ARMailContents::updateAuthoriserBody($ARUser), ARMailContents::updateAuthoriserSubject()));
 
         return successResponse('Successful', UserResource::make($ARUser));
-
     }
 
     public function cancelUpdate(Request $request, User $ARUser)
@@ -227,7 +230,6 @@ class ARController extends Controller
         }
 
         return successResponse('Successful', UserResource::make($ARUser));
-
     }
 
     public function processUpdate(Request $request, User $ARUser)
@@ -285,9 +287,6 @@ class ARController extends Controller
             $MEGs = Utility::getUsersByCategory(Role::MEG);
             if (count($MEGs))
                 Notification::send($MEGs, new InfoNotification(ARMailContents::updatedMEGBody($oldRecord, $updateParams), ARMailContents::updatedMEGSubject()));
-
-
-
         } else {
             $logTitle = 'Decline AR Update';
             $logMessage = "Declined the AR update of $ARUser->email ($regID)";
@@ -301,7 +300,6 @@ class ARController extends Controller
 
 
         return successResponse('Successful', UserResource::make($ARUser));
-
     }
 
     public function listTransfer(Request $request)
@@ -316,7 +314,6 @@ class ARController extends Controller
         $records = $query->latest()->get();
 
         return successResponse('Successful', ARTransferRequestResource::collection($records));
-
     }
 
     public function listTransferMEG(Request $request)
@@ -335,7 +332,6 @@ class ARController extends Controller
         $records = $query->latest()->get();
 
         return successResponse('Successful', ARTransferRequestResource::collection($records));
-
     }
 
     public function listStatusChange(Request $request)
@@ -352,11 +348,9 @@ class ARController extends Controller
             $query = $query->where('approval_status', $request->status);
         }
 
-
         $records = $query->latest()->get();
 
         return successResponse('Successful', ARDeactivationRequestResource::collection($records));
-
     }
 
     public function transfer(TransferARRequest $request, User $ARUser)
@@ -441,7 +435,6 @@ class ARController extends Controller
         $record->refresh();
 
         return successResponse('Successful', ARTransferRequestResource::make($record));
-
     }
 
     public function processTransfer(Request $request, ARTransferRequest $record)
@@ -478,7 +471,6 @@ class ARController extends Controller
             $ARRequester->notify(new InfoNotification(ARMailContents::transferDeclineRequesterBody($ARUser, $request->reason), ARMailContents::transferDeclineRequesterSubject(), [$request->user()->email]));
 
             return successResponse('Successful', ARTransferRequestResource::make($record));
-
         } else {
 
             $record->approval_status = ARTransferRequest::APPROVED;
@@ -487,7 +479,6 @@ class ARController extends Controller
             $record->save();
 
             $record->refresh(); // reload the ar relationship
-
 
             $MBGs = Utility::getUsersEmailByCategory(Role::MBG);
             $BLGs = Utility::getUsersEmailByCategory(Role::BLG);
@@ -498,25 +489,19 @@ class ARController extends Controller
             if (count($MEGs))
                 Notification::send($MEGs, new InfoNotification(ARMailContents::transferApprovedMEGBody($ARUser), ARMailContents::transferApprovedMEGSubject(), $CCs));
 
-
             $logTitle = 'Approve AR Transfer';
             $logMessage = "Approved the transfer of AR - $ARUser->email ($regID). Request ref #$record->id";
             logAction($request->user()->email, $logTitle, $logMessage, $request->ip());
-
-
         }
 
         return successResponse('Successful', ARTransferRequestResource::make($record));
-
     }
-
 
     public function processTransferByMEG(Request $request, ARTransferRequest $record)
     {
         $request->validate([
             'action' => 'required|in:approve,decline'
         ]);
-
 
         if ($record->mbg_approval_status != ARDeactivationRequest::PENDING) {
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'This request has already been approved or declined');
@@ -544,7 +529,6 @@ class ARController extends Controller
             $ARRequester->notify(new InfoNotification(ARMailContents::transferDeclineRequesterBody($ARUser, $request->reason), ARMailContents::transferDeclineRequesterSubject(), [$request->user()->email]));
 
             return successResponse('Successful', ARTransferRequestResource::make($record));
-
         } else {
 
             $data = [];
@@ -640,7 +624,6 @@ class ARController extends Controller
         $authoriserUser->notify(new InfoNotification(ARMailContents::changeStatusAuthoriserBody($ARUser, $logActionType), ARMailContents::changeStatusAuthoriserSubject($logActionType)));
 
         return successResponse('Successful', ARDeactivationRequestResource::make($record));
-
     }
 
     public function processChangeStatus(Request $request, ARDeactivationRequest $record)
@@ -674,7 +657,6 @@ class ARController extends Controller
             $logMessage = "Declined the $logActionType of AR - $ARUser->email ($regID). Request ref #$record->id";
             logAction($request->user()->email, $logTitle, $logMessage, $request->ip());
             return successResponse('Successful', ARDeactivationRequestResource::make($record));
-
         } else {
 
             // Activate or deactivate the user
@@ -686,7 +668,6 @@ class ARController extends Controller
             $record->save();
 
             $record->refresh(); // reload the ar relationship
-
 
             $mailSubject = $mailBody = "";
 
@@ -702,11 +683,8 @@ class ARController extends Controller
             $MEGs = Utility::getUsersByCategory(Role::MEG);
             if (count($MEGs))
                 Notification::send($MEGs, new InfoNotification($mailBody, $mailSubject));
-
-
         }
 
         return successResponse('Successful', ARDeactivationRequestResource::make($record));
-
     }
 }
