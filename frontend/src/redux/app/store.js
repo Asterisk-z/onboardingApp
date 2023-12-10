@@ -6,6 +6,8 @@ import complaintReducer from "../stores/complaints/complaint";
 import complaintTypeReducer from "../stores/complaints/complaintTypes";
 import activityReducer from "../stores/activity/audit";
 import arUsersReducer from "../stores/authorize/representative";
+import roleStore from "../stores/roles/roleStore";
+import positionStore from "../stores/positions/positionStore";
 
 const store = configureStore({
   reducer: {
@@ -16,6 +18,8 @@ const store = configureStore({
     complaintType: complaintTypeReducer,
     activity: activityReducer,
     arUsers: arUsersReducer,
+    role: roleStore,
+    position: positionStore,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

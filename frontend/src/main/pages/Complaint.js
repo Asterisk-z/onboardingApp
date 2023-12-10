@@ -171,10 +171,10 @@ const ComplainTable = () => {
                             </div>
                             <div className="form-group">
                                 <label className="form-label" htmlFor="phone-no">
-                                    Upload Document (*csv, pdf)
+                                    Upload Document (*jpg, png)
                                 </label>
                                 <div className="form-control-wrap">
-                                    <input type="file" className="form-control"  {...register('document', { })} onChange={handleFileChange}/>
+                                    <input type="file" accept="image/*" className="form-control"  {...register('document', { })} onChange={handleFileChange}/>
                                      {errors.document && <p className="invalid">{`${errors.document.message}`}</p>}
                                 </div>
                             </div>

@@ -7,6 +7,8 @@ use App\Http\Controllers\ComplaintTypeController;
 use App\Http\Controllers\MemberCategoryController;
 use App\Http\Controllers\NationalityController;
 use App\Http\Controllers\PasswordController;
+use App\Http\Controllers\PositionController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UsersController;
 use App\Models\Role;
 use Illuminate\Support\Facades\Route;
@@ -38,6 +40,9 @@ Route::group(['prefix' => 'auth'], function () {
 });
 
 Route::get('/nationalities', [NationalityController::class, 'index']);
+Route::get('/positions', [PositionController::class, 'index']);
+Route::get('/ar_roles', [RoleController::class, 'user_roles']);
+Route::get('/admin_roles', [RoleController::class, 'admin_roles']);
 Route::get('/categories', [MemberCategoryController::class, 'index']);
 Route::get('/complaint-types', [ComplaintTypeController::class, 'index']);
 
