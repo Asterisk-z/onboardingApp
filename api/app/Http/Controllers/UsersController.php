@@ -111,6 +111,7 @@ class UsersController extends Controller
         if (count($MEGs))
             Notification::send($MEGs, new InfoNotification(MailContents::newMembershipSignupMail($user->first_name . " " . $user->last_name, $membership->name ?? null), MailContents::newMembershipSignupSubject()));
 
-        return successResponse("You have successfully signed up as a" . $membership ? $membership->name : "member" . ". Kindly check your mail to proceed with completion of the membership form", UserResource::make($user));
+        $membership = $membership ? $membership->name : "member";
+        return successResponse("You have successfully signed up as a $membership. Kindly check your mail to proceed with completion of the membership form", UserResource::make($user));
     }
 }
