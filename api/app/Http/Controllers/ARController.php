@@ -95,17 +95,9 @@ class ARController extends Controller
         $MBGs = Utility::getUsersEmailByCategory(Role::MBG);
         $BLGs = Utility::getUsersEmailByCategory(Role::BLG);
 
-        logger(json_encode($MBGs));
-
-        logger(json_encode($BLGs));
-
         $CCs = array_merge($MBGs, $BLGs);
 
-        logger(json_encode($CCs));
-
         $MEGs = Utility::getUsersByCategory(Role::MEG);
-
-        logger(json_encode($MEGs));
 
         if (count($MEGs))
             Notification::send($MEGs, new InfoNotification(ARMailContents::applicationMEGBody($user), ARMailContents::applicationMEGSubject(), $CCs));
@@ -483,7 +475,7 @@ class ARController extends Controller
             $MBGs = Utility::getUsersEmailByCategory(Role::MBG);
             $BLGs = Utility::getUsersEmailByCategory(Role::BLG);
 
-            $CCs = $MBGs->merge($BLGs)->toArray();
+            $CCs = array_merge($MBGs, $BLGs);
 
             $MEGs = Utility::getUsersByCategory(Role::MEG);
             if (count($MEGs))
