@@ -18,6 +18,7 @@ class Role extends Model
     const MBG = 4;
     const ARINPUTTER = 5;
     const ARAUTHORISER = 6;
+    const BLG = 7;
 
     public function toArray()
     {

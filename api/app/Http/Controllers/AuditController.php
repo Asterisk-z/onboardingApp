@@ -40,7 +40,7 @@ class AuditController extends Controller
         // Fetch all audits where the 'user' field matches the authenticated user's email
         $userEmail = auth()->user()->email;
 
-        $audits = Audit::where('user', $userEmail)->get();
+        $audits = Audit::where('user', $userEmail)->latest()->get();
 
         return successResponse('Successful', $audits);
     }

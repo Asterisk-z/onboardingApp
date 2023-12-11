@@ -8,6 +8,9 @@ use App\Http\Controllers\ComplaintTypeController;
 use App\Http\Controllers\MemberCategoryController;
 use App\Http\Controllers\NationalityController;
 use App\Http\Controllers\PasswordController;
+use App\Http\Controllers\PositionController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\UsersController;
 use App\Models\Role;
 use Illuminate\Support\Facades\Route;
@@ -39,18 +42,21 @@ Route::group(['prefix' => 'auth'], function () {
 });
 
 Route::get('/nationalities', [NationalityController::class, 'index']);
+Route::get('/positions', [PositionController::class, 'index']);
+Route::get('/ar_roles', [RoleController::class, 'user_roles']);
+Route::get('/admin_roles', [RoleController::class, 'admin_roles']);
 Route::get('/categories', [MemberCategoryController::class, 'index']);
 Route::get('/complaint-types', [ComplaintTypeController::class, 'index']);
 
 Route::middleware('auth')->group(function () {
 
-    Route::group(['prefix' => 'complaint'],  function () {
+    Route::group(['prefix' => 'complaint'], function () {
         Route::post('/store', [ComplaintController::class, 'store']);
         Route::get('/', [ComplaintController::class, 'index']);
     });
 
     //
-    Route::group(['prefix' => 'user'],  function () {
+    Route::group(['prefix' => 'user'], function () {
         Route::get('/logs', [AuditController::class, 'userLog']);
     });
 
@@ -65,6 +71,14 @@ Route::middleware('auth')->group(function () {
         // audit
         Route::group(['prefix' => 'audits'], function () {
             Route::get('/logs', [AuditController::class, 'index']);
+        });
+
+        Route::group(['prefix' => 'meg/ar'], function () {
+            Route::get('/list', [ARController::class, 'listMEG']);
+            Route::get('/transfer', [ARController::class, 'listTransferMEG']);
+
+            Route::post('/process-add/{ARUser}', [ARController::class, 'processAddByMEG']);
+            Route::post('/process-transfer/{record}', [ARController::class, 'processTransferByMEG']);
         });
         // broadcast
         Route::group(['prefix' => 'broadcasts'], function () {
@@ -94,7 +108,14 @@ Route::middleware('auth')->group(function () {
             Route::get('/change-status', [ARController::class, 'listStatusChange']);
 
             Route::post('/transfer/{ARUser}', [ARController::class, 'transfer']);
+            Route::post('/process-transfer/{record}', [ARController::class, 'processTransfer']);
+
             Route::post('/change-status/{ARUser}', [ARController::class, 'changeStatus']);
+            Route::post('/process-change-status/{record}', [ARController::class, 'processChangeStatus']);
         });
+    });
+
+    Route::group(['prefix' => 'user'], function () {
+        Route::get('/authorisers', [UserController::class, 'list_ar_authorisers']);
     });
 });

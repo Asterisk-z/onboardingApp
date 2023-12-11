@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import exportFromJSON from "export-from-json";
 import CopyToClipboard from "react-copy-to-clipboard";
-import { Col, Modal, ModalBody, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge } from "reactstrap";
+import { Col, Modal, ModalBody, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge,  ModalHeader,  ModalFooter } from "reactstrap";
 import { DataTablePagination } from "components/Component";
 import moment from "moment";
 import Icon from "components/icon/Icon";
@@ -97,21 +97,35 @@ const CustomCheckbox = React.forwardRef(({ onClick, ...rest }, ref) => (
 
 
 
-const DropdownTrans = () => {
+const DropdownTrans = (props) => {
+  
+    const complaint = props.complaint
+    const [modalForm, setModalForm] = useState(false);
+
+    const toggleForm = () => setModalForm(!modalForm);
+  
   return (
+    <>
     <UncontrolledDropdown direction="right">
       <DropdownToggle className="dropdown-toggle btn" color="secondary">Action</DropdownToggle>
 
       <DropdownMenu>
         <ul className="link-list-opt">
+          
           <li>
+            <DropdownItem tag="a" href="#links" onClick={toggleForm} >
+              <Icon name="eye"></Icon>
+              <span>View</span>
+            </DropdownItem>
+          </li>
+          {/* <li>
             <DropdownItem tag="a" href="#links" onClick={(ev) => ev.preventDefault()}>
               <Icon name="pen"></Icon>
               <span>Edit</span>
             </DropdownItem>
           </li>
           <li>
-            <DropdownItem tag="a" href="#links" onClick={(ev) => ev.preventDefault()}>
+            <DropdownItem tag="a" href="#links" onClick={(ev) => ev.preventDefault()} >
               <Icon name="eye"></Icon>
               <span>View</span>
             </DropdownItem>
@@ -121,11 +135,38 @@ const DropdownTrans = () => {
               <Icon name="trash"></Icon>
               <span>Delete</span>
             </DropdownItem>
-          </li>
+          </li> */}
         </ul>
       </DropdownMenu>
     </UncontrolledDropdown>
-
+          <Modal isOpen={modalForm} toggle={toggleForm}>
+            <ModalHeader toggle={toggleForm} close={<button className="close" onClick={toggleForm}><Icon name="cross" /></button>}>
+                Fill Feedback Form
+            </ModalHeader>
+            <ModalBody className="modal-body-xl">
+                <div className="nk-modal">
+                    <h6 className="title">User: {complaint.user_id}</h6>
+                    <h6 className="title">Complaint Type: {complaint.complaint_type_id}</h6>
+                    <p>
+                        {complaint.body}
+                    </p>
+                    <p>
+                        {complaint.documment}
+                    </p>
+                    <h6 className="title">Comments:</h6>
+                      {complaint.comment.length > 1 && complaint.comment?.map((comment, index) => (
+                          <p key={index}>{comment.comment}<br/>{ moment(comment.createdAt).format('MMM. DD, YYYY HH:mm') }</p>))}
+                </div>
+            </ModalBody>
+            <ModalFooter className="bg-light">
+                <div className="text-center w-100">
+                    <p>
+                        Members Registration Oversight Information System (MROIS)
+                    </p>
+                </div>
+            </ModalFooter>
+        </Modal> 
+    </>
   );
 };
 
@@ -161,7 +202,7 @@ const complainColumn = [
   },
   {
     name: "Action",
-    selector: (row) => (<> <DropdownTrans /></>),
+    selector: (row) => (<> <DropdownTrans  complaint={row} /></>),
     sortable: true,
     hide: "md",
   },

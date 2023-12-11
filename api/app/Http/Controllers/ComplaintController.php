@@ -29,16 +29,16 @@ class ComplaintController extends Controller
 
         switch ($status) {
             case 'NEW':
-                $complaints = $user->complaints()->where('status', 'NEW')->get();
+                $complaints = $user->complaints()->where('status', 'NEW')->latest()->get();
                 break;
             case 'ONGOING':
-                $complaints = $user->complaints()->where('status', 'ONGOING')->get();
+                $complaints = $user->complaints()->where('status', 'ONGOING')->latest()->get();
                 break;
             case 'CLOSED':
-                $complaints = $user->complaints()->where('status', 'CLOSED')->get();
+                $complaints = $user->complaints()->where('status', 'CLOSED')->latest()->get();
                 break;
             default:
-                $complaints = $user->complaints;
+                $complaints = $user->complaints()->latest()->get();
                 break;
         }
 
@@ -60,16 +60,16 @@ class ComplaintController extends Controller
 
         switch ($status) {
             case 'NEW':
-                $complaints = Complaint::where('status', 'NEW')->get();
+                $complaints = Complaint::where('status', 'NEW')->latest()->get();
                 break;
             case 'ONGOING':
-                $complaints = Complaint::where('status', 'ONGOING')->get();
+                $complaints = Complaint::where('status', 'ONGOING')->latest()->get();
                 break;
             case 'CLOSED':
-                $complaints = Complaint::where('status', 'CLOSED')->get();
+                $complaints = Complaint::where('status', 'CLOSED')->latest()->get();
                 break;
             default:
-                $complaints = Complaint::all();
+                $complaints = Complaint::latest()->all();
                 break;
         }
 

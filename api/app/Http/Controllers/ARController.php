@@ -27,9 +27,25 @@ class ARController extends Controller
 {
 
 
+    public function listMEG(Request $request)
+    {
+        $query = User::whereNotNull('institution_id');
+
+        if ($request->approval_status) {
+            $query = $query->where('approval_status', strtolower($request->approval_status));
+        }
+
+        if ($request->role_id) {
+            $query = $query->where('role_id', $request->role_id);
+        }
+
+        $users = $query->latest()->get();
+
+        return successResponse('Successful', UserResource::collection($users));
+    }
+
     public function list(Request $request)
     {
-
         $query = User::where('institution_id', $request->user()->institution_id);
 
         if ($request->approval_status) {
@@ -40,7 +56,7 @@ class ARController extends Controller
             $query = $query->where('role_id', $request->role_id);
         }
 
-        $users = $query->get();
+        $users = $query->latest()->get();
 
         return successResponse('Successful', UserResource::collection($users));
     }
@@ -59,6 +75,7 @@ class ARController extends Controller
     {
         return successResponse('Successful', UserResource::make($ARUser));
     }
+
     public function add(AddARRequest $request)
     {
         $validated = $request->validated();
@@ -75,13 +92,69 @@ class ARController extends Controller
         $logMessage = "Added a new AR - $user->email ($regID)";
         logAction($request->user()->email, 'Add AR', $logMessage, $request->ip());
 
+        $MBGs = Utility::getUsersEmailByCategory(Role::MBG);
+        $BLGs = Utility::getUsersEmailByCategory(Role::BLG);
+
+        logger(json_encode($MBGs));
+
+        logger(json_encode($BLGs));
+
+        $CCs = array_merge($MBGs, $BLGs);
+
+        logger(json_encode($CCs));
+
         $MEGs = Utility::getUsersByCategory(Role::MEG);
-        $Ccs = Utility::getUsersEmailByCategory(Role::MBG);
+
+        logger(json_encode($MEGs));
 
         if (count($MEGs))
-            Notification::send($MEGs, new InfoNotification(ARMailContents::applicationMEGBody($user), ARMailContents::applicationMEGSubject(), $Ccs));
+            Notification::send($MEGs, new InfoNotification(ARMailContents::applicationMEGBody($user), ARMailContents::applicationMEGSubject(), $CCs));
 
         return successResponse('Successful', UserResource::make($user));
+    }
+
+    public function processAddByMEG(Request $request, User $ARUser)
+    {
+
+        if ($ARUser->approval_status != User::PENDING) {
+            return errorResponse(ResponseStatusCodes::BAD_REQUEST, "This AR is already approved or declined.");
+        }
+
+        $request->validate([
+            'action' => 'required|in:approve,decline',
+        ]);
+
+        $regID = $ARUser->getRegID();
+
+        if ($request->action == 'approve') {
+
+            // Generate another password so it can be sent via email
+            $password = Utility::generatePassword();
+            $ARUser->approval_status = User::APPROVED;
+            $ARUser->approval_status_by = $request->user()->id;
+            $ARUser->password = Hash::make($password);
+
+            $ARUser->save();
+
+            $logTitle = 'Approve New AR';
+            $logMessage = "Approved the addition of AR - $ARUser->email ($regID)";
+            logAction($request->user()->email, $logTitle, $logMessage, $request->ip());
+
+
+            $ARUser->notify(new InfoNotification(ARMailContents::approvedARBody($ARUser, $password), ARMailContents::approvedARSubject()));
+        } else {
+
+            $ARUser->approval_status = User::DECLINED;
+            $ARUser->approval_status_by = $request->user()->id;
+            $ARUser->save();
+
+            $logTitle = 'Decline New AR';
+            $logMessage = "Declined the addition of AR - $ARUser->email ($regID)";
+            logAction($request->user()->email, $logTitle, $logMessage, $request->ip());
+        }
+
+
+        return successResponse('Successful', UserResource::make($ARUser));
     }
 
     public function update(UpdateARRequest $request, User $ARUser)
@@ -141,7 +214,6 @@ class ARController extends Controller
         $authoriserUser->notify(new InfoNotification(ARMailContents::updateAuthoriserBody($ARUser), ARMailContents::updateAuthoriserSubject()));
 
         return successResponse('Successful', UserResource::make($ARUser));
-
     }
 
     public function cancelUpdate(Request $request, User $ARUser)
@@ -158,7 +230,6 @@ class ARController extends Controller
         }
 
         return successResponse('Successful', UserResource::make($ARUser));
-
     }
 
     public function processUpdate(Request $request, User $ARUser)
@@ -216,9 +287,6 @@ class ARController extends Controller
             $MEGs = Utility::getUsersByCategory(Role::MEG);
             if (count($MEGs))
                 Notification::send($MEGs, new InfoNotification(ARMailContents::updatedMEGBody($oldRecord, $updateParams), ARMailContents::updatedMEGSubject()));
-
-
-
         } else {
             $logTitle = 'Decline AR Update';
             $logMessage = "Declined the AR update of $ARUser->email ($regID)";
@@ -232,7 +300,6 @@ class ARController extends Controller
 
 
         return successResponse('Successful', UserResource::make($ARUser));
-
     }
 
     public function listTransfer(Request $request)
@@ -247,7 +314,24 @@ class ARController extends Controller
         $records = $query->latest()->get();
 
         return successResponse('Successful', ARTransferRequestResource::collection($records));
+    }
 
+    public function listTransferMEG(Request $request)
+    {
+        // check if there is pending transfer request
+        $query = ARTransferRequest::whereNotNull('new_institution_id');
+
+        if ($request->status) {
+            $query = $query->where('approval_status', $request->status);
+        }
+
+        if ($request->meg_status) {
+            $query = $query->where('mbg_approval_status', $request->status);
+        }
+
+        $records = $query->latest()->get();
+
+        return successResponse('Successful', ARTransferRequestResource::collection($records));
     }
 
     public function listStatusChange(Request $request)
@@ -264,11 +348,9 @@ class ARController extends Controller
             $query = $query->where('approval_status', $request->status);
         }
 
-
         $records = $query->latest()->get();
 
         return successResponse('Successful', ARDeactivationRequestResource::collection($records));
-
     }
 
     public function transfer(TransferARRequest $request, User $ARUser)
@@ -278,7 +360,7 @@ class ARController extends Controller
         // check if there is pending transfer request
         $existingRecord = ARTransferRequest::where('ar_user_id', $ARUser->id)
             ->where('new_institution_id', $request->user()->institution_id)
-            ->where('approval_status', 'pending')
+            ->where('approval_status', ARTransferRequest::PENDING)
             ->first();
 
         if ($existingRecord) {
@@ -353,7 +435,149 @@ class ARController extends Controller
         $record->refresh();
 
         return successResponse('Successful', ARTransferRequestResource::make($record));
+    }
 
+    public function processTransfer(Request $request, ARTransferRequest $record)
+    {
+        $request->validate([
+            'action' => 'required|in:approve,decline',
+            'reason' => 'nullable'
+        ]);
+
+        if ($record->authoriser_id != $request->user()->id) {
+            return errorResponse(ResponseStatusCodes::UNAUTHORIZED, "You are not allowed to perform this action");
+        }
+
+        if ($record->approval_status != ARDeactivationRequest::PENDING) {
+            return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'This request has already been approved or declined');
+        }
+
+        $ARUser = $record->ar;
+        $regID = $ARUser->getRegID();
+
+        if ($request->action == 'decline') {
+
+            $record->approval_status = ARTransferRequest::DECLINED;
+            $record->approval_reason = $request->reason;
+            $record->save();
+
+            $logTitle = 'Decline AR Transfer';
+            $logMessage = "Declined the transfer of AR - $ARUser->email ($regID). Request ref #$record->id";
+            logAction($request->user()->email, $logTitle, $logMessage, $request->ip());
+
+            // send mail
+
+            $ARRequester = $record->requester;
+            $ARRequester->notify(new InfoNotification(ARMailContents::transferDeclineRequesterBody($ARUser, $request->reason), ARMailContents::transferDeclineRequesterSubject(), [$request->user()->email]));
+
+            return successResponse('Successful', ARTransferRequestResource::make($record));
+        } else {
+
+            $record->approval_status = ARTransferRequest::APPROVED;
+            $record->mbg_approval_status = ARTransferRequest::PENDING;
+            $record->approval_reason = $request->reason;
+            $record->save();
+
+            $record->refresh(); // reload the ar relationship
+
+            $MBGs = Utility::getUsersEmailByCategory(Role::MBG);
+            $BLGs = Utility::getUsersEmailByCategory(Role::BLG);
+
+            $CCs = $MBGs->merge($BLGs)->toArray();
+
+            $MEGs = Utility::getUsersByCategory(Role::MEG);
+            if (count($MEGs))
+                Notification::send($MEGs, new InfoNotification(ARMailContents::transferApprovedMEGBody($ARUser), ARMailContents::transferApprovedMEGSubject(), $CCs));
+
+            $logTitle = 'Approve AR Transfer';
+            $logMessage = "Approved the transfer of AR - $ARUser->email ($regID). Request ref #$record->id";
+            logAction($request->user()->email, $logTitle, $logMessage, $request->ip());
+        }
+
+        return successResponse('Successful', ARTransferRequestResource::make($record));
+    }
+
+    public function processTransferByMEG(Request $request, ARTransferRequest $record)
+    {
+        $request->validate([
+            'action' => 'required|in:approve,decline'
+        ]);
+
+        if ($record->mbg_approval_status != ARDeactivationRequest::PENDING) {
+            return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'This request has already been approved or declined');
+        }
+
+        if ($record->approval_status != ARDeactivationRequest::APPROVED) {
+            return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'This request has not been authorised.');
+        }
+
+        $ARUser = $record->ar;
+        $regID = $ARUser->getRegID();
+
+        if ($request->action == 'decline') {
+
+            $record->mbg_approval_status = ARTransferRequest::DECLINED;
+            $record->save();
+
+            $logTitle = 'MBG Decline AR Transfer';
+            $logMessage = "Declined the transfer of AR - $ARUser->email ($regID). Request ref #$record->id";
+            logAction($request->user()->email, $logTitle, $logMessage, $request->ip());
+
+            // send mail
+
+            $ARRequester = $record->requester;
+            $ARRequester->notify(new InfoNotification(ARMailContents::transferDeclineRequesterBody($ARUser, $request->reason), ARMailContents::transferDeclineRequesterSubject(), [$request->user()->email]));
+
+            return successResponse('Successful', ARTransferRequestResource::make($record));
+        } else {
+
+            $data = [];
+            if ($record->update_payload) {
+                // Update the user
+                $data = $record->update_payload;
+
+                if (is_string($data)) {
+                    // Convert the string to an array if needed
+                    $data = json_decode($data, true);
+                }
+
+                if (isset($data['email'])) {
+                    if (User::where('email', $data['email'])->where('is_del', false)->where('id', '!=', $ARUser->id)->exists()) {
+                        return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'Transfer failed. The email has already been taken.');
+                    }
+                }
+
+                if (isset($data['phone'])) {
+                    if (User::where('phone', $data['phone'])->where('is_del', false)->where('id', '!=', $ARUser->id)->exists()) {
+                        return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'Transfer failed. The phone has been taken.');
+                    }
+                }
+
+                // if position is set, remove it from update data
+                if (isset($data['position'])) {
+                    unset($data['position']);
+                }
+
+                // if role is set, remove it from update data
+                if (isset($data['role'])) {
+                    unset($data['role']);
+                }
+            }
+
+            $data['institution_id'] = $request->new_institution_id;
+            $ARUser->update($data);
+
+            $record->mbg_approval_status = ARTransferRequest::APPROVED;
+            $record->save();
+
+            $record->refresh(); // reload the ar relationship
+
+            $logTitle = 'MBG Approve AR Transfer';
+            $logMessage = "MBG approved the transfer of AR - $ARUser->email ($regID). Request ref #$record->id";
+            logAction($request->user()->email, $logTitle, $logMessage, $request->ip());
+        }
+
+        return successResponse('Successful', ARTransferRequestResource::make($record));
     }
 
     public function changeStatus(ChangeStatusARRequest $request, User $ARUser)
@@ -362,7 +586,7 @@ class ARController extends Controller
 
         // check if there is pending transfer request
         $existingRecord = ARDeactivationRequest::where('ar_user_id', $ARUser->id)
-            ->where('approval_status', 'pending')
+            ->where('approval_status', ARDeactivationRequest::PENDING)
             ->first();
 
         if ($existingRecord) {
@@ -400,6 +624,67 @@ class ARController extends Controller
         $authoriserUser->notify(new InfoNotification(ARMailContents::changeStatusAuthoriserBody($ARUser, $logActionType), ARMailContents::changeStatusAuthoriserSubject($logActionType)));
 
         return successResponse('Successful', ARDeactivationRequestResource::make($record));
+    }
 
+    public function processChangeStatus(Request $request, ARDeactivationRequest $record)
+    {
+        $request->validate([
+            'action' => 'required|in:approve,decline',
+            'reason' => 'nullable'
+        ]);
+
+        if ($record->authoriser_id != $request->user()->id) {
+            return errorResponse(ResponseStatusCodes::UNAUTHORIZED, "You are not allowed to perform this action");
+        }
+
+        if ($record->approval_status != ARDeactivationRequest::PENDING) {
+            return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'This request has already been approved or declined');
+        }
+
+        $logActionType = ($record->request_type == ARDeactivationRequest::REQUEST_TYPE_ACTIVATE) ? "Activation" : "Deactivation";
+
+        $ARUser = $record->ar;
+        $regID = $ARUser->getRegID();
+
+
+        if ($request->action == 'decline') {
+
+            $record->approval_status = ARDeactivationRequest::DECLINED;
+            $record->approval_reason = $request->reason;
+            $record->save();
+
+            $logTitle = 'Decline AR ' . $logActionType;
+            $logMessage = "Declined the $logActionType of AR - $ARUser->email ($regID). Request ref #$record->id";
+            logAction($request->user()->email, $logTitle, $logMessage, $request->ip());
+            return successResponse('Successful', ARDeactivationRequestResource::make($record));
+        } else {
+
+            // Activate or deactivate the user
+            $ARUser->is_active = $record->request_type == ARDeactivationRequest::REQUEST_TYPE_ACTIVATE;
+            $ARUser->save();
+
+            $record->approval_status = ARDeactivationRequest::APPROVED;
+            $record->approval_reason = $request->reason;
+            $record->save();
+
+            $record->refresh(); // reload the ar relationship
+
+            $mailSubject = $mailBody = "";
+
+            // Notify MEG
+            if ($record->request_type == ARDeactivationRequest::REQUEST_TYPE_ACTIVATE) {
+                $mailSubject = ARMailContents::deactivationMEGSubject();
+                $mailBody = ARMailContents::deactivationMEGBody($ARUser);
+            } else {
+                $mailSubject = ARMailContents::activationMEGSubject();
+                $mailBody = ARMailContents::activationMEGBody($ARUser);
+            }
+
+            $MEGs = Utility::getUsersByCategory(Role::MEG);
+            if (count($MEGs))
+                Notification::send($MEGs, new InfoNotification($mailBody, $mailSubject));
+        }
+
+        return successResponse('Successful', ARDeactivationRequestResource::make($record));
     }
 }

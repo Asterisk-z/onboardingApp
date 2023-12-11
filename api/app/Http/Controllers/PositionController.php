@@ -3,25 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Utility;
-use App\Models\Role;
+use App\Models\Position;
 use Illuminate\Http\Request;
 
-class RoleController extends Controller
+class PositionController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function user_roles()
+    public function index()
     {
-        $roles = Role::where('is_del', 0)->whereIn('id', [5, 6])->get(['id', 'name', 'is_del'])->toArray();
-        $converted_roles = Utility::arrayKeysToCamelCase($roles);
+        $positions = Position::where('is_del', 0)->get(['id', 'name', 'is_del'])->toArray();
+        $converted_positions = Utility::arrayKeysToCamelCase($positions);
 
         $data = [
-            'roles' => (array) $converted_roles,
+            'positions' => (array) $converted_positions,
         ];
-        return successResponse('Roles Fetched Successfully', $data);
+        return successResponse('Positions Fetched Successfully', $data);
     }
 
     /**
@@ -29,15 +29,9 @@ class RoleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function admin_roles()
+    public function create()
     {
-        $roles = Role::where('is_del', 0)->whereIn('id', [1, 2, 3, 4])->get(['id', 'name', 'is_del'])->toArray();
-        $converted_roles = Utility::arrayKeysToCamelCase($roles);
-
-        $data = [
-            'roles' => (array) $converted_roles,
-        ];
-        return successResponse('Roles Fetched Successfully', $data);
+        //
     }
 
     /**
@@ -54,10 +48,10 @@ class RoleController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Role  $role
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Role $role)
+    public function show($id)
     {
         //
     }
@@ -65,10 +59,10 @@ class RoleController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Role  $role
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Role $role)
+    public function edit($id)
     {
         //
     }
@@ -77,10 +71,10 @@ class RoleController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Role  $role
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Role $role)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -88,10 +82,10 @@ class RoleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Role  $role
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Role $role)
+    public function destroy($id)
     {
         //
     }

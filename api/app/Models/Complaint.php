@@ -16,6 +16,8 @@ class Complaint extends Model
         return [
             "id" => $this->id,
             "body" => $this->body,
+            "complainer" => $this->user,
+            "complaint_type" => $this->type,
             "status" => $this->status,
             "documment" => $this->document ? config('app.url') .'/storage/'.$this->document : null,
             "comment" => $this->comments,
@@ -29,5 +31,9 @@ class Complaint extends Model
 
     public function user(){
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function type(){
+        return $this->belongsTo(ComplaintType::class, 'complaint_type_id');
     }
 }

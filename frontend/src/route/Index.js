@@ -148,8 +148,12 @@ import ForgotPassword from "main/auth/ForgotPassword";
 import PasswordUpdate from "main/auth/PasswordUpdate";
 import PasswordReset from "main/auth/PasswordChange";
 import Form from "main/forms/Form";
+import AdminComplaint from "main/pages/Admin/AdminComplaint" 
 import Complaint from "main/pages/Complaint" 
 import AuditLog from "main/pages/AuditLog" 
+import AuthRepresentative from "main/pages/AuthRepresentative" 
+import PendingAuthRepresentative from "main/pages/PendingAuthRepresentative" 
+
 import AdminAuditLog from "main/pages/Admin/AdminAuditLog" 
 import UserAuditLog from "main/pages/Admin/AuditLog" 
 import Success from "pages/auth/Success";
@@ -365,6 +369,8 @@ const Router = () => {
             <Route path="logout" element={<Logout />}></Route>
             <Route path="form" element={<Form />}></Route>
             <Route index element={<Landing />}></Route>
+            
+            
         
 
             <Route path="errors">
@@ -378,15 +384,37 @@ const Router = () => {
             <Route path="invoice-print/:invoiceId" element={<InvoicePrint />}></Route>
         </Route>
         
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
+        
         <Route path={`${process.env.PUBLIC_URL}`} element={<UserLayout />}>
           <Route path="dashboard" element={<UserHomepage />}></Route>
           <Route path="complaint" element={<Complaint />}></Route>
           <Route path="audit-log" element={<AuditLog />}></Route>
+          <Route path="auth-representatives-pending" element={<PendingAuthRepresentative />}></Route>
+          <Route path="auth-representatives" element={<AuthRepresentative />}></Route>
+          
         </Route>
 
         <Route path={`${process.env.PUBLIC_URL}`} element={<AdminLayout />}>
           <Route path="admin-dashboard" element={<UserHomepage />}></Route>
-          <Route path="admin-complaint" element={<Complaint />}></Route>
+          <Route path="admin-complaint" element={<AdminComplaint />}></Route>
           <Route path="admin-audit-log" element={<AdminAuditLog />}></Route>
           <Route path="user-audit-log" element={<UserAuditLog />}></Route>
         </Route>
