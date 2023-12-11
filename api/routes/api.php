@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ARController;
 use App\Http\Controllers\AuditController;
+use App\Http\Controllers\BroadcastMessageController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\ComplaintTypeController;
 use App\Http\Controllers\MemberCategoryController;
@@ -78,7 +79,11 @@ Route::middleware('auth')->group(function () {
 
             Route::post('/process-add/{ARUser}', [ARController::class, 'processAddByMEG']);
             Route::post('/process-transfer/{record}', [ARController::class, 'processTransferByMEG']);
-
+        });
+        // broadcast
+        Route::group(['prefix' => 'broadcasts'], function () {
+            Route::get('/view-messages', [BroadcastMessageController::class, 'index']);
+            Route::post('/create-message', [BroadcastMessageController::class, 'store']);
         });
     });
 
@@ -113,5 +118,4 @@ Route::middleware('auth')->group(function () {
     Route::group(['prefix' => 'user'], function () {
         Route::get('/authorisers', [UserController::class, 'list_ar_authorisers']);
     });
-
 });

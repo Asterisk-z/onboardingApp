@@ -17,8 +17,7 @@ class AuditController extends Controller
         //
         $audits = Audit::orderBy('created_at', 'DESC')->get();
 
-        return successResponse('User Activity Logs', $audits);
-
+        return successResponse('Successful', $audits);
     }
 
     /**
@@ -43,7 +42,7 @@ class AuditController extends Controller
 
         $audits = Audit::where('user', $userEmail)->latest()->get();
 
-        return successResponse('User Activity Logs', $audits);
+        return successResponse('Successful', $audits);
     }
 
     /**

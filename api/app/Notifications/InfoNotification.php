@@ -52,8 +52,8 @@ class InfoNotification extends Notification implements ShouldQueue
         $info = $this->message;
 
         $mail = (new MailMessage)
-        ->subject(config('app.name')." - ".$this->subject)
-        ->view('mails.info', compact('user', 'info'));
+            ->subject(config('app.name') . " - " . $this->subject)
+            ->view('mails.info', compact('user', 'info'));
         return ($this->cc) ? $mail->cc($this->cc) : $mail;
     }
 
