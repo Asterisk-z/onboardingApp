@@ -69,7 +69,7 @@ class ComplaintController extends Controller
                 $complaints = Complaint::where('status', 'CLOSED')->latest()->get();
                 break;
             default:
-                $complaints = Complaint::latest()->all();
+                $complaints = Complaint::latest()->get();
                 break;
         }
 
