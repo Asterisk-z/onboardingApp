@@ -8,6 +8,7 @@ import activityReducer from "../stores/activity/audit";
 import arUsersReducer from "../stores/authorize/representative";
 import roleStore from "../stores/roles/roleStore";
 import positionStore from "../stores/positions/positionStore";
+import userStore from "../stores/users/userStore";
 
 const store = configureStore({
   reducer: {
@@ -20,6 +21,8 @@ const store = configureStore({
     arUsers: arUsersReducer,
     role: roleStore,
     position: positionStore,
+    position: positionStore,
+    user: userStore,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

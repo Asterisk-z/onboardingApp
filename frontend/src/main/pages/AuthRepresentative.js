@@ -8,10 +8,10 @@ import { loadUserRoles } from "redux/stores/roles/roleStore";
 import { loadAllPositions } from "redux/stores/positions/positionStore";
 import { loadAllCountries } from "redux/stores/nationality/country";
 import { userLoadUserARs, userCreateUserAR } from "redux/stores/authorize/representative";
+import { loadAllActiveAuthoriser } from "redux/stores/users/userStore";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
 import AuthRepTable from './Tables/AuthRepTable'
-
 
 
 const AuthRepresentative = ({ drawer }) => {
@@ -19,26 +19,28 @@ const AuthRepresentative = ({ drawer }) => {
     const [counter, setCounter] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [complainFile, setComplainFile] = useState([]);
     const [loading, setLoading] = useState(false);
     const [sm, updateSm] = useState(false);
     const [modalForm, setModalForm] = useState(false);
+    const [parentState, setParentState] = useState('Initial state');
 
-    const categories = useSelector((state) => state?.category?.list) || null;
     const roles = useSelector((state) => state?.role?.list) || null;
     const positions = useSelector((state) => state?.position?.list) || null;
-    const complaintType = useSelector((state) => state?.complaintType?.list) || null;
     const countries = useSelector((state) => state?.country?.list) || null;
+    const authorizers = useSelector((state) => state?.user?.list) || null;
+    const authorize_reps = useSelector((state) => state?.arUsers?.list) || null;
 
     const { register, handleSubmit, formState: { errors }, resetField } = useForm();
 
     const toggleForm = () => setModalForm(!modalForm);
-    
+     
     useEffect(() => {
+      dispatch(userLoadUserARs({"approval_status" : "", "role_id": ""}));
       dispatch(loadUserRoles());
       dispatch(loadAllPositions());
       dispatch(loadAllCountries());
-    }, [dispatch, counter]);
+      dispatch(loadAllActiveAuthoriser());
+    }, [dispatch, parentState]);
       
     const handleFormSubmit = async (values) => {
 
@@ -60,10 +62,14 @@ const AuthRepresentative = ({ drawer }) => {
                 setTimeout(() => {
                   setLoading(false);
                   setModalForm(!modalForm)
-                //   resetField('complaint_type')
-                //   resetField('body')
-                //   resetField('document')
-                  setCounter(!counter)
+                  resetField('firstName')
+                  resetField('lastName')
+                  resetField('position_id')
+                  resetField('nationality')
+                  resetField('role')
+                  resetField('email')
+                  resetField('phone')
+                  setParentState(Math.random())
                 }, 1000);
             
             } else {
@@ -77,12 +83,11 @@ const AuthRepresentative = ({ drawer }) => {
     }; 
 
 
-    const $complaintType = complaintType ? JSON.parse(complaintType) : null;
     const $countries = countries ? JSON.parse(countries) : null;
     const $roles = roles ? JSON.parse(roles) : null;
     const $positions = positions ? JSON.parse(positions) : null;
-  
-    const [parentState, setParentState] = useState('Initial state');
+    const $authorizers = authorizers ? JSON.parse(authorizers) : null;
+    const $authorize_reps = authorize_reps ? JSON.parse(authorize_reps) : null;
 
     const updateParentState = (newState) => {
         setParentState(newState);
@@ -90,15 +95,6 @@ const AuthRepresentative = ({ drawer }) => {
 
     const TableData = () => {
        
-        const dispatch = useDispatch();
-        const authorize_reps = useSelector((state) => state?.arUsers?.list) || null;
-        useEffect(() => {
-            dispatch(userLoadUserARs());
-        }, [dispatch,parentState]);
-    
-        
-        const $authorize_reps = authorize_reps ? JSON.parse(authorize_reps) : null;
-        
         return (
             <React.Fragment>
                 <Content>
@@ -108,13 +104,24 @@ const AuthRepresentative = ({ drawer }) => {
                         <BlockHead>
                             <BlockHeadContent>
                                 {/* <BlockTitle tag="h4">List</BlockTitle> */}
-                                <p>{authorize_reps}</p>
+                                {/* <p>{authorize_reps}</p> */}
                                 {/* {<p>{parentState}</p>} */}
+                                 <div className="toggle-wrap nk-block-tools-toggle">
+                                    <div className="toggle-expand-content" style={{ display: sm ? "block" : "none" }}>
+                                        <ul className="nk-block-tools g-3">
+                                            <li className="nk-block-tools-opt">
+                                                <Button color="primary">
+                                                    <span onClick={(ev) => navigate(`${process.env.PUBLIC_URL}/auth-representatives-pending`)}>Pending Authorised Representative</span>
+                                                </Button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </BlockHeadContent>
                         </BlockHead>
 
                         <PreviewCard>
-                            {$authorize_reps && <AuthRepTable  updateParent={updateParentState} parentState={parentState} data={$authorize_reps} expandableRows pagination actions />}
+                            {$authorize_reps && <AuthRepTable  updateParent={updateParentState} parentState={parentState} data={$authorize_reps} positions={$positions} countries={$countries} authorizers={$authorizers} roles={$roles}  expandableRows pagination actions />}
                         </PreviewCard>
                     </Block>
 
@@ -127,7 +134,7 @@ const AuthRepresentative = ({ drawer }) => {
 
     return (
         <React.Fragment>
-            <Head title="Complaint"></Head>
+            <Head title="Authorised Representative"></Head>
             <Content>
                 <BlockHead size="sm">
                     <BlockBetween>
@@ -207,7 +214,6 @@ const AuthRepresentative = ({ drawer }) => {
                                     <div className="form-group">
                                         <Label htmlFor="position_id" className="form-label">
                                             Position
-                                            {positions}
                                         </Label>
                                         <div className="form-control-wrap">
                                             <div className="form-control-select">

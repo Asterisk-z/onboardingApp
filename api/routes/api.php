@@ -9,6 +9,7 @@ use App\Http\Controllers\NationalityController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\UsersController;
 use App\Models\Role;
 use Illuminate\Support\Facades\Route;
@@ -108,4 +109,9 @@ Route::middleware('auth')->group(function () {
             Route::post('/process-change-status/{record}', [ARController::class, 'processChangeStatus']);
         });
     });
+
+    Route::group(['prefix' => 'user'], function () {
+        Route::get('/authorisers', [UserController::class, 'list_ar_authorisers']);
+    });
+
 });

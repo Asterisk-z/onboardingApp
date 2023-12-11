@@ -152,6 +152,7 @@ import AdminComplaint from "main/pages/Admin/AdminComplaint"
 import Complaint from "main/pages/Complaint" 
 import AuditLog from "main/pages/AuditLog" 
 import AuthRepresentative from "main/pages/AuthRepresentative" 
+import PendingAuthRepresentative from "main/pages/PendingAuthRepresentative" 
 
 import AdminAuditLog from "main/pages/Admin/AdminAuditLog" 
 import UserAuditLog from "main/pages/Admin/AuditLog" 
@@ -406,6 +407,7 @@ const Router = () => {
           <Route path="dashboard" element={<UserHomepage />}></Route>
           <Route path="complaint" element={<Complaint />}></Route>
           <Route path="audit-log" element={<AuditLog />}></Route>
+          <Route path="auth-representatives-pending" element={<PendingAuthRepresentative />}></Route>
           <Route path="auth-representatives" element={<AuthRepresentative />}></Route>
           
         </Route>

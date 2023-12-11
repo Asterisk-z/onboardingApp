@@ -3,13 +3,15 @@ import DataTable from "react-data-table-component";
 import exportFromJSON from "export-from-json";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
-import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge,  Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner } from "reactstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge,  Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label } from "reactstrap";
 import { DataTablePagination } from "components/Component";
 import { sendComplaintFeedback, updateComplaintStatus } from "redux/stores/complaints/complaint";
+import { userUpdateUserAR, userCancelUpdateUserAR, userProcessUpdateUserAR } from "redux/stores/authorize/representative";
 import moment from "moment";
 import Icon from "components/icon/Icon";
 import { AiOutlineArrowRight } from "react-icons/ai";
+import Swal from "sweetalert2";
 
 const Export = ({ data }) => {
   const [modal, setModal] = useState(false);
@@ -68,8 +70,12 @@ const Export = ({ data }) => {
 
 
 const SendFeedback = (props) => {
-    const complaint_id = props.complaint.id
-    const complaint = props.complaint
+    const user_id = props.ar_user.id
+    const ar_user = props.ar_user
+    const $positions = props.positions
+    const $countries = props.countries
+    const $roles = props.roles
+    const $authorizers = props.authorizers
   
     const [modalForm, setModalForm] = useState(false);
     const [modalDetail, setModalDetail] = useState(false);
@@ -77,33 +83,50 @@ const SendFeedback = (props) => {
     const [modalCloseAsk, setModalCloseAsk] = useState(false);
 
     const toggleForm = () => setModalForm(!modalForm);
-    const toggleModalDetail = () => { setModalDetail(!modalForm) };
+    const toggleModalDetail = () => setModalDetail(!modalForm);
     const toggleModalOpenAsk = () => setModalOpenAsk(!modalOpenAsk);
     const toggleModalCloseAsk = () => setModalCloseAsk(!modalCloseAsk);
+    
     const dispatch = useDispatch();
-    const { register, handleSubmit, formState: { errors }, resetField } = useForm();
+    const { register, handleSubmit, formState: { errors }, resetField, setValue } = useForm();
     const [loading, setLoading] = useState(false);
+    
     
     const handleFormSubmit = async (values) => {
 
         const formData = new FormData();
-        formData.append('complaint_id', complaint_id)
-        formData.append('comment', values.comment)
-        formData.append('status', values.status)
+        formData.append('user_id', user_id)
+        formData.append('first_name', values.firstName)
+        formData.append('last_name', values.lastName)
+        formData.append('position_id', values.position_id)
+        formData.append('nationality', values.nationality)
+        formData.append('role_id', values.role)
+        formData.append('email', values.email)
+        formData.append('ar_authoriser_id', values.ar_authoriser_id)
+        formData.append('phone', values.phone)
         
         try {
             setLoading(true);
             
-            const resp = await dispatch(sendComplaintFeedback(formData));
+            const resp = await dispatch(userUpdateUserAR(formData));
 
             if (resp.payload?.message == "success") {
                 setTimeout(() => {
-                    setLoading(false);
-                    setModalForm(!modalForm)
-                    resetField('comment')
-                    resetField('status')
-                    props.updateParentParent(Math.random())
+                  setLoading(false);
+                  setModalForm(!modalForm)
+                  setInitValues({
+                    firstName: ar_user.firstName,
+                    lastName: ar_user.lastName,
+                    email: ar_user.email,
+                    phone: ar_user.phone,
+                    nationality: ar_user.nationality,
+                    position: ar_user.position,
+                    role_id: ar_user.role.id,
+                  });
+                  
                 }, 1000);
+                
+                props.updateParentParent(Math.random())
             
             } else {
               setLoading(false);
@@ -116,11 +139,11 @@ const SendFeedback = (props) => {
 
     const toggleComplainStatus = async () => {
 
-        const complaint_id = props.complaint.id
-        const updateStatus = (props.complaint.status != 'NEW') ? 'ONGOING' : 'CLOSED';
+        const user_id = props.ar_user.id
+        const updateStatus = (props.ar_user.status != 'NEW') ? 'ONGOING' : 'CLOSED';
         const formData = new FormData();
 
-        formData.append('complaint_id', complaint_id)
+        formData.append('user_id', user_id)
         formData.append('status', updateStatus)
 
         try {
@@ -148,6 +171,94 @@ const SendFeedback = (props) => {
     const toggleModalDetailTwo = () => {
         setModalDetail(false)
     }
+        
+    const [initValues, setInitValues] = useState({
+      firstName: ar_user.firstName,
+      lastName: ar_user.lastName,
+      email: ar_user.email,
+      phone: ar_user.phone,
+      nationality: ar_user.nationality,
+      position: ar_user.position,
+      role_id: ar_user.role.id,
+    });
+
+    
+  const askAction = async (action) => {
+    if(action == 'approve') {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, approve it!",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                
+                const formData = new FormData();
+                formData.append('user_id', ar_user.id);
+                formData.append('action', 'approve');
+                const resp = dispatch(userProcessUpdateUserAR(formData));
+
+                if (resp.payload?.message == "success") {
+                    setTimeout(() => {
+                        props.updateParentParent(Math.random())
+                    }, 1000);
+                
+                }
+            }
+        });
+    }
+    
+    if(action == 'decline') {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, decline it!",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                
+                const formData = new FormData();
+                formData.append('user_id', ar_user.id);
+                formData.append('action', 'decline');
+                const resp = dispatch(userProcessUpdateUserAR(formData));
+
+                if (resp.payload?.message == "success") {
+                    setTimeout(() => {
+                        props.updateParentParent(Math.random())
+                    }, 1000);
+                
+                }
+            }
+        });
+    }
+    
+    if(action == 'cancel') {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, Cancel it!",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                
+                const formData = new FormData();
+                formData.append('user_id', ar_user.id);
+                const resp = dispatch(userCancelUpdateUserAR(formData));
+
+                if (resp.payload?.message == "success") {
+                    setTimeout(() => {
+                        props.updateParentParent(Math.random())
+                    }, 1000);
+                
+                }
+            }
+        });
+    }
+
+  };
   
   return (
     <>
@@ -158,19 +269,79 @@ const SendFeedback = (props) => {
                         <span>View</span>
                     </Button>
                 </li>
-                <li className="nk-block-tools-opt">
-                    <Button color="primary" size="xs" onClick={toggleForm}>
-                        <span>Add feedback</span>
-                    </Button>
-                </li>
-                    {(complaint.status == 'NEW' || complaint.status == 'CLOSED') &&
-                        <li className="nk-block-tools-opt" >
-                            <Button color="primary" size="xs"  onClick={toggleModalOpenAsk}>
-                                <span>Open Ticket</span>
-                            </Button>
-                        </li>
+                
+                    {(!props?.pending) &&
+                      <li className="nk-block-tools-opt">
+                          <Button color="primary" size="xs" onClick={toggleForm}>
+                              <span>Update AR</span>
+                          </Button>
+                      </li>
                     }
-                    {complaint.status == 'ONGOING' &&
+                    {(!props?.pending && ar_user.update_payload) &&
+                      <li className="nk-block-tools-opt">
+                          <Button color="primary" size="xs" onClick={(e) => askAction('cancel')} >
+                              <span>Cancel Update</span>
+                          </Button>
+                      </li>
+                    }
+                    {(ar_user.update_payload && props?.pending) &&
+                        <>
+                      <li className="nk-block-tools-opt">
+                        <UncontrolledDropdown direction="right">
+                            <DropdownToggle className="dropdown-toggle btn btn-xs" color="secondary">Update</DropdownToggle>
+
+                            <DropdownMenu>
+                                <ul className="link-list-opt">
+                                
+                                <li>
+                                    <DropdownItem tag="a" href="#links"  onClick={(e) => askAction('approve')} >
+                                    <Icon name="eye"></Icon>
+                                    <span>Approve</span>
+                                    </DropdownItem>
+                                </li>
+                                <li>
+                                    <DropdownItem tag="a" href="#links"  onClick={(e) => askAction('decline')} >
+                                    <Icon name="eye"></Icon>
+                                    <span>Decline</span>
+                                    </DropdownItem>
+                                </li>
+                                {/* <li>
+                                    <DropdownItem tag="a" href="#links" onClick={(ev) => ev.preventDefault()}>
+                                    <Icon name="pen"></Icon>
+                                    <span>Edit</span>
+                                    </DropdownItem>
+                                </li>
+                                <li>
+                                    <DropdownItem tag="a" href="#links" onClick={(ev) => ev.preventDefault()} >
+                                    <Icon name="eye"></Icon>
+                                    <span>View</span>
+                                    </DropdownItem>
+                                </li>
+                                <li>
+                                    <DropdownItem tag="a" href="#links" onClick={(ev) => ev.preventDefault()}>
+                                    <Icon name="trash"></Icon>
+                                    <span>Delete</span>
+                                    </DropdownItem>
+                                </li> */}
+                                </ul>
+                            </DropdownMenu>
+                            </UncontrolledDropdown>
+                        </li>
+                        
+                            {/* <li className="nk-block-tools-opt" >
+                                <Button color="primary" size="xs"  onClick={toggleModalOpenAsk}>
+                                    <span>Open Ticket</span>
+                                </Button>
+                            </li>
+                            <li className="nk-block-tools-opt" >
+                                <Button color="primary" size="xs"  onClick={toggleModalOpenAsk}>
+                                    <span>Open Ticket</span>
+                                </Button>
+                            </li>                        */}
+                        </>
+
+                    }
+                    {ar_user.status == 'ONGOING' &&
                         <li className="nk-block-tools-opt" >
                             <Button color="primary" size="xs"  onClick={toggleModalCloseAsk}>
                                 <span>Closed Ticket</span>
@@ -224,45 +395,150 @@ const SendFeedback = (props) => {
                 </div>
             </ModalFooter>
         </Modal>
-        <Modal isOpen={modalForm} toggle={toggleForm}>
+        <Modal isOpen={modalForm} toggle={toggleForm} size="lg">
             <ModalHeader toggle={toggleForm} close={<button className="close" onClick={toggleForm}><Icon name="cross" /></button>}>
-                Fill Feedback Form
+                Update 
             </ModalHeader>
             <ModalBody>
-                <form  onSubmit={handleSubmit(handleFormSubmit)}  className="is-alter" encType="multipart/form-data">
-                    <div className="form-group">
-                        <label className="form-label" htmlFor="full-name">
-                            Complaint Type
-                        </label>
-                        <div className="form-control-wrap">
-                            <div className="form-control-select">
-                                <select className="form-control form-select" {...register('status', { required: "Type is Required" })}>
-                                    <option value="">Select Type</option>
-                                    <option value="ONGOING">Ongoing</option>
-                                    <option value="CLOSED">Closed</option>
-                                </select>
-                                {errors.status && <p className="invalid">{`${errors.status.message}`}</p>}
+                <form onSubmit={handleSubmit(handleFormSubmit)} className="is-alter" encType="multipart/form-data">
+                                    
+                    <Row className="gy-4">
+                        <Col sm="6">
+                            <div className="form-group">
+                                <Label htmlFor="firstName" className="form-label">
+                                    First Name
+                                </Label>
+                                <div className="form-control-wrap">
+                                    <input className="form-control" type="text" id="firstName" placeholder="Enter First Name" {...register('firstName', { required: "First Name is Required" })} defaultValue={initValues.firstName}/>
+                                    {errors.firstName && <p className="invalid">{`${errors.firstName.message}`}</p>}
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <label className="form-label" htmlFor="email">
-                            Comment
-                        </label>
-                        <div className="form-control-wrap">
-                            <textarea type="text" className="form-control" {...register('comment', { required: "comment is Required" })}></textarea>
-                                {errors.comment && <p className="invalid">{`${errors.comment.message}`}</p>}
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <Button color="primary" type="submit"  size="lg">
-                            {loading ? ( <span><Spinner size="sm" color="light" /> Processing...</span>) : "Send Feedback"}
-                        </Button>
-                    </div>
+                        </Col>
+                        <Col sm="6">
+                            <div className="form-group">
+                                <Label htmlFor="lastName" className="form-label">
+                                    Last Name
+                                </Label>
+                                <div className="form-control-wrap">
+                                    <input className="form-control" type="text" id="lastName" placeholder="Enter Last Name"  {...register('lastName', { required: "Last Name is Required" })}  defaultValue={initValues.lastName}/>
+                                    {errors.lastName && <p className="invalid">{`${errors.lastName.message}`}</p>}
+                                </div>
+                            </div>
+                        </Col>
+                        <Col sm="6">
+                            <div className="form-group">
+                                <Label htmlFor="email" className="form-label">
+                                    Email Address
+                                </Label>
+                                <div className="form-control-wrap">
+                                    <input className="form-control" type="email" id="email" placeholder="Enter Email Address" {...register('email', { required: "Email Address is Required" })}  defaultValue={initValues.email}/>
+                                    {errors.email && <p className="invalid">{`${errors.email.message}`}</p>}
+                                </div>
+                            </div>
+                        </Col>
+                        <Col sm="6">
+                            <div className="form-group">
+                                <Label htmlFor="phone" className="form-label">
+                                    Phone Number
+                                </Label>
+                                <div className="form-control-wrap">
+                                    <input className="form-control" type="text" id="phone" placeholder="Enter Last Name"  {...register('phone', { required: "Phone is Required" })}  defaultValue={initValues.phone}/>
+                                    {errors.phone && <p className="invalid">{`${errors.phone.message}`}</p>}
+                                </div>
+                            </div>
+                        </Col>
+                        <Col sm="6">
+                            <div className="form-group">
+                                <Label htmlFor="position_id" className="form-label">
+                                    Position
+                                </Label>
+                                <div className="form-control-wrap">
+                                    <div className="form-control-select">
+                                        <select className="form-control form-select" {...register('position_id', { required: "Position is Required" })}  defaultValue={initValues.position}>
+                                            <option value="">Select Position</option>
+                                            {$positions && $positions?.map((position, index) => (
+                                                <option key={index} value={position.id}>
+                                                    {position.name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        {errors.position_id && <p className="invalid">{`${errors.position_id.message}`}</p>}
+                                    </div>
+                                </div>
+                            </div>
+                        </Col>
+                        <Col sm="6">
+                            <div className="form-group">
+                                <Label htmlFor="nationality" className="form-label">
+                                    Nationality
+                                </Label>
+                                <div className="form-control-wrap">
+                                    <div className="form-control-select">
+                                        <select className="form-control form-select" {...register('nationality', { required: "Nationality is Required" })}  defaultValue={initValues.nationality}>
+                                            <option value="">Select Nationality</option>
+                                            {$countries && $countries?.map((country, index) => (
+                                                <option key={index} value={country.code}>
+                                                    {country.name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        {errors.nationality && <p className="invalid">{`${errors.nationality.message}`}</p>}
+                                    </div>
+                                </div>
+                            </div>
+                        </Col>
+                        <Col sm="6">
+                            <div className="form-group">
+                                <Label htmlFor="nationality" className="form-label">
+                                    Role
+                                </Label>
+                                <div className="form-control-wrap">
+                                    <div className="form-control-select">
+                                        <select className="form-control form-select" {...register('role', { required: "Roles is Required" })}  defaultValue={initValues.role}>
+                                            <option value="">Select Role</option>
+                                            {$roles && $roles?.map((role, index) => (
+                                                <option key={index} value={role.id}>
+                                                {role.name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        {errors.role && <p className="invalid">{`${errors.role.message}`}</p>}
+                                    </div>
+                                </div>
+                            </div>
+                        </Col>
+                        <Col sm="6">
+                            <div className="form-group">
+                                <Label htmlFor="nationality" className="form-label">
+                                    Authoriser
+                                </Label>
+                                <div className="form-control-wrap">
+                                    <div className="form-control-select">
+                                        <select className="form-control form-select" {...register('ar_authoriser_id', { required: "Authoriser is Required" })}>
+                                            <option value="">Select Authoriser</option>
+                                            {$authorizers && $authorizers?.map((authorizer, index) => user_id != authorizer.id ? (
+                                                <option key={index} value={authorizer.id}>
+                                                {`${authorizer.first_name} ${authorizer.last_name} ( ${authorizer.email} )`}
+                                                </option>
+                                            ): "")}
+                                        </select>
+                                        {errors.role && <p className="invalid">{`${errors.role.message}`}</p>}
+                                    </div>
+                                </div>
+                            </div>
+                        </Col>
+                        <Col sm="12">
+                            <div className="form-group">
+                                <Button color="primary" type="submit"  size="lg">
+                                    {loading ? ( <span><Spinner size="sm" color="light" /> Processing...</span>) : "Update"}
+                                </Button>
+                            </div>
+                        </Col>
+                    </Row>
                 </form>
             </ModalBody>
             <ModalFooter className="bg-light">
-                <span className="sub-text">Feedback</span>
+                <span className="sub-text">Update Authorised Representative</span>
             </ModalFooter>
         </Modal> 
         <Modal isOpen={modalDetail} toggle={toggleModalDetail}>
@@ -271,17 +547,17 @@ const SendFeedback = (props) => {
             </ModalHeader>
             <ModalBody className="modal-body-xl">
                 <div className="nk-modal">
-                    <h6 className="title">User: {complaint.user_id}</h6>
-                    <h6 className="title">Complaint Type: {complaint.complaint_type_id}</h6>
+                    <h6 className="title">User: {ar_user.user_id}</h6>
+                    <h6 className="title">Type: {ar_user.complaint_type_id}</h6>
                     <p>
-                        {complaint.body}
+                        {ar_user.body}
                     </p>
                     <p>
-                        {complaint.documment}
+                        {ar_user.documment}
                     </p>
                     <h6 className="title">Comments:</h6>
-                      {complaint.comment.length > 1 && complaint.comment?.map((comment, index) => (
-                          <p key={index}>{comment.comment}<br/>{ moment(comment.createdAt).format('MMM. DD, YYYY HH:mm') }</p>))}
+                      {/* {complaint.comment.length > 1 && complaint.comment?.map((comment, index) => (
+                          <p key={index}>{comment.comment}<br/>{ moment(comment.createdAt).format('MMM. DD, YYYY HH:mm') }</p>))} */}
                 </div>
             </ModalBody>
             <ModalFooter className="bg-light">
@@ -298,7 +574,7 @@ const SendFeedback = (props) => {
   );
 };
 
-const AuthRepTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState }) => {
+const AuthRepTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState, positions, countries, roles, authorizers, pending }) => {
     const authRepColumn = [
     {
         name: "User ID",
@@ -335,7 +611,7 @@ const AuthRepTable = ({ data, pagination, actions, className, selectableRows, ex
     {
         name: "Action",
         selector: (row) => (<>
-                        {/* <SendFeedback complaint={row} updateParentParent={updateParent} /> */}
+                        <SendFeedback ar_user={row} positions={positions} countries={countries} roles={roles} authorizers={authorizers} updateParentParent={updateParent} pending={pending} />
                     </>),
         sortable: true,
         hide: "md",

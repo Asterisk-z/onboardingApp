@@ -1,13 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { errorHandler, successHandler } from "../../../utils/Functions";
+import { errorHandler, successHandler } from "utils/Functions";
+import queryGenerator from "utils/QueryGenerator";
 const initialState = { all: null, list: null, user: null, total: null, error: "", loading: false };
 
 export const userLoadUserARs = createAsyncThunk(
   "arUsers/userLoadUserARs",
   async (values) => {
+    const query = queryGenerator(values);
     try {
-      const { data } = await axios.get(`ar/list`);
+      const { data } = await axios.get(`ar/list?${query}`);
       return successHandler(data);
     } catch (error) {
       return errorHandler(error);
@@ -30,6 +32,9 @@ export const adminLoadUserARs = createAsyncThunk(
 export const userSearchUserARs = createAsyncThunk(
   "arUsers/userSearchUserARs",
   async (values) => {
+//     first_name
+// last_name
+    const query = queryGenerator(values);
     try {
       const { data } = await axios.get(`ar/search`);
       return successHandler(data);
@@ -74,6 +79,7 @@ export const userCreateUserAR = createAsyncThunk(
 export const userUpdateUserAR = createAsyncThunk(
   "arUsers/userUpdateUserAR",
   async (values) => {
+    const id = values.get('user_id')
     try {
       const { data } = await axios({
         method: "post",
@@ -81,7 +87,7 @@ export const userUpdateUserAR = createAsyncThunk(
           Accept: "application/json",
           "Content-Type": "application/json;charset=UTF-8",
         },
-        url: `ar/update/user_id`,
+        url: `ar/update/${id}`,
         data: values,
       });
       return successHandler(data, data.message);
@@ -94,6 +100,7 @@ export const userUpdateUserAR = createAsyncThunk(
 export const userCancelUpdateUserAR = createAsyncThunk(
   "arUsers/userCancelUpdateUserAR",
   async (values) => {
+    const id = values.get('user_id')
     try {
       const { data } = await axios({
         method: "post",
@@ -101,7 +108,7 @@ export const userCancelUpdateUserAR = createAsyncThunk(
           Accept: "application/json",
           "Content-Type": "application/json;charset=UTF-8",
         },
-        url: `ar/cancel-update/user_id`,
+        url: `ar/cancel-update/${id}`,
         data: values,
       });
       return successHandler(data, data.message);
@@ -114,6 +121,7 @@ export const userCancelUpdateUserAR = createAsyncThunk(
 export const userProcessUpdateUserAR = createAsyncThunk(
   "arUsers/userProcessUpdateUserAR",
   async (values) => {
+    const id = values.get('user_id')
     try {
       const { data } = await axios({
         method: "post",
@@ -121,7 +129,7 @@ export const userProcessUpdateUserAR = createAsyncThunk(
           Accept: "application/json",
           "Content-Type": "application/json;charset=UTF-8",
         },
-        url: `ar/process-update/user_id`,
+        url: `ar/process-update/${id}`,
         data: values,
       });
       return successHandler(data, data.message);
