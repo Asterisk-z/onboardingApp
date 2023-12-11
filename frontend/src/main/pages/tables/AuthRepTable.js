@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
+import { useNavigate } from "react-router-dom";
 import exportFromJSON from "export-from-json";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { useForm } from "react-hook-form";
@@ -7,11 +8,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge,  Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label } from "reactstrap";
 import { DataTablePagination } from "components/Component";
 import { sendComplaintFeedback, updateComplaintStatus } from "redux/stores/complaints/complaint";
-import { userUpdateUserAR, userCancelUpdateUserAR, userProcessUpdateUserAR } from "redux/stores/authorize/representative";
+import { userUpdateUserAR, userCancelUpdateUserAR, userProcessUpdateUserAR, userTransferUserAR } from "redux/stores/authorize/representative";
 import moment from "moment";
 import Icon from "components/icon/Icon";
-import { AiOutlineArrowRight } from "react-icons/ai";
 import Swal from "sweetalert2";
+import Skeleton from 'react-loading-skeleton'
+import Countdown from 'react-countdown';
+// import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
+
+// const aUser = useUser();
+// const aUserUpdate = useUserUpdate();
 
 const Export = ({ data }) => {
   const [modal, setModal] = useState(false);
@@ -69,7 +75,7 @@ const Export = ({ data }) => {
 };
 
 
-const SendFeedback = (props) => {
+const ActionTab = (props) => {
     const user_id = props.ar_user.id
     const ar_user = props.ar_user
     const $positions = props.positions
@@ -79,6 +85,7 @@ const SendFeedback = (props) => {
   
     const [modalForm, setModalForm] = useState(false);
     const [modalDetail, setModalDetail] = useState(false);
+    const [modalForTransfer, setModalForTransfer] = useState(false);
     const [modalOpenAsk, setModalOpenAsk] = useState(false);
     const [modalCloseAsk, setModalCloseAsk] = useState(false);
 
@@ -86,12 +93,14 @@ const SendFeedback = (props) => {
     const toggleModalDetail = () => setModalDetail(!modalForm);
     const toggleModalOpenAsk = () => setModalOpenAsk(!modalOpenAsk);
     const toggleModalCloseAsk = () => setModalCloseAsk(!modalCloseAsk);
+    const toggleForTransfer = () => setModalForTransfer(!modalForTransfer);
     
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    
     const { register, handleSubmit, formState: { errors }, resetField, setValue } = useForm();
     const [loading, setLoading] = useState(false);
-    
-    
+
     const handleFormSubmit = async (values) => {
 
         const formData = new FormData();
@@ -137,41 +146,8 @@ const SendFeedback = (props) => {
       }
     }; 
 
-    const toggleComplainStatus = async () => {
 
-        const user_id = props.ar_user.id
-        const updateStatus = (props.ar_user.status != 'NEW') ? 'ONGOING' : 'CLOSED';
-        const formData = new FormData();
-
-        formData.append('user_id', user_id)
-        formData.append('status', updateStatus)
-
-        try {
-            setLoading(true);
-            
-            const resp = await dispatch(updateComplaintStatus(formData));
-
-            if (resp.payload?.message == "success") {
-                setTimeout(() => {
-                    setLoading(false);
-                    setModalOpenAsk(false)
-                    setModalCloseAsk(false)
-                    props.updateParentParent(Math.random())
-                }, 1000);
-            
-            } else {
-              setLoading(false);
-            }
-            
-      } catch (error) {
-        setLoading(false);
-      }
-    }
-
-    const toggleModalDetailTwo = () => {
-        setModalDetail(false)
-    }
-        
+ 
     const [initValues, setInitValues] = useState({
       firstName: ar_user.firstName,
       lastName: ar_user.lastName,
@@ -264,83 +240,84 @@ const SendFeedback = (props) => {
     <>
         <div className="toggle-expand-content" style={{ display: "block" }}>
             <ul className="nk-block-tools g-3">
-                <li className="nk-block-tools-opt">
-                    <Button color="primary" size="xs" onClick={toggleModalDetail}>
-                        <span>View</span>
-                    </Button>
-                </li>
-                
-                    {(!props?.pending) &&
-                      <li className="nk-block-tools-opt">
-                          <Button color="primary" size="xs" onClick={toggleForm}>
-                              <span>Update AR</span>
-                          </Button>
-                      </li>
-                    }
-                    {(!props?.pending && ar_user.update_payload) &&
-                      <li className="nk-block-tools-opt">
-                          <Button color="primary" size="xs" onClick={(e) => askAction('cancel')} >
-                              <span>Cancel Update</span>
-                          </Button>
-                      </li>
-                    }
-                    {(ar_user.update_payload && props?.pending) &&
-                        <>
-                      <li className="nk-block-tools-opt">
-                        <UncontrolledDropdown direction="right">
-                            <DropdownToggle className="dropdown-toggle btn btn-xs" color="secondary">Update</DropdownToggle>
+                 <li className="nk-block-tools-opt">
+                    <UncontrolledDropdown direction="right">
+                        <DropdownToggle className="dropdown-toggle btn btn-xs" color="secondary">Action</DropdownToggle>
 
-                            <DropdownMenu>
-                                <ul className="link-list-opt">
+                        <DropdownMenu>
+                            <ul className="link-list-opt">
+                        
+                                    <li size="xs">
+                                        <DropdownItem tag="a" href="#links" onClick={toggleForm} >
+                                            <Icon name="eye"></Icon>
+                                            <span>View AR</span>
+                                        </DropdownItem>
+                                    </li>
+                                    
+                                    {(!props?.pending) &&
+                                        <>
+                                            <li size="xs">
+                                                <DropdownItem tag="a" href="#links" onClick={toggleForm} >
+                                                    <Icon name="eye"></Icon>
+                                                    <span>Update AR</span>
+                                                </DropdownItem>
+                                            </li>
+                                        </>
+                                    }
+                                  
+                                    {/* {(!props?.pending && ar_user.update_payload && aUser.role != "ARAUTHORISER") && */}
+                                    {(!props?.pending && ar_user.update_payload) &&
+                                        <li size="xs">
+                                            <DropdownItem tag="a" href="#links" onClick={(e) => askAction('cancel')} >
+                                                <Icon name="eye"></Icon>
+                                                <span>Cancel Update</span>
+                                            </DropdownItem>
+                                        </li>
+                                    }
+                                    
+                                    {/* {(ar_user.update_payload && props?.pending && aUser.role == "ARAUTHORISER" ) && */}
+                                    {(ar_user.update_payload && props?.pending) &&
+                                        <>
+                                            <li size="xs">
+                                                <DropdownItem tag="a" href="#links" onClick={toggleForm} >
+                                                    <Icon name="eye"></Icon>
+                                                    <span>View Update AR</span>
+                                                </DropdownItem>
+                                            </li>
+                                            <li size="xs">
+                                                <DropdownItem tag="a" href="#links" onClick={(e) => askAction('approve')} >
+                                                    <Icon name="eye"></Icon>
+                                                    <span>Approve</span>
+                                                </DropdownItem>
+                                            </li>
+                                            <li size="xs">
+                                                <DropdownItem tag="a" href="#links" onClick={(e) => askAction('decline')} >
+                                                    <Icon name="eye"></Icon>
+                                                    <span>Decline</span>
+                                                </DropdownItem>
+                                            </li>
+                                        </>
+                                    }
+                                    
+                                    <li size="xs" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/transfer-auth-representative/${user_id}`)} >
+                                        <DropdownItem tag="a" href="#links" >
+                                            <Icon name="eye"></Icon>
+                                            <span>Transfer AR</span>
+                                        </DropdownItem>
+                                    </li>
                                 
-                                <li>
-                                    <DropdownItem tag="a" href="#links"  onClick={(e) => askAction('approve')} >
-                                    <Icon name="eye"></Icon>
-                                    <span>Approve</span>
-                                    </DropdownItem>
-                                </li>
-                                <li>
+                                {/* <li  size="xs">
                                     <DropdownItem tag="a" href="#links"  onClick={(e) => askAction('decline')} >
-                                    <Icon name="eye"></Icon>
-                                    <span>Decline</span>
-                                    </DropdownItem>
-                                </li>
-                                {/* <li>
-                                    <DropdownItem tag="a" href="#links" onClick={(ev) => ev.preventDefault()}>
-                                    <Icon name="pen"></Icon>
-                                    <span>Edit</span>
-                                    </DropdownItem>
-                                </li>
-                                <li>
-                                    <DropdownItem tag="a" href="#links" onClick={(ev) => ev.preventDefault()} >
-                                    <Icon name="eye"></Icon>
-                                    <span>View</span>
-                                    </DropdownItem>
-                                </li>
-                                <li>
-                                    <DropdownItem tag="a" href="#links" onClick={(ev) => ev.preventDefault()}>
-                                    <Icon name="trash"></Icon>
-                                    <span>Delete</span>
+                                        <Icon name="eye"></Icon>
+                                        <span>Decline</span>
                                     </DropdownItem>
                                 </li> */}
-                                </ul>
-                            </DropdownMenu>
-                            </UncontrolledDropdown>
-                        </li>
-                        
-                            {/* <li className="nk-block-tools-opt" >
-                                <Button color="primary" size="xs"  onClick={toggleModalOpenAsk}>
-                                    <span>Open Ticket</span>
-                                </Button>
-                            </li>
-                            <li className="nk-block-tools-opt" >
-                                <Button color="primary" size="xs"  onClick={toggleModalOpenAsk}>
-                                    <span>Open Ticket</span>
-                                </Button>
-                            </li>                        */}
-                        </>
+                            </ul>
+                        </DropdownMenu>
+                    </UncontrolledDropdown>
+                </li>
+                
 
-                    }
                     {ar_user.status == 'ONGOING' &&
                         <li className="nk-block-tools-opt" >
                             <Button color="primary" size="xs"  onClick={toggleModalCloseAsk}>
@@ -351,53 +328,10 @@ const SendFeedback = (props) => {
 
             </ul>
         </div>
-        <Modal isOpen={modalOpenAsk} toggle={toggleModalOpenAsk}>
-            
-            <ModalBody className="modal-body-lg text-center">
-                <div className="nk-modal">
-                <Icon className="nk-modal-icon icon-circle icon-circle-xxl ni ni-check bg-success"></Icon>
-                <h4 className="nk-modal-title">Do you want to open this complain!</h4>
-                <div className="nk-modal-action">
-                    <Button color="primary" size="lg" className="btn-mw" onClick={toggleComplainStatus}>
-                        {loading ? ( <span><Spinner size="sm" color="light" /> Processing...</span>) : (<span>Proceed <AiOutlineArrowRight /></span>) }
-                    </Button>
-                </div>
-                </div>
-            </ModalBody>
-            <ModalFooter className="bg-light">
-                <div className="text-center w-100">
-                    <p>
-                        Members Registration Oversight Information System (MROIS)
-                    </p>
-                </div>
-            </ModalFooter>
-        </Modal>
-        <Modal isOpen={modalCloseAsk} toggle={toggleModalCloseAsk}>
-            <ModalBody className="modal-body-lg text-center">
-                <div className="nk-modal">
-                    <Icon className="nk-modal-icon icon-circle icon-circle-xxl ni ni-check bg-success"></Icon>
-                <h4 className="nk-modal-title">Do you want to close this complain!</h4>
-                <div className="nk-modal-text">
-
-                </div>
-                <div className="nk-modal-action">
-                    <Button color="primary" size="lg" className="btn-mw" onClick={toggleComplainStatus}>
-                        {loading ? ( <span><Spinner size="sm" color="light" /> Processing...</span>) : (<span>Proceed <AiOutlineArrowRight /></span>) }
-                    </Button>
-                </div>
-                </div>
-            </ModalBody>
-            <ModalFooter className="bg-light">
-                <div className="text-center w-100">
-                    <p>
-                        Members Registration Oversight Information System (MROIS)
-                    </p>
-                </div>
-            </ModalFooter>
-        </Modal>
+       
         <Modal isOpen={modalForm} toggle={toggleForm} size="lg">
             <ModalHeader toggle={toggleForm} close={<button className="close" onClick={toggleForm}><Icon name="cross" /></button>}>
-                Update 
+                Update AR
             </ModalHeader>
             <ModalBody>
                 <form onSubmit={handleSubmit(handleFormSubmit)} className="is-alter" encType="multipart/form-data">
@@ -522,7 +456,7 @@ const SendFeedback = (props) => {
                                                 </option>
                                             ): "")}
                                         </select>
-                                        {errors.role && <p className="invalid">{`${errors.role.message}`}</p>}
+                                        {errors.ar_authoriser_id && <p className="invalid">{`${errors.ar_authoriser_id.message}`}</p>}
                                     </div>
                                 </div>
                             </div>
@@ -539,33 +473,6 @@ const SendFeedback = (props) => {
             </ModalBody>
             <ModalFooter className="bg-light">
                 <span className="sub-text">Update Authorised Representative</span>
-            </ModalFooter>
-        </Modal> 
-        <Modal isOpen={modalDetail} toggle={toggleModalDetail}>
-            <ModalHeader toggle={toggleModalDetailTwo} close={<button className="close" onClick={toggleModalDetailTwo}> <Icon name="cross" /></button> } >
-                    View
-            </ModalHeader>
-            <ModalBody className="modal-body-xl">
-                <div className="nk-modal">
-                    <h6 className="title">User: {ar_user.user_id}</h6>
-                    <h6 className="title">Type: {ar_user.complaint_type_id}</h6>
-                    <p>
-                        {ar_user.body}
-                    </p>
-                    <p>
-                        {ar_user.documment}
-                    </p>
-                    <h6 className="title">Comments:</h6>
-                      {/* {complaint.comment.length > 1 && complaint.comment?.map((comment, index) => (
-                          <p key={index}>{comment.comment}<br/>{ moment(comment.createdAt).format('MMM. DD, YYYY HH:mm') }</p>))} */}
-                </div>
-            </ModalBody>
-            <ModalFooter className="bg-light">
-                <div className="text-center w-100">
-                    <p>
-                        Members Registration Oversight Information System (MROIS)
-                    </p>
-                </div>
             </ModalFooter>
         </Modal>
     </>
@@ -611,7 +518,7 @@ const AuthRepTable = ({ data, pagination, actions, className, selectableRows, ex
     {
         name: "Action",
         selector: (row) => (<>
-                        <SendFeedback ar_user={row} positions={positions} countries={countries} roles={roles} authorizers={authorizers} updateParentParent={updateParent} pending={pending} />
+                        <ActionTab ar_user={row} positions={positions} countries={countries} roles={roles} authorizers={authorizers} updateParentParent={updateParent} pending={pending} />
                     </>),
         sortable: true,
         hide: "md",
@@ -651,78 +558,102 @@ const AuthRepTable = ({ data, pagination, actions, className, selectableRows, ex
       window.removeEventListener("resize", viewChange);
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    
+    // const renderer = ({ hours, minutes, seconds, completed }) => {
+    //         if (completed) {
+                return (
+                    <div className={`dataTables_wrapper dt-bootstrap4 no-footer ${className ? className : ""}`}>
+                        <Row className={`justify-between g-2 ${actions ? "with-export" : ""}`}>
+                            <Col className="col-7 text-start" sm="4">
+                            <div id="DataTables_Table_0_filter" className="dataTables_filter">
+                                <label>
+                                <input
+                                    type="search"
+                                    className="form-control form-control-sm"
+                                    placeholder="Search by name"
+                                    onChange={(ev) => setSearchText(ev.target.value)}
+                                />
+                                </label>
+                            </div>
+                            </Col>
+                            <Col className="col-5 text-end" sm="8">
+                            <div className="datatable-filter">
 
-  return (
-    <div className={`dataTables_wrapper dt-bootstrap4 no-footer ${className ? className : ""}`}>
-      <Row className={`justify-between g-2 ${actions ? "with-export" : ""}`}>
-        <Col className="col-7 text-start" sm="4">
-          <div id="DataTables_Table_0_filter" className="dataTables_filter">
-            <label>
-              <input
-                type="search"
-                className="form-control form-control-sm"
-                placeholder="Search by name"
-                onChange={(ev) => setSearchText(ev.target.value)}
-              />
-            </label>
-          </div>
-        </Col>
-        <Col className="col-5 text-end" sm="8">
-          <div className="datatable-filter">
+                                <div className="d-flex justify-content-end g-2">
+                                {actions && <Export data={data} />}
+                                <div className="dataTables_length" id="DataTables_Table_0_length">
+                                    <label>
+                                    <span className="d-none d-sm-inline-block">Show</span>
+                                    <div className="form-control-select">
+                                        {" "}
+                                        <select
+                                        name="DataTables_Table_0_length"
+                                        className="custom-select custom-select-sm form-control form-control-sm"
+                                        onChange={(e) => setRowsPerPage(e.target.value)}
+                                        value={rowsPerPageS}
+                                        >
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="40">40</option>
+                                        <option value="50">50</option>
+                                        </select>{" "}
+                                    </div>
+                                    </label>
+                                </div>
+                                </div>
+                            </div>
+                            </Col>
+                        </Row>
+                        <DataTable
+                            data={tableData}
+                            columns={authRepColumn}
+                            className={className + ' customMroisDatatable'} id='customMroisDatatable'
+                            selectableRows={selectableRows}
+                            expandableRows={mobileView}
+                            noDataComponent={<div className="p-2">There are no records found</div>}
+                            sortIcon={
+                            <div>
+                                <span>&darr;</span>
+                                <span>&uarr;</span>
+                            </div>
+                            }
+                            pagination={pagination}
+                            paginationComponent={({ currentPage, rowsPerPage, rowCount, onChangePage, onChangeRowsPerPage }) => (
+                            <DataTablePagination
+                                customItemPerPage={rowsPerPageS}
+                                itemPerPage={rowsPerPage}
+                                totalItems={rowCount}
+                                paginate={onChangePage}
+                                currentPage={currentPage}
+                                onChangeRowsPerPage={onChangeRowsPerPage}
+                                setRowsPerPage={setRowsPerPage}
+                            />
+                            )}
+                        ></DataTable>
+                    </div>
+                );
+            // } else {
 
-            <div className="d-flex justify-content-end g-2">
-              {actions && <Export data={data} />}
-              <div className="dataTables_length" id="DataTables_Table_0_length">
-                <label>
-                  <span className="d-none d-sm-inline-block">Show</span>
-                  <div className="form-control-select">
-                    {" "}
-                    <select
-                      name="DataTables_Table_0_length"
-                      className="custom-select custom-select-sm form-control form-control-sm"
-                      onChange={(e) => setRowsPerPage(e.target.value)}
-                      value={rowsPerPageS}
-                    >
-                      <option value="10">10</option>
-                      <option value="25">25</option>
-                      <option value="40">40</option>
-                      <option value="50">50</option>
-                    </select>{" "}
-                  </div>
-                </label>
-              </div>
-            </div>
-          </div>
-        </Col>
-      </Row>
-      <DataTable
-        data={tableData}
-        columns={authRepColumn}
-        className={className + ' customMroisDatatable'} id='customMroisDatatable'
-        selectableRows={selectableRows}
-        expandableRows={mobileView}
-        noDataComponent={<div className="p-2">There are no records found</div>}
-        sortIcon={
-          <div>
-            <span>&darr;</span>
-            <span>&uarr;</span>
-          </div>
-        }
-        pagination={pagination}
-        paginationComponent={({ currentPage, rowsPerPage, rowCount, onChangePage, onChangeRowsPerPage }) => (
-          <DataTablePagination
-            customItemPerPage={rowsPerPageS}
-            itemPerPage={rowsPerPage}
-            totalItems={rowCount}
-            paginate={onChangePage}
-            currentPage={currentPage}
-            onChangeRowsPerPage={onChangeRowsPerPage}
-            setRowsPerPage={setRowsPerPage}
-          />
-        )}
-      ></DataTable>
-    </div>
-  );
+            //     return (
+            //             <>
+            //                 <Skeleton count={20} height={30}  style={{display: 'block',lineHeight: 2, padding: '1rem',width: 'auto',}}/>
+            //             </>
+                        
+            //         )
+            // }
+    // };
+    
+          return (
+                  <Countdown
+                    date={Date.now() + 5000}
+                    renderer={renderer}
+                />
+
+                
+            );
+ 
+
+
 };
 
 export default AuthRepTable;

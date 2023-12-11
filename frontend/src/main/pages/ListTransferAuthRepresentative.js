@@ -7,28 +7,21 @@ import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col,
 import { loadUserRoles } from "redux/stores/roles/roleStore";
 import { loadAllPositions } from "redux/stores/positions/positionStore";
 import { loadAllCountries } from "redux/stores/nationality/country";
-import { userLoadUserARs, userCreateUserAR } from "redux/stores/authorize/representative";
+import { userLoadTransferUserAR, userCreateUserAR } from "redux/stores/authorize/representative";
 import { loadAllActiveAuthoriser } from "redux/stores/users/userStore";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
-import AuthRepTable from './Tables/AuthRepTable'
+import TransferAuthRepTable from './Tables/TransferAuthRepTable'
 
 
-const PendingAuthRepresentative = ({ drawer }) => {
+const ListTransferAuthRepresentative = ({ drawer }) => {
         
-    const [counter, setCounter] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
-    const [sm, updateSm] = useState(false);
     const [modalForm, setModalForm] = useState(false);
     const [parentState, setParentState] = useState('Initial state');
 
-    const roles = useSelector((state) => state?.role?.list) || null;
-    const positions = useSelector((state) => state?.position?.list) || null;
-    const countries = useSelector((state) => state?.country?.list) || null;
-    const authorizers = useSelector((state) => state?.user?.list) || null;
-    const authorize_reps = useSelector((state) => state?.arUsers?.list) || null;
+    const authorize_reps = useSelector((state) => state?.arUsers?.transfer_list) || null;
 
     const { register, handleSubmit, formState: { errors }, resetField } = useForm();
 
@@ -39,60 +32,15 @@ const PendingAuthRepresentative = ({ drawer }) => {
     };
 
     useEffect(() => {
-        dispatch(loadUserRoles());
-        dispatch(loadAllPositions());
-        dispatch(loadAllCountries());
-        dispatch(loadAllActiveAuthoriser());
-        dispatch(userLoadUserARs({"approval_status" : "pending", 'role_id' : ""}));
+        dispatch(userLoadTransferUserAR());
     }, [dispatch, parentState]);
       
-    const handleFormSubmit = async (values) => {
-
-        const formData = new FormData();
-        formData.append('first_name', values.firstName)
-        formData.append('last_name', values.lastName)
-        formData.append('position_id', values.position_id)
-        formData.append('nationality', values.nationality)
-        formData.append('role_id', values.role)
-        formData.append('email', values.email)
-        formData.append('phone', values.phone)
-        
-        try {
-            setLoading(true);
-            
-            const resp = await dispatch(userCreateUserAR(formData));
-
-            if (resp.payload?.message == "success") {
-                setTimeout(() => {
-                  setLoading(false);
-                  setModalForm(!modalForm)
-                  resetField('firstName')
-                  resetField('lastName')
-                  resetField('position_id')
-                  resetField('nationality')
-                  resetField('role')
-                  resetField('email')
-                  resetField('phone')
-                  setParentState(Math.random())
-                }, 1000);
-            
-            } else {
-              setLoading(false);
-            }
-            
-      } catch (error) {
-        setLoading(false);
-      }
-
-    }; 
 
 
-    const $countries = countries ? JSON.parse(countries) : null;
-    const $roles = roles ? JSON.parse(roles) : null;
-    const $positions = positions ? JSON.parse(positions) : null;
-    const $authorizers = authorizers ? JSON.parse(authorizers) : null;
+
     const $authorize_reps = authorize_reps ? JSON.parse(authorize_reps) : null;
   
+    console.log($authorize_reps);
 
 
 
@@ -104,7 +52,7 @@ const PendingAuthRepresentative = ({ drawer }) => {
                     <BlockBetween>
                         <BlockHeadContent>
                             <BlockTitle page tag="h3">
-                                Pending Authorised Representatives
+                                Transfer Authorised Representatives
                             </BlockTitle>
                         </BlockHeadContent>
                         <BlockHeadContent>
@@ -124,7 +72,7 @@ const PendingAuthRepresentative = ({ drawer }) => {
                                         {/* <p>{authorize_reps}</p> */}
                                         {/* {<p>{parentState}</p>} */}
                                         <div className="toggle-wrap nk-block-tools-toggle">
-                                            <div className="toggle-expand-content" style={{ display: sm ? "block" : "none" }}>
+                                            <div className="toggle-expand-content" style={{ display: true ? "block" : "none" }}>
                                                 <ul className="nk-block-tools g-3">
                                                     <li className="nk-block-tools-opt">
                                                         <Button color="primary">
@@ -138,7 +86,7 @@ const PendingAuthRepresentative = ({ drawer }) => {
                                 </BlockHead>
 
                                 <PreviewCard>
-                                    {$authorize_reps && <AuthRepTable updateParent={updateParentState} parentState={parentState} data={$authorize_reps} positions={$positions} countries={$countries} authorizers={$authorizers} roles={$roles} pending={true}  expandableRows pagination actions />}
+                                    {$authorize_reps && <TransferAuthRepTable updateParent={updateParentState} parentState={parentState} data={$authorize_reps}   expandableRows pagination actions />}
                                 </PreviewCard>
                             </Block>
 
@@ -150,4 +98,4 @@ const PendingAuthRepresentative = ({ drawer }) => {
         </React.Fragment>
     );
 };
-export default PendingAuthRepresentative;
+export default ListTransferAuthRepresentative;

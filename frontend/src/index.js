@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import { toast } from "react-toastify";
 import "App.css"
-
+import 'react-loading-skeleton/dist/skeleton.css'
 import "./assets/scss/dashlite.scss";
 import "./assets/scss/style-email.scss";
 
@@ -27,7 +27,8 @@ axios.interceptors.response.use(function (config) {
     // Do something before request is sent
     return config;
   }, function (error) {
-    console.log(error.response)
+    // console.log(error.response.data.message)
+     toast.success(error.response?.data?.message);
     // console.log(error.response.data)
       // if(error.response.status == '999') {
       //   toast.success(error.response.statusText);

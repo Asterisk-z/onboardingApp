@@ -19,35 +19,37 @@ export function stringShorter(str, length) {
 export function errorHandler(error, toastStatus, messageType = "Error") {
   const errors = error.response?.data?.errors ? error.response?.data?.errors : null;
   const errorMessage = (typeof errors === 'object') ? Object.values(errors)[0][0] : "";
-
+  
   if (error.response?.data?.message) {
+    toast.error(<div className="toastr-text"><h5>{`${messageType}`}</h5><p>{`${error.response.data.message}  -  ${errorMessage}`}</p></div>)
     
-    toast.error(<div className="toastr-text"><h5>{`${messageType}`}</h5><p>{`${error.response.data.message}  -  ${errorMessage}`}</p></div>, {
-      position: "top-right",
-      autoClose: true,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: true,
-      closeButton: <span className="btn-trigger toast-close-button" role="button"><Icon name="cross"></Icon></span>,
-    });
+    // toast.error(<div className="toastr-text"><h5>{`${messageType}`}</h5><p>{`${error.response.data.message}  -  ${errorMessage}`}</p></div>, {
+    //   position: "top-right",
+    //   autoClose: true,
+    //   hideProgressBar: true,
+    //   closeOnClick: true,
+    //   pauseOnHover: true,
+    //   draggable: true,
+    //   progress: true,
+    //   closeButton: <span className="btn-trigger toast-close-button" role="button"><Icon name="cross"></Icon></span>,
+    // });
     return {
       message: "error",
       error: error.response.data.error,
     };
   } else {
     
-        toast.warning(<div className="toastr-text"><h5>{`${"Warning"}`}</h5><p>{`${"Something went wrong, Please try again"}`}</p></div>, {
-            position: "top-right",
-            autoClose: true,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: true,
-            closeButton: <span className="btn-trigger toast-close-button" role="button"><Icon name="cross"></Icon></span>,
-        });
+        toast.warning(<div className="toastr-text"><h5>{`${"Warning"}`}</h5><p>{`${"Something went wrong, Please try again"}`}</p></div>)
+        // toast.warning(<div className="toastr-text"><h5>{`${"Warning"}`}</h5><p>{`${"Something went wrong, Please try again"}`}</p></div>, {
+        //     position: "top-right",
+        //     autoClose: true,
+        //     hideProgressBar: true,
+        //     closeOnClick: true,
+        //     pauseOnHover: true,
+        //     draggable: true,
+        //     progress: true,
+        //     closeButton: <span className="btn-trigger toast-close-button" role="button"><Icon name="cross"></Icon></span>,
+        // });
     return {
       message: "error",
       error: "Something went wrong, Please try again",
@@ -59,16 +61,17 @@ export function errorHandler(error, toastStatus, messageType = "Error") {
 export function successHandler(data, message, messageType = "Success") {
 
     if (message) {
-        toast.success(<div className="toastr-text"><h5>{`${messageType}`}</h5><p>{`${message}`}</p></div>, {
-            position: "top-right",
-            autoClose: true,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: true,
-            closeButton: <span className="btn-trigger toast-close-button" role="button"><Icon name="cross"></Icon></span>,
-        });
+        toast.success(<div className="toastr-text"><h5>{`${messageType}`}</h5><p>{`${message}`}</p></div>)
+        // toast.success(<div className="toastr-text"><h5>{`${messageType}`}</h5><p>{`${message}`}</p></div>, {
+        //     position: "top-right",
+        //     autoClose: true,
+        //     hideProgressBar: true,
+        //     closeOnClick: true,
+        //     pauseOnHover: true,
+        //     draggable: true,
+        //     progress: true,
+        //     closeButton: <span className="btn-trigger toast-close-button" role="button"><Icon name="cross"></Icon></span>,
+        // });
         
     }
 

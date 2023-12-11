@@ -152,6 +152,8 @@ import AdminComplaint from "main/pages/Admin/AdminComplaint"
 import Complaint from "main/pages/Complaint" 
 import AuditLog from "main/pages/AuditLog" 
 import AuthRepresentative from "main/pages/AuthRepresentative" 
+import ListTransferAuthRepresentative from "main/pages/ListTransferAuthRepresentative" 
+import TransferAuthRepresentative from "main/pages/TransferAuthRepresentative" 
 import PendingAuthRepresentative from "main/pages/PendingAuthRepresentative" 
 
 import AdminAuditLog from "main/pages/Admin/AdminAuditLog" 
@@ -408,6 +410,8 @@ const Router = () => {
           <Route path="complaint" element={<Complaint />}></Route>
           <Route path="audit-log" element={<AuditLog />}></Route>
           <Route path="auth-representatives-pending" element={<PendingAuthRepresentative />}></Route>
+          <Route path="transfer-auth-representatives" element={<ListTransferAuthRepresentative />}></Route>
+          <Route path="transfer-auth-representative/:ar_user_id" element={<TransferAuthRepresentative />}></Route>
           <Route path="auth-representatives" element={<AuthRepresentative />}></Route>
           
         </Route>

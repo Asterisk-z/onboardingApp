@@ -93,45 +93,6 @@ const AuthRepresentative = ({ drawer }) => {
         setParentState(newState);
     };
 
-    const TableData = () => {
-       
-        return (
-            <React.Fragment>
-                <Content>
-
-
-                    <Block size="xl">
-                        <BlockHead>
-                            <BlockHeadContent>
-                                {/* <BlockTitle tag="h4">List</BlockTitle> */}
-                                {/* <p>{authorize_reps}</p> */}
-                                {/* {<p>{parentState}</p>} */}
-                                 <div className="toggle-wrap nk-block-tools-toggle">
-                                    <div className="toggle-expand-content" style={{ display: sm ? "block" : "none" }}>
-                                        <ul className="nk-block-tools g-3">
-                                            <li className="nk-block-tools-opt">
-                                                <Button color="primary">
-                                                    <span onClick={(ev) => navigate(`${process.env.PUBLIC_URL}/auth-representatives-pending`)}>Pending Authorised Representative</span>
-                                                </Button>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </BlockHeadContent>
-                        </BlockHead>
-
-                        <PreviewCard>
-                            {$authorize_reps && <AuthRepTable  updateParent={updateParentState} parentState={parentState} data={$authorize_reps} positions={$positions} countries={$countries} authorizers={$authorizers} roles={$roles}  expandableRows pagination actions />}
-                        </PreviewCard>
-                    </Block>
-
-
-                </Content>
-            </React.Fragment>
-        );
-    }
-
-
     return (
         <React.Fragment>
             <Head title="Authorised Representative"></Head>
@@ -152,7 +113,12 @@ const AuthRepresentative = ({ drawer }) => {
                                                 <span onClick={toggleForm}>Create Authorised Representative</span>
                                             </Button>
                                         </li>
-                                    </ul>
+                                        <li className="nk-block-tools-opt">
+                                            <Button color="primary" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/transfer-auth-representatives`)}>
+                                                <span>Transfer Authorised Representative</span>
+                                            </Button>
+                                        </li>
+                                    </ul> 
                                 </div>
                             </div>
                         </BlockHeadContent>
@@ -286,7 +252,36 @@ const AuthRepresentative = ({ drawer }) => {
                 </Modal>
                 <Block size="lg">
                     <Card className="card-bordered card-preview">
-                        <TableData/>
+                        <Content>
+
+
+                            <Block size="xl">
+                                <BlockHead>
+                                    <BlockHeadContent>
+                                        {/* <BlockTitle tag="h4">List</BlockTitle> */}
+                                        {/* <p>{authorize_reps}</p> */}
+                                        {/* {<p>{parentState}</p>} */}
+                                        <div className="toggle-wrap nk-block-tools-toggle">
+                                            <div className="toggle-expand-content" style={{ display: sm ? "block" : "none" }}>
+                                                <ul className="nk-block-tools g-3">
+                                                    <li className="nk-block-tools-opt">
+                                                        <Button color="primary">
+                                                            <span onClick={(ev) => navigate(`${process.env.PUBLIC_URL}/auth-representatives-pending`)}>Pending Authorised Representative</span>
+                                                        </Button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </BlockHeadContent>
+                                </BlockHead>
+
+                                <PreviewCard>
+                                    {$authorize_reps && <AuthRepTable  updateParent={updateParentState} parentState={parentState} data={$authorize_reps} positions={$positions} countries={$countries} authorizers={$authorizers} roles={$roles}  expandableRows pagination actions />}
+                                </PreviewCard>
+                            </Block>
+
+
+                        </Content>
                     </Card>
                 </Block>
             </Content>
