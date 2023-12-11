@@ -64,7 +64,7 @@ const TransferAuthRepresentative = ({ drawer }) => {
             const formData = new FormData();
             formData.append('user_id', ar_user_id)
             formData.append('ar_authoriser_id', values.ar_authoriser_id)
-            formData.append('request_type', values.phone)
+            formData.append('request_type', values.request_type)
             formData.append('reason', values.reason)
 
             try {
@@ -75,13 +75,13 @@ const TransferAuthRepresentative = ({ drawer }) => {
                 if (resp.payload?.message == "success") {
                     setTimeout(() => {
                     setLoading(false);
-                    setInitValues({
-                        email: $user?.email,
-                        phone: $user?.phone,
-                        nationality: $user?.nationality,
-                        position: $user?.position,
-                        role_id: $user?.role.id,
-                    });
+                    // setInitValues({
+                    //     email: $user?.email,
+                    //     phone: $user?.phone,
+                    //     nationality: $user?.nationality,
+                    //     position: $user?.position,
+                    //     role_id: $user?.role.id,
+                    // });
                     
                     }, 1000);
                     
@@ -157,13 +157,13 @@ const TransferAuthRepresentative = ({ drawer }) => {
                                                             </Label>
                                                             <div className="form-control-wrap">
                                                                 <div className="form-control-select">
-                                                                    <select className="form-control form-select" {...register('role', { required: "Roles is Required" })} defaultValue={initValues.role}>
+                                                                    <select className="form-control form-select" {...register('request_type', { required: "Roles is Required" })} >
                                                                         <option value="">Select Status</option>
                                                                         <option value="activate">Activate</option>
                                                                         <option value="deactivate">Deactivate</option>
                                                                         
                                                                     </select>
-                                                                    {errors.role && <p className="invalid">{`${errors.role.message}`}</p>}
+                                                                    {errors.request_type && <p className="invalid">{`${errors.request_type.message}`}</p>}
                                                                 </div>
                                                             </div>
                                                         </div>

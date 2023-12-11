@@ -28,7 +28,10 @@ axios.interceptors.response.use(function (config) {
     return config;
   }, function (error) {
     // console.log(error.response.data.message)
-     toast.success(error.response?.data?.message);
+    if (error.response.data?.message) {
+      toast.success(error.response?.data?.message);
+    }
+     
     // console.log(error.response.data)
       // if(error.response.status == '999') {
       //   toast.success(error.response.statusText);

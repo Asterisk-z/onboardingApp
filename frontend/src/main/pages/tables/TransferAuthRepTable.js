@@ -271,8 +271,8 @@ const TransferAuthRepTable = ({ data, pagination, actions, className, selectable
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
     
-    // const renderer = ({ hours, minutes, seconds, completed }) => {
-    //         if (completed) {
+    const renderer = ({ hours, minutes, seconds, completed }) => {
+            if (completed) {
                 return (
                     <div className={`dataTables_wrapper dt-bootstrap4 no-footer ${className ? className : ""}`}>
                         <Row className={`justify-between g-2 ${actions ? "with-export" : ""}`}>
@@ -344,16 +344,16 @@ const TransferAuthRepTable = ({ data, pagination, actions, className, selectable
                         ></DataTable>
                     </div>
                 );
-            // } else {
+            } else {
 
-            //     return (
-            //             <>
-            //                 <Skeleton count={20} height={30}  style={{display: 'block',lineHeight: 2, padding: '1rem',width: 'auto',}}/>
-            //             </>
+                return (
+                        <>
+                            <Skeleton count={20} height={30}  style={{display: 'block',lineHeight: 2, padding: '1rem',width: 'auto',}}/>
+                        </>
                         
-            //         )
-            // }
-    // };
+                    )
+            }
+    };
     
           return (
                   <Countdown
