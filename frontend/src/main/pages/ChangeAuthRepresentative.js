@@ -7,7 +7,7 @@ import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col,
 import { loadUserRoles } from "redux/stores/roles/roleStore";
 import { loadAllPositions } from "redux/stores/positions/positionStore";
 import { loadAllCountries } from "redux/stores/nationality/country";
-import { userLoadUserARs, userTransferUserAR, userViewUserAR } from "redux/stores/authorize/representative";
+import { userLoadUserARs, userStatusChangeUserAR, userViewUserAR } from "redux/stores/authorize/representative";
 import { loadAllActiveAuthoriser } from "redux/stores/users/userStore";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
@@ -63,18 +63,14 @@ const TransferAuthRepresentative = ({ drawer }) => {
 
             const formData = new FormData();
             formData.append('user_id', ar_user_id)
-            formData.append('position_id', values.position_id)
-            formData.append('nationality', values.nationality)
-            formData.append('role_id', values.role)
-            formData.append('email', values.email)
             formData.append('ar_authoriser_id', values.ar_authoriser_id)
-            formData.append('phone', values.phone)
+            formData.append('request_type', values.phone)
             formData.append('reason', values.reason)
 
             try {
                 setLoading(true);
                 
-                const resp = await dispatch(userTransferUserAR(formData));
+                const resp = await dispatch(userStatusChangeUserAR(formData));
 
                 if (resp.payload?.message == "success") {
                     setTimeout(() => {
@@ -156,80 +152,16 @@ const TransferAuthRepresentative = ({ drawer }) => {
                                                 <Row className="gy-4">
                                                     <Col sm="6">
                                                         <div className="form-group">
-                                                            <Label htmlFor="email" className="form-label">
-                                                                Email Address
-                                                            </Label>
-                                                            <div className="form-control-wrap">
-                                                                <input className="form-control" type="email" id="email" placeholder="Enter Email Address" {...register('email', { required: "Email Address is Required" })} defaultValue={initValues.email} />
-                                                                {errors.email && <p className="invalid">{`${errors.email.message}`}</p>}
-                                                            </div>
-                                                        </div>
-                                                    </Col>
-                                                    <Col sm="6">
-                                                        <div className="form-group">
-                                                            <Label htmlFor="phone" className="form-label">
-                                                                Phone Number
-                                                            </Label>
-                                                            <div className="form-control-wrap">
-                                                                <input className="form-control" type="text" id="phone" placeholder="Enter Last Name"  {...register('phone', { required: "Phone is Required" })} defaultValue={initValues.phone} />
-                                                                {errors.phone && <p className="invalid">{`${errors.phone.message}`}</p>}
-                                                            </div>
-                                                        </div>
-                                                    </Col>
-                                                    <Col sm="6">
-                                                        <div className="form-group">
-                                                            <Label htmlFor="position_id" className="form-label">
-                                                                Position
-                                                            </Label>
-                                                            <div className="form-control-wrap">
-                                                                <div className="form-control-select">
-                                                                    <select className="form-control form-select" {...register('position_id', { required: "Position is Required" })} defaultValue={initValues.position}>
-                                                                        <option value="">Select Position</option>
-                                                                        {$positions && $positions?.map((position, index) => (
-                                                                            <option key={index} value={position.id}>
-                                                                                {position.name}
-                                                                            </option>
-                                                                        ))}
-                                                                    </select>
-                                                                    {errors.position_id && <p className="invalid">{`${errors.position_id.message}`}</p>}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </Col>
-                                                    <Col sm="6">
-                                                        <div className="form-group">
                                                             <Label htmlFor="nationality" className="form-label">
-                                                                Nationality
-                                                            </Label>
-                                                            <div className="form-control-wrap">
-                                                                <div className="form-control-select">
-                                                                    <select className="form-control form-select" {...register('nationality', { required: "Nationality is Required" })} defaultValue={initValues.nationality}>
-                                                                        <option value="">Select Nationality</option>
-                                                                        {$countries && $countries?.map((country, index) => (
-                                                                            <option key={index} value={country.code}>
-                                                                                {country.name}
-                                                                            </option>
-                                                                        ))}
-                                                                    </select>
-                                                                    {errors.nationality && <p className="invalid">{`${errors.nationality.message}`}</p>}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </Col>
-                                                    <Col sm="6">
-                                                        <div className="form-group">
-                                                            <Label htmlFor="nationality" className="form-label">
-                                                                Role
+                                                                Status
                                                             </Label>
                                                             <div className="form-control-wrap">
                                                                 <div className="form-control-select">
                                                                     <select className="form-control form-select" {...register('role', { required: "Roles is Required" })} defaultValue={initValues.role}>
-                                                                        <option value="">Select Role</option>
-                                                                        {$roles && $roles?.map((role, index) => (
-                                                                            <option key={index} value={role.id}>
-                                                                                {role.name}
-                                                                            </option>
-                                                                        ))}
+                                                                        <option value="">Select Status</option>
+                                                                        <option value="activate">Activate</option>
+                                                                        <option value="deactivate">Deactivate</option>
+                                                                        
                                                                     </select>
                                                                     {errors.role && <p className="invalid">{`${errors.role.message}`}</p>}
                                                                 </div>
@@ -270,7 +202,7 @@ const TransferAuthRepresentative = ({ drawer }) => {
                                                     <Col sm="12">
                                                         <div className="form-group">
                                                             <Button color="primary" type="submit" size="lg">
-                                                                {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Transfer"}
+                                                                {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Change Status"}
                                                             </Button>
                                                         </div>
                                                     </Col>
