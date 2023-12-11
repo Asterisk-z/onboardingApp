@@ -305,6 +305,12 @@ const ActionTab = (props) => {
                                             <span>Transfer AR</span>
                                         </DropdownItem>
                                     </li>
+                                    <li size="xs" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/change-auth-representative/${user_id}`)} >
+                                        <DropdownItem tag="a" href="#links" >
+                                            <Icon name="eye"></Icon>
+                                            <span>Change AR</span>
+                                        </DropdownItem>
+                                    </li>
                                 
                                 {/* <li  size="xs">
                                     <DropdownItem tag="a" href="#links"  onClick={(e) => askAction('decline')} >

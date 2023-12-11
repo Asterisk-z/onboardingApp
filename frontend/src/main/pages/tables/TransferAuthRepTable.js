@@ -76,30 +76,11 @@ const Export = ({ data }) => {
 
 
 const ActionTab = (props) => {
-    const user_id = props.ar_user.id
     const ar_user = props.ar_user
-  
-    const [modalForm, setModalForm] = useState(false);
-    const [modalDetail, setModalDetail] = useState(false);
-    const [modalForTransfer, setModalForTransfer] = useState(false);
-    const [modalOpenAsk, setModalOpenAsk] = useState(false);
-    const [modalCloseAsk, setModalCloseAsk] = useState(false);
-
-    const toggleForm = () => setModalForm(!modalForm);
-    // const toggleModalDetail = () => setModalDetail(!modalForm);
-    // const toggleModalOpenAsk = () => setModalOpenAsk(!modalOpenAsk);
-    const toggleModalCloseAsk = () => setModalCloseAsk(!modalCloseAsk);
-    // const toggleForTransfer = () => setModalForTransfer(!modalForTransfer);
     
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    
-    // const { register, handleSubmit, formState: { errors }, resetField, setValue } = useForm();
-    // const [loading, setLoading] = useState(false);
 
-
-
-    
   const askAction = async (action) => {
     if(action == 'approve') {
         Swal.fire({
