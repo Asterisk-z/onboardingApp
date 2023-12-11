@@ -40,7 +40,7 @@ class UsersController extends Controller
             return errorResponse(ResponseStatusCodes::INVALID_AUTH_CREDENTIAL, "Incorrect login credentials.", [], Response::HTTP_UNAUTHORIZED);
         }
 
-        //check if user is verified, force if otherwise. 
+        //check if user is verified, force if otherwise.
         if (!$user->verified_at) {
             logAction($request->email, 'Failed Login', 'Failed Login - Not yet reset passwword', $request->ip());
             return errorResponse(ResponseStatusCodes::FORCE_PASSWORD_RESET, "Please reset your password to continue.");
@@ -108,9 +108,9 @@ class UsersController extends Controller
         $user->notify(new InfoNotification(MailContents::signupMail($user->email, $user->created_at->format('Y-m-d')), MailContents::signupMailSubject()));
 
         $MEGs = Utility::getUsersByCategory(Role::MEG);
-        if(count($MEGs))
-            Notification::send($MEGs, new InfoNotification(MailContents::newMembershipSignupMail($user->first_name." ".$user->last_name, $membership->name ?? null), MailContents::newMembershipSignupSubject()));
+        if (count($MEGs))
+            Notification::send($MEGs, new InfoNotification(MailContents::newMembershipSignupMail($user->first_name . " " . $user->last_name, $membership->name ?? null), MailContents::newMembershipSignupSubject()));
 
-        return successResponse("You have successfully signed up as a".$membership ? $membership->name : "member".". Kindly check your mail to proceed with completion of the membership form", UserResource::make($user));
+        return successResponse("You have successfully signed up as a" . $membership ? $membership->name : "member" . ". Kindly check your mail to proceed with completion of the membership form", UserResource::make($user));
     }
 }

@@ -45,7 +45,7 @@ class ComplaintController extends Controller
         return successResponse('Here you go.', $complaints);
     }
 
-        /**
+    /**
      * Display a listing of the resource.
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
@@ -93,20 +93,20 @@ class ComplaintController extends Controller
         $user = $request->user();
 
         $user->complaints()->create([
-            'document' => $request->hasFile('document') ? $request->file('document')->storePublicly('complaint','public') : null,
+            'document' => $request->hasFile('document') ? $request->file('document')->storePublicly('complaint', 'public') : null,
             'body' => $request->input('body'),
             'complaint_type_id' => $request->input('complaint_type')
         ]);
 
         $MEGs = Utility::getUsersByCategory(Role::MEG);
-        if(count($MEGs))
-            Notification::send($MEGs, new InfoNotification(MailContents::complaintSubmitMail($user->first_name." ".$user->last_name, $user->institution->name ?? null, $request->input('body')), MailContents::complaintSubmitSubject()));
+        if (count($MEGs))
+            Notification::send($MEGs, new InfoNotification(MailContents::complaintSubmitMail($user->first_name . " " . $user->last_name, $user->institution->name ?? null, $request->input('body')), MailContents::complaintSubmitSubject()));
 
         logAction($request->user()->email, 'New Complaint', 'Logged a new complaint', $request->ip());
         return successResponse('Your complaint has been submitted.');
     }
 
-        /**
+    /**
      * Show the form for creating a new resource.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -136,7 +136,7 @@ class ComplaintController extends Controller
         return successResponse('Your comment has been submitted.');
     }
 
-        /**
+    /**
      * Show the form for creating a new resource.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -150,7 +150,7 @@ class ComplaintController extends Controller
         ]);
 
         $complaint = Complaint::find($request->input('complaint_id'));
-        
+
         $complaint->update([
             "status" => $request->input('status')
         ]);
