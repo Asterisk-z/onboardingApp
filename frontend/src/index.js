@@ -30,8 +30,12 @@ axios.interceptors.response.use(function (config) {
     // console.log(error.response.data.message)
     if (error.response.data?.message) {
       toast.success(error.response?.data?.message);
-    }
-     
+  }
+  // console.log(error.response.data)
+     if(error.response.data.statusCode == '666') {
+        toast.success(error.response.statusText);
+        window.location.href = `${process.env.PUBLIC_URL}/auth-password-reset`
+      }
     // console.log(error.response.data)
       // if(error.response.status == '999') {
       //   toast.success(error.response.statusText);

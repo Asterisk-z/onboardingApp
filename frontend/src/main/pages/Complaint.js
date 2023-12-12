@@ -151,7 +151,7 @@ const ComplainTable = () => {
                                         <select className="form-control form-select" {...register('complaint_type', { required: "Type is Required" })}>
                                         <option value="">Select Type</option>
                                         {$complaintType && $complaintType?.map((complaintType) => (
-                                            <option key={complaintType.id} value={complaintType.id}>
+                                            <option key={complaintType.id} value={complaintType.id} style={{ color: "black" }}>
                                             {complaintType.name}
                                             </option>
                                         ))}
