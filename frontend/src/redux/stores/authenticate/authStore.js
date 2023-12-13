@@ -43,10 +43,16 @@ export const loginUser = createAsyncThunk(
         localStorage.setItem("firstName", data.data.user.firstName);
         localStorage.setItem("id", data.data.user.id);
         localStorage.setItem("logger", btoa(JSON.stringify(data.data.user)));
+        localStorage.removeItem('reset-password-email')
       }
       return successHandler(data, "Login Successful");
     } catch (error) {
-      return errorHandler(error, true);
+      console.log(error.response.data.statusCode)
+      console.log(values.email)
+      if (error.response.data.statusCode == '666') {
+        localStorage.setItem("reset-password-email", values.email);
+      }
+      return errorHandler(error?.response, true);
     }
   }
 );

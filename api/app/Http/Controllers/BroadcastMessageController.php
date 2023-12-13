@@ -7,9 +7,9 @@ use App\Helpers\Utility;
 use App\Models\Broadcast;
 use App\Models\Role;
 use App\Models\User;
+use App\Notifications\InfoNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
-use App\Notifications\InfoNotification;
 
 class BroadcastMessageController extends Controller
 {
@@ -51,7 +51,7 @@ class BroadcastMessageController extends Controller
         ]);
 
         $user = auth()->user();
-        $broadcast = Broadcast::create([
+        Broadcast::create([
             'title' => $request->input('title'),
             'content' => $request->input('content'),
             'file' => $request->hasFile('file') ? $request->file('file')->storePublicly('broadcast', 'public') : null,
@@ -64,14 +64,11 @@ class BroadcastMessageController extends Controller
 
         Notification::send($ars, new InfoNotification(MailContents::newBroadcastMessage($request->input('title'), $request->input('content')), MailContents::newBroadcastMessageSubject(), $MEGs));
 
-
         $logMessage = $user->email . ' created a broadcast message named : ' . $request->title;
         logAction($user->email, 'Broadcast Message Created', $logMessage, $request->ip());
         //
         return successResponse('Broadcast message for ' . $request->title . ' was successfully created');
     }
-
-
 
     /**
      * Display the specified resource.

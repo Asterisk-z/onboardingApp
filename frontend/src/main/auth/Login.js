@@ -35,21 +35,24 @@ const Login = () => {
         setLoading(true);
         
         const resp = await dispatch(loginUser(formData));
-        
+  
         if (resp.payload?.message == "success") {
-          
-            setTimeout(() => {
-              // navigate(`${process.env.PUBLIC_URL}/dashboard`);
-              window.location.href = `${process.env.PUBLIC_URL}/dashboard`
-              setLoading(false);
-            }, 1000);
+              localStorage.getItem('reset-password-email')
+              setTimeout(() => {
+                
+                window.location.href = `${process.env.PUBLIC_URL}/dashboard`
+                setLoading(false);
+              }, 1000);
           
           setLoading(false);
         } else {
+          
           setLoading(false);
         }
       } catch (error) {
+        
         setLoading(false);
+        // console.log(error)
         setTimeout(() => {
           setError("Cannot login with credentials");
           setLoading(false);

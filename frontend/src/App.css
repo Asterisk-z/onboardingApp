@@ -68,4 +68,8 @@
     color: #fff !important;
 }
 
-
+.checkbox-error{
+    outline: 2px solid red !important;
+    background-color: red !important;
+    color: red !important;
+}

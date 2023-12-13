@@ -222,7 +222,7 @@ const Register = ({ drawer }) => {
               </div>
 
               <div className="checkbox-flex">
-                <input type="checkbox"/>
+                <input type="checkbox" />
                 <p>I have read, understood and accepted Terms and Conditions</p>
               </div>
               

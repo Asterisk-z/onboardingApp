@@ -11,7 +11,6 @@ import { passwordChange } from "./../../redux/stores/authenticate/authStore";
 const PasswordChange = () => {
 
   const [loading, setLoading] = useState(false);
-  const [mailSent, setMailSent] = useState(true);
   const [passState, setPassState] = useState(false);
   const navigate = useNavigate();
 
@@ -35,7 +34,8 @@ const PasswordChange = () => {
             }, 1000);
               setLoading(false);
           } else {
-          setLoading(false);
+            console.log(resp.payload.response.data.statusCode)
+            setLoading(false);
         }
         setLoading(false);
       } catch (error) {
@@ -48,19 +48,21 @@ const PasswordChange = () => {
   };
 
       const passwordPolicy = (event) => {
-      
+        console.log(event.target.name)
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
         const isValidPassword = passwordRegex.test(getValues('password'));
+        const isValidNewPassword = passwordRegex.test(getValues('new_password'));
         
-        if (!isValidPassword) {
+        if (!isValidPassword && event.target.name == 'password') {
             setError("password", { type: "password",  message: "Uppercase, lowercase, numbers and 8 characters"  }, { shouldFocus: false })
             return
         }
-        if (getValues('new_password') !== getValues('password')) {
-            setError("password", { type: "password",  message: "Password does not match"  }, { shouldFocus: false })
-            setError("new_password", { type: "new_password",  message: "Password does not match"  }, { shouldFocus: false })
+        
+        if (!isValidNewPassword  && event.target.name == 'new_password') {
+            setError("new_password", { type: "password",  message: "Uppercase, lowercase, numbers and 8 characters"  }, { shouldFocus: false })
             return
         }
+        
         setValue('email', localStorage.getItem('reset-password-email'))
         clearErrors('password')
         clearErrors('new_password')
@@ -104,7 +106,7 @@ const PasswordChange = () => {
              <div className="form-group">
                 <div className="form-label-group">
                   <label className="form-label">
-                    Password
+                    Current Password
                   </label>
                 </div>
                 <div className="form-control-wrap">
@@ -119,7 +121,7 @@ const PasswordChange = () => {
               <div className="form-group">
                 <div className="form-label-group">
                   <label className="form-label">
-                    Confirm Password
+                    New Password
                   </label>
                 </div>
                 
@@ -136,7 +138,7 @@ const PasswordChange = () => {
                     <Icon name="eye-off" className="passcode-icon icon-hide"></Icon>
                   </a>
                   <input  type={passState ? "text" : "password"}  id="new_password"  {...register('new_password', { required: "This field is required" })}  onKeyUp={passwordPolicy}  placeholder="Confirm your password"  className={`form-control-lg form-control ${passState ? "is-hidden" : "is-shown"}`} />
-                  {errors.passcode && <span className="invalid">{errors.new_password.message}</span>}
+                  {errors.new_password && <span className="invalid">{errors.new_password.message}</span>}
                 </div>
               </div>
               <div className="form-group">
