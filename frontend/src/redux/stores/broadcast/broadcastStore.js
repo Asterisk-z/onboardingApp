@@ -23,7 +23,7 @@ export const loadViewMessages = createAsyncThunk(
 );
 
 export const CreateBroadcast = createAsyncThunk(
-  "authenticate/CreateBroadcast",
+  "broadcast/CreateBroadcast",
   async (values) => {
     try {
       const { data } = await axios({
@@ -32,7 +32,7 @@ export const CreateBroadcast = createAsyncThunk(
           Accept: "application/json",
           "Content-Type": "application/json;charset=UTF-8",
         },
-        url: `auth/password/change`,
+        url: `broadcasts/create-message`,
         data: values,
       });
       return successHandler(data, data.message);

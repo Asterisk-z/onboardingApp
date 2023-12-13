@@ -4,23 +4,21 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner} from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
-import { loadAllComplaintTypes } from "redux/stores/complaints/complaintTypes";
-import { loadAllUsersComplaints, sendComplaint } from "redux/stores/complaints/complaint";
+import { CreateBroadcast, loadViewMessages } from "redux/stores/broadcast/broadcastStore";
 import { loadAllPositions } from "redux/stores/positions/positionStore";
 import { loadAllCategories } from "redux/stores/memberCategory/category";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
-import AdminComplaintTable from './Tables/AdminComplaintTable'
+import AdminBroadcastTable from './Tables/AdminBroadcastTable'
 
 
 
-const Complaint = ({ drawer }) => {
+const AdminBroadcast = ({ drawer }) => {
         
     const [counter, setCounter] = useState(false);
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
-    const [complainFile, setComplainFile] = useState([]);
+    const [documentToUpload, setDocumentToUpload] = useState([]);
     const [sm, updateSm] = useState(false);
     const [modalForm, setModalForm] = useState(false);
 
@@ -46,31 +44,38 @@ const Complaint = ({ drawer }) => {
     };
 
        
-    const complaints = useSelector((state) => state?.complaint?.list) || null;
+    const broadcasts = useSelector((state) => state?.broadcasts?.list) || null;
     useEffect(() => {
-        dispatch(loadAllUsersComplaints());
+        dispatch(loadViewMessages());
     }, [dispatch,parentState]);
 
     
-    const $complaints = complaints ? JSON.parse(complaints) : null;
+    const $broadcasts = broadcasts ? JSON.parse(broadcasts) : null;
           
     const handleFormSubmit = async (values) => {
         const formData = new FormData();
-        formData.append('complaint_type', values.complaint_type)
-        formData.append('body', values.body)
-        formData.append('document', complainFile)
+        formData.append('title', values.title)
+        formData.append('content', values.content)
+        formData.append('position', values.position_type)
+        formData.append('category', values.category_type)
+        if (documentToUpload) {
+            formData.append('file', documentToUpload)
+        }
+
         
         try {
             setLoading(true);
             
-            const resp = await dispatch(sendComplaint(formData));
+            const resp = await dispatch(CreateBroadcast(formData));
 
             if (resp.payload?.message == "success") {
                 setTimeout(() => {
                   setLoading(false);
                   setModalForm(!modalForm)
-                  resetField('complaint_type')
-                  resetField('body')
+                  resetField('title')
+                  resetField('content')
+                  resetField('position_type')
+                  resetField('category_type')
                   resetField('document')
                   setCounter(!counter)
                 }, 1000);
@@ -84,8 +89,9 @@ const Complaint = ({ drawer }) => {
       }
 
     }; 
+    
     const handleFileChange = (event) => {
-		  setComplainFile(event.target.files[0]);
+		  setDocumentToUpload(event.target.files[0]);
     };
 
 
@@ -100,9 +106,9 @@ const Complaint = ({ drawer }) => {
                             <BlockTitle page tag="h3">
                                 Broadcast
                             </BlockTitle>
-                            {categories}
+                            {/* {categories} */}
                         </BlockHeadContent>
-                        <BlockHeadContent>
+                        <BlockHeadContent>x``
                             <div className="toggle-wrap nk-block-tools-toggle">
                                 <div className="toggle-expand-content" style={{ display: sm ? "block" : "none" }}>
                                     <ul className="nk-block-tools g-3">
@@ -225,13 +231,13 @@ const Complaint = ({ drawer }) => {
                         <BlockHead>
                             <BlockHeadContent>
                                 <BlockTitle tag="h4">Broadcast History</BlockTitle>
-                                {/* <p>{complaints}</p> */}
+                                <p>{broadcasts}</p>
                                 {/* {<p>{parentState}</p>} */}
                             </BlockHeadContent>
                         </BlockHead>
 
                         <PreviewCard>
-                            {$complaints && <AdminComplaintTable  updateParent={updateParentState} parentState={parentState} data={$complaints} expandableRows pagination actions />}
+                            {$broadcasts && <AdminBroadcastTable  updateParent={updateParentState} parentState={parentState} data={$broadcasts} expandableRows pagination actions />}
                         </PreviewCard>
                     </Block>
 
@@ -243,4 +249,4 @@ const Complaint = ({ drawer }) => {
         </React.Fragment>
     );
 };
-export default Complaint;
+export default AdminBroadcast;

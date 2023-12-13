@@ -9,6 +9,7 @@ import arUsersReducer from "../stores/authorize/representative";
 import roleStore from "../stores/roles/roleStore";
 import positionStore from "../stores/positions/positionStore";
 import userStore from "../stores/users/userStore";
+import broadcastStore from "../stores/broadcast/broadcastStore";
 
 const store = configureStore({
   reducer: {
@@ -23,6 +24,7 @@ const store = configureStore({
     position: positionStore,
     position: positionStore,
     user: userStore,
+    broadcasts: broadcastStore,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
