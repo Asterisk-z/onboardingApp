@@ -35,6 +35,11 @@ const navData = [
           },
         ],
       },
+      {
+        icon: "dashboard-fill",
+        text: "Broadcast",
+        link: "/admin-broadcast",
+      },
     ],
   },
   {
@@ -62,7 +67,7 @@ const navData = [
       },
       {
         icon: "tile-thumb-fill",
-        text: "Authorized Representatives",
+        text: "Authorised Representatives",
         link: "/auth-representatives",
       },
       // {
