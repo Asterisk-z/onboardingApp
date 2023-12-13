@@ -69,9 +69,6 @@ const Complaint = ({ drawer }) => {
 		  setComplainFile(event.target.files[0]);
     };
 
-const ComplainTable = () => {
-    
-    const dispatch = useDispatch();
     const complaints = useSelector((state) => state?.complaint?.list) || null;
     useEffect(() => {
         dispatch(loadAllComplaints());
@@ -79,31 +76,6 @@ const ComplainTable = () => {
   
     
     const $complaints = complaints ? JSON.parse(complaints) : null;
-  
-    return (
-        <React.Fragment>
-            <Content>
-
-
-                <Block size="xl">
-                    <BlockHead>
-                        <BlockHeadContent>
-                            <BlockTitle tag="h4">Complaint History</BlockTitle>
-                            {/* <p>{complaints}</p> */}
-                        </BlockHeadContent>
-                    </BlockHead>
-
-                    <PreviewCard>
-                        {$complaints && <ComplaintTableUser data={$complaints} expandableRows pagination actions />}
-                    </PreviewCard>
-                </Block>
-
-
-            </Content>
-        </React.Fragment>
-    );
-}
-
 
     return (
         <React.Fragment>
@@ -148,11 +120,11 @@ const ComplainTable = () => {
                                 </label>
                                 <div className="form-control-wrap">
                                     <div className="form-control-select">
-                                        <select className="form-control form-select" {...register('complaint_type', { required: "Type is Required" })}>
+                                        <select className="form-control form-select"  style={{ color: "black !important" }} {...register('complaint_type', { required: "Type is Required" })}>
                                         <option value="">Select Type</option>
                                         {$complaintType && $complaintType?.map((complaintType) => (
                                             <option key={complaintType.id} value={complaintType.id}>
-                                            {complaintType.name}
+                                                {complaintType.body}
                                             </option>
                                         ))}
                                         </select>
@@ -191,7 +163,24 @@ const ComplainTable = () => {
                 </Modal>
                 <Block size="lg">
                     <Card className="card-bordered card-preview">
-                        <ComplainTable />
+                        <Content>
+
+
+                            <Block size="xl">
+                                <BlockHead>
+                                    <BlockHeadContent>
+                                        <BlockTitle tag="h4">Complaint History</BlockTitle>
+                                        {/* <p>{complaints}</p> */}
+                                    </BlockHeadContent>
+                                </BlockHead>
+
+                                <PreviewCard>
+                                    {$complaints && <ComplaintTableUser data={$complaints} expandableRows pagination actions />}
+                                </PreviewCard>
+                            </Block>
+
+
+                        </Content>
                     </Card>
                 </Block>
             </Content>

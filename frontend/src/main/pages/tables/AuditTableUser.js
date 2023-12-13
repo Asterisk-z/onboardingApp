@@ -5,6 +5,8 @@ import CopyToClipboard from "react-copy-to-clipboard";
 import { Col, Modal, ModalBody, Row, Button } from "reactstrap";
 import { DataTablePagination } from "components/Component";
 import moment from "moment";
+import Skeleton from 'react-loading-skeleton'
+import Countdown from 'react-countdown';
 
 const Export = ({ data }) => {
   const [modal, setModal] = useState(false);
@@ -60,25 +62,6 @@ const Export = ({ data }) => {
     </React.Fragment>
   );
 };
-
-// const ExpandableRowComponent = ({ data }) => {
-//   return (
-//     <ul className="dtr-details p-2 border-bottom ms-1">
-//       <li className="d-block d-sm-none">
-//         <span className="dtr-title">Company</span> <span className="dtr-data">{data.company}</span>
-//       </li>
-//       <li className="d-block d-sm-none">
-//         <span className="dtr-title ">Gender</span> <span className="dtr-data">{data.gender}</span>
-//       </li>
-//       <li>
-//         <span className="dtr-title">Start Date</span> <span className="dtr-data">{data.startDate}</span>
-//       </li>
-//       <li>
-//         <span className="dtr-title">Salary</span> <span className="dtr-data">{data.salary}</span>
-//       </li>
-//     </ul>
-//   );
-// };
 
 const CustomCheckbox = React.forwardRef(({ onClick, ...rest }, ref) => (
   <div className="custom-control custom-control-sm custom-checkbox notext">
@@ -162,79 +145,102 @@ const UserActivities = ({ data, pagination, actions, className, selectableRows, 
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return (
-    <div className={`dataTables_wrapper dt-bootstrap4 no-footer ${className ? className : ""}`}>
-      <Row className={`justify-between g-2 ${actions ? "with-export" : ""}`}>
-        <Col className="col-7 text-start" sm="4">
-          <div id="DataTables_Table_0_filter" className="dataTables_filter">
-            <label>
-              <input
-                type="search"
-                className="form-control form-control-sm"
-                placeholder="Search by name"
-                onChange={(ev) => setSearchText(ev.target.value)}
-              />
-            </label>
-          </div>
-        </Col>
-        <Col className="col-5 text-end" sm="8">
-          <div className="datatable-filter">
-            
-            <div className="d-flex justify-content-end g-2">
-              {actions && <Export data={data} />}
-              <div className="dataTables_length" id="DataTables_Table_0_length">
-                <label>
-                  <span className="d-none d-sm-inline-block">Show</span>
-                  <div className="form-control-select">
-                    {" "}
-                    <select
-                      name="DataTables_Table_0_length"
-                      className="custom-select custom-select-sm form-control form-control-sm"
-                      onChange={(e) => setRowsPerPage(e.target.value)}
-                      value={rowsPerPageS}
-                    >
-                      <option value="10">10</option>
-                      <option value="25">25</option>
-                      <option value="40">40</option>
-                      <option value="50">50</option>
-                    </select>{" "}
+    const renderer = ({ hours, minutes, seconds, completed }) => {
+            if (completed) {
+              
+                return (
+                  <div className={`dataTables_wrapper dt-bootstrap4 no-footer ${className ? className : ""}`}>
+                    <Row className={`justify-between g-2 ${actions ? "with-export" : ""}`}>
+                      <Col className="col-7 text-start" sm="4">
+                        <div id="DataTables_Table_0_filter" className="dataTables_filter">
+                          <label>
+                            <input
+                              type="search"
+                              className="form-control form-control-sm"
+                              placeholder="Search by name"
+                              onChange={(ev) => setSearchText(ev.target.value)}
+                            />
+                          </label>
+                        </div>
+                      </Col>
+                      <Col className="col-5 text-end" sm="8">
+                        <div className="datatable-filter">
+                          
+                          <div className="d-flex justify-content-end g-2">
+                            {actions && <Export data={data} />}
+                            <div className="dataTables_length" id="DataTables_Table_0_length">
+                              <label>
+                                <span className="d-none d-sm-inline-block">Show</span>
+                                <div className="form-control-select">
+                                  {" "}
+                                  <select
+                                    name="DataTables_Table_0_length"
+                                    className="custom-select custom-select-sm form-control form-control-sm"
+                                    onChange={(e) => setRowsPerPage(e.target.value)}
+                                    value={rowsPerPageS}
+                                  >
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="40">40</option>
+                                    <option value="50">50</option>
+                                  </select>{" "}
+                                </div>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      </Col>
+                    </Row>
+                    <DataTable
+                      data={tableData}
+                      columns={tableColumn}
+                      className={className + ' customMroisDatatable'} id='customMroisDatatable'
+                      selectableRows={selectableRows}
+                      selectableRowsComponent={CustomCheckbox}
+                      // expandableRowsComponent={ExpandableRowComponent}
+                      expandableRows={mobileView}
+                      noDataComponent={<div className="p-2">There are no records found</div>}
+                      sortIcon={
+                        <div>
+                          <span>&darr;</span>
+                          <span>&uarr;</span>
+                        </div>
+                      }
+                      pagination={pagination}
+                      paginationComponent={({ currentPage, rowsPerPage, rowCount, onChangePage, onChangeRowsPerPage }) => (
+                        <DataTablePagination
+                          customItemPerPage={rowsPerPageS}
+                          itemPerPage={rowsPerPage}
+                          totalItems={rowCount}
+                          paginate={onChangePage}
+                          currentPage={currentPage}
+                          onChangeRowsPerPage={onChangeRowsPerPage}
+                          setRowsPerPage={setRowsPerPage}
+                        />
+                      )}
+                    ></DataTable>
                   </div>
-                </label>
-              </div>
-            </div>
-          </div>
-        </Col>
-      </Row>
-      <DataTable
-        data={tableData}
-        columns={tableColumn}
-        className={className + ' customMroisDatatable'} id='customMroisDatatable'
-        selectableRows={selectableRows}
-        selectableRowsComponent={CustomCheckbox}
-        // expandableRowsComponent={ExpandableRowComponent}
-        expandableRows={mobileView}
-        noDataComponent={<div className="p-2">There are no records found</div>}
-        sortIcon={
-          <div>
-            <span>&darr;</span>
-            <span>&uarr;</span>
-          </div>
-        }
-        pagination={pagination}
-        paginationComponent={({ currentPage, rowsPerPage, rowCount, onChangePage, onChangeRowsPerPage }) => (
-          <DataTablePagination
-            customItemPerPage={rowsPerPageS}
-            itemPerPage={rowsPerPage}
-            totalItems={rowCount}
-            paginate={onChangePage}
-            currentPage={currentPage}
-            onChangeRowsPerPage={onChangeRowsPerPage}
-            setRowsPerPage={setRowsPerPage}
-          />
-        )}
-      ></DataTable>
-    </div>
-  );
+                );
+  
+            } else {
+
+                return (
+                        <>
+                            <Skeleton count={10} height={20}  style={{display: 'block',lineHeight: 2, padding: '1rem',width: 'auto',}}/>
+                        </>
+                        
+                    )
+            }
+    };
+    
+          return (
+                  <Countdown
+                    date={Date.now() + 5000}
+                    renderer={renderer}
+                />
+
+                
+            );
 };
 
 export default UserActivities;

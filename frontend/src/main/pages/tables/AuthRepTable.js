@@ -493,41 +493,50 @@ const AuthRepTable = ({ data, pagination, actions, className, selectableRows, ex
         name: "User ID",
         selector: (row) => row.id,
         sortable: true,
+        width: "100px",
+        wrap: true
     },
     {
         name: "Name",
         selector: (row) => (`${row.firstName} ${row.lastName}`),
         sortable: true,
+        width: "auto",
+        wrap: true
     },
     {
         name: "Email",
-        selector: (row) => (`${row.email}`),
+        selector: (row) => (`${row.email} `),
         sortable: true,
+        width: "auto",
+        wrap: true
     },
     {
         name: "Phone",
         selector: (row) => (`${row.phone}`),
         sortable: true,
+        width: "auto",
+        wrap: true
     },
     {
         name: "Role",
         selector: (row) => { return (<><Badge color="success">{`${row.role.name}`}</Badge></>) },
         sortable: true,
-        // hide: "sm",
+        width: "auto",
+        wrap: true
     },
     {
         name: "Date Created",
         selector: (row) => moment(row.createdAt).format('MMM. DD, YYYY HH:mm'),
         sortable: true,
-        hide: "md",
+        width: "auto",
+        wrap: true
     },
     {
         name: "Action",
         selector: (row) => (<>
                         <ActionTab ar_user={row} positions={positions} countries={countries} roles={roles} authorizers={authorizers} updateParentParent={updateParent} pending={pending} />
                     </>),
-        sortable: true,
-        hide: "md",
+        width: "100px",
     },
     ];
   const [tableData, setTableData] = useState(data);

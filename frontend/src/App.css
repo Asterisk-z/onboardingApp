@@ -11,7 +11,14 @@
     padding: 20px;
 }
 
-.customMroisDatatable .dlfHg div:first-child {
+/* .customMroisDatatable .dlfHg .jPphKt .rdt_Table .rdt_TableBody .rdt_TableRow div:last-child {
+    overflow: unset !important;
+} */
+
+/* .customMroisDatatable .sc-jsMahE.cKBiPJ.rdt_TableRow:last-child {
+    overflow: unset !important;
+}  */
+.customMroisDatatable .dlfHg div:last-child {
     overflow: unset !important;
 }
 .customMroisDatatable.hXLGuA {
@@ -68,4 +75,8 @@
     color: #fff !important;
 }
 
-
+.checkbox-error{
+    outline: 2px solid red !important;
+    background-color: red !important;
+    color: red !important;
+}

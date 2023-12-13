@@ -12,12 +12,9 @@ import AuditTableUser from './Tables/AuditTableUser'
 
 const UserAuditLog = ({ drawer }) => {
         
- 
-
-const AuditLog = () => {
-    
     const dispatch = useDispatch();
     const activity = useSelector((state) => state?.activity?.ulist) || null;
+
     useEffect(() => {
         dispatch(loadAllUserLog());
     }, [dispatch]);
@@ -25,28 +22,7 @@ const AuditLog = () => {
     
     const $activity = activity ? JSON.parse(activity) : null;
   
-    return (
-        <React.Fragment>
-            <Content>
 
-
-                <Block size="xl">
-                    <BlockHead>
-                        <BlockHeadContent>
-                            <BlockTitle tag="h4">User Log</BlockTitle>
-                        </BlockHeadContent>
-                    </BlockHead>
-
-                    <PreviewCard>
-                        {$activity && <AuditTableUser data={$activity} expandableRows pagination actions />}
-                    </PreviewCard>
-                </Block>
-
-
-            </Content>
-        </React.Fragment>
-    );
-}
 
 
     return (
@@ -67,7 +43,23 @@ const AuditLog = () => {
                 </BlockHead>
                 <Block size="lg">
                     <Card className="card-bordered card-preview">
-                        <AuditLog />
+                        <Content>
+
+
+                            <Block size="xl">
+                                <BlockHead>
+                                    <BlockHeadContent>
+                                        <BlockTitle tag="h4">User Log</BlockTitle>
+                                    </BlockHeadContent>
+                                </BlockHead>
+
+                                <PreviewCard>
+                                    {$activity && <AuditTableUser data={$activity} expandableRows pagination actions />}
+                                </PreviewCard>
+                            </Block>
+
+
+                        </Content>
                     </Card>
                 </Block>
             </Content>
