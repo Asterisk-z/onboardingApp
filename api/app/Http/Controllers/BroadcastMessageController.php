@@ -48,6 +48,8 @@ class BroadcastMessageController extends Controller
             "title" => "required|string",
             "content" => "required|string",
             "file" => "nullable|mimes:jpeg,png,jpg,pdf,doc,docx|max:5048",
+            "category" => "required|exists:membership_categories,id",
+            "position" => "required|exists:positions,id"
         ]);
 
         $user = auth()->user();
@@ -58,10 +60,9 @@ class BroadcastMessageController extends Controller
             'category' => $request->input('category'),
             'position' => $request->input('position'),
         ]);
-        $ars = User::where('approval_status', 'approved')->get();
+        $ars = User::where('approval_status', 'approved')->where('position_id', $request->input('position'))->get();
         $MEGs = Utility::getUsersEmailByCategory(Role::MEG);
         //
-
         Notification::send($ars, new InfoNotification(MailContents::newBroadcastMessage($request->input('title'), $request->input('content')), MailContents::newBroadcastMessageSubject(), $MEGs));
 
         $logMessage = $user->email . ' created a broadcast message named : ' . $request->title;
