@@ -118,11 +118,11 @@ const AuthRepresentative = ({ drawer }) => {
                                                 <span>Transfer AR</span>
                                             </Button>
                                         </li>
-                                        {/* <li className="nk-block-tools-opt">
+                                        <li className="nk-block-tools-opt">
                                             <Button color="primary" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/change-auth-representatives`)}>
                                                 <span>Status AR</span>
                                             </Button>
-                                        </li> */}
+                                        </li>
                                     </ul> 
                                 </div>
                             </div>

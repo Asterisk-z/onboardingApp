@@ -120,11 +120,11 @@ const Complaint = ({ drawer }) => {
                                 </label>
                                 <div className="form-control-wrap">
                                     <div className="form-control-select">
-                                        <select className="form-control form-select" {...register('complaint_type', { required: "Type is Required" })}>
+                                        <select className="form-control form-select"  style={{ color: "black !important" }} {...register('complaint_type', { required: "Type is Required" })}>
                                         <option value="">Select Type</option>
                                         {$complaintType && $complaintType?.map((complaintType) => (
-                                            <option key={complaintType.id} value={complaintType.id} style={{ color: "black" }}>
-                                            {complaintType.name}
+                                            <option key={complaintType.id} value={complaintType.id}>
+                                                {complaintType.body}
                                             </option>
                                         ))}
                                         </select>
