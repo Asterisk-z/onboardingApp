@@ -89,7 +89,7 @@ const AdminBroadcast = ({ drawer }) => {
       }
 
     }; 
-    
+
     const handleFileChange = (event) => {
 		  setDocumentToUpload(event.target.files[0]);
     };
@@ -98,7 +98,7 @@ const AdminBroadcast = ({ drawer }) => {
 
     return (
         <React.Fragment>
-            <Head title="Complaint"></Head>
+            <Head title="Broadcast"></Head>
             <Content>
                 <BlockHead size="sm">
                     <BlockBetween>
@@ -219,7 +219,7 @@ const AdminBroadcast = ({ drawer }) => {
                         </form>
                     </ModalBody>
                     <ModalFooter className="bg-light">
-                        <span className="sub-text">Complaint</span>
+                        <span className="sub-text">Broadcast</span>
                     </ModalFooter>
                 </Modal>
                 <Block size="lg">
@@ -231,7 +231,7 @@ const AdminBroadcast = ({ drawer }) => {
                         <BlockHead>
                             <BlockHeadContent>
                                 <BlockTitle tag="h4">Broadcast History</BlockTitle>
-                                <p>{broadcasts}</p>
+                                {/* <p>{broadcasts}</p> */}
                                 {/* {<p>{parentState}</p>} */}
                             </BlockHeadContent>
                         </BlockHead>

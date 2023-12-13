@@ -14,8 +14,7 @@ import {
   BlockBetween,
 } from "components/Component";
 import { orderData } from "../../components/table/TableData";
-import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge } from "reactstrap";=
-import "../../App.css"
+import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge } from "reactstrap";
 
 
 export const OrderTable = () => {

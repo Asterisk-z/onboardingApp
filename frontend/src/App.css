@@ -80,3 +80,7 @@
     background-color: red !important;
     color: red !important;
 }
+
+.nk-menu-sub .nk-menu-link:hover {
+    color: #cc9933 !important;
+}

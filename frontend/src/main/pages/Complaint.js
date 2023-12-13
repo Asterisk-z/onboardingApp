@@ -6,8 +6,6 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner} from "reacts
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
 import { loadAllComplaintTypes } from "redux/stores/complaints/complaintTypes";
 import { sendComplaint, loadAllComplaints } from "redux/stores/complaints/complaint";
-
-import { DataTableData, dataTableColumns, dataTableColumns2, userData, orderData } from "components/table/TableData";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
 import ComplaintTableUser from './ComplaintTableUser'

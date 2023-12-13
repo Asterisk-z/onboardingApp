@@ -50,11 +50,11 @@ const TransferAuthRepresentative = ({ drawer }) => {
 
     
         const [initValues, setInitValues] = useState({
-        email: $user?.email,
-        phone: $user?.phone,
-        nationality: $user?.nationality,
-        position: $user?.position,
-        role_id: $user?.role.id,
+            email: $user?.email,
+            phone: $user?.phone,
+            nationality: $user?.nationality,
+            position: $user?.position,
+            role_id: $user?.role.id,
         });    
     
 

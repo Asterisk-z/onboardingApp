@@ -323,14 +323,14 @@ const AdminBroadcastTable = ({ data, pagination, actions, className, selectableR
       },
       {
           name: "Category",
-          selector: (row) => { return (<>{`${row.category}`}</>) },
+          selector: (row) => { return (<>{`${row.category_obj.name}`}</>) },
           sortable: true,
           width: "auto",
           wrap: true
       },
       {
           name: "Position",
-          selector: (row) => { return (<>{`${row.position}`}</>) },
+          selector: (row) => { return (<>{`${row.position_obj.name}`}</>) },
           sortable: true,
           width: "auto",
           wrap: true

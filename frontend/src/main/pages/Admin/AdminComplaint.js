@@ -35,19 +35,32 @@ const Complaint = ({ drawer }) => {
         setParentState(newState);
     };
 
-    const UserCompTable = () => {
-       
-        const dispatch = useDispatch();
-        const complaints = useSelector((state) => state?.complaint?.list) || null;
-        useEffect(() => {
-            dispatch(loadAllUsersComplaints());
-        }, [dispatch,parentState]);
+    const complaints = useSelector((state) => state?.complaint?.list) || null;
+    useEffect(() => {
+        dispatch(loadAllUsersComplaints());
+    }, [dispatch,parentState]);
+
     
-        
-        const $complaints = complaints ? JSON.parse(complaints) : null;
-        
-        return (
-            <React.Fragment>
+    const $complaints = complaints ? JSON.parse(complaints) : null;
+    
+
+    return (
+        <React.Fragment>
+            <Head title="Complaint"></Head>
+            <Content>
+                <BlockHead size="sm">
+                    <BlockBetween>
+                        <BlockHeadContent>
+                            <BlockTitle page tag="h3">
+                                Complaints
+                            </BlockTitle>
+                        </BlockHeadContent>
+                        <BlockHeadContent>
+                        </BlockHeadContent>
+                    </BlockBetween>
+                </BlockHead>
+                <Block size="lg">
+                    <Card className="card-bordered card-preview">
                 <Content>
 
 
@@ -67,29 +80,6 @@ const Complaint = ({ drawer }) => {
 
 
                 </Content>
-            </React.Fragment>
-        );
-    }
-
-
-    return (
-        <React.Fragment>
-            <Head title="Complaint"></Head>
-            <Content>
-                <BlockHead size="sm">
-                    <BlockBetween>
-                        <BlockHeadContent>
-                            <BlockTitle page tag="h3">
-                                Complaints
-                            </BlockTitle>
-                        </BlockHeadContent>
-                        <BlockHeadContent>
-                        </BlockHeadContent>
-                    </BlockBetween>
-                </BlockHead>
-                <Block size="lg">
-                    <Card className="card-bordered card-preview">
-                        <UserCompTable/>
                     </Card>
                 </Block>
             </Content>
