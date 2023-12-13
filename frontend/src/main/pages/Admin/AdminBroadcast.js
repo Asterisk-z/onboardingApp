@@ -1,0 +1,246 @@
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner} from "reactstrap";
+import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
+import { loadAllComplaintTypes } from "redux/stores/complaints/complaintTypes";
+import { loadAllUsersComplaints, sendComplaint } from "redux/stores/complaints/complaint";
+import { loadAllPositions } from "redux/stores/positions/positionStore";
+import { loadAllCategories } from "redux/stores/memberCategory/category";
+import Content from "layout/content/Content";
+import Head from "layout/head/Head";
+import AdminComplaintTable from './Tables/AdminComplaintTable'
+
+
+
+const Complaint = ({ drawer }) => {
+        
+    const [counter, setCounter] = useState(false);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+    const [complainFile, setComplainFile] = useState([]);
+    const [sm, updateSm] = useState(false);
+    const [modalForm, setModalForm] = useState(false);
+
+    const positions = useSelector((state) => state?.position?.list) || null;
+    const categories = useSelector((state) => state?.category?.list) || null;
+
+    const { register, handleSubmit, formState: { errors }, resetField } = useForm();
+
+    const toggleForm = () => setModalForm(!modalForm);
+
+    useEffect(() => {
+        dispatch(loadAllPositions());
+        dispatch(loadAllCategories());
+    }, [dispatch]);
+
+    const $positions = positions ? JSON.parse(positions) : null;
+    const $categories = categories ? JSON.parse(categories) : null;
+  
+    const [parentState, setParentState] = useState('Initial state');
+
+    const updateParentState = (newState) => {
+        setParentState(newState);
+    };
+
+       
+    const complaints = useSelector((state) => state?.complaint?.list) || null;
+    useEffect(() => {
+        dispatch(loadAllUsersComplaints());
+    }, [dispatch,parentState]);
+
+    
+    const $complaints = complaints ? JSON.parse(complaints) : null;
+          
+    const handleFormSubmit = async (values) => {
+        const formData = new FormData();
+        formData.append('complaint_type', values.complaint_type)
+        formData.append('body', values.body)
+        formData.append('document', complainFile)
+        
+        try {
+            setLoading(true);
+            
+            const resp = await dispatch(sendComplaint(formData));
+
+            if (resp.payload?.message == "success") {
+                setTimeout(() => {
+                  setLoading(false);
+                  setModalForm(!modalForm)
+                  resetField('complaint_type')
+                  resetField('body')
+                  resetField('document')
+                  setCounter(!counter)
+                }, 1000);
+            
+            } else {
+              setLoading(false);
+            }
+            
+      } catch (error) {
+        setLoading(false);
+      }
+
+    }; 
+    const handleFileChange = (event) => {
+		  setComplainFile(event.target.files[0]);
+    };
+
+
+
+    return (
+        <React.Fragment>
+            <Head title="Complaint"></Head>
+            <Content>
+                <BlockHead size="sm">
+                    <BlockBetween>
+                        <BlockHeadContent>
+                            <BlockTitle page tag="h3">
+                                Broadcast
+                            </BlockTitle>
+                            {categories}
+                        </BlockHeadContent>
+                        <BlockHeadContent>
+                            <div className="toggle-wrap nk-block-tools-toggle">
+                                <div className="toggle-expand-content" style={{ display: sm ? "block" : "none" }}>
+                                    <ul className="nk-block-tools g-3">
+                                        <li className="nk-block-tools-opt">
+                                            <Button color="primary">
+                                                <span onClick={toggleForm}>Add Broadcast</span>
+                                            </Button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </BlockHeadContent>
+                    </BlockBetween>
+                </BlockHead>
+                <Modal isOpen={modalForm} toggle={toggleForm} size="lg">
+                    <ModalHeader toggle={toggleForm} close={
+                            <button className="close" onClick={toggleForm}>
+                                <Icon name="cross" />
+                            </button>
+                        }
+                    >
+                        Create Broadcast
+                    </ModalHeader>
+                    <ModalBody>
+                        <form  onSubmit={handleSubmit(handleFormSubmit)}  className="is-alter" encType="multipart/form-data">
+                            <Row  className="gy-4">
+                                <Col sm="12">
+                                    <div className="form-group">
+                                        <label className="form-label" htmlFor="phone-no">
+                                            Title
+                                        </label>
+                                        <div className="form-control-wrap">
+                                            <input type="text" className="form-control"  {...register('title', {  required: "content is Required" })} />
+                                            {errors.title && <p className="invalid">{`${errors.title.message}`}</p>}
+                                        </div>
+                                    </div>
+                                </Col>
+                                <Col sm="12">
+                                    <div className="form-group">
+                                        <label className="form-label" htmlFor="email">
+                                            Content
+                                        </label>
+                                        <div className="form-control-wrap">
+                                            <textarea type="text" className="form-control" {...register('content', { required: "content is Required" })}></textarea>
+                                            {errors.content && <p className="invalid">{`${errors.content.message}`}</p>}
+                                        </div>
+                                    </div>
+                                </Col>
+                                <Col sm="12">
+                                    <div className="form-group">
+                                        <label className="form-label" htmlFor="phone-no">
+                                            Upload Document (*jpg, png)
+                                        </label>
+                                        <div className="form-control-wrap">
+                                            <input type="file" accept="image/*" className="form-control"  {...register('document', { })} onChange={handleFileChange}/>
+                                            {errors.document && <p className="invalid">{`${errors.document.message}`}</p>}
+                                        </div>
+                                    </div>
+                                </Col>
+                                <Col sm="6">
+                                    <div className="form-group">
+                                        <label className="form-label" htmlFor="full-name">
+                                            Category
+                                        </label>
+                                        <div className="form-control-wrap">
+                                            <div className="form-control-select">
+                                                <select className="form-control form-select"  style={{ color: "black !important" }} {...register('category_type', { required: "Type is Required" })}>
+                                                <option value="">Select Type</option>
+                                                {$categories && $categories?.map((category) => (
+                                                    <option key={category.id} value={category.id}>
+                                                        {category.name}
+                                                    </option>
+                                                ))}
+                                                </select>
+                                                {errors.category_type && <p className="invalid">{`${errors.category_type.message}`}</p>}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Col>
+                                <Col sm="6">
+                                    <div className="form-group">
+                                        <label className="form-label" htmlFor="full-name">
+                                            Position Type
+                                        </label>
+                                        <div className="form-control-wrap">
+                                            <div className="form-control-select">
+                                                <select className="form-control form-select"  style={{ color: "black !important" }} {...register('position_type', { required: "Type is Required" })}>
+                                                <option value="">Select Type</option>
+                                                {$positions && $positions?.map((position) => (
+                                                    <option key={position.id} value={position.id}>
+                                                        {position.name}
+                                                    </option>
+                                                ))}
+                                                </select>
+                                                {errors.position_type && <p className="invalid">{`${errors.position_type.message}`}</p>}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </Col>
+                                <Col sm="12">
+                                    <div className="form-group">
+                                        <Button color="primary" type="submit"  size="lg">
+                                            {loading ? ( <span><Spinner size="sm" color="light" /> Processing...</span>) : "Send Broadcast"}
+                                        </Button>
+                                    </div>
+                                </Col>
+                            </Row>
+                        </form>
+                    </ModalBody>
+                    <ModalFooter className="bg-light">
+                        <span className="sub-text">Complaint</span>
+                    </ModalFooter>
+                </Modal>
+                <Block size="lg">
+                    <Card className="card-bordered card-preview">
+                <Content>
+
+
+                    <Block size="xl">
+                        <BlockHead>
+                            <BlockHeadContent>
+                                <BlockTitle tag="h4">Broadcast History</BlockTitle>
+                                {/* <p>{complaints}</p> */}
+                                {/* {<p>{parentState}</p>} */}
+                            </BlockHeadContent>
+                        </BlockHead>
+
+                        <PreviewCard>
+                            {$complaints && <AdminComplaintTable  updateParent={updateParentState} parentState={parentState} data={$complaints} expandableRows pagination actions />}
+                        </PreviewCard>
+                    </Block>
+
+
+                </Content>
+                    </Card>
+                </Block>
+            </Content>
+        </React.Fragment>
+    );
+};
+export default Complaint;

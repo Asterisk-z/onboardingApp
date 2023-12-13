@@ -148,6 +148,7 @@ import ForgotPassword from "main/auth/ForgotPassword";
 import PasswordUpdate from "main/auth/PasswordUpdate";
 import PasswordReset from "main/auth/PasswordChange";
 import Form from "main/forms/Form";
+import AdminBroadcast from "main/pages/Admin/AdminBroadcast" 
 import AdminComplaint from "main/pages/Admin/AdminComplaint" 
 import Complaint from "main/pages/Complaint" 
 import AuditLog from "main/pages/AuditLog" 
@@ -422,6 +423,7 @@ const Router = () => {
           <Route path="admin-dashboard" element={<UserHomepage />}></Route>
           <Route path="admin-complaint" element={<AdminComplaint />}></Route>
           <Route path="admin-audit-log" element={<AdminAuditLog />}></Route>
+          <Route path="admin-broadcast" element={<AdminBroadcast />}></Route>
           <Route path="user-audit-log" element={<UserAuditLog />}></Route>
         </Route>
       </Routes>
