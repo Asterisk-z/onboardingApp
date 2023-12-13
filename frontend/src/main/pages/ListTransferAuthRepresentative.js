@@ -39,8 +39,6 @@ const ListTransferAuthRepresentative = ({ drawer }) => {
 
 
     const $authorize_reps = authorize_reps ? JSON.parse(authorize_reps) : null;
-  
-    console.log($authorize_reps);
 
 
 

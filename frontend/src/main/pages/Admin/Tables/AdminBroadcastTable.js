@@ -10,6 +10,8 @@ import { sendComplaintFeedback, updateComplaintStatus } from "redux/stores/compl
 import moment from "moment";
 import Icon from "components/icon/Icon";
 import { AiOutlineArrowRight } from "react-icons/ai";
+import Skeleton from 'react-loading-skeleton'
+import Countdown from 'react-countdown';
 
 const Export = ({ data }) => {
   const [modal, setModal] = useState(false);
@@ -378,6 +380,9 @@ const AdminBroadcastTable = ({ data, pagination, actions, className, selectableR
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+    const renderer = ({ hours, minutes, seconds, completed }) => {
+            if (completed) {
+              
   return (
     <div className={`dataTables_wrapper dt-bootstrap4 no-footer ${className ? className : ""}`}>
       <Row className={`justify-between g-2 ${actions ? "with-export" : ""}`}>
@@ -449,6 +454,26 @@ const AdminBroadcastTable = ({ data, pagination, actions, className, selectableR
       ></DataTable>
     </div>
   );
+  
+            } else {
+
+                return (
+                        <>
+                            <Skeleton count={10} height={20}  style={{display: 'block',lineHeight: 2, padding: '1rem',width: 'auto',}}/>
+                        </>
+                        
+                    )
+            }
+    };
+    
+          return (
+                  <Countdown
+                    date={Date.now() + 5000}
+                    renderer={renderer}
+                />
+
+                
+            );
 };
 
 export default AdminBroadcastTable;
