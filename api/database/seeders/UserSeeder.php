@@ -20,11 +20,17 @@ class UserSeeder extends Seeder
 
         foreach ($roles as $index => $role) {
 
+            $email = $role . "@fmdqgroup.com";
+
+            if(User::where('email', $email)->exists()){
+                continue;
+            }
+
             $user = User::create([
                 'first_name' => "Admin" . $role,
                 'last_name' => "Admin" . $role,
                 'nationality' => 'NG',
-                'email' => $role . "@fmdqgroup.com",
+                'email' => $email,
                 'phone' => '0816667778' . $index,
                 'password' => Hash::make('password'),
                 'approval_status' => 'approved',
