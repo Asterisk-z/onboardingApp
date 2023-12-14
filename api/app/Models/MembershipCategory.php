@@ -15,7 +15,8 @@ class MembershipCategory extends Model
     {
         return [
             "id" => $this->id,
-            "name" => $this->name
+            "code" => $this->code,
+            "name" => $this->name,
         ];
     }
 
