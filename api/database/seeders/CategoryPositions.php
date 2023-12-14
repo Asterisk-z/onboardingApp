@@ -17,12 +17,13 @@ class CategoryPositions extends Seeder
     public function run()
     {
         //
+        MembershipCategoryPostition::query()->truncate();
 
         $categories = MembershipCategory::all();
         $positions = Position::count();
 
         foreach ($categories as $category) {
-            $totalRelations = rand(0, $positions);
+            $totalRelations = rand(1, $positions);
             if ($totalRelations > 0) {
                 for ($i = 0; $i <= $totalRelations; $i++) {
                     MembershipCategoryPostition::updateOrCreate([

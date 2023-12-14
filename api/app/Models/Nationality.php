@@ -11,10 +11,12 @@ class Nationality extends Model
 
     protected $guarded = ['id'];
 
-    public function toArray(){
+    public function toArray()
+    {
         return [
             "id" => $this->id,
-            "name" => $this->name
+            "code" => $this->code,
+            "name" => $this->name,
         ];
     }
 }
