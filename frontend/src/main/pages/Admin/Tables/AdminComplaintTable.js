@@ -314,7 +314,7 @@ const ComplaintTableUser = ({ data, pagination, actions, className, selectableRo
         wrap: true
     },
     {
-        name: "Body",
+        name: "Description",
         selector: (row) => row.body,
         sortable: true,
         width: "auto",

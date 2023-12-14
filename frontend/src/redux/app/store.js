@@ -22,7 +22,6 @@ const store = configureStore({
     arUsers: arUsersReducer,
     role: roleStore,
     position: positionStore,
-    position: positionStore,
     user: userStore,
     broadcasts: broadcastStore,
   },

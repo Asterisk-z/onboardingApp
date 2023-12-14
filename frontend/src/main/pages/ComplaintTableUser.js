@@ -90,39 +90,7 @@ const DropdownTrans = (props) => {
   
   return (
     <>
-    <UncontrolledDropdown direction="right">
-      <DropdownToggle className="dropdown-toggle btn" color="secondary">Action</DropdownToggle>
-
-      <DropdownMenu>
-        <ul className="link-list-opt">
-          
-          <li>
-            <DropdownItem tag="a" href="#links" onClick={toggleForm} >
-              <Icon name="eye"></Icon>
-              <span>View</span>
-            </DropdownItem>
-          </li>
-          {/* <li>
-            <DropdownItem tag="a" href="#links" onClick={(ev) => ev.preventDefault()}>
-              <Icon name="pen"></Icon>
-              <span>Edit</span>
-            </DropdownItem>
-          </li>
-          <li>
-            <DropdownItem tag="a" href="#links" onClick={(ev) => ev.preventDefault()} >
-              <Icon name="eye"></Icon>
-              <span>View</span>
-            </DropdownItem>
-          </li>
-          <li>
-            <DropdownItem tag="a" href="#links" onClick={(ev) => ev.preventDefault()}>
-              <Icon name="trash"></Icon>
-              <span>Delete</span>
-            </DropdownItem>
-          </li> */}
-        </ul>
-      </DropdownMenu>
-    </UncontrolledDropdown>
+      <Button color="secondary"  className="btn"  onClick={toggleForm}> <Icon name="eye"></Icon> View</Button>
           <Modal isOpen={modalForm} toggle={toggleForm} size="xl">
             <ModalHeader toggle={toggleForm} close={<button className="close" onClick={toggleForm}><Icon name="cross" /></button>}>
                 Fill Feedback Form
@@ -162,7 +130,7 @@ const complainColumn = [
     width: "80px",
   },
   {
-    name: "Body",
+    name: "Description",
     selector: (row) => row.body,
     sortable: true,
     width: "auto",
