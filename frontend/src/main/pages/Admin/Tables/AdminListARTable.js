@@ -61,39 +61,53 @@ const Export = ({ data }) => {
   );
 };
 
-const AdminBroadcastTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState }) => {
+const AdminListARTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState }) => {
     const complainColumn = [
       {
-          name: "BID",
+          name: "UID",
           selector: (row) => row.id,
           sortable: true,
           width: "100px",
           wrap: true
       },
       {
-          name: "Title",
-          selector: (row) => row.title,
+          name: "User",
+          selector: (row) => { return (<><p>{`${row.firstName} ${row.lastName}`}<br/>{`${row.email}`}</p></>) },
           sortable: true,
           width: "auto",
           wrap: true
       },
       {
-          name: "Content",
-          selector: (row) => { return (<>{`${row.content}`}</>) },
+          name: "Institution",
+          selector: (row) => { return (<>{`${row.institution.name}`}</>) },
           sortable: true,
           width: "auto",
           wrap: true
       },
       {
-          name: "Category",
-          selector: (row) => { return (<>{`${row.category_obj.name}`}</>) },
+          name: "Nationality",
+          selector: (row) => { return (<>{`${row.nationality}`}</>) },
+          sortable: true,
+          width: "auto",
+          wrap: true
+      },
+      {
+          name: "Role",
+          selector: (row) => { return (<>{`${row.role.name}`}</>) },
           sortable: true,
           width: "auto",
           wrap: true
       },
       {
           name: "Position",
-          selector: (row) => { return (<>{`${row.position_obj.name}`}</>) },
+          selector: (row) => { return (<>{`${row.position.name}`}</>) },
+          sortable: true,
+          width: "auto",
+          wrap: true
+      },
+      {
+          name: "Reg No",
+          selector: (row) => { return (<>{`${row.regId}`}</>) },
           sortable: true,
           width: "auto",
           wrap: true
@@ -241,4 +255,4 @@ const AdminBroadcastTable = ({ data, pagination, actions, className, selectableR
     //         );
 };
 
-export default AdminBroadcastTable;
+export default AdminListARTable;

@@ -5,19 +5,16 @@ import exportFromJSON from "export-from-json";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge,  Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label } from "reactstrap";
+import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge,  Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, CardBody, CardTitle } from "reactstrap";
 import { DataTablePagination } from "components/Component";
-import { sendComplaintFeedback, updateComplaintStatus } from "redux/stores/complaints/complaint";
 import { userUpdateUserAR, userCancelUpdateUserAR, userProcessUpdateUserAR, userTransferUserAR } from "redux/stores/authorize/representative";
 import moment from "moment";
 import Icon from "components/icon/Icon";
 import Swal from "sweetalert2";
 import Skeleton from 'react-loading-skeleton'
 import Countdown from 'react-countdown';
-// import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
+import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 
-// const aUser = useUser();
-// const aUserUpdate = useUserUpdate();
 
 const Export = ({ data }) => {
   const [modal, setModal] = useState(false);
@@ -76,6 +73,9 @@ const Export = ({ data }) => {
 
 
 const ActionTab = (props) => {
+        
+    const aUser = useUser();
+    const aUserUpdate = useUserUpdate();
     const user_id = props.ar_user.id
     const ar_user = props.ar_user
     const $positions = props.positions
@@ -84,16 +84,12 @@ const ActionTab = (props) => {
     const $authorizers = props.authorizers
   
     const [modalForm, setModalForm] = useState(false);
-    const [modalDetail, setModalDetail] = useState(false);
-    const [modalForTransfer, setModalForTransfer] = useState(false);
-    const [modalOpenAsk, setModalOpenAsk] = useState(false);
-    const [modalCloseAsk, setModalCloseAsk] = useState(false);
+    const [modalView, setModalView] = useState(false);
+    const [modalViewUpdate, setModalViewUpdate] = useState(false);
 
     const toggleForm = () => setModalForm(!modalForm);
-    const toggleModalDetail = () => setModalDetail(!modalForm);
-    const toggleModalOpenAsk = () => setModalOpenAsk(!modalOpenAsk);
-    const toggleModalCloseAsk = () => setModalCloseAsk(!modalCloseAsk);
-    const toggleForTransfer = () => setModalForTransfer(!modalForTransfer);
+    const toggleView = () => setModalView(!modalView);
+    const toggleViewUpdate = () => setModalViewUpdate(!modalViewUpdate);
     
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -248,16 +244,16 @@ const ActionTab = (props) => {
                             <ul className="link-list-opt">
                         
                                     <li size="xs">
-                                        <DropdownItem tag="a" href="#links" onClick={toggleForm} >
+                                        <DropdownItem tag="a"  onClick={toggleView} >
                                             <Icon name="eye"></Icon>
                                             <span>View AR</span>
                                         </DropdownItem>
                                     </li>
                                     
-                                    {(!props?.pending) &&
+                                    {(!props?.pending && aUser.is_ar_inputter()) &&
                                         <>
                                             <li size="xs">
-                                                <DropdownItem tag="a" href="#links" onClick={toggleForm} >
+                                                <DropdownItem tag="a"  onClick={toggleForm} >
                                                     <Icon name="eye"></Icon>
                                                     <span>Update AR</span>
                                                 </DropdownItem>
@@ -265,33 +261,32 @@ const ActionTab = (props) => {
                                         </>
                                     }
                                   
-                                    {/* {(!props?.pending && ar_user.update_payload && aUser.role != "ARAUTHORISER") && */}
-                                    {(!props?.pending && ar_user.update_payload) &&
+                                    {(!props?.pending && ar_user.update_payload && aUser.is_ar_inputter()) &&
+                                   
                                         <li size="xs">
-                                            <DropdownItem tag="a" href="#links" onClick={(e) => askAction('cancel')} >
+                                            <DropdownItem tag="a"  onClick={(e) => askAction('cancel')} >
                                                 <Icon name="eye"></Icon>
                                                 <span>Cancel Update</span>
                                             </DropdownItem>
                                         </li>
                                     }
                                     
-                                    {/* {(ar_user.update_payload && props?.pending && aUser.role == "ARAUTHORISER" ) && */}
-                                    {(ar_user.update_payload && props?.pending) &&
+                                    {(ar_user.update_payload && props?.pending && aUser.is_ar_authorizer() ) &&
                                         <>
                                             <li size="xs">
-                                                <DropdownItem tag="a" href="#links" onClick={toggleForm} >
+                                                <DropdownItem tag="a"  onClick={toggleViewUpdate} >
                                                     <Icon name="eye"></Icon>
                                                     <span>View Update AR</span>
                                                 </DropdownItem>
                                             </li>
                                             <li size="xs">
-                                                <DropdownItem tag="a" href="#links" onClick={(e) => askAction('approve')} >
+                                                <DropdownItem tag="a"  onClick={(e) => askAction('approve')} >
                                                     <Icon name="eye"></Icon>
                                                     <span>Approve</span>
                                                 </DropdownItem>
                                             </li>
                                             <li size="xs">
-                                                <DropdownItem tag="a" href="#links" onClick={(e) => askAction('decline')} >
+                                                <DropdownItem tag="a"  onClick={(e) => askAction('decline')} >
                                                     <Icon name="eye"></Icon>
                                                     <span>Decline</span>
                                                 </DropdownItem>
@@ -299,25 +294,24 @@ const ActionTab = (props) => {
                                         </>
                                     }
                                     
-                                    <li size="xs" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/transfer-auth-representative/${user_id}`)} >
-                                        <DropdownItem tag="a" href="#links" >
-                                            <Icon name="eye"></Icon>
-                                            <span>Transfer AR</span>
-                                        </DropdownItem>
-                                    </li>
-                                    <li size="xs" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/change-auth-representative/${user_id}`)} >
-                                        <DropdownItem tag="a" href="#links" >
-                                            <Icon name="eye"></Icon>
-                                            <span>Change AR</span>
-                                        </DropdownItem>
-                                    </li>
+                                    {(!props?.pending && ar_user.update_payload && aUser.is_ar_inputter()) &&
+                                        <>
+                                            <li size="xs" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/transfer-auth-representative/${user_id}`)} >
+                                                <DropdownItem tag="a"  >
+                                                    <Icon name="eye"></Icon>
+                                                    <span>Transfer AR</span>
+                                                </DropdownItem>
+                                            </li>
+                                            <li size="xs" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/change-auth-representative/${user_id}`)} >
+                                                <DropdownItem tag="a"  >
+                                                    <Icon name="eye"></Icon>
+                                                    <span>Change AR</span>
+                                                </DropdownItem>
+                                            </li>
+                                        </>
+                                    }
+
                                 
-                                {/* <li  size="xs">
-                                    <DropdownItem tag="a" href="#links"  onClick={(e) => askAction('decline')} >
-                                        <Icon name="eye"></Icon>
-                                        <span>Decline</span>
-                                    </DropdownItem>
-                                </li> */}
                             </ul>
                         </DropdownMenu>
                     </UncontrolledDropdown>
@@ -335,6 +329,59 @@ const ActionTab = (props) => {
             </ul>
         </div>
        
+        <Modal isOpen={modalViewUpdate} toggle={toggleViewUpdate} size="lg">
+            <ModalHeader toggle={toggleViewUpdate} close={<button className="close" onClick={toggleViewUpdate}><Icon name="cross" /></button>}>
+                View Update AR
+            </ModalHeader>
+            <ModalBody>
+                    <Card className="card">   
+                        <CardBody className="card-inner">
+                            <CardTitle tag="h5">{ `${ar_user.firstName} ${ar_user.lastName} (${ar_user.email})` }</CardTitle>
+                            {/* <CardText> */}
+                                <ul>
+                                    <li><span className="lead">Phone : </span>{`${ar_user.phone}`}</li>
+                                    <li><span className="lead">Nationality : </span>{`${ar_user.nationality}`}</li>
+                                    <li><span className="lead">Role : </span>{`${ar_user.role.name}`}</li>
+                                    <li><span className="lead">Position : </span>{`${ar_user.position.name}`}</li>
+                                    <li><span className="lead">Status : </span>{`${ar_user.approval_status}`}</li>
+                                    <li><span className="lead">RegID : </span>{`${ar_user.regId}`}</li>
+                                    <li><span className="lead">Institution : </span>{`${ar_user.institution.name}`}</li>
+                                </ul>
+                            {/* </CardText> */}
+                        </CardBody>
+                    </Card>
+            </ModalBody>
+            <ModalFooter className="bg-light">
+                <span className="sub-text">View Authorised Representative</span>
+            </ModalFooter>
+        </Modal>
+        <Modal isOpen={modalView} toggle={toggleView} size="lg">
+            <ModalHeader toggle={toggleView} close={<button className="close" onClick={toggleView}><Icon name="cross" /></button>}>
+                View AR
+            </ModalHeader>
+            <ModalBody>
+                    <Card className="card">   
+                        <CardBody className="card-inner">
+                            <CardTitle tag="h5">{ `${ar_user.firstName} ${ar_user.lastName} (${ar_user.email})` }</CardTitle>
+                            {/* <CardText> */}
+                                <ul>
+                                    <li><span className="lead">Phone : </span>{`${ar_user.phone}`}</li>
+                                    <li><span className="lead">Nationality : </span>{`${ar_user.nationality}`}</li>
+                                    <li><span className="lead">Role : </span>{`${ar_user.role.name}`}</li>
+                                    <li><span className="lead">Position : </span>{`${ar_user.position.name}`}</li>
+                                    <li><span className="lead">Status : </span>{`${ar_user.approval_status}`}</li>
+                                    <li><span className="lead">RegID : </span>{`${ar_user.regId}`}</li>
+                                    <li><span className="lead">Institution : </span>{`${ar_user.institution.name}`}</li>
+                                </ul>
+                            {/* </CardText> */}
+                        </CardBody>
+                    </Card>
+            </ModalBody>
+            <ModalFooter className="bg-light">
+                <span className="sub-text">View Authorised Representative</span>
+            </ModalFooter>
+        </Modal>
+        
         <Modal isOpen={modalForm} toggle={toggleForm} size="lg">
             <ModalHeader toggle={toggleForm} close={<button className="close" onClick={toggleForm}><Icon name="cross" /></button>}>
                 Update AR

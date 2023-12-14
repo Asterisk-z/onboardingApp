@@ -3,25 +3,32 @@ import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner} from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
-import {megLoadTransferUserAR} from "redux/stores/authorize/representative"
+import { loadAllPositions } from "redux/stores/positions/positionStore";
+import { loadAllCategories } from "redux/stores/memberCategory/category";
+import {adminLoadUserARs} from "redux/stores/authorize/representative"
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
-import AdminTransferARTable from './Tables/AdminTransferARTable'
+import AdminListARTable from './Tables/AdminListARTable'
 
 
 
 const AdminBroadcast = ({ drawer }) => {
         
+    const [counter, setCounter] = useState(false);
     const dispatch = useDispatch();
+    const [documentToUpload, setDocumentToUpload] = useState([]);
+    const [sm, updateSm] = useState(false);
+    const [modalForm, setModalForm] = useState(false);
+
     const [parentState, setParentState] = useState('Initial state');
 
     const updateParentState = (newState) => {
         setParentState(newState);
     };
 
-    const ar_users = useSelector((state) => state?.arUsers?.transfer_list) || null;
+    const ar_users = useSelector((state) => state?.arUsers?.list) || null;
     useEffect(() => {
-        dispatch(megLoadTransferUserAR());
+        dispatch(adminLoadUserARs());
     }, [dispatch,parentState]);
     
     const $ar_users = ar_users ? JSON.parse(ar_users) : null;
@@ -50,14 +57,14 @@ const AdminBroadcast = ({ drawer }) => {
                     <Block size="xl">
                         <BlockHead>
                             <BlockHeadContent>
-                                <BlockTitle tag="h4">Transfer Authorised Representatives</BlockTitle>
+                                <BlockTitle tag="h4">All Authorised Representatives</BlockTitle>
                                 {/* <p>{ar_users}</p> */}
                                 {/* {<p>{parentState}</p>} */}
                             </BlockHeadContent>
                         </BlockHead>
 
                         <PreviewCard>
-                            {$ar_users && <AdminTransferARTable  updateParent={updateParentState} parentState={parentState} data={$ar_users} expandableRows pagination actions />}
+                            {$ar_users && <AdminListARTable  updateParent={updateParentState} parentState={parentState} data={$ar_users} expandableRows pagination actions />}
                         </PreviewCard>
                     </Block>
 

@@ -149,7 +149,7 @@ import PasswordUpdate from "main/auth/PasswordUpdate";
 import PasswordReset from "main/auth/PasswordChange";
 import Form from "main/forms/Form";
 import AdminBroadcast from "main/pages/Admin/AdminBroadcast" 
-import AdminChangeAR from "main/pages/Admin/AdminChangeAR" 
+import AdminListAR from "main/pages/Admin/AdminListAR" 
 import AdminTransferAR from "main/pages/Admin/AdminTransferAR" 
 import AdminComplaint from "main/pages/Admin/AdminComplaint" 
 import Complaint from "main/pages/Complaint" 
@@ -428,7 +428,7 @@ const Router = () => {
           <Route path="admin-complaint" element={<AdminComplaint />}></Route>
           <Route path="admin-audit-log" element={<AdminAuditLog />}></Route>
           <Route path="admin-broadcast" element={<AdminBroadcast />}></Route>
-          <Route path="admin-change-ar" element={<AdminChangeAR />}></Route>
+          <Route path="admin-list-ar" element={<AdminListAR />}></Route>
           <Route path="admin-transfer-ar" element={<AdminTransferAR />}></Route>
           <Route path="user-audit-log" element={<UserAuditLog />}></Route>
         </Route>

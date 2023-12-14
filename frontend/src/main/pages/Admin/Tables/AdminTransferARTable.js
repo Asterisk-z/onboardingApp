@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import exportFromJSON from "export-from-json";
 import CopyToClipboard from "react-copy-to-clipboard";
-import { Col, Row, Button,  Modal, ModalBody, } from "reactstrap";
+import { Col, Row, Button,  Modal, ModalBody, Badge } from "reactstrap";
 import { DataTablePagination } from "components/Component";
 import moment from "moment";
 
@@ -61,50 +61,57 @@ const Export = ({ data }) => {
   );
 };
 
-const AdminBroadcastTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState }) => {
+const AdminListARTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState }) => {
     const complainColumn = [
-      {
-          name: "BID",
-          selector: (row) => row.id,
-          sortable: true,
-          width: "100px",
-          wrap: true
-      },
-      {
-          name: "Title",
-          selector: (row) => row.title,
-          sortable: true,
-          width: "auto",
-          wrap: true
-      },
-      {
-          name: "Content",
-          selector: (row) => { return (<>{`${row.content}`}</>) },
-          sortable: true,
-          width: "auto",
-          wrap: true
-      },
-      {
-          name: "Category",
-          selector: (row) => { return (<>{`${row.category_obj.name}`}</>) },
-          sortable: true,
-          width: "auto",
-          wrap: true
-      },
-      {
-          name: "Position",
-          selector: (row) => { return (<>{`${row.position_obj.name}`}</>) },
-          sortable: true,
-          width: "auto",
-          wrap: true
-      },
-      {
-          name: "Date Created",
-          selector: (row) => moment(row.createdAt).format('MMM. DD, YYYY HH:mm'),
-          sortable: true,
-          width: "auto",
-          wrap: true
-      },
+    {
+        name: "UID",
+        selector: (row) => row.id,
+        sortable: true,
+        width: "150px",
+        wrap: true,
+    },
+    {
+        name: "Institution",
+        selector: (row) => (`${row.new_institution.category[0].name}`),
+        sortable: true,
+        width: "auto",
+        wrap: true,
+    },
+    {
+        name: "Email",
+        selector: (row) => (`${row.ar.email}`),
+        sortable: true,
+        width: "auto",
+        wrap: true,
+    },
+    {
+        name: "Status",
+        selector: (row) => { return (<><Badge color="success">{`${row.approval_status}`}</Badge></>) },
+        sortable: true,
+        width: "auto",
+        wrap: true,
+    },
+    {
+        name: "Role",
+        selector: (row) => { return (<><Badge color="success">{`${row.ar.role.name}`}</Badge></>) },
+        sortable: true,
+        width: "auto",
+        wrap: true,
+    },
+    {
+        name: "Date Created",
+        selector: (row) => moment(row.createdAt).format('MMM. DD, YYYY HH:mm'),
+        sortable: true,
+        width: "auto",
+        wrap: true,
+    },
+    // {
+    //     name: "Action",
+    //     selector: (row) => (<>
+    //                     <ActionTab ar_user={row} updateParentParent={updateParent} />
+    //                 </>),
+    //     width: "18%",
+    // },
     ];
   const [tableData, setTableData] = useState(data);
   const [searchText, setSearchText] = useState("");
@@ -241,4 +248,4 @@ const AdminBroadcastTable = ({ data, pagination, actions, className, selectableR
     //         );
 };
 
-export default AdminBroadcastTable;
+export default AdminListARTable;
