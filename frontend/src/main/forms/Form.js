@@ -405,67 +405,28 @@ const UserSettings = (props) => {
   const password = useRef();
   password.current = watch("password");
 
+
+  // const [inputValue1, setInputValue1] = useState('');
+  // const [inputValue2, setInputValue2] = useState('');
+  // const [checkboxChecked, setCheckboxChecked] = useState(false);
+
+
   return (
     <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
       <Row className="gy-4">
-        <Col md="6">
-          <div className="form-group">
-            <label className="form-label" htmlFor="username">
-              Username
+        <Col md="12">
+          <div className="custom-control custom-checkbox">
+            <input
+              type="checkbox"
+              className="custom-control-input"
+              onChange={(e) => setFormData({ ...formData, terms: e.target.checked })}
+              checked={formData.terms}
+              {...register('terms', { required: true })}
+              id="fw-policy" />
+            {errors.terms && <span className="invalid">This field is required</span>}
+            <label className="custom-control-label" htmlFor="fw-policy">
+              International Banking License
             </label>
-            <div className="form-control-wrap">
-              <input
-                type="text"
-                id="username"
-                className="form-control"
-                {...register('username', { required: true })}
-                onChange={(e) => onInputChange(e)}
-                defaultValue={formData.username} />
-              {errors.username && <span className="invalid">This field is required</span>}
-            </div>
-          </div>
-        </Col>
-        <Col md="6">
-          <div className="form-group">
-            <label className="form-label" htmlFor="password">
-              Password
-            </label>
-            <div className="form-control-wrap">
-              <input
-                type="password"
-                id="password"
-                className="form-control"
-                {...register('password', {
-                  required: "This field is required",
-                  minLength: {
-                    value: 6,
-                    message: "Password must have at least 6 characters",
-                  },
-                })}
-                onChange={(e) => onInputChange(e)}
-                defaultValue={formData.password} />
-              {errors.password && <span className="invalid">{errors.password.message}</span>}
-            </div>
-          </div>
-        </Col>
-        <Col md="6">
-          <div className="form-group">
-            <label className="form-label" htmlFor="rePassword">
-              Re-Password
-            </label>
-            <div className="form-control-wrap">
-              <input
-                type="password"
-                id="rePassword"
-                className="form-control"
-                {...register('rePassword', {
-                  required: "This field is required",
-                  validate: (value) => value === password.current || "The passwords do not match",
-                })}
-                onChange={(e) => onInputChange(e)}
-                defaultValue={formData.rePassword} />
-              {errors.rePassword && <span className="invalid">{errors.rePassword?.message}</span>}
-            </div>
           </div>
         </Col>
         <Col md="12">
@@ -479,10 +440,286 @@ const UserSettings = (props) => {
               id="fw-policy" />
             {errors.terms && <span className="invalid">This field is required</span>}
             <label className="custom-control-label" htmlFor="fw-policy">
-              I agreed Terms and policy
+              National Banking License
             </label>
           </div>
         </Col>
+        <Col md="12">
+          <div className="custom-control custom-checkbox">
+            <input
+              type="checkbox"
+              className="custom-control-input"
+              onChange={(e) => setFormData({ ...formData, terms: e.target.checked })}
+              checked={formData.terms}
+              {...register('terms', { required: true })}
+              id="fw-policy" />
+            {errors.terms && <span className="invalid">This field is required</span>}
+            <label className="custom-control-label" htmlFor="fw-policy">
+              Regional Banking License
+            </label>
+          </div>
+        </Col>
+      </Row>
+      <h5 style={{ marginTop: '30px' }}>Product Of Interest</h5>
+      <Row >
+        <div>
+          <table style={{ borderCollapse: 'collapse', width: '100%' }}>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Product</th>
+                <th>Monthly Average Value of Trades per Product (₦)</th>
+                <th>Average Trade Size per Transaction (₦)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: "20px"}}>
+                  <label>
+                    Bond
+                  </label>
+                  <input
+                    type="checkbox"
+                    // checked={checkboxChecked}
+                    // onChange={() => setCheckboxChecked(!checkboxChecked)}
+                  />
+                </td>
+                <td>
+                  <input style={{width: '100%'}}
+                    type="text"
+                    // value={inputValue1}
+                    // onChange={(e) => setInputValue1(e.target.value)}
+                  />
+                </td>
+                <td>
+                  <input style={{width: '100%'}}
+                    type="text"
+                    // value={inputValue2}
+                    // onChange={(e) => setInputValue2(e.target.value)}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: "20px"}}>
+                  <label>
+                    Commercial Papers
+                  </label>
+                  <input
+                    type="checkbox"
+                    // checked={checkboxChecked}
+                    // onChange={() => setCheckboxChecked(!checkboxChecked)}
+                  />
+                </td>
+                <td>
+                  <input style={{width: '100%'}}
+                    type="text"
+                    // value={inputValue1}
+                    // onChange={(e) => setInputValue1(e.target.value)}
+                  />
+                </td>
+                <td>
+                  <input style={{width: '100%'}}
+                    type="text"
+                    // value={inputValue2}
+                    // onChange={(e) => setInputValue2(e.target.value)}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: "20px"}}>
+                  <label>
+                    Futures
+                  </label>
+                  <input
+                    type="checkbox"
+                    // checked={checkboxChecked}
+                    // onChange={() => setCheckboxChecked(!checkboxChecked)}
+                  />
+                </td>
+                <td>
+                  <input style={{width: '100%'}}
+                    type="text"
+                    // value={inputValue1}
+                    // onChange={(e) => setInputValue1(e.target.value)}
+                  />
+                </td>
+                <td>
+                  <input style={{width: '100%'}}
+                    type="text"
+                    // value={inputValue2}
+                    // onChange={(e) => setInputValue2(e.target.value)}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>4</td>
+                <td style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: "20px"}}>
+                  <label>
+                    Loans
+                  </label>
+                  <input
+                    type="checkbox"
+                    // checked={checkboxChecked}
+                    // onChange={() => setCheckboxChecked(!checkboxChecked)}
+                  />
+                </td>
+                <td>
+                  <input style={{width: '100%'}}
+                    type="text"
+                    // value={inputValue1}
+                    // onChange={(e) => setInputValue1(e.target.value)}
+                  />
+                </td>
+                <td>
+                  <input style={{width: '100%'}}
+                    type="text"
+                    // value={inputValue2}
+                    // onChange={(e) => setInputValue2(e.target.value)}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>5</td>
+                <td style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: "20px"}}>
+                  <label>
+                    Wrapped
+                  </label>
+                  <input
+                    type="checkbox"
+                    // checked={checkboxChecked}
+                    // onChange={() => setCheckboxChecked(!checkboxChecked)}
+                  />
+                </td>
+                <td>
+                  <input style={{width: '100%'}}
+                    type="text"
+                    // value={inputValue1}
+                    // onChange={(e) => setInputValue1(e.target.value)}
+                  />
+                </td>
+                <td>
+                  <input style={{width: '100%'}}
+                    type="text"
+                    // value={inputValue2}
+                    // onChange={(e) => setInputValue2(e.target.value)}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>6</td>
+                <td style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: "20px"}}>
+                  <label>
+                    Quakes
+                  </label>
+                  <input
+                    type="checkbox"
+                    // checked={checkboxChecked}
+                    // onChange={() => setCheckboxChecked(!checkboxChecked)}
+                  />
+                </td>
+                <td>
+                  <input style={{width: '100%'}}
+                    type="text"
+                    // value={inputValue1}
+                    // onChange={(e) => setInputValue1(e.target.value)}
+                  />
+                </td>
+                <td>
+                  <input style={{width: '100%'}}
+                    type="text"
+                    // value={inputValue2}
+                    // onChange={(e) => setInputValue2(e.target.value)}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>7</td>
+                <td style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: "20px"}}>
+                  <label>
+                    Pay
+                  </label>
+                  <input
+                    type="checkbox"
+                    // checked={checkboxChecked}
+                    // onChange={() => setCheckboxChecked(!checkboxChecked)}
+                  />
+                </td>
+                <td>
+                  <input style={{width: '100%'}}
+                    type="text"
+                    // value={inputValue1}
+                    // onChange={(e) => setInputValue1(e.target.value)}
+                  />
+                </td>
+                <td>
+                  <input style={{width: '100%'}}
+                    type="text"
+                    // value={inputValue2}
+                    // onChange={(e) => setInputValue2(e.target.value)}
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </Row>
+      <h5 style={{ marginTop: '30px' }}>Direction of Trade</h5>
+      <Row >
+        <div>
+          <table style={{ borderCollapse: 'collapse', width: '100%' }}>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Direction</th>
+                <th>check</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td style={{ display: 'flex', gap: '50px', alignItems: 'center' }}>
+                  Buy
+                </td>
+                <td>
+                  <input
+                    type="checkbox"
+                    // checked={checkboxChecked}
+                    // onChange={() => setCheckboxChecked(!checkboxChecked)}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td style={{ display: 'flex', gap: '50px', alignItems: 'center' }}>
+                  Sell
+                </td>
+                <td>
+                  <input
+                    type="checkbox"
+                    // checked={checkboxChecked}
+                    // onChange={() => setCheckboxChecked(!checkboxChecked)}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td style={{ display: 'flex', gap: '50px', alignItems: 'center' }}>
+                  Both
+                </td>
+                <td>
+                  <input
+                    type="checkbox"
+                    // checked={checkboxChecked}
+                    // onChange={() => setCheckboxChecked(!checkboxChecked)}
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </Row>
       <div className="actions clearfix">
         <ul>
