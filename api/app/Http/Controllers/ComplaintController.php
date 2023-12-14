@@ -87,7 +87,7 @@ class ComplaintController extends Controller
         $request->validate([
             "complaint_type" => "required|exists:complaint_types,id",
             "body" => "required|string",
-            "document" => "nullable|mimes:jpeg,png,jpg,pdf,doc,docx,csv,xls,xlsx|max:5048"
+            "document" => "nullable|mimes:jpeg,png,jpg,pdf|max:5048"
         ]);
 
         $user = $request->user();

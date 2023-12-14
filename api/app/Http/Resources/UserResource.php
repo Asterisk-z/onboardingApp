@@ -18,6 +18,7 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'firstName' => $this->first_name,
             'lastName' => $this->last_name,
+            'middleName' => $this->middle_name,
             'email' => $this->email,
             'phone' => $this->phone,
             'nationality' => $this->userNationality->name,
@@ -26,7 +27,8 @@ class UserResource extends JsonResource
             'approval_status' => $this->approval_status,
             'update_payload' => $this->update_payload,
             'regId' => $this->reg_id,
-            'img' => null,
+            'img' => $this->img ? config('app.url') .'/storage/'.$this->img : null,
+            'mandate_form' => $this->mandate_form ? config('app.url') .'/storage/'.$this->mandate_form : null,
             'institution' => $this->institution,
             'is_active' => $this->is_active,
             'createdAt' => $this->created_at

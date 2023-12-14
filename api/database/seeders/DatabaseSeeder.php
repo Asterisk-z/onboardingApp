@@ -20,5 +20,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ComplaintTypes::class);
         $this->call(UserSeeder::class);
         $this->call(MembershipPositionSeeder::class);
+        $this->call(SystemSettingSeeder::class);
     }
 }

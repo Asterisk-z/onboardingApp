@@ -69,7 +69,6 @@ class UsersController extends Controller
 
     public function register(RegistrationRequest $request): JsonResponse
     {
-
         // $form_id = $request->form_id;
 
         // $form_value = $request->form_value;
@@ -86,6 +85,7 @@ class UsersController extends Controller
         $user = User::create([
             'first_name' => $request->input('firstName'),
             'last_name' => $request->input('lastName'),
+            'middle_name' => $request->input('middleName') ?? null,
             'nationality' => $request->input('nationality'),
             'email' => $request->input('email'),
             'phone' => $request->input('phone'),
@@ -94,6 +94,7 @@ class UsersController extends Controller
             'role_id' => Role::ARINPUTTER,
             'institution_id' => $institution->id,
             'position_id' => $position ? $position->id : null,
+            'img' => $request->hasFile('img') ? $request->file('img')->storePublicly('users', 'public') : null,
             'verified_at' => now()
         ]);
 

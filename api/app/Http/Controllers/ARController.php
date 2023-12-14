@@ -84,6 +84,8 @@ class ARController extends Controller
         $password = Utility::generatePassword();
         $validated['password'] = Hash::make($password);
         $validated['created_by'] = $request->user()->id;
+        $validated['img'] = $request->hasFile('img') ? $request->file('img')->storePublicly('users', 'public') : null;
+        $validated['mandate_form'] = $request->hasFile('mandate_form') ? $request->file('mandate_form')->storePublicly('mandate', 'public') : null;
 
         $user = User::create($validated);
 
@@ -152,6 +154,7 @@ class ARController extends Controller
     public function update(UpdateARRequest $request, User $ARUser)
     {
         $validated = $request->validated();
+        $validated['img'] = $request->hasFile('img') ? $request->file('img')->storePublicly('users', 'public') : $ARUser->img;
         $authoriserID = $validated['ar_authoriser_id'];
 
         if ($authoriserID == $ARUser->id) {
