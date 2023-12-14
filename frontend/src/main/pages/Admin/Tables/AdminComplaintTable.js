@@ -231,7 +231,7 @@ const SendFeedback = (props) => {
                   <form  onSubmit={handleSubmit(handleFormSubmit)}  className="is-alter" encType="multipart/form-data">
                       <div className="form-group">
                           <label className="form-label" htmlFor="full-name">
-                              Complaint Type
+                              Status
                           </label>
                           <div className="form-control-wrap">
                               <div className="form-control-select">
@@ -282,8 +282,11 @@ const SendFeedback = (props) => {
                       <p>
                           {complaint.body}
                       </p>
-                      <h6 className="title">Document:</h6>
-                      <ImageContainer img={complaint.documment} />
+                      {complaint.documment &&
+                        <>
+                          <a href={complaint.documment} target="_blank" className="btn btn-secondary">View Document</a>
+                        </>}
+                      
                         
                       <h6 className="title">Comments:</h6>
                         {complaint.comment.length > 1 && complaint.comment?.map((comment, index) => (

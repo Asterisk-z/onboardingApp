@@ -144,7 +144,7 @@ const Complaint = ({ drawer }) => {
                                     Upload Document (*jpg, png)
                                 </label>
                                 <div className="form-control-wrap">
-                                    <input type="file" accept="image/*" className="form-control"  {...register('document', { })} onChange={handleFileChange}/>
+                                    <input type="file" accept=".gif,.jpg,.jpeg,.png,.pdf" className="form-control"  {...register('document', { })} onChange={handleFileChange}/>
                                      {errors.document && <p className="invalid">{`${errors.document.message}`}</p>}
                                 </div>
                             </div>

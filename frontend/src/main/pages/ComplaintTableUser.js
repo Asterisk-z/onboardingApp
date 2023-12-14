@@ -6,9 +6,6 @@ import { Col, Modal, ModalBody, Row, Button, Dropdown, UncontrolledDropdown, Dro
 import { DataTablePagination } from "components/Component";
 import moment from "moment";
 import Icon from "components/icon/Icon";
-import ImageContainer from "components/partials/gallery/GalleryImage";
-import Skeleton from 'react-loading-skeleton'
-import Countdown from 'react-countdown';
 
 const Export = ({ data }) => {
   const [modal, setModal] = useState(false);
@@ -102,8 +99,10 @@ const DropdownTrans = (props) => {
                         {complaint.body}
                     </p>
                     
-                    <h6 className="title">Document:</h6>
-                    <ImageContainer img={complaint.documment} />
+                      {complaint.documment &&
+                        <>
+                          <a href={complaint.documment} target="_blank" className="btn btn-secondary">View Document</a>
+                        </>}
                       
                     <h6 className="title">Comments:</h6>
                       {complaint.comment.length > 1 && complaint.comment?.map((comment, index) => (
