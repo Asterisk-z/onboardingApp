@@ -29,6 +29,7 @@ class AddARRequest extends FormRequest
         return [
             'first_name' => 'required|string',
             'last_name' => 'required|string',
+            'middle_name' => 'nullable|string',
             'position_id' => 'required|exists:positions,id',
             'nationality' => 'required|exists:nationalities,code',
             'role_id' => 'required|in:' . Role::ARAUTHORISER . ',' . Role::ARINPUTTER,
@@ -42,6 +43,8 @@ class AddARRequest extends FormRequest
                 },
                 new EmailValidation
             ],
+            "img" => "nullable|mimes:jpeg,png,jpg|max:5048",
+            "mandate_form" => "required|mimes:jpeg,png,jpg,pdf|max:5048",
             'phone' => [
                 'required',
                 //'regex:/^(070|080|091|090|081|071)\d{8}$/',

@@ -43,6 +43,7 @@ class UpdateARRequest extends FormRequest
 
             'first_name' => 'sometimes|string',
             'last_name' => 'sometimes|string',
+            'middle_name' => 'sometimes|string',
             'position_id' => 'sometimes|exists:positions,id',
             'nationality' => 'sometimes|exists:nationalities,code',
             'role_id' => 'sometimes|in:' . Role::ARAUTHORISER . ',' . Role::ARINPUTTER,
@@ -51,6 +52,7 @@ class UpdateARRequest extends FormRequest
                 'email',
                 new EmailValidation
             ],
+            "img" => "nullable|mimes:jpeg,png,jpg|max:5048",
             'phone' => [
                 'sometimes',
                 'regex:/^(070|080|091|090|081|071)\d{8}$/',

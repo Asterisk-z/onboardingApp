@@ -21,5 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call(UserSeeder::class);
         // $this->call(MembershipPositionSeeder::class);
         $this->call(CategoryPositions::class);
+        $this->call(MembershipPositionSeeder::class);
+        $this->call(SystemSettingSeeder::class);
     }
 }
