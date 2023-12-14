@@ -70,11 +70,14 @@ const AuthRepresentative = ({ drawer }) => {
         const formData = new FormData();
         formData.append('first_name', values.firstName)
         formData.append('last_name', values.lastName)
+        formData.append('middle_name', values.middleName)
         formData.append('position_id', values.position_id)
         formData.append('nationality', values.nationality)
         formData.append('role_id', values.role)
         formData.append('email', values.email)
         formData.append('phone', values.phone)
+        formData.append('img', values.digitalPhone[0])
+        formData.append('mandate_form', values.signedMandate[0])
         
         try {
             setLoading(true);
@@ -401,7 +404,7 @@ const AuthRepresentative = ({ drawer }) => {
                                                     <option value="">Select Role</option>
                                                     {$roles && $roles?.map((role, index) => (
                                                         <option key={index} value={role.id}>
-                                                        {role.name}
+                                                            {role.name}
                                                         </option>
                                                     ))}
                                                 </select>

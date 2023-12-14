@@ -63,7 +63,8 @@ export const userCreateUserAR = createAsyncThunk(
         method: "post",
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json;charset=UTF-8",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
         },
         url: `ar/add`,
         data: values,
@@ -84,7 +85,8 @@ export const userUpdateUserAR = createAsyncThunk(
         method: "post",
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json;charset=UTF-8",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
         },
         url: `ar/update/${id}`,
         data: values,
