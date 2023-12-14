@@ -178,6 +178,7 @@ import MainLayoutNoSidebar from "main/layout/Index-nosidebar";
 
 import Landing from "main/auth/Landing";
 import UserHomepage from "main/pages/Homepage";
+import AdminHomepage from "main/pages/Admin/Homepage";
 
 const Router = () => {
   const location = useLocation();
@@ -424,7 +425,7 @@ const Router = () => {
         </Route>
 
         <Route path={`${process.env.PUBLIC_URL}`} element={<AdminLayout />}>
-          <Route path="admin-dashboard" element={<UserHomepage />}></Route>
+          <Route path="admin-dashboard" element={<AdminHomepage />}></Route>
           <Route path="admin-complaint" element={<AdminComplaint />}></Route>
           <Route path="admin-audit-log" element={<AdminAuditLog />}></Route>
           <Route path="admin-broadcast" element={<AdminBroadcast />}></Route>

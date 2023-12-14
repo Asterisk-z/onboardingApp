@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Head from "../layout/head/Head";
-import Content from "../layout/content/Content";
+import Head from "../../layout/head/Head";
+import Content from "../../layout/content/Content";
 import { Card } from "reactstrap";
 import {
   Block,
@@ -15,8 +15,8 @@ import {
   PreviewCard
 } from "components/Component";
 import { useDispatch, useSelector } from "react-redux";
-import { userLoadUserARs } from "redux/stores/authorize/representative";
-import AuthRepTable from './Tables/AuthRepTable'
+import { adminLoadUserARs } from "redux/stores/authorize/representative";
+import AuthRepTable from '../Tables/AuthRepTable'
 
 
 
@@ -26,7 +26,7 @@ const Homepage = () => {
   const arUsers = useSelector((state) => state?.arUsers?.list) || null;
 
   useEffect(() => {
-    dispatch(userLoadUserARs());
+    dispatch(adminLoadUserARs());
   }, [dispatch]);
 
 
@@ -132,7 +132,7 @@ const Homepage = () => {
           <Block size="xl">
             <BlockHead>
               <BlockHeadContent>
-                <BlockTitle tag="h4">User</BlockTitle>
+                <BlockTitle tag="h4">Admin</BlockTitle>
               </BlockHeadContent>
             </BlockHead>
 
