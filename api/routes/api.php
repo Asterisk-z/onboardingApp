@@ -10,6 +10,7 @@ use App\Http\Controllers\NationalityController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SystemController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UsersController;
 use App\Models\Role;
@@ -50,6 +51,8 @@ Route::get('/category/{category}/positions', [MemberCategoryController::class, '
 Route::get('/complaint-types', [ComplaintTypeController::class, 'index']);
 
 Route::middleware('auth')->group(function () {
+
+    Route::get('/system/configs', [SystemController::class, 'index']);
 
     Route::group(['prefix' => 'complaint'], function () {
         Route::post('/store', [ComplaintController::class, 'store']);
