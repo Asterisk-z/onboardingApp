@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner} from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
 import { CreateBroadcast, loadViewMessages } from "redux/stores/broadcast/broadcastStore";
-import { loadAllPositions } from "redux/stores/positions/positionStore";
+import { loadAllCategoryPositions } from "redux/stores/positions/positionStore";
 import { loadAllCategories } from "redux/stores/memberCategory/category";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
@@ -18,6 +18,7 @@ const AdminBroadcast = ({ drawer }) => {
     const [counter, setCounter] = useState(false);
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
+    const [categoryId, setCategoryId] = useState(1);
     const [documentToUpload, setDocumentToUpload] = useState([]);
     const [sm, updateSm] = useState(false);
     const [modalForm, setModalForm] = useState(false);
@@ -30,9 +31,12 @@ const AdminBroadcast = ({ drawer }) => {
     const toggleForm = () => setModalForm(!modalForm);
 
     useEffect(() => {
-        dispatch(loadAllPositions());
         dispatch(loadAllCategories());
     }, [dispatch]);
+
+    useEffect(() => {
+        dispatch(loadAllCategoryPositions({'category_id' : categoryId}));
+    }, [categoryId]);
 
     const $positions = positions ? JSON.parse(positions) : null;
     const $categories = categories ? JSON.parse(categories) : null;
@@ -47,7 +51,7 @@ const AdminBroadcast = ({ drawer }) => {
     const broadcasts = useSelector((state) => state?.broadcasts?.list) || null;
     useEffect(() => {
         dispatch(loadViewMessages());
-    }, [dispatch,parentState]);
+    }, [dispatch, parentState]);
 
     
     const $broadcasts = broadcasts ? JSON.parse(broadcasts) : null;
@@ -78,6 +82,7 @@ const AdminBroadcast = ({ drawer }) => {
                   resetField('category_type')
                   resetField('document')
                   setCounter(!counter)
+                  setParentState(Math.random())
                 }, 1000);
             
             } else {
@@ -94,7 +99,11 @@ const AdminBroadcast = ({ drawer }) => {
 		  setDocumentToUpload(event.target.files[0]);
     };
 
-
+    const updatePosition = (event) => {
+        if (event.target.value) {
+            setCategoryId(event.target.value)
+        }
+    }
 
     return (
         <React.Fragment>
@@ -108,7 +117,7 @@ const AdminBroadcast = ({ drawer }) => {
                             </BlockTitle>
                             {/* {categories} */}
                         </BlockHeadContent>
-                        <BlockHeadContent>x``
+                        <BlockHeadContent>
                             <div className="toggle-wrap nk-block-tools-toggle">
                                 <div className="toggle-expand-content" style={{ display: sm ? "block" : "none" }}>
                                     <ul className="nk-block-tools g-3">
@@ -175,7 +184,7 @@ const AdminBroadcast = ({ drawer }) => {
                                         </label>
                                         <div className="form-control-wrap">
                                             <div className="form-control-select">
-                                                <select className="form-control form-select"  style={{ color: "black !important" }} {...register('category_type', { required: "Type is Required" })}>
+                                                <select className="form-control form-select"  style={{ color: "black !important" }} {...register('category_type', { required: "Type is Required" })} onChange={updatePosition}>
                                                 <option value="">Select Type</option>
                                                 {$categories && $categories?.map((category) => (
                                                     <option key={category.id} value={category.id}>

@@ -46,12 +46,12 @@ const navData = [
       active: false,
       subMenu: [
           {
-            text: "Transfer AR",
-            link: "/admin-transfer-ar",
+            text: "All ARs",
+            link: "/admin-list-ar",
           },
           {
-            text: "Change Status",
-            link: "/admin-change-ar",
+            text: "Transfer AR",
+            link: "/admin-transfer-ar",
           },
         ],
       },

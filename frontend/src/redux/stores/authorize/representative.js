@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { errorHandler, successHandler } from "utils/Functions";
 import queryGenerator from "utils/QueryGenerator";
-const initialState = { all: null, list: null, single_ar: null, status_list: null, transfer_list: null, user: null, total: null, error: "", loading: false };
+const initialState = { all: null, list: null, search_list: null, single_ar: null, status_list: null, transfer_list: null, user: null, total: null, error: "", loading: false };
 
 export const userLoadUserARs = createAsyncThunk(
   "arUsers/userLoadUserARs",
@@ -32,11 +32,9 @@ export const adminLoadUserARs = createAsyncThunk(
 export const userSearchUserARs = createAsyncThunk(
   "arUsers/userSearchUserARs",
   async (values) => {
-//     first_name
-// last_name
     const query = queryGenerator(values);
     try {
-      const { data } = await axios.get(`ar/search`);
+      const { data } = await axios.get(`ar/search?${query}`);
       return successHandler(data);
     } catch (error) {
       return errorHandler(error);
@@ -359,7 +357,7 @@ const arUsersStore = createSlice({
     builder.addCase(userSearchUserARs.fulfilled, (state, action) => {
         state.loading = false;
         // state.list = action.payload?.data?.data?.categories;
-        state.list = JSON.stringify(action.payload?.data?.data);
+        state.search_list = JSON.stringify(action.payload?.data?.data);
     });
 
     builder.addCase(userSearchUserARs.rejected, (state, action) => {

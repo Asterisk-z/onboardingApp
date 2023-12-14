@@ -40,7 +40,7 @@ const countryStore = createSlice({
 
     builder.addCase(loadAllCountries.fulfilled, (state, action) => {
       state.loading = false;
-        // state.list = action.payload?.data?.data?.countries;
+        // state.list = action.payload?.data?.data?.countries;  
         state.list = JSON.stringify(action.payload?.data?.data?.countries);
     });
 
