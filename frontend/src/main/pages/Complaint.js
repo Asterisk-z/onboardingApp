@@ -6,8 +6,6 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner} from "reacts
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
 import { loadAllComplaintTypes } from "redux/stores/complaints/complaintTypes";
 import { sendComplaint, loadAllComplaints } from "redux/stores/complaints/complaint";
-
-import { DataTableData, dataTableColumns, dataTableColumns2, userData, orderData } from "components/table/TableData";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
 import ComplaintTableUser from './ComplaintTableUser'
@@ -47,14 +45,14 @@ const Complaint = ({ drawer }) => {
 
             if (resp.payload?.message == "success") {
                 setTimeout(() => {
-                  setLoading(false);
-                  setModalForm(!modalForm)
-                  resetField('complaint_type')
-                  resetField('body')
-                  resetField('document')
-                  setCounter(!counter)
+                    setLoading(false);
+                    setModalForm(!modalForm)
+                    resetField('complaint_type')
+                    resetField('body')
+                    resetField('document')
+                    setCounter(!counter)
+                    // window.location.reload(true)
                 }, 1000);
-            
             } else {
               setLoading(false);
             }
@@ -72,7 +70,7 @@ const Complaint = ({ drawer }) => {
     const complaints = useSelector((state) => state?.complaint?.list) || null;
     useEffect(() => {
         dispatch(loadAllComplaints());
-    }, [counter, dispatch]);
+    }, [dispatch, counter]);
   
     
     const $complaints = complaints ? JSON.parse(complaints) : null;

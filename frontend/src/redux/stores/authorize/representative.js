@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { errorHandler, successHandler } from "utils/Functions";
 import queryGenerator from "utils/QueryGenerator";
-const initialState = { all: null, list: null, single_ar: null, transfer_list: null, user: null, total: null, error: "", loading: false };
+const initialState = { all: null, list: null, single_ar: null, status_list: null, transfer_list: null, user: null, total: null, error: "", loading: false };
 
 export const userLoadUserARs = createAsyncThunk(
   "arUsers/userLoadUserARs",
@@ -169,7 +169,7 @@ export const userLoadStatusChangeUserAR = createAsyncThunk(
   "arUsers/userLoadStatusChangeUserAR",
   async (values) => {
     try {
-      const { data } = await axios.get(`ar/change-status/?status=pending`);
+      const { data } = await axios.get(`ar/change-status`);
       return successHandler(data);
     } catch (error) {
       return errorHandler(error);
@@ -518,7 +518,7 @@ const arUsersStore = createSlice({
     builder.addCase(userLoadStatusChangeUserAR.fulfilled, (state, action) => {
         state.loading = false;
         // state.list = action.payload?.data?.data?.categories;
-        state.list = JSON.stringify(action.payload?.data?.data);
+        state.status_list = JSON.stringify(action.payload?.data?.data);
     });
 
     builder.addCase(userLoadStatusChangeUserAR.rejected, (state, action) => {

@@ -544,6 +544,11 @@ const AuthRepTable = ({ data, pagination, actions, className, selectableRows, ex
   const [rowsPerPageS, setRowsPerPage] = useState(10);
   const [mobileView, setMobileView] = useState();
 
+  
+  if (data != tableData) {
+    setTableData(data)
+  }
+  
   useEffect(() => {
     let defaultData = tableData;
     if (searchText !== "") {
@@ -658,14 +663,14 @@ const AuthRepTable = ({ data, pagination, actions, className, selectableRows, ex
             // }
     // };
     
-          return (
-                  <Countdown
-                    date={Date.now() + 5000}
-                    renderer={renderer}
-                />
+        //   return (
+        //           <Countdown
+        //             date={Date.now() + 5000}
+        //             renderer={renderer}
+        //         />
 
                 
-            );
+        //     );
  
 
 

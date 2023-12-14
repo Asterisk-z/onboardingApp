@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, Input} from "reactstrap";
+import { Card, Spinner, Label, Input} from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
 import { loadUserRoles } from "redux/stores/roles/roleStore";
 import { loadAllPositions } from "redux/stores/positions/positionStore";
@@ -11,7 +11,6 @@ import { userLoadUserARs, userTransferUserAR, userViewUserAR } from "redux/store
 import { loadAllActiveAuthoriser } from "redux/stores/users/userStore";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
-import AuthRepTable from './Tables/AuthRepTable'
 
 
 const TransferAuthRepresentative = ({ drawer }) => {
@@ -50,11 +49,11 @@ const TransferAuthRepresentative = ({ drawer }) => {
 
     
         const [initValues, setInitValues] = useState({
-        email: $user?.email,
-        phone: $user?.phone,
-        nationality: $user?.nationality,
-        position: $user?.position,
-        role_id: $user?.role.id,
+            email: $user?.email,
+            phone: $user?.phone,
+            nationality: $user?.nationality,
+            position: $user?.position,
+            role_id: $user?.role.id,
         });    
     
 

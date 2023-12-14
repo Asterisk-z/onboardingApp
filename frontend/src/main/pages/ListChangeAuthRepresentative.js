@@ -4,14 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, Input} from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
-import { loadUserRoles } from "redux/stores/roles/roleStore";
-import { loadAllPositions } from "redux/stores/positions/positionStore";
-import { loadAllCountries } from "redux/stores/nationality/country";
-import { userLoadTransferUserAR, userCreateUserAR } from "redux/stores/authorize/representative";
-import { loadAllActiveAuthoriser } from "redux/stores/users/userStore";
+import { userLoadStatusChangeUserAR } from "redux/stores/authorize/representative";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
-import TransferAuthRepTable from './Tables/TransferAuthRepTable'
+import ChangeStatusAuthRepTable from './Tables/ChangeStatusAuthRepTable'
 
 
 const ListTransferAuthRepresentative = ({ drawer }) => {
@@ -21,7 +17,7 @@ const ListTransferAuthRepresentative = ({ drawer }) => {
     const [modalForm, setModalForm] = useState(false);
     const [parentState, setParentState] = useState('Initial state');
 
-    const authorize_reps = useSelector((state) => state?.arUsers?.transfer_list) || null;
+    const authorize_reps = useSelector((state) => state?.arUsers?.status_list) || null;
 
     const { register, handleSubmit, formState: { errors }, resetField } = useForm();
 
@@ -32,7 +28,7 @@ const ListTransferAuthRepresentative = ({ drawer }) => {
     };
 
     useEffect(() => {
-        dispatch(userLoadTransferUserAR());
+        dispatch(userLoadStatusChangeUserAR());
     }, [dispatch, parentState]);
       
 
@@ -50,7 +46,7 @@ const ListTransferAuthRepresentative = ({ drawer }) => {
                     <BlockBetween>
                         <BlockHeadContent>
                             <BlockTitle page tag="h3">
-                                Transfer Authorised Representatives
+                                Change Authorised Representatives Status
                             </BlockTitle>
                         </BlockHeadContent>
                         <BlockHeadContent>
@@ -84,7 +80,7 @@ const ListTransferAuthRepresentative = ({ drawer }) => {
                                 </BlockHead>
 
                                 <PreviewCard>
-                                    {$authorize_reps && <TransferAuthRepTable updateParent={updateParentState} parentState={parentState} data={$authorize_reps}   expandableRows pagination actions />}
+                                    {$authorize_reps && <ChangeStatusAuthRepTable updateParent={updateParentState} parentState={parentState} data={$authorize_reps}   expandableRows pagination actions />}
                                 </PreviewCard>
                             </Block>
 

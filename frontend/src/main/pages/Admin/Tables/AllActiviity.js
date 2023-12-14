@@ -5,6 +5,8 @@ import CopyToClipboard from "react-copy-to-clipboard";
 import { Col, Modal, ModalBody, Row, Button } from "reactstrap";
 import { DataTablePagination } from "components/Component";
 import moment from "moment";
+import Skeleton from 'react-loading-skeleton'
+import Countdown from 'react-countdown';
 
 const Export = ({ data }) => {
   const [modal, setModal] = useState(false);
@@ -100,30 +102,36 @@ const tableColumn = [
         name: "ID",
         selector: (row) => row.id,
         sortable: true,
+        width: "100px",
+        wrap: true
       },
       {
         name: "User",
         selector: (row) => row.user,
         sortable: true,
-        hide: 370,
+        width: "auto",
+        wrap: true
       },
       {
         name: "Description",
         selector: (row) => row.description,
         sortable: [true],
-        hide: "sm",
+        width: "auto",
+        wrap: true
       },
       {
         name: "IP Address",
         selector: (row) => row.ip_address,
         sortable: true,
-        hide: "sm",
+        width: "auto",
+        wrap: true
       },
       {
         name: "Date Created",
         selector: (row) => moment(row.created_at).format('MMM. DD, YYYY HH:mm'),
         sortable: true,
-        hide: "md",
+        width: "auto",
+        wrap: true
       },
   ];
 
@@ -133,6 +141,10 @@ const AllActivities = ({ data, pagination, actions, className, selectableRows, e
   const [rowsPerPageS, setRowsPerPage] = useState(10);
   const [mobileView, setMobileView] = useState();
 
+  if (data != tableData) {
+    setTableData(data)
+  }
+  
   useEffect(() => {
     let defaultData = tableData;
     // console.log(searchText, defaultData)
@@ -165,6 +177,9 @@ const AllActivities = ({ data, pagination, actions, className, selectableRows, e
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+    // const renderer = ({ hours, minutes, seconds, completed }) => {
+    //         if (completed) {
+                  
   return (
     <div className={`dataTables_wrapper dt-bootstrap4 no-footer ${className ? className : ""}`}>
       <Row className={`justify-between g-2 ${actions ? "with-export" : ""}`}>
@@ -238,6 +253,26 @@ const AllActivities = ({ data, pagination, actions, className, selectableRows, e
       ></DataTable>
     </div>
   );
+  
+    //         } else {
+
+    //             return (
+    //                     <>
+    //                         <Skeleton count={10} height={20}  style={{display: 'block',lineHeight: 2, padding: '1rem',width: 'auto',}}/>
+    //                     </>
+                        
+    //                 )
+    //         }
+    // };
+    
+    //       return (
+    //               <Countdown
+    //                 date={Date.now() + 5000}
+    //                 renderer={renderer}
+    //             />
+
+                
+    //         );
 };
 
 export default AllActivities;

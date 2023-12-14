@@ -149,11 +149,14 @@ import PasswordUpdate from "main/auth/PasswordUpdate";
 import PasswordReset from "main/auth/PasswordChange";
 import Form from "main/forms/Form";
 import AdminBroadcast from "main/pages/Admin/AdminBroadcast" 
+import AdminChangeAR from "main/pages/Admin/AdminChangeAR" 
+import AdminTransferAR from "main/pages/Admin/AdminTransferAR" 
 import AdminComplaint from "main/pages/Admin/AdminComplaint" 
 import Complaint from "main/pages/Complaint" 
 import AuditLog from "main/pages/AuditLog" 
 import AuthRepresentative from "main/pages/AuthRepresentative" 
 import ListTransferAuthRepresentative from "main/pages/ListTransferAuthRepresentative" 
+import ChangeAuthRepresentatives from "main/pages/ListChangeAuthRepresentative" 
 import ChangeAuthRepresentative from "main/pages/ChangeAuthRepresentative" 
 import TransferAuthRepresentative from "main/pages/TransferAuthRepresentative" 
 import PendingAuthRepresentative from "main/pages/PendingAuthRepresentative" 
@@ -414,6 +417,7 @@ const Router = () => {
           <Route path="auth-representatives-pending" element={<PendingAuthRepresentative />}></Route>
           <Route path="transfer-auth-representatives" element={<ListTransferAuthRepresentative />}></Route>
           <Route path="change-auth-representative/:ar_user_id" element={<ChangeAuthRepresentative />}></Route>
+          <Route path="change-auth-representatives" element={<ChangeAuthRepresentatives />}></Route>
           <Route path="transfer-auth-representative/:ar_user_id" element={<TransferAuthRepresentative />}></Route>
           <Route path="auth-representatives" element={<AuthRepresentative />}></Route>
           
@@ -424,6 +428,8 @@ const Router = () => {
           <Route path="admin-complaint" element={<AdminComplaint />}></Route>
           <Route path="admin-audit-log" element={<AdminAuditLog />}></Route>
           <Route path="admin-broadcast" element={<AdminBroadcast />}></Route>
+          <Route path="admin-change-ar" element={<AdminChangeAR />}></Route>
+          <Route path="admin-transfer-ar" element={<AdminTransferAR />}></Route>
           <Route path="user-audit-log" element={<UserAuditLog />}></Route>
         </Route>
       </Routes>

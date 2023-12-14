@@ -40,6 +40,21 @@ const navData = [
         text: "Broadcast",
         link: "/admin-broadcast",
       },
+      {
+      icon: "tile-thumb-fill",
+      text: "Authorised Representative",
+      active: false,
+      subMenu: [
+          {
+            text: "Transfer AR",
+            link: "/admin-transfer-ar",
+          },
+          {
+            text: "Change Status",
+            link: "/admin-change-ar",
+          },
+        ],
+      },
     ],
   },
   {

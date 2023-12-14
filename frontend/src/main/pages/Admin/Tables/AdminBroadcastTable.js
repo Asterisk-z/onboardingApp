@@ -10,6 +10,8 @@ import { sendComplaintFeedback, updateComplaintStatus } from "redux/stores/compl
 import moment from "moment";
 import Icon from "components/icon/Icon";
 import { AiOutlineArrowRight } from "react-icons/ai";
+import Skeleton from 'react-loading-skeleton'
+import Countdown from 'react-countdown';
 
 const Export = ({ data }) => {
   const [modal, setModal] = useState(false);
@@ -323,14 +325,14 @@ const AdminBroadcastTable = ({ data, pagination, actions, className, selectableR
       },
       {
           name: "Category",
-          selector: (row) => { return (<>{`${row.category}`}</>) },
+          selector: (row) => { return (<>{`${row.category_obj.name}`}</>) },
           sortable: true,
           width: "auto",
           wrap: true
       },
       {
           name: "Position",
-          selector: (row) => { return (<>{`${row.position}`}</>) },
+          selector: (row) => { return (<>{`${row.position_obj.name}`}</>) },
           sortable: true,
           width: "auto",
           wrap: true
@@ -348,6 +350,10 @@ const AdminBroadcastTable = ({ data, pagination, actions, className, selectableR
   const [rowsPerPageS, setRowsPerPage] = useState(10);
   const [mobileView, setMobileView] = useState();
 
+  if (data != tableData) {
+    setTableData(data)
+  }
+  
   useEffect(() => {
     let defaultData = tableData;
     if (searchText !== "") {
@@ -378,6 +384,9 @@ const AdminBroadcastTable = ({ data, pagination, actions, className, selectableR
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+    // const renderer = ({ hours, minutes, seconds, completed }) => {
+    //         if (completed) {
+              
   return (
     <div className={`dataTables_wrapper dt-bootstrap4 no-footer ${className ? className : ""}`}>
       <Row className={`justify-between g-2 ${actions ? "with-export" : ""}`}>
@@ -449,6 +458,26 @@ const AdminBroadcastTable = ({ data, pagination, actions, className, selectableR
       ></DataTable>
     </div>
   );
+  
+    //         } else {
+
+    //             return (
+    //                     <>
+    //                         <Skeleton count={10} height={20}  style={{display: 'block',lineHeight: 2, padding: '1rem',width: 'auto',}}/>
+    //                     </>
+                        
+    //                 )
+    //         }
+    // };
+    
+    //       return (
+    //               <Countdown
+    //                 date={Date.now() + 5000}
+    //                 renderer={renderer}
+    //             />
+
+                
+    //         );
 };
 
 export default AdminBroadcastTable;

@@ -46,6 +46,7 @@ Route::get('/positions', [PositionController::class, 'index']);
 Route::get('/ar_roles', [RoleController::class, 'user_roles']);
 Route::get('/admin_roles', [RoleController::class, 'admin_roles']);
 Route::get('/categories', [MemberCategoryController::class, 'index']);
+Route::get('/category/{category}/positions', [MemberCategoryController::class, 'positions']);
 Route::get('/complaint-types', [ComplaintTypeController::class, 'index']);
 
 Route::middleware('auth')->group(function () {

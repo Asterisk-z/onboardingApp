@@ -40,6 +40,27 @@ const UserProvider = ({...props}) => {
       email: localStorage.getItem('user_mail'),
       firstName: localStorage.getItem('firstName'),
       user_data: json_user,
+      is_ar_inputter: function () {
+        return localStorage.getItem('role') == "ARINPUTER" ? true : false;
+      },
+      is_ar_authorizer: function () {
+        return localStorage.getItem('role') == "ARAUTHORISER" ? true : false;
+      },
+      is_admin_msg: function () {
+        return localStorage.getItem('role') == "MSG" ? true : false;
+      },
+      is_admin_meg: function () {
+        return localStorage.getItem('role') == "MEG" ? true : false;
+      },
+      is_admin_fsd: function () {
+        return localStorage.getItem('role') == "FSD" ? true : false;
+      },
+      is_admin_blg: function () {
+        return localStorage.getItem('role') == "MBG" ? true : false;
+      },
+      is_admin_blg: function () {
+        return localStorage.getItem('role') == "BLG" ? true : false;
+      },
     }
     
     const [user, setUser] = useState(defaultUser);
