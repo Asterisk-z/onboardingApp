@@ -45,14 +45,14 @@ const Complaint = ({ drawer }) => {
 
             if (resp.payload?.message == "success") {
                 setTimeout(() => {
-                  setLoading(false);
-                  setModalForm(!modalForm)
-                  resetField('complaint_type')
-                  resetField('body')
-                  resetField('document')
-                  setCounter(!counter)
+                    setLoading(false);
+                    setModalForm(!modalForm)
+                    resetField('complaint_type')
+                    resetField('body')
+                    resetField('document')
+                    setCounter(!counter)
+                    // window.location.reload(true)
                 }, 1000);
-            
             } else {
               setLoading(false);
             }
@@ -70,7 +70,7 @@ const Complaint = ({ drawer }) => {
     const complaints = useSelector((state) => state?.complaint?.list) || null;
     useEffect(() => {
         dispatch(loadAllComplaints());
-    }, [counter, dispatch]);
+    }, [dispatch, counter]);
   
     
     const $complaints = complaints ? JSON.parse(complaints) : null;

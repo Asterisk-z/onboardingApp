@@ -141,6 +141,10 @@ const AllActivities = ({ data, pagination, actions, className, selectableRows, e
   const [rowsPerPageS, setRowsPerPage] = useState(10);
   const [mobileView, setMobileView] = useState();
 
+  if (data != tableData) {
+    setTableData(data)
+  }
+  
   useEffect(() => {
     let defaultData = tableData;
     // console.log(searchText, defaultData)
@@ -173,8 +177,8 @@ const AllActivities = ({ data, pagination, actions, className, selectableRows, e
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const renderer = ({ hours, minutes, seconds, completed }) => {
-            if (completed) {
+    // const renderer = ({ hours, minutes, seconds, completed }) => {
+    //         if (completed) {
                   
   return (
     <div className={`dataTables_wrapper dt-bootstrap4 no-footer ${className ? className : ""}`}>
@@ -250,25 +254,25 @@ const AllActivities = ({ data, pagination, actions, className, selectableRows, e
     </div>
   );
   
-            } else {
+    //         } else {
 
-                return (
-                        <>
-                            <Skeleton count={10} height={20}  style={{display: 'block',lineHeight: 2, padding: '1rem',width: 'auto',}}/>
-                        </>
+    //             return (
+    //                     <>
+    //                         <Skeleton count={10} height={20}  style={{display: 'block',lineHeight: 2, padding: '1rem',width: 'auto',}}/>
+    //                     </>
                         
-                    )
-            }
-    };
+    //                 )
+    //         }
+    // };
     
-          return (
-                  <Countdown
-                    date={Date.now() + 5000}
-                    renderer={renderer}
-                />
+    //       return (
+    //               <Countdown
+    //                 date={Date.now() + 5000}
+    //                 renderer={renderer}
+    //             />
 
                 
-            );
+    //         );
 };
 
 export default AllActivities;

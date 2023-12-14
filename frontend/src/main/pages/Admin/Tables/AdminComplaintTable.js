@@ -136,10 +136,10 @@ const SendFeedback = (props) => {
                 formData.append('status', 'ONGOING');
                 const resp = dispatch(updateComplaintStatus(formData));
 
+                      console.log(props)
                 if (resp.payload?.message == "success") {
-                    setTimeout(() => {
-                        props.updateParentParent(Math.random())
-                    }, 1000);
+                    
+                    props.updateParentParent(Math.random())
                 
                 }
             }
@@ -162,9 +162,9 @@ const SendFeedback = (props) => {
                 const resp = dispatch(updateComplaintStatus(formData));
 
                 if (resp.payload?.message == "success") {
-                    setTimeout(() => {
+                    // setTimeout(() => {
                         props.updateParentParent(Math.random())
-                    }, 1000);
+                    // }, 1000);
                 
                 }
             }
@@ -353,6 +353,10 @@ const ComplaintTableUser = ({ data, pagination, actions, className, selectableRo
   const [rowsPerPageS, setRowsPerPage] = useState(10);
   const [mobileView, setMobileView] = useState();
 
+  if (data != tableData) {
+    setTableData(data)
+  }
+
   useEffect(() => {
     let defaultData = tableData;
     if (searchText !== "") {
@@ -383,8 +387,8 @@ const ComplaintTableUser = ({ data, pagination, actions, className, selectableRo
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const renderer = ({ hours, minutes, seconds, completed }) => {
-            if (completed) {
+    // const renderer = ({ hours, minutes, seconds, completed }) => {
+    //         if (completed) {
                       
               return (
                 <div className={`dataTables_wrapper dt-bootstrap4 no-footer ${className ? className : ""}`}>
@@ -458,25 +462,25 @@ const ComplaintTableUser = ({ data, pagination, actions, className, selectableRo
                 </div>
               );
   
-            } else {
+    //         } else {
 
-                return (
-                        <>
-                            <Skeleton count={10} height={20}  style={{display: 'block',lineHeight: 2, padding: '1rem',width: 'auto',}}/>
-                        </>
+    //             return (
+    //                     <>
+    //                         <Skeleton count={10} height={20}  style={{display: 'block',lineHeight: 2, padding: '1rem',width: 'auto',}}/>
+    //                     </>
                         
-                    )
-            }
-    };
+    //                 )
+    //         }
+    // };
     
-          return (
-                  <Countdown
-                    date={Date.now() + 5000}
-                    renderer={renderer}
-                />
+    //       return (
+    //               <Countdown
+    //                 date={Date.now() + 5000}
+    //                 renderer={renderer}
+    //             />
 
                 
-            );
+    //         );
 };
 
 export default ComplaintTableUser;

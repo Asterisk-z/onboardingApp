@@ -7,8 +7,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge,  Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label } from "reactstrap";
 import { DataTablePagination } from "components/Component";
-import { sendComplaintFeedback, updateComplaintStatus } from "redux/stores/complaints/complaint";
-import { userUpdateUserAR, userCancelUpdateUserAR, userProcessUpdateUserAR, userProcessTransferUserAR } from "redux/stores/authorize/representative";
+import { userProcessChangeStatusUserAR } from "redux/stores/authorize/representative";
 import moment from "moment";
 import Icon from "components/icon/Icon";
 import Swal from "sweetalert2";
@@ -81,136 +80,151 @@ const ActionTab = (props) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-  const askAction = async (action) => {
-    if(action == 'approve') {
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes, approve it!",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                
-                const formData = new FormData();
-                formData.append('user_id', ar_user.id);
-                formData.append('action', 'approve');
-                const resp = dispatch(userProcessTransferUserAR(formData));
+    const askAction = async (action) => {
+      if(action == 'approve') {
+          Swal.fire({
+              title: "Are you sure?",
+              text: "You won't be able to revert this!",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonText: "Yes, approve it!",
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  
+                  const formData = new FormData();
+                  formData.append('user_id', ar_user.id);
+                  formData.append('action', 'approve');
+                  const resp = dispatch(userProcessChangeStatusUserAR(formData));
 
-                if (resp.payload?.message == "success") {
-                    setTimeout(() => {
-                        props.updateParentParent(Math.random())
-                    }, 1000);
-                
-                }
-            }
-        });
-    }
-    
-    if(action == 'decline') {
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes, decline it!",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                
-                const formData = new FormData();
-                formData.append('user_id', ar_user.id);
-                formData.append('action', 'decline');
-                const resp = dispatch(userProcessTransferUserAR(formData));
+                  if (resp.payload?.message == "success") {
+                      setTimeout(() => {
+                          props.updateParentParent(Math.random())
+                      }, 1000);
+                  
+                  }
+              }
+          });
+      }
+      
+      if(action == 'decline') {
+          Swal.fire({
+              title: "Are you sure?",
+              text: "You won't be able to revert this!",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonText: "Yes, decline it!",
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  
+                  const formData = new FormData();
+                  formData.append('user_id', ar_user.id);
+                  formData.append('action', 'decline');
+                  const resp = dispatch(userProcessChangeStatusUserAR(formData));
 
-                if (resp.payload?.message == "success") {
-                    setTimeout(() => {
-                        props.updateParentParent(Math.random())
-                    }, 1000);
-                
-                }
-            }
-        });
-    }
-    
+                  if (resp.payload?.message == "success") {
+                      setTimeout(() => {
+                          props.updateParentParent(Math.random())
+                      }, 1000);
+                  
+                  }
+              }
+          });
+      }
+      
 
-  };
+    };
   
-  return (
-    <>
-        <div className="toggle-expand-content" style={{ display: "block" }}>
-            <ul className="nk-block-tools g-3">
-                 <li className="nk-block-tools-opt">
-                    <UncontrolledDropdown direction="right">
-                        <DropdownToggle className="dropdown-toggle btn btn-xs" color="secondary">Action</DropdownToggle>
+    return (
+      <>
+          <div className="toggle-expand-content" style={{ display: "block" }}>
+              <ul className="nk-block-tools g-3">
+                  <li className="nk-block-tools-opt">
+                      <UncontrolledDropdown direction="right">
+                          <DropdownToggle className="dropdown-toggle btn btn-xs" color="secondary">Action</DropdownToggle>
 
-                        <DropdownMenu>
-                            <ul className="link-list-opt">
-                        
-                                    {/* <li size="xs">
-                                        <DropdownItem tag="a" href="#links" onClick={toggleForm} >
-                                            <Icon name="eye"></Icon>
-                                            <span>View AR</span>
-                                        </DropdownItem>
-                                    </li>
-                                    
-                                
-                                    <li size="xs">
-                                        <DropdownItem tag="a" href="#links" onClick={toggleForm} >
-                                            <Icon name="eye"></Icon>
-                                            <span>View Update AR</span>
-                                        </DropdownItem>
-                                    </li> */}
-                                    <li size="xs">
-                                        <DropdownItem tag="a" href="#links" onClick={(e) => askAction('approve')} >
-                                            <Icon name="eye"></Icon>
-                                            <span>Approve</span>
-                                        </DropdownItem>
-                                    </li>
-                                    <li size="xs">
-                                        <DropdownItem tag="a" href="#links" onClick={(e) => askAction('decline')} >
-                                            <Icon name="eye"></Icon>
-                                            <span>Decline</span>
-                                        </DropdownItem>
-                                    </li>
-                                        
-                                    
-                                    
-                                    
-                                
-                            </ul>
-                        </DropdownMenu>
-                    </UncontrolledDropdown>
-                </li>
-                
+                          <DropdownMenu>
+                              <ul className="link-list-opt">
+                          
+                                      {/* <li size="xs">
+                                          <DropdownItem tag="a" href="#links" onClick={toggleForm} >
+                                              <Icon name="eye"></Icon>
+                                              <span>View AR</span>
+                                          </DropdownItem>
+                                      </li>
+                                      
+                                  
+                                      <li size="xs">
+                                          <DropdownItem tag="a" href="#links" onClick={toggleForm} >
+                                              <Icon name="eye"></Icon>
+                                              <span>View Update AR</span>
+                                          </DropdownItem>
+                                      </li> */}
+                                      <li size="xs">
+                                          <DropdownItem tag="a" href="#links" onClick={(e) => askAction('approve')} >
+                                              <Icon name="eye"></Icon>
+                                              <span>Approve</span>
+                                          </DropdownItem>
+                                      </li>
+                                      <li size="xs">
+                                          <DropdownItem tag="a" href="#links" onClick={(e) => askAction('decline')} >
+                                              <Icon name="eye"></Icon>
+                                              <span>Decline</span>
+                                          </DropdownItem>
+                                      </li>
+                                          
+                                      
+                                      
+                                      
+                                  
+                              </ul>
+                          </DropdownMenu>
+                      </UncontrolledDropdown>
+                  </li>
+                  
 
-            </ul>
-        </div>
-       
-    </>
+              </ul>
+          </div>
+        
+      </>
 
 
-  );
+    );
 };
 
-const TransferAuthRepTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState }) => {
+const ChangeStatusAuthRepTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState }) => {
+  // console.log(data)
     const authRepColumn = [
     {
         name: "UID",
         selector: (row) => row.id,
         sortable: true,
-        width: "150px",
+        width: "120px",
         wrap: true,
     },
     {
-        name: "Institution",
-        selector: (row) => (`${row.new_institution.category[0].name}`),
+        name: "Request Type",
+        selector: (row) => (`${row.request_type}`),
+        sortable: true,
+        width: "auto",
+        wrap: true,
+    },
+    {
+        name: "Request Reason",
+        selector: (row) => (`${row.request_reason}`),
         sortable: true,
         width: "auto",
         wrap: true,
     },
     {
         name: "Email",
-        selector: (row) => (`${row.ar.email}`),
+        selector: (row) => {return (<><p>{`${row.ar.firstName} ${row.ar.lastName}`}<br/>{`${row.ar.email}`}</p></>)},
+        sortable: true,
+        width: "auto",
+        wrap: true,
+    },
+    {
+        name: "Institution",
+        selector: (row) => {return (<><p>{`${row.ar.institution.category[0].name} `}</p></>)},
         sortable: true,
         width: "auto",
         wrap: true,
@@ -220,14 +234,7 @@ const TransferAuthRepTable = ({ data, pagination, actions, className, selectable
         selector: (row) => { return (<><Badge color="success">{`${row.approval_status}`}</Badge></>) },
         sortable: true,
         width: "auto",
-        wrap: true,
-    },
-    {
-        name: "Role",
-        selector: (row) => { return (<><Badge color="success">{`${row.ar.role.name}`}</Badge></>) },
-        sortable: true,
-        width: "auto",
-        wrap: true,
+        wrap: true
     },
     {
         name: "Date Created",
@@ -241,7 +248,7 @@ const TransferAuthRepTable = ({ data, pagination, actions, className, selectable
         selector: (row) => (<>
                         <ActionTab ar_user={row} updateParentParent={updateParent} />
                     </>),
-        width: "18%",
+        width: "auto",
     },
     ];
   const [tableData, setTableData] = useState(data);
@@ -380,4 +387,4 @@ const TransferAuthRepTable = ({ data, pagination, actions, className, selectable
 
 };
 
-export default TransferAuthRepTable;
+export default ChangeStatusAuthRepTable;

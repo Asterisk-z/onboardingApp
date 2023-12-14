@@ -199,7 +199,10 @@ const ComplaintTableUser = ({ data, pagination, actions, className, selectableRo
   const [searchText, setSearchText] = useState("");
   const [rowsPerPageS, setRowsPerPage] = useState(10);
   const [mobileView, setMobileView] = useState();
-
+  
+  if (data != tableData) {
+    setTableData(data)
+  }
   useEffect(() => {
     let defaultData = tableData;
     if (searchText !== "") {
@@ -230,8 +233,8 @@ const ComplaintTableUser = ({ data, pagination, actions, className, selectableRo
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const renderer = ({ hours, minutes, seconds, completed }) => {
-            if (completed) {
+    // const renderer = ({ hours, minutes, seconds, completed }) => {
+    //         if (completed) {
                 return (
                     <div className={`dataTables_wrapper dt-bootstrap4 no-footer ${className ? className : ""}`}>
                     <Row className={`justify g-2 ${actions ? "with-export" : ""}`}>
@@ -304,25 +307,25 @@ const ComplaintTableUser = ({ data, pagination, actions, className, selectableRo
                     ></DataTable>
                     </div>
                 );
-            } else {
+    //         } else {
 
-                return (
-                        <>
-                            <Skeleton count={10} height={20}  style={{display: 'block',lineHeight: 2, padding: '1rem',width: 'auto',}}/>
-                        </>
+    //             return (
+    //                     <>
+    //                         <Skeleton count={10} height={20}  style={{display: 'block',lineHeight: 2, padding: '1rem',width: 'auto',}}/>
+    //                     </>
                         
-                    )
-            }
-    };
+    //                 )
+    //         }
+    // };
     
-          return (
-                  <Countdown
-                    date={Date.now() + 5000}
-                    renderer={renderer}
-                />
+    //       return (
+    //               <Countdown
+    //                 date={Date.now() + 5000}
+    //                 renderer={renderer}
+    //             />
 
                 
-            );
+    //         );
 };
 
 export default ComplaintTableUser;

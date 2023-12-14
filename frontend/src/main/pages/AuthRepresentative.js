@@ -12,10 +12,13 @@ import { loadAllActiveAuthoriser } from "redux/stores/users/userStore";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
 import AuthRepTable from './Tables/AuthRepTable'
+import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 
 
 const AuthRepresentative = ({ drawer }) => {
         
+    const authUser = useUser();
+    const authUserUpdate = useUserUpdate();
     const [counter, setCounter] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -82,7 +85,7 @@ const AuthRepresentative = ({ drawer }) => {
 
     }; 
 
-
+    console.log(authUser.is_ar_inputter())
     const $countries = countries ? JSON.parse(countries) : null;
     const $roles = roles ? JSON.parse(roles) : null;
     const $positions = positions ? JSON.parse(positions) : null;
@@ -108,21 +111,30 @@ const AuthRepresentative = ({ drawer }) => {
                             <div className="toggle-wrap nk-block-tools-toggle">
                                 <div className="toggle-expand-content" style={{ display: sm ? "block" : "none" }}>
                                     <ul className="nk-block-tools g-3">
-                                        <li className="nk-block-tools-opt">
-                                            <Button color="primary">
-                                                <span onClick={toggleForm}>Create AR</span>
-                                            </Button>
-                                        </li>
-                                        <li className="nk-block-tools-opt">
-                                            <Button color="primary" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/transfer-auth-representatives`)}>
-                                                <span>Transfer AR</span>
-                                            </Button>
-                                        </li>
-                                        <li className="nk-block-tools-opt">
-                                            <Button color="primary" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/change-auth-representatives`)}>
-                                                <span>Status AR</span>
-                                            </Button>
-                                        </li>
+                                        {authUser.is_ar_inputter() && <>
+                                             <li className="nk-block-tools-opt">
+                                                <Button color="primary">
+                                                    <span onClick={toggleForm}>Create AR</span>
+                                                </Button>
+                                            </li>
+                                        </>}
+                                        {authUser.is_ar_authorizer() && <>
+                                            <li className="nk-block-tools-opt">
+                                                <Button color="primary" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/transfer-auth-representatives`)}>
+                                                    <span>Transfer AR</span>
+                                                </Button>
+                                            </li>
+                                            <li className="nk-block-tools-opt">
+                                                <Button color="primary" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/change-auth-representatives`)}>
+                                                    <span>Status AR</span>
+                                                </Button>
+                                            </li>
+                                            <li className="nk-block-tools-opt">
+                                                <Button color="primary" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/auth-representatives-pending`)}>
+                                                    <span>Pending AR</span>
+                                                </Button>
+                                            </li>
+                                         </>}
                                     </ul> 
                                 </div>
                             </div>
@@ -266,17 +278,6 @@ const AuthRepresentative = ({ drawer }) => {
                                         {/* <BlockTitle tag="h4">List</BlockTitle> */}
                                         {/* <p>{authorize_reps}</p> */}
                                         {/* {<p>{parentState}</p>} */}
-                                        <div className="toggle-wrap nk-block-tools-toggle">
-                                            <div className="toggle-expand-content" style={{ display: sm ? "block" : "none" }}>
-                                                <ul className="nk-block-tools g-3">
-                                                    <li className="nk-block-tools-opt">
-                                                        <Button color="primary">
-                                                            <span onClick={(ev) => navigate(`${process.env.PUBLIC_URL}/auth-representatives-pending`)}>Pending Authorised Representative</span>
-                                                        </Button>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
                                     </BlockHeadContent>
                                 </BlockHead>
 
