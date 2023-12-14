@@ -75,7 +75,6 @@ class UsersController extends Controller
 
         // //////////////////////////////////////////////////////////////
         $institution = Institution::create();
-        $position = Position::first();
 
         InstitutionMembership::create([
             'institution_id' => $institution->id,
@@ -93,7 +92,7 @@ class UsersController extends Controller
             'approval_status' => 'approved',
             'role_id' => Role::ARINPUTTER,
             'institution_id' => $institution->id,
-            'position_id' => $position ? $position->id : null,
+            'position_id' => $request->input('position'),
             'img' => $request->hasFile('img') ? $request->file('img')->storePublicly('users', 'public') : null,
             'verified_at' => now()
         ]);

@@ -31,6 +31,7 @@ class RegistrationRequest extends FormRequest
             'middleName' => 'nullable|string',
             'nationality' => 'required|exists:nationalities,code',
             'category' => 'required|exists:membership_categories,id',
+            'position' => 'required|exists:positions,id',
             'email' => [
                 'email',
                 'required',
