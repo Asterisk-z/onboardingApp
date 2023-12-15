@@ -11,7 +11,8 @@ export const registerUser = createAsyncThunk(
         method: "post",
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json;charset=UTF-8",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
         },
         url: `auth/register`,
         data: values,

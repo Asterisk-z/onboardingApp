@@ -55,6 +55,25 @@ const navData = [
           },
         ],
       },
+      {
+      icon: "tile-thumb-fill",
+      text: "Settings",
+      active: false,
+      subMenu: [
+          {
+            text: "Complaint Type",
+            link: "/admin-complaint-type",
+          },
+          {
+            text: "Member Category",
+            link: "/admin-categories",
+          },
+          {
+            text: "Positions",
+            link: "/admin-positions",
+          },
+        ],
+      },
     ],
   },
   {

@@ -38,6 +38,8 @@ const AuthRepresentative = ({ drawer }) => {
     const ar_search_result = useSelector((state) => state?.arUsers?.search_list) || null;
 
     const { register, handleSubmit, formState: { errors }, resetField, getValues } = useForm();
+    const [document, setDocument] = useState([]);
+    const [signatureMandate, setSignatureMandate] = useState([]);
 
     const toggleForm = () => setModalForm(!modalForm);
     const toggleModelForSearch = () => setModelForSearchAR(!modelForSearchAR);
@@ -68,11 +70,14 @@ const AuthRepresentative = ({ drawer }) => {
         const formData = new FormData();
         formData.append('first_name', values.firstName)
         formData.append('last_name', values.lastName)
+        formData.append('middle_name', values.middleName)
         formData.append('position_id', values.position_id)
         formData.append('nationality', values.nationality)
         formData.append('role_id', values.role)
         formData.append('email', values.email)
         formData.append('phone', values.phone)
+        formData.append('img', values.digitalPhone[0])
+        formData.append('mandate_form', values.signedMandate[0])
         
         try {
             setLoading(true);
@@ -131,6 +136,12 @@ const AuthRepresentative = ({ drawer }) => {
     // if ($ar_search_result.length > 0) {
     //     setModelForSearchAR(true);
     // } 
+    const handleDificalFileChange = (event) => {
+		  setDocument(event.target.files[0]);
+    };
+    const handleSignaturewChange = (event) => {
+		  setSignatureMandate(event.target.files[0]);
+    };
 
     return (
         <React.Fragment>
@@ -150,7 +161,7 @@ const AuthRepresentative = ({ drawer }) => {
                                         {authUser.is_ar_inputter() && <>
                                              <li className="nk-block-tools-opt">
                                                 <Button color="primary">
-                                                    <span onClick={toggleForm}>Create AR</span>
+                                                    <span onClick={toggleForm}>Add New AR</span>
                                                 </Button>
                                             </li>
                                         </>}
@@ -258,6 +269,17 @@ const AuthRepresentative = ({ drawer }) => {
                             <Row className="gy-4">
                                 <Col sm="6">
                                     <div className="form-group">
+                                        <Label htmlFor="lastName" className="form-label">
+                                            Surname
+                                        </Label>
+                                        <div className="form-control-wrap">
+                                            <input className="form-control" type="text" id="lastName" placeholder="Enter Last Name"  {...register('lastName', { required: "Last Name is Required" })} onKeyUp={searchArFromFirstNameAndLastName}/>
+                                            {errors.lastName && <p className="invalid">{`${errors.lastName.message}`}</p>}
+                                        </div>
+                                    </div>
+                                </Col>
+                                <Col sm="6">
+                                    <div className="form-group">
                                         <Label htmlFor="firstName" className="form-label">
                                             First Name
                                         </Label>
@@ -269,12 +291,32 @@ const AuthRepresentative = ({ drawer }) => {
                                 </Col>
                                 <Col sm="6">
                                     <div className="form-group">
-                                        <Label htmlFor="lastName" className="form-label">
-                                            Last Name
+                                        <Label htmlFor="firstName" className="form-label">
+                                            Middle Name
                                         </Label>
                                         <div className="form-control-wrap">
-                                            <input className="form-control" type="text" id="lastName" placeholder="Enter Last Name"  {...register('lastName', { required: "Last Name is Required" })} onKeyUp={searchArFromFirstNameAndLastName}/>
-                                            {errors.lastName && <p className="invalid">{`${errors.lastName.message}`}</p>}
+                                            <input className="form-control" type="text" id="middleName" placeholder="Enter Middle Name" {...register('middleName', { required: false })} />
+                                            {errors.middleName && <p className="invalid">{`${errors.middleName.message}`}</p>}
+                                        </div>
+                                    </div>
+                                </Col>
+                                <Col sm="6">
+                                    <div className="form-group">
+                                        <Label htmlFor="nationality" className="form-label">
+                                            Nationality
+                                        </Label>
+                                        <div className="form-control-wrap">
+                                            <div className="form-control-select">
+                                                <select className="form-control form-select" {...register('nationality', { required: "Nationality is Required" })}>
+                                                    <option value="">Select Nationality</option>
+                                                    {$countries && $countries?.map((country, index) => (
+                                                        <option key={index} value={country.code}>
+                                                            {country.name}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                                {errors.nationality && <p className="invalid">{`${errors.nationality.message}`}</p>}
+                                            </div>
                                         </div>
                                     </div>
                                 </Col>
@@ -302,13 +344,24 @@ const AuthRepresentative = ({ drawer }) => {
                                 </Col>
                                 <Col sm="6">
                                     <div className="form-group">
+                                        <Label htmlFor="email" className="form-label">
+                                            Group Email Address
+                                        </Label>
+                                        <div className="form-control-wrap">
+                                            <input className="form-control" type="email" id="group_email" placeholder="Enter Group Email Address" {...register('group_email', { required: "Group Email Address is Required" })}/>
+                                            {errors.group_email && <p className="invalid">{`${errors.group_email.message}`}</p>}
+                                        </div>
+                                    </div>
+                                </Col>
+                                <Col sm="6">
+                                    <div className="form-group">
                                         <Label htmlFor="position_id" className="form-label">
                                             Category
                                         </Label>
                                         <div className="form-control-wrap">
                                             <div className="form-control-select">
                                                 <select className="form-control form-select" {...register('category_type', { required: "Position is Required" })}  onChange={updatePosition}>
-                                                    <option value="">Select Caetory</option>
+                                                    <option value="">Select Category</option>
                                                     {categories && categories?.map((category, index) => (
                                                         <option key={index} value={category.id}>
                                                             {category.name}
@@ -343,26 +396,6 @@ const AuthRepresentative = ({ drawer }) => {
                                 <Col sm="6">
                                     <div className="form-group">
                                         <Label htmlFor="nationality" className="form-label">
-                                            Nationality
-                                        </Label>
-                                        <div className="form-control-wrap">
-                                            <div className="form-control-select">
-                                                <select className="form-control form-select" {...register('nationality', { required: "Nationality is Required" })}>
-                                                    <option value="">Select Nationality</option>
-                                                    {$countries && $countries?.map((country, index) => (
-                                                        <option key={index} value={country.code}>
-                                                            {country.name}
-                                                        </option>
-                                                    ))}
-                                                </select>
-                                                {errors.nationality && <p className="invalid">{`${errors.nationality.message}`}</p>}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Col>
-                                <Col sm="6">
-                                    <div className="form-group">
-                                        <Label htmlFor="nationality" className="form-label">
                                             Role
                                         </Label>
                                         <div className="form-control-wrap">
@@ -371,7 +404,7 @@ const AuthRepresentative = ({ drawer }) => {
                                                     <option value="">Select Role</option>
                                                     {$roles && $roles?.map((role, index) => (
                                                         <option key={index} value={role.id}>
-                                                        {role.name}
+                                                            {role.name}
                                                         </option>
                                                     ))}
                                                 </select>
@@ -380,8 +413,38 @@ const AuthRepresentative = ({ drawer }) => {
                                         </div>
                                     </div>
                                 </Col>
+                                <Col sm="6">
+                                    <div className="form-group">
+                                        <Label htmlFor="nationality" className="form-label">
+                                            Digital Photo
+                                        </Label>
+                                        <div className="form-control-wrap">
+                                             <input type="file" accept=".gif,.jpg,.jpeg,.png,.pdf" className="form-control"  {...register('digitalPhone', {  required: "Digital Photo is Required" })} onChange={handleDificalFileChange}/>
+                                            {errors.digitalPhone && <p className="invalid">{`${errors.digitalPhone.message}`}</p>}
+                                        </div>
+                                    </div>
+                                </Col>
+                                <Col sm="6">
+                                    <div className="form-group">
+                                        <Label htmlFor="nationality" className="form-label">
+                                            Signed Signature Mandate
+                                        </Label>
+                                        <div className="form-control-wrap">
+                                             <input type="file" accept=".gif,.jpg,.jpeg,.png,.pdf" className="form-control"  {...register('signedMandate', {  required: "Signed Mandate is Required" })} onChange={handleSignaturewChange}/>
+                                            {errors.signedMandate && <p className="invalid">{`${errors.signedMandate.message}`}</p>}
+                                        </div>
+                                    </div>
+                                </Col>
                                 <Col sm="12">
                                     <div className="form-group">
+                                        
+                                        <Button color="primary"  size="lg">
+                                            {"Download Signature Mandate"}
+                                        </Button>
+                                    </div>
+                                </Col>
+                                <Col sm="12">
+                                    <div className="form-group float-right">
                                         <Button color="primary" type="submit"  size="lg">
                                             {loading ? ( <span><Spinner size="sm" color="light" /> Processing...</span>) : "Create"}
                                         </Button>

@@ -432,6 +432,12 @@ const Router = () => {
           <Route path="admin-list-ar" element={<AdminListAR />}></Route>
           <Route path="admin-transfer-ar" element={<AdminTransferAR />}></Route>
           <Route path="user-audit-log" element={<UserAuditLog />}></Route>
+          {/* <Route path="admin-complaint-type" element={<AdminComplaintType />}></Route>
+          <Route path="admin-categories" element={<AdminCategories />}></Route>
+          <Route path="admin-positions" element={<AdminPosition />}></Route> */}
+          
+
+
         </Route>
       </Routes>
   );

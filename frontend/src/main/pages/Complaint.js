@@ -37,7 +37,7 @@ const Complaint = ({ drawer }) => {
         formData.append('complaint_type', values.complaint_type)
         formData.append('body', values.body)
         formData.append('document', complainFile)
-        
+        // console.log(complainFile)
         try {
             setLoading(true);
             
