@@ -63,7 +63,6 @@ class ARController extends Controller
 
     public function search(SearchARRequest $request)
     {
-
         $users = User::where('first_name', $request->first_name)
             ->where('last_name', $request->last_name)
             ->get();
