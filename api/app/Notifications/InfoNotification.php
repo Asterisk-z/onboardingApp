@@ -21,7 +21,7 @@ class InfoNotification extends Notification implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($message, $subject = "Info", $cc = [], $attachment = null)
+    public function __construct($message, $subject = "Info", $cc = [], $attachment = [])
     {
         $this->message = $message;
         $this->subject = $subject;
@@ -54,7 +54,18 @@ class InfoNotification extends Notification implements ShouldQueue
         $mail = (new MailMessage)
             ->subject(config('app.name') . " - " . $this->subject)
             ->view('mails.info', compact('user', 'info'));
-        return ($this->cc) ? $mail->cc($this->cc) : $mail;
+
+        if($this->cc){
+            $mail = $mail->cc($this->cc);
+        }
+
+        if($this->attachment){
+            $mail = $mail->attach($this->attachment['saved_path'], [
+                'as' => $this->attachment['name'],
+            ]);
+        }
+
+        return $mail;
     }
 
     /**
