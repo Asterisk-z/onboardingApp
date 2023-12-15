@@ -88,4 +88,18 @@ class Utility
         return User::where('role_id', $category)->pluck('email')->toArray();
     }
 
+    public static function saveFile($path, $file){
+        if(! $file || !$path)
+            return [];
+
+        $path = $file->storeAs($path, $file->getClientOriginalName(), 'public');
+        $filename = $file->getClientOriginalName();
+
+        return [
+            "name" => $filename,
+            "path" => $path,
+            "saved_path" => config('app.url') .'/storage/'.$path
+        ];
+    }
+
 }
