@@ -137,7 +137,7 @@ const Homepage = () => {
             </BlockHead>
 
             <PreviewCard>
-              {$arUsers && <AuthRepTable data={$arUsers} expandableRows pagination actions />}
+              {/* {$arUsers && <AuthRepTable data={$arUsers} expandableRows pagination actions />} */}
             </PreviewCard>
           </Block>
 

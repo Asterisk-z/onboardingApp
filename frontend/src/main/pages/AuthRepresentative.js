@@ -74,6 +74,7 @@ const AuthRepresentative = ({ drawer }) => {
         formData.append('position_id', values.position_id)
         formData.append('nationality', values.nationality)
         formData.append('role_id', values.role)
+        formData.append('group_email', values.group_email)
         formData.append('email', values.email)
         formData.append('phone', values.phone)
         formData.append('img', values.digitalPhone[0])
@@ -344,7 +345,7 @@ const AuthRepresentative = ({ drawer }) => {
                                 </Col>
                                 <Col sm="6">
                                     <div className="form-group">
-                                        <Label htmlFor="email" className="form-label">
+                                        <Label htmlFor="group_email" className="form-label">
                                             Group Email Address
                                         </Label>
                                         <div className="form-control-wrap">
