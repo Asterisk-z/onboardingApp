@@ -125,7 +125,7 @@ const AdminBroadcast = ({ drawer }) => {
                                     <ul className="nk-block-tools g-3">
                                         <li className="nk-block-tools-opt">
                                             <Button color="primary">
-                                                <span onClick={handleAdd}>Add Broadcast</span>
+                                                <span onClick={handleAdd}>Add New Broadcast</span>
                                             </Button>
                                         </li>
                                     </ul>
@@ -134,105 +134,7 @@ const AdminBroadcast = ({ drawer }) => {
                         </BlockHeadContent>
                     </BlockBetween>
                 </BlockHead>
-                <Modal isOpen={modalForm} toggle={toggleForm} size="lg">
-                    <ModalHeader toggle={toggleForm} close={
-                            <button className="close" onClick={toggleForm}>
-                                <Icon name="cross" />
-                            </button>
-                        }
-                    >
-                        Create Broadcast
-                    </ModalHeader>
-                    <ModalBody>
-                        <form  onSubmit={handleSubmit(handleFormSubmit)}  className="is-alter" encType="multipart/form-data">
-                            <Row  className="gy-4">
-                                <Col sm="12">
-                                    <div className="form-group">
-                                        <label className="form-label" htmlFor="phone-no">
-                                            Title
-                                        </label>
-                                        <div className="form-control-wrap">
-                                            <input type="text" className="form-control"  {...register('title', {  required: "content is Required" })} />
-                                            {errors.title && <p className="invalid">{`${errors.title.message}`}</p>}
-                                        </div>
-                                    </div>
-                                </Col>
-                                <Col sm="12">
-                                    <div className="form-group">
-                                        <label className="form-label" htmlFor="email">
-                                            Content
-                                        </label>
-                                        <div className="form-control-wrap">
-                                            <textarea type="text" className="form-control" {...register('content', { required: "content is Required" })}></textarea>
-                                            {errors.content && <p className="invalid">{`${errors.content.message}`}</p>}
-                                        </div>
-                                    </div>
-                                </Col>
-                                <Col sm="12">
-                                    <div className="form-group">
-                                        <label className="form-label" htmlFor="phone-no">
-                                            Upload Document (*jpg, png)
-                                        </label>
-                                        <div className="form-control-wrap">
-                                            <input type="file" accept="image/*" className="form-control"  {...register('document', { })} onChange={handleFileChange}/>
-                                            {errors.document && <p className="invalid">{`${errors.document.message}`}</p>}
-                                        </div>
-                                    </div>
-                                </Col>
-                                <Col sm="6">
-                                    <div className="form-group">
-                                        <label className="form-label" htmlFor="full-name">
-                                            Category
-                                        </label>
-                                        <div className="form-control-wrap">
-                                            <div className="form-control-select">
-                                                <select className="form-control form-select"  style={{ color: "black !important" }} {...register('category_type', { required: "Type is Required" })} onChange={updatePosition}>
-                                                <option value="">Select Type</option>
-                                                {$categories && $categories?.map((category) => (
-                                                    <option key={category.id} value={category.id}>
-                                                        {category.name}
-                                                    </option>
-                                                ))}
-                                                </select>
-                                                {errors.category_type && <p className="invalid">{`${errors.category_type.message}`}</p>}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Col>
-                                <Col sm="6">
-                                    <div className="form-group">
-                                        <label className="form-label" htmlFor="full-name">
-                                            Position Type
-                                        </label>
-                                        <div className="form-control-wrap">
-                                            <div className="form-control-select">
-                                                <select className="form-control form-select"  style={{ color: "black !important" }} {...register('position_type', { required: "Type is Required" })}>
-                                                <option value="">Select Type</option>
-                                                {$positions && $positions?.map((position) => (
-                                                    <option key={position.id} value={position.id}>
-                                                        {position.name}
-                                                    </option>
-                                                ))}
-                                                </select>
-                                                {errors.position_type && <p className="invalid">{`${errors.position_type.message}`}</p>}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </Col>
-                                <Col sm="12">
-                                    <div className="form-group">
-                                        <Button color="primary" type="submit"  size="lg">
-                                            {loading ? ( <span><Spinner size="sm" color="light" /> Processing...</span>) : "Send Broadcast"}
-                                        </Button>
-                                    </div>
-                                </Col>
-                            </Row>
-                        </form>
-                    </ModalBody>
-                    <ModalFooter className="bg-light">
-                        <span className="sub-text">Broadcast</span>
-                    </ModalFooter>
-                </Modal>
+                
                 <Block size="lg">
                     <Card className="card-bordered card-preview">
                 <Content>
