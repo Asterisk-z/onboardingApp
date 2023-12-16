@@ -23,7 +23,7 @@ const TransferAuthRepresentative = ({ drawer }) => {
     const categories = authUser.user_data.institution.category ? authUser.user_data.institution.category : [];
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [categoryId, setCategoryId] = useState(authUser.user_data.institution.category[0].id);
+    const [categoryIds, setCategoryIds] = useState([authUser.user_data.institution.category[0].id]);
     const [loading, setLoading] = useState(false);
     const [sm, updateSm] = useState(false);
     const [parentState, setParentState] = useState('Initial state');
@@ -46,8 +46,8 @@ const TransferAuthRepresentative = ({ drawer }) => {
     }, [dispatch, parentState]);
 
     useEffect(() => {
-        dispatch(loadAllCategoryPositions({'category_id' : categoryId}));
-    }, [categoryId]);
+        dispatch(loadAllCategoryPositions({'category_ids' : categoryIds}));
+    }, [categoryIds]);
 
     const $countries = countries ? JSON.parse(countries) : null;
     const $roles = roles ? JSON.parse(roles) : null;
@@ -113,7 +113,7 @@ const TransferAuthRepresentative = ({ drawer }) => {
      
     const updatePosition = (event) => {
         if (event.target.value) {
-            setCategoryId(event.target.value)
+            setCategoryIds([event.target.value])
         }
     }
 

@@ -17,7 +17,7 @@ const AdminBroadcast = ({ drawer }) => {
     const [counter, setCounter] = useState(false);
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
-    const [categoryId, setCategoryId] = useState(1);
+    const [categoryIds, setCategoryIds] = useState([1]);
     const [documentToUpload, setDocumentToUpload] = useState([]);
     const [sm, updateSm] = useState(false);
     const [modalForm, setModalForm] = useState(false);
@@ -37,8 +37,8 @@ const AdminBroadcast = ({ drawer }) => {
     }, [dispatch]);
 
     useEffect(() => {
-        dispatch(loadAllCategoryPositions({'category_id' : categoryId}));
-    }, [categoryId]);
+        dispatch(loadAllCategoryPositions({'category_ids' : categoryIds}));
+    }, [categoryIds]);
 
     const $positions = positions ? JSON.parse(positions) : null;
     const $categories = categories ? JSON.parse(categories) : null;
@@ -103,7 +103,7 @@ const AdminBroadcast = ({ drawer }) => {
 
     const updatePosition = (event) => {
         if (event.target.value) {
-            setCategoryId(event.target.value)
+            setCategoryIds([event.target.value])
         }
     }
 

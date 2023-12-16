@@ -22,7 +22,7 @@ const AuthRepresentative = ({ drawer }) => {
     const categories = authUser.user_data.institution.category ? authUser.user_data.institution.category : [];
     const [counter, setCounter] = useState(false);
     const dispatch = useDispatch();
-    const [categoryId, setCategoryId] = useState(authUser.user_data.institution.category[0].id);
+    const [categoryIds, setCategoryIds] = useState([authUser.user_data.institution.category[0].id]);
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [sm, updateSm] = useState(false);
@@ -52,8 +52,8 @@ const AuthRepresentative = ({ drawer }) => {
     }, [dispatch, parentState]);
    
     useEffect(() => {
-        dispatch(loadAllCategoryPositions({'category_id' : categoryId}));
-    }, [categoryId]);
+        dispatch(loadAllCategoryPositions({'category_ids' : categoryIds}));
+    }, [categoryIds]);
 
     
     useEffect(() => {
@@ -123,7 +123,7 @@ const AuthRepresentative = ({ drawer }) => {
     
     const updatePosition = (event) => {
         if (event.target.value) {
-            setCategoryId(event.target.value)
+            setCategoryIds([event.target.value])
         }
     }
     

@@ -79,7 +79,7 @@ const ActionTab = (props) => {
     const categories = aUser.user_data.institution.category ? aUser.user_data.institution.category : [];
     const user_id = props.ar_user.id
     const ar_user = props.ar_user
-    const [categoryId, setCategoryId] = useState(aUser.user_data.institution.category[0].id);
+    const [categoryIds, setCategoryIds] = useState([aUser.user_data.institution.category[0].id]);
     const $positions = props.positions
     const $countries = props.countries
     const $roles = props.roles
@@ -160,8 +160,8 @@ const ActionTab = (props) => {
     });
 
     useEffect(() => {
-        dispatch(loadAllCategoryPositions({'category_id' : categoryId}));
-    }, [categoryId]);
+        dispatch(loadAllCategoryPositions({'category_ids' : categoryIds}));
+    }, [categoryIds]);
         
     const askAction = async (action) => {
         if(action == 'approve') {
@@ -242,7 +242,7 @@ const ActionTab = (props) => {
   
     const updatePosition = (event) => {
         if (event.target.value) {
-            setCategoryId(event.target.value)
+            setCategoryIds([event.target.value])
         }
     }
     const handleDificalFileChange = (event) => {
