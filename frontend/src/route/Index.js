@@ -162,6 +162,7 @@ import TransferAuthRepresentative from "main/pages/TransferAuthRepresentative"
 import PendingAuthRepresentative from "main/pages/PendingAuthRepresentative" 
 
 import AdminAuditLog from "main/pages/Admin/AdminAuditLog" 
+import AddBroadcast from "main/pages/Admin/AddBroadcast";
 import UserAuditLog from "main/pages/Admin/AuditLog" 
 import Success from "pages/auth/Success";
 
@@ -432,6 +433,7 @@ const Router = () => {
           <Route path="admin-list-ar" element={<AdminListAR />}></Route>
           <Route path="admin-transfer-ar" element={<AdminTransferAR />}></Route>
           <Route path="user-audit-log" element={<UserAuditLog />}></Route>
+          <Route path="add-broadcast" element={<AddBroadcast />}></Route>
           {/* <Route path="admin-complaint-type" element={<AdminComplaintType />}></Route>
           <Route path="admin-categories" element={<AdminCategories />}></Route>
           <Route path="admin-positions" element={<AdminPosition />}></Route> */}

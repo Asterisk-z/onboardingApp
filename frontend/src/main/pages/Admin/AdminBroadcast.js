@@ -12,7 +12,6 @@ import Head from "layout/head/Head";
 import AdminBroadcastTable from './Tables/AdminBroadcastTable'
 
 
-
 const AdminBroadcast = ({ drawer }) => {
         
     const [counter, setCounter] = useState(false);
@@ -22,11 +21,14 @@ const AdminBroadcast = ({ drawer }) => {
     const [documentToUpload, setDocumentToUpload] = useState([]);
     const [sm, updateSm] = useState(false);
     const [modalForm, setModalForm] = useState(false);
+    const navigate = useNavigate();
 
     const positions = useSelector((state) => state?.position?.list) || null;
     const categories = useSelector((state) => state?.category?.list) || null;
 
     const { register, handleSubmit, formState: { errors }, resetField } = useForm();
+
+    const handleAdd = () => navigate(process.env.PUBLIC_URL+'/add-broadcast');
 
     const toggleForm = () => setModalForm(!modalForm);
 
@@ -123,7 +125,7 @@ const AdminBroadcast = ({ drawer }) => {
                                     <ul className="nk-block-tools g-3">
                                         <li className="nk-block-tools-opt">
                                             <Button color="primary">
-                                                <span onClick={toggleForm}>Add Broadcast</span>
+                                                <span onClick={handleAdd}>Add Broadcast</span>
                                             </Button>
                                         </li>
                                     </ul>

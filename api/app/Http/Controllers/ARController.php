@@ -25,8 +25,6 @@ use Illuminate\Support\Facades\Notification;
 
 class ARController extends Controller
 {
-
-
     public function listMEG(Request $request)
     {
         $query = User::whereNotNull('institution_id');
@@ -56,6 +54,8 @@ class ARController extends Controller
             $query = $query->where('role_id', $request->role_id);
         }
 
+        $query = $query->whereNotNull('update_payload');
+
         $users = $query->latest()->get();
 
         return successResponse('Successful', UserResource::collection($users));
@@ -63,7 +63,6 @@ class ARController extends Controller
 
     public function search(SearchARRequest $request)
     {
-
         $users = User::where('first_name', $request->first_name)
             ->where('last_name', $request->last_name)
             ->get();

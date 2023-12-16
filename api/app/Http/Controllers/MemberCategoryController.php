@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Utility;
+use App\Http\Requests\CategoryRequest;
 use App\Http\Requests\Settings\AddCategoryRequest;
 use App\Models\MembershipCategory;
+use App\Models\MembershipCategoryPostition;
+use App\Models\Position;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class MemberCategoryController extends Controller
 {
@@ -25,9 +29,12 @@ class MemberCategoryController extends Controller
 
     }
 
-    public function positions(MembershipCategory $category): JsonResponse
+    public function positions(CategoryRequest $request): JsonResponse
     {
-        return successResponse('Here you go', $category->positions);
+        $position_ids = MembershipCategoryPostition::whereIn('category_id', $request->category_ids)->pluck('position_id');
+        $positions = Position::whereIn('id', $position_ids)->get();
+
+        return successResponse('Here you go', $positions);
     }
     /**
      * Display a listing of the resource.
