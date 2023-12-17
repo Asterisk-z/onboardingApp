@@ -150,6 +150,7 @@ import PasswordUpdate from "main/auth/PasswordUpdate";
 import PasswordReset from "main/auth/PasswordChange";
 import Form from "main/forms/Form";
 import AdminBroadcast from "main/pages/Admin/AdminBroadcast" 
+import AdminListInstitutionAR from "main/pages/Admin/AdminListInstitutionAR" 
 import AdminListAR from "main/pages/Admin/AdminListAR" 
 import AdminTransferAR from "main/pages/Admin/AdminTransferAR" 
 import AdminComplaint from "main/pages/Admin/AdminComplaint" 
@@ -163,6 +164,7 @@ import TransferAuthRepresentative from "main/pages/TransferAuthRepresentative"
 import PendingAuthRepresentative from "main/pages/PendingAuthRepresentative" 
 
 import AdminAuditLog from "main/pages/Admin/AdminAuditLog" 
+import AdminInstitutions from "main/pages/Admin/AdminInstitutions";
 import AddBroadcast from "main/pages/Admin/AddBroadcast";
 import UserAuditLog from "main/pages/Admin/AuditLog" 
 import Success from "pages/auth/Success";
@@ -432,9 +434,11 @@ const Router = () => {
           <Route path="admin-audit-log" element={<AdminAuditLog />}></Route>
           <Route path="admin-broadcast" element={<AdminBroadcast />}></Route>
           <Route path="admin-list-ar" element={<AdminListAR />}></Route>
+          <Route path=":institution_id/list-ars" element={<AdminListInstitutionAR />}></Route>
           <Route path="admin-transfer-ar" element={<AdminTransferAR />}></Route>
           <Route path="user-audit-log" element={<UserAuditLog />}></Route>
           <Route path="add-broadcast" element={<AddBroadcast />}></Route>
+          <Route path="admin-institutions" element={<AdminInstitutions />}></Route>
           {/* <Route path="admin-complaint-type" element={<AdminComplaintType />}></Route>
           <Route path="admin-categories" element={<AdminCategories />}></Route>
           <Route path="admin-positions" element={<AdminPosition />}></Route> */}

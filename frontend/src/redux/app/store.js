@@ -10,6 +10,8 @@ import roleStore from "../stores/roles/roleStore";
 import positionStore from "../stores/positions/positionStore";
 import userStore from "../stores/users/userStore";
 import broadcastStore from "../stores/broadcast/broadcastStore";
+import settingStore from "../stores/settings/config";
+import institutionStore from "../stores/institution/institutionStore";
 
 const store = configureStore({
   reducer: {
@@ -24,6 +26,8 @@ const store = configureStore({
     position: positionStore,
     user: userStore,
     broadcasts: broadcastStore,
+    settings: settingStore,
+    institutions: institutionStore,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

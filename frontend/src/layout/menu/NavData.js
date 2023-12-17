@@ -41,6 +41,11 @@ const navData = [
         link: "/admin-broadcast",
       },
       {
+        icon: "dashboard-fill",
+        text: "Institutions",
+        link: "/admin-institutions",
+      },
+      {
       icon: "tile-thumb-fill",
       text: "Authorised Representative",
       active: false,

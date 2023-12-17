@@ -20,8 +20,9 @@ export const userLoadUserARs = createAsyncThunk(
 export const adminLoadUserARs = createAsyncThunk(
   "arUsers/adminLoadUserARs",
   async (values) => {
+    const query = queryGenerator(values);
     try {
-      const { data } = await axios.get(`meg/ar/list`);
+      const { data } = await axios.get(`meg/ar/list?${query}`);
       return successHandler(data);
     } catch (error) {
       return errorHandler(error);
@@ -210,7 +211,7 @@ export const megProcessTransferUserAR = createAsyncThunk(
           Accept: "application/json",
           "Content-Type": "application/json;charset=UTF-8",
         },
-        url: `meg/ar/process-add/${id}`,
+        url: `meg/ar/process-transfer/${id}`,
         data: values,
       });
       return successHandler(data, data.message);
@@ -222,7 +223,7 @@ export const megProcessTransferUserAR = createAsyncThunk(
 
 export const megProcessAddUserAR = createAsyncThunk(
   "arUsers/megProcessAddUserAR",
-  async (values) => {
+    async (values) => {
     const id = values.get('user_id')
     try {
       const { data } = await axios({
@@ -231,7 +232,7 @@ export const megProcessAddUserAR = createAsyncThunk(
           Accept: "application/json",
           "Content-Type": "application/json;charset=UTF-8",
         },
-        url: `meg/ar/process-transfer/${id}`,
+        url: `meg/ar/process-add/${id}`,
         data: values,
       });
       return successHandler(data, data.message);

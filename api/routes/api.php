@@ -5,6 +5,7 @@ use App\Http\Controllers\AuditController;
 use App\Http\Controllers\BroadcastMessageController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\ComplaintTypeController;
+use App\Http\Controllers\InstitutionController;
 use App\Http\Controllers\MemberCategoryController;
 use App\Http\Controllers\NationalityController;
 use App\Http\Controllers\PasswordController;
@@ -67,17 +68,17 @@ Route::middleware('auth')->group(function () {
     //MEG ROUTES
     Route::middleware('authRole:' . Role::MEG)->group(function () {
         // complaint
-        Route::group(['prefix' => 'complaint'], function () {
+        Route::group(['prefix' => 'complaint'],  function () {
             Route::post('/feedback', [ComplaintController::class, 'feedback']);
             Route::post('/status', [ComplaintController::class, 'changeStatus']);
             Route::get('/all', [ComplaintController::class, 'allComplaints']);
         });
         // audit
-        Route::group(['prefix' => 'audits'], function () {
+        Route::group(['prefix' => 'audits'],  function () {
             Route::get('/logs', [AuditController::class, 'index']);
         });
 
-        Route::group(['prefix' => 'meg/ar'], function () {
+        Route::group(['prefix' => 'meg/ar'],  function () {
             Route::get('/list', [ARController::class, 'listMEG']);
             Route::get('/transfer', [ARController::class, 'listTransferMEG']);
 
@@ -85,9 +86,14 @@ Route::middleware('auth')->group(function () {
             Route::post('/process-transfer/{record}', [ARController::class, 'processTransferByMEG']);
         });
         // broadcast
-        Route::group(['prefix' => 'broadcasts'], function () {
+        Route::group(['prefix' => 'broadcasts'],  function () {
             Route::get('/view-messages', [BroadcastMessageController::class, 'index']);
             Route::post('/create-message', [BroadcastMessageController::class, 'store']);
+        });
+
+        // institutions
+        Route::group(['prefix' => 'institution'],  function () {
+            Route::get('/list', [InstitutionController::class, 'listInstitution']);
         });
     });
 
@@ -98,7 +104,7 @@ Route::middleware('auth')->group(function () {
     //MBG ROUTES
 
     //AR ROUTES
-    Route::middleware('authRole:' . Role::ARAUTHORISER . ',' . Role::ARINPUTTER)->group(function () {
+    Route::middleware('authRole:' . Role::ARAUTHORISER . ',' . Role::ARINPUTTER)->group( function () {
         Route::group(['prefix' => 'ar'], function () {
             Route::get('/list', [ARController::class, 'list']);
             Route::get('/search', [ARController::class, 'search']);
@@ -119,7 +125,7 @@ Route::middleware('auth')->group(function () {
         });
     });
 
-    Route::group(['prefix' => 'user'], function () {
+    Route::group(['prefix' => 'user'],  function () {
         Route::get('/authorisers', [UserController::class, 'list_ar_authorisers']);
     });
 });

@@ -26,7 +26,7 @@ const Homepage = () => {
   const arUsers = useSelector((state) => state?.arUsers?.list) || null;
 
   useEffect(() => {
-    dispatch(adminLoadUserARs());
+    dispatch(adminLoadUserARs({"approval_status": "","institution_id":"","role_id":""}));
   }, [dispatch]);
 
 

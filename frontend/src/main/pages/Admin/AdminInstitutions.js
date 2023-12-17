@@ -3,35 +3,28 @@ import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner} from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
-import { loadAllPositions } from "redux/stores/positions/positionStore";
-import { loadAllCategories } from "redux/stores/memberCategory/category";
-import {adminLoadUserARs} from "redux/stores/authorize/representative"
+import {loadAllActiveInstitutions} from "redux/stores/institution/institutionStore"
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
-import AdminListARTable from './Tables/AdminListARTable'
+import AdminInstitutionTable from './Tables/AdminInstitutionTable'
 
 
 
-const AdminBroadcast = ({ drawer }) => {
+const AdminInstitutions = ({ drawer }) => {
         
-    const [counter, setCounter] = useState(false);
     const dispatch = useDispatch();
-    const [documentToUpload, setDocumentToUpload] = useState([]);
-    const [sm, updateSm] = useState(false);
-    const [modalForm, setModalForm] = useState(false);
-
     const [parentState, setParentState] = useState('Initial state');
 
     const updateParentState = (newState) => {
         setParentState(newState);
     };
 
-    const ar_users = useSelector((state) => state?.arUsers?.list) || null;
+    const institutions = useSelector((state) => state?.institutions?.list) || null;
     useEffect(() => {
-        dispatch(adminLoadUserARs({"approval_status": "","institution_id":"","role_id":""}));
+        dispatch(loadAllActiveInstitutions());
     }, [dispatch,parentState]);
     
-    const $ar_users = ar_users ? JSON.parse(ar_users) : null;
+    const $institutions = institutions ? JSON.parse(institutions) : null;
 
     return (
         <React.Fragment>
@@ -41,7 +34,7 @@ const AdminBroadcast = ({ drawer }) => {
                     <BlockBetween>
                         <BlockHeadContent>
                             <BlockTitle page tag="h3">
-                                Authorised Representation
+                                Institutions
                             </BlockTitle>
                             {/* {categories} */}
                         </BlockHeadContent>
@@ -57,14 +50,14 @@ const AdminBroadcast = ({ drawer }) => {
                     <Block size="xl">
                         <BlockHead>
                             <BlockHeadContent>
-                                <BlockTitle tag="h4">All Authorised Representatives</BlockTitle>
-                                {/* <p>{ar_users}</p> */}
+                                <BlockTitle tag="h4">All Institutions</BlockTitle>
+                                {/* <p>{institutions}</p> */}
                                 {/* {<p>{parentState}</p>} */}
                             </BlockHeadContent>
                         </BlockHead>
 
                         <PreviewCard>
-                            {$ar_users && <AdminListARTable  updateParent={updateParentState} parentState={parentState} data={$ar_users} expandableRows pagination actions />}
+                            {$institutions && <AdminInstitutionTable  updateParent={updateParentState} parentState={parentState} data={$institutions} expandableRows pagination actions />}
                         </PreviewCard>
                     </Block>
 
@@ -76,4 +69,4 @@ const AdminBroadcast = ({ drawer }) => {
         </React.Fragment>
     );
 };
-export default AdminBroadcast;
+export default AdminInstitutions;

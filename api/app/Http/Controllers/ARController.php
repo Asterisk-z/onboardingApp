@@ -29,6 +29,10 @@ class ARController extends Controller
     {
         $query = User::whereNotNull('institution_id');
 
+        if ($request->institution_id) {
+            $query = $query->where('institution_id', $request->institution_id);
+        }
+
         if ($request->approval_status) {
             $query = $query->where('approval_status', strtolower($request->approval_status));
         }
