@@ -25,10 +25,18 @@ export const loadAllPositions = createAsyncThunk(
 
 export const loadAllCategoryPositions = createAsyncThunk(
   "position/loadAllCategoryPositions",
-  async (arg) => {
-    const category_id = arg.category_id;
+  async (values) => {
     try {
-      const { data } = await axios.get(`category/${category_id}/positions`);
+       const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+        url: `category/positions`,
+        data: values,
+      });
+      
       return successHandler(data);
     } catch (error) {
       return errorHandler(error);

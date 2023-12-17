@@ -57,6 +57,7 @@ import FormUpload from "../pages/components/forms/FormUpload";
 import NumberSpinner from "../pages/components/forms/NumberSpinner";
 import NouiSlider from "../pages/components/forms/nouislider";
 import WizardForm from "../pages/components/forms/WizardForm";
+import WizardTest from "../pages/components/forms/WizardTest";
 import UtilBorder from "../pages/components/UtilBorder";
 import UtilColors from "../pages/components/UtilColors";
 import UtilDisplay from "../pages/components/UtilDisplay";
@@ -438,6 +439,7 @@ const Router = () => {
           <Route path="admin-categories" element={<AdminCategories />}></Route>
           <Route path="admin-positions" element={<AdminPosition />}></Route> */}
           
+            <Route path="wizard" element={<WizardTest />}></Route>
 
 
         </Route>

@@ -20,7 +20,7 @@ const Register = ({ drawer }) => {
     const [digitalPhoto, setDigitalPhoto] = useState([]);
     const { register, handleSubmit, formState: { errors }, getValues, setError, clearErrors } = useForm();
     const navigate = useNavigate();
-    const [categoryId, setCategoryId] = useState(1);
+    const [categoryIds, setCategoryIds] = useState([1]);
 
     const categories = useSelector((state) => state?.category?.list) || null;
     const countries = useSelector((state) => state?.country?.list) || null;
@@ -64,8 +64,8 @@ const Register = ({ drawer }) => {
     }, [dispatch]);
     
      useEffect(() => {
-        dispatch(loadAllCategoryPositions({'category_id' : categoryId}));
-    }, [categoryId]);
+        dispatch(loadAllCategoryPositions({'category_ids' : categoryIds}));
+    }, [categoryIds]);
   
     const $categories = categories ? JSON.parse(categories) : null;
     const $countries = countries ? JSON.parse(countries) : null;
@@ -97,7 +97,7 @@ const Register = ({ drawer }) => {
     
     const updatePosition = (event) => {
         if (event.target.value) {
-            setCategoryId(event.target.value)
+            setCategoryIds([event.target.value])
         }
     }
 
