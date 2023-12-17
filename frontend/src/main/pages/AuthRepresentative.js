@@ -337,7 +337,7 @@ const AuthRepresentative = ({ drawer }) => {
                                             Phone Number
                                         </Label>
                                         <div className="form-control-wrap">
-                                            <input className="form-control" type="text" id="phone" placeholder="Enter Last Name"  {...register('phone', { required: "Phone is Required" })} />
+                                            <input className="form-control" type="text" id="phone" placeholder="Enter Phone Number"  {...register('phone', { required: "Phone is Required" })} />
                                             {errors.phone && <p className="invalid">{`${errors.phone.message}`}</p>}
                                         </div>
                                     </div>
