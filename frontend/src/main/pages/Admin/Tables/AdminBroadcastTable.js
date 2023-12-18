@@ -86,14 +86,14 @@ const AdminBroadcastTable = ({ data, pagination, actions, className, selectableR
       },
       {
           name: "Categories",
-          selector: (row) => { return (<>{`${row.category_obj}`}</>) },
+          selector: (row) => { return (<>{`${(row.category_obj.map((cat) => cat.name)).toString()}`}</>) },
           sortable: true,
           width: "auto",
           wrap: true
       },
       {
           name: "Positions",
-          selector: (row) => { return (<>{`${row.position_obj}`}</>) },
+          selector: (row) => { return (<>{`${(row.position_obj.map((pos) => pos.name)).toString()}`}</>) },
           sortable: true,
           width: "auto",
           wrap: true
