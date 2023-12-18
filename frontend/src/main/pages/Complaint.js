@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner} from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
-import { loadAllComplaintTypes } from "redux/stores/complaints/complaintTypes";
+import { loadAllActiveComplaintTypes } from "redux/stores/complaints/complaintTypes";
 import { sendComplaint, loadAllComplaints } from "redux/stores/complaints/complaint";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
@@ -27,7 +27,7 @@ const Complaint = ({ drawer }) => {
     const toggleForm = () => setModalForm(!modalForm);
 
     useEffect(() => {
-        dispatch(loadAllComplaintTypes());
+        dispatch(loadAllActiveComplaintTypes());
     }, [dispatch]);
 
     const $complaintType = complaintType ? JSON.parse(complaintType) : null;

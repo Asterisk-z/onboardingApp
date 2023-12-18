@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Head from "../../layout/head/Head";
 import { registerUser } from "./../../redux/stores/authenticate/authStore";
-import { loadAllCategories } from "./../../redux/stores/memberCategory/category";
+import { loadAllActiveCategories } from "./../../redux/stores/memberCategory/category";
 import { loadAllCountries } from "./../../redux/stores/nationality/country";
 import { loadAllCategoryPositions } from "redux/stores/positions/positionStore";
 import { Block, BlockHeadContent, BlockHead, BlockTitle, Button, Icon, PreviewCard } from "../../components/Component";
@@ -59,7 +59,7 @@ const Register = ({ drawer }) => {
     };
 
     useEffect(() => {
-      dispatch(loadAllCategories());
+      dispatch(loadAllActiveCategories());
       dispatch(loadAllCountries());
     }, [dispatch]);
     

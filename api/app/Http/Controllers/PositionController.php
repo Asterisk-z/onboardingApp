@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Utility;
 use App\Models\Position;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class PositionController extends Controller
@@ -25,68 +26,79 @@ class PositionController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function listAll(): JsonResponse
     {
-        //
+        $positions = Position::orderBy('created_at', 'DESC')->get(['id', 'name', 'is_del'])->toArray();
+        $converted_positions = Utility::arrayKeysToCamelCase($positions);
+        $data = [
+            'positions' => (array) $converted_positions,
+        ];
+
+        return successResponse('Position Fetched Successfully', $data);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function addPosition(Request $request): JsonResponse
     {
-        //
-    }
+        $validated = $request->validate([
+            'name' => 'required|string|unique:positions,name',
+        ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+        $positions = Position::create($validated);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+        return successResponse('Position Created Successfully', $positions);
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
     }
-
     /**
-     * Remove the specified resource from storage.
+     * Display a listing of the resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function changeStatusPosition(Request $request, Position $position): JsonResponse
     {
-        //
+        $validated = $request->validate([
+            'action' => 'required|string|in:activate,deactivate',
+        ]);
+
+        if ($request->action == 'activate') {
+
+            $position->is_del = Position::ACTIVATE;
+            $position->save();
+
+        } else {
+
+            $position->is_del = Position::DEACTIVATE;
+            $position->save();
+
+        }
+
+        return successResponse('Position  Successfully', $position);
+
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function updatePosition(Request $request, Position $position): JsonResponse
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|unique:positions,name',
+        ]);
+
+        $position->name = $request->name;
+        $position->is_del = Position::ACTIVATE;
+        $position->save();
+
+        return successResponse('Position Successfully', $position);
+
     }
 }

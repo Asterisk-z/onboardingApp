@@ -11,12 +11,16 @@ class ComplaintType extends Model
 
     protected $guarded = ['id'];
 
+    const DEACTIVATE = "1";
+    const ACTIVATE = "0";
+
     public function toArray()
     {
         return [
             "id" => $this->id,
-            "body" => $this->name
+            "name" => $this->name,
+            "active" => !$this->is_del ? true : false,
         ];
     }
-    
+
 }

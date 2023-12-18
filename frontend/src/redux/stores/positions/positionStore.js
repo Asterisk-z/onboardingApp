@@ -6,13 +6,13 @@ import queryGenerator from "../../../utils/QueryGenerator";
 import category from "../memberCategory/category";
 const initialState = {
                     list: null,
-                    error: "",
+                    error: "", all_list: null,
                     loading: false,
 };
 
 
-export const loadAllPositions = createAsyncThunk(
-  "position/loadAllPositions",
+export const loadAllActivePositions = createAsyncThunk(
+  "position/loadAllActivePositions",
   async (arg) => {
     try {
       const { data } = await axios.get(`positions`);
@@ -44,6 +44,82 @@ export const loadAllCategoryPositions = createAsyncThunk(
   }
 );
 
+export const loadAllPositions = createAsyncThunk(
+  "position/loadAllPositions",
+  async (arg) => {
+    try {
+      const { data } = await axios.get(`meg/position/list`);
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
+    }
+  }
+);
+
+export const createPosition = createAsyncThunk(
+  "position/createPosition",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+        url: `meg/position/create`,
+        data: values,
+      });
+      return successHandler(data, data.message);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
+
+export const updatePosition = createAsyncThunk(
+  "position/updatePosition",
+  async (values) => {
+    const id = values.get('position_id')
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+        url: `meg/position/update/${id}`,
+        data: values,
+      });
+      return successHandler(data, data.message);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
+export const updatePositionStatus = createAsyncThunk(
+  "position/updatePositionStatus",
+  async (values) => {
+    const id = values.get('position_id')
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+        url: `meg/position/update-status/${id}`,
+        data: values,
+      });
+      return successHandler(data, data.message);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
+
 const positionStore = createSlice({
   name: "position",
   initialState,
@@ -54,19 +130,19 @@ const positionStore = createSlice({
   },
   extraReducers: (builder) => {
 
-    // ====== builders for loadAllPositions ======
+    // ====== builders for loadAllActivePositions ======
 
-    builder.addCase(loadAllPositions.pending, (state) => {
+    builder.addCase(loadAllActivePositions.pending, (state) => {
       state.loading = true;
     });
 
-    builder.addCase(loadAllPositions.fulfilled, (state, action) => {
+    builder.addCase(loadAllActivePositions.fulfilled, (state, action) => {
       state.loading = false;
         // state.list = action.payload?.data?.data?.positions;
         state.list = JSON.stringify(action.payload?.data?.data?.positions);
     });
 
-    builder.addCase(loadAllPositions.rejected, (state, action) => {
+    builder.addCase(loadAllActivePositions.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });
@@ -84,6 +160,69 @@ const positionStore = createSlice({
     });
 
     builder.addCase(loadAllCategoryPositions.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
+    // ====== builders for loadAllPositions ======
+
+    builder.addCase(loadAllPositions.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(loadAllPositions.fulfilled, (state, action) => {
+        state.loading = false;
+        // state.list = action.payload?.data?.data?.categories;
+        state.all_list = JSON.stringify(action.payload?.data?.data.positions);
+    });
+
+    builder.addCase(loadAllPositions.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
+
+    // ====== builders for updatePosition ======
+
+    builder.addCase(updatePosition.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(updatePosition.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(updatePosition.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+    
+    // ====== builders for updatePositionStatus ======
+
+    builder.addCase(updatePositionStatus.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(updatePositionStatus.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(updatePositionStatus.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+    
+    // ====== builders for createPosition ======
+
+    builder.addCase(createPosition.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(createPosition.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(createPosition.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });
