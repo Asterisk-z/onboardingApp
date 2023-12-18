@@ -17,7 +17,6 @@ class Broadcast extends Model
     {
         $positions = MembershipCategory::whereIn('id', json_decode($this->category))->get();
         return $positions;
-
     }
 
     public function getPositionObjAttribute()
