@@ -157,6 +157,7 @@ import ListTransferAuthRepresentative from "main/pages/ListTransferAuthRepresent
 import ChangeAuthRepresentative from "main/pages/ChangeAuthRepresentative" 
 import TransferAuthRepresentative from "main/pages/TransferAuthRepresentative" 
 import PendingAuthRepresentative from "main/pages/PendingAuthRepresentative" 
+import FeesFramework from "main/pages/FeesFramework"
 
 import AdminAuditLog from "main/pages/Admin/AdminAuditLog" 
 import UserAuditLog from "main/pages/Admin/AuditLog" 
@@ -416,7 +417,7 @@ const Router = () => {
           <Route path="change-auth-representative/:ar_user_id" element={<ChangeAuthRepresentative />}></Route>
           <Route path="transfer-auth-representative/:ar_user_id" element={<TransferAuthRepresentative />}></Route>
           <Route path="auth-representatives" element={<AuthRepresentative />}></Route>
-          
+          <Route path="fees-framework" element={<FeesFramework />}></Route>
         </Route>
 
         <Route path={`${process.env.PUBLIC_URL}`} element={<AdminLayout />}>

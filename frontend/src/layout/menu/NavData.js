@@ -1,5 +1,4 @@
-const navData = [
-  {
+const navData = [{
     heading: "Navigation",
   },
   {
@@ -9,8 +8,7 @@ const navData = [
     panel: true,
     isAdmin: true,
     newTab: true,
-    subPanel: [
-      {
+    subPanel: [{
         icon: "dashboard-fill",
         text: "Dashboard",
         link: "/admin-dashboard",
@@ -21,11 +19,10 @@ const navData = [
         link: "/admin-complaint",
       },
       {
-      icon: "tile-thumb-fill",
-      text: "Activity Log",
-      active: false,
-      subMenu: [
-          {
+        icon: "tile-thumb-fill",
+        text: "Activity Log",
+        active: false,
+        subMenu: [{
             text: "All Logs",
             link: "/admin-audit-log",
           },
@@ -49,8 +46,7 @@ const navData = [
     panel: true,
     isAdmin: false,
     newTab: true,
-    subPanel: [
-      {
+    subPanel: [{
         icon: "dashboard-fill",
         text: "Dashboard",
         link: "/dashboard",
@@ -69,6 +65,11 @@ const navData = [
         icon: "tile-thumb-fill",
         text: "Authorised Representatives",
         link: "/auth-representatives",
+      },
+      {
+        icon: "tile-thumb-fill",
+        text: "FMDQ Fees and Dues",
+        link: "/fees-framework",
       },
       // {
       // icon: "tile-thumb-fill",

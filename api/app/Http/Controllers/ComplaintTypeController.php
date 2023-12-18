@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ResponseStatusCodes;
 use App\Helpers\Utility;
 use App\Models\ComplaintType;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class ComplaintTypeController extends Controller
 {
@@ -22,7 +24,6 @@ class ComplaintTypeController extends Controller
             'compliant_types' => (array) $converted_compliant_types,
         ];
         return successResponse('Complaint Types Fetched Successfully', $data);
-
     }
 
     /**
@@ -44,6 +45,19 @@ class ComplaintTypeController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            "name" => "required|string"
+        ]);
+        //
+        ComplaintType::create([
+            'name' => $request->input('name'),
+        ]);
+        //
+        $user = auth()->user();
+        $logMessage = $user->email . ' created a complaint type : ' . $request->name;
+        logAction($user->email, 'Complaint type created', $logMessage, $request->ip());
+        //
+        return successResponse('Complaint type for ' . $request->name . ' was successfully created');
     }
 
     /**
@@ -75,10 +89,28 @@ class ComplaintTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         //
+        $request->validate([
+            "id" => "required",
+            "name" => "required|string"
+        ]);
+        //
+        // Find the complaint type by ID
+        $complaintType = ComplaintType::find($request->input('id'));
+        if (!$complaintType) {
+            return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'Complaint type not found');
+        }
+        //
+
+        // $user = auth()->user();
+        // $logMessage = $user->email . ' created a complaint type : ' . $request->name;
+        // logAction($user->email, 'Complaint type created', $logMessage, $request->ip());
+        // //
+        // return successResponse('Complaint type for ' . $request->name . ' was successfully created');
     }
+
 
     /**
      * Remove the specified resource from storage.

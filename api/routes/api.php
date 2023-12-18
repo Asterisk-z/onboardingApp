@@ -5,6 +5,7 @@ use App\Http\Controllers\AuditController;
 use App\Http\Controllers\BroadcastMessageController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\ComplaintTypeController;
+use App\Http\Controllers\FeesAndDuesController;
 use App\Http\Controllers\MemberCategoryController;
 use App\Http\Controllers\NationalityController;
 use App\Http\Controllers\PasswordController;
@@ -47,7 +48,8 @@ Route::get('/ar_roles', [RoleController::class, 'user_roles']);
 Route::get('/admin_roles', [RoleController::class, 'admin_roles']);
 Route::get('/categories', [MemberCategoryController::class, 'index']);
 Route::get('/category/{category}/positions', [MemberCategoryController::class, 'positions']);
-Route::get('/complaint-types', [ComplaintTypeController::class, 'index']);
+
+
 
 Route::middleware('auth')->group(function () {
 
@@ -81,10 +83,27 @@ Route::middleware('auth')->group(function () {
             Route::post('/process-add/{ARUser}', [ARController::class, 'processAddByMEG']);
             Route::post('/process-transfer/{record}', [ARController::class, 'processTransferByMEG']);
         });
+
         // broadcast
         Route::group(['prefix' => 'broadcasts'], function () {
             Route::get('/view-messages', [BroadcastMessageController::class, 'index']);
             Route::post('/create-message', [BroadcastMessageController::class, 'store']);
+        });
+
+        // complaint types
+        Route::group(['prefix' => 'complaint-types'], function () {
+            Route::get('/view-all', [ComplaintTypeController::class, 'index']);
+            Route::post('/create', [ComplaintTypeController::class, 'store']);
+            Route::post('/update', [ComplaintTypeController::class, 'update']);
+            Route::post('/create', [ComplaintTypeController::class, 'store']);
+        });
+
+        // fees and dues frameworks
+        Route::group(['prefix' => 'fees-dues-framework'], function () {
+            Route::get('/view-all', [FeesAndDuesController::class, 'index']);
+            Route::post('/create', [FeesAndDuesController::class, 'store']);
+            Route::post('/update/{id}', [FeesAndDuesController::class, 'update']);
+            Route::post('/delete/{id}', [FeesAndDuesController::class, 'delete']);
         });
     });
 

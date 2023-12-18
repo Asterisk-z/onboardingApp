@@ -47,7 +47,7 @@ class BroadcastMessageController extends Controller
         $request->validate([
             "title" => "required|string",
             "content" => "required|string",
-            "file" => "nullable|mimes:jpeg,png,jpg|max:5048",
+            "file" => "nullable",
             "category" => "required|exists:membership_categories,id",
             "position" => "required|exists:positions,id"
         ]);
