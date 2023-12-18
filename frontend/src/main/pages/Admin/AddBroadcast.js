@@ -43,289 +43,296 @@ const config = {
 };
 
 const AdminBroadcast = ({ drawer }) => {
-        const dispatch = useDispatch();
-        const [overAllForm, setOverAllForm] = useState({
-            title: "",
-            content: "",
-            document: "",
-            category_ids: [],
-            position_ids: [],
-        });
-    
-        const [loading, setLoading] = useState(false);
-        const navigate = useNavigate();
-        
-        const handleFormSubmit = async (values) => {
-        
-            const postValues = new Object();
-            postValues.title = values.title;
-            postValues.content = values.content;
-            postValues.position = values.position_ids;
-            postValues.category = values.category_ids;
-            postValues.file = values.document;
+    const dispatch = useDispatch();
+    const [overAllForm, setOverAllForm] = useState({
+        title: "",
+        content: "",
+        document: "",
+        category_ids: [],
+        position_ids: [],
+    });
 
-            try {
-                setLoading(true);
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
-                const resp = await dispatch(CreateBroadcast(postValues));
+    const handleFormSubmit = async (values) => {
 
-                if (resp.payload?.message == "success") {
-                    setTimeout(() => {
-                        setLoading(false);
-                        navigate(process.env.PUBLIC_URL+'/admin-broadcast')
-                        // setParentState(Math.random())
-                    }, 1000);
+        const postValues = new Object();
+        postValues.title = values.title;
+        postValues.content = values.content;
+        postValues.position = values.position_ids;
+        postValues.category = values.category_ids;
+        postValues.file = values.document;
 
-                } else {
+        try {
+            setLoading(true);
+
+            const resp = await dispatch(CreateBroadcast(postValues));
+
+            if (resp.payload?.message == "success") {
+                setTimeout(() => {
                     setLoading(false);
-                }
+                    navigate(process.env.PUBLIC_URL + '/admin-broadcast')
+                    // setParentState(Math.random())
+                }, 1000);
 
-            } catch (error) {
+            } else {
                 setLoading(false);
             }
 
+        } catch (error) {
+            setLoading(false);
+        }
+
+    };
+
+    const categories = useSelector((state) => state?.category?.list) || null;
+
+    useEffect(() => {
+        dispatch(loadAllCategories());
+    }, [dispatch]);
+
+    const $categories = categories ? JSON.parse(categories) : null;
+
+    const updateOverflow = (att) => {
+        const data = { ...att };
+        setOverAllForm(data);
+    };
+
+    const FormFields = (props) => {
+
+        const [documentToUpload, setDocumentToUpload] = useState([]);
+
+        const [formData, setFormData] = useState({
+            title: overAllForm.title ? overAllForm.title : "",
+            content: overAllForm.content ? overAllForm.content : "",
+            document: overAllForm.document ? overAllForm.document : "",
+        });
+
+        const onInputChange = (e) => {
+            // console.log(e.target.value, e.target.name, { ...formData, [e.target.name]: e.target.value })
+            const data = { ...formData, [e.target.name]: e.target.value };
+            setFormData(data);
         };
 
-        const categories = useSelector((state) => state?.category?.list) || null;
+        const { reset, register, handleSubmit, formState: { errors } } = useForm();
 
-        useEffect(() => {
-            dispatch(loadAllCategories());
-        }, [dispatch]);
-
-        const $categories = categories ? JSON.parse(categories) : null;
-        
-        const updateOverflow = (att) => {
-            const data = { ...att };
-            setOverAllForm(data);
+        const submitForm = (data) => {
+            updateOverflow(formData)
+            props.next();
         };
-      
-        const FormFields = (props) => {
-    
-                const [documentToUpload, setDocumentToUpload] = useState([]);
-        
-                const [formData, setFormData] = useState({
-                    title: overAllForm.title ? overAllForm.title : "",
-                    content: overAllForm.content ? overAllForm.content : "",
-                    document: overAllForm.document ? overAllForm.document : "",
-                });
-        
-                const onInputChange = (e) => {
-                    // console.log(e.target.value, e.target.name, { ...formData, [e.target.name]: e.target.value })
-                    const data = { ...formData, [e.target.name]: e.target.value };
-                    setFormData(data);
-                };
-                
-                const { reset, register, handleSubmit, formState: { errors } } = useForm();
-
-                const submitForm = (data) => {
-                    updateOverflow(formData)
-                    props.next();
-                };
-
-            
-                const handleFileChange = (event) => {
-                    const data = { ...formData, ['document']: event.target.files[0] };
-                    setFormData(data);
-                    setDocumentToUpload(event.target.files[0]);
-                };
 
 
-                return (
-                    <form className="content clearfix" onSubmit={handleSubmit(submitForm)}  encType="multipart/form-data">
-                        <Row className="gy-4">
-                            <Col md="12">
-                                <div className="form-group">
-                                    <label className="form-label" htmlFor="title">
-                                        Title
-                                    </label>
-                                    <div className="form-control-wrap">
-                                        <input type="text" id="title" className="form-control" {...register('title', { required: "This Field is required" })} onChange={(e) => onInputChange(e)} defaultValue={formData.title} />
-                                        {errors.title && <span className="invalid">{ errors.title.message }</span>}
-                                    </div>
-                                </div>
-                            </Col>
-                            <Col md="12">
-                                <div className="form-group">
-                                    <label className="form-label" htmlFor="content">
-                                        Content
-                                    </label>
-                                    <div className="form-control-wrap">
-                                        <textarea id="content" className="form-control" {...register('content', { required: "This Field is required" })} onKeyUp={(e) => onInputChange(e)} defaultValue={formData.content} ></textarea>
-                                        {errors.content && <span className="invalid">{ errors.content.message }</span>}
-                                    </div>
-                                </div>
-                            </Col>
-                            <Col md="12">
-                                <div className="form-group">
-                                    <label className="form-label" htmlFor="document">
-                                        Attachment
-                                    </label>
-                                    <div className="form-control-wrap">   
-                                        <input type="file" accept="image/*"  id="document"  className="form-control"   {...register('document', { required: "This Field is required" })} onChange={handleFileChange} />
-                                        {errors.document && <p className="invalid">{`${errors.document.message}`}</p>}
-                                    </div>
-                                </div>
-                            </Col>
-                        </Row>
-                        <div className="actions clearfix">
-                            <ul>
-                            <li>
-                                <Button color="primary" type="submit">
-                                Next
-                                </Button>
-                            </li>
-                            </ul>
+        const handleFileChange = (event) => {
+            const data = { ...formData, ['document']: event.target.files[0] };
+            setFormData(data);
+            setDocumentToUpload(event.target.files[0]);
+        };
+
+
+        return (
+            <form className="content clearfix" onSubmit={handleSubmit(submitForm)} encType="multipart/form-data">
+                <Row className="gy-4">
+                    <Col md="12">
+                        <div className="form-group">
+                            <label className="form-label" htmlFor="title">
+                                Title
+                            </label>
+                            <div className="form-control-wrap">
+                                <input type="text" id="title" className="form-control" {...register('title', { required: "This Field is required" })} onChange={(e) => onInputChange(e)} defaultValue={formData.title} />
+                                {errors.title && <span className="invalid">{errors.title.message}</span>}
+                            </div>
                         </div>
-                    </form>
-                );
-        };
-        
-        const CategorySection = (props) => {
-            
-            const [categoryIds, setCategoryIds] = useState([]);
+                    </Col>
+                    <Col md="12">
+                        <div className="form-group">
+                            <label className="form-label" htmlFor="content">
+                                Content
+                            </label>
+                            <div className="form-control-wrap">
+                                <textarea id="content" className="form-control" {...register('content', { required: "This Field is required" })} onKeyUp={(e) => onInputChange(e)} defaultValue={formData.content} ></textarea>
+                                {errors.content && <span className="invalid">{errors.content.message}</span>}
+                            </div>
+                        </div>
+                    </Col>
+                    <Col md="12">
+                        <div className="form-group">
+                            <label className="form-label" htmlFor="document">
+                                Attachment
+                            </label>
+                            <div className="form-control-wrap">
+                                <input type="file" accept="image/*" id="document" className="form-control"   {...register('document', { required: "This Field is required" })} onChange={handleFileChange} />
+                                {errors.document && <p className="invalid">{`${errors.document.message}`}</p>}
+                            </div>
+                        </div>
+                    </Col>
+                </Row>
+                <div className="actions clearfix">
+                    <ul>
+                        <li>
+                            <Button color="primary" type="submit">
+                                Next
+                            </Button>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        );
+    };
 
-            const { handleSubmit, register, watch, formState: { errors } } = useForm();
+    const CategorySection = (props) => {
 
-            const submitForm = (data) => {
+        const [categoryIds, setCategoryIds] = useState([]);
 
-                const clickedIds = Object.keys(categoryIds)
-                const valuesIds = Object.values(categoryIds)
-                const checkedId = clickedIds.filter((check, index) => valuesIds[index]);
+        const { handleSubmit, register, watch, formState: { errors } } = useForm();
+
+        const submitForm = (data) => {
+
+            const clickedIds = Object.keys(categoryIds)
+            const valuesIds = Object.values(categoryIds)
+            const checkedId = clickedIds.filter((check, index) => valuesIds[index]);
+            // check if checkedID dey greater than 0
+            if (checkedId.length > 0) {
                 const newOverAll = { ...overAllForm, ['category_ids']: [...checkedId] }
 
                 setOverAllForm(newOverAll)
                 props.next();
-            };
+            }
+        };
 
-            const checkCategory = (event) => {
-                const ids = categoryIds;
-                ids[event.target.value] = event.target.checked
-            };
+        const checkCategory = (event) => {
+            const ids = categoryIds;
+            ids[event.target.value] = event.target.checked
+        };
 
-            return (
-                <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
-                    <Row className="gy-4">
-                        <Col md="12">
-                            <div className="form-group">
-                                <label className="form-label">
-                                    Categories
-                                </label>
-                                <div className="form-control-wrap">
-                                    {$categories && $categories?.map((category, index) => (
-                                        // <input type="text" className="form-control" {...register('username', { required: true })} onChange={(e) => onInputChange(e)} defaultValue={formData.username} />
-                                        <div className="custom-control custom-checkbox" key={index}>
-                                            {/* checked={formData.category_ids.includes(category.id)} */}
-                                            {/* {...register(`category_ids${index}`, { required: false })} */}
-                                            <input type="checkbox" className="custom-control-input" onChange={(e) => checkCategory(e)} name='category_id[]' value={category.id}  id={`fw-policy${category.id}`} />
-                                            {/* {errors.terms && <span className="invalid">This field is required</span>} */}
-                                            <label className="custom-control-label" htmlFor={`fw-policy${category.id}`}>
+        return (
+            <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
+                <Row className="gy-4">
+                    <Col md="12">
+                        <div className="form-group">
+                            <label className="form-label">
+                                Categories
+                            </label>
+                            <div className="form-control-wrap">
+                                {$categories && $categories?.map((category, index) => (
+                                    // <input type="text" className="form-control" {...register('username', { required: true })} onChange={(e) => onInputChange(e)} defaultValue={formData.username} />
+                                    <article className="custom-control" key={index} style={{ paddingLeft: '5px !important' }}>
+                                        {/* checked={formData.category_ids.includes(category.id)} */}
+                                        {/* {...register(`category_ids${index}`, { required: false })} */}
+                                        <input type="checkbox" className="" onChange={(e) => checkCategory(e)} name='category_id[]' value={category.id} id={`fw-policy${category.id}`} />
+                                        {/* {errors.terms && <span className="invalid">This field is required</span>} */}
+                                        <label className="" htmlFor={`fw-policy${category.id}`}>
+                                            <span>
                                                 {category.name}
-                                            </label>
-                                        </div>
-                                     ))}
-                                    {errors.username && <span className="invalid">This field is required</span>}
-                                </div>
+                                            </span>
+                                        </label>
+                                    </article>
+                                ))}
+                                {errors.username && <span className="invalid">This field is required</span>}
                             </div>
-                        </Col>
-                    </Row>
-                    <div className="actions clearfix">
-                        <ul>
-                            <li>
-                                <Button color="primary" type="submit">
-                                    Next
-                                </Button>
-                            </li>
-                            <li>
-                                <Button color="primary" onClick={props.prev}>
-                                    Previous
-                                </Button>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            );
+                        </div>
+                    </Col>
+                </Row>
+                <div className="actions clearfix">
+                    <ul>
+                        <li>
+                            <Button color="primary" type="submit">
+                                Next
+                            </Button>
+                        </li>
+                        <li>
+                            <Button color="primary" onClick={props.prev}>
+                                Previous
+                            </Button>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        );
+    };
+
+    const PositionSection = (props) => {
+
+        const positions = useSelector((state) => state?.position?.list) || null;
+
+        useEffect(() => {
+            dispatch(loadAllCategoryPositions({ 'category_ids': overAllForm.category_ids }));
+        }, [dispatch]);
+
+        const $positions = positions ? JSON.parse(positions) : null;
+
+        const [positionIds, setPositionIds] = useState([]);
+
+        const { handleSubmit, register, watch, formState: { errors } } = useForm();
+
+        const submitForm = (data) => {
+            const clickedIds = Object.keys(positionIds)
+            const valuesIds = Object.values(positionIds)
+            const checkedId = clickedIds.filter((check, index) => valuesIds[index]);
+            const newOverAll = { ...overAllForm, ['position_ids']: [...checkedId] }
+
+            setOverAllForm(newOverAll)
+
+            handleFormSubmit(newOverAll);
+
+
         };
-        
-        const PositionSection = (props) => {
-            
-            const positions = useSelector((state) => state?.position?.list) || null;
 
-            useEffect(() => {
-                dispatch(loadAllCategoryPositions({'category_ids' : overAllForm.category_ids}));
-            }, [dispatch]);
+        const checkPosition = (event) => {
+            const ids = positionIds;
+            ids[event.target.value] = event.target.checked
+        };
 
-            const $positions = positions ? JSON.parse(positions) : null;
-            
-            const [positionIds, setPositionIds] = useState([]);
-
-            const { handleSubmit, register, watch, formState: { errors } } = useForm();
-
-            const submitForm = (data) => {
-                const clickedIds = Object.keys(positionIds)
-                const valuesIds = Object.values(positionIds)
-                const checkedId = clickedIds.filter((check, index) => valuesIds[index]);
-                const newOverAll = { ...overAllForm, ['position_ids']: [...checkedId] }
-
-                setOverAllForm(newOverAll)
-
-                handleFormSubmit(newOverAll);
-         
-                
-            };
-
-            const checkPosition = (event) => {
-                const ids = positionIds;
-                ids[event.target.value] = event.target.checked
-            };
-
-            return (
-                <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
-                    <Row className="gy-4">
-                        <Col md="12">
-                            <div className="form-group">
-                                <label className="form-label">
-                                    Position
-                                </label>
-                                <div className="form-control-wrap">
-                                    {$positions && $positions?.map((position, index) => (
-                                        // <input type="text" className="form-control" {...register('username', { required: true })} onChange={(e) => onInputChange(e)} defaultValue={formData.username} />
-                                        <div className="custom-control custom-checkbox" key={index}>
-                                            {/* checked={formData.category_ids.includes(category.id)} */}
-                                            {/* {...register(`category_ids${index}`, { required: false })} */}
-                                            <input type="checkbox" className="custom-control-input" onChange={(e) => checkPosition(e)} name='position_id[]' value={position.id}  id={`fw-policy${position.id}`} />
-                                            {/* {errors.terms && <span className="invalid">This field is required</span>} */}
-                                            <label className="custom-control-label" htmlFor={`fw-policy${position.id}`}>
+        return (
+            <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
+                <Row className="gy-4">
+                    <Col md="12">
+                        <div className="form-group">
+                            <label className="form-label">
+                                Position
+                            </label>
+                            <div className="form-control-wrap">
+                                {$positions && $positions?.map((position, index) => (
+                                    // <input type="text" className="form-control" {...register('username', { required: true })} onChange={(e) => onInputChange(e)} defaultValue={formData.username} />
+                                    <article className="custom-control" key={index} style={{ paddingLeft: '5px !important' }}>
+                                        {/* checked={formData.category_ids.includes(category.id)} */}
+                                        {/* {...register(`category_ids${index}`, { required: false })} */}
+                                        <input type="checkbox" className="" onChange={(e) => checkPosition(e)} name='position_id[]' value={position.id} id={`fw-policy${position.id}`} />
+                                        {/* {errors.terms && <span className="invalid">This field is required</span>} */}
+                                        <label className="" htmlFor={`fw-policy${position.id}`}>
+                                            <span>
                                                 {position.name}
-                                            </label>
-                                        </div>
-                                     ))}
-                                    {errors.username && <span className="invalid">This field is required</span>}
-                                </div>
+                                            </span>
+                                        </label>
+                                    </article>
+                                ))}
+                                {errors.username && <span className="invalid">This field is required</span>}
                             </div>
-                        </Col>
-                    </Row>
-                    <div className="actions clearfix">
-                        <ul>
-                            <li>
-                                <Button color="primary" type="submit">
-                                    {loading ? ( <span><Spinner size="sm" color="light" /> Processing...</span>) : "Register"}
-                                </Button>
-                            </li>
-                            <li>
-                                <Button color="primary" onClick={props.prev}>
-                                    Previous
-                                </Button>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            );
-        };
+                        </div>
+                    </Col>
+                </Row>
+                <div className="actions clearfix">
+                    <ul>
+                        <li>
+                            <Button color="primary" type="submit">
+                                {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Register"}
+                            </Button>
+                        </li>
+                        <li>
+                            <Button color="primary" onClick={props.prev}>
+                                Previous
+                            </Button>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        );
+    };
 
     return (
         <React.Fragment>
             <Head title="Broadcast"></Head>
-            <Content  page="component">
+            <Content page="component">
                 <Content>
                     <Block size="lg">
                         <BlockHead>
