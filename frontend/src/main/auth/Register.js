@@ -117,7 +117,7 @@ const Register = ({ drawer }) => {
             <BlockHead>
             <div className="logo-div">
               <img className="logo" src={Logo} alt="fmdq logo" />
-                <h4>Members Registration Oversight Information System (MROIS) Registration Form</h4>
+                <h4>Members Registration Oversight Information System (MROIS) Sign Up Form</h4>
             </div>
             </BlockHead>
             <form  className="is-alter" onSubmit={handleSubmit(handleFormSubmit)} encType="multipart/form-data">
@@ -221,7 +221,7 @@ const Register = ({ drawer }) => {
                     </label>
                   </div>
                   <div className="form-control-wrap">
-                    <input type="text" bssize="lg" {...register('phone', { required: true, minLength: 11, valueAsNumber: true })} className="form-control-lg form-control" placeholder="Enter your email address" />
+                    <input type="text" bssize="lg" {...register('phone', { required: true, minLength: 11, valueAsNumber: true })} className="form-control-lg form-control" placeholder="Enter your phone number" />
                     {errors.phone && <p className="invalid">{`This field is required`}</p>}
                   </div>
                 </div>
@@ -268,10 +268,10 @@ const Register = ({ drawer }) => {
                 </div>
               </div>
 
-              <div className="checkbox-flex">
+              {/* <div className="checkbox-flex">
                 <input type="checkbox" />
                 <p>I have read, understood and accepted Terms and Conditions</p>
-              </div>
+              </div> */}
               
               <div className="form-group">
                 <Button type="submit" color="primary" size="lg" className="btn-block">
@@ -283,7 +283,7 @@ const Register = ({ drawer }) => {
               {" "}
               Already have an account?{" "}
               <Link to={`${process.env.PUBLIC_URL}/login`}>
-                <strong>Sign in instead</strong>
+                <strong>Log in</strong>
               </Link>
             </div>
           </PreviewCard>

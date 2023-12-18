@@ -26,7 +26,7 @@ const Homepage = () => {
   const arUsers = useSelector((state) => state?.arUsers?.list) || null;
 
   useEffect(() => {
-    dispatch(adminLoadUserARs({"approval_status": "","institution_id":"","role_id":""}));
+    dispatch(adminLoadUserARs({ "approval_status": "", "institution_id": "", "role_id": "" }));
   }, [dispatch]);
 
 
@@ -52,7 +52,7 @@ const Homepage = () => {
                   <div className="card-inner">
                     <div className="card-title-group">
                       <div className="card-title">
-                        <h6 className="title">{"Today's Order"}</h6>
+                        <h6 className="title">{"My Applications"}</h6>
                       </div>
                     </div>
                     <div className="data">
@@ -70,7 +70,7 @@ const Homepage = () => {
                   <div className="card-inner">
                     <div className="card-title-group">
                       <div className="card-title">
-                        <h6 className="title">{"Today's Revenue"}</h6>
+                        <h6 className="title">{"Authorised Representatives"}</h6>
                       </div>
                     </div>
                     <div className="data">
@@ -88,7 +88,7 @@ const Homepage = () => {
                   <div className="card-inner">
                     <div className="card-title-group">
                       <div className="card-title">
-                        <h6 className="title">{"Today's Customers"}</h6>
+                        <h6 className="title">{"Complaints"}</h6>
                       </div>
                     </div>
                     <div className="data">
@@ -106,7 +106,7 @@ const Homepage = () => {
                   <div className="card-inner">
                     <div className="card-title-group">
                       <div className="card-title">
-                        <h6 className="title">{"Today's Visitor"}</h6>
+                        <h6 className="title">{"Messages"}</h6>
                       </div>
                     </div>
                     <div className="data">

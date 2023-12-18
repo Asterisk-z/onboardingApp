@@ -382,10 +382,11 @@ const Router = () => {
             <Route path="auth-password-update" element={<PasswordUpdate />}></Route>
             <Route path="auth-reset" element={<ForgotPassword />}></Route>
             <Route path="auth-register" element={<Register />}></Route>
+            <Route path="privacy-policy" element={<Landing />}></Route>
             <Route path="login" element={<Login />}></Route>
             <Route path="logout" element={<Logout />}></Route>
             <Route path="form" element={<Form />}></Route>
-            <Route index element={<Landing />}></Route>
+            <Route index element={<Login />}></Route>
             
             
         

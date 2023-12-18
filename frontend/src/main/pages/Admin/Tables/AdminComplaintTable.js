@@ -326,8 +326,8 @@ const ComplaintTableUser = ({ data, pagination, actions, className, selectableRo
         wrap: true
     },
     {
-        name: "Comments",
-        selector: (row) => { return (<><Badge color="gray">{`${row.comment.length} Comments`}</Badge></>) },
+        name: "Comment(s)",
+        selector: (row) => { return (<><Badge color="gray">{`${row.comment.length} Comment(s)`}</Badge></>) },
         sortable: true,
         width: "auto",
         wrap: true

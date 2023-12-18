@@ -104,7 +104,7 @@ const DropdownTrans = (props) => {
                           <a href={complaint.documment} target="_blank" className="btn btn-secondary">View Document</a>
                         </>}
                       
-                    <h6 className="title">Comments:</h6>
+                    <h6 className="title">Comment(s):</h6>
                       {complaint.comment.length > 1 && complaint.comment?.map((comment, index) => (
                           <p key={index}>{comment.comment}<br />{ comment.commenter.first_name } <br />{ moment(comment.createdAt).format('MMM. DD, YYYY HH:mm') }</p>))}
                 </div>
