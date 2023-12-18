@@ -30,7 +30,8 @@ export const CreateBroadcast = createAsyncThunk(
         method: "post",
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json;charset=UTF-8",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
         },
         url: `broadcasts/create-message`,
         data: values,

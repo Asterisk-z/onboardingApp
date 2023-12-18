@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, Input} from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
 import { loadUserRoles } from "redux/stores/roles/roleStore";
-import { loadAllPositions } from "redux/stores/positions/positionStore";
+import { loadAllActivePositions } from "redux/stores/positions/positionStore";
 import { loadAllCountries } from "redux/stores/nationality/country";
 import { userLoadUserARs, userStatusChangeUserAR, userViewUserAR } from "redux/stores/authorize/representative";
 import { loadAllActiveAuthoriser } from "redux/stores/users/userStore";
@@ -37,7 +37,7 @@ const TransferAuthRepresentative = ({ drawer }) => {
     useEffect(() => {
         dispatch(userViewUserAR({"user_id" : ar_user_id}));
         dispatch(loadUserRoles());
-        dispatch(loadAllPositions());
+        dispatch(loadAllActivePositions());
         dispatch(loadAllCountries());
         dispatch(loadAllActiveAuthoriser());
     }, [dispatch, parentState]);

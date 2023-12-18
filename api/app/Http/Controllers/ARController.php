@@ -25,11 +25,13 @@ use Illuminate\Support\Facades\Notification;
 
 class ARController extends Controller
 {
-
-
     public function listMEG(Request $request)
     {
         $query = User::whereNotNull('institution_id');
+
+        if ($request->institution_id) {
+            $query = $query->where('institution_id', $request->institution_id);
+        }
 
         if ($request->approval_status) {
             $query = $query->where('approval_status', strtolower($request->approval_status));
@@ -56,6 +58,8 @@ class ARController extends Controller
             $query = $query->where('role_id', $request->role_id);
         }
 
+        // $query = $query->whereNotNull('update_payload');
+
         $users = $query->latest()->get();
 
         return successResponse('Successful', UserResource::collection($users));
@@ -63,7 +67,6 @@ class ARController extends Controller
 
     public function search(SearchARRequest $request)
     {
-
         $users = User::where('first_name', $request->first_name)
             ->where('last_name', $request->last_name)
             ->get();
@@ -84,6 +87,8 @@ class ARController extends Controller
         $password = Utility::generatePassword();
         $validated['password'] = Hash::make($password);
         $validated['created_by'] = $request->user()->id;
+        $validated['img'] = $request->hasFile('img') ? $request->file('img')->storePublicly('users', 'public') : null;
+        $validated['mandate_form'] = $request->hasFile('mandate_form') ? $request->file('mandate_form')->storePublicly('mandate', 'public') : null;
 
         $user = User::create($validated);
 
@@ -99,8 +104,9 @@ class ARController extends Controller
 
         $MEGs = Utility::getUsersByCategory(Role::MEG);
 
-        if (count($MEGs))
+        if (count($MEGs)) {
             Notification::send($MEGs, new InfoNotification(ARMailContents::applicationMEGBody($user), ARMailContents::applicationMEGSubject(), $CCs));
+        }
 
         return successResponse('Successful', UserResource::make($user));
     }
@@ -132,7 +138,6 @@ class ARController extends Controller
             $logMessage = "Approved the addition of AR - $ARUser->email ($regID)";
             logAction($request->user()->email, $logTitle, $logMessage, $request->ip());
 
-
             $ARUser->notify(new InfoNotification(ARMailContents::approvedARBody($ARUser, $password), ARMailContents::approvedARSubject()));
         } else {
 
@@ -145,13 +150,13 @@ class ARController extends Controller
             logAction($request->user()->email, $logTitle, $logMessage, $request->ip());
         }
 
-
         return successResponse('Successful', UserResource::make($ARUser));
     }
 
     public function update(UpdateARRequest $request, User $ARUser)
     {
         $validated = $request->validated();
+        $validated['img'] = $request->hasFile('img') ? $request->file('img')->storePublicly('users', 'public') : $ARUser->img;
         $authoriserID = $validated['ar_authoriser_id'];
 
         if ($authoriserID == $ARUser->id) {
@@ -275,10 +280,11 @@ class ARController extends Controller
             $logTitle = 'Approve AR Update';
             $logMessage = "Approved the AR update of $ARUser->email ($regID)";
 
-
             $MEGs = Utility::getUsersByCategory(Role::MEG);
-            if (count($MEGs))
+            if (count($MEGs)) {
                 Notification::send($MEGs, new InfoNotification(ARMailContents::updatedMEGBody($oldRecord, $updateParams), ARMailContents::updatedMEGSubject()));
+            }
+
         } else {
             $logTitle = 'Decline AR Update';
             $logMessage = "Declined the AR update of $ARUser->email ($regID)";
@@ -289,7 +295,6 @@ class ARController extends Controller
         $ARUser->save();
 
         logAction($request->user()->email, $logTitle, $logMessage, $request->ip());
-
 
         return successResponse('Successful', UserResource::make($ARUser));
     }
@@ -433,7 +438,7 @@ class ARController extends Controller
     {
         $request->validate([
             'action' => 'required|in:approve,decline',
-            'reason' => 'nullable'
+            'reason' => 'nullable',
         ]);
 
         if ($record->authoriser_id != $request->user()->id) {
@@ -478,8 +483,9 @@ class ARController extends Controller
             $CCs = array_merge($MBGs, $BLGs);
 
             $MEGs = Utility::getUsersByCategory(Role::MEG);
-            if (count($MEGs))
+            if (count($MEGs)) {
                 Notification::send($MEGs, new InfoNotification(ARMailContents::transferApprovedMEGBody($ARUser), ARMailContents::transferApprovedMEGSubject(), $CCs));
+            }
 
             $logTitle = 'Approve AR Transfer';
             $logMessage = "Approved the transfer of AR - $ARUser->email ($regID). Request ref #$record->id";
@@ -492,7 +498,7 @@ class ARController extends Controller
     public function processTransferByMEG(Request $request, ARTransferRequest $record)
     {
         $request->validate([
-            'action' => 'required|in:approve,decline'
+            'action' => 'required|in:approve,decline',
         ]);
 
         if ($record->mbg_approval_status != ARDeactivationRequest::PENDING) {
@@ -622,7 +628,7 @@ class ARController extends Controller
     {
         $request->validate([
             'action' => 'required|in:approve,decline',
-            'reason' => 'nullable'
+            'reason' => 'nullable',
         ]);
 
         if ($record->authoriser_id != $request->user()->id) {
@@ -637,7 +643,6 @@ class ARController extends Controller
 
         $ARUser = $record->ar;
         $regID = $ARUser->getRegID();
-
 
         if ($request->action == 'decline') {
 
@@ -673,8 +678,10 @@ class ARController extends Controller
             }
 
             $MEGs = Utility::getUsersByCategory(Role::MEG);
-            if (count($MEGs))
+            if (count($MEGs)) {
                 Notification::send($MEGs, new InfoNotification($mailBody, $mailSubject));
+            }
+
         }
 
         return successResponse('Successful', ARDeactivationRequestResource::make($record));

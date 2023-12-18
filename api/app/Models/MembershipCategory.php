@@ -11,11 +11,16 @@ class MembershipCategory extends Model
 
     protected $guarded = ['id'];
 
+    const DEACTIVATE = "1";
+    const ACTIVATE = "0";
+
     public function toArray()
     {
         return [
             "id" => $this->id,
-            "name" => $this->name
+            "code" => $this->code,
+            "name" => $this->name,
+            "active" => !$this->is_del ? true : false,
         ];
     }
 

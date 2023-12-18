@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { errorHandler, successHandler } from "utils/Functions";
 import queryGenerator from "utils/QueryGenerator";
-const initialState = { all: null, list: null, single_ar: null, transfer_list: null, user: null, total: null, error: "", loading: false };
+const initialState = { all: null, list: null, search_list: null, single_ar: null, status_list: null, transfer_list: null, user: null, total: null, error: "", loading: false };
 
 export const userLoadUserARs = createAsyncThunk(
   "arUsers/userLoadUserARs",
@@ -20,8 +20,9 @@ export const userLoadUserARs = createAsyncThunk(
 export const adminLoadUserARs = createAsyncThunk(
   "arUsers/adminLoadUserARs",
   async (values) => {
+    const query = queryGenerator(values);
     try {
-      const { data } = await axios.get(`meg/ar/list`);
+      const { data } = await axios.get(`meg/ar/list?${query}`);
       return successHandler(data);
     } catch (error) {
       return errorHandler(error);
@@ -32,11 +33,9 @@ export const adminLoadUserARs = createAsyncThunk(
 export const userSearchUserARs = createAsyncThunk(
   "arUsers/userSearchUserARs",
   async (values) => {
-//     first_name
-// last_name
     const query = queryGenerator(values);
     try {
-      const { data } = await axios.get(`ar/search`);
+      const { data } = await axios.get(`ar/search?${query}`);
       return successHandler(data);
     } catch (error) {
       return errorHandler(error);
@@ -65,7 +64,8 @@ export const userCreateUserAR = createAsyncThunk(
         method: "post",
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json;charset=UTF-8",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
         },
         url: `ar/add`,
         data: values,
@@ -86,7 +86,8 @@ export const userUpdateUserAR = createAsyncThunk(
         method: "post",
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json;charset=UTF-8",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
         },
         url: `ar/update/${id}`,
         data: values,
@@ -169,7 +170,7 @@ export const userLoadStatusChangeUserAR = createAsyncThunk(
   "arUsers/userLoadStatusChangeUserAR",
   async (values) => {
     try {
-      const { data } = await axios.get(`ar/change-status/?status=pending`);
+      const { data } = await axios.get(`ar/change-status`);
       return successHandler(data);
     } catch (error) {
       return errorHandler(error);
@@ -186,7 +187,8 @@ export const userTransferUserAR = createAsyncThunk(
         method: "post",
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json;charset=UTF-8",
+        //   "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
         },
         url: `ar/transfer/${id}`,
         data: values,
@@ -210,7 +212,7 @@ export const megProcessTransferUserAR = createAsyncThunk(
           Accept: "application/json",
           "Content-Type": "application/json;charset=UTF-8",
         },
-        url: `meg/ar/process-add/${id}`,
+        url: `meg/ar/process-transfer/${id}`,
         data: values,
       });
       return successHandler(data, data.message);
@@ -222,7 +224,7 @@ export const megProcessTransferUserAR = createAsyncThunk(
 
 export const megProcessAddUserAR = createAsyncThunk(
   "arUsers/megProcessAddUserAR",
-  async (values) => {
+    async (values) => {
     const id = values.get('user_id')
     try {
       const { data } = await axios({
@@ -231,7 +233,7 @@ export const megProcessAddUserAR = createAsyncThunk(
           Accept: "application/json",
           "Content-Type": "application/json;charset=UTF-8",
         },
-        url: `meg/ar/process-transfer/${id}`,
+        url: `meg/ar/process-add/${id}`,
         data: values,
       });
       return successHandler(data, data.message);
@@ -359,7 +361,7 @@ const arUsersStore = createSlice({
     builder.addCase(userSearchUserARs.fulfilled, (state, action) => {
         state.loading = false;
         // state.list = action.payload?.data?.data?.categories;
-        state.list = JSON.stringify(action.payload?.data?.data);
+        state.search_list = JSON.stringify(action.payload?.data?.data);
     });
 
     builder.addCase(userSearchUserARs.rejected, (state, action) => {
@@ -518,7 +520,7 @@ const arUsersStore = createSlice({
     builder.addCase(userLoadStatusChangeUserAR.fulfilled, (state, action) => {
         state.loading = false;
         // state.list = action.payload?.data?.data?.categories;
-        state.list = JSON.stringify(action.payload?.data?.data);
+        state.status_list = JSON.stringify(action.payload?.data?.data);
     });
 
     builder.addCase(userLoadStatusChangeUserAR.rejected, (state, action) => {

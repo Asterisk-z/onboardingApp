@@ -6,9 +6,6 @@ import { Col, Modal, ModalBody, Row, Button, Dropdown, UncontrolledDropdown, Dro
 import { DataTablePagination } from "components/Component";
 import moment from "moment";
 import Icon from "components/icon/Icon";
-import ImageContainer from "components/partials/gallery/GalleryImage";
-import Skeleton from 'react-loading-skeleton'
-import Countdown from 'react-countdown';
 
 const Export = ({ data }) => {
   const [modal, setModal] = useState(false);
@@ -90,39 +87,7 @@ const DropdownTrans = (props) => {
   
   return (
     <>
-    <UncontrolledDropdown direction="right">
-      <DropdownToggle className="dropdown-toggle btn" color="secondary">Action</DropdownToggle>
-
-      <DropdownMenu>
-        <ul className="link-list-opt">
-          
-          <li>
-            <DropdownItem tag="a" href="#links" onClick={toggleForm} >
-              <Icon name="eye"></Icon>
-              <span>View</span>
-            </DropdownItem>
-          </li>
-          {/* <li>
-            <DropdownItem tag="a" href="#links" onClick={(ev) => ev.preventDefault()}>
-              <Icon name="pen"></Icon>
-              <span>Edit</span>
-            </DropdownItem>
-          </li>
-          <li>
-            <DropdownItem tag="a" href="#links" onClick={(ev) => ev.preventDefault()} >
-              <Icon name="eye"></Icon>
-              <span>View</span>
-            </DropdownItem>
-          </li>
-          <li>
-            <DropdownItem tag="a" href="#links" onClick={(ev) => ev.preventDefault()}>
-              <Icon name="trash"></Icon>
-              <span>Delete</span>
-            </DropdownItem>
-          </li> */}
-        </ul>
-      </DropdownMenu>
-    </UncontrolledDropdown>
+      <Button color="secondary"  className="btn"  onClick={toggleForm}> <Icon name="eye"></Icon> View</Button>
           <Modal isOpen={modalForm} toggle={toggleForm} size="xl">
             <ModalHeader toggle={toggleForm} close={<button className="close" onClick={toggleForm}><Icon name="cross" /></button>}>
                 Fill Feedback Form
@@ -134,8 +99,10 @@ const DropdownTrans = (props) => {
                         {complaint.body}
                     </p>
                     
-                    <h6 className="title">Document:</h6>
-                    <ImageContainer img={complaint.documment} />
+                      {complaint.documment &&
+                        <>
+                          <a href={complaint.documment} target="_blank" className="btn btn-secondary">View Document</a>
+                        </>}
                       
                     <h6 className="title">Comments:</h6>
                       {complaint.comment.length > 1 && complaint.comment?.map((comment, index) => (
@@ -162,7 +129,7 @@ const complainColumn = [
     width: "80px",
   },
   {
-    name: "Body",
+    name: "Description",
     selector: (row) => row.body,
     sortable: true,
     width: "auto",
@@ -199,7 +166,10 @@ const ComplaintTableUser = ({ data, pagination, actions, className, selectableRo
   const [searchText, setSearchText] = useState("");
   const [rowsPerPageS, setRowsPerPage] = useState(10);
   const [mobileView, setMobileView] = useState();
-
+  
+  if (data != tableData) {
+    setTableData(data)
+  }
   useEffect(() => {
     let defaultData = tableData;
     if (searchText !== "") {
@@ -230,8 +200,8 @@ const ComplaintTableUser = ({ data, pagination, actions, className, selectableRo
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const renderer = ({ hours, minutes, seconds, completed }) => {
-            if (completed) {
+    // const renderer = ({ hours, minutes, seconds, completed }) => {
+    //         if (completed) {
                 return (
                     <div className={`dataTables_wrapper dt-bootstrap4 no-footer ${className ? className : ""}`}>
                     <Row className={`justify g-2 ${actions ? "with-export" : ""}`}>
@@ -304,25 +274,25 @@ const ComplaintTableUser = ({ data, pagination, actions, className, selectableRo
                     ></DataTable>
                     </div>
                 );
-            } else {
+    //         } else {
 
-                return (
-                        <>
-                            <Skeleton count={10} height={20}  style={{display: 'block',lineHeight: 2, padding: '1rem',width: 'auto',}}/>
-                        </>
+    //             return (
+    //                     <>
+    //                         <Skeleton count={10} height={20}  style={{display: 'block',lineHeight: 2, padding: '1rem',width: 'auto',}}/>
+    //                     </>
                         
-                    )
-            }
-    };
+    //                 )
+    //         }
+    // };
     
-          return (
-                  <Countdown
-                    date={Date.now() + 5000}
-                    renderer={renderer}
-                />
+    //       return (
+    //               <Countdown
+    //                 date={Date.now() + 5000}
+    //                 renderer={renderer}
+    //             />
 
                 
-            );
+    //         );
 };
 
 export default ComplaintTableUser;

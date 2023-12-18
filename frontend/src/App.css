@@ -1,4 +1,4 @@
-#customSelectDropdown{
+#customSelectDropdown {
     background-color: #1D326C !important;
     color: #fff !important;
     font-weight: 900 !important;
@@ -21,6 +21,7 @@
 .customMroisDatatable .dlfHg div:last-child {
     overflow: unset !important;
 }
+
 .customMroisDatatable.hXLGuA {
     overflow: unset !important;
 }
@@ -63,7 +64,7 @@
     color: #fff !important;
 }
 
-.color4  {
+.color4 {
     background-color: #1b4c43 !important;
 }
 
@@ -75,7 +76,7 @@
     color: #fff !important;
 }
 
-.checkbox-error{
+.checkbox-error {
     outline: 2px solid red !important;
     background-color: red !important;
     color: red !important;
@@ -83,4 +84,34 @@
 
 .nk-menu-sub .nk-menu-link:hover {
     color: #cc9933 !important;
+}
+
+article {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+article label {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 25px;
+    transition: .5s ease;
+    min-width: 60px;
+    height: 40px;
+    padding: 8px;
+    border-radius: 5px;
+    margin: 5px 0;
+    border: 2px solid #1D326C;
+}
+
+input[type=checkbox]:checked~label {
+    background-color: #1D326C;
+    color: #fff;
+}
+
+article input {
+    display: none !important;
 }

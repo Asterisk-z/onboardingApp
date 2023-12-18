@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner} from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
-import { loadAllComplaintTypes } from "redux/stores/complaints/complaintTypes";
+import { loadAllActiveComplaintTypes } from "redux/stores/complaints/complaintTypes";
 import { sendComplaint, loadAllComplaints } from "redux/stores/complaints/complaint";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
@@ -27,7 +27,7 @@ const Complaint = ({ drawer }) => {
     const toggleForm = () => setModalForm(!modalForm);
 
     useEffect(() => {
-        dispatch(loadAllComplaintTypes());
+        dispatch(loadAllActiveComplaintTypes());
     }, [dispatch]);
 
     const $complaintType = complaintType ? JSON.parse(complaintType) : null;
@@ -37,7 +37,7 @@ const Complaint = ({ drawer }) => {
         formData.append('complaint_type', values.complaint_type)
         formData.append('body', values.body)
         formData.append('document', complainFile)
-        
+        // console.log(complainFile)
         try {
             setLoading(true);
             
@@ -45,14 +45,14 @@ const Complaint = ({ drawer }) => {
 
             if (resp.payload?.message == "success") {
                 setTimeout(() => {
-                  setLoading(false);
-                  setModalForm(!modalForm)
-                  resetField('complaint_type')
-                  resetField('body')
-                  resetField('document')
-                  setCounter(!counter)
+                    setLoading(false);
+                    setModalForm(!modalForm)
+                    resetField('complaint_type')
+                    resetField('body')
+                    resetField('document')
+                    setCounter(!counter)
+                    // window.location.reload(true)
                 }, 1000);
-            
             } else {
               setLoading(false);
             }
@@ -70,7 +70,7 @@ const Complaint = ({ drawer }) => {
     const complaints = useSelector((state) => state?.complaint?.list) || null;
     useEffect(() => {
         dispatch(loadAllComplaints());
-    }, [counter, dispatch]);
+    }, [dispatch, counter]);
   
     
     const $complaints = complaints ? JSON.parse(complaints) : null;
@@ -144,7 +144,7 @@ const Complaint = ({ drawer }) => {
                                     Upload Document (*jpg, png)
                                 </label>
                                 <div className="form-control-wrap">
-                                    <input type="file" accept="image/*" className="form-control"  {...register('document', { })} onChange={handleFileChange}/>
+                                    <input type="file" accept=".gif,.jpg,.jpeg,.png,.pdf" className="form-control"  {...register('document', { })} onChange={handleFileChange}/>
                                      {errors.document && <p className="invalid">{`${errors.document.message}`}</p>}
                                 </div>
                             </div>

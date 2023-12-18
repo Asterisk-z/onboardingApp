@@ -10,8 +10,6 @@ import { sendComplaintFeedback, updateComplaintStatus } from "redux/stores/compl
 import moment from "moment";
 import Icon from "components/icon/Icon";
 import Swal from "sweetalert2";
-import { AiOutlineArrowRight } from "react-icons/ai";
-import ImageContainer from "components/partials/gallery/GalleryImage";
 
 const Export = ({ data }) => {
   const [modal, setModal] = useState(false);
@@ -69,19 +67,14 @@ const Export = ({ data }) => {
 };
 
 
-const SendFeedback = (props) => {
-    const complaint_id = props.complaint.id
-    const complaint = props.complaint
-  
+const SendFeedback = ({ updateParentParent, complaint}) => {
+    const complaint_id = complaint.id
     const [modalForm, setModalForm] = useState(false);
     const [modalDetail, setModalDetail] = useState(false);
-    const [modalOpenAsk, setModalOpenAsk] = useState(false);
-    const [modalCloseAsk, setModalCloseAsk] = useState(false);
 
     const toggleForm = () => setModalForm(!modalForm);
     const toggleModalDetail = () => { setModalDetail(!modalForm) };
-    const toggleModalOpenAsk = () => setModalOpenAsk(!modalOpenAsk);
-    const toggleModalCloseAsk = () => setModalCloseAsk(!modalCloseAsk);
+    
     const dispatch = useDispatch();
     const { register, handleSubmit, formState: { errors }, resetField } = useForm();
     const [loading, setLoading] = useState(false);
@@ -104,7 +97,7 @@ const SendFeedback = (props) => {
                     setModalForm(!modalForm)
                     resetField('comment')
                     resetField('status')
-                    props.updateParentParent(Math.random())
+                    updateParentParent(Math.random())
                 }, 1000);
             
             } else {
@@ -122,27 +115,28 @@ const SendFeedback = (props) => {
     
         
   const askAction = async (action) => {
+
     if(action == 'open') {
         Swal.fire({
             title: "Are you sure?",
             text: "Do you want to open this complain!",
             icon: "warning",
             showCancelButton: true,
-            confirmButtonText: "Yes, approve it!",
+            confirmButtonText: "Yes, open it!",
         }).then((result) => {
-            if (result.isConfirmed) {
+
+          if (result.isConfirmed) {
                 
                 const formData = new FormData();
                 formData.append('complaint_id', complaint_id);
                 formData.append('status', 'ONGOING');
                 const resp = dispatch(updateComplaintStatus(formData));
-
-                if (resp.payload?.message == "success") {
-                    setTimeout(() => {
-                        props.updateParentParent(Math.random())
-                    }, 1000);
                 
-                }
+                setTimeout(() => { 
+                    updateParentParent(Math.random())
+                }, 1000);
+                
+                
             }
         });
     }
@@ -153,58 +147,77 @@ const SendFeedback = (props) => {
             text: "Do you want to close this complain!",
             icon: "warning",
             showCancelButton: true,
-            confirmButtonText: "Yes, decline it!",
+            confirmButtonText: "Yes, close it!",
         }).then((result) => {
-            if (result.isConfirmed) {
+
+          if (result.isConfirmed) {
                 
                 const formData = new FormData();
                 formData.append('complaint_id', complaint_id);
                 formData.append('status', 'CLOSED');
                 const resp = dispatch(updateComplaintStatus(formData));
-
-                if (resp.payload?.message == "success") {
-                    setTimeout(() => {
-                        props.updateParentParent(Math.random())
-                    }, 1000);
                 
-                }
+                setTimeout(() => { 
+                    updateParentParent(Math.random())
+                }, 1000);
+              
             }
         });
     }
+    
 
   };
   
     return (
       <>
-          <div className="toggle-expand-content" style={{ display: "block" }}>
-              <ul className="nk-block-tools g-3">
-                  <li className="nk-block-tools-opt">
-                      <Button color="primary" size="xs" onClick={toggleModalDetail}>
-                          <span>View</span>
-                      </Button>
-                  </li>
-                  <li className="nk-block-tools-opt">
-                      <Button color="primary" size="xs" onClick={toggleForm}>
-                          <span>Add feedback</span>
-                      </Button>
-                  </li>
-                      {(complaint.status == 'NEW' || complaint.status == 'CLOSED') &&
-                          <li className="nk-block-tools-opt" >
-                              <Button color="primary" size="xs"  onClick={(e) => askAction('open')}>
-                                  <span>Open Ticket</span>
-                              </Button>
-                          </li>
-                      }
-                      {complaint.status == 'ONGOING' &&
-                          <li className="nk-block-tools-opt" >
-                              <Button color="primary" size="xs"  onClick={(e) => askAction('close')}>
-                                  <span>Closed Ticket</span>
-                              </Button>
-                          </li>
-                      }
+        
+        <div className="toggle-expand-content" style={{ display: "block" }}>
+            <ul className="nk-block-tools g-3">
+                 <li className="nk-block-tools-opt">
+                    <UncontrolledDropdown direction="right">
+                        <DropdownToggle className="dropdown-toggle btn btn-sm" color="secondary">Action</DropdownToggle>
 
-              </ul>
-          </div> 
+                        <DropdownMenu>
+                            <ul className="link-list-opt">
+                        
+                      
+                              <li size="xs">
+                                  <DropdownItem tag="a"  onClick={toggleModalDetail} >
+                                      <Icon name="eye"></Icon>
+                                      <span>View</span>
+                                  </DropdownItem>
+                              </li>
+                              <li size="xs">
+                                  <DropdownItem tag="a"  onClick={toggleForm} >
+                                      <Icon name="eye"></Icon>
+                                      <span>Add Feedback</span>
+                                  </DropdownItem>
+                              </li>
+                              {(complaint.status == 'NEW' || complaint.status == 'CLOSED') &&
+                              <li size="xs">
+                                  <DropdownItem tag="a"  onClick={(e) => askAction('open')} >
+                                      <Icon name="eye"></Icon>
+                                      <span>Open Ticket</span>
+                                  </DropdownItem>
+                              </li>
+                              }
+                              {(complaint.status == 'ONGOING') &&
+                                <li size="xs">
+                                    <DropdownItem tag="a"  onClick={(e) => askAction('close')} >
+                                        <Icon name="eye"></Icon>
+                                        <span>Closed Ticket</span>
+                                    </DropdownItem>
+                                </li>
+                                }
+                                     
+
+                            </ul>
+                        </DropdownMenu>
+                    </UncontrolledDropdown>
+                </li>
+
+            </ul>
+        </div>
           <Modal isOpen={modalForm} toggle={toggleForm} >
               <ModalHeader toggle={toggleForm} close={<button className="close" onClick={toggleForm}><Icon name="cross" /></button>}>
                   Fill Feedback Form
@@ -213,7 +226,7 @@ const SendFeedback = (props) => {
                   <form  onSubmit={handleSubmit(handleFormSubmit)}  className="is-alter" encType="multipart/form-data">
                       <div className="form-group">
                           <label className="form-label" htmlFor="full-name">
-                              Complaint Type
+                              Status
                           </label>
                           <div className="form-control-wrap">
                               <div className="form-control-select">
@@ -264,8 +277,11 @@ const SendFeedback = (props) => {
                       <p>
                           {complaint.body}
                       </p>
-                      <h6 className="title">Document:</h6>
-                      <ImageContainer img={complaint.documment} />
+                      {complaint.documment &&
+                        <>
+                          <a href={complaint.documment} target="_blank" className="btn btn-secondary">View Document</a>
+                        </>}
+                      
                         
                       <h6 className="title">Comments:</h6>
                         {complaint.comment.length > 1 && complaint.comment?.map((comment, index) => (
@@ -296,7 +312,7 @@ const ComplaintTableUser = ({ data, pagination, actions, className, selectableRo
         wrap: true
     },
     {
-        name: "Body",
+        name: "Description",
         selector: (row) => row.body,
         sortable: true,
         width: "auto",
@@ -335,6 +351,10 @@ const ComplaintTableUser = ({ data, pagination, actions, className, selectableRo
   const [rowsPerPageS, setRowsPerPage] = useState(10);
   const [mobileView, setMobileView] = useState();
 
+  if (data != tableData) {
+    setTableData(data)
+  }
+
   useEffect(() => {
     let defaultData = tableData;
     if (searchText !== "") {
@@ -365,77 +385,100 @@ const ComplaintTableUser = ({ data, pagination, actions, className, selectableRo
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return (
-    <div className={`dataTables_wrapper dt-bootstrap4 no-footer ${className ? className : ""}`}>
-      <Row className={`justify-between g-2 ${actions ? "with-export" : ""}`}>
-        <Col className="col-7 text-start" sm="4">
-          <div id="DataTables_Table_0_filter" className="dataTables_filter">
-            <label>
-              <input
-                type="search"
-                className="form-control form-control-sm"
-                placeholder="Search by name"
-                onChange={(ev) => setSearchText(ev.target.value)}
-              />
-            </label>
-          </div>
-        </Col>
-        <Col className="col-5 text-end" sm="8">
-          <div className="datatable-filter">
+    // const renderer = ({ hours, minutes, seconds, completed }) => {
+    //         if (completed) {
+                      
+              return (
+                <div className={`dataTables_wrapper dt-bootstrap4 no-footer ${className ? className : ""}`}>
+                  <Row className={`justify-between g-2 ${actions ? "with-export" : ""}`}>
+                    <Col className="col-7 text-start" sm="4">
+                      <div id="DataTables_Table_0_filter" className="dataTables_filter">
+                        <label>
+                          <input
+                            type="search"
+                            className="form-control form-control-sm"
+                            placeholder="Search by name"
+                            onChange={(ev) => setSearchText(ev.target.value)}
+                          />
+                        </label>
+                      </div>
+                    </Col>
+                    <Col className="col-5 text-end" sm="8">
+                      <div className="datatable-filter">
 
-            <div className="d-flex justify-content-end g-2">
-              {actions && <Export data={data} />}
-              <div className="dataTables_length" id="DataTables_Table_0_length">
-                <label>
-                  <span className="d-none d-sm-inline-block">Show</span>
-                  <div className="form-control-select">
-                    {" "}
-                    <select
-                      name="DataTables_Table_0_length"
-                      className="custom-select custom-select-sm form-control form-control-sm"
-                      onChange={(e) => setRowsPerPage(e.target.value)}
-                      value={rowsPerPageS}
-                    >
-                      <option value="10">10</option>
-                      <option value="25">25</option>
-                      <option value="40">40</option>
-                      <option value="50">50</option>
-                    </select>{" "}
-                  </div>
-                </label>
-              </div>
-            </div>
-          </div>
-        </Col>
-      </Row>
-      <DataTable
-        data={tableData}
-        columns={complainColumn}
-        className={className + ' customMroisDatatable'} id='customMroisDatatable'
-        selectableRows={selectableRows}
-        expandableRows={mobileView}
-        noDataComponent={<div className="p-2">There are no records found</div>}
-        sortIcon={
-          <div>
-            <span>&darr;</span>
-            <span>&uarr;</span>
-          </div>
-        }
-        pagination={pagination}
-        paginationComponent={({ currentPage, rowsPerPage, rowCount, onChangePage, onChangeRowsPerPage }) => (
-          <DataTablePagination
-            customItemPerPage={rowsPerPageS}
-            itemPerPage={rowsPerPage}
-            totalItems={rowCount}
-            paginate={onChangePage}
-            currentPage={currentPage}
-            onChangeRowsPerPage={onChangeRowsPerPage}
-            setRowsPerPage={setRowsPerPage}
-          />
-        )}
-      ></DataTable>
-    </div>
-  );
+                        <div className="d-flex justify-content-end g-2">
+                          {actions && <Export data={data} />}
+                          <div className="dataTables_length" id="DataTables_Table_0_length">
+                            <label>
+                              <span className="d-none d-sm-inline-block">Show</span>
+                              <div className="form-control-select">
+                                {" "}
+                                <select
+                                  name="DataTables_Table_0_length"
+                                  className="custom-select custom-select-sm form-control form-control-sm"
+                                  onChange={(e) => setRowsPerPage(e.target.value)}
+                                  value={rowsPerPageS}
+                                >
+                                  <option value="10">10</option>
+                                  <option value="25">25</option>
+                                  <option value="40">40</option>
+                                  <option value="50">50</option>
+                                </select>{" "}
+                              </div>
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </Col>
+                  </Row>
+                  <DataTable
+                    data={tableData}
+                    columns={complainColumn}
+                    className={className + ' customMroisDatatable'} id='customMroisDatatable'
+                    selectableRows={selectableRows}
+                    expandableRows={mobileView}
+                    noDataComponent={<div className="p-2">There are no records found</div>}
+                    sortIcon={
+                      <div>
+                        <span>&darr;</span>
+                        <span>&uarr;</span>
+                      </div>
+                    }
+                    pagination={pagination}
+                    paginationComponent={({ currentPage, rowsPerPage, rowCount, onChangePage, onChangeRowsPerPage }) => (
+                      <DataTablePagination
+                        customItemPerPage={rowsPerPageS}
+                        itemPerPage={rowsPerPage}
+                        totalItems={rowCount}
+                        paginate={onChangePage}
+                        currentPage={currentPage}
+                        onChangeRowsPerPage={onChangeRowsPerPage}
+                        setRowsPerPage={setRowsPerPage}
+                      />
+                    )}
+                  ></DataTable>
+                </div>
+              );
+  
+    //         } else {
+
+    //             return (
+    //                     <>
+    //                         <Skeleton count={10} height={20}  style={{display: 'block',lineHeight: 2, padding: '1rem',width: 'auto',}}/>
+    //                     </>
+                        
+    //                 )
+    //         }
+    // };
+    
+    //       return (
+    //               <Countdown
+    //                 date={Date.now() + 5000}
+    //                 renderer={renderer}
+    //             />
+
+                
+    //         );
 };
 
 export default ComplaintTableUser;

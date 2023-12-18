@@ -5,12 +5,13 @@ use App\Http\Controllers\AuditController;
 use App\Http\Controllers\BroadcastMessageController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\ComplaintTypeController;
-use App\Http\Controllers\FeesAndDuesController;
+use App\Http\Controllers\InstitutionController;
 use App\Http\Controllers\MemberCategoryController;
 use App\Http\Controllers\NationalityController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SystemController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UsersController;
 use App\Models\Role;
@@ -47,11 +48,12 @@ Route::get('/positions', [PositionController::class, 'index']);
 Route::get('/ar_roles', [RoleController::class, 'user_roles']);
 Route::get('/admin_roles', [RoleController::class, 'admin_roles']);
 Route::get('/categories', [MemberCategoryController::class, 'index']);
-Route::get('/category/{category}/positions', [MemberCategoryController::class, 'positions']);
-
-
+Route::post('/category/positions', [MemberCategoryController::class, 'positions']);
+Route::get('/complaint-types', [ComplaintTypeController::class, 'index']);
 
 Route::middleware('auth')->group(function () {
+
+    Route::get('/system/configs', [SystemController::class, 'index']);
 
     Route::group(['prefix' => 'complaint'], function () {
         Route::post('/store', [ComplaintController::class, 'store']);
@@ -66,17 +68,17 @@ Route::middleware('auth')->group(function () {
     //MEG ROUTES
     Route::middleware('authRole:' . Role::MEG)->group(function () {
         // complaint
-        Route::group(['prefix' => 'complaint'], function () {
+        Route::group(['prefix' => 'complaint'],  function () {
             Route::post('/feedback', [ComplaintController::class, 'feedback']);
             Route::post('/status', [ComplaintController::class, 'changeStatus']);
             Route::get('/all', [ComplaintController::class, 'allComplaints']);
         });
         // audit
-        Route::group(['prefix' => 'audits'], function () {
+        Route::group(['prefix' => 'audits'],  function () {
             Route::get('/logs', [AuditController::class, 'index']);
         });
 
-        Route::group(['prefix' => 'meg/ar'], function () {
+        Route::group(['prefix' => 'meg/ar'],  function () {
             Route::get('/list', [ARController::class, 'listMEG']);
             Route::get('/transfer', [ARController::class, 'listTransferMEG']);
 
@@ -85,25 +87,38 @@ Route::middleware('auth')->group(function () {
         });
 
         // broadcast
-        Route::group(['prefix' => 'broadcasts'], function () {
+        Route::group(['prefix' => 'broadcasts'],  function () {
             Route::get('/view-messages', [BroadcastMessageController::class, 'index']);
             Route::post('/create-message', [BroadcastMessageController::class, 'store']);
         });
 
-        // complaint types
-        Route::group(['prefix' => 'complaint-types'], function () {
-            Route::get('/view-all', [ComplaintTypeController::class, 'index']);
-            Route::post('/create', [ComplaintTypeController::class, 'store']);
-            Route::post('/update', [ComplaintTypeController::class, 'update']);
-            Route::post('/create', [ComplaintTypeController::class, 'store']);
+        // institutions
+        Route::group(['prefix' => 'institution'],  function () {
+            Route::get('/list', [InstitutionController::class, 'listInstitution']);
         });
 
-        // fees and dues frameworks
-        Route::group(['prefix' => 'fees-dues-framework'], function () {
-            Route::get('/view-all', [FeesAndDuesController::class, 'index']);
-            Route::post('/create', [FeesAndDuesController::class, 'store']);
-            Route::post('/update/{id}', [FeesAndDuesController::class, 'update']);
-            Route::post('/delete/{id}', [FeesAndDuesController::class, 'delete']);
+        // Membership Category
+        Route::group(['prefix' => 'membership/category'],  function () {
+            Route::get('/list', [MemberCategoryController::class, 'listAll']);
+            Route::post('/create', [MemberCategoryController::class, 'addCategory']);
+            Route::post('/update/{category}', [MemberCategoryController::class, 'updateCategory']);
+            Route::post('/update-status/{category}', [MemberCategoryController::class, 'changeStatusCategory']);
+        });
+
+        // Positions
+        Route::group(['prefix' => 'meg/position'],  function () {
+            Route::get('/list', [PositionController::class, 'listAll']);
+            Route::post('/create', [PositionController::class, 'addPosition']);
+            Route::post('/update/{position}', [PositionController::class, 'updatePosition']);
+            Route::post('/update-status/{position}', [PositionController::class, 'changeStatusPosition']);
+        });
+
+        // Complaint
+        Route::group(['prefix' => 'meg/complain-type'],  function () {
+            Route::get('/list', [ComplaintTypeController::class, 'listAll']);
+            Route::post('/create', [ComplaintTypeController::class, 'addComplainType']);
+            Route::post('/update/{complainType}', [ComplaintTypeController::class, 'updateComplainType']);
+            Route::post('/update-status/{complainType}', [ComplaintTypeController::class, 'changeStatusComplainType']);
         });
     });
 

@@ -37,6 +37,45 @@ const navData = [{
         text: "Broadcast",
         link: "/admin-broadcast",
       },
+      {
+        icon: "dashboard-fill",
+        text: "Institutions",
+        link: "/admin-institutions",
+      },
+      {
+      icon: "tile-thumb-fill",
+      text: "Authorised Representative",
+      active: false,
+      subMenu: [
+          {
+            text: "All ARs",
+            link: "/admin-list-ar",
+          },
+          {
+            text: "Transfer AR",
+            link: "/admin-transfer-ar",
+          },
+        ],
+      },
+      {
+      icon: "tile-thumb-fill",
+      text: "Settings",
+      active: false,
+      subMenu: [
+          {
+            text: "Complaint Type",
+            link: "/admin-complaint-type",
+          },
+          {
+            text: "Member Category",
+            link: "/admin-categories",
+          },
+          {
+            text: "Positions",
+            link: "/admin-positions",
+          },
+        ],
+      },
     ],
   },
   {

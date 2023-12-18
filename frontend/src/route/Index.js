@@ -57,6 +57,7 @@ import FormUpload from "../pages/components/forms/FormUpload";
 import NumberSpinner from "../pages/components/forms/NumberSpinner";
 import NouiSlider from "../pages/components/forms/nouislider";
 import WizardForm from "../pages/components/forms/WizardForm";
+import WizardTest from "../pages/components/forms/WizardTest";
 import UtilBorder from "../pages/components/UtilBorder";
 import UtilColors from "../pages/components/UtilColors";
 import UtilDisplay from "../pages/components/UtilDisplay";
@@ -149,20 +150,30 @@ import PasswordUpdate from "main/auth/PasswordUpdate";
 import PasswordReset from "main/auth/PasswordChange";
 import Form from "main/forms/Form";
 import AdminBroadcast from "main/pages/Admin/AdminBroadcast" 
+import AdminListInstitutionAR from "main/pages/Admin/AdminListInstitutionAR" 
+import AdminListAR from "main/pages/Admin/AdminListAR" 
+import AdminTransferAR from "main/pages/Admin/AdminTransferAR" 
+import AdminCategories from "main/pages/Admin/AdminCategories" 
+import AdminComplaintType from "main/pages/Admin/AdminComplaintType" 
+import AdminPositions from "main/pages/Admin/AdminPositions" 
 import AdminComplaint from "main/pages/Admin/AdminComplaint" 
+
+
 import Complaint from "main/pages/Complaint" 
 import AuditLog from "main/pages/AuditLog" 
 import AuthRepresentative from "main/pages/AuthRepresentative" 
 import ListTransferAuthRepresentative from "main/pages/ListTransferAuthRepresentative" 
+import ChangeAuthRepresentatives from "main/pages/ListChangeAuthRepresentative" 
 import ChangeAuthRepresentative from "main/pages/ChangeAuthRepresentative" 
 import TransferAuthRepresentative from "main/pages/TransferAuthRepresentative" 
 import PendingAuthRepresentative from "main/pages/PendingAuthRepresentative" 
 import FeesFramework from "main/pages/FeesFramework"
 
 import AdminAuditLog from "main/pages/Admin/AdminAuditLog" 
+import AdminInstitutions from "main/pages/Admin/AdminInstitutions";
+import AddBroadcast from "main/pages/Admin/AddBroadcast";
 import UserAuditLog from "main/pages/Admin/AuditLog" 
 import Success from "pages/auth/Success";
-
 
 import Layout from "layout/Index";
 import AdminLayout from "layout/AdminLayout";
@@ -176,6 +187,7 @@ import MainLayoutNoSidebar from "main/layout/Index-nosidebar";
 
 import Landing from "main/auth/Landing";
 import UserHomepage from "main/pages/Homepage";
+import AdminHomepage from "main/pages/Admin/Homepage";
 
 const Router = () => {
   const location = useLocation();
@@ -415,17 +427,30 @@ const Router = () => {
           <Route path="auth-representatives-pending" element={<PendingAuthRepresentative />}></Route>
           <Route path="transfer-auth-representatives" element={<ListTransferAuthRepresentative />}></Route>
           <Route path="change-auth-representative/:ar_user_id" element={<ChangeAuthRepresentative />}></Route>
+          <Route path="change-auth-representatives" element={<ChangeAuthRepresentatives />}></Route>
           <Route path="transfer-auth-representative/:ar_user_id" element={<TransferAuthRepresentative />}></Route>
           <Route path="auth-representatives" element={<AuthRepresentative />}></Route>
           <Route path="fees-framework" element={<FeesFramework />}></Route>
         </Route>
 
         <Route path={`${process.env.PUBLIC_URL}`} element={<AdminLayout />}>
-          <Route path="admin-dashboard" element={<UserHomepage />}></Route>
+          <Route path="admin-dashboard" element={<AdminHomepage />}></Route>
           <Route path="admin-complaint" element={<AdminComplaint />}></Route>
           <Route path="admin-audit-log" element={<AdminAuditLog />}></Route>
           <Route path="admin-broadcast" element={<AdminBroadcast />}></Route>
+          <Route path="admin-list-ar" element={<AdminListAR />}></Route>
+          <Route path=":institution_id/list-ars" element={<AdminListInstitutionAR />}></Route>
+          <Route path="admin-transfer-ar" element={<AdminTransferAR />}></Route>
           <Route path="user-audit-log" element={<UserAuditLog />}></Route>
+          <Route path="add-broadcast" element={<AddBroadcast />}></Route>
+          <Route path="admin-institutions" element={<AdminInstitutions />}></Route>
+          <Route path="admin-complaint-type" element={<AdminComplaintType />}></Route>
+          <Route path="admin-categories" element={<AdminCategories />}></Route>
+          <Route path="admin-positions" element={<AdminPositions />}></Route>
+          
+            <Route path="wizard" element={<WizardTest />}></Route>
+
+
         </Route>
       </Routes>
   );

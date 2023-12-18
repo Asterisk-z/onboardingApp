@@ -4,11 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, Input} from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
-import { loadUserRoles } from "redux/stores/roles/roleStore";
-import { loadAllPositions } from "redux/stores/positions/positionStore";
-import { loadAllCountries } from "redux/stores/nationality/country";
 import { userLoadTransferUserAR, userCreateUserAR } from "redux/stores/authorize/representative";
-import { loadAllActiveAuthoriser } from "redux/stores/users/userStore";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
 import TransferAuthRepTable from './Tables/TransferAuthRepTable'
@@ -39,8 +35,6 @@ const ListTransferAuthRepresentative = ({ drawer }) => {
 
 
     const $authorize_reps = authorize_reps ? JSON.parse(authorize_reps) : null;
-  
-    console.log($authorize_reps);
 
 
 

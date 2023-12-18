@@ -28,8 +28,10 @@ class RegistrationRequest extends FormRequest
         return [
             'firstName' => 'required|string',
             'lastName' => 'required|string',
+            'middleName' => 'nullable|string',
             'nationality' => 'required|exists:nationalities,code',
             'category' => 'required|exists:membership_categories,id',
+            'position' => 'required|exists:positions,id',
             'email' => [
                 'email',
                 'required',
@@ -49,6 +51,7 @@ class RegistrationRequest extends FormRequest
                     }
                 },
             ],
+            "img" => "nullable|mimes:jpeg,png,jpg|max:5048",
             'password' => 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/'
         ];
     }

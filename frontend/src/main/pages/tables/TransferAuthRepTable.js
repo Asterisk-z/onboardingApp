@@ -97,12 +97,8 @@ const ActionTab = (props) => {
                 formData.append('action', 'approve');
                 const resp = dispatch(userProcessTransferUserAR(formData));
 
-                if (resp.payload?.message == "success") {
-                    setTimeout(() => {
-                        props.updateParentParent(Math.random())
-                    }, 1000);
-                
-                }
+                props.updateParentParent(Math.random())
+                    
             }
         });
     }
@@ -122,12 +118,9 @@ const ActionTab = (props) => {
                 formData.append('action', 'decline');
                 const resp = dispatch(userProcessTransferUserAR(formData));
 
-                if (resp.payload?.message == "success") {
-                    setTimeout(() => {
-                        props.updateParentParent(Math.random())
-                    }, 1000);
-                
-                }
+              
+                props.updateParentParent(Math.random())
+
             }
         });
     }
@@ -141,7 +134,7 @@ const ActionTab = (props) => {
             <ul className="nk-block-tools g-3">
                  <li className="nk-block-tools-opt">
                     <UncontrolledDropdown direction="right">
-                        <DropdownToggle className="dropdown-toggle btn btn-xs" color="secondary">Action</DropdownToggle>
+                        <DropdownToggle className="dropdown-toggle btn btn-sm" color="secondary">Action</DropdownToggle>
 
                         <DropdownMenu>
                             <ul className="link-list-opt">
@@ -195,45 +188,53 @@ const ActionTab = (props) => {
 const TransferAuthRepTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState }) => {
     const authRepColumn = [
     {
-        name: "User ID",
+        name: "UID",
         selector: (row) => row.id,
         sortable: true,
+        width: "150px",
+        wrap: true,
     },
     {
         name: "Institution",
         selector: (row) => (`${row.new_institution.category[0].name}`),
         sortable: true,
+        width: "auto",
+        wrap: true,
     },
     {
         name: "Email",
         selector: (row) => (`${row.ar.email}`),
         sortable: true,
+        width: "auto",
+        wrap: true,
     },
     {
         name: "Status",
-        selector: (row) => { return (<><Badge color="success">{`${row.approval_status}`}</Badge></>) },
+        selector: (row) => { return (<><Badge color="success"  className="text-uppercase">{`${row.approval_status}`}</Badge></>) },
         sortable: true,
-        // hide: "sm",
+        width: "auto",
+        wrap: true,
     },
     {
         name: "Role",
         selector: (row) => { return (<><Badge color="success">{`${row.ar.role.name}`}</Badge></>) },
         sortable: true,
-        // hide: "sm",
+        width: "auto",
+        wrap: true,
     },
     {
         name: "Date Created",
         selector: (row) => moment(row.createdAt).format('MMM. DD, YYYY HH:mm'),
         sortable: true,
-        hide: "md",
+        width: "auto",
+        wrap: true,
     },
     {
         name: "Action",
         selector: (row) => (<>
                         <ActionTab ar_user={row} updateParentParent={updateParent} />
                     </>),
-        sortable: true,
-        hide: "md",
+        width: "18%",
     },
     ];
   const [tableData, setTableData] = useState(data);
@@ -241,6 +242,10 @@ const TransferAuthRepTable = ({ data, pagination, actions, className, selectable
   const [rowsPerPageS, setRowsPerPage] = useState(10);
   const [mobileView, setMobileView] = useState();
 
+  if (data != tableData) {
+    setTableData(data)
+  }
+  
   useEffect(() => {
     let defaultData = tableData;
     if (searchText !== "") {
@@ -271,8 +276,8 @@ const TransferAuthRepTable = ({ data, pagination, actions, className, selectable
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
     
-    const renderer = ({ hours, minutes, seconds, completed }) => {
-            if (completed) {
+    // const renderer = ({ hours, minutes, seconds, completed }) => {
+    //         if (completed) {
                 return (
                     <div className={`dataTables_wrapper dt-bootstrap4 no-footer ${className ? className : ""}`}>
                         <Row className={`justify-between g-2 ${actions ? "with-export" : ""}`}>
@@ -344,25 +349,25 @@ const TransferAuthRepTable = ({ data, pagination, actions, className, selectable
                         ></DataTable>
                     </div>
                 );
-            } else {
+    //         } else {
 
-                return (
-                        <>
-                            <Skeleton count={20} height={30}  style={{display: 'block',lineHeight: 2, padding: '1rem',width: 'auto',}}/>
-                        </>
+    //             return (
+    //                     <>
+    //                         <Skeleton count={20} height={30}  style={{display: 'block',lineHeight: 2, padding: '1rem',width: 'auto',}}/>
+    //                     </>
                         
-                    )
-            }
-    };
+    //                 )
+    //         }
+    // };
     
-          return (
-                  <Countdown
-                    date={Date.now() + 5000}
-                    renderer={renderer}
-                />
+    //       return (
+    //               <Countdown
+    //                 date={Date.now() + 5000}
+    //                 renderer={renderer}
+    //             />
 
                 
-            );
+    //         );
  
 
 

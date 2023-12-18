@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner} from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
-import { loadAllComplaintTypes } from "redux/stores/complaints/complaintTypes";
+import { loadAllActiveComplaintTypes } from "redux/stores/complaints/complaintTypes";
 import { loadAllUsersComplaints } from "redux/stores/complaints/complaint";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
@@ -13,36 +13,23 @@ import AdminComplaintTable from './Tables/AdminComplaintTable'
 
 const Complaint = ({ drawer }) => {
         
-    const [counter, setCounter] = useState(false);
     const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const [complainFile, setComplainFile] = useState([]);
-    const [sm, updateSm] = useState(false);
-    const [modalForm, setModalForm] = useState(false);
-    const complaintType = useSelector((state) => state?.complaintType?.list) || null;
-
-    const toggleForm = () => setModalForm(!modalForm);
-
-    useEffect(() => {
-        dispatch(loadAllComplaintTypes());
-    }, [dispatch]);
-
-    const $complaintType = complaintType ? JSON.parse(complaintType) : null;
-  
     const [parentState, setParentState] = useState('Initial state');
 
-    const updateParentState = (newState) => {
-        setParentState(newState);
-    };
 
     const complaints = useSelector((state) => state?.complaint?.list) || null;
     useEffect(() => {
         dispatch(loadAllUsersComplaints());
-    }, [dispatch,parentState]);
+    }, [dispatch, parentState]);
 
     
     const $complaints = complaints ? JSON.parse(complaints) : null;
     
+    const updateParentState = (newState) => {
+        console.log(newState)
+        setParentState(newState);
+    };
+
 
     return (
         <React.Fragment>

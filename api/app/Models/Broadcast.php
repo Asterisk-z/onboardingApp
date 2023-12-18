@@ -11,16 +11,24 @@ class Broadcast extends Model
     protected $table = 'broadcasts';
     protected $guarded = [];
 
-    protected $with = ['category_obj', 'position_obj'];
+    protected $appends = ['full_name', 'position_obj', 'category_obj'];
 
-    public function category_obj()
+    public function getCategoryObjAttribute()
     {
-        return $this->belongsTo(MembershipCategory::class, 'category');
+        $positions = MembershipCategory::whereIn('id', json_decode($this->category))->get();
+        return $positions;
+
     }
 
-    public function position_obj()
+    public function getPositionObjAttribute()
     {
-        return $this->belongsTo(Position::class, 'position');
+        $positions = Position::whereIn('id', json_decode($this->position))->get();
+        return $positions;
+    }
+
+    public function getFullNameAttribute()
+    {
+        return "Full Name";
     }
 
 }
