@@ -187,7 +187,8 @@ export const userTransferUserAR = createAsyncThunk(
         method: "post",
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json;charset=UTF-8",
+        //   "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
         },
         url: `ar/transfer/${id}`,
         data: values,

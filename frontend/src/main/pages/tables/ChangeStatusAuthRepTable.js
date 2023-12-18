@@ -96,12 +96,8 @@ const ActionTab = (props) => {
                   formData.append('action', 'approve');
                   const resp = dispatch(userProcessChangeStatusUserAR(formData));
 
-                  if (resp.payload?.message == "success") {
-                      setTimeout(() => {
-                          props.updateParentParent(Math.random())
-                      }, 1000);
-                  
-                  }
+                  props.updateParentParent(Math.random())
+
               }
           });
       }
@@ -121,12 +117,8 @@ const ActionTab = (props) => {
                   formData.append('action', 'decline');
                   const resp = dispatch(userProcessChangeStatusUserAR(formData));
 
-                  if (resp.payload?.message == "success") {
-                      setTimeout(() => {
-                          props.updateParentParent(Math.random())
-                      }, 1000);
-                  
-                  }
+                  props.updateParentParent(Math.random())
+
               }
           });
       }
@@ -231,7 +223,7 @@ const ChangeStatusAuthRepTable = ({ data, pagination, actions, className, select
     },
     {
         name: "Status",
-        selector: (row) => { return (<><Badge color="success">{`${row.approval_status}`}</Badge></>) },
+        selector: (row) => { return (<><Badge color="success" className="text-uppercase">{`${row.approval_status}`}</Badge></>) },
         sortable: true,
         width: "auto",
         wrap: true

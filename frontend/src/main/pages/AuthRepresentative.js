@@ -23,7 +23,7 @@ const AuthRepresentative = ({ drawer }) => {
     const categories = authUser.user_data.institution.category ? authUser.user_data.institution.category : [];
     const [counter, setCounter] = useState(false);
     const dispatch = useDispatch();
-    const [categoryIds, setCategoryIds] = useState([authUser.user_data.institution.category[0].id]);
+    const [categoryIds, setCategoryIds] = useState(authUser.user_data.institution.category.map((cat) => cat.id));
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [sm, updateSm] = useState(false);
@@ -365,7 +365,7 @@ const AuthRepresentative = ({ drawer }) => {
                                         </Label>
                                         <div className="form-control-wrap">
                                             <div className="form-control-select">
-                                                <select className="form-control form-select" {...register('category_type', { required: "Position is Required" })}  onChange={updatePosition}>
+                                                <select className="form-control form-select" {...register('category_type', { required: "Position is Required" })} >
                                                     <option value="">Select Category</option>
                                                     {categories && categories?.map((category, index) => (
                                                         <option key={index} value={category.id}>
