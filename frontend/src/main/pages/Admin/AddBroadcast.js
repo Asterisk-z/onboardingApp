@@ -6,7 +6,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner } from "react
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
 import { CreateBroadcast, loadViewMessages } from "redux/stores/broadcast/broadcastStore";
 import { loadAllCategoryPositions } from "redux/stores/positions/positionStore";
-import { loadAllCategories } from "redux/stores/memberCategory/category";
+import { loadAllActiveCategories } from "redux/stores/memberCategory/category";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
 import { Steps, Step } from "react-step-builder";
@@ -89,7 +89,7 @@ const AdminBroadcast = ({ drawer }) => {
         const categories = useSelector((state) => state?.category?.list) || null;
 
         useEffect(() => {
-            dispatch(loadAllCategories());
+            dispatch(loadAllActiveCategories());
         }, [dispatch]);
 
         const $categories = categories ? JSON.parse(categories) : null;

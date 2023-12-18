@@ -37,10 +37,10 @@ axios.interceptors.response.use(function (config) {
         window.location.href = `${process.env.PUBLIC_URL}/auth-password-reset`
       }
     // console.log(error.response.data)
-      if(error.response.data.statusCode == '999') {
-        toast.success(error.response.statusText);
-        window.location.href = `${process.env.PUBLIC_URL}/logout`
-      }
+      // if(error.response.data.statusCode == '999') {
+      //   toast.success(error.response.statusText);
+      //   window.location.href = `${process.env.PUBLIC_URL}/logout`
+      // }
     return Promise.reject(error);
   });
 

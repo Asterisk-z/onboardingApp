@@ -153,7 +153,12 @@ import AdminBroadcast from "main/pages/Admin/AdminBroadcast"
 import AdminListInstitutionAR from "main/pages/Admin/AdminListInstitutionAR" 
 import AdminListAR from "main/pages/Admin/AdminListAR" 
 import AdminTransferAR from "main/pages/Admin/AdminTransferAR" 
+import AdminCategories from "main/pages/Admin/AdminCategories" 
+import AdminComplaintType from "main/pages/Admin/AdminComplaintType" 
+import AdminPositions from "main/pages/Admin/AdminPositions" 
 import AdminComplaint from "main/pages/Admin/AdminComplaint" 
+
+
 import Complaint from "main/pages/Complaint" 
 import AuditLog from "main/pages/AuditLog" 
 import AuthRepresentative from "main/pages/AuthRepresentative" 
@@ -168,7 +173,6 @@ import AdminInstitutions from "main/pages/Admin/AdminInstitutions";
 import AddBroadcast from "main/pages/Admin/AddBroadcast";
 import UserAuditLog from "main/pages/Admin/AuditLog" 
 import Success from "pages/auth/Success";
-
 
 import Layout from "layout/Index";
 import AdminLayout from "layout/AdminLayout";
@@ -439,9 +443,9 @@ const Router = () => {
           <Route path="user-audit-log" element={<UserAuditLog />}></Route>
           <Route path="add-broadcast" element={<AddBroadcast />}></Route>
           <Route path="admin-institutions" element={<AdminInstitutions />}></Route>
-          {/* <Route path="admin-complaint-type" element={<AdminComplaintType />}></Route>
+          <Route path="admin-complaint-type" element={<AdminComplaintType />}></Route>
           <Route path="admin-categories" element={<AdminCategories />}></Route>
-          <Route path="admin-positions" element={<AdminPosition />}></Route> */}
+          <Route path="admin-positions" element={<AdminPositions />}></Route>
           
             <Route path="wizard" element={<WizardTest />}></Route>
 

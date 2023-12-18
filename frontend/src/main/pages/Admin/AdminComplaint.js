@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner} from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
-import { loadAllComplaintTypes } from "redux/stores/complaints/complaintTypes";
+import { loadAllActiveComplaintTypes } from "redux/stores/complaints/complaintTypes";
 import { loadAllUsersComplaints } from "redux/stores/complaints/complaint";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";

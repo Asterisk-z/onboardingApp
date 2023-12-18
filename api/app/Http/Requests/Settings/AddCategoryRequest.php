@@ -25,8 +25,20 @@ class AddCategoryRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'code' => 'required|string',
+            'code' => 'required|string|unique:membership_categories,code',
         ];
 
     }
+    public function messages()
+    {
+
+        return [
+            "code.required" => "Category Code Is Required.",
+            "code.string" => "Category code must be an string.",
+            "code.unique" => "Category code exists.",
+            "name.required" => "Category Name Is Required.",
+            "name.string" => "Category Name must be an string.",
+        ];
+    }
+
 }

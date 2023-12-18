@@ -95,6 +95,31 @@ Route::middleware('auth')->group(function () {
         Route::group(['prefix' => 'institution'],  function () {
             Route::get('/list', [InstitutionController::class, 'listInstitution']);
         });
+
+        // Membership Category
+        Route::group(['prefix' => 'membership/category'],  function () {
+            Route::get('/list', [MemberCategoryController::class, 'listAll']);
+            Route::post('/create', [MemberCategoryController::class, 'addCategory']);
+            Route::post('/update/{category}', [MemberCategoryController::class, 'updateCategory']);
+            Route::post('/update-status/{category}', [MemberCategoryController::class, 'changeStatusCategory']);
+        });
+
+        // Positions
+        Route::group(['prefix' => 'meg/position'],  function () {
+            Route::get('/list', [PositionController::class, 'listAll']);
+            Route::post('/create', [PositionController::class, 'addPosition']);
+            Route::post('/update/{position}', [PositionController::class, 'updatePosition']);
+            Route::post('/update-status/{position}', [PositionController::class, 'changeStatusPosition']);
+        });
+
+        // Complaint
+        Route::group(['prefix' => 'meg/complain-type'],  function () {
+            Route::get('/list', [ComplaintTypeController::class, 'listAll']);
+            Route::post('/create', [ComplaintTypeController::class, 'addComplainType']);
+            Route::post('/update/{complainType}', [ComplaintTypeController::class, 'updateComplainType']);
+            Route::post('/update-status/{complainType}', [ComplaintTypeController::class, 'changeStatusComplainType']);
+        });
+
     });
 
     //MSG ROUTES
@@ -104,7 +129,7 @@ Route::middleware('auth')->group(function () {
     //MBG ROUTES
 
     //AR ROUTES
-    Route::middleware('authRole:' . Role::ARAUTHORISER . ',' . Role::ARINPUTTER)->group( function () {
+    Route::middleware('authRole:' . Role::ARAUTHORISER . ',' . Role::ARINPUTTER)->group(function () {
         Route::group(['prefix' => 'ar'], function () {
             Route::get('/list', [ARController::class, 'list']);
             Route::get('/search', [ARController::class, 'search']);
@@ -125,7 +150,7 @@ Route::middleware('auth')->group(function () {
         });
     });
 
-    Route::group(['prefix' => 'user'],  function () {
+    Route::group(['prefix' => 'user'], function () {
         Route::get('/authorisers', [UserController::class, 'list_ar_authorisers']);
     });
 });
