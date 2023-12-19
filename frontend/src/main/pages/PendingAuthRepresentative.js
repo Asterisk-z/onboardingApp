@@ -43,7 +43,7 @@ const PendingAuthRepresentative = ({ drawer }) => {
         dispatch(loadAllActivePositions());
         dispatch(loadAllCountries());
         dispatch(loadAllActiveAuthoriser());
-        dispatch(userLoadUserARs({"approval_status" : "pending", 'role_id' : ""}));
+        dispatch(userLoadUserARs({"approval_status" : "", 'role_id' : ""}));
     }, [dispatch, parentState]);
       
     const handleFormSubmit = async (values) => {

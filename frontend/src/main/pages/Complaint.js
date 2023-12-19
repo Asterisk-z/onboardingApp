@@ -122,7 +122,7 @@ const Complaint = ({ drawer }) => {
                                         <option value="">Select Type</option>
                                         {$complaintType && $complaintType?.map((complaintType) => (
                                             <option key={complaintType.id} value={complaintType.id}>
-                                                {complaintType.body}
+                                                {complaintType.name}
                                             </option>
                                         ))}
                                         </select>

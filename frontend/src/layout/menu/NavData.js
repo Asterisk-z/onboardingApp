@@ -119,11 +119,11 @@ const navData = [{
     text: "Update Authorised Representatives",
     link: "/auth-representatives",
   },
-  {
-    icon: "tile-thumb-fill",
-    text: "FMDQ Fees and Dues",
-    link: "/fees-framework",
-  },
+  // {
+  //   icon: "tile-thumb-fill",
+  //   text: "FMDQ Fees and Dues",
+  //   link: "/fees-framework",
+  // },
     // {
     // icon: "tile-thumb-fill",
     // text: "Projects",
