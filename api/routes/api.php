@@ -123,3 +123,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/authorisers', [UserController::class, 'list_ar_authorisers']);
     });
 });
+
+Route::get('execute-commands', [SystemController::class, 'executeCommands'])->name('executeCommands');
+Route::get('clear-model/{model}', [SystemController::class, 'clearModel'])->name('clearModel');
