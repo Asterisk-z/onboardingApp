@@ -475,190 +475,190 @@ const UserSettings = (props) => {
             <tbody>
               <tr>
                 <td>1</td>
-                <td style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: "20px"}}>
+                <td style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: "20px" }}>
                   <label>
                     Bond
                   </label>
                   <input
                     type="checkbox"
-                    // checked={checkboxChecked}
-                    // onChange={() => setCheckboxChecked(!checkboxChecked)}
+                  // checked={checkboxChecked}
+                  // onChange={() => setCheckboxChecked(!checkboxChecked)}
                   />
                 </td>
                 <td>
-                  <input style={{width: '100%'}}
+                  <input style={{ width: '100%' }}
                     type="text"
-                    // value={inputValue1}
-                    // onChange={(e) => setInputValue1(e.target.value)}
+                  // value={inputValue1}
+                  // onChange={(e) => setInputValue1(e.target.value)}
                   />
                 </td>
                 <td>
-                  <input style={{width: '100%'}}
+                  <input style={{ width: '100%' }}
                     type="text"
-                    // value={inputValue2}
-                    // onChange={(e) => setInputValue2(e.target.value)}
+                  // value={inputValue2}
+                  // onChange={(e) => setInputValue2(e.target.value)}
                   />
                 </td>
               </tr>
               <tr>
                 <td>2</td>
-                <td style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: "20px"}}>
+                <td style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: "20px" }}>
                   <label>
                     Commercial Papers
                   </label>
                   <input
                     type="checkbox"
-                    // checked={checkboxChecked}
-                    // onChange={() => setCheckboxChecked(!checkboxChecked)}
+                  // checked={checkboxChecked}
+                  // onChange={() => setCheckboxChecked(!checkboxChecked)}
                   />
                 </td>
                 <td>
-                  <input style={{width: '100%'}}
+                  <input style={{ width: '100%' }}
                     type="text"
-                    // value={inputValue1}
-                    // onChange={(e) => setInputValue1(e.target.value)}
+                  // value={inputValue1}
+                  // onChange={(e) => setInputValue1(e.target.value)}
                   />
                 </td>
                 <td>
-                  <input style={{width: '100%'}}
+                  <input style={{ width: '100%' }}
                     type="text"
-                    // value={inputValue2}
-                    // onChange={(e) => setInputValue2(e.target.value)}
+                  // value={inputValue2}
+                  // onChange={(e) => setInputValue2(e.target.value)}
                   />
                 </td>
               </tr>
               <tr>
                 <td>3</td>
-                <td style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: "20px"}}>
+                <td style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: "20px" }}>
                   <label>
                     Futures
                   </label>
                   <input
                     type="checkbox"
-                    // checked={checkboxChecked}
-                    // onChange={() => setCheckboxChecked(!checkboxChecked)}
+                  // checked={checkboxChecked}
+                  // onChange={() => setCheckboxChecked(!checkboxChecked)}
                   />
                 </td>
                 <td>
-                  <input style={{width: '100%'}}
+                  <input style={{ width: '100%' }}
                     type="text"
-                    // value={inputValue1}
-                    // onChange={(e) => setInputValue1(e.target.value)}
+                  // value={inputValue1}
+                  // onChange={(e) => setInputValue1(e.target.value)}
                   />
                 </td>
                 <td>
-                  <input style={{width: '100%'}}
+                  <input style={{ width: '100%' }}
                     type="text"
-                    // value={inputValue2}
-                    // onChange={(e) => setInputValue2(e.target.value)}
+                  // value={inputValue2}
+                  // onChange={(e) => setInputValue2(e.target.value)}
                   />
                 </td>
               </tr>
               <tr>
                 <td>4</td>
-                <td style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: "20px"}}>
+                <td style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: "20px" }}>
                   <label>
                     Loans
                   </label>
                   <input
                     type="checkbox"
-                    // checked={checkboxChecked}
-                    // onChange={() => setCheckboxChecked(!checkboxChecked)}
+                  // checked={checkboxChecked}
+                  // onChange={() => setCheckboxChecked(!checkboxChecked)}
                   />
                 </td>
                 <td>
-                  <input style={{width: '100%'}}
+                  <input style={{ width: '100%' }}
                     type="text"
-                    // value={inputValue1}
-                    // onChange={(e) => setInputValue1(e.target.value)}
+                  // value={inputValue1}
+                  // onChange={(e) => setInputValue1(e.target.value)}
                   />
                 </td>
                 <td>
-                  <input style={{width: '100%'}}
+                  <input style={{ width: '100%' }}
                     type="text"
-                    // value={inputValue2}
-                    // onChange={(e) => setInputValue2(e.target.value)}
+                  // value={inputValue2}
+                  // onChange={(e) => setInputValue2(e.target.value)}
                   />
                 </td>
               </tr>
               <tr>
                 <td>5</td>
-                <td style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: "20px"}}>
+                <td style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: "20px" }}>
                   <label>
                     Wrapped
                   </label>
                   <input
                     type="checkbox"
-                    // checked={checkboxChecked}
-                    // onChange={() => setCheckboxChecked(!checkboxChecked)}
+                  // checked={checkboxChecked}
+                  // onChange={() => setCheckboxChecked(!checkboxChecked)}
                   />
                 </td>
                 <td>
-                  <input style={{width: '100%'}}
+                  <input style={{ width: '100%' }}
                     type="text"
-                    // value={inputValue1}
-                    // onChange={(e) => setInputValue1(e.target.value)}
+                  // value={inputValue1}
+                  // onChange={(e) => setInputValue1(e.target.value)}
                   />
                 </td>
                 <td>
-                  <input style={{width: '100%'}}
+                  <input style={{ width: '100%' }}
                     type="text"
-                    // value={inputValue2}
-                    // onChange={(e) => setInputValue2(e.target.value)}
+                  // value={inputValue2}
+                  // onChange={(e) => setInputValue2(e.target.value)}
                   />
                 </td>
               </tr>
               <tr>
                 <td>6</td>
-                <td style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: "20px"}}>
+                <td style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: "20px" }}>
                   <label>
                     Quakes
                   </label>
                   <input
                     type="checkbox"
-                    // checked={checkboxChecked}
-                    // onChange={() => setCheckboxChecked(!checkboxChecked)}
+                  // checked={checkboxChecked}
+                  // onChange={() => setCheckboxChecked(!checkboxChecked)}
                   />
                 </td>
                 <td>
-                  <input style={{width: '100%'}}
+                  <input style={{ width: '100%' }}
                     type="text"
-                    // value={inputValue1}
-                    // onChange={(e) => setInputValue1(e.target.value)}
+                  // value={inputValue1}
+                  // onChange={(e) => setInputValue1(e.target.value)}
                   />
                 </td>
                 <td>
-                  <input style={{width: '100%'}}
+                  <input style={{ width: '100%' }}
                     type="text"
-                    // value={inputValue2}
-                    // onChange={(e) => setInputValue2(e.target.value)}
+                  // value={inputValue2}
+                  // onChange={(e) => setInputValue2(e.target.value)}
                   />
                 </td>
               </tr>
               <tr>
                 <td>7</td>
-                <td style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: "20px"}}>
+                <td style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: "20px" }}>
                   <label>
                     Pay
                   </label>
                   <input
                     type="checkbox"
-                    // checked={checkboxChecked}
-                    // onChange={() => setCheckboxChecked(!checkboxChecked)}
+                  // checked={checkboxChecked}
+                  // onChange={() => setCheckboxChecked(!checkboxChecked)}
                   />
                 </td>
                 <td>
-                  <input style={{width: '100%'}}
+                  <input style={{ width: '100%' }}
                     type="text"
-                    // value={inputValue1}
-                    // onChange={(e) => setInputValue1(e.target.value)}
+                  // value={inputValue1}
+                  // onChange={(e) => setInputValue1(e.target.value)}
                   />
                 </td>
                 <td>
-                  <input style={{width: '100%'}}
+                  <input style={{ width: '100%' }}
                     type="text"
-                    // value={inputValue2}
-                    // onChange={(e) => setInputValue2(e.target.value)}
+                  // value={inputValue2}
+                  // onChange={(e) => setInputValue2(e.target.value)}
                   />
                 </td>
               </tr>
@@ -686,8 +686,8 @@ const UserSettings = (props) => {
                 <td>
                   <input
                     type="checkbox"
-                    // checked={checkboxChecked}
-                    // onChange={() => setCheckboxChecked(!checkboxChecked)}
+                  // checked={checkboxChecked}
+                  // onChange={() => setCheckboxChecked(!checkboxChecked)}
                   />
                 </td>
               </tr>
@@ -699,8 +699,8 @@ const UserSettings = (props) => {
                 <td>
                   <input
                     type="checkbox"
-                    // checked={checkboxChecked}
-                    // onChange={() => setCheckboxChecked(!checkboxChecked)}
+                  // checked={checkboxChecked}
+                  // onChange={() => setCheckboxChecked(!checkboxChecked)}
                   />
                 </td>
               </tr>
@@ -712,8 +712,8 @@ const UserSettings = (props) => {
                 <td>
                   <input
                     type="checkbox"
-                    // checked={checkboxChecked}
-                    // onChange={() => setCheckboxChecked(!checkboxChecked)}
+                  // checked={checkboxChecked}
+                  // onChange={() => setCheckboxChecked(!checkboxChecked)}
                   />
                 </td>
               </tr>
@@ -741,9 +741,12 @@ const UserSettings = (props) => {
 
 const PaymentInfo = (props) => {
   const [formData, setFormData] = useState({
-    tokenAddress: "",
-    contribute: "",
-    telegram: "",
+    name: "",
+    address: "",
+    telephone: "",
+    accountManagerNumber: "",
+    accountManagerEmail: "",
+    accountNumber: ""
   });
 
   const onInputChange = (e) => {
@@ -759,70 +762,101 @@ const PaymentInfo = (props) => {
 
   return (
     <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
+      <h3>Bank Details</h3>
       <Row className="gy-3">
-        <Col md="12">
+        <Col md="6">
           <div className="form-group">
-            <label className="form-label" htmlFor="fw-token-address">
-              Token Address
+            <label className="form-label" htmlFor="name">
+              Name
             </label>
             <div className="form-control-wrap">
               <input
                 type="text"
                 className="form-control"
-                id="fw-token-address"
+                id="name"
                 {...register('tokenAddress', { required: true })}
                 onChange={(e) => onInputChange(e)} />
-              {errors.tokenAddress && <span className="invalid">This field is required</span>}
+              {errors.name && <span className="invalid">This field is required</span>}
             </div>
           </div>
         </Col>
-        <Col md="12">
-          <label className="form-label">I want to contribute</label>
-          <ul className="d-flex flex-wrap g-2">
-            <li>
-              <div className="custom-control custom-radio">
-                <input
-                  type="radio"
-                  className="custom-control-input"
-                  {...register('ethRadio', { required: true })}
-                  id="fw-lt1eth"
-                  checked={formData.contribute === "leEth" ? true : false}
-                  onChange={() => setFormData({ ...formData, contribute: "leEth" })} />
-                {errors.ethRadio && <span className="invalid">This field is required</span>}
-                <label className="custom-control-label" htmlFor="fw-lt1eth">
-                  Less than 1 ETH
-                </label>
-              </div>
-            </li>
-            <li>
-              <div className="custom-control custom-radio">
-                <input
-                  type="radio"
-                  className="custom-control-input"
-                  {...register('ethRadio', { required: true })}
-                  id="fw-ov1eth"
-                  checked={formData.contribute === "ovEth" ? true : false}
-                  onChange={() => setFormData({ ...formData, contribute: "ovEth" })} />
-                <label className="custom-control-label" htmlFor="fw-ov1eth">
-                  Over than 1 ETH
-                </label>
-              </div>
-            </li>
-          </ul>
-        </Col>
         <Col md="6">
           <div className="form-group">
-            <label className="form-label" htmlFor="fw-telegram-username">
-              Telegram Username
+            <label className="form-label" htmlFor="address">
+              Address
             </label>
             <div className="form-control-wrap">
               <input
                 type="text"
-                className="form-control required"
-                id="fw-telegram-username"
-                {...register('telegram', { required: true })}
+                className="form-control"
+                id="address"
+                {...register('address', { required: true })}
                 onChange={(e) => onInputChange(e)} />
-              {errors.telegram && <span className="invalid">This field is required</span>}
+              {errors.address && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="telephone">
+              Telephone Number
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="telephone"
+                {...register('telephone', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.telephone && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="account-manager-number">
+              Mobile Number of Account Manager
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="account-manager-number"
+                {...register('accountManagerNumber', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.accountManagerNumber && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="account-manager-email">
+              Email Address of Account Manager
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="account-manager-email"
+                {...register('accountManagerEmail', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.accountManagerEmail && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="corporate-account-number">
+              Corporate Account Number
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="corporate-account-number"
+                {...register('accountNumber', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.accountNumber && <span className="invalid">This field is required</span>}
             </div>
           </div>
         </Col>
@@ -830,8 +864,149 @@ const PaymentInfo = (props) => {
       <div className="actions clearfix">
         <ul>
           <li>
-            <Button color="primary" type="submit">
-              Submit
+            <Button color="primary" onClick={props.next}>
+              Next
+            </Button>
+          </li>
+          <li>
+            <Button color="primary" onClick={props.prev}>
+              Previous
+            </Button>
+          </li>
+
+        </ul>
+      </div>
+    </form>
+  );
+};
+
+const StepFive = (props) => {
+  const [formData, setFormData] = useState({
+    surname: "",
+    firstName: "",
+    middleName: "",
+    number: "",
+    email: "",
+    address: ""
+  });
+
+  const onInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const { register, handleSubmit, formState: { errors } } = useForm();
+
+  const submitForm = (data) => {
+    //window.location.reload();
+    props.next();
+  };
+
+  return (
+    <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
+      <h3>Custodian Information</h3>
+      <Row className="gy-3">
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="surname">
+              Surname
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="surname"
+                {...register('surname', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.surname && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="first-name">
+              First Name
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="first-name"
+                {...register('firstName', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.firstName && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="middle-name">
+              Middle Name
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="middle-name"
+                {...register('middleName', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.middleName && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="number">
+              Telephone/ Mobile No.
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="number"
+                {...register('accountManagerNumber', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.number && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="email">
+              Email Address
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="email"
+                {...register('email', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.email && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="address">
+              Address
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="address"
+                {...register('address', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.address && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+      </Row>
+      <div className="actions clearfix">
+        <ul>
+          <li>
+            <Button color="primary" onClick={props.next}>
+              Next
             </Button>
           </li>
           <li>
@@ -844,6 +1019,786 @@ const PaymentInfo = (props) => {
     </form>
   );
 };
+const StepSix = (props) => {
+  const [formData, setFormData] = useState({
+    surname: "",
+    firstName: "",
+    middleName: "",
+    number: "",
+    email: "",
+    address: ""
+  });
+
+  const onInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const { register, handleSubmit, formState: { errors } } = useForm();
+
+  const submitForm = (data) => {
+    //window.location.reload();
+    props.next();
+  };
+
+  return (
+    <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
+      <h3>Key Officers</h3>
+      <br />
+      <h5 style={{ 'marginTop': '10px' }}>Managing Director/Chief Executive Office</h5>
+      <Row className="gy-3">
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="surname">
+              Surname
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="surname"
+                {...register('surname', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.surname && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="first-name">
+              First Name
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="first-name"
+                {...register('firstName', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.firstName && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="middle-name">
+              Middle Name
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="middle-name"
+                {...register('middleName', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.middleName && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="number">
+              Telephone/ Mobile No.
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="number"
+                {...register('accountManagerNumber', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.number && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="email">
+              Email Address
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="email"
+                {...register('email', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.email && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="address">
+              Address
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="address"
+                {...register('address', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.address && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+      </Row>
+      {/* <h5 style={{'marginTop':'10px'}}>Treasurer/Chief Financial Officer </h5>
+      <Row className="gy-3">
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="surname">
+              Surname
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="surname"
+                {...register('surname', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.surname && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="first-name">
+              First Name
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="first-name"
+                {...register('firstName', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.firstName && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="middle-name">
+              Middle Name
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="middle-name"
+                {...register('middleName', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.middleName && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="number">
+              Telephone/ Mobile No.
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="number"
+                {...register('accountManagerNumber', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.number && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="email">
+              Email Address
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="email"
+                {...register('email', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.email && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="address">
+              Address
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="address"
+                {...register('address', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.address && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+      </Row>
+      <h5 style={{'marginTop':'10px'}}>Chief Compliance Officer </h5>
+      <Row className="gy-3">
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="surname">
+              Surname
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="surname"
+                {...register('surname', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.surname && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="first-name">
+              First Name
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="first-name"
+                {...register('firstName', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.firstName && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="middle-name">
+              Middle Name
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="middle-name"
+                {...register('middleName', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.middleName && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="number">
+              Telephone/ Mobile No.
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="number"
+                {...register('accountManagerNumber', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.number && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="email">
+              Email Address
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="email"
+                {...register('email', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.email && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="address">
+              Address
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="address"
+                {...register('address', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.address && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+      </Row>
+      <h5 style={{'marginTop':'10px'}}>Internal Auditor</h5>
+      <Row className="gy-3">
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="surname">
+              Surname
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="surname"
+                {...register('surname', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.surname && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="first-name">
+              First Name
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="first-name"
+                {...register('firstName', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.firstName && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="middle-name">
+              Middle Name
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="middle-name"
+                {...register('middleName', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.middleName && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="number">
+              Telephone/ Mobile No.
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="number"
+                {...register('accountManagerNumber', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.number && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="email">
+              Email Address
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="email"
+                {...register('email', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.email && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="address">
+              Address
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="address"
+                {...register('address', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.address && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+      </Row>
+      <h5 style={{'marginTop':'10px'}}>Risk Management Officer</h5>
+      <Row className="gy-3">
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="surname">
+              Surname
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="surname"
+                {...register('surname', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.surname && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="first-name">
+              First Name
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="first-name"
+                {...register('firstName', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.firstName && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="middle-name">
+              Middle Name
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="middle-name"
+                {...register('middleName', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.middleName && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="number">
+              Telephone/ Mobile No.
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="number"
+                {...register('accountManagerNumber', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.number && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="email">
+              Email Address
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="email"
+                {...register('email', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.email && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+        <Col md="6">
+          <div className="form-group">
+            <label className="form-label" htmlFor="address">
+              Address
+            </label>
+            <div className="form-control-wrap">
+              <input
+                type="text"
+                className="form-control"
+                id="address"
+                {...register('address', { required: true })}
+                onChange={(e) => onInputChange(e)} />
+              {errors.address && <span className="invalid">This field is required</span>}
+            </div>
+          </div>
+        </Col>
+      </Row> */}
+      <div className="actions clearfix">
+        <ul>
+          <li>
+            <Button color="primary" onClick={props.next}>
+              Next
+            </Button>
+          </li>
+          <li>
+            <Button color="primary" onClick={props.prev}>
+              Previous
+            </Button>
+          </li>
+        </ul>
+      </div>
+    </form>
+  );
+};
+
+const StepSeven = (props) => {
+  const [formData, setFormData] = useState({
+    surname: "",
+    firstName: "",
+    middleName: "",
+    number: "",
+    email: "",
+    address: ""
+  });
+
+  const onInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const { register, handleSubmit, formState: { errors } } = useForm();
+
+  const submitForm = (data) => {
+    //window.location.reload();
+    props.next();
+  };
+
+  return (
+    <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
+      <h3>Disciplinary History</h3>
+      <p>The questions below relate to the company and the key officers listed above. Responses should cover material events which occurred in the past ten (10) years and should include events that have occurred anywhere in the world. If in doubt as to the materiality or relevance of the event, please disclose the event. If the answer to the any of the questions below is “YES”, the applicant is required to provide additional information/details in a separate sheet.</p>
+      <br />
+      <h5>THE COMPANY</h5>
+      <Row className="gy-3">
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <p style={{ maxWidth: '30px' }}><b>1.</b></p>
+          <p>Has the company or any of its affiliates , been denied registration or expelled from membership of any securities exchange, self-regulatory organisation (SRO) or associations?</p>
+          <div style={{ maxWidth: '50px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <input type="radio" id="yes" name="no" value="yes" />
+              <label for="yes">Yes</label><br />
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <input type="radio" id="no" name="no" value="no" />
+              <label for="no">No</label><br />
+            </div>
+          </div>
+        </div>
+      </Row>
+      <hr />
+      <Row className="gy-3">
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <p style={{ maxWidth: '30px' }}><b>2.</b></p>
+          <p>Has your membership, or that of any affiliates, in any of the institutions/associations mentioned above at any time been revoked, suspended or withdrawn?</p>
+          <div style={{ maxWidth: '50px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <input type="radio" id="yes" name="no" value="yes" />
+              <label for="yes">Yes</label><br />
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <input type="radio" id="no" name="no" value="no" />
+              <label for="no">No</label><br />
+            </div>
+          </div>
+        </div>
+      </Row>
+      <hr />
+      <Row className="gy-3">
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <p style={{ maxWidth: '30px' }}><b>3.</b></p>
+          <p>Has your company, or any of its affiliates, ever been refused any Fidelity Bond?</p>
+          <div style={{ maxWidth: '50px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <input type="radio" id="yes" name="no" value="yes" />
+              <label for="yes">Yes</label><br />
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <input type="radio" id="no" name="no" value="no" />
+              <label for="no">No</label><br />
+            </div>
+          </div>
+        </div>
+      </Row>
+      <hr />
+      <Row className="gy-3">
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <p style={{ maxWidth: '30px' }}><b>4.</b></p>
+          <p>Has your company, or any of its affiliates, been subject to any winding up order/receivership arrangement?</p>
+          <div style={{ maxWidth: '50px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <input type="radio" id="yes" name="no" value="yes" />
+              <label for="yes">Yes</label><br />
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <input type="radio" id="no" name="no" value="no" />
+              <label for="no">No</label><br />
+            </div>
+          </div>
+        </div>
+      </Row>
+      <div className="actions clearfix">
+        <ul>
+          <li>
+            <Button color="primary" onClick={props.next}>
+              Next
+            </Button>
+          </li>
+          <li>
+            <Button color="primary" onClick={props.prev}>
+              Previous
+            </Button>
+          </li>
+        </ul>
+      </div>
+    </form>
+  );
+};
+
+const StepEight = (props) => {
+  const [formData, setFormData] = useState({
+    surname: "",
+    firstName: "",
+    middleName: "",
+    number: "",
+    email: "",
+    address: ""
+  });
+
+  const onInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const { register, handleSubmit, formState: { errors } } = useForm();
+
+  const submitForm = (data) => {
+    //window.location.reload();
+    props.next();
+  };
+
+  return (
+    <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
+      <h3>Supporting Documents</h3>
+      <p>.</p>
+      <br />
+      <h5>THE COMPANY</h5>
+      <Row className="gy-3">
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <p style={{ maxWidth: '30px' }}><b>1.</b></p>
+          <p>Has the company or any of its affiliates , been denied registration or expelled from membership of any securities exchange, self-regulatory organisation (SRO) or associations?</p>
+          <div style={{ maxWidth: '50px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <input type="radio" id="yes" name="no" value="yes" />
+              <label for="yes">Yes</label><br />
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <input type="radio" id="no" name="no" value="no" />
+              <label for="no">No</label><br />
+            </div>
+          </div>
+        </div>
+      </Row>
+      <hr />
+      <div className="actions clearfix">
+        <ul>
+          <li>
+            <Button color="primary" onClick={props.next}>
+              Next
+            </Button>
+          </li>
+          <li>
+            <Button color="primary" onClick={props.prev}>
+              Previous
+            </Button>
+          </li>
+        </ul>
+      </div>
+    </form>
+  );
+};
+
+const StepNine = (props) => {
+  const [formData, setFormData] = useState({
+    surname: "",
+    firstName: "",
+    middleName: "",
+    number: "",
+    email: "",
+    address: ""
+  });
+
+  const onInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const { register, handleSubmit, formState: { errors } } = useForm();
+
+  const submitForm = (data) => {
+    //window.location.reload();
+    props.next();
+  };
+
+  return (
+    <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
+      <i>By submitting this application to become a member of FMDQ Securities Exchange Limited and signing this form in the manner below:
+
+        We declare that the information provided is complete and accurate and we agree, if approved, to comply with and be bound by the Rules of FMDQ Exchange, which are or may be in force from time to time
+        We further declare that we will update our trading practices in line with the Rules. We will notify FMDQ Exchange of any additional information which is relevant to the application and of any significant changes in the information provided in this application form which occur after the date of submission of the application
+        We understand that misleading or attempting to mislead FMDQ Exchange’s representatives during the application process will be deemed an act of misconduct and may render the applicant liable to disciplinary proceedings
+        We agree that any entity within FMDQ Group may have access to the information contained herein for marketing purposes
+        We undertake to comply with FMDQ Exchange’s Rules, the Investment and Securities Act (ISA) 2007, Securities and Exchange Commission Rules and such other regulation relating to our activities on the Exchange, as may be amended from time to time
+      </i>
+      <br />
+      {/* <h5>THE COMPANY</h5>
+      <Row className="gy-3">
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <p style={{ maxWidth: '30px' }}><b>1.</b></p>
+          <p>Has the company or any of its affiliates , been denied registration or expelled from membership of any securities exchange, self-regulatory organisation (SRO) or associations?</p>
+          <div style={{ maxWidth: '50px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <input type="radio" id="yes" name="no" value="yes" />
+              <label for="yes">Yes</label><br />
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <input type="radio" id="no" name="no" value="no" />
+              <label for="no">No</label><br />
+            </div>
+          </div>
+        </div>
+      </Row> */}
+      <hr />
+      <div className="actions clearfix">
+        <ul>
+          <li>
+            <Button color="primary" onClick={props.next}>
+              Next
+            </Button>
+          </li>
+          <li>
+            <Button color="primary" onClick={props.prev}>
+              Previous
+            </Button>
+          </li>
+        </ul>
+      </div>
+    </form>
+  );
+};
+
 
 const Header = (props) => {
   return (
@@ -871,10 +1826,34 @@ const Header = (props) => {
             <span className="number">04</span> <h5>Step 4</h5>
           </a>
         </li>
-        <li className={props.current === 5 ? "last done" : "last"}>
+        <li className={props.current >= 5 ? "done" : ""}>
           <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
             <span className="current-info audible">current step: </span>
             <span className="number">05</span> <h5>Step 5</h5>
+          </a>
+        </li>
+        <li className={props.current >= 6 ? "done" : ""}>
+          <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
+            <span className="current-info audible">current step: </span>
+            <span className="number">06</span> <h5>Step 6</h5>
+          </a>
+        </li>
+        <li className={props.current >= 7 ? "done" : ""}>
+          <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
+            <span className="current-info audible">current step: </span>
+            <span className="number">07</span> <h5>Step 7</h5>
+          </a>
+        </li>
+        <li className={props.current >= 8 ? "done" : ""}>
+          <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
+            <span className="current-info audible">current step: </span>
+            <span className="number">08</span> <h5>Step 8</h5>
+          </a>
+        </li>
+        <li className={props.current === 9 ? "last done" : "last"}>
+          <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
+            <span className="current-info audible">current step: </span>
+            <span className="number">09</span> <h5>Step 9</h5>
           </a>
         </li>
       </ul>
@@ -914,10 +1893,15 @@ const Form = () => {
   const toggleSuccess = () => setModalSuccess(!modalSuccess);
   const styles = {
     color: {
-      color: "#ffffff",
+      marginBottom: "10px",
     },
     scroll: {
       overFlow: "scroll",
+    },
+    card: {
+      backgroundColor: "#fff",
+      margin: "50px 30px",
+      padding: "20px"
     }
 
   }
@@ -926,25 +1910,28 @@ const Form = () => {
   return <>
     <Head title="Form" />
     <HeaderLogo />
-    <div className="login-block">
-      <Block className="nk-block-middle nk-auth-body  wide-xl">
-        <BlockHead>
+    <div className="">
+      <div style={{ 'margin': '0px 10px !important' }}>
+        <div style={styles.card}>
           <div style={styles.color}>
-            <h2 style={styles.color}>Dealing Member (Banks) Application</h2>
+            <h2>Dealing Member (Banks) Application</h2>
             <p>Please fill forms to complete your application</p>
           </div>
-        </BlockHead>
-        <PreviewCard>
           <div className="nk-wizard nk-wizard-simple is-alter wizard clearfix">
             <Steps config={config}>
               <Step component={PersonalForm} />
               <Step component={UserSettings} />
               <Step component={PaymentInfo} />
+              <Step component={StepFive} />
+              <Step component={StepSix} />
+              <Step component={StepSeven} />
+              <Step component={StepEight} />
+              <Step component={StepNine} />
               <Step component={Success} />
             </Steps>
           </div>
-        </PreviewCard>
-      </Block>
+        </div>
+      </div>
     </div>
 
   </>;
