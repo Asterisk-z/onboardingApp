@@ -10,10 +10,6 @@ import { sendComplaintFeedback, updateComplaintStatus } from "redux/stores/compl
 import moment from "moment";
 import Icon from "components/icon/Icon";
 import Swal from "sweetalert2";
-import { AiOutlineArrowRight } from "react-icons/ai";
-import ImageContainer from "components/partials/gallery/GalleryImage";
-import Skeleton from 'react-loading-skeleton'
-import Countdown from 'react-countdown';
 
 const Export = ({ data }) => {
   const [modal, setModal] = useState(false);
@@ -71,10 +67,8 @@ const Export = ({ data }) => {
 };
 
 
-const SendFeedback = (props) => {
-    const complaint_id = props.complaint.id
-    const complaint = props.complaint
-  
+const SendFeedback = ({ updateParentParent, complaint}) => {
+    const complaint_id = complaint.id
     const [modalForm, setModalForm] = useState(false);
     const [modalDetail, setModalDetail] = useState(false);
 
@@ -103,7 +97,7 @@ const SendFeedback = (props) => {
                     setModalForm(!modalForm)
                     resetField('comment')
                     resetField('status')
-                    props.updateParentParent(Math.random())
+                    updateParentParent(Math.random())
                 }, 1000);
             
             } else {
@@ -121,6 +115,7 @@ const SendFeedback = (props) => {
     
         
   const askAction = async (action) => {
+
     if(action == 'open') {
         Swal.fire({
             title: "Are you sure?",
@@ -129,19 +124,19 @@ const SendFeedback = (props) => {
             showCancelButton: true,
             confirmButtonText: "Yes, open it!",
         }).then((result) => {
-            if (result.isConfirmed) {
+
+          if (result.isConfirmed) {
                 
                 const formData = new FormData();
                 formData.append('complaint_id', complaint_id);
                 formData.append('status', 'ONGOING');
                 const resp = dispatch(updateComplaintStatus(formData));
-
-                      console.log(props)
-                if (resp.payload?.message == "success") {
-                    
-                    props.updateParentParent(Math.random())
                 
-                }
+                setTimeout(() => { 
+                    updateParentParent(Math.random())
+                }, 1000);
+                
+                
             }
         });
     }
@@ -154,22 +149,22 @@ const SendFeedback = (props) => {
             showCancelButton: true,
             confirmButtonText: "Yes, close it!",
         }).then((result) => {
-            if (result.isConfirmed) {
+
+          if (result.isConfirmed) {
                 
                 const formData = new FormData();
                 formData.append('complaint_id', complaint_id);
                 formData.append('status', 'CLOSED');
                 const resp = dispatch(updateComplaintStatus(formData));
-
-                if (resp.payload?.message == "success") {
-                    // setTimeout(() => {
-                        props.updateParentParent(Math.random())
-                    // }, 1000);
                 
-                }
+                setTimeout(() => { 
+                    updateParentParent(Math.random())
+                }, 1000);
+              
             }
         });
     }
+    
 
   };
   
@@ -331,8 +326,8 @@ const ComplaintTableUser = ({ data, pagination, actions, className, selectableRo
         wrap: true
     },
     {
-        name: "Comments",
-        selector: (row) => { return (<><Badge color="gray">{`${row.comment.length} Comments`}</Badge></>) },
+        name: "Comment(s)",
+        selector: (row) => { return (<><Badge color="gray">{`${row.comment.length} Comment(s)`}</Badge></>) },
         sortable: true,
         width: "auto",
         wrap: true

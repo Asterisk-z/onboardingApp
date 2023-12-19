@@ -23,10 +23,11 @@ const TransferAuthRepresentative = ({ drawer }) => {
     const categories = authUser.user_data.institution.category ? authUser.user_data.institution.category : [];
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [categoryId, setCategoryId] = useState(authUser.user_data.institution.category[0].id);
+    const [categoryIds, setCategoryIds] = useState(authUser.user_data.institution.category.map((cat) => cat.id));
     const [loading, setLoading] = useState(false);
     const [sm, updateSm] = useState(false);
     const [parentState, setParentState] = useState('Initial state');
+    const [document, setDocument] = useState([]);
 
     const user = useSelector((state) => state?.arUsers?.single_ar) || null;
     const roles = useSelector((state) => state?.role?.list) || null;
@@ -46,8 +47,8 @@ const TransferAuthRepresentative = ({ drawer }) => {
     }, [dispatch, parentState]);
 
     useEffect(() => {
-        dispatch(loadAllCategoryPositions({'category_id' : categoryId}));
-    }, [categoryId]);
+        dispatch(loadAllCategoryPositions({'category_ids' : categoryIds}));
+    }, [categoryIds]);
 
     const $countries = countries ? JSON.parse(countries) : null;
     const $roles = roles ? JSON.parse(roles) : null;
@@ -69,6 +70,9 @@ const TransferAuthRepresentative = ({ drawer }) => {
 
         const formData = new FormData();
         formData.append('user_id', ar_user_id)
+        // formData.append('first_name', values.firstName)
+        // formData.append('middle_name', values.middleName)
+        // formData.append('last_name', values.lastName)
         formData.append('position_id', values.position_id)
         formData.append('nationality', values.nationality)
         formData.append('role_id', values.role)
@@ -76,6 +80,9 @@ const TransferAuthRepresentative = ({ drawer }) => {
         formData.append('ar_authoriser_id', values.ar_authoriser_id)
         formData.append('phone', values.phone)
         formData.append('reason', values.reason)
+        if (document) {
+            formData.append('img', document)
+        }
 
         try {
             setLoading(true);
@@ -111,12 +118,11 @@ const TransferAuthRepresentative = ({ drawer }) => {
 
   
      
-    const updatePosition = (event) => {
-        if (event.target.value) {
-            setCategoryId(event.target.value)
-        }
-    }
 
+    
+    const handleDificalFileChange = (event) => {
+		  setDocument(event.target.files[0]);
+    };
 
 
     return (
@@ -194,6 +200,39 @@ const TransferAuthRepresentative = ({ drawer }) => {
                                                         <form onSubmit={handleSubmit(handleFormSubmit)} className="is-alter" encType="multipart/form-data">
                                                                         
                                                             <Row className="gy-4">
+                                                                {/* <Col sm="6">
+                                                                    <div className="form-group">
+                                                                        <Label htmlFor="lastName" className="form-label">
+                                                                            Surname
+                                                                        </Label>
+                                                                        <div className="form-control-wrap">
+                                                                            <input className="form-control" type="text" id="lastName" placeholder="Enter Last Name"  {...register('lastName', { required: "Surname is Required" })}  defaultValue={initValues.lastName}/>
+                                                                            {errors.lastName && <p className="invalid">{`${errors.lastName.message}`}</p>}
+                                                                        </div>
+                                                                    </div>
+                                                                </Col>
+                                                                <Col sm="6">
+                                                                    <div className="form-group">
+                                                                        <Label htmlFor="firstName" className="form-label">
+                                                                            First Name
+                                                                        </Label>
+                                                                        <div className="form-control-wrap">
+                                                                            <input className="form-control" type="text" id="firstName" placeholder="Enter First Name" {...register('firstName', { required: "First Name is Required" })} defaultValue={initValues.firstName}/>
+                                                                            {errors.firstName && <p className="invalid">{`${errors.firstName.message}`}</p>}
+                                                                        </div>
+                                                                    </div>
+                                                                </Col>
+                                                                <Col sm="6">
+                                                                    <div className="form-group">
+                                                                        <Label htmlFor="middleName" className="form-label">
+                                                                            Middle Name
+                                                                        </Label>
+                                                                        <div className="form-control-wrap">
+                                                                            <input className="form-control" type="text" id="middleName" placeholder="Enter First Name" {...register('middleName', { required: false })} defaultValue={initValues.middleName}/>
+                                                                            {errors.middleName && <p className="invalid">{`${errors.middleName.message}`}</p>}
+                                                                        </div>
+                                                                    </div>
+                                                                </Col> */}
                                                                 <Col sm="6">
                                                                     <div className="form-group">
                                                                         <Label htmlFor="email" className="form-label">
@@ -207,32 +246,23 @@ const TransferAuthRepresentative = ({ drawer }) => {
                                                                 </Col>
                                                                 <Col sm="6">
                                                                     <div className="form-group">
+                                                                        <Label htmlFor="email" className="form-label">
+                                                                            Group Email Address
+                                                                        </Label>
+                                                                        <div className="form-control-wrap">
+                                                                            <input className="form-control" type="email" id="group_email" placeholder="Enter Group Email Address" {...register('group_email', { required: "Group Email Address is Required" })}  defaultValue={initValues.group_email}/>
+                                                                            {errors.group_email && <p className="invalid">{`${errors.group_email.message}`}</p>}
+                                                                        </div>
+                                                                    </div>
+                                                                </Col>
+                                                                <Col sm="6">
+                                                                    <div className="form-group">
                                                                         <Label htmlFor="phone" className="form-label">
                                                                             Phone Number
                                                                         </Label>
                                                                         <div className="form-control-wrap">
                                                                             <input className="form-control" type="text" id="phone" placeholder="Enter Last Name"  {...register('phone', { required: "Phone is Required" })} defaultValue={initValues.phone} />
                                                                             {errors.phone && <p className="invalid">{`${errors.phone.message}`}</p>}
-                                                                        </div>
-                                                                    </div>
-                                                                </Col>
-                                                                <Col sm="6">
-                                                                    <div className="form-group">
-                                                                        <Label htmlFor="position_id" className="form-label">
-                                                                            Category
-                                                                        </Label>
-                                                                        <div className="form-control-wrap">
-                                                                            <div className="form-control-select">
-                                                                                <select className="form-control form-select" {...register('category_type', { required: "Category is Required" })}  onChange={updatePosition}>
-                                                                                    <option value="">Select Category</option>
-                                                                                    {categories && categories?.map((category, index) => (
-                                                                                        <option key={index} value={category.id}>
-                                                                                            {category.name}
-                                                                                        </option>
-                                                                                    ))}
-                                                                                </select>
-                                                                                {errors.category_type && <p className="invalid">{`${errors.category_type.message}`}</p>}
-                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </Col>
@@ -296,7 +326,7 @@ const TransferAuthRepresentative = ({ drawer }) => {
                                                                         </div>
                                                                     </div>
                                                                 </Col>
-                                                                <Col sm="12">
+                                                                <Col sm="6">
                                                                     <div className="form-group">
                                                                         <Label htmlFor="nationality" className="form-label">
                                                                             Authoriser
@@ -313,6 +343,17 @@ const TransferAuthRepresentative = ({ drawer }) => {
                                                                                 </select>
                                                                                 {errors.ar_authoriser_id && <p className="invalid">{`${errors.ar_authoriser_id.message}`}</p>}
                                                                             </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </Col>
+                                                                <Col sm="6">
+                                                                    <div className="form-group">
+                                                                        <Label htmlFor="nationality" className="form-label">
+                                                                            Photo
+                                                                        </Label>
+                                                                        <div className="form-control-wrap">
+                                                                            <input type="file" accept=".gif,.jpg,.jpeg,.png,.pdf" className="form-control"  {...register('digitalPhone', {  required: false })} onChange={handleDificalFileChange}/>
+                                                                            {errors.digitalPhone && <p className="invalid">{`${errors.digitalPhone.message}`}</p>}
                                                                         </div>
                                                                     </div>
                                                                 </Col>

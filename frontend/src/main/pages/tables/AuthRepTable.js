@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge,  Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, CardBody, CardTitle } from "reactstrap";
 import { DataTablePagination } from "components/Component";
 import { userUpdateUserAR, userCancelUpdateUserAR, userProcessUpdateUserAR, userTransferUserAR } from "redux/stores/authorize/representative";
+import { loadAllCategoryPositions } from "redux/stores/positions/positionStore";
 import moment from "moment";
 import Icon from "components/icon/Icon";
 import Swal from "sweetalert2";
@@ -71,18 +72,19 @@ const Export = ({ data }) => {
   );
 };
 
-
 const ActionTab = (props) => {
         
     const aUser = useUser();
     const aUserUpdate = useUserUpdate();
+    const categories = aUser.user_data.institution.category ? aUser.user_data.institution.category : [];
     const user_id = props.ar_user.id
     const ar_user = props.ar_user
+    const [categoryIds, setCategoryIds] = useState(aUser.user_data.institution.category.map((cat) => cat.id));
     const $positions = props.positions
     const $countries = props.countries
     const $roles = props.roles
     const $authorizers = props.authorizers
-  
+    
     const [modalForm, setModalForm] = useState(false);
     const [modalView, setModalView] = useState(false);
     const [modalViewUpdate, setModalViewUpdate] = useState(false);
@@ -96,12 +98,15 @@ const ActionTab = (props) => {
     
     const { register, handleSubmit, formState: { errors }, resetField, setValue } = useForm();
     const [loading, setLoading] = useState(false);
+    const [document, setDocument] = useState([]);
+    const [signatureMandate, setSignatureMandate] = useState([]);
 
     const handleFormSubmit = async (values) => {
 
         const formData = new FormData();
         formData.append('user_id', user_id)
         formData.append('first_name', values.firstName)
+        formData.append('middle_name', values.middleName)
         formData.append('last_name', values.lastName)
         formData.append('position_id', values.position_id)
         formData.append('nationality', values.nationality)
@@ -109,7 +114,9 @@ const ActionTab = (props) => {
         formData.append('email', values.email)
         formData.append('ar_authoriser_id', values.ar_authoriser_id)
         formData.append('phone', values.phone)
-        
+        if (document) {
+            formData.append('img', document)
+        }
         try {
             setLoading(true);
             
@@ -141,8 +148,6 @@ const ActionTab = (props) => {
         setLoading(false);
       }
     }; 
-
-
  
     const [initValues, setInitValues] = useState({
       firstName: ar_user.firstName,
@@ -153,92 +158,80 @@ const ActionTab = (props) => {
       position: ar_user.position,
       role_id: ar_user.role.id,
     });
+        
+    const askAction = async (action) => {
+        if(action == 'approve') {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, approve it!",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    
+                    const formData = new FormData();
+                    formData.append('user_id', ar_user.id);
+                    formData.append('action', 'approve');
+                    const resp = dispatch(userProcessUpdateUserAR(formData));
 
-    
-  const askAction = async (action) => {
-    if(action == 'approve') {
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes, approve it!",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                
-                const formData = new FormData();
-                formData.append('user_id', ar_user.id);
-                formData.append('action', 'approve');
-                const resp = dispatch(userProcessUpdateUserAR(formData));
-
-                if (resp.payload?.message == "success") {
-                    setTimeout(() => {
-                        props.updateParentParent(Math.random())
-                    }, 1000);
-                
+                            props.updateParentParent(Math.random())
                 }
-            }
-        });
-    }
-    
-    if(action == 'decline') {
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes, decline it!",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                
-                const formData = new FormData();
-                formData.append('user_id', ar_user.id);
-                formData.append('action', 'decline');
-                const resp = dispatch(userProcessUpdateUserAR(formData));
+            });
+        }
+        
+        if(action == 'decline') {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, decline it!",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    
+                    const formData = new FormData();
+                    formData.append('user_id', ar_user.id);
+                    formData.append('action', 'decline');
+                    const resp = dispatch(userProcessUpdateUserAR(formData));
 
-                if (resp.payload?.message == "success") {
-                    setTimeout(() => {
-                        props.updateParentParent(Math.random())
-                    }, 1000);
-                
+                            props.updateParentParent(Math.random())
                 }
-            }
-        });
-    }
-    
-    if(action == 'cancel') {
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes, Cancel it!",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                
-                const formData = new FormData();
-                formData.append('user_id', ar_user.id);
-                const resp = dispatch(userCancelUpdateUserAR(formData));
+            });
+        }
+        
+        if(action == 'cancel') {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, Cancel it!",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    
+                    const formData = new FormData();
+                    formData.append('user_id', ar_user.id);
+                    const resp = dispatch(userCancelUpdateUserAR(formData));
 
-                if (resp.payload?.message == "success") {
-                    setTimeout(() => {
-                        props.updateParentParent(Math.random())
-                    }, 1000);
-                
+                            props.updateParentParent(Math.random())
                 }
-            }
-        });
-    }
+            });
+        }
 
-  };
+    };
   
+    
+    const handleDificalFileChange = (event) => {
+		  setDocument(event.target.files[0]);
+    };
   return (
     <>
         <div className="toggle-expand-content" style={{ display: "block" }}>
             <ul className="nk-block-tools g-3">
                  <li className="nk-block-tools-opt">
                     <UncontrolledDropdown direction="right">
-                        <DropdownToggle className="dropdown-toggle btn btn-xs" color="secondary">Action</DropdownToggle>
+                        <DropdownToggle className="dropdown-toggle btn btn-sm" color="secondary">Action</DropdownToggle>
 
                         <DropdownMenu>
                             <ul className="link-list-opt">
@@ -250,67 +243,69 @@ const ActionTab = (props) => {
                                         </DropdownItem>
                                     </li>
                                     
-                                    {(!props?.pending && aUser.is_ar_inputter()) &&
-                                        <>
-                                            <li size="xs">
-                                                <DropdownItem tag="a"  onClick={toggleForm} >
-                                                    <Icon name="eye"></Icon>
-                                                    <span>Update AR</span>
-                                                </DropdownItem>
-                                            </li>
-                                        </>
-                                    }
-                                  
-                                    {(!props?.pending && ar_user.update_payload && aUser.is_ar_inputter()) &&
-                                   
-                                        <li size="xs">
-                                            <DropdownItem tag="a"  onClick={(e) => askAction('cancel')} >
-                                                <Icon name="eye"></Icon>
-                                                <span>Cancel Update</span>
-                                            </DropdownItem>
-                                        </li>
-                                    }
+                                    {(ar_user.approval_status == 'approved') && <>
+                                        {(!props?.pending && !ar_user.update_payload && aUser.is_ar_inputter()) &&
+                                            <>
+                                                <li size="xs">
+                                                    <DropdownItem tag="a"  onClick={toggleForm} >
+                                                        <Icon name="eye"></Icon>
+                                                        <span>Update AR</span>
+                                                    </DropdownItem>
+                                                </li>
+                                            </>
+                                        }
                                     
-                                    {(ar_user.update_payload && props?.pending && aUser.is_ar_authorizer() ) &&
-                                        <>
-                                            <li size="xs">
-                                                <DropdownItem tag="a"  onClick={toggleViewUpdate} >
-                                                    <Icon name="eye"></Icon>
-                                                    <span>View Update AR</span>
-                                                </DropdownItem>
-                                            </li>
-                                            <li size="xs">
-                                                <DropdownItem tag="a"  onClick={(e) => askAction('approve')} >
-                                                    <Icon name="eye"></Icon>
-                                                    <span>Approve</span>
-                                                </DropdownItem>
-                                            </li>
-                                            <li size="xs">
-                                                <DropdownItem tag="a"  onClick={(e) => askAction('decline')} >
-                                                    <Icon name="eye"></Icon>
-                                                    <span>Decline</span>
-                                                </DropdownItem>
-                                            </li>
-                                        </>
-                                    }
+                                        {(!props?.pending && ar_user.update_payload && aUser.is_ar_inputter()) &&
                                     
-                                    {(!props?.pending && ar_user.update_payload && aUser.is_ar_inputter()) &&
-                                        <>
-                                            <li size="xs" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/transfer-auth-representative/${user_id}`)} >
-                                                <DropdownItem tag="a"  >
+                                            <li size="xs">
+                                                <DropdownItem tag="a"  onClick={(e) => askAction('cancel')} >
                                                     <Icon name="eye"></Icon>
-                                                    <span>Transfer AR</span>
+                                                    <span>Cancel Update</span>
                                                 </DropdownItem>
                                             </li>
-                                            <li size="xs" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/change-auth-representative/${user_id}`)} >
-                                                <DropdownItem tag="a"  >
-                                                    <Icon name="eye"></Icon>
-                                                    <span>Change AR</span>
-                                                </DropdownItem>
-                                            </li>
-                                        </>
+                                        }
+                                        
+                                        {(ar_user.update_payload && props?.pending && aUser.is_ar_authorizer() ) &&
+                                            <>
+                                                <li size="xs">
+                                                    <DropdownItem tag="a"  onClick={toggleViewUpdate} >
+                                                        <Icon name="eye"></Icon>
+                                                        <span>View Update AR</span>
+                                                    </DropdownItem>
+                                                </li>
+                                                <li size="xs">
+                                                    <DropdownItem tag="a"  onClick={(e) => askAction('approve')} >
+                                                        <Icon name="eye"></Icon>
+                                                        <span>Approve</span>
+                                                    </DropdownItem>
+                                                </li>
+                                                <li size="xs">
+                                                    <DropdownItem tag="a"  onClick={(e) => askAction('decline')} >
+                                                        <Icon name="eye"></Icon>
+                                                        <span>Decline</span>
+                                                    </DropdownItem>
+                                                </li>
+                                            </>
+                                        }
+                                        
+                                        {(!props?.pending && !ar_user.update_payload && aUser.is_ar_inputter()) &&
+                                            <>
+                                                <li size="xs" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/transfer-auth-representative/${user_id}`)} >
+                                                    <DropdownItem tag="a"  >
+                                                        <Icon name="eye"></Icon>
+                                                        <span>Transfer AR</span>
+                                                    </DropdownItem>
+                                                </li>
+                                                <li size="xs" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/change-auth-representative/${user_id}`)} >
+                                                    <DropdownItem tag="a"  >
+                                                        <Icon name="eye"></Icon>
+                                                        <span>Change AR Status</span>
+                                                    </DropdownItem>
+                                                </li>
+                                            </>
+                                        }
+                                      </>
                                     }
-
                                 
                             </ul>
                         </DropdownMenu>
@@ -392,6 +387,17 @@ const ActionTab = (props) => {
                     <Row className="gy-4">
                         <Col sm="6">
                             <div className="form-group">
+                                <Label htmlFor="lastName" className="form-label">
+                                    Surname
+                                </Label>
+                                <div className="form-control-wrap">
+                                    <input className="form-control" type="text" id="lastName" placeholder="Enter Last Name"  {...register('lastName', { required: "Surname is Required" })}  defaultValue={initValues.lastName}/>
+                                    {errors.lastName && <p className="invalid">{`${errors.lastName.message}`}</p>}
+                                </div>
+                            </div>
+                        </Col>
+                        <Col sm="6">
+                            <div className="form-group">
                                 <Label htmlFor="firstName" className="form-label">
                                     First Name
                                 </Label>
@@ -403,12 +409,32 @@ const ActionTab = (props) => {
                         </Col>
                         <Col sm="6">
                             <div className="form-group">
-                                <Label htmlFor="lastName" className="form-label">
-                                    Last Name
+                                <Label htmlFor="middleName" className="form-label">
+                                    Middle Name
                                 </Label>
                                 <div className="form-control-wrap">
-                                    <input className="form-control" type="text" id="lastName" placeholder="Enter Last Name"  {...register('lastName', { required: "Last Name is Required" })}  defaultValue={initValues.lastName}/>
-                                    {errors.lastName && <p className="invalid">{`${errors.lastName.message}`}</p>}
+                                    <input className="form-control" type="text" id="middleName" placeholder="Enter First Name" {...register('middleName', { required: false })} defaultValue={initValues.middleName}/>
+                                    {errors.middleName && <p className="invalid">{`${errors.middleName.message}`}</p>}
+                                </div>
+                            </div>
+                        </Col>
+                        <Col sm="6">
+                            <div className="form-group">
+                                <Label htmlFor="nationality" className="form-label">
+                                    Nationality
+                                </Label>
+                                <div className="form-control-wrap">
+                                    <div className="form-control-select">
+                                        <select className="form-control form-select" {...register('nationality', { required: "Nationality is Required" })}  defaultValue={initValues.nationality}>
+                                            <option value="">Select Nationality</option>
+                                            {$countries && $countries?.map((country, index) => (
+                                                <option key={index} value={country.code}>
+                                                    {country.name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        {errors.nationality && <p className="invalid">{`${errors.nationality.message}`}</p>}
+                                    </div>
                                 </div>
                             </div>
                         </Col>
@@ -436,6 +462,38 @@ const ActionTab = (props) => {
                         </Col>
                         <Col sm="6">
                             <div className="form-group">
+                                <Label htmlFor="email" className="form-label">
+                                    Group Email Address
+                                </Label>
+                                <div className="form-control-wrap">
+                                    <input className="form-control" type="email" id="group_email" placeholder="Enter Group Email Address" {...register('group_email', { required: "Group Email Address is Required" })}  defaultValue={initValues.group_email}/>
+                                    {errors.group_email && <p className="invalid">{`${errors.group_email.message}`}</p>}
+                                </div>
+                            </div>
+                        </Col>
+                        <Col sm="6">
+                            {/* Not Required */}
+                            <div className="form-group">
+                                <Label htmlFor="position_id" className="form-label">
+                                    Category
+                                </Label>
+                                <div className="form-control-wrap">
+                                    <div className="form-control-select">
+                                        <select className="form-control form-select" {...register('category_type', { required: "Category is Required" })} >
+                                            <option value="">Select Category</option>
+                                            {categories && categories?.map((category, index) => (
+                                                <option key={index} value={category.id}>
+                                                    {category.name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        {errors.category_type && <p className="invalid">{`${errors.category_type.message}`}</p>}
+                                    </div>
+                                </div>
+                            </div>
+                        </Col>
+                        <Col sm="6">
+                            <div className="form-group">
                                 <Label htmlFor="position_id" className="form-label">
                                     Position
                                 </Label>
@@ -457,26 +515,6 @@ const ActionTab = (props) => {
                         <Col sm="6">
                             <div className="form-group">
                                 <Label htmlFor="nationality" className="form-label">
-                                    Nationality
-                                </Label>
-                                <div className="form-control-wrap">
-                                    <div className="form-control-select">
-                                        <select className="form-control form-select" {...register('nationality', { required: "Nationality is Required" })}  defaultValue={initValues.nationality}>
-                                            <option value="">Select Nationality</option>
-                                            {$countries && $countries?.map((country, index) => (
-                                                <option key={index} value={country.code}>
-                                                    {country.name}
-                                                </option>
-                                            ))}
-                                        </select>
-                                        {errors.nationality && <p className="invalid">{`${errors.nationality.message}`}</p>}
-                                    </div>
-                                </div>
-                            </div>
-                        </Col>
-                        <Col sm="6">
-                            <div className="form-group">
-                                <Label htmlFor="nationality" className="form-label">
                                     Role
                                 </Label>
                                 <div className="form-control-wrap">
@@ -491,6 +529,17 @@ const ActionTab = (props) => {
                                         </select>
                                         {errors.role && <p className="invalid">{`${errors.role.message}`}</p>}
                                     </div>
+                                </div>
+                            </div>
+                        </Col>
+                        <Col sm="6">
+                            <div className="form-group">
+                                <Label htmlFor="nationality" className="form-label">
+                                    Digital Photo
+                                </Label>
+                                <div className="form-control-wrap">
+                                    <input type="file" accept=".gif,.jpg,.jpeg,.png,.pdf" className="form-control"  {...register('digitalPhone', {  required: false })} onChange={handleDificalFileChange}/>
+                                    {errors.digitalPhone && <p className="invalid">{`${errors.digitalPhone.message}`}</p>}
                                 </div>
                             </div>
                         </Col>
@@ -522,6 +571,7 @@ const ActionTab = (props) => {
                             </div>
                         </Col>
                     </Row>
+                    
                 </form>
             </ModalBody>
             <ModalFooter className="bg-light">
@@ -567,6 +617,13 @@ const AuthRepTable = ({ data, pagination, actions, className, selectableRows, ex
     {
         name: "Role",
         selector: (row) => { return (<><Badge color="success">{`${row.role.name}`}</Badge></>) },
+        sortable: true,
+        width: "auto",
+        wrap: true
+    },
+    {
+        name: "Status",
+        selector: (row) => { return (<><Badge color="success" className="text-uppercase">{`${row.approval_status}`}</Badge></>) },
         sortable: true,
         width: "auto",
         wrap: true

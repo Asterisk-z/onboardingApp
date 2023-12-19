@@ -9,6 +9,7 @@ import { loadAllCategoryPositions } from "redux/stores/positions/positionStore";
 import { loadAllCountries } from "redux/stores/nationality/country";
 import { userLoadUserARs, userCreateUserAR, userSearchUserARs } from "redux/stores/authorize/representative";
 import { loadAllActiveAuthoriser } from "redux/stores/users/userStore";
+import { loadAllSettings } from "redux/stores/settings/config";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
 import AuthRepTable from './Tables/AuthRepTable'
@@ -22,7 +23,7 @@ const AuthRepresentative = ({ drawer }) => {
     const categories = authUser.user_data.institution.category ? authUser.user_data.institution.category : [];
     const [counter, setCounter] = useState(false);
     const dispatch = useDispatch();
-    const [categoryId, setCategoryId] = useState(authUser.user_data.institution.category[0].id);
+    const [categoryIds, setCategoryIds] = useState(authUser.user_data.institution.category.map((cat) => cat.id));
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [sm, updateSm] = useState(false);
@@ -36,6 +37,7 @@ const AuthRepresentative = ({ drawer }) => {
     const authorizers = useSelector((state) => state?.user?.list) || null;
     const authorize_reps = useSelector((state) => state?.arUsers?.list) || null;
     const ar_search_result = useSelector((state) => state?.arUsers?.search_list) || null;
+    const settings = useSelector((state) => state?.settings?.list) || null;
 
     const { register, handleSubmit, formState: { errors }, resetField, getValues } = useForm();
     const [document, setDocument] = useState([]);
@@ -49,11 +51,12 @@ const AuthRepresentative = ({ drawer }) => {
       dispatch(loadUserRoles());
       dispatch(loadAllCountries());
       dispatch(loadAllActiveAuthoriser());
+      dispatch(loadAllSettings({"config" : "mandate_form"}));
     }, [dispatch, parentState]);
    
     useEffect(() => {
-        dispatch(loadAllCategoryPositions({'category_id' : categoryId}));
-    }, [categoryId]);
+        dispatch(loadAllCategoryPositions({'category_ids' : categoryIds}));
+    }, [categoryIds]);
 
     
     useEffect(() => {
@@ -74,6 +77,7 @@ const AuthRepresentative = ({ drawer }) => {
         formData.append('position_id', values.position_id)
         formData.append('nationality', values.nationality)
         formData.append('role_id', values.role)
+        formData.append('group_email', values.group_email)
         formData.append('email', values.email)
         formData.append('phone', values.phone)
         formData.append('img', values.digitalPhone[0])
@@ -115,6 +119,7 @@ const AuthRepresentative = ({ drawer }) => {
     const $authorizers = authorizers ? JSON.parse(authorizers) : null;
     const $authorize_reps = authorize_reps ? JSON.parse(authorize_reps) : null;
     const $ar_search_result = ar_search_result ? JSON.parse(ar_search_result) : null;
+    const $settings = settings ? JSON.parse(settings) : null;
 
     const updateParentState = (newState) => {
         setParentState(newState);
@@ -122,7 +127,7 @@ const AuthRepresentative = ({ drawer }) => {
     
     const updatePosition = (event) => {
         if (event.target.value) {
-            setCategoryId(event.target.value)
+            setCategoryIds([event.target.value])
         }
     }
     
@@ -142,7 +147,7 @@ const AuthRepresentative = ({ drawer }) => {
     const handleSignaturewChange = (event) => {
 		  setSignatureMandate(event.target.files[0]);
     };
-
+    
     return (
         <React.Fragment>
             <Head title="Authorised Representative"></Head>
@@ -337,14 +342,14 @@ const AuthRepresentative = ({ drawer }) => {
                                             Phone Number
                                         </Label>
                                         <div className="form-control-wrap">
-                                            <input className="form-control" type="text" id="phone" placeholder="Enter Last Name"  {...register('phone', { required: "Phone is Required" })} />
+                                            <input className="form-control" type="text" id="phone" placeholder="Enter Phone Number"  {...register('phone', { required: "Phone is Required" })} />
                                             {errors.phone && <p className="invalid">{`${errors.phone.message}`}</p>}
                                         </div>
                                     </div>
                                 </Col>
                                 <Col sm="6">
                                     <div className="form-group">
-                                        <Label htmlFor="email" className="form-label">
+                                        <Label htmlFor="group_email" className="form-label">
                                             Group Email Address
                                         </Label>
                                         <div className="form-control-wrap">
@@ -360,7 +365,7 @@ const AuthRepresentative = ({ drawer }) => {
                                         </Label>
                                         <div className="form-control-wrap">
                                             <div className="form-control-select">
-                                                <select className="form-control form-select" {...register('category_type', { required: "Position is Required" })}  onChange={updatePosition}>
+                                                <select className="form-control form-select" {...register('category_type', { required: "Position is Required" })} >
                                                     <option value="">Select Category</option>
                                                     {categories && categories?.map((category, index) => (
                                                         <option key={index} value={category.id}>
@@ -437,10 +442,13 @@ const AuthRepresentative = ({ drawer }) => {
                                 </Col>
                                 <Col sm="12">
                                     <div className="form-group">
+                                        {/* {settings} */}
+                                        {($settings && $settings.name == 'mandate_form') && <>
+                                            <a  size="lg" href={$settings.value}  download="mandate_form.pdf" target="_blank" className="active btn btn-primary">
+                                                {"Download Signature Mandate"}
+                                            </a>
+                                        </>}
                                         
-                                        <Button color="primary"  size="lg">
-                                            {"Download Signature Mandate"}
-                                        </Button>
                                     </div>
                                 </Col>
                                 <Col sm="12">

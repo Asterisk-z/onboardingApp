@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import exportFromJSON from "export-from-json";
 import CopyToClipboard from "react-copy-to-clipboard";
-import { Col, Row, Button,  Modal, ModalBody, } from "reactstrap";
+import Icon from "components/icon/Icon";
+import { useDispatch } from "react-redux";
+import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge,  Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, CardBody, CardTitle } from "reactstrap";
 import { DataTablePagination } from "components/Component";
 import moment from "moment";
+import { megProcessAddUserAR } from "redux/stores/authorize/representative";
+import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
+import Swal from "sweetalert2";
 
 const Export = ({ data }) => {
   const [modal, setModal] = useState(false);
@@ -61,6 +68,168 @@ const Export = ({ data }) => {
   );
 };
 
+const ActionTab = (props) => {
+        
+    const aUser = useUser();
+    const aUserUpdate = useUserUpdate();
+    const ar_user = props.ar_user
+    
+    const [modalViewUpdate, setModalViewUpdate] = useState(false);
+
+    const toggleViewUpdate = () => setModalViewUpdate(!modalViewUpdate);
+    
+    const dispatch = useDispatch();
+  
+    
+    const askAction = async (action) => {
+      
+      if(action == 'approve') {
+          Swal.fire({
+              title: "Are you sure?",
+              text: "You won't be able to revert this!",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonText: "Yes, approve it!",
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  
+                  const formData = new FormData();
+                  formData.append('user_id', ar_user.id);
+                  formData.append('action', 'approve');
+                  const resp = dispatch(megProcessAddUserAR(formData));
+
+                  props.updateParentParent(Math.random())
+                  setModalViewUpdate(false)
+                     
+              }
+          });
+      }
+      
+      if(action == 'decline') {
+          Swal.fire({
+              title: "Are you sure?",
+              text: "You won't be able to revert this!",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonText: "Yes, decline it!",
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  
+                  const formData = new FormData();
+                  formData.append('user_id', ar_user.id);
+                  formData.append('action', 'decline');
+                  const resp = dispatch(megProcessAddUserAR(formData));
+
+                  props.updateParentParent(Math.random())
+                  setModalViewUpdate(false)
+              }
+          });
+      }
+      
+
+    };
+  
+  return (
+    <>
+        <div className="toggle-expand-content" style={{ display: "block" }}>
+            <ul className="nk-block-tools g-3">
+                 <li className="nk-block-tools-opt">
+                    <UncontrolledDropdown direction="right">
+                        <DropdownToggle className="dropdown-toggle btn btn-md" color="secondary">Action</DropdownToggle>
+
+                        <DropdownMenu>
+                            <ul className="link-list-opt">
+                        
+                                    <li size="xs">
+                                        <DropdownItem tag="a"  onClick={toggleViewUpdate} >
+                                            <Icon name="eye"></Icon>
+                                            <span>View AR</span>
+                                        </DropdownItem>
+                                    </li>
+                                    
+
+                                    {(aUser.is_admin_meg() && ar_user.approval_status == 'pending' ) &&
+                                        <>
+                                            <li size="xs">
+                                                <DropdownItem tag="a"  onClick={(e) => askAction('approve')} >
+                                                    <Icon name="eye"></Icon>
+                                                    <span>Approve</span>
+                                                </DropdownItem>
+                                            </li>
+                                            <li size="xs">
+                                                <DropdownItem tag="a"  onClick={(e) => askAction('decline')} >
+                                                    <Icon name="eye"></Icon>
+                                                    <span>Decline</span>
+                                                </DropdownItem>
+                                            </li>
+                                        </>
+                                    }
+
+                                
+                            </ul>
+                        </DropdownMenu>
+                    </UncontrolledDropdown>
+                </li>
+
+            </ul>
+        </div>
+       
+        <Modal isOpen={modalViewUpdate} toggle={toggleViewUpdate} size="lg">
+            <ModalHeader toggle={toggleViewUpdate} close={<button className="close" onClick={toggleViewUpdate}><Icon name="cross" /></button>}>
+                View Authorised Representative
+            </ModalHeader>
+            <ModalBody>
+                    <Card className="card">   
+                        <CardBody className="card-inner">
+                            <CardTitle tag="h5">{ `${ar_user.firstName} ${ar_user.lastName} (${ar_user.email})` }</CardTitle>
+                            {/* <CardText> */}
+                                <ul className="gy-3">
+                                    <li><span className="lead">Phone : </span>{`${ar_user.phone}`}</li>
+                                    <li><span className="lead">Nationality : </span>{`${ar_user.nationality}`}</li>
+                                    <li><span className="lead">Role : </span>{`${ar_user.role.name}`}</li>
+                                    <li><span className="lead">Position : </span>{`${ar_user.position.name}`}</li>
+                                    <li><span className="lead">Status : </span>{`${ar_user.approval_status}`}</li>
+                                    <li><span className="lead">RegID : </span>{`${ar_user.regId}`}</li>
+                                    <li><span className="lead">Institution : </span>{`${ar_user.institution.name}`}</li>
+                                    <li><span className="lead">Profile Photo : </span>{ar_user.img ? (
+                                            <a  size="lg" href={ar_user.img}  target="_blank" className="active btn btn-primary">
+                                                {"View Image"}
+                                            </a>
+                                        ) : `Not Uploaded`}</li>
+                                    <li><span className="lead">Signature Mandate : </span>{ ar_user.mandate_form ?  (
+                                            <a  size="lg" href={ar_user.mandate_form}  target="_blank" className="active btn btn-primary">
+                                                {"View Mandate"}
+                                            </a>
+                                        ) : `Not Uploaded`}</li>
+                                </ul>
+
+                                {(aUser.is_admin_meg() && ar_user.approval_status == 'pending' ) &&
+                                    <>   
+                                      <ul className="g-4 center">
+                                          <li className="btn-group">
+                                              <Button color="secondary" size="md"  onClick={(e) => askAction('approve')} >Approve</Button>
+                                          </li>
+                                          <li className="btn-group">
+                                              <Button color="warning" size="md"  onClick={(e) => askAction('decline')} >Decline</Button>
+                                          </li>
+                                      </ul>
+                                      </>
+                                  }
+                                
+                            {/* </CardText> */}
+                        </CardBody>
+                    </Card>
+            </ModalBody>
+            <ModalFooter className="bg-light">
+                <span className="sub-text">View Authorised Representative</span>
+            </ModalFooter>
+        </Modal>
+    </>
+
+
+  );
+};
+
 const AdminListARTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState }) => {
     const complainColumn = [
       {
@@ -92,8 +261,15 @@ const AdminListARTable = ({ data, pagination, actions, className, selectableRows
           wrap: true
       },
       {
+          name: "Status",
+          selector: (row) => { return (<><Badge color="success" className="text-uppercase">{`${row.approval_status}`}</Badge></>) },
+          sortable: true,
+          width: "auto",
+          wrap: true
+      },
+      {
           name: "Role",
-          selector: (row) => { return (<>{`${row.role.name}`}</>) },
+          selector: (row) =>  { return (<><Badge color="success">{`${row.role.name}`}</Badge></>) },
           sortable: true,
           width: "auto",
           wrap: true
@@ -118,6 +294,13 @@ const AdminListARTable = ({ data, pagination, actions, className, selectableRows
           sortable: true,
           width: "auto",
           wrap: true
+      },
+      {
+        name: "Action",
+        selector: (row) => (<>
+                        <ActionTab ar_user={row}  updateParentParent={updateParent} />
+                    </>),
+        width: "100px",
       },
     ];
   const [tableData, setTableData] = useState(data);

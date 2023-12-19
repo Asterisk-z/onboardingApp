@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ResponseStatusCodes;
 use App\Helpers\Utility;
 use App\Models\ComplaintType;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class ComplaintTypeController extends Controller
 {
@@ -22,72 +25,77 @@ class ComplaintTypeController extends Controller
             'compliant_types' => (array) $converted_compliant_types,
         ];
         return successResponse('Complaint Types Fetched Successfully', $data);
-
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function listAll(): JsonResponse
     {
-        //
+        $compliant_types = ComplaintType::orderBy('created_at', 'DESC')->get(['id', 'name', 'is_del'])->toArray();
+        $converted_compliant_types = Utility::arrayKeysToCamelCase($compliant_types);
+        $data = [
+            'compliant_types' => (array) $converted_compliant_types,
+        ];
+
+        return successResponse('Complaint Types Fetched Successfully', $data);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function addComplainType(Request $request): JsonResponse
     {
-        //
-    }
+        $validated = $request->validate([
+            'name' => 'required|string|unique:complaint_types,name',
+        ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+        $compliant_types = ComplaintType::create($validated);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return successResponse('Complaint Type Created Successfully', $compliant_types);
     }
-
     /**
-     * Update the specified resource in storage.
+     * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function changeStatusComplainType(Request $request, ComplaintType $complainType): JsonResponse
     {
-        //
+        $validated = $request->validate([
+            'action' => 'required|string|in:activate,deactivate',
+        ]);
+
+        if ($request->action == 'activate') {
+
+            $complainType->is_del = ComplaintType::ACTIVATE;
+            $complainType->save();
+        } else {
+
+            $complainType->is_del = ComplaintType::DEACTIVATE;
+            $complainType->save();
+        }
+
+        return successResponse('ComplainType  Successfully', $complainType);
     }
-
     /**
-     * Remove the specified resource from storage.
+     * Display a listing of the resource.
      *
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function updateComplainType(Request $request, ComplaintType $complainType): JsonResponse
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|unique:complaint_types,name',
+        ]);
+
+        $complainType->name = $request->name;
+        $complainType->is_del = ComplaintType::ACTIVATE;
+        $complainType->save();
+
+        return successResponse('ComplainType Successfullyd', $complainType);
     }
 }

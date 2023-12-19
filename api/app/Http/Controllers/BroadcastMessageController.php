@@ -58,7 +58,7 @@ class BroadcastMessageController extends Controller
 
         $attachment = [];
 
-        if($request->hasFile('file')){
+        if ($request->hasFile('file')) {
             $attachment = Utility::saveFile('broadcast', $request->file('file'));
         }
 
@@ -71,8 +71,8 @@ class BroadcastMessageController extends Controller
         ]);
 
         $ars = User::where(function ($query) {
-                $query->where('role_id', Role::ARINPUTTER)->orWhere('role_id', Role::ARAUTHORISER);
-            })->where('approval_status', 'approved')->whereIn('position_id', $request->position)->get();
+            $query->where('role_id', Role::ARINPUTTER)->orWhere('role_id', Role::ARAUTHORISER);
+        })->where('approval_status', 'approved')->whereIn('position_id', $request->position)->get();
 
         $MEGs = Utility::getUsersEmailByCategory(Role::MEG);
         //

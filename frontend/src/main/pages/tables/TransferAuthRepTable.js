@@ -97,12 +97,8 @@ const ActionTab = (props) => {
                 formData.append('action', 'approve');
                 const resp = dispatch(userProcessTransferUserAR(formData));
 
-                if (resp.payload?.message == "success") {
-                    setTimeout(() => {
-                        props.updateParentParent(Math.random())
-                    }, 1000);
-                
-                }
+                props.updateParentParent(Math.random())
+                    
             }
         });
     }
@@ -122,12 +118,9 @@ const ActionTab = (props) => {
                 formData.append('action', 'decline');
                 const resp = dispatch(userProcessTransferUserAR(formData));
 
-                if (resp.payload?.message == "success") {
-                    setTimeout(() => {
-                        props.updateParentParent(Math.random())
-                    }, 1000);
-                
-                }
+              
+                props.updateParentParent(Math.random())
+
             }
         });
     }
@@ -141,7 +134,7 @@ const ActionTab = (props) => {
             <ul className="nk-block-tools g-3">
                  <li className="nk-block-tools-opt">
                     <UncontrolledDropdown direction="right">
-                        <DropdownToggle className="dropdown-toggle btn btn-xs" color="secondary">Action</DropdownToggle>
+                        <DropdownToggle className="dropdown-toggle btn btn-sm" color="secondary">Action</DropdownToggle>
 
                         <DropdownMenu>
                             <ul className="link-list-opt">
@@ -217,7 +210,7 @@ const TransferAuthRepTable = ({ data, pagination, actions, className, selectable
     },
     {
         name: "Status",
-        selector: (row) => { return (<><Badge color="success">{`${row.approval_status}`}</Badge></>) },
+        selector: (row) => { return (<><Badge color="success"  className="text-uppercase">{`${row.approval_status}`}</Badge></>) },
         sortable: true,
         width: "auto",
         wrap: true,

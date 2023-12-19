@@ -17,7 +17,7 @@ const Landing = ({ ...props }) => {
 
   const handleContinueClick = () => {
     if (selectedOption === 'accept') {
-      navigate(process.env.PUBLIC_URL + '/login');
+      navigate(process.env.PUBLIC_URL + '/auth-register');
     } else if (selectedOption === 'reject') {
       window.location.href = 'https://fmdqgroup.com/exchange/membership/';
     }

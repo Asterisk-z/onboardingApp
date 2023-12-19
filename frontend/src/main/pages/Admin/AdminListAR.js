@@ -3,8 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner} from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
-import { loadAllPositions } from "redux/stores/positions/positionStore";
-import { loadAllCategories } from "redux/stores/memberCategory/category";
 import {adminLoadUserARs} from "redux/stores/authorize/representative"
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
@@ -28,7 +26,7 @@ const AdminBroadcast = ({ drawer }) => {
 
     const ar_users = useSelector((state) => state?.arUsers?.list) || null;
     useEffect(() => {
-        dispatch(adminLoadUserARs());
+        dispatch(adminLoadUserARs({"approval_status": "","institution_id":"","role_id":""}));
     }, [dispatch,parentState]);
     
     const $ar_users = ar_users ? JSON.parse(ar_users) : null;

@@ -16,12 +16,18 @@ class Institution extends Model
         return [
             "id" => $this->id,
             "name" => $this->name,
-            "category" => $this->membershipCategories
+            "category" => $this->membershipCategories,
+            "ars" => $this->ars,
         ];
     }
 
     public function membershipCategories()
     {
         return $this->belongsToMany(MembershipCategory::class, 'institution_memberships', 'institution_id', 'membership_category_id');
+    }
+
+    public function ars()
+    {
+        return $this->hasMany(User::class, 'institution_id', 'id');
     }
 }

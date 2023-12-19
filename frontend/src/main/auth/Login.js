@@ -72,7 +72,7 @@ const Login = () => {
                 <img className="logo" src={Logo} alt="fmdq logo"/>
                 <h4>Members Registration Oversight Information System (MROIS)</h4>
               </div>
-              <BlockTitle tag="h4">Sign-In</BlockTitle>
+              <BlockTitle tag="h4">Log-In</BlockTitle>
             </BlockContent>
           </BlockHead>
           {errorVal && (
@@ -131,12 +131,12 @@ const Login = () => {
             </div>
             <div className="form-group">
               <Button type="submit" size="lg" className="btn-block"  color="primary">
-                {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Sign in"}
+                {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Log in"}
               </Button>
             </div>
           </Form>
           <div className="form-note-s2 text-center pt-4">
-            New on MROIS? <Link to={`${process.env.PUBLIC_URL}/auth-register`}>Create an account</Link>
+            New on MROIS? <Link to={`${process.env.PUBLIC_URL}/privacy-policy`}>Sign Up</Link>
           </div>
         </PreviewCard>
       </Block>
