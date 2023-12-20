@@ -125,7 +125,7 @@ const AdminBroadcast = ({ drawer }) => {
                                     <ul className="nk-block-tools g-3">
                                         <li className="nk-block-tools-opt">
                                             <Button color="primary">
-                                                <span onClick={toggleForm}>Add Broadcast</span>
+                                                <span onClick={handleAdd}>Add Broadcast</span>
                                             </Button>
                                         </li>
                                     </ul>

@@ -124,7 +124,7 @@ const Register = ({ drawer }) => {
                 <div className="d-flex flex-row g-4" >
                     <div className="form-group w-50">
                         <label className="form-label" >
-                            First Name
+                            First Name<span style={{color:'red'}}> *</span>
                         </label>
                         <div className="form-control-wrap">
                             <input type="text" {...register('firstName', { required: true })} placeholder="Enter your first name" className="form-control-lg form-control" />
@@ -133,7 +133,7 @@ const Register = ({ drawer }) => {
                     </div>
                     <div className="form-group w-50">
                         <label className="form-label" >
-                            Last Name
+                            Last Name<span style={{color:'red'}}> *</span>
                         </label>
                         <div className="form-control-wrap">
                             <input type="text" {...register('lastName', { required: true })} placeholder="Enter your last name" className="form-control-lg form-control" />
@@ -144,7 +144,7 @@ const Register = ({ drawer }) => {
                 <div className="d-flex flex-row g-4" >
                     <div className="form-group w-100">
                         <div className="form-label">
-                            <label for="nationality">Nationality:</label>
+                            <label for="nationality">Nationality<span style={{color:'red'}}> *</span>:</label>
                         </div>
                         <div className="form-control-wrap">
                             <div className="form-control-select">
@@ -165,7 +165,7 @@ const Register = ({ drawer }) => {
                 <div className="d-flex flex-row g-4" >
                     <div className="form-group w-50">
                         <div className="form-label">
-                            <label for="category">Membership Category:</label>
+                            <label for="category">Membership Category<span style={{color:'red'}}> *</span>:</label>
                         </div>
                         <div className="form-control-wrap">
                             <div className="form-control-select">
@@ -183,7 +183,7 @@ const Register = ({ drawer }) => {
                     </div>
                     <div className="form-group w-50">
                         <div className="form-label">
-                            <label for="nationality">Position:</label>
+                            <label for="nationality">Position<span style={{color:'red'}}> *</span>:</label>
                         </div>
                         <div className="form-control-wrap">
                             <div className="form-control-select">
@@ -206,7 +206,7 @@ const Register = ({ drawer }) => {
                 <div className="form-group w-50">
                   <div className="form-label-group">
                     <label className="form-label" >
-                      Email
+                      Email<span style={{color:'red'}}> *</span>
                     </label>
                   </div>
                   <div className="form-control-wrap">
@@ -217,7 +217,7 @@ const Register = ({ drawer }) => {
                 <div className="form-group w-50">
                   <div className="form-label-group">
                     <label className="form-label" >
-                      Phone Number
+                      Phone Number<span style={{color:'red'}}> *</span>
                     </label>
                   </div>
                   <div className="form-control-wrap">
@@ -232,7 +232,7 @@ const Register = ({ drawer }) => {
                 <div className="form-group w-50">
                   <div className="form-label-group">
                     <label className="form-label" >
-                      Password
+                      Password<span style={{color:'red'}}> *</span>
                     </label>
                   </div>
                   <div className="form-control-wrap">
@@ -247,7 +247,7 @@ const Register = ({ drawer }) => {
                 <div className="form-group w-50">
                   <div className="form-label-group">
                     <label className="form-label">
-                      Retype Password
+                      Retype Password<span style={{color:'red'}}> *</span>
                     </label>
                   </div>
                   <div className="form-control-wrap">
