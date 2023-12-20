@@ -118,7 +118,7 @@ const tableColumn = [
         wrap: true
       },
       {
-        name: "ip_address",
+        name: "IP Address",
         selector: (row) => row.ip_address,
         sortable: true,
         width: "auto",

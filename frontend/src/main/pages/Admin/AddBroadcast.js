@@ -315,7 +315,7 @@ const AdminBroadcast = ({ drawer }) => {
                     <ul>
                         <li>
                             <Button color="primary" type="submit">
-                                {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Register"}
+                                {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Add Broadcast"}
                             </Button>
                         </li>
                         <li>

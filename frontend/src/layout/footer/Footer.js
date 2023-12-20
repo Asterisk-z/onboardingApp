@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="nk-footer-wrap">
           <div className="nk-footer-copyright">
             {" "}
-            &copy; MROIS FMDQ
+            &copy; Powered By iQx Consult
           </div>
           <div className="nk-footer-links">
             {/* <ul className="nav nav-sm">
