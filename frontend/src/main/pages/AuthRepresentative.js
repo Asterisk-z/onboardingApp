@@ -264,7 +264,7 @@ const AuthRepresentative = ({ drawer }) => {
                     </ModalFooter>
                 </Modal>
                 <Modal isOpen={modalForm} toggle={toggleForm} size="lg">
-                    <ModalHeader toggle={toggleForm} close={<button className="close" onClick={toggleForm}><Icon name="cross" /></button>}>
+                    <ModalHeader toggle={toggleForm} close={<button className="close" onClick={toggleForm}><Icon name="times" /></button>}>
                         Add Authorised Representative
                         {/* {ar_search_result} */}
                     </ModalHeader>
