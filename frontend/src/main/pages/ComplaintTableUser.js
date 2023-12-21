@@ -90,11 +90,15 @@ const DropdownTrans = (props) => {
       <Button color="secondary"  className="btn"  onClick={toggleForm}> <Icon name="eye"></Icon> View</Button>
           <Modal isOpen={modalForm} toggle={toggleForm} size="xl">
             <ModalHeader toggle={toggleForm} close={<button className="close" onClick={toggleForm}><Icon name="cross" /></button>}>
-                Fill Feedback Form
+                View
             </ModalHeader>
             <ModalBody className="modal-body-xl">
                 <div className="nk-modal">
-                    <h6 className="title">Complaint Type: {complaint.complaint_type.body}</h6>
+                    <h6 className="title">Complaint Type:</h6>
+                    <p>
+                        {complaint.complaint_type.name}
+                    </p>
+                    <h6 className="title">Complaint Description: </h6>
                     <p>
                         {complaint.body}
                     </p>
@@ -104,9 +108,8 @@ const DropdownTrans = (props) => {
                           <a href={complaint.documment} target="_blank" className="btn btn-secondary">View Document</a>
                         </>}
                       
-                    <h6 className="title">Comment(s):</h6>
-                      {complaint.comment.length > 1 && complaint.comment?.map((comment, index) => (
-                          <p key={index}>{comment.comment}<br />{ comment.commenter.first_name } <br />{ moment(comment.createdAt).format('MMM. DD, YYYY HH:mm') }</p>))}
+                        {complaint.comment.length > 0 && <><h6 className="title">Comment(s):</h6></> }
+                        {complaint.comment.length > 0 && complaint.comment?.map((comment, index) => (<p key={index}>{comment.comment}<br />{ comment.commenter.first_name } <br />{ moment(comment.createdAt).format('MMM. DD, YYYY HH:mm') }</p>))}
                 </div>
             </ModalBody>
             <ModalFooter className="bg-light">

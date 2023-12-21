@@ -115,3 +115,7 @@ input[type=checkbox]:checked~label {
 article input {
     display: none !important;
 }
+
+.rdt_TableHeadRow {
+    background: #fc0c0c !important;
+}
