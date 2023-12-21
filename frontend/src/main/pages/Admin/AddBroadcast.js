@@ -88,9 +88,9 @@ const AdminBroadcast = ({ drawer }) => {
 
     const categories = useSelector((state) => state?.category?.list) || null;
 
-        useEffect(() => {
-            dispatch(loadAllActiveCategories());
-        }, [dispatch]);
+    useEffect(() => {
+        dispatch(loadAllActiveCategories());
+    }, [dispatch]);
 
     const $categories = categories ? JSON.parse(categories) : null;
 
@@ -107,6 +107,8 @@ const AdminBroadcast = ({ drawer }) => {
             title: overAllForm.title ? overAllForm.title : "",
             content: overAllForm.content ? overAllForm.content : "",
             document: overAllForm.document ? overAllForm.document : "",
+            category_ids: overAllForm.category_ids ? overAllForm.category_ids : [],
+            position_ids: overAllForm.position_ids ? overAllForm.position_ids : [],
         });
 
         const onInputChange = (e) => {
@@ -181,7 +183,7 @@ const AdminBroadcast = ({ drawer }) => {
     };
 
     const CategorySection = (props) => {
-
+        
         const [categoryIds, setCategoryIds] = useState([]);
 
         const { handleSubmit, register, watch, formState: { errors } } = useForm();
@@ -204,6 +206,9 @@ const AdminBroadcast = ({ drawer }) => {
             const ids = categoryIds;
             ids[event.target.value] = event.target.checked
         };
+        
+
+        console.log(overAllForm)
 
         return (
             <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
@@ -219,7 +224,7 @@ const AdminBroadcast = ({ drawer }) => {
                                     <article className="custom-control" key={index} style={{ paddingLeft: '5px !important' }}>
                                         {/* checked={formData.category_ids.includes(category.id)} */}
                                         {/* {...register(`category_ids${index}`, { required: false })} */}
-                                        <input type="checkbox" className="" onChange={(e) => checkCategory(e)} name='category_id[]' value={category.id} id={`fw-policy${category.id}`} />
+                                        <input type="checkbox" className="" onChange={(e) => checkCategory(e)} name='category_id[]'  value={category.id} id={`fw-policy${category.id}`} />
                                         {/* {errors.terms && <span className="invalid">This field is required</span>} */}
                                         <label className="" htmlFor={`fw-policy${category.id}`}>
                                             <span>
@@ -254,7 +259,7 @@ const AdminBroadcast = ({ drawer }) => {
     const PositionSection = (props) => {
 
         const positions = useSelector((state) => state?.position?.list) || null;
-
+        console.log(overAllForm)
         useEffect(() => {
             dispatch(loadAllCategoryPositions({ 'category_ids': overAllForm.category_ids }));
         }, [dispatch]);
@@ -315,7 +320,7 @@ const AdminBroadcast = ({ drawer }) => {
                     <ul>
                         <li>
                             <Button color="primary" type="submit">
-                                {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Register"}
+                                {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Add Broadcast"}
                             </Button>
                         </li>
                         <li>

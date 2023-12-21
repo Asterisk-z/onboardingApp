@@ -72,7 +72,7 @@ const Login = () => {
                 <img className="logo" src={Logo} alt="fmdq logo"/>
                 <h4>Members Registration Oversight Information System (MROIS)</h4>
               </div>
-              <BlockTitle tag="h4">Log-In</BlockTitle>
+              <BlockTitle tag="h4">Log In</BlockTitle>
             </BlockContent>
           </BlockHead>
           {errorVal && (

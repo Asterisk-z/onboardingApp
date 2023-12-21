@@ -264,7 +264,7 @@ const AuthRepresentative = ({ drawer }) => {
                     </ModalFooter>
                 </Modal>
                 <Modal isOpen={modalForm} toggle={toggleForm} size="lg">
-                    <ModalHeader toggle={toggleForm} close={<button className="close" onClick={toggleForm}><Icon name="cross" /></button>}>
+                    <ModalHeader toggle={toggleForm} close={<button className="close" onClick={toggleForm}><Icon name="times" /></button>}>
                         Add Authorised Representative
                         {/* {ar_search_result} */}
                     </ModalHeader>
@@ -275,7 +275,7 @@ const AuthRepresentative = ({ drawer }) => {
                                 <Col sm="6">
                                     <div className="form-group">
                                         <Label htmlFor="lastName" className="form-label">
-                                            Surname
+                                            Surname<span style={{color:'red'}}> *</span>
                                         </Label>
                                         <div className="form-control-wrap">
                                             <input className="form-control" type="text" id="lastName" placeholder="Enter Last Name"  {...register('lastName', { required: "Last Name is Required" })} onKeyUp={searchArFromFirstNameAndLastName}/>
@@ -286,7 +286,7 @@ const AuthRepresentative = ({ drawer }) => {
                                 <Col sm="6">
                                     <div className="form-group">
                                         <Label htmlFor="firstName" className="form-label">
-                                            First Name
+                                            First Name<span style={{color:'red'}}> *</span>
                                         </Label>
                                         <div className="form-control-wrap">
                                             <input className="form-control" type="text" id="firstName" placeholder="Enter First Name" {...register('firstName', { required: "First Name is Required" })} onKeyUp={searchArFromFirstNameAndLastName}/>
@@ -297,7 +297,7 @@ const AuthRepresentative = ({ drawer }) => {
                                 <Col sm="6">
                                     <div className="form-group">
                                         <Label htmlFor="firstName" className="form-label">
-                                            Middle Name
+                                            Middle Name<span style={{color:'red'}}> *</span>
                                         </Label>
                                         <div className="form-control-wrap">
                                             <input className="form-control" type="text" id="middleName" placeholder="Enter Middle Name" {...register('middleName', { required: false })} />
@@ -308,7 +308,7 @@ const AuthRepresentative = ({ drawer }) => {
                                 <Col sm="6">
                                     <div className="form-group">
                                         <Label htmlFor="nationality" className="form-label">
-                                            Nationality
+                                            Nationality<span style={{color:'red'}}> *</span>
                                         </Label>
                                         <div className="form-control-wrap">
                                             <div className="form-control-select">
@@ -328,7 +328,7 @@ const AuthRepresentative = ({ drawer }) => {
                                 <Col sm="6">
                                     <div className="form-group">
                                         <Label htmlFor="email" className="form-label">
-                                            Email Address
+                                            Email Address<span style={{color:'red'}}> *</span>
                                         </Label>
                                         <div className="form-control-wrap">
                                             <input className="form-control" type="email" id="email" placeholder="Enter Email Address" {...register('email', { required: "Email Address is Required" })}/>
@@ -339,7 +339,7 @@ const AuthRepresentative = ({ drawer }) => {
                                 <Col sm="6">
                                     <div className="form-group">
                                         <Label htmlFor="phone" className="form-label">
-                                            Phone Number
+                                            Phone Number<span style={{color:'red'}}> *</span>
                                         </Label>
                                         <div className="form-control-wrap">
                                             <input className="form-control" type="text" id="phone" placeholder="Enter Phone Number"  {...register('phone', { required: "Phone is Required" })} />
@@ -350,7 +350,7 @@ const AuthRepresentative = ({ drawer }) => {
                                 <Col sm="6">
                                     <div className="form-group">
                                         <Label htmlFor="group_email" className="form-label">
-                                            Group Email Address
+                                            Group Email Address<span style={{color:'red'}}> *</span>
                                         </Label>
                                         <div className="form-control-wrap">
                                             <input className="form-control" type="email" id="group_email" placeholder="Enter Group Email Address" {...register('group_email', { required: "Group Email Address is Required" })}/>
@@ -361,7 +361,7 @@ const AuthRepresentative = ({ drawer }) => {
                                 <Col sm="6">
                                     <div className="form-group">
                                         <Label htmlFor="position_id" className="form-label">
-                                            Category
+                                            Category<span style={{color:'red'}}> *</span>
                                         </Label>
                                         <div className="form-control-wrap">
                                             <div className="form-control-select">
@@ -381,7 +381,7 @@ const AuthRepresentative = ({ drawer }) => {
                                 <Col sm="6">
                                     <div className="form-group">
                                         <Label htmlFor="position_id" className="form-label">
-                                            Position
+                                            Position<span style={{color:'red'}}> *</span>
                                         </Label>
                                         <div className="form-control-wrap">
                                             <div className="form-control-select">
@@ -401,7 +401,7 @@ const AuthRepresentative = ({ drawer }) => {
                                 <Col sm="6">
                                     <div className="form-group">
                                         <Label htmlFor="nationality" className="form-label">
-                                            Role
+                                            Role<span style={{color:'red'}}> *</span>
                                         </Label>
                                         <div className="form-control-wrap">
                                             <div className="form-control-select">
@@ -421,7 +421,7 @@ const AuthRepresentative = ({ drawer }) => {
                                 <Col sm="6">
                                     <div className="form-group">
                                         <Label htmlFor="nationality" className="form-label">
-                                            Digital Photo
+                                            Digital Photo<span style={{color:'red'}}> *</span>
                                         </Label>
                                         <div className="form-control-wrap">
                                              <input type="file" accept=".gif,.jpg,.jpeg,.png,.pdf" className="form-control"  {...register('digitalPhone', {  required: "Digital Photo is Required" })} onChange={handleDificalFileChange}/>
@@ -432,7 +432,7 @@ const AuthRepresentative = ({ drawer }) => {
                                 <Col sm="6">
                                     <div className="form-group">
                                         <Label htmlFor="nationality" className="form-label">
-                                            Signed Signature Mandate
+                                            Signed Signature Mandate<span style={{color:'red'}}> *</span>
                                         </Label>
                                         <div className="form-control-wrap">
                                              <input type="file" accept=".gif,.jpg,.jpeg,.png,.pdf" className="form-control"  {...register('signedMandate', {  required: "Signed Mandate is Required" })} onChange={handleSignaturewChange}/>

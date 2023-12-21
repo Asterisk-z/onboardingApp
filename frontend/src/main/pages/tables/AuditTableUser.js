@@ -82,7 +82,7 @@ const tableColumn = [
         name: "ID",
         selector: (row) => row.id,
         sortable: true,
-        width: "auto",
+        width: "80px",
         wrap: true,
       },
       {
@@ -93,7 +93,7 @@ const tableColumn = [
         wrap: true
       },
       {
-        name: "IP_Address",
+        name: "IP Address",
         selector: (row) => row.ip_address,
         sortable: true,
         width: "auto",
