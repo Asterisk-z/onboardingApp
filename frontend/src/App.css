@@ -26,6 +26,10 @@
     overflow: unset !important;
 }
 
+.customMroisDatatable .gAfldS div:first-child {
+    overflow: visible;
+}
+
 .color1 {
     background-color: #1D326C !important;
     color: #fff !important;
