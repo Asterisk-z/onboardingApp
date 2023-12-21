@@ -117,5 +117,26 @@ article input {
 }
 
 .rdt_TableHeadRow {
-    background: #fc0c0c !important;
+    background: #1D326C !important;
+}
+
+.sc-fbJfA.hcgwbo {
+    color: #fff !important;
+}
+
+.dropdown-menu {
+    background-color: #CC9933 !important;
+    color: #fff;
+}
+
+span.asc.__rdt_custom_sort_icon__ {
+    color: #fff !important;
+}
+
+.link-list-opt a {
+    color: #fff !important;
+}
+
+.link-list-opt a:hover {
+    color: #1D326C !important;
 }
