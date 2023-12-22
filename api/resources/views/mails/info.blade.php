@@ -32,7 +32,8 @@
 
         /* Main content styles */
         .content {
-            background-color: #fff; /* White background for content */
+            background-color: #fff;
+            /* White background for content */
             padding: 20px;
         }
 
@@ -40,8 +41,10 @@
         .cta-btn {
             display: inline-block;
             padding: 10px 20px;
-            background-color: #23336c; /* Blue button background */
-            color: #fff; /* White text color */
+            background-color: #23336c;
+            /* Blue button background */
+            color: #fff;
+            /* White text color */
             text-decoration: none;
             border-radius: 5px;
             margin-top: 20px;

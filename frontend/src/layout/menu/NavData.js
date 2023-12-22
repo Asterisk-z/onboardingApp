@@ -88,6 +88,10 @@ const navData = [{
         text: "Positions",
         link: "/admin-positions",
       },
+      {
+        text: "Regulators",
+        link: "/admin-regulators",
+      },
     ],
   },
   ],

@@ -10,7 +10,9 @@ use App\Http\Controllers\MemberCategoryController;
 use App\Http\Controllers\NationalityController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\PositionController;
+use App\Http\Controllers\RegulatorsController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SanctionsController;
 use App\Http\Controllers\SystemController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UsersController;
@@ -77,7 +79,7 @@ Route::middleware('auth')->group(function () {
         Route::group(['prefix' => 'audits'],  function () {
             Route::get('/logs', [AuditController::class, 'index']);
         });
-
+        //
         Route::group(['prefix' => 'meg/ar'],  function () {
             Route::get('/list', [ARController::class, 'listMEG']);
             Route::get('/transfer', [ARController::class, 'listTransferMEG']);
@@ -85,18 +87,15 @@ Route::middleware('auth')->group(function () {
             Route::post('/process-add/{ARUser}', [ARController::class, 'processAddByMEG']);
             Route::post('/process-transfer/{record}', [ARController::class, 'processTransferByMEG']);
         });
-
         // broadcast
         Route::group(['prefix' => 'broadcasts'],  function () {
             Route::get('/view-messages', [BroadcastMessageController::class, 'index']);
             Route::post('/create-message', [BroadcastMessageController::class, 'store']);
         });
-
         // institutions
         Route::group(['prefix' => 'institution'],  function () {
             Route::get('/list', [InstitutionController::class, 'listInstitution']);
         });
-
         // Membership Category
         Route::group(['prefix' => 'membership/category'],  function () {
             Route::get('/list', [MemberCategoryController::class, 'listAll']);
@@ -104,7 +103,6 @@ Route::middleware('auth')->group(function () {
             Route::post('/update/{category}', [MemberCategoryController::class, 'updateCategory']);
             Route::post('/update-status/{category}', [MemberCategoryController::class, 'changeStatusCategory']);
         });
-
         // Positions
         Route::group(['prefix' => 'meg/position'],  function () {
             Route::get('/list', [PositionController::class, 'listAll']);
@@ -112,13 +110,30 @@ Route::middleware('auth')->group(function () {
             Route::post('/update/{position}', [PositionController::class, 'updatePosition']);
             Route::post('/update-status/{position}', [PositionController::class, 'changeStatusPosition']);
         });
-
         // Complaint
         Route::group(['prefix' => 'meg/complain-type'],  function () {
             Route::get('/list', [ComplaintTypeController::class, 'listAll']);
             Route::post('/create', [ComplaintTypeController::class, 'addComplainType']);
             Route::post('/update/{complainType}', [ComplaintTypeController::class, 'updateComplainType']);
             Route::post('/update-status/{complainType}', [ComplaintTypeController::class, 'changeStatusComplainType']);
+        });
+        // regulators
+        Route::group(['prefix' => 'meg/regulators'],  function () {
+            Route::get('/view_all', [RegulatorsController::class, 'index']);
+            Route::post('/create', [RegulatorsController::class, 'store']);
+            Route::post('/update/{id}', [RegulatorsController::class, 'update']);
+            Route::post('/update-status/{id}', [RegulatorsController::class, 'updateStatus']);
+        });
+    });
+    // CCO and MEG ROUTES
+    Route::middleware('ccomeg')->group(function () {
+        // sanctions
+        Route::group(['prefix' => 'disciplinary-sanctions'],  function () {
+            Route::get('/view-all', [SanctionsController::class, 'index']);
+            Route::get('/fetch-ar', [SanctionsController::class, 'fetchAR']);
+            Route::post('/create', [SanctionsController::class, 'store']);
+            Route::post('/update/{id}', [SanctionsController::class, 'update']);
+            Route::post('/delete/{id}', [SanctionsController::class, 'delete']);
         });
     });
 

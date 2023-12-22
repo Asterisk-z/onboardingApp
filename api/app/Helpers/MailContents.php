@@ -93,4 +93,21 @@ class MailContents
             <p><strong>{$content}</strong></p>
         </ul>";
     }
+
+    public static function newSanctionMessageSubject(): string
+    {
+        return "New Disciplinary and Sanctions Message";
+    }
+
+    public static function newSanctionMessage($ar_name, $ar_summary, $sanction_summary, $evidence): string
+    {
+        return "<p>There is a new message from the MROIS portal:</p>
+
+        <ul>
+            <li><strong>AR:</strong> {$ar_name}</li>
+            <li>AR Summary<strong>{$ar_summary}</strong></li>
+            <li>Sanction Summary<strong>{$sanction_summary}</strong></li>
+            <li>Evidence<strong>{$evidence}</strong></li>
+        </ul>";
+    }
 }
