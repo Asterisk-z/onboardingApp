@@ -65,11 +65,14 @@ class SanctionsController extends Controller
         //
         $ar = User::where('id', $request->ar)->first();
         $ar_name = $ar->first_name . ' ' . $ar->last_name;
+        $ar_summary = $request->ar_summary;
+        $sanction_summary = $request->sanction_summary;
+
         $megs = User::where(function ($query) {
             $query->where('role_id', Role::ARINPUTTER)->orWhere('role_id', Role::ARAUTHORISER);
         })->where('approval_status', 'approved')->get();
-        //
-        // Notification::send($megs, new InfoNotification(MailContents::newSanctionMessage($request->ar), MailContents::newSanctionMessageSubject()));
+        //7
+        Notification::send($megs, new InfoNotification(MailContents::newSanctionMessage($ar_name, $ar_summary, $sanction_summary), MailContents::newSanctionMessageSubject()));
         //
         return successResponse('Sanction successfully created', $sanction);
     }

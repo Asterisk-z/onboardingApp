@@ -65,7 +65,7 @@ class FeesAndDuesController extends Controller
     }
 
     //
-    public function delete($id)
+    public function updateStatus(Request $request, $id)
     {
         //
         $fees = FeesAndDues::find($id);
@@ -74,8 +74,15 @@ class FeesAndDuesController extends Controller
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'Does not exist');
         }
         //
-        $fees->delete();
-
-        return successResponse('Delete successful');
+        FeesAndDues::where('status', true)->update(['status' => false]);
+        //
+        $fees->update(['status', 1]);
+        // $fees->status = 1;
+        // $update = $fees->update();
+        //
+        $user = auth()->user();
+        $logMessage = $user->email . ' updated the status FMDQ Fees and Dues Framework';
+        logAction($user->email, 'Updated Status the Fees and Dues Framework', $logMessage, $request->ip());
+        return successResponse('Status Updated Successfully');
     }
 }

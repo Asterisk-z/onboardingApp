@@ -139,7 +139,7 @@ const AdminRegulator = ({ drawer }) => {
                                 <BlockHead>
                                     <BlockHeadContent>
                                         {/* <BlockTitle tag="h4">All Membership</BlockTitle> */}
-                                        {/* <p>{positions}</p> */}
+                                        {/* <p>{regulators}</p> */}
                                         {/* {<p>{parentState}</p>} */}
                                     </BlockHeadContent>
                                 </BlockHead>

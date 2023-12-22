@@ -99,7 +99,7 @@ class MailContents
         return "New Disciplinary and Sanctions Message";
     }
 
-    public static function newSanctionMessage($ar_name, $ar_summary, $sanction_summary, $evidence): string
+    public static function newSanctionMessage($ar_name, $ar_summary, $sanction_summary): string
     {
         return "<p>There is a new message from the MROIS portal:</p>
 
@@ -107,7 +107,6 @@ class MailContents
             <li><strong>AR:</strong> {$ar_name}</li>
             <li>AR Summary<strong>{$ar_summary}</strong></li>
             <li>Sanction Summary<strong>{$sanction_summary}</strong></li>
-            <li>Evidence<strong>{$evidence}</strong></li>
         </ul>";
     }
 }

@@ -6,7 +6,7 @@ import { errorHandler, successHandler } from "../../../utils/Functions";
 // import category from "../memberCategory/category";
 const initialState = {
                     list: null,
-                    error: "", all_list: null,
+                    error: "", view_all: null,
                     loading: false,
 };
 
@@ -137,7 +137,7 @@ const regulatorStore = createSlice({
     builder.addCase(loadAllRegulators.fulfilled, (state, action) => {
         state.loading = false;
         // state.list = action.payload?.data?.data?.categories;
-        state.all_list = JSON.stringify(action.payload?.data?.data.regulators);
+        state.view_all = JSON.stringify(action.payload?.data?.data);
     });
 
     builder.addCase(loadAllRegulators.rejected, (state, action) => {

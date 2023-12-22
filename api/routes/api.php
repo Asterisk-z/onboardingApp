@@ -56,7 +56,7 @@ Route::get('/complaint-types', [ComplaintTypeController::class, 'index']);
 Route::middleware('auth')->group(function () {
 
     Route::get('/system/configs', [SystemController::class, 'index']);
-
+    //
     Route::group(['prefix' => 'complaint'], function () {
         Route::post('/store', [ComplaintController::class, 'store']);
         Route::get('/', [ComplaintController::class, 'index']);
