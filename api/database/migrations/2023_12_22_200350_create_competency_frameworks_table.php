@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateApplicantGuidesTable extends Migration
+class CreateCompetencyFrameworksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateApplicantGuidesTable extends Migration
      */
     public function up()
     {
-        Schema::create('applicant_guides', function (Blueprint $table) {
+        Schema::create('competency_frameworks', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('file');
-            $table->string('status')->nullable();
-            $table->string('created_by');
+            $table->text('description')->nullable();
+            $table->text('position');
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ class CreateApplicantGuidesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('applicant_guides');
+        Schema::dropIfExists('competency_frameworks');
     }
 }
