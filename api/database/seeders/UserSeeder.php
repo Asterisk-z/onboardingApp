@@ -20,9 +20,9 @@ class UserSeeder extends Seeder
 
         foreach ($roles as $index => $role) {
 
-            $email = $role . "@fmdqgroup.com";
+            $email = "test" . $role . "@fmdqgroup.com";
 
-            if(User::where('email', $email)->exists()){
+            if (User::where('email', $email)->exists()) {
                 continue;
             }
 
