@@ -50,6 +50,11 @@ const navData = [{
     icon: "dashboard-fill",
     text: "Broadcast",
     link: "/admin-broadcast",
+    },
+    {
+    icon: "dashboard-fill",
+    text: "Disciplinary and Sanctions",
+    link: "/admin-sanctions",
   },
   {
     icon: "dashboard-fill",
@@ -122,6 +127,11 @@ const navData = [{
     icon: "tile-thumb-fill",
     text: "Update Authorised Representatives",
     link: "/auth-representatives",
+    },
+  {
+    icon: "tile-thumb-fill",
+    text: "Disciplinary and Sanctions",
+    link: "/sanctions",
   },
   // {
   //   icon: "tile-thumb-fill",

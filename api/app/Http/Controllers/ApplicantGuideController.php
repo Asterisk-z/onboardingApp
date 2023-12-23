@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Utility;
+use App\Models\ApplicantGuide;
 use Illuminate\Http\Request;
 
 class ApplicantGuideController extends Controller
@@ -14,6 +16,8 @@ class ApplicantGuideController extends Controller
     public function index()
     {
         //
+        $applicants = ApplicantGuide::orderBy('created_at', 'DESC')->get();
+        return successResponse('Successful', $applicants);
     }
 
     /**
@@ -35,6 +39,31 @@ class ApplicantGuideController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            "name" => "required|string",
+            "file" => "required|mimes:pdf",
+            "status" => "required|string",
+            "created_by" => "required"
+        ]);
+        $user = auth()->user();
+        $attachment = [];
+
+        if ($request->hasFile('file')) {
+            $attachment = Utility::saveFile('applicant-guides', $request->file('file'));
+        }
+
+        // $sanction = Sanction::create($validated);
+        $applicants =  ApplicantGuide::create([
+            'name' => $request->input('name'),
+            'file' => $attachment ? $attachment['path'] : null,
+            'status' => true,
+            'created_by' => $user->email
+        ]);
+        //
+        $logMessage = $user->email . ' created an applicant guides ';
+        logAction($user->email, 'New Applicant Guides Created', $logMessage, $request->ip());
+        //
+        return successResponse('Sanction successfully created', $applicants);
     }
 
     /**

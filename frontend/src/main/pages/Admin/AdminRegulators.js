@@ -129,7 +129,7 @@ const AdminRegulator = ({ drawer }) => {
                         </form>
                     </ModalBody>
                     <ModalFooter className="bg-light">
-                        <span className="sub-text">Regulators</span>
+                        <span className="sub-text">List of Regulators</span>
                     </ModalFooter>
                 </Modal>
                 <Block size="lg">

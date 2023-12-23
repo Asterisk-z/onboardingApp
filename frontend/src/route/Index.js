@@ -158,6 +158,7 @@ import AdminComplaintType from "main/pages/Admin/AdminComplaintType"
 import AdminPositions from "main/pages/Admin/AdminPositions" 
 import AdminComplaint from "main/pages/Admin/AdminComplaint" 
 import AdminRegulators from "main/pages/Admin/AdminRegulators"
+import AdminSanctions from "main/pages/Admin/AdminSanctions"
 
 import Complaint from "main/pages/Complaint" 
 import AuditLog from "main/pages/AuditLog" 
@@ -168,6 +169,7 @@ import ChangeAuthRepresentative from "main/pages/ChangeAuthRepresentative"
 import TransferAuthRepresentative from "main/pages/TransferAuthRepresentative" 
 import PendingAuthRepresentative from "main/pages/PendingAuthRepresentative" 
 import FeesFramework from "main/pages/FeesFramework"
+import Sanction from "main/pages/Sanction"
 
 import AdminAuditLog from "main/pages/Admin/AdminAuditLog" 
 import AdminInstitutions from "main/pages/Admin/AdminInstitutions";
@@ -432,6 +434,7 @@ const Router = () => {
           <Route path="transfer-auth-representative/:ar_user_id" element={<TransferAuthRepresentative />}></Route>
           <Route path="auth-representatives" element={<AuthRepresentative />}></Route>
           <Route path="fees-framework" element={<FeesFramework />}></Route>
+          <Route path="sanction" element={<Sanction />}></Route>
         </Route>
 
         <Route path={`${process.env.PUBLIC_URL}`} element={<AdminLayout />}>
@@ -449,6 +452,7 @@ const Router = () => {
           <Route path="admin-categories" element={<AdminCategories />}></Route>
           <Route path="admin-positions" element={<AdminPositions />}></Route>
           <Route path="admin-regulators" element={<AdminRegulators />}></Route>
+          <Route path="admin-sanctions" element={<AdminSanctions />}></Route>
           <Route path="wizard" element={<WizardTest />}></Route>
 
 

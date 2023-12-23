@@ -27,7 +27,7 @@ class SanctionsController extends Controller
     //
     public function fetchAR()
     {
-        $ars = User::where('is_active', 1)->where('is_del', 0)
+        $ars = User::where('is_active', 1)->where('is_del', 0)->where('approval_status', 'approved')
             ->where(function ($query) {
                 $query->where('role_id', 5)
                     ->orWhere('role_id', 6);
@@ -40,8 +40,7 @@ class SanctionsController extends Controller
     //
     public function store(Request $request): JsonResponse
     {
-        $user = auth()->user();
-        // dd($request->all());
+        //
         $request->validate([
             "ar" => ["required", "string", new ValidArRole],
             "ar_summary" => "required|string",
@@ -50,13 +49,19 @@ class SanctionsController extends Controller
             // "evidence" => "required",
             "created_by" => "required"
         ]);
+        $user = auth()->user();
+        $attachment = [];
+
+        if ($request->hasFile('file')) {
+            $attachment = Utility::saveFile('sanctions', $request->file('file'));
+        }
 
         // $sanction = Sanction::create($validated);
         $sanction =  Sanction::create([
             'ar' => $request->input('ar'),
             'ar_summary' => $request->input('ar_summary'),
             'sanction_summary' => $request->input('sanction_summary'),
-            'evidence' => $request->hasFile('evidence') ? $request->file('evidence')->storePublicly('evidence', 'public') : null,
+            'evidence' => $attachment ? $attachment['path'] : null,
             'created_by' => $user->email
         ]);
         //
@@ -71,7 +76,7 @@ class SanctionsController extends Controller
         $megs = User::where(function ($query) {
             $query->where('role_id', Role::ARINPUTTER)->orWhere('role_id', Role::ARAUTHORISER);
         })->where('approval_status', 'approved')->get();
-        //7
+        //
         Notification::send($megs, new InfoNotification(MailContents::newSanctionMessage($ar_name, $ar_summary, $sanction_summary), MailContents::newSanctionMessageSubject()));
         //
         return successResponse('Sanction successfully created', $sanction);

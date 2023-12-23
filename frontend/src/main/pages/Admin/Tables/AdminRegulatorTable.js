@@ -84,7 +84,6 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
         url: tabItem.url,
     });
     const handleFormSubmit = async (values) => {
-
         const formData = new FormData();
         formData.append('id', tabItem_id)
         formData.append('name', values.name)
@@ -110,6 +109,25 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
         } catch (error) {
             setLoading(false);
         }
+        // 
+          try {
+            setLoading(true);
+            const resp = await dispatch(updateRegulatorStatus(formData));
+
+            if (resp.payload?.message === "success") {
+                setTimeout(() => {
+                    setLoading(false);
+                    setModalForm(!modalForm)
+                    updateParentParent(Math.random())
+                }, 1000);
+
+            } else {
+                setLoading(false);
+            }
+
+        } catch (error) {
+            setLoading(false);
+        }
     };
 
     const toggleModalDetailTwo = () => {
@@ -117,55 +135,35 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
     }
 
 
-    const askAction = async (action) => {
+  const askAction = async (status) => {
+    const actionText = status === '0' ? 'Activate' : 'Deactivate';
+    const oppositeStatus = status === '0' ? '1' : '0';
 
-        if (action === 0) {
-            Swal.fire({
-                title: "Are you sure?",
-                text: "Do you want to activate this regulator?",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Yes, open it!",
-            }).then((result) => {
+    const confirmationText =
+        status === '0'
+            ? 'Do you want to activate this regulator?'
+            : 'Do you want to deactivate this regulator?';
 
-                if (result.isConfirmed) {
+    const confirmationButtonText =
+        status === '0' ? 'Yes, activate it!' : 'Yes, deactivate it!';
 
-                    const formData = new FormData();
-                    formData.append('id', tabItem_id);
-                    formData.append('status', '1');
-                    const resp = dispatch(updateRegulatorStatus(formData));
-
-                    updateParentParent(Math.random())
-
-
-                }
-            });
+    Swal.fire({
+        title: 'Are you sure?',
+        text: confirmationText,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: confirmationButtonText,
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const formData = new FormData();
+            formData.append('id', tabItem_id);
+            formData.append('status', oppositeStatus);
+            const resp = dispatch(updateRegulatorStatus(formData));
+            updateParentParent(Math.random());
         }
-
-        if (action === 1) {
-            Swal.fire({
-                title: "Are you sure?",
-                text: "Do you want to deactivate this regulator?",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Yes, close it!",
-            }).then((result) => {
-
-                if (result.isConfirmed) {
-
-                    const formData = new FormData();
-                    formData.append('id', tabItem_id);
-                    formData.append('status', '0');
-                    const resp = dispatch(updateRegulatorStatus(formData));
-                    updateParentParent(Math.random())
-
-                }
-            });
-        }
-
-
+    });
     };
-
+    
     return (
         <>
 
@@ -177,28 +175,31 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
 
                             <DropdownMenu>
                                 <ul className="link-list-opt">
-
                                     <li size="xs">
                                         <DropdownItem tag="a" onClick={toggleForm} >
                                             <Icon name="eye"></Icon>
                                             <span>Edit</span>
                                         </DropdownItem>
                                     </li>
-                                    {(!tabItem.active) ? <>
-                                        <li size="xs">
-                                            <DropdownItem tag="a" onClick={(e) => askAction('0')} >
-                                                <Icon name="eye"></Icon>
-                                                <span>Activate</span>
-                                            </DropdownItem>
-                                        </li></> : <>
-                                        <li size="xs">
-                                            <DropdownItem tag="a" onClick={(e) => askAction('1')} >
-                                                <Icon name="eye"></Icon>
-                                                <span>Deactivate</span>
-                                            </DropdownItem>
-                                        </li>
-                                    </>
-                                    }
+                                 {!tabItem.active ? (
+                                        <>
+                                            <li size="xs">
+                                                <DropdownItem tag="a" onClick={() => askAction('1')}>
+                                                    <Icon name="eye"></Icon>
+                                                    <span>Activate</span>
+                                                </DropdownItem>
+                                            </li>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <li size="xs">
+                                                <DropdownItem tag="a" onClick={() => askAction('0')}>
+                                                    <Icon name="eye"></Icon>
+                                                    <span>Deactivate</span>
+                                                </DropdownItem>
+                                            </li>
+                                        </>
+                                    )}
 
                                 </ul>
                             </DropdownMenu>
@@ -218,8 +219,17 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
                                 Name
                             </label>
                             <div className="form-control-wrap">
-                                <input type="text" id="name" className="form-control" {...register('name', { required: "This Field is required" })} defaultValue={formData.name} />
+                                <input type="text" id="name" className="form-control" {...register('name', { required: "This field is required" })} defaultValue={formData.name} />
                                 {errors.name && <span className="invalid">{errors.name.message}</span>}
+                            </div>
+                        </div>
+                         <div className="form-group">
+                            <label className="form-label" htmlFor="full-name">
+                                Website
+                            </label>
+                            <div className="form-control-wrap">
+                                <input type="url" id="url" className="form-control" {...register('url', { required: "This field is required" })} defaultValue={formData.url} />
+                                {errors.url && <span className="invalid">{errors.url.message}</span>}
                             </div>
                         </div>
                         <div className="form-group">
@@ -230,7 +240,7 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
                     </form>
                 </ModalBody>
                 <ModalFooter className="bg-light">
-                    <span className="sub-text">Feedback</span>
+                    <span className="sub-text">Update Status</span>
                 </ModalFooter>
             </Modal>
         </>
@@ -264,7 +274,15 @@ const AdminRegulatorTable = ({ data, pagination, actions, className, selectableR
         },
         {
             name: "Status",
-            selector: (row) => { return (<><Badge color="success">{(row.status) ? `Activated` : `Deactivated`}</Badge></>) },
+            selector: (row) => {
+                return (
+                    <>
+                        <Badge color={row.status === "1" ? "success" : "danger"}>
+                            {row.status === "1" ? 'Active' : 'Deactivated'}
+                        </Badge>
+                    </>
+                );
+            },
             sortable: true,
             width: "auto",
             wrap: true
