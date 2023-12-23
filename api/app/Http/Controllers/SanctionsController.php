@@ -34,7 +34,6 @@ class SanctionsController extends Controller
             "evidence" => "required|mimes:pdf",
         ]);
 
-        $user = auth()->user();
         $attachment = [];
 
         if ($request->hasFile('file')) {
@@ -47,11 +46,12 @@ class SanctionsController extends Controller
             'ar_summary' => $request->input('ar_summary'),
             'sanction_summary' => $request->input('sanction_summary'),
             'evidence' => $attachment ? $attachment['path'] : null,
-            'created_by' => $user->email,
+            'created_by' => auth()->user()->email,
+            'institution' => auth()->user()->institution_id,
         ]);
         //
-        $logMessage = $user->email . ' created a new sanction ';
-        logAction($user->email, 'New Sanction Created', $logMessage, $request->ip());
+        $logMessage = auth()->user()->email . ' created a new sanction ';
+        logAction(auth()->user()->email, 'New Sanction Created', $logMessage, $request->ip());
         //
         $ar = User::where('id', $request->ar)->first();
         $ar_name = $ar->first_name . ' ' . $ar->last_name;

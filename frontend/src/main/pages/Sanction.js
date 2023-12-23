@@ -19,7 +19,7 @@ const Complaint = ({ drawer }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
-    const [complainFile, setComplainFile] = useState([]);
+    const [evidenceFile, setEvidenceFile] = useState([]);
     const [sm, updateSm] = useState(false);
     const [modalForm, setModalForm] = useState(false);
     const { register, handleSubmit, formState: { errors }, resetField } = useForm();
@@ -40,7 +40,7 @@ const Complaint = ({ drawer }) => {
         formData.append('ar', values.ar)
         formData.append('ar_summary', values.ar_summary)
         formData.append('sanction_summary', values.sanction_summary)
-        formData.append('evidence', complainFile)
+        formData.append('evidence', evidenceFile)
 
         try {
             setLoading(true);
@@ -68,7 +68,7 @@ const Complaint = ({ drawer }) => {
     }; 
 
     const handleFileChange = (event) => {
-		  setComplainFile(event.target.files[0]);
+		  setEvidenceFile(event.target.files[0]);
     };
 
     const complaints = useSelector((state) => state?.complaint?.list) || null;
