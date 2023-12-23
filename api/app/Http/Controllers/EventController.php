@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\EventNotificationUtility;
 use App\Http\Requests\Education\AddEventRequest;
 use App\Http\Requests\Education\UpdateEventRequest;
 use App\Http\Resources\Education\EventBasicResource;
@@ -12,6 +13,7 @@ use App\Models\Education\Event;
 use App\Models\Education\EventNotificationDates;
 use App\Models\Education\EventInvitePosition;
 use App\Models\Education\EventRegistration;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
@@ -229,14 +231,16 @@ class EventController extends Controller
         }
 
 
-        if ($validated) {
+        if ($validated) { // there is something to update
             $event->update($validated);
+
+            $logMessage = "Updated an Event: $event->name";
+            logAction($request->user()->email, 'Update Event', $logMessage, $request->ip());
+
+            EventNotificationUtility::eventUpdated($event);
         }
 
         $event->refresh();
-
-        $logMessage = "Updated an Event: $event->name";
-        logAction($request->user()->email, 'Update Event', $logMessage, $request->ip());
 
         return successResponse('Successful', EventResource::make($event));
     }
@@ -291,11 +295,19 @@ class EventController extends Controller
         $eventName = $event->name;
 
         if ($event) {
-            $event->delete();
-        }
 
-        $logMessage = "Deleted the Event: $eventName";
-        logAction($request->user()->email, 'Delete Event', $logMessage, $request->ip());
+            $eventName = $event->name;
+            $registeredUsers = $event->getRegisteredUsers();
+
+            $event->delete();
+
+            $logMessage = "Deleted the Event: $eventName";
+            logAction($request->user()->email, 'Delete Event', $logMessage, $request->ip());
+
+
+            EventNotificationUtility::eventDeleted($registeredUsers, $eventName);
+
+        }
 
         return successResponse('Successful');
     }
@@ -396,15 +408,20 @@ class EventController extends Controller
     {
 
         $request->validate([
-            'status' => 'required|in:Pending,Approved,Declined',
+            'status' => 'required|in:Approved,Declined',
+            'reason' => 'nullable|required_if:status,Declined',
         ]);
 
         $oldStatus = $eventReg->status;
 
-        $eventReg->update(['status' => $request->status]);
+        $eventReg->update(['status' => $request->status, 'admin_remark' => $request->reason]);
 
         $logMessage = "Updated Event Registration Status from $oldStatus to $eventReg->status  (# $eventReg->id)";
         logAction($request->user()->email, 'Update Event Registration Status', $logMessage, $request->ip());
+
+
+        EventNotificationUtility::paymentStatusUpdated($eventReg);
+
 
         return successResponse('Successful', EventRegistrationWithEventResource::make($eventReg));
     }

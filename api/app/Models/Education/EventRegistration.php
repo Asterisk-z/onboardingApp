@@ -12,6 +12,10 @@ class EventRegistration extends Model
     protected $guarded = ['id'];
     protected $with = ['user'];
 
+    const STATUS_DECLINED = "Declined";
+    const STATUS_APPROVED = "Approved";
+    const STATUS_PENDING = "Pending";
+
     public function event()
     {
         return $this->belongsTo(Event::class);

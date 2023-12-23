@@ -53,4 +53,18 @@ class Event extends Model
             'fee' => $this->fee,
         ];
     }
+
+    //  if no user, empty array is returned.
+    public function getRegisteredUsers()
+    {
+        $userIds = $this->registrations->pluck('user_id');
+        $users = User::whereIn('id', $userIds)->get();
+
+        if (count($users)) {
+            return $users;
+        }
+
+        return [];
+    }
+
 }

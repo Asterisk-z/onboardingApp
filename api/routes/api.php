@@ -140,13 +140,15 @@ Route::middleware('auth')->group(function () {
             Route::post('/update-invited/{event}', [EventController::class, 'updateInvitePositions']);
             Route::post('/delete/{eventID}', [EventController::class, 'delete']);
 
-            Route::get('/registrations/{event}', [EventController::class, 'eventRegistrations']);
-            Route::post('/registration-update-status/{eventReg}', [EventController::class, 'approveEventRegistration']);
-
-
-
 
         });
+
+        Route::middleware('authRole:' . Role::MEG . ',' . Role::FSD . ',' . Role::ARAUTHORISER)->group(function () { // TODO: remove ARAUTHORISER
+            Route::get('/registrations/{event}', [EventController::class, 'eventRegistrations']);
+            Route::post('/registration-update-status/{eventReg}', [EventController::class, 'approveEventRegistration']);
+        });
+
+
 
         Route::middleware('authRole:' . Role::ARAUTHORISER . ',' . Role::ARINPUTTER)->group(function () {
 

@@ -21,6 +21,10 @@ class EventRegistrationWithEventResource extends JsonResource
 
             'evidence_of_payment' => $this->evidence_of_payment,
             'evidence_of_payment_url' => $this->evidence_of_payment ? asset('storage/' . $this->evidence_of_payment) : null, // Adjust the path based on your storage setup
+
+            'admin_remark' => $this->admin_remark,
+            'user_remark' => $this->user_remark,
+
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
 
