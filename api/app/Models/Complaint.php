@@ -19,7 +19,7 @@ class Complaint extends Model
             "complainer" => $this->user,
             "complaint_type" => $this->type,
             "status" => $this->status,
-            "documment" => $this->document ? config('app.url') .'/storage/'.$this->document : null,
+            "documment" => $this->document ? config('app.url') .'/storage/app/public/'.$this->document : null,
             "comment" => $this->comments,
             'createdAt' => $this->created_at
         ];

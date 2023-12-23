@@ -157,7 +157,7 @@ import AdminCategories from "main/pages/Admin/AdminCategories"
 import AdminComplaintType from "main/pages/Admin/AdminComplaintType" 
 import AdminPositions from "main/pages/Admin/AdminPositions" 
 import AdminComplaint from "main/pages/Admin/AdminComplaint" 
-
+import AdminRegulators from "main/pages/Admin/AdminRegulators"
 
 import Complaint from "main/pages/Complaint" 
 import AuditLog from "main/pages/AuditLog" 
@@ -448,8 +448,8 @@ const Router = () => {
           <Route path="admin-complaint-type" element={<AdminComplaintType />}></Route>
           <Route path="admin-categories" element={<AdminCategories />}></Route>
           <Route path="admin-positions" element={<AdminPositions />}></Route>
-          
-            <Route path="wizard" element={<WizardTest />}></Route>
+          <Route path="admin-regulators" element={<AdminRegulators />}></Route>
+          <Route path="wizard" element={<WizardTest />}></Route>
 
 
         </Route>
