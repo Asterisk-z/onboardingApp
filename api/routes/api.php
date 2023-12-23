@@ -100,6 +100,8 @@ Route::middleware('auth')->group(function () {
         Route::group(['prefix' => 'membership/category'],  function () {
             Route::get('/list', [MemberCategoryController::class, 'listAll']);
             Route::post('/create', [MemberCategoryController::class, 'addCategory']);
+            Route::post('/mapToPositions', [MemberCategoryController::class, 'mapToPositions']);
+            Route::post('/unlinkFromPositions', [MemberCategoryController::class, 'unlinkFromPositions']);
             Route::post('/update/{category}', [MemberCategoryController::class, 'updateCategory']);
             Route::post('/update-status/{category}', [MemberCategoryController::class, 'changeStatusCategory']);
         });
@@ -107,6 +109,8 @@ Route::middleware('auth')->group(function () {
         Route::group(['prefix' => 'meg/position'],  function () {
             Route::get('/list', [PositionController::class, 'listAll']);
             Route::post('/create', [PositionController::class, 'addPosition']);
+            Route::post('/mapToCategories', [PositionController::class, 'mapToCategories']);
+            Route::post('/unlinkFromCategories', [PositionController::class, 'unlinkFromCategories']);
             Route::post('/update/{position}', [PositionController::class, 'updatePosition']);
             Route::post('/update-status/{position}', [PositionController::class, 'changeStatusPosition']);
         });
@@ -128,7 +132,7 @@ Route::middleware('auth')->group(function () {
     // CCO and MEG ROUTES
     Route::middleware('ccomeg')->group(function () {
         // sanctions
-        Route::group(['prefix' => 'disciplinary-sanctions'],  function () {
+        Route::group(['prefix' => 'disciplinary-sanctions'], function () {
             Route::get('/view-all', [SanctionsController::class, 'index']);
             Route::get('/fetch-ar', [SanctionsController::class, 'fetchAR']);
             Route::post('/create', [SanctionsController::class, 'store']);
@@ -145,7 +149,7 @@ Route::middleware('auth')->group(function () {
 
     //AR ROUTES
     Route::middleware('authRole:' . Role::ARAUTHORISER . ',' . Role::ARINPUTTER)->group(function () {
-        Route::group(['prefix' => 'ar'], function () {
+        Route::group(['prefix' => 'ar'],  function () {
             Route::get('/list', [ARController::class, 'list']);
             Route::get('/search', [ARController::class, 'search']);
             Route::get('/view/{ARUser}', [ARController::class, 'view']);

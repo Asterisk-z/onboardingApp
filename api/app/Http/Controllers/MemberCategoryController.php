@@ -43,7 +43,7 @@ class MemberCategoryController extends Controller
      */
     public function listAll(): JsonResponse
     {
-        $categories = MembershipCategory::orderBy('created_at', 'DESC')->get(['id', 'name', 'code', 'is_del'])->toArray();
+        $categories = MembershipCategory::orderBy('created_at', 'DESC')->with('positions')->get(['id', 'name', 'code', 'is_del']);
         $converted_categories = Utility::arrayKeysToCamelCase($categories);
         $data = [
             'categories' => (array) $converted_categories,
@@ -109,6 +109,51 @@ class MemberCategoryController extends Controller
         $category->save();
 
         return successResponse('Membership Successfully', $category);
+
+    }
+
+    public function mapToPositions(Request $request)
+    {
+        $request->validate([
+            "category" => "required|exists:membership_categories,id",
+            "position" => "required|array",
+            "position.*" => "required|exists:positions,id",
+        ]);
+
+        $positions = request('position');
+
+        foreach ($positions as $position) {
+            if (MembershipCategoryPostition::where('position_id', $position)->where('category_id', request('category'))->exists()) {
+                continue;
+            }
+            MembershipCategoryPostition::create([
+                'category_id' => request('category'),
+                'position_id' => $position,
+            ]);
+        }
+        return successResponse('Category Linked to Position successfully');
+
+    }
+
+    public function unlinkFromPositions(Request $request)
+    {
+
+        $request->validate([
+            "category" => "required|exists:membership_categories,id",
+            "position" => "required|array",
+            "position.*" => "required|exists:positions,id",
+        ]);
+
+        $positions = request('position');
+
+        foreach ($positions as $position) {
+            if (MembershipCategoryPostition::where('position_id', $position)->where('category_id', request('category'))->exists()) {
+
+                $pivot = MembershipCategoryPostition::where('position_id', $position)->where('category_id', request('category'))->delete();
+
+            }
+        }
+        return successResponse('Category UnLinked from Position successfully');
 
     }
 }
