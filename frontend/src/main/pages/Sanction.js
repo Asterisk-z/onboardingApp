@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner} from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
-import { loadAllActiveComplaintTypes } from "redux/stores/complaints/complaintTypes";
+import { userLoadUserARs } from "redux/stores/authorize/representative";
+import { sendSanction, loadAllSanctions } from "redux/stores/sanctions/sanctionStore";
 import { sendComplaint, loadAllComplaints } from "redux/stores/complaints/complaint";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
@@ -25,23 +26,26 @@ const Complaint = ({ drawer }) => {
     const complaintType = useSelector((state) => state?.complaintType?.list) || null;
 
     const toggleForm = () => setModalForm(!modalForm);
+    const ar_users = useSelector((state) => state?.arUsers?.list) || null;
 
     useEffect(() => {
-        dispatch(loadAllActiveComplaintTypes());
+        dispatch(userLoadUserARs({"approval_status" : "approved", "role_id": ""}));
     }, [dispatch]);
 
+    const $ar_users = ar_users ? JSON.parse(ar_users) : null;
     const $complaintType = complaintType ? JSON.parse(complaintType) : null;
         
     const handleFormSubmit = async (values) => {
         const formData = new FormData();
-        formData.append('complaint_type', values.complaint_type)
-        formData.append('body', values.body)
-        formData.append('document', complainFile)
-        // console.log(complainFile)
+        formData.append('ar', values.ar)
+        formData.append('ar_summary', values.ar_summary)
+        formData.append('sanction_summary', values.sanction_summary)
+        formData.append('evidence', complainFile)
+
         try {
             setLoading(true);
-            
-            const resp = await dispatch(sendComplaint(formData));
+
+            const resp = await dispatch(sendSanction(formData));
 
             if (resp.payload?.message == "success") {
                 setTimeout(() => {
@@ -51,7 +55,7 @@ const Complaint = ({ drawer }) => {
                     resetField('body')
                     resetField('document')
                     setCounter(!counter)
-                    // window.location.reload(true)
+                    
                 }, 1000);
             } else {
               setLoading(false);
@@ -83,7 +87,7 @@ const Complaint = ({ drawer }) => {
                     <BlockBetween>
                         <BlockHeadContent>
                             <BlockTitle page tag="h3">
-                                Complaints
+                                Disciplinary and Sanctions
                             </BlockTitle>
                         </BlockHeadContent>
                         <BlockHeadContent>
@@ -92,7 +96,7 @@ const Complaint = ({ drawer }) => {
                                     <ul className="nk-block-tools g-3">
                                         <li className="nk-block-tools-opt">
                                             <Button color="primary">
-                                                <span onClick={toggleForm}>Add Complaint</span>
+                                                <span onClick={toggleForm}>Add Sanctions</span>
                                             </Button>
                                         </li>
                                     </ul>
@@ -101,56 +105,61 @@ const Complaint = ({ drawer }) => {
                         </BlockHeadContent>
                     </BlockBetween>
                 </BlockHead>
-                <Modal isOpen={modalForm} toggle={toggleForm}>
-                    <ModalHeader toggle={toggleForm} close={
-                            <button className="close" onClick={toggleForm}>
-                                <Icon name="cross" />
-                            </button>
-                        }
-                    >
-                        Fill Complain Form
+                <Modal isOpen={modalForm} toggle={toggleForm} size="lg">
+                    <ModalHeader toggle={toggleForm} close={<button className="close" onClick={toggleForm}><Icon name="cross" /></button>} >
+                        Fill Disciplinary and Sanction Form
                     </ModalHeader>
                     <ModalBody>
                         <form  onSubmit={handleSubmit(handleFormSubmit)}  className="is-alter" encType="multipart/form-data">
                             <div className="form-group">
                                 <label className="form-label" htmlFor="full-name">
-                                    Complaint Type
+                                    Authorised Representative
                                 </label>
                                 <div className="form-control-wrap">
                                     <div className="form-control-select">
-                                        <select className="form-control form-select"  style={{ color: "black !important" }} {...register('complaint_type', { required: "Type is Required" })}>
-                                        <option value="">Select Type</option>
-                                        {$complaintType && $complaintType?.map((complaintType) => (
-                                            <option key={complaintType.id} value={complaintType.id}>
-                                                {complaintType.name}
+                                        <select className="form-control form-select"  style={{ color: "black !important" }} {...register('ar', { required: "AR is Required" })}>
+                                        <option value="">Select Authorised Representative</option>
+                                        {$ar_users && $ar_users?.map((ar_user) => (
+                                            <option key={ar_user.id} value={ar_user.id}>
+                                                {`${ar_user.firstName} ${ar_user.lastName} (${ar_user.email})`}
                                             </option>
                                         ))}
                                         </select>
-                                        {errors.complaint_type && <p className="invalid">{`${errors.complaint_type.message}`}</p>}
+                                        {errors.ar && <p className="invalid">{`${errors.ar.message}`}</p>}
                                     </div>
                                 </div>
                             </div>
+                            
                             <div className="form-group">
                                 <label className="form-label" htmlFor="email">
-                                    Complain
+                                    AR Summary
                                 </label>
                                 <div className="form-control-wrap">
-                                    <textarea type="text" className="form-control" {...register('body', { required: "Body is Required" })}></textarea>
-                                     {errors.body && <p className="invalid">{`${errors.body.message}`}</p>}
+                                    <textarea type="text" className="form-control" {...register('ar_summary', { required: "This field is Required" })}></textarea>
+                                     {errors.ar_summary && <p className="invalid">{`${errors.ar_summary.message}`}</p>}
+                                </div>
+                            </div>
+                              <div className="form-group">
+                                <label className="form-label" htmlFor="email">
+                                    Sanction Summary
+                                </label>
+                                <div className="form-control-wrap">
+                                    <textarea type="text" className="form-control" {...register('sanction_summary', { required: "This field is Required" })}></textarea>
+                                     {errors.sanction_summary && <p className="invalid">{`${errors.sanction_summary.message}`}</p>}
                                 </div>
                             </div>
                             <div className="form-group">
                                 <label className="form-label" htmlFor="phone-no">
-                                    Upload Document (*jpg, png)
+                                    Upload Document (*pdf)
                                 </label>
                                 <div className="form-control-wrap">
-                                    <input type="file" accept=".gif,.jpg,.jpeg,.png,.pdf" className="form-control"  {...register('document', { })} onChange={handleFileChange}/>
-                                     {errors.document && <p className="invalid">{`${errors.document.message}`}</p>}
+                                    <input type="file" accept=".pdf" className="form-control"  {...register('evidence', {required: "This field is Required" })} onChange={handleFileChange}/>
+                                     {errors.evidence && <p className="invalid">{`${errors.evidence.message}`}</p>}
                                 </div>
                             </div>
                             <div className="form-group">
                                 <Button color="primary" type="submit"  size="lg">
-                                    {loading ? ( <span><Spinner size="sm" color="light" /> Processing...</span>) : "File Complain"}
+                                    {loading ? ( <span><Spinner size="sm" color="light" /> Processing...</span>) : "Send Sanction"}
                                 </Button>
                             </div>
                         </form>
@@ -167,7 +176,7 @@ const Complaint = ({ drawer }) => {
                             <Block size="xl">
                                 <BlockHead>
                                     <BlockHeadContent>
-                                        <BlockTitle tag="h4">Complaint History</BlockTitle>
+                                        <BlockTitle tag="h4">Disciplinary and Sanction</BlockTitle>
                                         {/* <p>{complaints}</p> */}
                                     </BlockHeadContent>
                                 </BlockHead>

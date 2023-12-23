@@ -434,7 +434,7 @@ const Router = () => {
           <Route path="transfer-auth-representative/:ar_user_id" element={<TransferAuthRepresentative />}></Route>
           <Route path="auth-representatives" element={<AuthRepresentative />}></Route>
           <Route path="fees-framework" element={<FeesFramework />}></Route>
-          <Route path="sanction" element={<Sanction />}></Route>
+          <Route path="sanctions" element={<Sanction />}></Route>
         </Route>
 
         <Route path={`${process.env.PUBLIC_URL}`} element={<AdminLayout />}>

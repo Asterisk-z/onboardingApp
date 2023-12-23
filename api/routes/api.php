@@ -135,7 +135,6 @@ Route::middleware('auth')->group(function () {
         // sanctions
         Route::group(['prefix' => 'disciplinary-sanctions'], function () {
             Route::get('/list_all', [SanctionsController::class, 'index']);
-            Route::get('/fetch_ar', [SanctionsController::class, 'fetchAR']);
             Route::post('/create', [SanctionsController::class, 'store']);
         });
     });

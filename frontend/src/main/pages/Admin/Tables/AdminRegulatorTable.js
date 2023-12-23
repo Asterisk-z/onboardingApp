@@ -136,16 +136,12 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
 
 
   const askAction = async (status) => {
-    const actionText = status === '0' ? 'Activate' : 'Deactivate';
-    const oppositeStatus = status === '0' ? '1' : '0';
+    const actionText = tabItem.active ? 'Activate' : 'Deactivate';
+    const oppositeStatus = tabItem.active ? '1' : '0';
 
-    const confirmationText =
-        status === '0'
-            ? 'Do you want to activate this regulator?'
-            : 'Do you want to deactivate this regulator?';
+    const confirmationText = tabItem.active ? 'Do you want to activate this regulator?' : 'Do you want to deactivate this regulator?';
 
-    const confirmationButtonText =
-        status === '0' ? 'Yes, activate it!' : 'Yes, deactivate it!';
+    const confirmationButtonText = tabItem.active ? 'Yes, activate it!' : 'Yes, deactivate it!';
 
     Swal.fire({
         title: 'Are you sure?',
@@ -277,9 +273,7 @@ const AdminRegulatorTable = ({ data, pagination, actions, className, selectableR
             selector: (row) => {
                 return (
                     <>
-                        <Badge color={row.status === "1" ? "success" : "danger"}>
-                            {row.status === "1" ? 'Active' : 'Deactivated'}
-                        </Badge>
+                        <Badge color={row.active ? "success" : "danger"}>{row.active ? 'Active' : 'Deactivated'} </Badge>
                     </>
                 );
             },

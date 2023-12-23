@@ -4,12 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner} from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button,BlockBetween, PreviewCard } from "components/Component";
-import { loadAllActiveARs } from "redux/stores/sanctions/fetchAR";
+import { adminLoadUserARs } from "redux/stores/authorize/representative";
 import { sendSanction, loadAllSanctions } from "redux/stores/sanctions/sanctionStore";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
 import AdminSanctionTable from './Tables/AdminSanctionTable'
-
 
 
 const Sanction = ({ drawer }) => {
@@ -22,15 +21,15 @@ const Sanction = ({ drawer }) => {
     const [sm] = useState(false);
     const [modalForm, setModalForm] = useState(false);
     const { register, handleSubmit, formState: { errors }, resetField } = useForm();
-    const fetchAR = useSelector((state) => state?.fetchAR?.list) || null;
+    const ar_users = useSelector((state) => state?.arUsers?.list) || null;
 
     const toggleForm = () => setModalForm(!modalForm);
 
     useEffect(() => {
-        dispatch(loadAllActiveARs());
+         dispatch(adminLoadUserARs({ "approval_status": "approved", "institution_id": "", "role_id": "" }));
     }, [dispatch]);
 
-    const $fetchAR = fetchAR ? JSON.parse(fetchAR) : null;
+    const $ar_users = ar_users ? JSON.parse(ar_users) : null;
         
     const handleFormSubmit = async (values) => {
         const formData = new FormData();
@@ -118,9 +117,9 @@ const Sanction = ({ drawer }) => {
                                     <div className="form-control-select">
                                         <select className="form-control form-select"  style={{ color: "black !important" }} {...register('ar', { required: "AR is Required" })}>
                                         <option value="">Select AR</option>
-                                        {$fetchAR && $fetchAR?.map((fetchAR) => (
-                                            <option key={fetchAR.id} value={fetchAR.id}>
-                                                {fetchAR.first_name}
+                                        {$ar_users && $ar_users?.map((ar_user) => (
+                                            <option key={ar_user.id} value={ar_user.id}>
+                                                {`${ar_user.firstName} ${ar_user.lastName} (${ar_user.email})`}
                                             </option>
                                         ))}
                                         </select>

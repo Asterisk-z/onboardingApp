@@ -3,15 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\MailContents;
-use App\Helpers\ResponseStatusCodes;
 use App\Helpers\Utility;
 use App\Models\Role;
 use App\Models\Sanction;
 use App\Models\User;
-use App\Rules\ValidArRole;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 use App\Notifications\InfoNotification;
+use App\Rules\ValidArRole;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 
 class SanctionsController extends Controller
@@ -25,19 +24,6 @@ class SanctionsController extends Controller
     }
 
     //
-    public function fetchAR()
-    {
-        $ars = User::where('is_active', 1)->where('is_del', 0)->where('approval_status', 'approved')
-            ->where(function ($query) {
-                $query->where('role_id', 5)
-                    ->orWhere('role_id', 6);
-            })
-            ->get();
-
-        return successResponse('Successful', $ars);
-    }
-
-    //
     public function store(Request $request): JsonResponse
     {
         //
@@ -46,9 +32,8 @@ class SanctionsController extends Controller
             "ar_summary" => "required|string",
             "sanction_summary" => "required|string",
             "evidence" => "required|mimes:pdf",
-            // "evidence" => "required",
-            "created_by" => "required"
         ]);
+
         $user = auth()->user();
         $attachment = [];
 
@@ -57,12 +42,12 @@ class SanctionsController extends Controller
         }
 
         // $sanction = Sanction::create($validated);
-        $sanction =  Sanction::create([
+        $sanction = Sanction::create([
             'ar' => $request->input('ar'),
             'ar_summary' => $request->input('ar_summary'),
             'sanction_summary' => $request->input('sanction_summary'),
             'evidence' => $attachment ? $attachment['path'] : null,
-            'created_by' => $user->email
+            'created_by' => $user->email,
         ]);
         //
         $logMessage = $user->email . ' created a new sanction ';

@@ -33,7 +33,7 @@ const AdminRegulator = ({ drawer }) => {
     const handleFormSubmit = async (values) => {
         const formData = new FormData();
         formData.append('name', values.name)
-        formData.append('url', values.name)
+        formData.append('url', values.url)
         try {
             setLoading(true);
             
@@ -60,7 +60,6 @@ const AdminRegulator = ({ drawer }) => {
     const $regulators = regulators ? JSON.parse(regulators) : null;
     
     const updateParentState = (newState) => {
-        console.log(newState)
         setParentState(newState);
     };
 

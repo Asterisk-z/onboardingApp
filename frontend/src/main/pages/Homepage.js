@@ -26,7 +26,7 @@ const Homepage = () => {
   const arUsers = useSelector((state) => state?.arUsers?.list) || null;
 
   useEffect(() => {
-    dispatch(userLoadUserARs());
+    dispatch(userLoadUserARs({"approval_status" : "", "role_id": ""}));
   }, [dispatch]);
 
 
