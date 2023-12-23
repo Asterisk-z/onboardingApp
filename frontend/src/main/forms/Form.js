@@ -1806,54 +1806,47 @@ const Header = (props) => {
       <ul>
         <li className={props.current >= 1 ? "first done" : "first"}>
           <a href="#wizard-01-h-0" onClick={(ev) => ev.preventDefault()}>
-            <span className="number">01</span> <h5>Step 1</h5>
+            <span className="number">APPLICANT</span> <h5>Information</h5>
           </a>
         </li>
         <li className={props.current >= 2 ? "done" : ""}>
           <a href="#wizard-01-h-1" onClick={(ev) => ev.preventDefault()}>
-            <span className="number">02</span> <h5>Step 2</h5>
+            <span className="number">TRADING</span> <h5>DETAILS</h5>
           </a>
         </li>
         <li className={props.current >= 3 ? "done" : ""}>
           <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="current-info audible">current step: </span>
-            <span className="number">03</span> <h5>Step 3</h5>
+            <span className="number"></span> <h5>Step 3</h5>
           </a>
         </li>
         <li className={props.current >= 4 ? "done" : ""}>
           <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="current-info audible">current step: </span>
-            <span className="number">04</span> <h5>Step 4</h5>
+            <span className="number"></span> <h5>Step 4</h5>
           </a>
         </li>
         <li className={props.current >= 5 ? "done" : ""}>
           <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="current-info audible">current step: </span>
-            <span className="number">05</span> <h5>Step 5</h5>
+            <span className="number"></span> <h5>Step 5</h5>
           </a>
         </li>
         <li className={props.current >= 6 ? "done" : ""}>
           <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="current-info audible">current step: </span>
-            <span className="number">06</span> <h5>Step 6</h5>
+            <span className="number"></span> <h5>Step 6</h5>
           </a>
         </li>
         <li className={props.current >= 7 ? "done" : ""}>
           <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="current-info audible">current step: </span>
-            <span className="number">07</span> <h5>Step 7</h5>
+            <span className="number"></span> <h5>Step 7</h5>
           </a>
         </li>
         <li className={props.current >= 8 ? "done" : ""}>
           <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="current-info audible">current step: </span>
-            <span className="number">08</span> <h5>Step 8</h5>
+            <span className="number"></span> <h5>Step 8</h5>
           </a>
         </li>
         <li className={props.current === 9 ? "last done" : "last"}>
           <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="current-info audible">current step: </span>
-            <span className="number">09</span> <h5>Step 9</h5>
+            <span className="number"></span> <h5>Step 9</h5>
           </a>
         </li>
       </ul>
@@ -1910,6 +1903,9 @@ const Form = () => {
   return <>
     <Head title="Form" />
     <HeaderLogo />
+    
+            <Content page="component">
+                <Content>
     <div className="">
       <div style={{ 'margin': '0px 10px !important' }}>
         <div style={styles.card}>
@@ -1933,6 +1929,8 @@ const Form = () => {
         </div>
       </div>
     </div>
+                </Content>
+            </Content>
 
   </>;
 };
