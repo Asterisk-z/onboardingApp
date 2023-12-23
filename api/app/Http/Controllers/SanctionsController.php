@@ -24,6 +24,14 @@ class SanctionsController extends Controller
     }
 
     //
+    public function mySanction()
+    {
+        $sanctions = Sanction::orderBy('created_at', 'DESC')->get();
+
+        return successResponse('Successful', $sanctions);
+    }
+
+    //
     public function store(Request $request): JsonResponse
     {
         //
