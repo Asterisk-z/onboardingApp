@@ -25,6 +25,14 @@ class SanctionsController extends Controller
     }
 
     //
+    public function mySanction()
+    {
+        $sanctions = Sanction::orderBy('created_at', 'DESC')->get();
+
+        return successResponse('Successful', $sanctions);
+    }
+
+    //
     public function fetchAR()
     {
         $ars = User::where('is_active', 1)->where('is_del', 0)->where('approval_status', 'approved')

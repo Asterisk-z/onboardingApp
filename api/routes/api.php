@@ -124,16 +124,20 @@ Route::middleware('auth')->group(function () {
             Route::post('/update/{id}', [RegulatorsController::class, 'update']);
             Route::post('/update-status/{id}', [RegulatorsController::class, 'updateStatus']);
         });
-    });
-
-    // CCO and MEG ROUTES
-    Route::middleware('ccomeg')->group(function () {
         // sanctions
         Route::group(['prefix' => 'disciplinary-sanctions'],  function () {
             Route::get('/list_all', [SanctionsController::class, 'index']);
-            Route::get('/fetch_ar', [SanctionsController::class, 'fetchAR']);
+        });
+    });
+
+    // CCO and MEG ROUTES
+    Route::middleware('cco')->group(function () {
+        // sanctions
+        Route::group(['prefix' => 'disciplinary-sanctions'],  function () {
+            Route::get('/my_sanctions', [SanctionsController::class, 'mySanction']);
             Route::post('/create', [SanctionsController::class, 'store']);
         });
+        // competency
     });
 
     //MSG ROUTES
