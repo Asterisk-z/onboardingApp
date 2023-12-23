@@ -50,6 +50,48 @@ export const createMembershipCategory = createAsyncThunk(
 );
 
 
+export const mapToPositions = createAsyncThunk(
+  "category/mapToPositions",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+        url: `membership/category/mapToPositions`,
+        data: values,
+      });
+      return successHandler(data, data.message);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
+export const unlinkFromPositions = createAsyncThunk(
+  "category/unlinkFromPositions",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+        url: `membership/category/unlinkFromPositions`,
+        data: values,
+      });
+      return successHandler(data, data.message);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
+
+
 export const updateMembershipCategory = createAsyncThunk(
   "category/updateMembershipCategory",
   async (values) => {
@@ -148,6 +190,37 @@ const categoryStore = createSlice({
     });
 
     builder.addCase(updateMembershipCategory.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+   
+ 
+    // ====== builders for mapToPositions ======
+
+    builder.addCase(mapToPositions.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(mapToPositions.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(mapToPositions.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
+    // ====== builders for unlinkFromPositions ======
+
+    builder.addCase(unlinkFromPositions.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(unlinkFromPositions.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(unlinkFromPositions.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });

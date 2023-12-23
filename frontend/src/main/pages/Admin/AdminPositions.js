@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner} from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
 import { loadAllPositions, createPosition } from "redux/stores/positions/positionStore";
+import { loadAllActiveCategories } from "redux/stores/memberCategory/category"
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
 import AdminPositionTable from './Tables/AdminPositionTable'
@@ -20,8 +21,10 @@ const AdminPosition = ({ drawer }) => {
     const [modalForm, setModalForm] = useState(false);
     
     const positions = useSelector((state) => state?.position?.all_list) || null;
+    const categories = useSelector((state) => state?.category?.list) || null;
 
     useEffect(() => {
+        dispatch(loadAllActiveCategories());
         dispatch(loadAllPositions());
     }, [dispatch, parentState]);
 
@@ -57,6 +60,7 @@ const AdminPosition = ({ drawer }) => {
     }; 
     
     const $positions = positions ? JSON.parse(positions) : null;
+    const $categories = categories ? JSON.parse(categories) : null;
     
     const updateParentState = (newState) => {
         console.log(newState)
@@ -136,7 +140,7 @@ const AdminPosition = ({ drawer }) => {
                                 </BlockHead>
 
                                 <PreviewCard>
-                                    {$positions && <AdminPositionTable  updateParent={updateParentState} parentState={parentState} data={$positions} expandableRows pagination actions />}
+                                    {$positions && <AdminPositionTable  updateParent={updateParentState} categories={$categories} parentState={parentState} data={$positions} expandableRows pagination actions />}
                                 </PreviewCard>
                             </Block>
 

@@ -144,3 +144,7 @@ span.asc.__rdt_custom_sort_icon__ {
 .link-list-opt a:hover {
     color: #1D326C !important;
 } */
+
+.zeroMarginBottom {
+    margin-bottom: 0px;
+}

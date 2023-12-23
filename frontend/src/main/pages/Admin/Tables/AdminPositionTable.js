@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge,  Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner } from "reactstrap";
 import { DataTablePagination } from "components/Component";
-import { updatePositionStatus, updatePosition } from "redux/stores/positions/positionStore";
+import { updatePositionStatus, updatePosition, mapToCategories, unlinkFromCategories } from "redux/stores/positions/positionStore";
 import moment from "moment";
 import Icon from "components/icon/Icon";
 import Swal from "sweetalert2";
@@ -67,16 +67,19 @@ const Export = ({ data }) => {
 };
 
 
-const ActionTab = ({ updateParentParent, tabItem}) => {
+const ActionTab = ({ updateParentParent, tabItem, categories}) => {
     const tabItem_id = tabItem.id
     const [modalForm, setModalForm] = useState(false);
-    const [modalDetail, setModalDetail] = useState(false);
+    const [modalCatForm, setModalCatForm] = useState(false);
+    const [modalUnlinkCatForm, setModalUnlinkCatForm] = useState(false);
 
     const toggleForm = () => setModalForm(!modalForm);
-    const toggleModalDetail = () => { setModalDetail(!modalForm) };
+    const toggleCatForm = () => setModalCatForm(!modalCatForm);
+    const toggleUnlinkCatForm = () => setModalUnlinkCatForm(!modalUnlinkCatForm);
     
     const dispatch = useDispatch();
     const { register, handleSubmit, formState: { errors }, resetField } = useForm();
+    
     const [loading, setLoading] = useState(false);
     
     const [formData, setFormData] = useState({
@@ -110,59 +113,59 @@ const ActionTab = ({ updateParentParent, tabItem}) => {
       }
     }; 
 
-    const toggleModalDetailTwo = () => {
-        setModalDetail(false)
+    const closeModel = () => {
+        setModalCatForm(false)
+        setModalUnlinkCatForm(false)
     }
     
-        
-  const askAction = async (action) => {
+    const askAction = async (action) => {
 
-    if(action == 'open') {
-        Swal.fire({
-            title: "Are you sure?",
-            text: "Do you want to activate this category!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes, open it!",
-        }).then((result) => {
+      if(action == 'open') {
+          Swal.fire({
+              title: "Are you sure?",
+              text: "Do you want to activate this category!",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonText: "Yes, open it!",
+          }).then((result) => {
 
-          if (result.isConfirmed) {
-                
-                const formData = new FormData();
-                formData.append('position_id', tabItem_id);
-                formData.append('action', 'activate');
-                const resp = dispatch(updatePositionStatus(formData));
-                
-                    updateParentParent(Math.random())
-                
-                
-            }
-        });
-    }
-    
-    if(action == 'close') {
-        Swal.fire({
-            title: "Are you sure?",
-            text: "Do you want to deactivate this category!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes, close it!",
-        }).then((result) => {
+            if (result.isConfirmed) {
+                  
+                  const formData = new FormData();
+                  formData.append('position_id', tabItem_id);
+                  formData.append('action', 'activate');
+                  const resp = dispatch(updatePositionStatus(formData));
+                  
+                      updateParentParent(Math.random())
+                  
+                  
+              }
+          });
+      }
+      
+      if(action == 'close') {
+          Swal.fire({
+              title: "Are you sure?",
+              text: "Do you want to deactivate this category!",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonText: "Yes, close it!",
+          }).then((result) => {
 
-          if (result.isConfirmed) {
+            if (result.isConfirmed) {
+                  
+                  const formData = new FormData();
+                  formData.append('position_id', tabItem_id);
+                  formData.append('action', 'deactivate');
+                  const resp = dispatch(updatePositionStatus(formData));
+                  updateParentParent(Math.random())
                 
-                const formData = new FormData();
-                formData.append('position_id', tabItem_id);
-                formData.append('action', 'deactivate');
-                const resp = dispatch(updatePositionStatus(formData));
-                updateParentParent(Math.random())
-              
-            }
-        });
-    }
-    
+              }
+          });
+      }
+      
 
-  };
+    };
   
     return (
       <>
@@ -180,6 +183,18 @@ const ActionTab = ({ updateParentParent, tabItem}) => {
                                   <DropdownItem tag="a"  onClick={toggleForm} >
                                       <Icon name="eye"></Icon>
                                       <span>Edit</span>
+                                  </DropdownItem>
+                              </li>
+                              <li size="xs">
+                                  <DropdownItem tag="a"  onClick={toggleCatForm} >
+                                      <Icon name="eye"></Icon>
+                                      <span>Add Categories</span>
+                                  </DropdownItem>
+                              </li>
+                              <li size="xs">
+                                  <DropdownItem tag="a"  onClick={toggleUnlinkCatForm} >
+                                      <Icon name="eye"></Icon>
+                                      <span>Unlink Categories</span>
                                   </DropdownItem>
                               </li>
                               {(!tabItem.active) ? <>
@@ -229,7 +244,37 @@ const ActionTab = ({ updateParentParent, tabItem}) => {
                   </form>
               </ModalBody>
               <ModalFooter className="bg-light">
-                  <span className="sub-text">Feedback</span>
+                  <span className="sub-text">Position</span>
+              </ModalFooter>
+          </Modal>
+          <Modal isOpen={modalCatForm} toggle={toggleCatForm} size="xl" >
+              <ModalHeader toggle={toggleCatForm} close={<button className="close" onClick={toggleCatForm}><Icon name="cross" /></button>}>
+                  Add Category
+              </ModalHeader>
+              <ModalBody>
+                
+                    <h6 className="title">Linked Categories:</h6>
+                    
+                    <>
+                      {tabItem.categories.map((cat, index) => (
+                          <p className="zeroMarginBottom" key={index}>{cat.name}</p>
+                      ))}
+                    </>
+                   <LinkCategories tabItem={tabItem} updateParentParent={updateParentParent} categories={categories} closeModel={closeModel}/>
+              </ModalBody>
+              <ModalFooter className="bg-light">
+                  <span className="sub-text">Position</span>
+              </ModalFooter>
+          </Modal>
+          <Modal isOpen={modalUnlinkCatForm} toggle={toggleUnlinkCatForm} size="xl" >
+              <ModalHeader toggle={toggleUnlinkCatForm} close={<button className="close" onClick={toggleUnlinkCatForm}><Icon name="cross" /></button>}>
+                  Unlink Category
+              </ModalHeader>
+              <ModalBody>
+                   <UnLinkCategories tabItem={tabItem} updateParentParent={updateParentParent} categories={categories} closeModel={closeModel}/>
+              </ModalBody>
+              <ModalFooter className="bg-light">
+                  <span className="sub-text">Position</span>
               </ModalFooter>
           </Modal>
       </>
@@ -238,7 +283,197 @@ const ActionTab = ({ updateParentParent, tabItem}) => {
     );
 };
 
-const AdminPositionTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState }) => {
+const LinkCategories = ({ updateParentParent, tabItem, categories, closeModel}) => {
+    const tabItem_id = tabItem.id
+    const [categoryIds, setCategoryIds] = useState([]);
+    const [hasCat, setHasCat] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch();
+    
+    const { handleSubmit, register, watch, formState: { errors } } = useForm();
+
+        const submitForm = async (data) => {
+            const clickedIds = Object.keys(categoryIds)
+            const valuesIds = Object.values(categoryIds)
+            const checkedId = clickedIds.filter((check, index) => valuesIds[index]);
+          
+            const postValues = new Object();
+              postValues.position = tabItem_id;
+              postValues.category = checkedId;
+
+              try {
+                  setLoading(true);
+                  
+                  const resp = await dispatch(mapToCategories(postValues));
+
+                  if (resp.payload?.message == "success") {
+                      setTimeout(() => {
+                          setLoading(false);
+                          updateParentParent(Math.random())
+                          closeModel()
+                      }, 1000);
+                  
+                  } else {
+                    setLoading(false);
+                  }
+                  
+              } catch (error) {
+                setLoading(false);
+              }
+          
+        };
+
+
+        const checkItem = (event) => {
+            const ids = categoryIds;
+            ids[event.target.value] = event.target.checked
+        };
+  
+    return (
+      <>
+        {(categories.length > tabItem.categories.length) ? <>
+            <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
+                <Row className="gy-4">
+                    <Col md="12">
+                      <div className="form-group">
+                          <label className="form-label">
+                              Categories
+                          </label>
+                          <div className="form-control-wrap">
+                                {categories && categories?.map((category, index) => {
+                                  if (!tabItem.categories.map((cat) => cat.id).includes(category.id)) { 
+                                    // setHasCat(true)
+                                  return (                
+                                      <article className="custom-control" key={index} style={{ paddingLeft: '5px !important' }}>
+                                        <input type="checkbox" className="" onChange={(e) => checkItem(e)} name='category_id[]' value={category.id} id={`fw-policy${category.id}`} />
+                                        <label className="" htmlFor={`fw-policy${category.id}`}>
+                                          <span>
+                                            {category.name}
+                                          </span>
+                                        </label>
+                                      </article>
+                                      )
+                                    } 
+                                })}
+                              {errors.username && <span className="invalid">This field is required</span>}
+                          </div>
+                      </div>
+                  </Col>
+              </Row>
+              <div className="actions clearfix">
+                  <ul>
+                      <li>
+                          <Button color="primary" type="submit">
+                              {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Link Categories"}
+                          </Button>
+                      </li>
+                  </ul>
+              </div>                    
+          </form>
+          </> : <>
+              <h4>No Categories to Add</h4>
+            </>}
+      </>
+
+
+    );
+};
+
+const UnLinkCategories = ({ updateParentParent, tabItem, categories, closeModel}) => {
+    const tabItem_id = tabItem.id
+    const [categoryIds, setCategoryIds] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch();
+    
+    const { handleSubmit, register, watch, formState: { errors } } = useForm();
+
+        const submitForm = async (data) => {
+            const clickedIds = Object.keys(categoryIds)
+            const valuesIds = Object.values(categoryIds)
+            const checkedId = clickedIds.filter((check, index) => valuesIds[index]);
+          
+            const postValues = new Object();
+            postValues.position = tabItem_id;
+            postValues.category = checkedId;
+
+            try {
+                setLoading(true);
+                
+                const resp = await dispatch(unlinkFromCategories(postValues));
+
+                if (resp.payload?.message == "success") {
+                    setTimeout(() => {
+                        setLoading(false);
+                        updateParentParent(Math.random())
+                        closeModel()
+                    }, 1000);
+                
+                } else {
+                  setLoading(false);
+                }
+                
+            } catch (error) {
+              setLoading(false);
+            }
+          
+        };
+
+
+        const checkItem = (event) => {
+            const ids = categoryIds;
+            ids[event.target.value] = event.target.checked
+        };
+  
+    return (
+      <>
+        {(tabItem.categories.length > 0) ? <>
+            <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
+                <Row className="gy-4">
+                    <Col md="12">
+                      <div className="form-group">
+                          <label className="form-label">
+                              Categories
+                          </label>
+                          <div className="form-control-wrap">
+                                {tabItem.categories && tabItem.categories?.map((category, index) => {
+                                  if (categories.map((cat) => cat.id).includes(category.id)) { 
+                                  return (                
+                                      <article className="custom-control" key={index} style={{ paddingLeft: '5px !important' }}>
+                                        <input type="checkbox" className="" onChange={(e) => checkItem(e)} name='category_id[]' value={category.id} id={`fw-policy${category.id}`} />
+                                        <label className="" htmlFor={`fw-policy${category.id}`}>
+                                          <span>
+                                            {category.name}
+                                          </span>
+                                        </label>
+                                      </article>
+                                      )
+                                    } 
+                                })}
+                              {errors.username && <span className="invalid">This field is required</span>}
+                          </div>
+                      </div>
+                  </Col>
+              </Row>
+              <div className="actions clearfix">
+                  <ul>
+                      <li>
+                          <Button color="primary" type="submit">
+                              {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Unlink Categories"}
+                          </Button>
+                      </li>
+                  </ul>
+              </div>                    
+          </form>
+          </> : <>
+              <h4>No Categories to Unlink</h4>
+            </>}
+      </>
+
+
+    );
+};
+
+const AdminPositionTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState, categories }) => {
     const tableColumn = [
     {
         name: "PID",
@@ -250,6 +485,16 @@ const AdminPositionTable = ({ data, pagination, actions, className, selectableRo
     {
         name: "Name",
         selector: (row) => row.name,
+        sortable: true,
+        width: "auto",
+        wrap: true
+    },
+    {
+        name: "Categories",
+      selector: (row) => { return (<> {row.categories.map((cat) => cat.name).toString()}</>) },
+      // selector: (row) => { return (<> {row.categories.map((cat) => (
+      //   <p>{cat.name}</p>
+      // ))}</>) },
         sortable: true,
         width: "auto",
         wrap: true
@@ -271,7 +516,7 @@ const AdminPositionTable = ({ data, pagination, actions, className, selectableRo
     {
         name: "Action",
         selector: (row) => (<>
-                        <ActionTab tabItem={row} updateParentParent={updateParent} />
+                        <ActionTab tabItem={row} updateParentParent={updateParent} categories={categories}/>
                     </>),
     },
     ];

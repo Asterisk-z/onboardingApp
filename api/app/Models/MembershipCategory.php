@@ -14,15 +14,8 @@ class MembershipCategory extends Model
     const DEACTIVATE = "1";
     const ACTIVATE = "0";
 
-    public function toArray()
-    {
-        return [
-            "id" => $this->id,
-            "code" => $this->code,
-            "name" => $this->name,
-            "active" => !$this->is_del ? true : false,
-        ];
-    }
+    // protected $with = ['positions'];
+    protected $appends = ['active'];
 
     public function institutions()
     {
@@ -32,5 +25,10 @@ class MembershipCategory extends Model
     public function positions()
     {
         return $this->belongsToMany(Position::class, 'membership_category_postitions', 'category_id', 'position_id');
+    }
+
+    public function getActiveAttribute()
+    {
+        return !$this->is_del ? true : false;
     }
 }
