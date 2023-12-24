@@ -16,6 +16,12 @@ class RegulatorsController extends Controller
         return successResponse('Successful', $regulators);
     }
 
+    public function list()
+    {
+        $regulators = Regulator::where('is_del', 0)->orderBy('created_at', 'DESC')->get();
+        return successResponse('Successful', $regulators);
+    }
+
     //
     public function store(Request $request): JsonResponse
     {

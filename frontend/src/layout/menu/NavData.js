@@ -127,11 +127,17 @@ const navData = [{
     icon: "tile-thumb-fill",
     text: "Update Authorised Representatives",
     link: "/auth-representatives",
-    },
+   },
   {
     icon: "tile-thumb-fill",
     text: "Disciplinary and Sanctions",
+    access: ['cco'],
     link: "/sanctions",
+  },
+  {
+    icon: "tile-thumb-fill",
+    text: "Regulators",
+    link: "/regulators",
   },
   // {
   //   icon: "tile-thumb-fill",

@@ -13,7 +13,7 @@ import SanctionTable from './Tables/SanctionTable'
 
 
 
-const Complaint = ({ drawer }) => {
+const Sanction = ({ drawer }) => {
         
     const authUser = useUser();
     const authUserUpdate = useUserUpdate();
@@ -26,7 +26,6 @@ const Complaint = ({ drawer }) => {
         const [sm, updateSm] = useState(false);
         const [modalForm, setModalForm] = useState(false);
         const { register, handleSubmit, formState: { errors }, resetField } = useForm();
-        const complaintType = useSelector((state) => state?.complaintType?.list) || null;
 
         const toggleForm = () => setModalForm(!modalForm);
         const ar_users = useSelector((state) => state?.arUsers?.list) || null;
@@ -82,7 +81,7 @@ const Complaint = ({ drawer }) => {
 
         return (
             <React.Fragment>
-                <Head title="Complaint"></Head>
+                <Head title="Sanction"></Head>
                 <Content>
                     <BlockHead size="sm">
                         <BlockBetween>
@@ -202,7 +201,7 @@ const Complaint = ({ drawer }) => {
 
         return (
             <React.Fragment>
-                <Head title="Complaint"></Head>
+                <Head title="Sanction"></Head>
                 <Content>
                     <BlockHead size="sm">
                         <BlockBetween>
@@ -218,4 +217,4 @@ const Complaint = ({ drawer }) => {
     }
 
 };
-export default Complaint;
+export default Sanction;

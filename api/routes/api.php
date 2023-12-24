@@ -170,6 +170,11 @@ Route::middleware('auth')->group(function () {
             Route::post('/change-status/{ARUser}', [ARController::class, 'changeStatus']);
             Route::post('/process-change-status/{record}', [ARController::class, 'processChangeStatus']);
         });
+
+        Route::group(['prefix' => 'regulators'], function () {
+            Route::get('/list', [RegulatorsController::class, 'list']);
+        });
+
     });
 
     Route::group(['prefix' => 'user'], function () {
