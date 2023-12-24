@@ -15,61 +15,11 @@ const Sanction = ({ drawer }) => {
         
     const [counter, setCounter] = useState(false);
     const dispatch = useDispatch();
-    // const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
-    const [complainFile, setComplainFile] = useState([]);
-    const [sm] = useState(false);
-    const [modalForm, setModalForm] = useState(false);
-    const { register, handleSubmit, formState: { errors }, resetField } = useForm();
-    const ar_users = useSelector((state) => state?.arUsers?.list) || null;
-
-    const toggleForm = () => setModalForm(!modalForm);
-
-    useEffect(() => {
-         dispatch(adminLoadUserARs({ "approval_status": "approved", "institution_id": "", "role_id": "" }));
-    }, [dispatch]);
-
-    const $ar_users = ar_users ? JSON.parse(ar_users) : null;
-        
-    const handleFormSubmit = async (values) => {
-        const formData = new FormData();
-        formData.append('ar', values.ar)
-        formData.append('body', values.body)
-        formData.append('document', complainFile)
-        try {
-            setLoading(true);
-            
-            const resp = await dispatch(sendSanction(formData));
-
-            if (resp.payload?.message === "success") {
-                setTimeout(() => {
-                    setLoading(false);
-                    setModalForm(!modalForm)
-                    resetField('complaint_type')
-                    resetField('body')
-                    resetField('document')
-                    setCounter(!counter)
-                }, 1000);
-            } else {
-              setLoading(false);
-            }
-            
-      } catch (error) {
-        setLoading(false);
-      }
-
-    }; 
-
-    const handleFileChange = (event) => {
-		  setComplainFile(event.target.files[0]);
-    };
-
-    const sanctions = useSelector((state) => state?.sanction?.view_all) || null;
+    const sanctions = useSelector((state) => state?.sanctions?.view_all) || null;
     useEffect(() => {
         dispatch(loadAllSanctions());
     }, [dispatch, counter]);
   
-    
     const $sanctions = sanctions ? JSON.parse(sanctions) : null;
 
     return (
@@ -83,88 +33,8 @@ const Sanction = ({ drawer }) => {
                                 Disciplinary and Sanctions
                             </BlockTitle>
                         </BlockHeadContent>
-                        <BlockHeadContent>
-                            <div className="toggle-wrap nk-block-tools-toggle">
-                                <div className="toggle-expand-content" style={{ display: sm ? "block" : "none" }}>
-                                    <ul className="nk-block-tools g-3">
-                                        <li className="nk-block-tools-opt">
-                                            <Button color="primary">
-                                                <span onClick={toggleForm}>Add Sanction</span>
-                                            </Button>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </BlockHeadContent>
                     </BlockBetween>
                 </BlockHead>
-                <Modal isOpen={modalForm} toggle={toggleForm}>
-                    <ModalHeader toggle={toggleForm} close={
-                            <button className="close" onClick={toggleForm}>
-                                <Icon name="cross" />
-                            </button>
-                        }
-                    >
-                        Fill Disciplinary and Sanction Form
-                    </ModalHeader>
-                    <ModalBody>
-                        <form  onSubmit={handleSubmit(handleFormSubmit)}  className="is-alter" encType="multipart/form-data">
-                            <div className="form-group">
-                                <label className="form-label" htmlFor="full-name">
-                                    AR
-                                </label>
-                                <div className="form-control-wrap">
-                                    <div className="form-control-select">
-                                        <select className="form-control form-select"  style={{ color: "black !important" }} {...register('ar', { required: "AR is Required" })}>
-                                        <option value="">Select AR</option>
-                                        {$ar_users && $ar_users?.map((ar_user) => (
-                                            <option key={ar_user.id} value={ar_user.id}>
-                                                {`${ar_user.firstName} ${ar_user.lastName} (${ar_user.email})`}
-                                            </option>
-                                        ))}
-                                        </select>
-                                        {errors.ar && <p className="invalid">{`${errors.ar.message}`}</p>}
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="form-group">
-                                <label className="form-label" htmlFor="email">
-                                    AR Summary
-                                </label>
-                                <div className="form-control-wrap">
-                                    <textarea type="text" className="form-control" {...register('body', { required: "This field is Required" })}></textarea>
-                                     {errors.body && <p className="invalid">{`${errors.body.message}`}</p>}
-                                </div>
-                            </div>
-                              <div className="form-group">
-                                <label className="form-label" htmlFor="email">
-                                    Sanction Summary
-                                </label>
-                                <div className="form-control-wrap">
-                                    <textarea type="text" className="form-control" {...register('body', { required: "This field is Required" })}></textarea>
-                                     {errors.body && <p className="invalid">{`${errors.body.message}`}</p>}
-                                </div>
-                            </div>
-                            <div className="form-group">
-                                <label className="form-label" htmlFor="phone-no">
-                                    Upload Document (*pdf)
-                                </label>
-                                <div className="form-control-wrap">
-                                    <input type="file" accept=".pdf" className="form-control"  {...register('evidence', {required: "This field is Required" })} onChange={handleFileChange}/>
-                                     {errors.evidence && <p className="invalid">{`${errors.evidence.message}`}</p>}
-                                </div>
-                            </div>
-                            <div className="form-group">
-                                <Button color="primary" type="submit"  size="lg">
-                                    {loading ? ( <span><Spinner size="sm" color="light" /> Processing...</span>) : "Send Sanction"}
-                                </Button>
-                            </div>
-                        </form>
-                    </ModalBody>
-                    <ModalFooter className="bg-light">
-                        <span className="sub-text">Disciplinary and Sanction Module</span>
-                    </ModalFooter>
-                </Modal>
                 <Block size="lg">
                     <Card className="card-bordered card-preview">
                         <Content>

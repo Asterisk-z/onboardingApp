@@ -26,7 +26,7 @@ class SanctionsController extends Controller
     //
     public function mySanction()
     {
-        $sanctions = Sanction::orderBy('created_at', 'DESC')->get();
+        $sanctions = Sanction::where('institution', auth()->user()->institution_id)->orderBy('created_at', 'DESC')->get();
 
         return successResponse('Successful', $sanctions);
     }
@@ -44,8 +44,8 @@ class SanctionsController extends Controller
 
         $attachment = [];
 
-        if ($request->hasFile('file')) {
-            $attachment = Utility::saveFile('sanctions', $request->file('file'));
+        if ($request->hasFile('evidence')) {
+            $attachment = Utility::saveFile('sanctions', $request->file('evidence'));
         }
 
         // $sanction = Sanction::create($validated);

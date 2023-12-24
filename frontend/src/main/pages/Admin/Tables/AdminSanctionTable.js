@@ -124,41 +124,57 @@ const DropdownTrans = (props) => {
   );
 };
 
-const complainColumn = [
+const sanctionColumn = [
   {
-    name: "TID",
+    name: "ID",
     selector: (row) => row.id,
     sortable: true,
     width: "80px",
   },
   {
-    name: "Description",
-    selector: (row) => row.body,
+    name: "Institution",
+    selector: (row) => row.institution_obj.name,
     sortable: true,
     width: "auto",
     wrap: true
   },
   {
-    name: "Status",
-    selector: (row) => { return (<><Badge color="success">{`${row.status}`}</Badge></>) },
+    name: "Sanction Summary",
+    selector: (row) => row.sanction_summary,
+    sortable: true,
+    width: "auto",
+    wrap: true
+  },
+  {
+    name: "AR Summary",
+    selector: (row) => row.ar_summary,
+    sortable: true,
+    width: "auto",
+    wrap: true
+  },
+  {
+    name: "Evidence",
+    selector: (row) => { return row.evidence_file ? (<><a href={row.evidence_file} target="_blank" className="btn btn-success">{`View`}</a></>) : (<><Badge color="warning">{`No evidence`}</Badge></>) },
     sortable: true,
     width: "150px",
   },
   {
-    name: "Comments",
-    selector: (row) => { return (<><Badge color="gray">{`${row.comment.length} Comments`}</Badge></>) },
+    name: "Sanctioner",
+    selector: (row) => row.sanctioner.full_name,
     sortable: true,
-    width: "150px",
+    width: "auto",
+    wrap: true
+  },
+  {
+    name: "Sanctionee",
+    selector: (row) => row.sanctionee.full_name_with_mail,
+    sortable: true,
+    width: "auto",
+    wrap: true
   },
   {
     name: "Date Created",
-    selector: (row) => moment(row.createdAt).format('MMM. DD, YYYY HH:mm'),
-    sortable: true,
-    width: "150px",
-  },
-  {
-    name: "Action",
-    selector: (row) => (<> <DropdownTrans  complaint={row} /></>),
+    selector: (row) => moment(row.created_at).format('MMM. DD, YYYY HH:mm'),
     sortable: true,
     width: "150px",
   },
@@ -250,7 +266,7 @@ const AdminSanctionTable = ({ data, pagination, actions, className, selectableRo
                     </Row>
                     <DataTable
                         data={tableData}
-                        columns={complainColumn}
+                        columns={sanctionColumn}
                         className={className + ' customMroisDatatable'} id='customMroisDatatable'
                         selectableRows={selectableRows}
                         selectableRowsComponent={CustomCheckbox}
