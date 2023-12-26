@@ -23,5 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CategoryPositions::class);
         $this->call(MembershipPositionSeeder::class);
         $this->call(SystemSettingSeeder::class);
+        $this->call(ApplicationFieldSeed::class);
+        $this->call(ApplicationFieldOptionSeeder::class);
     }
 }

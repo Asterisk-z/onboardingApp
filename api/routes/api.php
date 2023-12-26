@@ -7,6 +7,7 @@ use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\ComplaintTypeController;
 use App\Http\Controllers\InstitutionController;
 use App\Http\Controllers\MemberCategoryController;
+use App\Http\Controllers\MembershipApplicationController;
 use App\Http\Controllers\NationalityController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\PositionController;
@@ -175,6 +176,9 @@ Route::middleware('auth')->group(function () {
             Route::get('/list', [RegulatorsController::class, 'list']);
         });
 
+        Route::group(['prefix' => 'membership'], function () {
+            Route::get('application/fields', [MembershipApplicationController::class, 'getfield']);
+        });
     });
 
     Route::group(['prefix' => 'user'], function () {
