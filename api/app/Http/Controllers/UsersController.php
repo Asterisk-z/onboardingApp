@@ -7,6 +7,7 @@ use App\Helpers\ResponseStatusCodes;
 use App\Helpers\Utility;
 use App\Http\Requests\RegistrationRequest;
 use App\Http\Resources\UserResource;
+use App\Models\Application;
 use App\Models\Institution;
 use App\Models\InstitutionMembership;
 use App\Models\MembershipCategory;
@@ -97,6 +98,12 @@ class UsersController extends Controller
 
         $user->passwords()->create([
             'password' => Hash::make($request->input('password')),
+        ]);
+
+        Application::create([
+            'institution_id' => $institution->id,
+            'submitted_by' => $user->id,
+            'status' => 'pending',
         ]);
 
         $regID = $user->getRegID();

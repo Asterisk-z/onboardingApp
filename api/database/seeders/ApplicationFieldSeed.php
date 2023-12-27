@@ -159,7 +159,7 @@ class ApplicationFieldSeed extends Seeder
                 "category" => '1',
                 "name" => 'productOfInterest',
                 "description" => 'Product Of Interest',
-                "type" => 'select',
+                "type" => 'checkbox',
                 "required" => 1,
                 "page" => '2',
             ],
@@ -170,6 +170,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
+                "parent_id" => 18,
             ],
             [
                 "category" => '1',
@@ -178,6 +179,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
+                "parent_id" => 18,
             ],
             [
                 "category" => '1',
@@ -186,6 +188,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
+                "parent_id" => 18,
             ],
             [
                 "category" => '1',
@@ -194,6 +197,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
+                "parent_id" => 18,
             ],
             [
                 "category" => '1',
@@ -202,6 +206,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
+                "parent_id" => 18,
             ],
             [
                 "category" => '1',
@@ -210,6 +215,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
+                "parent_id" => 18,
             ],
             [
                 "category" => '1',
@@ -218,6 +224,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
+                "parent_id" => 18,
             ],
             [
                 "category" => '1',
@@ -226,6 +233,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
+                "parent_id" => 18,
             ],
             [
                 "category" => '1',
@@ -234,6 +242,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
+                "parent_id" => 18,
             ],
             [
                 "category" => '1',
@@ -242,6 +251,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
+                "parent_id" => 18,
             ],
             [
                 "category" => '1',
@@ -250,6 +260,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
+                "parent_id" => 18,
             ],
             [
                 "category" => '1',
@@ -258,6 +269,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
+                "parent_id" => 18,
             ],
             [
                 "category" => '1',
@@ -266,6 +278,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
+                "parent_id" => 18,
             ],
             [
                 "category" => '1',
@@ -274,6 +287,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
+                "parent_id" => 18,
             ],
             [
                 "category" => '1',
@@ -389,8 +403,8 @@ class ApplicationFieldSeed extends Seeder
             // ],
         ];
 
-        foreach($fields as $field) {
-            if(  ApplicationField::where('category', $field['category'])->where('name', $field['name'])->exists()) {
+        foreach ($fields as $field) {
+            if (ApplicationField::where('category', $field['category'])->where('name', $field['name'])->exists()) {
                 continue;
             }
 
@@ -403,7 +417,6 @@ class ApplicationFieldSeed extends Seeder
                 "page" => $field['page'],
             ]);
         }
-
 
     }
 }

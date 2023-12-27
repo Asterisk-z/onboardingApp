@@ -177,7 +177,9 @@ Route::middleware('auth')->group(function () {
         });
 
         Route::group(['prefix' => 'membership'], function () {
-            Route::get('application/fields', [MembershipApplicationController::class, 'getfield']);
+            Route::get('application/fields', [MembershipApplicationController::class, 'getField']);
+            Route::get('application/field/option', [MembershipApplicationController::class, 'getFieldOption']);
+            Route::post('application/upload', [MembershipApplicationController::class, 'uploadField']);
         });
     });
 

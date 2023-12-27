@@ -17,8 +17,8 @@ class CreateApplicationsTable extends Migration
             $table->id();
             $table->foreignId('institution_id')->constrained('institutions')->onDelete('cascade');
             $table->foreignId('submitted_by')->constrained('users')->onDelete('cascade');
-            $table->string('status');            
-            $table->dateTime('completed_at');            
+            $table->string('status');
+            $table->timestamp('completed_at')->nullable();
             $table->timestamps();
         });
     }
