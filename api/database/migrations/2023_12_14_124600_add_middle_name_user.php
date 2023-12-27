@@ -13,7 +13,7 @@ class AddMiddleNameUser extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) { 
+        Schema::table('users', function (Blueprint $table) {
             $table->string('middle_name')->after('last_name')->nullable();
             $table->string('mandate_form')->after('img')->nullable();
         });
