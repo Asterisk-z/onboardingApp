@@ -7,7 +7,7 @@ import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col,
 import { loadUserRoles } from "redux/stores/roles/roleStore";
 import { loadAllCategoryPositions } from "redux/stores/positions/positionStore";
 import { loadAllCountries } from "redux/stores/nationality/country";
-import { userLoadUserARs, userTransferUserAR, userViewUserAR } from "redux/stores/authorize/representative";
+import {  userTransferUserAR, userViewUserAR } from "redux/stores/authorize/representative";
 import { loadAllActiveAuthoriser } from "redux/stores/users/userStore";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";

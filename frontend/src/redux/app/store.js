@@ -14,7 +14,6 @@ import settingStore from "../stores/settings/config";
 import institutionStore from "../stores/institution/institutionStore";
 import regulatorStore from "redux/stores/regulators/regulatorStore";
 import sanctionStore from "redux/stores/sanctions/sanctionStore";
-import fetchAR from "redux/stores/sanctions/fetchAR";
 
 const store = configureStore({
   reducer: {

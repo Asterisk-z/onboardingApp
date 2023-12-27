@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Helpers\ResponseStatusCodes;
 use App\Models\Regulator;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class RegulatorsController extends Controller
 {
@@ -13,6 +13,12 @@ class RegulatorsController extends Controller
     public function index()
     {
         $regulators = Regulator::orderBy('created_at', 'DESC')->get();
+        return successResponse('Successful', $regulators);
+    }
+
+    public function list()
+    {
+        $regulators = Regulator::where('is_del', 0)->orderBy('created_at', 'DESC')->get();
         return successResponse('Successful', $regulators);
     }
 
@@ -26,10 +32,6 @@ class RegulatorsController extends Controller
 
         $user = auth()->user();
         $regulator = Regulator::create($validated);
-        // Regulator::create([
-        //     'name' => $request->input('name'),
-        //     'url' => $request->input('url'),
-        // ]);
 
         $logMessage = $user->email . ' created a regulator message named : ' . $request->name;
         logAction($user->email, 'New Regulator Created', $logMessage, $request->ip());
@@ -58,7 +60,6 @@ class RegulatorsController extends Controller
             'url' => $validated['url'],
         ]);
 
-
         return successResponse('Update successful', $regulators);
     }
 
@@ -80,9 +81,8 @@ class RegulatorsController extends Controller
 
         //
         $regulators->update([
-            'status' => $request->status
+            'is_del' => $request->status,
         ]);
-
 
         return successResponse('Update successful', $regulators);
     }

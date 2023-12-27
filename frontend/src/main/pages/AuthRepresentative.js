@@ -63,7 +63,6 @@ const AuthRepresentative = ({ drawer }) => {
         if ($ar_search_result) {
             if ($ar_search_result.length > 0) {
                 setModelForSearchAR(true);
-                console.log($ar_search_result)
             } 
         }
     }, [ar_search_result]);

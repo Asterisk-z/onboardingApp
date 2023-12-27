@@ -6,22 +6,22 @@ import { errorHandler, successHandler } from "../../../utils/Functions";
 // import category from "../memberCategory/category";
 const initialState = {
                     list: null,
-                    error: "", view_all: null,
+                    error: "", view_all: null, active_list: null,
                     loading: false,
 };
 
 
-// export const loadAllActivePositions = createAsyncThunk(
-//   "position/loadAllActivePositions",
-//   async (arg) => {
-//     try {
-//       const { data } = await axios.get(`positions`);
-//       return successHandler(data);
-//     } catch (error) {
-//       return errorHandler(error);
-//     }
-//   }
-// );
+export const loadAllActiveRegulators = createAsyncThunk(
+  "regulator/loadAllActiveRegulators",
+  async (arg) => {
+    try {
+      const { data } = await axios.get(`regulators/list`);
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
+    }
+  }
+);
 
 
 
@@ -111,22 +111,22 @@ const regulatorStore = createSlice({
   },
   extraReducers: (builder) => {
 
-    // ====== builders for loadAllActivePositions ======
+    // ====== builders for loadAllActiveRegulators ======
 
-    // builder.addCase(loadAllActivePositions.pending, (state) => {
-    //   state.loading = true;
-    // });
+    builder.addCase(loadAllActiveRegulators.pending, (state) => {
+      state.loading = true;
+    });
 
-    // builder.addCase(loadAllActivePositions.fulfilled, (state, action) => {
-    //   state.loading = false;
-    //     // state.list = action.payload?.data?.data?.positions;
-    //     state.list = JSON.stringify(action.payload?.data?.data?.positions);
-    // });
+    builder.addCase(loadAllActiveRegulators.fulfilled, (state, action) => {
+      state.loading = false;
+        // state.list = action.payload?.data?.data?.positions;
+        state.active_list = JSON.stringify(action.payload?.data?.data);
+    });
 
-    // builder.addCase(loadAllActivePositions.rejected, (state, action) => {
-    //   state.loading = false;
-    //   state.error = action.payload.message;
-    // });
+    builder.addCase(loadAllActiveRegulators.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
 
     // ====== builders for loadAllPositions ======
 

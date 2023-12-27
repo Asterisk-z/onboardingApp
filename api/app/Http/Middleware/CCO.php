@@ -2,10 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Helpers\ResponseStatusCodes;
+use App\Models\Position;
 use Closure;
 use Illuminate\Http\Request;
-use App\Helpers\ResponseStatusCodes;
-use App\Models\Role;
 use Symfony\Component\HttpFoundation\Response;
 
 class CCO
@@ -19,7 +19,9 @@ class CCO
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->user()->position_id === '5') {
+        $cco_position = Position::where('name', Position::CCO)->first();
+
+        if ($request->user()->position_id === $cco_position->id) {
             return $next($request);
         }
         return errorResponse(ResponseStatusCodes::UNAUTHORIZED, "Unauthorized Access", [], Response::HTTP_UNAUTHORIZED);

@@ -13,6 +13,7 @@ class Position extends Model
 
     const DEACTIVATE = "1";
     const ACTIVATE = "0";
+    const CCO = "CCO";
 
     // protected $with = ['categories'];
     protected $appends = ['active'];
@@ -26,4 +27,5 @@ class Position extends Model
     {
         return !$this->is_del ? true : false;
     }
+
 }

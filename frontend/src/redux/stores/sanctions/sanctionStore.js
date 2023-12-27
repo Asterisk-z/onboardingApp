@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { errorHandler, successHandler } from "../../../utils/Functions";
 
-const initialState = { list: null, error: "", loading: false};
+const initialState = { list: null, error: "", loading: false, view_all: null};
 
 
 export const loadAllSanctions = createAsyncThunk(
@@ -10,6 +10,18 @@ export const loadAllSanctions = createAsyncThunk(
   async (arg) => {
     try {
       const { data } = await axios.get(`disciplinary-sanctions/list_all`);
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
+    }
+  }
+);
+
+export const loadUserSanctions = createAsyncThunk(
+  "sanction/loadUserSanctions",
+  async (arg) => {
+    try {
+      const { data } = await axios.get(`disciplinary-sanctions/my_sanctions`);
       return successHandler(data);
     } catch (error) {
       return errorHandler(error);
@@ -78,6 +90,23 @@ const sanctionStore = createSlice({
     });
 
     builder.addCase(loadAllSanctions.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+    
+    // ====== builders for loadUserSanctions ======
+
+    builder.addCase(loadUserSanctions.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(loadUserSanctions.fulfilled, (state, action) => {
+        state.loading = false;
+        // state.list = action.payload?.data?.data?.categories;
+        state.view_all = JSON.stringify(action.payload?.data?.data);
+    });
+
+    builder.addCase(loadUserSanctions.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });

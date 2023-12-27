@@ -129,7 +129,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/update-status/{id}', [RegulatorsController::class, 'updateStatus']);
         });
         // sanctions
-        Route::group(['prefix' => 'disciplinary-sanctions'], function () {
+        Route::group(['prefix' => 'disciplinary-sanctions'],  function () {
             Route::get('/list_all', [SanctionsController::class, 'index']);
         });
     });
@@ -137,7 +137,7 @@ Route::middleware('auth')->group(function () {
     // CCO and MEG ROUTES
     Route::middleware('cco')->group(function () {
         // sanctions
-        Route::group(['prefix' => 'disciplinary-sanctions'],  function () {
+        Route::group(['prefix' => 'disciplinary-sanctions'], function () {
             Route::get('/my_sanctions', [SanctionsController::class, 'mySanction']);
             Route::post('/create', [SanctionsController::class, 'store']);
         });
@@ -170,6 +170,11 @@ Route::middleware('auth')->group(function () {
             Route::post('/change-status/{ARUser}', [ARController::class, 'changeStatus']);
             Route::post('/process-change-status/{record}', [ARController::class, 'processChangeStatus']);
         });
+
+        Route::group(['prefix' => 'regulators'], function () {
+            Route::get('/list', [RegulatorsController::class, 'list']);
+        });
+
     });
 
     Route::group(['prefix' => 'user'], function () {

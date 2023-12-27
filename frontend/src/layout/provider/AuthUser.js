@@ -61,6 +61,9 @@ const UserProvider = ({...props}) => {
       is_admin_blg: function () {
         return localStorage.getItem('role') == "BLG" ? true : false;
       },
+      is_position_cco: function () {
+        return json_user.position.name == "CCO" ? true : false;
+      },
     }
     
     const [user, setUser] = useState(defaultUser);
