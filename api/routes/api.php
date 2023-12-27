@@ -169,7 +169,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/delete/{eventID}', [EventController::class, 'delete']);
         });
 
-        Route::middleware('authRole:' . Role::MEG . ',' . Role::FSD . ',' . Role::ARAUTHORISER)->group(function () { // TODO: remove ARAUTHORISER
+        Route::middleware('authRole:' . Role::MEG . ',' . Role::FSD)->group(function () {
             Route::get('/registrations/{event}', [EventController::class, 'eventRegistrations']);
             Route::post('/registration-update-status/{eventReg}', [EventController::class, 'approveEventRegistration']);
         });

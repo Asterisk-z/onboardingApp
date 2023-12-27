@@ -67,4 +67,16 @@ class Event extends Model
         return [];
     }
 
+    public function newlyInvitedUsers()
+    {
+        $positionIds = $this->invitePosition->pluck('position_id');
+        $users = User::whereIn('position_id', $positionIds)->get();
+
+        if (count($users)) {
+            return $users;
+        }
+
+        return [];
+    }
+
 }

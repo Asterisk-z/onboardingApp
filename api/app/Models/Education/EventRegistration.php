@@ -13,7 +13,7 @@ class EventRegistration extends Model
     protected $with = ['user'];
 
     const STATUS_DECLINED = "Declined";
-    const STATUS_APPROVED = "Approved";
+    const STATUS_APPROVED = "Registered";
     const STATUS_PENDING = "Pending";
 
     public function event()

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\EventNotificationUtility;
+use App\Helpers\ResponseStatusCodes;
 use App\Http\Requests\Education\AddEventRequest;
 use App\Http\Requests\Education\UpdateEventRequest;
 use App\Http\Resources\Education\EventBasicResource;
@@ -13,14 +14,12 @@ use App\Models\Education\Event;
 use App\Models\Education\EventNotificationDates;
 use App\Models\Education\EventInvitePosition;
 use App\Models\Education\EventRegistration;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 
 class EventController extends Controller
 {
-
     public function view(Event $event)
     {
         return successResponse('Successful', EventResource::make($event));
@@ -71,7 +70,6 @@ class EventController extends Controller
             $imagePath = $image->storeAs('event_images', $imageName, 'public');
         }
 
-
         // validate the notification dates
         $validRegisteredDates = [];
         $validUnregisteredDates = [];
@@ -79,7 +77,6 @@ class EventController extends Controller
         // split $validated['unregistered_remainder_dates'] by comma. 
         // Validate each date to be YYYY-MM-DD
         // Add to $validUnregisteredDates;
-
 
         if ($validated['registered_remainder_dates']) {
             $dateArr = $this->stringToDateArray($validated['registered_remainder_dates']);
@@ -102,8 +99,6 @@ class EventController extends Controller
             $validUnregisteredDates = $dateArr;
         }
 
-
-
         unset($validated['registered_remainder_dates'], $validated['unregistered_remainder_dates'], $validated['img']);
 
         $validated['image'] = $imagePath;
@@ -116,9 +111,7 @@ class EventController extends Controller
                 EventNotificationDates::create([
                     'type' => 'Registered',
                     'event_id' => $event->id,
-                    'reminder_date' => $notificationDate,
-                    'created_at' => now(),
-                    'updated_at' => now(),
+                    'reminder_date' => $notificationDate
                 ]);
             });
         }
@@ -128,12 +121,16 @@ class EventController extends Controller
                 EventNotificationDates::create([
                     'type' => 'Unregistered',
                     'event_id' => $event->id,
-                    'reminder_date' => $notificationDate,
-                    'created_at' => now(),
-                    'updated_at' => now(),
+                    'reminder_date' => $notificationDate
                 ]);
             });
         }
+
+        // Get the positions from the request
+        $requestedPositions = $request->input('positions');
+
+        //Notify newly added AR
+        $this->addInviteesToEvent($event, $requestedPositions);
 
         $logMessage = "Added a new Event: $event->name";
         logAction($request->user()->email, 'Add Event', $logMessage, $request->ip());
@@ -146,7 +143,6 @@ class EventController extends Controller
         $validated = $request->validated();
 
         // Store the image
-
         if (isset($validated['img']) && $request->hasFile('img')) {
             $image = $request->file('img');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
@@ -156,23 +152,21 @@ class EventController extends Controller
             unset($validated['img']);
         }
 
-
         // validate the notification dates
 
         // split dates by comma. 
         // Validate each date to be YYYY-MM-DD
         // Add to $validUnregisteredDates;
 
-
         if (isset($validated['registered_remainder_dates'])) {
 
             $validRegisteredDates = [];
 
-            if (isset($validated['img']) && $validated['registered_remainder_dates']) {
+            if ($validated['registered_remainder_dates']) {
                 $dateArr = $this->stringToDateArray($validated['registered_remainder_dates']);
 
                 if (is_string($dateArr)) {
-                    return errorResponse(1, $dateArr);
+                    return errorResponse(ResponseStatusCodes::BAD_REQUEST, $dateArr);
                 }
 
                 $validRegisteredDates = $dateArr;
@@ -186,13 +180,10 @@ class EventController extends Controller
                     EventNotificationDates::create([
                         'type' => 'Registered',
                         'event_id' => $event->id,
-                        'reminder_date' => $notificationDate,
-                        'created_at' => now(),
-                        'updated_at' => now(),
+                        'reminder_date' => $notificationDate
                     ]);
                 });
             }
-
 
             unset($validated['registered_remainder_dates']);
         }
@@ -200,13 +191,12 @@ class EventController extends Controller
         if (isset($validated['unregistered_remainder_dates'])) {
             $validUnregisteredDates = [];
 
-
             if ($validated['unregistered_remainder_dates']) {
 
                 $dateArr = $this->stringToDateArray($validated['unregistered_remainder_dates']);
 
                 if (is_string($dateArr)) {
-                    return errorResponse(1, $dateArr);
+                    return errorResponse(ResponseStatusCodes::BAD_REQUEST, $dateArr);
                 }
 
                 $validUnregisteredDates = $dateArr;
@@ -219,61 +209,74 @@ class EventController extends Controller
                     EventNotificationDates::create([
                         'type' => 'Unregistered',
                         'event_id' => $event->id,
-                        'reminder_date' => $notificationDate,
-                        'created_at' => now(),
-                        'updated_at' => now(),
+                        'reminder_date' => $notificationDate
                     ]);
                 });
             }
 
             unset($validated['unregistered_remainder_dates']);
-
         }
-
 
         if ($validated) { // there is something to update
             $event->update($validated);
-
             $logMessage = "Updated an Event: $event->name";
             logAction($request->user()->email, 'Update Event', $logMessage, $request->ip());
 
             EventNotificationUtility::eventUpdated($event);
         }
 
-        $event->refresh();
+        // Get the positions from the request
+        $requestedPositions = $request->input('positions', []);
 
+        //Notify newly added AR
+        if($requestedPositions)
+            $this->addInviteesToEvent($event, $requestedPositions);
+
+        $event->refresh();
         return successResponse('Successful', EventResource::make($event));
     }
 
     public function updateInvitePositions(Request $request, Event $event)
     {
-
         $request->validate([
-            'positions' => 'nullable|array', // Ensure 'positions' is present and is an array
+            'positions' => 'required|array', // Ensure 'positions' is present and is an array
             'positions.*' => [
                 'integer',
                 Rule::exists('positions', 'id'), // Ensure each position ID exists in the 'positions' table
             ],
         ]);
         // Get the positions from the request
-        $requestedPositions = $request->input('positions', []);
+        $requestedPositions = $request->input('positions');
 
+        //Notify newly added AR
+        $this->addInviteesToEvent($event, $requestedPositions);
 
+        $event->refresh();
+        return successResponse('Successful', EventResource::make($event));
+    }
+
+    //Change to re-useable method
+    protected function addInviteesToEvent(Event $event, $positions){
         // Get the existing positions for the event
-        $existingPositions = $event->invitePosition->pluck('position_id')->toArray();
+        $existingPositions = $event->invitePosition()->pluck('position_id')->toArray();
 
         // Determine positions to add and positions to remove
-        $positionsToAdd = array_diff($requestedPositions, $existingPositions);
-        $positionsToRemove = array_diff($existingPositions, $requestedPositions);
+        $positionsToAdd = array_diff($positions, $existingPositions);
+        $positionsToRemove = array_diff($existingPositions, $positions);
 
+        $newPositionToAdd = [];
         // Create new records for positions to add
         foreach ($positionsToAdd as $positionId) {
-
-            EventInvitePosition::create([
+            $newPositionToAdd[] = [
                 'event_id' => $event->id,
                 'position_id' => $positionId,
-            ]);
+                'created_at' => now(),
+                'updated_at' => now()
+            ];
+        }
 
+        if($newPositionToAdd){
+            EventInvitePosition::insert($newPositionToAdd);
         }
 
         // Remove records for positions to remove
@@ -281,10 +284,12 @@ class EventController extends Controller
             ->whereIn('position_id', $positionsToRemove)
             ->delete();
 
+        //SEND NOTIFICATION TO ADDED POSITIONS
+        if($newPositionToAdd){
+            EventNotificationUtility::eventAdded($event->refresh());
+        }
 
-        $event->refresh();
-        return successResponse('Successful', EventResource::make($event));
-
+        return true;
     }
 
     public function delete(Request $request, $eventID)
@@ -304,9 +309,7 @@ class EventController extends Controller
             $logMessage = "Deleted the Event: $eventName";
             logAction($request->user()->email, 'Delete Event', $logMessage, $request->ip());
 
-
             EventNotificationUtility::eventDeleted($registeredUsers, $eventName);
-
         }
 
         return successResponse('Successful');
@@ -353,7 +356,6 @@ class EventController extends Controller
 
     public function register(Request $request, Event $event)
     {
-
         $request->validate([
             'evidence_of_payment_img' => 'sometimes|mimes:jpeg,png,jpg|max:5048',
         ]);
@@ -368,19 +370,23 @@ class EventController extends Controller
         }
 
         if ($event->fee > 0 && !$imagePath) {
-            return \errorResponse(1, "Evidence of payment is required");
+            return errorResponse(ResponseStatusCodes::BAD_REQUEST, "Evidence of payment is required");
         }
-
 
         $eventReg = EventRegistration::create([
             'user_id' => $request->user()->id,
             'event_id' => $event->id,
-            'status' => 'Pending',
+            'status' => ($event->fee > 0) ? EventRegistration::STATUS_PENDING : EventRegistration::STATUS_APPROVED,
             'evidence_of_payment' => $imagePath,
         ]);
 
         $logMessage = "Registered for the Event: $event->name";
         logAction($request->user()->email, 'Register for Event', $logMessage, $request->ip());
+
+        //Notify FSD Cc MBG and MEG For payment Approval
+        if ($event->fee > 0){
+            EventNotificationUtility::pendingPaymentEventRegistration($eventReg);
+        }
 
         return successResponse('Successful', EventRegistrationResource::make($eventReg));
     }
@@ -389,24 +395,18 @@ class EventController extends Controller
     {
 
         $records = EventRegistration::with(['user', 'event'])->where('user_id', $request->user()->id)->latest()->get();
-
         return successResponse('Successful', EventRegistrationWithEventResource::collection($records));
     }
 
-
-
     public function eventRegistrations(Request $request, Event $event)
     {
-
         $records = EventRegistration::with(['user', 'event'])->where('event_id', $event->id)->latest()->get();
-
         return successResponse('Successful', EventRegistrationWithEventResource::collection($records));
     }
 
 
     public function approveEventRegistration(Request $request, EventRegistration $eventReg)
     {
-
         $request->validate([
             'status' => 'required|in:Approved,Declined',
             'reason' => 'nullable|required_if:status,Declined',
@@ -414,16 +414,16 @@ class EventController extends Controller
 
         $oldStatus = $eventReg->status;
 
-        $eventReg->update(['status' => $request->status, 'admin_remark' => $request->reason]);
+        //Change approved status to registered
+        $eventReg->update([
+            'status' => ($request->status == "Approved") ? EventRegistration::STATUS_APPROVED : EventRegistration::STATUS_DECLINED, 
+            'admin_remark' => $request->reason
+        ]);
 
         $logMessage = "Updated Event Registration Status from $oldStatus to $eventReg->status  (# $eventReg->id)";
         logAction($request->user()->email, 'Update Event Registration Status', $logMessage, $request->ip());
 
-
         EventNotificationUtility::paymentStatusUpdated($eventReg);
-
-
         return successResponse('Successful', EventRegistrationWithEventResource::make($eventReg));
     }
-
 }

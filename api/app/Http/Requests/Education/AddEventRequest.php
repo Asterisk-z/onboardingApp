@@ -2,10 +2,8 @@
 
 namespace App\Http\Requests\Education;
 
-use App\Models\Role;
-use App\Models\User;
-use App\Rules\EmailValidation;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class AddEventRequest extends FormRequest
 {
@@ -39,8 +37,11 @@ class AddEventRequest extends FormRequest
             'registered_remainder_dates' => 'nullable|string|required_if:registered_remainder_frequency,null',
             'unregistered_remainder_frequency' => 'nullable|in:Daily,Weekly,Monthly',
             'unregistered_remainder_dates' => 'nullable|string|required_if:unregistered_remainder_frequency,null',
-
-
+            'positions' => 'required|array', // Ensure 'positions' is present and is an array
+            'positions.*' => [
+                'integer',
+                Rule::exists('positions', 'id'), // Ensure each position ID exists in the 'positions' table
+            ]
         ];
     }
 }

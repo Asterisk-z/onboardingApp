@@ -74,4 +74,34 @@ class EventMailContents
 
         return $message;
     }
+
+    public static function eventAddedSubject(string $eventName): string
+    {
+        return "$eventName Has Been Added";
+    }
+
+    public static function eventAddedBody($event): string
+    {
+
+        $message = "<p>
+                Please be informed that you have been invited for {$event->name} scheduled to hold {$event->date} {$event->time}. Kindly login to the MROIS Portal to register
+            </p>";
+
+        return $message;
+    }
+
+    public static function pendingPaymentForEventRegistrationSubject(string $eventName): string
+    {
+        return "$eventName Registration Fee Pending Approval";
+    }
+
+    public static function pendingPaymentForEventRegistrationBody(string $eventName): string
+    {
+
+        $message = "<p>
+                Please be informed that there is a new registration for $eventName event fee pending approval.
+            </p>";
+
+        return $message;
+    }
 }
