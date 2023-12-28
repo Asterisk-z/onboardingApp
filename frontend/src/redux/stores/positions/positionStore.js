@@ -3,19 +3,13 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { errorHandler, successHandler } from "../../../utils/Functions";
 import queryGenerator from "../../../utils/QueryGenerator";
-import category from "../memberCategory/category";
-const initialState = {
-                    list: null,
-                    error: "", all_list: null,
-                    loading: false,
-};
-
+const initialState = { list: null, error: "", all_list: null, loading: false };
 
 export const loadAllActivePositions = createAsyncThunk(
   "position/loadAllActivePositions",
   async (arg) => {
     try {
-      const { data } = await axios.get(`positions`);
+      const { data } = await axios.get(`positions`);unlinkFromCategories
       return successHandler(data);
     } catch (error) {
       return errorHandler(error);
@@ -67,6 +61,46 @@ export const createPosition = createAsyncThunk(
           "Content-Type": "application/json;charset=UTF-8",
         },
         url: `meg/position/create`,
+        data: values,
+      });
+      return successHandler(data, data.message);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
+export const mapToCategories = createAsyncThunk(
+  "position/mapToCategories",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+        url: `meg/position/mapToCategories`,
+        data: values,
+      });
+      return successHandler(data, data.message);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
+export const unlinkFromCategories = createAsyncThunk(
+  "position/unlinkFromCategories",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+        url: `meg/position/unlinkFromCategories`,
         data: values,
       });
       return successHandler(data, data.message);
@@ -212,6 +246,36 @@ const positionStore = createSlice({
       state.error = action.payload.message;
     });
     
+    // ====== builders for unlinkFromCategories ======
+
+    builder.addCase(unlinkFromCategories.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(unlinkFromCategories.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(unlinkFromCategories.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
+    // ====== builders for mapToCategories ======
+
+    builder.addCase(mapToCategories.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(mapToCategories.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(mapToCategories.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
     // ====== builders for createPosition ======
 
     builder.addCase(createPosition.pending, (state) => {

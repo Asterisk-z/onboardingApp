@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -18,6 +17,7 @@ class User extends Authenticatable implements JWTSubject
     const PENDING = "pending";
 
     protected $with = ['role', 'userNationality']; // almost all use of user model requires this information.
+    protected $appends = ['full_name', 'full_name_with_mail'];
     /**
      * The attributes that are mass assignable.
      *
@@ -31,7 +31,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array<int, string>
      */
     protected $hidden = [
-        'password'
+        'password',
     ];
 
     /**
@@ -88,7 +88,6 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(PasswordHistory::class);
     }
 
-
     public function getFullName(): string
     {
         return $this->first_name . ' ' . $this->last_name;
@@ -107,9 +106,8 @@ class User extends Authenticatable implements JWTSubject
             'approval_status' => $this->approval_status,
             'regId' => $this->reg_id,
             'institution' => $this->institution->name,
-            'createdAt' => $this->created_at
+            'createdAt' => $this->created_at,
         ];
-
 
         // if ($includePosition) {
         //     $data['position'] = $this->position->name;
@@ -129,6 +127,16 @@ class User extends Authenticatable implements JWTSubject
         }
 
         return $this->createRegID();
+    }
+
+    public function getFullNameAttribute()
+    {
+        return $this->first_name . " " . $this->last_name;
+    }
+
+    public function getFullNameWithMailAttribute()
+    {
+        return $this->first_name . " " . $this->last_name . " (" . $this->email . ")";
     }
 
     private function createRegID(): string

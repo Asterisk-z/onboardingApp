@@ -12,6 +12,9 @@ import userStore from "../stores/users/userStore";
 import broadcastStore from "../stores/broadcast/broadcastStore";
 import settingStore from "../stores/settings/config";
 import institutionStore from "../stores/institution/institutionStore";
+import regulatorStore from "redux/stores/regulators/regulatorStore";
+import sanctionStore from "redux/stores/sanctions/sanctionStore";
+import applicationStore from "redux/stores/membership/applicationStore"
 
 const store = configureStore({
   reducer: {
@@ -28,6 +31,9 @@ const store = configureStore({
     broadcasts: broadcastStore,
     settings: settingStore,
     institutions: institutionStore,
+    regulator: regulatorStore,
+    sanctions: sanctionStore,
+    application: applicationStore,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

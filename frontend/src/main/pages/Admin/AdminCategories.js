@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner} from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
 import { loadAllCategories, createMembershipCategory } from "redux/stores/memberCategory/category";
+import { loadAllActivePositions } from "redux/stores/positions/positionStore";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
 import AdminCategoryTable from './Tables/AdminCategoryTable'
@@ -20,8 +21,10 @@ const AdminCategory = ({ drawer }) => {
     const [modalForm, setModalForm] = useState(false);
     
     const categories = useSelector((state) => state?.category?.all_list) || null;
+    const positions = useSelector((state) => state?.position?.list) || null;
 
     useEffect(() => {
+        dispatch(loadAllActivePositions());
         dispatch(loadAllCategories());
     }, [dispatch, parentState]);
 
@@ -59,6 +62,7 @@ const AdminCategory = ({ drawer }) => {
     }; 
     
     const $categories = categories ? JSON.parse(categories) : null;
+    const $positions = positions ? JSON.parse(positions) : null;
     
     const updateParentState = (newState) => {
         console.log(newState)
@@ -142,13 +146,13 @@ const AdminCategory = ({ drawer }) => {
                                 <BlockHead>
                                     <BlockHeadContent>
                                         {/* <BlockTitle tag="h4">All Membership</BlockTitle> */}
-                                        {/* <p>{categories}</p> */}
+                                        {/* <p>{positions}</p> */}
                                         {/* {<p>{parentState}</p>} */}
                                     </BlockHeadContent>
                                 </BlockHead>
 
                                 <PreviewCard>
-                                    {$categories && <AdminCategoryTable  updateParent={updateParentState} parentState={parentState} data={$categories} expandableRows pagination actions />}
+                                    {$categories && <AdminCategoryTable  updateParent={updateParentState} parentState={parentState} data={$categories} positions={$positions} expandableRows pagination actions />}
                                 </PreviewCard>
                             </Block>
 

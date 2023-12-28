@@ -7,11 +7,10 @@ use App\Helpers\ResponseStatusCodes;
 use App\Helpers\Utility;
 use App\Http\Requests\RegistrationRequest;
 use App\Http\Resources\UserResource;
-use App\Models\Audit;
+use App\Models\Application;
 use App\Models\Institution;
 use App\Models\InstitutionMembership;
 use App\Models\MembershipCategory;
-use App\Models\Position;
 use App\Models\Role;
 use App\Models\User;
 use App\Notifications\InfoNotification;
@@ -57,7 +56,7 @@ class UsersController extends Controller
             'authorization' => [
                 'type' => 'Bearer',
                 'token' => $token,
-                'expires_in' => config('jwt.ttl') * 60
+                'expires_in' => config('jwt.ttl') * 60,
             ],
             'user' => UserResource::make($user),
         ];
@@ -94,12 +93,20 @@ class UsersController extends Controller
             'institution_id' => $institution->id,
             'position_id' => $request->input('position'),
             'img' => $request->hasFile('img') ? $request->file('img')->storePublicly('users', 'public') : null,
-            'verified_at' => now()
+            'verified_at' => now(),
         ]);
 
         $user->passwords()->create([
-            'password' => Hash::make($request->input('password'))
+            'password' => Hash::make($request->input('password')),
         ]);
+
+        Application::create([
+            'institution_id' => $institution->id,
+            'submitted_by' => $user->id,
+            'status' => 'pending',
+        ]);
+
+        $regID = $user->getRegID();
 
         logAction($request->email, 'Successful User Registration', 'Registration Successful', $request->ip());
 
@@ -108,8 +115,9 @@ class UsersController extends Controller
         $user->notify(new InfoNotification(MailContents::signupMail($user->email, $user->created_at->format('Y-m-d')), MailContents::signupMailSubject()));
 
         $MEGs = Utility::getUsersByCategory(Role::MEG);
-        if (count($MEGs))
+        if (count($MEGs)) {
             Notification::send($MEGs, new InfoNotification(MailContents::newMembershipSignupMail($user->first_name . " " . $user->last_name, $membership->name ?? null), MailContents::newMembershipSignupSubject()));
+        }
 
         $membership = $membership ? $membership->name : "member";
         return successResponse("You have successfully signed up as a $membership. Kindly check your mail to proceed with completion of the membership form", UserResource::make($user));

@@ -17,6 +17,7 @@ import { HeaderLogo } from "../../pages/components/HeaderLogo";
 
 
 const PersonalForm = (props) => {
+    console.log(props)
   const [formData, setFormData] = useState({
     companyName: "",
     rcNumber: "",
@@ -52,6 +53,7 @@ const PersonalForm = (props) => {
 
   return (
     <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
+      <h3>Applicant Information</h3>
       <Row className="gy-4">
         <Col md="6">
           <div className="form-group">
@@ -308,6 +310,7 @@ const PersonalForm = (props) => {
             </div>
           </div>
         </Col>
+        <h4>Application Primary Contact Details</h4>
         <Col md="6">
           <div className="form-group">
             <label className="form-label" htmlFor="name">
@@ -413,54 +416,49 @@ const UserSettings = (props) => {
 
   return (
     <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
+      <h3>Banking Licence</h3>
       <Row className="gy-4">
         <Col md="12">
-          <div className="custom-control custom-checkbox">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <label>
+              International Banking Licence
+            </label>
             <input
               type="checkbox"
-              className="custom-control-input"
-              onChange={(e) => setFormData({ ...formData, terms: e.target.checked })}
-              checked={formData.terms}
-              {...register('terms', { required: true })}
-              id="fw-policy" />
-            {errors.terms && <span className="invalid">This field is required</span>}
-            <label className="custom-control-label" htmlFor="fw-policy">
-              International Banking License
-            </label>
+            // checked={checkboxChecked}
+            // onChange={() => setCheckboxChecked(!checkboxChecked)}
+            />
           </div>
+
         </Col>
         <Col md="12">
-          <div className="custom-control custom-checkbox">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <label>
+              National Banking Licence
+            </label>
             <input
               type="checkbox"
-              className="custom-control-input"
-              onChange={(e) => setFormData({ ...formData, terms: e.target.checked })}
-              checked={formData.terms}
-              {...register('terms', { required: true })}
-              id="fw-policy" />
-            {errors.terms && <span className="invalid">This field is required</span>}
-            <label className="custom-control-label" htmlFor="fw-policy">
-              National Banking License
-            </label>
+            // checked={checkboxChecked}
+            // onChange={() => setCheckboxChecked(!checkboxChecked)}
+            />
           </div>
+
         </Col>
         <Col md="12">
-          <div className="custom-control custom-checkbox">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <label >
+              Regional Banking Licence
+            </label>
             <input
               type="checkbox"
-              className="custom-control-input"
-              onChange={(e) => setFormData({ ...formData, terms: e.target.checked })}
-              checked={formData.terms}
-              {...register('terms', { required: true })}
-              id="fw-policy" />
-            {errors.terms && <span className="invalid">This field is required</span>}
-            <label className="custom-control-label" htmlFor="fw-policy">
-              Regional Banking License
-            </label>
+            // checked={checkboxChecked}
+            // onChange={() => setCheckboxChecked(!checkboxChecked)}
+            />
           </div>
         </Col>
       </Row>
-      <h5 style={{ marginTop: '30px' }}>Product Of Interest</h5>
+      <h4 style={{ marginTop: '30px' }}>Trading Details</h4>
+      <h5 style={{ marginTop: '30px' }}>Product of Interest:</h5>
       <Row >
         <div>
           <table style={{ borderCollapse: 'collapse', width: '100%' }}>
@@ -486,7 +484,7 @@ const UserSettings = (props) => {
                   />
                 </td>
                 <td>
-                  <input style={{ width: '100%' }}
+                  <input style={{ width: '90%' }}
                     type="text"
                   // value={inputValue1}
                   // onChange={(e) => setInputValue1(e.target.value)}
@@ -513,7 +511,7 @@ const UserSettings = (props) => {
                   />
                 </td>
                 <td>
-                  <input style={{ width: '100%' }}
+                  <input style={{ width: '90%' }}
                     type="text"
                   // value={inputValue1}
                   // onChange={(e) => setInputValue1(e.target.value)}
@@ -540,7 +538,7 @@ const UserSettings = (props) => {
                   />
                 </td>
                 <td>
-                  <input style={{ width: '100%' }}
+                  <input style={{ width: '90%' }}
                     type="text"
                   // value={inputValue1}
                   // onChange={(e) => setInputValue1(e.target.value)}
@@ -567,7 +565,7 @@ const UserSettings = (props) => {
                   />
                 </td>
                 <td>
-                  <input style={{ width: '100%' }}
+                  <input style={{ width: '90%' }}
                     type="text"
                   // value={inputValue1}
                   // onChange={(e) => setInputValue1(e.target.value)}
@@ -594,7 +592,7 @@ const UserSettings = (props) => {
                   />
                 </td>
                 <td>
-                  <input style={{ width: '100%' }}
+                  <input style={{ width: '90%' }}
                     type="text"
                   // value={inputValue1}
                   // onChange={(e) => setInputValue1(e.target.value)}
@@ -621,7 +619,7 @@ const UserSettings = (props) => {
                   />
                 </td>
                 <td>
-                  <input style={{ width: '100%' }}
+                  <input style={{ width: '90%' }}
                     type="text"
                   // value={inputValue1}
                   // onChange={(e) => setInputValue1(e.target.value)}
@@ -648,7 +646,7 @@ const UserSettings = (props) => {
                   />
                 </td>
                 <td>
-                  <input style={{ width: '100%' }}
+                  <input style={{ width: '90%' }}
                     type="text"
                   // value={inputValue1}
                   // onChange={(e) => setInputValue1(e.target.value)}
@@ -1585,70 +1583,462 @@ const StepSeven = (props) => {
       <br />
       <h5>THE COMPANY</h5>
       <Row className="gy-3">
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', gap: '20px' }}>
           <p style={{ maxWidth: '30px' }}><b>1.</b></p>
-          <p>Has the company or any of its affiliates , been denied registration or expelled from membership of any securities exchange, self-regulatory organisation (SRO) or associations?</p>
-          <div style={{ maxWidth: '50px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-              <input type="radio" id="yes" name="no" value="yes" />
-              <label for="yes">Yes</label><br />
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-              <input type="radio" id="no" name="no" value="no" />
-              <label for="no">No</label><br />
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <p>Has the company or any of its affiliates , been denied registration or expelled from membership of any securities exchange, self-regulatory organisation (SRO) or associations?</p>
+            <div style={{ maxWidth: '50px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="yes" name="no" value="yes" />
+                <label for="yes">Yes</label><br />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="no" name="no" value="no" />
+                <label for="no">No</label><br />
+              </div>
             </div>
           </div>
+
         </div>
       </Row>
       <hr />
       <Row className="gy-3">
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', gap: '20px' }}>
           <p style={{ maxWidth: '30px' }}><b>2.</b></p>
-          <p>Has your membership, or that of any affiliates, in any of the institutions/associations mentioned above at any time been revoked, suspended or withdrawn?</p>
-          <div style={{ maxWidth: '50px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-              <input type="radio" id="yes" name="no" value="yes" />
-              <label for="yes">Yes</label><br />
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-              <input type="radio" id="no" name="no" value="no" />
-              <label for="no">No</label><br />
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <p>Has your membership, or that of any affiliates, in any of the institutions/ associations mentioned above at any time been revoked, suspended or withdrawn?</p>
+            <div style={{ maxWidth: '50px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="yes" name="no" value="yes" />
+                <label for="yes">Yes</label><br />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="no" name="no" value="no" />
+                <label for="no">No</label><br />
+              </div>
             </div>
           </div>
+
         </div>
       </Row>
       <hr />
       <Row className="gy-3">
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', gap: '20px' }}>
           <p style={{ maxWidth: '30px' }}><b>3.</b></p>
-          <p>Has your company, or any of its affiliates, ever been refused any Fidelity Bond?</p>
-          <div style={{ maxWidth: '50px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-              <input type="radio" id="yes" name="no" value="yes" />
-              <label for="yes">Yes</label><br />
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-              <input type="radio" id="no" name="no" value="no" />
-              <label for="no">No</label><br />
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <p>Has your company, or any of its affiliates, ever been refused a Fidelity Bond?</p>
+            <div style={{ maxWidth: '50px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="yes" name="no" value="yes" />
+                <label for="yes">Yes</label><br />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="no" name="no" value="no" />
+                <label for="no">No</label><br />
+              </div>
             </div>
           </div>
+
         </div>
       </Row>
       <hr />
       <Row className="gy-3">
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', gap: '20px' }}>
           <p style={{ maxWidth: '30px' }}><b>4.</b></p>
-          <p>Has your company, or any of its affiliates, been subject to any winding up order/receivership arrangement?</p>
-          <div style={{ maxWidth: '50px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-              <input type="radio" id="yes" name="no" value="yes" />
-              <label for="yes">Yes</label><br />
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-              <input type="radio" id="no" name="no" value="no" />
-              <label for="no">No</label><br />
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <p>Has your company, or any of its affiliates, ever been refused a Fidelity Bond?</p>
+            <div style={{ maxWidth: '50px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="yes" name="no" value="yes" />
+                <label for="yes">Yes</label><br />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="no" name="no" value="no" />
+                <label for="no">No</label><br />
+              </div>
             </div>
           </div>
+
+        </div>
+      </Row>
+      <h4>MD/CEO</h4>
+      <Row className="gy-3">
+        <div style={{ display: 'flex', gap: '20px' }}>
+          <p style={{ maxWidth: '30px' }}><b>1.</b></p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <p>Ever been convicted of any criminal offence? </p>
+            <div style={{ maxWidth: '50px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="yes" name="no" value="yes" />
+                <label for="yes">Yes</label><br />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="no" name="no" value="no" />
+                <label for="no">No</label><br />
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </Row>
+      <hr />
+      <Row className="gy-3">
+        <div style={{ display: 'flex', gap: '20px' }}>
+          <p style={{ maxWidth: '30px' }}><b>2.</b></p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <p>Ever been the subject of an adverse finding by, or settlement with, any government agency, court, securities exchange, SRO, tribunal or other regulatory authority? </p>
+            <div style={{ maxWidth: '50px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="yes" name="no" value="yes" />
+                <label for="yes">Yes</label><br />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="no" name="no" value="no" />
+                <label for="no">No</label><br />
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </Row>
+      <hr />
+      <Row className="gy-3">
+        <div style={{ display: 'flex', gap: '20px' }}>
+          <p style={{ maxWidth: '30px' }}><b>3.</b></p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <p>Ever been a Director, partner or otherwise concerned in the management of a business which has gone into insolvency, liquidation, administration or the equivalent proceedings within or outside of the Nigerian jurisdiction while connected with such organisation within one year of that connection? </p>
+            <div style={{ maxWidth: '50px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="yes" name="no" value="yes" />
+                <label for="yes">Yes</label><br />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="no" name="no" value="no" />
+                <label for="no">No</label><br />
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </Row>
+      <hr />
+      <Row className="gy-3">
+        <div style={{ display: 'flex', gap: '20px' }}>
+          <p style={{ maxWidth: '30px' }}><b>4.</b></p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <p>Ever been declared bankrupt or entered into any compromise arrangement with creditors related to bankruptcy or insolvency?</p>
+            <div style={{ maxWidth: '50px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="yes" name="no" value="yes" />
+                <label for="yes">Yes</label><br />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="no" name="no" value="no" />
+                <label for="no">No</label><br />
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </Row>
+      <hr />
+      <Row className="gy-3">
+        <div style={{ display: 'flex', gap: '20px' }}>
+          <p style={{ maxWidth: '30px' }}><b>5.</b></p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <p>Ever been the subject of any disciplinary or criminal proceedings or been the subject of any investigation by any authority which may lead to such proceedings?</p>
+            <div style={{ maxWidth: '50px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="yes" name="no" value="yes" />
+                <label for="yes">Yes</label><br />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="no" name="no" value="no" />
+                <label for="no">No</label><br />
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </Row>
+      <hr />
+      <Row className="gy-3">
+        <div style={{ display: 'flex', gap: '20px' }}>
+          <p style={{ maxWidth: '30px' }}><b>6.</b></p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <p>Ever been refused authorisation or licence to carry on a trade, business or profession or to be a member of a securities exchange?</p>
+            <div style={{ maxWidth: '50px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="yes" name="no" value="yes" />
+                <label for="yes">Yes</label><br />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="no" name="no" value="no" />
+                <label for="no">No</label><br />
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </Row>
+      <hr />
+      <Row className="gy-3">
+        <div style={{ display: 'flex', gap: '20px' }}>
+          <p style={{ maxWidth: '30px' }}><b>7.</b></p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <p>Ever been the subject of an adverse finding by, or settlement with, any government agency, court, securities exchange, SRO, tribunal or other regulatory authority? </p>
+            <div style={{ maxWidth: '50px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="yes" name="no" value="yes" />
+                <label for="yes">Yes</label><br />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="no" name="no" value="no" />
+                <label for="no">No</label><br />
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </Row>
+      <hr />
+      <Row className="gy-3">
+        <div style={{ display: 'flex', gap: '20px' }}>
+          <p style={{ maxWidth: '30px' }}><b>8.</b></p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <p>Ever had such authorisation, membership or licence (referred to above) revoked or terminated?</p>
+            <div style={{ maxWidth: '50px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="yes" name="no" value="yes" />
+                <label for="yes">Yes</label><br />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="no" name="no" value="no" />
+                <label for="no">No</label><br />
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </Row>
+      <hr />
+      <Row className="gy-3">
+        <div style={{ display: 'flex', gap: '20px' }}>
+          <p style={{ maxWidth: '30px' }}><b>9.</b></p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <p>Ever been disqualified from acting as a Director?</p>
+            <div style={{ maxWidth: '50px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="yes" name="no" value="yes" />
+                <label for="yes">Yes</label><br />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="no" name="no" value="no" />
+                <label for="no">No</label><br />
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </Row>
+      <h4>TREASURER</h4>
+      <Row className="gy-3">
+        <div style={{ display: 'flex', gap: '20px' }}>
+          <p style={{ maxWidth: '30px' }}><b>1.</b></p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <p>Ever been convicted of any criminal offence?  </p>
+            <div style={{ maxWidth: '50px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="yes" name="no" value="yes" />
+                <label for="yes">Yes</label><br />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="no" name="no" value="no" />
+                <label for="no">No</label><br />
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </Row>
+      <hr />
+      <Row className="gy-3">
+        <div style={{ display: 'flex', gap: '20px' }}>
+          <p style={{ maxWidth: '30px' }}><b>2.</b></p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <p>Ever been the subject of an adverse finding by, or settlement with, any government agency, court, securities exchange, SRO, tribunal or other regulatory authority? </p>
+            <div style={{ maxWidth: '50px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="yes" name="no" value="yes" />
+                <label for="yes">Yes</label><br />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="no" name="no" value="no" />
+                <label for="no">No</label><br />
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </Row>
+      <hr />
+      <Row className="gy-3">
+        <div style={{ display: 'flex', gap: '20px' }}>
+          <p style={{ maxWidth: '30px' }}><b>2.</b></p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <p>Ever been concerned in the management of a business which has gone into insolvency, liquidation, administration or the equivalent proceedings within or outside of the Nigerian jurisdiction while connected with such organisation within one year of that connection? </p>
+            <div style={{ maxWidth: '50px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="yes" name="no" value="yes" />
+                <label for="yes">Yes</label><br />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="no" name="no" value="no" />
+                <label for="no">No</label><br />
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </Row>
+      <hr />
+      <Row className="gy-3">
+        <div style={{ display: 'flex', gap: '20px' }}>
+          <p style={{ maxWidth: '30px' }}><b>2.</b></p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <p>Ever been declared bankrupt or entered into any compromise arrangement with creditors related to bankruptcy or insolvency?</p>
+            <div style={{ maxWidth: '50px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="yes" name="no" value="yes" />
+                <label for="yes">Yes</label><br />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="no" name="no" value="no" />
+                <label for="no">No</label><br />
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </Row>
+      <hr />
+      <Row className="gy-3">
+        <div style={{ display: 'flex', gap: '20px' }}>
+          <p style={{ maxWidth: '30px' }}><b>2.</b></p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <p>Ever been the subject of any disciplinary or criminal proceedings or been the subject of any investigation by any authority which may lead to such proceedings?</p>
+            <div style={{ maxWidth: '50px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="yes" name="no" value="yes" />
+                <label for="yes">Yes</label><br />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="no" name="no" value="no" />
+                <label for="no">No</label><br />
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </Row>
+      <h4>CHIEF COMPLIANCE OFFICER</h4>
+      <Row className="gy-3">
+        <div style={{ display: 'flex', gap: '20px' }}>
+          <p style={{ maxWidth: '30px' }}><b>1.</b></p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <p>Ever been convicted of any criminal offence?  </p>
+            <div style={{ maxWidth: '50px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="yes" name="no" value="yes" />
+                <label for="yes">Yes</label><br />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="no" name="no" value="no" />
+                <label for="no">No</label><br />
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </Row>
+      <hr />
+      <Row className="gy-3">
+        <div style={{ display: 'flex', gap: '20px' }}>
+          <p style={{ maxWidth: '30px' }}><b>1.</b></p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <p>Ever been the subject of an adverse finding by, or settlement with, any government agency, court, securities exchange, SRO, tribunal or other regulatory authority?  </p>
+            <div style={{ maxWidth: '50px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="yes" name="no" value="yes" />
+                <label for="yes">Yes</label><br />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="no" name="no" value="no" />
+                <label for="no">No</label><br />
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </Row>
+      <hr />
+      <Row className="gy-3">
+        <div style={{ display: 'flex', gap: '20px' }}>
+          <p style={{ maxWidth: '30px' }}><b>1.</b></p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <p>Ever been concerned in the management of a business which has gone into insolvency, liquidation, administration or the equivalent proceedings within or outside of the Nigerian jurisdiction while connected with such organisation within one year of that connection? </p>
+            <div style={{ maxWidth: '50px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="yes" name="no" value="yes" />
+                <label for="yes">Yes</label><br />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="no" name="no" value="no" />
+                <label for="no">No</label><br />
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </Row>
+      <hr />
+      <Row className="gy-3">
+        <div style={{ display: 'flex', gap: '20px' }}>
+          <p style={{ maxWidth: '30px' }}><b>1.</b></p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <p>Ever been declared bankrupt or entered into any compromise arrangement with creditors related to bankruptcy or insolvency?</p>
+            <div style={{ maxWidth: '50px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="yes" name="no" value="yes" />
+                <label for="yes">Yes</label><br />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="no" name="no" value="no" />
+                <label for="no">No</label><br />
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </Row>
+      <hr />
+      <Row className="gy-3">
+        <div style={{ display: 'flex', gap: '20px' }}>
+          <p style={{ maxWidth: '30px' }}><b>1.</b></p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <p>Ever been the subject of any disciplinary or criminal proceedings or been the subject of any investigation by any Authority which may lead to such proceedings?</p>
+            <div style={{ maxWidth: '50px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="yes" name="no" value="yes" />
+                <label for="yes">Yes</label><br />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <input type="radio" id="no" name="no" value="no" />
+                <label for="no">No</label><br />
+              </div>
+            </div>
+          </div>
+
         </div>
       </Row>
       <div className="actions clearfix">
@@ -1693,21 +2083,20 @@ const StepEight = (props) => {
   return (
     <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
       <h3>Supporting Documents</h3>
-      <p>.</p>
-      <br />
-      <h5>THE COMPANY</h5>
+
       <Row className="gy-3">
+
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <p style={{ maxWidth: '30px' }}><b>1.</b></p>
-          <p>Has the company or any of its affiliates , been denied registration or expelled from membership of any securities exchange, self-regulatory organisation (SRO) or associations?</p>
-          <div style={{ maxWidth: '50px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-              <input type="radio" id="yes" name="no" value="yes" />
-              <label for="yes">Yes</label><br />
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-              <input type="radio" id="no" name="no" value="no" />
-              <label for="no">No</label><br />
+          <p>Company Profile containing brief description of the following inter alia:
+            History & Company Overview
+            Details of Business Services
+            Profiles of Board of Directors
+            Profiles of Executive Management Staff</p>
+          <div>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
+              <input type="file" id="yes" />
+              <label for="yes"></label><br />
             </div>
           </div>
         </div>
@@ -1806,54 +2195,47 @@ const Header = (props) => {
       <ul>
         <li className={props.current >= 1 ? "first done" : "first"}>
           <a href="#wizard-01-h-0" onClick={(ev) => ev.preventDefault()}>
-            <span className="number">01</span> <h5>Step 1</h5>
+            <span className="number">APPLICANT</span> <h5>Information</h5>
           </a>
         </li>
         <li className={props.current >= 2 ? "done" : ""}>
           <a href="#wizard-01-h-1" onClick={(ev) => ev.preventDefault()}>
-            <span className="number">02</span> <h5>Step 2</h5>
+            <span className="number">TRADING</span> <h5>DETAILS</h5>
           </a>
         </li>
         <li className={props.current >= 3 ? "done" : ""}>
           <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="current-info audible">current step: </span>
-            <span className="number">03</span> <h5>Step 3</h5>
+            <span className="number"></span> <h5>Step 3</h5>
           </a>
         </li>
         <li className={props.current >= 4 ? "done" : ""}>
           <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="current-info audible">current step: </span>
-            <span className="number">04</span> <h5>Step 4</h5>
+            <span className="number"></span> <h5>Step 4</h5>
           </a>
         </li>
         <li className={props.current >= 5 ? "done" : ""}>
           <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="current-info audible">current step: </span>
-            <span className="number">05</span> <h5>Step 5</h5>
+            <span className="number"></span> <h5>Step 5</h5>
           </a>
         </li>
         <li className={props.current >= 6 ? "done" : ""}>
           <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="current-info audible">current step: </span>
-            <span className="number">06</span> <h5>Step 6</h5>
+            <span className="number"></span> <h5>Step 6</h5>
           </a>
         </li>
         <li className={props.current >= 7 ? "done" : ""}>
           <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="current-info audible">current step: </span>
-            <span className="number">07</span> <h5>Step 7</h5>
+            <span className="number"></span> <h5>Step 7</h5>
           </a>
         </li>
         <li className={props.current >= 8 ? "done" : ""}>
           <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="current-info audible">current step: </span>
-            <span className="number">08</span> <h5>Step 8</h5>
+            <span className="number"></span> <h5>Step 8</h5>
           </a>
         </li>
         <li className={props.current === 9 ? "last done" : "last"}>
           <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="current-info audible">current step: </span>
-            <span className="number">09</span> <h5>Step 9</h5>
+            <span className="number"></span> <h5>Step 9</h5>
           </a>
         </li>
       </ul>
@@ -1910,6 +2292,9 @@ const Form = () => {
   return <>
     <Head title="Form" />
     <HeaderLogo />
+    
+            <Content page="component">
+                <Content>
     <div className="">
       <div style={{ 'margin': '0px 10px !important' }}>
         <div style={styles.card}>
@@ -1933,6 +2318,8 @@ const Form = () => {
         </div>
       </div>
     </div>
+                </Content>
+            </Content>
 
   </>;
 };

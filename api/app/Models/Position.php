@@ -13,13 +13,19 @@ class Position extends Model
 
     const DEACTIVATE = "1";
     const ACTIVATE = "0";
+    const CCO = "CCO";
 
-    public function toArray()
+    // protected $with = ['categories'];
+    protected $appends = ['active'];
+
+    public function categories()
     {
-        return [
-            "id" => $this->id,
-            "name" => $this->name,
-            "active" => !$this->is_del ? true : false,
-        ];
+        return $this->belongsToMany(MembershipCategory::class, 'membership_category_postitions', 'position_id', 'category_id');
     }
+
+    public function getActiveAttribute()
+    {
+        return !$this->is_del ? true : false;
+    }
+
 }

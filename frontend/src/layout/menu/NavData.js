@@ -50,6 +50,11 @@ const navData = [{
     icon: "dashboard-fill",
     text: "Broadcast",
     link: "/admin-broadcast",
+    },
+    {
+    icon: "dashboard-fill",
+    text: "Disciplinary and Sanctions",
+    link: "/admin-sanctions",
   },
   {
     icon: "dashboard-fill",
@@ -88,6 +93,10 @@ const navData = [{
         text: "Positions",
         link: "/admin-positions",
       },
+      {
+        text: "Regulators",
+        link: "/admin-regulators",
+      },
     ],
   },
   ],
@@ -118,6 +127,17 @@ const navData = [{
     icon: "tile-thumb-fill",
     text: "Update Authorised Representatives",
     link: "/auth-representatives",
+   },
+  {
+    icon: "tile-thumb-fill",
+    text: "Disciplinary and Sanctions",
+    access: ['cco'],
+    link: "/sanctions",
+  },
+  {
+    icon: "tile-thumb-fill",
+    text: "Regulators",
+    link: "/regulators",
   },
   // {
   //   icon: "tile-thumb-fill",

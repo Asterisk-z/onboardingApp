@@ -41,6 +41,7 @@ class Positions extends Seeder
             ["name" => "Position X"],
             ["name" => "Position Y"],
             ["name" => "Position Z"],
+            ["name" => "CCO"],
         ];
 
         foreach ($positions as $position) {

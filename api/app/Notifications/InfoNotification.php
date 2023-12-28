@@ -55,11 +55,11 @@ class InfoNotification extends Notification implements ShouldQueue
             ->subject(config('app.name') . " - " . $this->subject)
             ->view('mails.info', compact('user', 'info'));
 
-        if($this->cc){
+        if ($this->cc) {
             $mail = $mail->cc($this->cc);
         }
 
-        if($this->attachment){
+        if ($this->attachment) {
             $mail = $mail->attach($this->attachment['saved_path'], [
                 'as' => $this->attachment['name'],
             ]);
