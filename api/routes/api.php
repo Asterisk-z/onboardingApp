@@ -33,8 +33,9 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('/login', [UsersController::class, 'login']);
     Route::post('/register', [UsersController::class, 'register']);
 
-    Route::prefix('password')->group(function () {
+    Route::prefix('password')->group(function () { 
         Route::post('/change', [PasswordController::class, 'changePassword'])->middleware('throttle:10,5');
+        Route::post('/set', [PasswordController::class, 'setPassword'])->middleware('throttle:10,5');
 
         Route::prefix('reset')->group(function () {
             Route::post('/initiate', [PasswordController::class, 'forgotPassword']);

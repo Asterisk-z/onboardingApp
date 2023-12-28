@@ -11,13 +11,16 @@ use App\Models\Audit;
 use App\Models\Institution;
 use App\Models\InstitutionMembership;
 use App\Models\MembershipCategory;
+use App\Models\PasswordSet;
 use App\Models\Position;
 use App\Models\Role;
 use App\Models\User;
 use App\Notifications\InfoNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Notification;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -69,11 +72,6 @@ class UsersController extends Controller
 
     public function register(RegistrationRequest $request): JsonResponse
     {
-        // $form_id = $request->form_id;
-
-        // $form_value = $request->form_value;
-
-        // //////////////////////////////////////////////////////////////
         $institution = Institution::create();
 
         InstitutionMembership::create([
@@ -97,15 +95,16 @@ class UsersController extends Controller
             'verified_at' => now()
         ]);
 
-        $user->passwords()->create([
-            'password' => Hash::make($request->input('password'))
+        $password = PasswordSet::create([
+            "email" => $user->email,
+            "signature" => crypt::encrypt(Str::random(30))
         ]);
 
         logAction($request->email, 'Successful User Registration', 'Registration Successful', $request->ip());
 
         $membership = MembershipCategory::find($request->input('category'));
 
-        $user->notify(new InfoNotification(MailContents::signupMail($user->email, $user->created_at->format('Y-m-d')), MailContents::signupMailSubject()));
+        $user->notify(new InfoNotification(MailContents::signupMail($user->email, $user->created_at->format('Y-m-d'), $password->signature), MailContents::signupMailSubject()));
 
         $MEGs = Utility::getUsersByCategory(Role::MEG);
         if (count($MEGs))

@@ -63,9 +63,8 @@
         <div class="content">
             <p>Dear {{$user->first_name}},</p>
             <p>{!! $info !!}</p>
-            <p>Kindly click <a href="{{config('app.front_end_url')}}">here</a> to use the MROIS system.</p>
-            <p>Regards,</p>
-            <p style="margin-top: -15px;">The MROIS Team</p>
+            <p>Thank You.</p>
+            <p style="margin-top: -15px;">FMDQ Securities Exchange</p>
         </div>
         <div class="footer">
             &copy; {{date('Y')}} FMDQ Group. All rights reserved.

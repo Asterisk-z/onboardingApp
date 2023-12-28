@@ -9,14 +9,17 @@ class MailContents
         return "Registration Successful";
     }
 
-    public static function signupMail($email, $date): string
+    public static function signupMail($email, $date, $signature): string
     {
-        return "<p>Your account has been successfully created. Below are your login details:</p>
+        $url = config('app.front_end_url')."/set/password?signature=".$signature;
 
+        return "<p>Your account has been successfully created.</p>
+        <p>Your login details are as follows:</p>
         <ul>
             <li><strong>Username:</strong> {$email}</li>
             <li><strong>Account Creation Date:</strong> {$date}</li>
-        </ul>";
+        </ul>
+        <p>Kindly click on this <a href=$url>link</a> to proceed.</p>";
     }
 
     public static function complaintSubmitSubject(): string
@@ -71,12 +74,7 @@ class MailContents
 
     public static function newMembershipSignupMail($name, $category): string
     {
-        return "<p>A new applicant has successfully signed up on the MROIS portal:</p>
-
-        <ul>
-            <li><strong>Name:</strong> {$name}</li>
-            <li><strong>Category:</strong> {$category}</li>
-        </ul>";
+        return "<p>A new applicant, $name, has successfully signed up on the MROIS portal</p>";
     }
 
     public static function newBroadcastMessageSubject(): string
