@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Helpers\ResponseStatusCodes;
 use App\Helpers\Utility;
+use App\Models\PasswordSet;
 use App\Models\User;
 use App\Services\OtpService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -124,5 +126,41 @@ class PasswordController extends Controller
 
         logAction($request->input('email'), 'Reset Password successful', 'Reset Password successful', $request->ip());
         return successResponse("Your password has been reset successfully.");
+    }
+
+    public function setPassword(Request $request)
+    {
+        $request->validate([
+            "signature" => "required|string",
+            "email" => "required|string|email",
+            'password' => 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/'
+        ]);
+
+        $signature = Crypt::decrypt($request->signature);
+
+        if(! $passwordReset = PasswordSet::where('signature', $signature)->first()){
+            return errorResponse(ResponseStatusCodes::BAD_REQUEST, "Invalid signature.");
+        }
+
+        if($passwordReset->status == "completed"){
+            return errorResponse(ResponseStatusCodes::BAD_REQUEST, "You have initially completed this process. Kindly proceed to login.");
+        }
+
+        if($passwordReset->email != $request->email){
+            return errorResponse(ResponseStatusCodes::BAD_REQUEST, "Invalid Email Address.");
+        }
+
+        $user = User::where('email', $request->email)->first();
+        $user->password = Hash::make($request->input('password'));
+        $user->save();
+
+        $user->passwords()->create([
+            'password' => Hash::make($request->input('password'))
+        ]);
+
+        $passwordReset->status = "completed";
+        $passwordReset->save();
+
+        return successResponse("Password set successfully.");
     }
 }

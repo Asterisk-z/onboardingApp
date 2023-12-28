@@ -5,6 +5,7 @@ use App\Http\Controllers\AuditController;
 use App\Http\Controllers\BroadcastMessageController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\ComplaintTypeController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\InstitutionController;
 use App\Http\Controllers\MemberCategoryController;
 use App\Http\Controllers\MembershipApplicationController;
@@ -35,8 +36,9 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('/login', [UsersController::class, 'login']);
     Route::post('/register', [UsersController::class, 'register']);
 
-    Route::prefix('password')->group(function () {
+    Route::prefix('password')->group(function () { 
         Route::post('/change', [PasswordController::class, 'changePassword'])->middleware('throttle:10,5');
+        Route::post('/set', [PasswordController::class, 'setPassword'])->middleware('throttle:10,5');
 
         Route::prefix('reset')->group(function () {
             Route::post('/initiate', [PasswordController::class, 'forgotPassword']);
@@ -185,6 +187,31 @@ Route::middleware('auth')->group(function () {
 
     Route::group(['prefix' => 'user'], function () {
         Route::get('/authorisers', [UserController::class, 'list_ar_authorisers']);
+    });
+
+
+    Route::group(['prefix' => 'events'], function () {
+
+        Route::get('/', [EventController::class, 'list']);
+        Route::get('/view/{event}', [EventController::class, 'view']);
+        Route::get('/registered', [EventController::class, 'myRegisteredEvents']);
+
+        Route::middleware('authRole:' . Role::MEG)->group(function () {
+            Route::post('/add', [EventController::class, 'add']);
+            Route::post('/update/{event}', [EventController::class, 'update']);
+            Route::post('/update-invited/{event}', [EventController::class, 'updateInvitePositions']);
+            Route::post('/delete/{eventID}', [EventController::class, 'delete']);
+        });
+
+        Route::middleware('authRole:' . Role::MEG . ',' . Role::FSD)->group(function () {
+            Route::get('/registrations/{event}', [EventController::class, 'eventRegistrations']);
+            Route::post('/registration-update-status/{eventReg}', [EventController::class, 'approveEventRegistration']);
+        });
+
+        Route::middleware('authRole:' . Role::ARAUTHORISER . ',' . Role::ARINPUTTER)->group(function () {
+            Route::post('/register/{event}', [EventController::class, 'register']);
+        });
+
     });
 });
 
