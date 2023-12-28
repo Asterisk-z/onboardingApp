@@ -20,7 +20,7 @@ const Export = ({ data }) => {
     }
   }, [modal]);
 
-  const fileName = "user-data";
+  const fileName = "data";
 
   const exportCSV = () => {
     const exportType = exportFromJSON.types.csv;
@@ -540,9 +540,9 @@ const AdminCategoryTable = ({ data, pagination, actions, className, selectableRo
   const [rowsPerPageS, setRowsPerPage] = useState(10);
   const [mobileView, setMobileView] = useState();
 
-  if (data != tableData) {
-    setTableData(data)
-  }
+    useEffect(() => {
+        setTableData(data)
+    }, [data]);
 
   useEffect(() => {
     let defaultData = tableData;

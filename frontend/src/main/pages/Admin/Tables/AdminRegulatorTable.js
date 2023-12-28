@@ -20,7 +20,7 @@ const Export = ({ data }) => {
         }
     }, [modal]);
 
-    const fileName = "user-data";
+    const fileName = "data";
 
     const exportCSV = () => {
         const exportType = exportFromJSON.types.csv;
@@ -191,7 +191,7 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
                                             <li size="xs">
                                                 <DropdownItem tag="a" onClick={() => askAction('0')}>
                                                     <Icon name="eye"></Icon>
-                                                    <span>Deactivate</span>
+                                                  <span>Deactivate</span>
                                                 </DropdownItem>
                                             </li>
                                         </>
@@ -300,9 +300,11 @@ const AdminRegulatorTable = ({ data, pagination, actions, className, selectableR
     const [rowsPerPageS, setRowsPerPage] = useState(10);
     const [mobileView, setMobileView] = useState();
 
-    if (data !== tableData) {
+
+    useEffect(() => {
         setTableData(data)
-    }
+    }, [data]);
+    
 
     useEffect(() => {
         let defaultData = tableData;

@@ -14,7 +14,7 @@ const Export = ({ data }) => {
     }
   }, [modal]);
 
-  const fileName = "user-data";
+  const fileName = "data";
 
   const exportCSV = () => {
     const exportType = exportFromJSON.types.csv;

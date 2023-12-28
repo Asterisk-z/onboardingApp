@@ -12,64 +12,76 @@ import { loadAllCategoryPositions } from "redux/stores/positions/positionStore";
 import moment from "moment";
 import Icon from "components/icon/Icon";
 import Swal from "sweetalert2";
-import Skeleton from 'react-loading-skeleton'
-import Countdown from 'react-countdown';
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 
 
 const Export = ({ data }) => {
-  const [modal, setModal] = useState(false);
+    const [modal, setModal] = useState(false);
 
-  useEffect(() => {
-    if (modal === true) {
-      setTimeout(() => setModal(false), 2000);
-    }
-  }, [modal]);
+    useEffect(() => {
+        if (modal === true) {
+        setTimeout(() => setModal(false), 2000);
+        }
+    }, [modal]);
 
-  const fileName = "user-data";
+    const newData = data.map((item) => {
+        return ({
+            "User ID": item.id,
+            "Name": `${item.firstName} ${item.lastName}`,
+            "Email": item.email,
+            "Phone": item.phone,
+            "Role": item.role.name,
+            "Status": item.approval_status,
+            "Date Created": moment(item.createdAt).format('MMM. DD, YYYY HH:mm')
+        })
+    });
 
-  const exportCSV = () => {
-    const exportType = exportFromJSON.types.csv;
-    exportFromJSON({ data, fileName, exportType });
-  };
+    const fileName = "data";
 
-  const exportExcel = () => {
-    const exportType = exportFromJSON.types.xls;
-    exportFromJSON({ data, fileName, exportType });
-  };
+    const exportCSV = () => {
+        const exportType = exportFromJSON.types.csv;
+        exportFromJSON({ data: newData, fileName: fileName, exportType: exportType });
 
-  const copyToClipboard = () => {
-    setModal(true);
-  };
+    };
 
-  return (
-    <React.Fragment>
-      <div className="dt-export-buttons d-flex align-center">
-        <div className="dt-export-title d-none d-md-inline-block">Export</div>
-        <div className="dt-buttons btn-group flex-wrap">
-          <CopyToClipboard text={JSON.stringify(data)}>
-            <Button className="buttons-copy buttons-html5" onClick={() => copyToClipboard()}>
-              <span>Copy</span>
-            </Button>
-          </CopyToClipboard>{" "}
-          <button className="btn btn-secondary buttons-csv buttons-html5" type="button" onClick={() => exportCSV()}>
-            <span>CSV</span>
-          </button>{" "}
-          <button className="btn btn-secondary buttons-excel buttons-html5" type="button" onClick={() => exportExcel()}>
-            <span>Excel</span>
-          </button>{" "}
+    const exportExcel = () => {
+        const exportType = exportFromJSON.types.xls;
+        exportFromJSON({ data: newData, fileName: fileName, exportType: exportType });
+
+    };
+
+    const copyToClipboard = () => {
+        setModal(true);
+    };
+
+    return (
+        <React.Fragment>
+        <div className="dt-export-buttons d-flex align-center">
+            <div className="dt-export-title d-none d-md-inline-block">Export</div>
+            <div className="dt-buttons btn-group flex-wrap">
+            <CopyToClipboard text={JSON.stringify(newData)}>
+                <Button className="buttons-copy buttons-html5" onClick={() => copyToClipboard()}>
+                <span>Copy</span>
+                </Button>
+            </CopyToClipboard>{" "}
+            <button className="btn btn-secondary buttons-csv buttons-html5" type="button" onClick={() => exportCSV()}>
+                <span>CSV</span>
+            </button>{" "}
+            <button className="btn btn-secondary buttons-excel buttons-html5" type="button" onClick={() => exportExcel()}>
+                <span>Excel</span>
+            </button>{" "}
+            </div>
         </div>
-      </div>
-      <Modal isOpen={modal} className="modal-dialog-centered text-center" size="sm">
-        <ModalBody className="text-center m-2">
-          <h5>Copied to clipboard</h5>
-        </ModalBody>
-        <div className="p-3 bg-light">
-          <div className="text-center">Copied {data.length} rows to clipboard</div>
-        </div>
-      </Modal>
-    </React.Fragment>
-  );
+        <Modal isOpen={modal} className="modal-dialog-centered text-center" size="sm">
+            <ModalBody className="text-center m-2">
+                <h5>Copied to clipboard</h5>
+            </ModalBody>
+            <div className="p-3 bg-light">
+                <div className="text-center">Copied {newData.length} rows to clipboard</div>
+            </div>
+        </Modal>
+        </React.Fragment>
+    );
 };
 
 const ActionTab = (props) => {
@@ -649,21 +661,21 @@ const AuthRepTable = ({ data, pagination, actions, className, selectableRows, ex
   const [mobileView, setMobileView] = useState();
 
   
-  if (data != tableData) {
-    setTableData(data)
-  }
+    useEffect(() => {
+        setTableData(data)
+    }, [data]);
   
   useEffect(() => {
-    let defaultData = tableData;
-    if (searchText !== "") {
-      defaultData = data.filter((item) => {
-        // return item.name.toLowerCase().includes(searchText.toLowerCase());
-        return (Object.values(item).join('').toLowerCase()).includes(searchText.toLowerCase())
-      });
-      setTableData(defaultData);
-    } else {
-      setTableData(data);
-    }
+      let defaultData = tableData;
+      
+        if (searchText !== "") {
+            defaultData = data.filter((item) => {
+                return (Object.values(item).join('').toLowerCase()).includes(searchText.toLowerCase())
+            });
+            setTableData(defaultData);
+        } else {
+            setTableData(data);
+        }
   }, [searchText]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // function to change the design view under 1200 px
