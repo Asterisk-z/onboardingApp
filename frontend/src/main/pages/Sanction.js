@@ -136,7 +136,7 @@ const Sanction = ({ drawer }) => {
                                 
                                 <div className="form-group">
                                     <label className="form-label" htmlFor="email">
-                                        AR Summary
+                                        Summary of AR's Infraction
                                     </label>
                                     <div className="form-control-wrap">
                                         <textarea type="text" className="form-control" {...register('ar_summary', { required: "This field is Required" })}></textarea>
@@ -145,7 +145,7 @@ const Sanction = ({ drawer }) => {
                                 </div>
                                 <div className="form-group">
                                     <label className="form-label" htmlFor="email">
-                                        Sanction Summary
+                                       Summary of Sanction
                                     </label>
                                     <div className="form-control-wrap">
                                         <textarea type="text" className="form-control" {...register('sanction_summary', { required: "This field is Required" })}></textarea>
@@ -154,7 +154,7 @@ const Sanction = ({ drawer }) => {
                                 </div>
                                 <div className="form-group">
                                     <label className="form-label" htmlFor="phone-no">
-                                        Upload Document (*pdf)
+                                        Infraction and Sanction evidence (*pdf)
                                     </label>
                                     <div className="form-control-wrap">
                                         <input type="file" accept=".pdf" className="form-control"  {...register('evidence', {required: "This field is Required" })} onChange={handleFileChange}/>
@@ -207,7 +207,7 @@ const Sanction = ({ drawer }) => {
                         <BlockBetween>
                             <BlockHeadContent>
                                 <BlockTitle page tag="h3">
-                                    You are not authorised to accesss this module
+                                    You are not authorised to access this module
                                 </BlockTitle>
                             </BlockHeadContent>
                         </BlockBetween>
