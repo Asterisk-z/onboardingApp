@@ -51,8 +51,7 @@ class RegistrationRequest extends FormRequest
                     }
                 },
             ],
-            "img" => "nullable|mimes:jpeg,png,jpg|max:5048",
-            'password' => 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/'
+            "img" => "nullable|mimes:jpeg,png,jpg|max:5048"
         ];
     }
 }
