@@ -77,7 +77,7 @@ class EventMailContents
 
     public static function eventAddedSubject(string $eventName): string
     {
-        return "$eventName Has Been Added";
+        return "Register $eventName";
     }
 
     public static function eventAddedBody($event): string
@@ -85,6 +85,43 @@ class EventMailContents
 
         $message = "<p>
                 Please be informed that you have been invited for {$event->name} scheduled to hold {$event->date} {$event->time}. Kindly login to the MROIS Portal to register
+            </p>";
+
+        return $message;
+    }
+
+    public static function invitedSubject(string $eventName): string
+    {
+        return "Register for $eventName";
+    }
+
+    public static function invitedBody($event): string
+    {
+
+        $message = "<p>
+                Please be informed that you have been invited for {$event->name} scheduled to hold {$event->date} {$event->time}. Kindly login to the MROIS Portal to register
+            </p>";
+
+        return $message;
+    }
+
+
+    public static function reminderSubject(string $eventName): string
+    {
+        return "$eventName Reminder";
+    }
+
+    public static function reminderBody($event): string
+    {
+
+        $message = "<p>
+                Trust this mail meets you well. 
+            </p>
+            <p>
+            We wish to remind you of the {$event->name} event scheduled {$event->date} {$event->time}.
+            </p>
+            <p>
+            We look forward to your attendance.
             </p>";
 
         return $message;

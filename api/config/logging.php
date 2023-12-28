@@ -113,6 +113,17 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+
+        'command_freq_remainder' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/command/freq_remainder/log.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+        ],
+        'command_date_remainder' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/command/date_remainder/log.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+        ],
     ],
 
 ];

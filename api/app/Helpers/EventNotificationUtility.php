@@ -111,6 +111,62 @@ class EventNotificationUtility
         }
     }
 
+    public static function reminderNotification(Event $event)
+    {
+        $to = null;
+        $CCs = [];
+
+        $eventName = $event->name;
+        $message = EventMailContents::reminderBody($event);
+        $subject = EventMailContents::reminderSubject($eventName);
+
+        $registeredUsers = $event->getRegisteredUsers();
+
+        if ($registeredUsers) {
+            // email registered AR and copy MEG
+            $to = $registeredUsers;
+            $CCs = Utility::getUsersEmailByCategory(Role::MEG);
+        } else {
+            // Email MEGs
+            $MEGs = Utility::getUsersByCategory(Role::MEG);
+
+            if (count($MEGs))
+                $to = $MEGs;
+        }
+
+        if ($to) {
+            self::sendNotification($message, $subject, $to, $CCs);
+        }
+    }
+
+    public static function inviteNotification(Event $event)
+    {
+        $to = null;
+        $CCs = [];
+
+        $eventName = $event->name;
+        $message = EventMailContents::invitedBody($event);
+        $subject = EventMailContents::invitedSubject($eventName);
+
+        $invitedUsers = $event->newlyInvitedUsers();
+
+        if ($invitedUsers) {
+            // email registered AR and copy MEG
+            $to = $invitedUsers;
+            $CCs = Utility::getUsersEmailByCategory(Role::MEG);
+        } else {
+            // Email MEGs
+            $MEGs = Utility::getUsersByCategory(Role::MEG);
+
+            if (count($MEGs))
+                $to = $MEGs;
+        }
+
+        if ($to) {
+            self::sendNotification($message, $subject, $to, $CCs);
+        }
+    }
+
     public static function eventDeleted($registeredUsers, string $eventName)
     {
         $to = null;
