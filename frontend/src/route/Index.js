@@ -1,144 +1,12 @@
 import React, { useLayoutEffect } from "react";
 import { Routes,Route, useLocation } from "react-router-dom";
-import { CustomerProvider } from "../pages/panel/e-commerce/customer/CustomerContext";
-import { ProductContextProvider } from "../pages/pre-built/products/ProductContext";
-import { UserContextProvider } from "../pages/pre-built/user-manage/UserContext";
-
-import Homepage from "../pages/Homepage";
-import Sales from "../pages/Sales";
-import Analytics from "../pages/Analytics";
-
-import EcomOrder from "../pages/panel/e-commerce/order/OrderDefault";
-import EcomSupport from "../pages/panel/e-commerce/support/Messages";
-import EcomProducts from "../pages/panel/e-commerce/product/ProductList";
-import EcomCustomer from "../pages/panel/e-commerce/customer/CustomerList";
-import EcomCustomerDetails from "../pages/panel/e-commerce/customer/CustomerDetails";
-import EcomIntegration from "../pages/panel/e-commerce/integration/Integration";
-import EcomSettings from "../pages/panel/e-commerce/settings/Settings";
-import EcomDashboard from "../pages/panel/e-commerce/index";
-
-import Component from "../pages/components/Index";
-import Accordian from "../pages/components/Accordions";
-import Alerts from "../pages/components/Alerts";
-import Avatar from "../pages/components/Avatar";
-import Badges from "../pages/components/Badges";
-import Breadcrumbs from "../pages/components/Breadcrumbs";
-import ButtonGroup from "../pages/components/ButtonGroup";
-import Buttons from "../pages/components/Buttons";
-import Cards from "../pages/components/Cards";
-import Carousel from "../pages/components/Carousel";
-import Dropdowns from "../pages/components/Dropdowns";
-import FormElements from "../pages/components/forms/FormElements";
-import FormLayouts from "../pages/components/forms/FormLayouts";
-import FormValidation from "../pages/components/forms/FormValidation";
-import DataTablePage from "../pages/components/table/DataTable";
-import DateTimePicker from "../pages/components/forms/DateTimePicker";
-import CardWidgets from "../pages/components/widgets/CardWidgets";
-import ChartWidgets from "../pages/components/widgets/ChartWidgets";
-import RatingWidgets from "../pages/components/widgets/RatingWidgets";
-import SlickPage from "../pages/components/misc/Slick";
-import SweetAlertPage from "../pages/components/misc/SweetAlert";
-import BeautifulDnd from "../pages/components/misc/BeautifulDnd";
-import DualListPage from "../pages/components/misc/DualListbox";
-import GoogleMapPage from "../pages/components/misc/GoogleMap";
-import Modals from "../pages/components/Modals";
-import Pagination from "../pages/components/Pagination";
-import Popovers from "../pages/components/Popovers";
-import Progress from "../pages/components/Progress";
-import Spinner from "../pages/components/Spinner";
-import Tabs from "../pages/components/Tabs";
-import Toast from "../pages/components/Toast";
-import Tooltips from "../pages/components/Tooltips";
-import Typography from "../pages/components/Typography";
-import CheckboxRadio from "../pages/components/forms/CheckboxRadio";
-import AdvancedControls from "../pages/components/forms/AdvancedControls";
-import InputGroup from "../pages/components/forms/InputGroup";
-import FormUpload from "../pages/components/forms/FormUpload";
-import NumberSpinner from "../pages/components/forms/NumberSpinner";
-import NouiSlider from "../pages/components/forms/nouislider";
-import WizardForm from "../pages/components/forms/WizardForm";
 import WizardTest from "../pages/components/forms/WizardTest";
-import UtilBorder from "../pages/components/UtilBorder";
-import UtilColors from "../pages/components/UtilColors";
-import UtilDisplay from "../pages/components/UtilDisplay";
-import UtilEmbeded from "../pages/components/UtilEmbeded";
-import UtilFlex from "../pages/components/UtilFlex";
-import UtilOthers from "../pages/components/UtilOthers";
-import UtilSizing from "../pages/components/UtilSizing";
-import UtilSpacing from "../pages/components/UtilSpacing";
-import UtilText from "../pages/components/UtilText";
-
-import Blank from "../pages/others/Blank";
-import Faq from "../pages/others/Faq";
-import Regularv1 from "../pages/others/Regular-1";
-import Regularv2 from "../pages/others/Regular-2";
-import Terms from "../pages/others/Terms";
-import BasicTable from "../pages/components/table/BasicTable";
-import SpecialTablePage from "../pages/components/table/SpecialTable";
-import ChartPage from "../pages/components/charts/Charts";
-import EmailTemplate from "../pages/components/email-template/Email";
-import NioIconPage from "../pages/components/crafted-icons/NioIcon";
-import SVGIconPage from "../pages/components/crafted-icons/SvgIcons";
-
-import ProjectCardPage from "../pages/pre-built/projects/ProjectCard";
-import ProjectListPage from "../pages/pre-built/projects/ProjectList";
-import UserListDefault from "../pages/pre-built/user-manage/UserListDefault";
-import UserListRegular from "../pages/pre-built/user-manage/UserListRegular";
-import UserContactCard from "../pages/pre-built/user-manage/UserContactCard";
-import UserDetails from "../pages/pre-built/user-manage/UserDetailsRegular";
-import UserListCompact from "../pages/pre-built/user-manage/UserListCompact";
-import UserProfileRegular from "../pages/pre-built/user-manage/UserProfileRegular";
-import UserProfileSetting from "../pages/pre-built/user-manage/UserProfileSetting";
-import UserProfileNotification from "../pages/pre-built/user-manage/UserProfileNotification";
-import UserProfileActivity from "../pages/pre-built/user-manage/UserProfileActivity";
-import OrderDefault from "../pages/pre-built/orders/OrderDefault";
-import OrderRegular from "../pages/pre-built/orders/OrderRegular";
-import OrderSales from "../pages/pre-built/orders/OrderSales";
-import KycListRegular from "../pages/pre-built/kyc-list-regular/KycListRegular";
-import KycDetailsRegular from "../pages/pre-built/kyc-list-regular/kycDetailsRegular";
-import ProductCard from "../pages/pre-built/products/ProductCard";
-import ProductList from "../pages/pre-built/products/ProductList";
-import ProductDetails from "../pages/pre-built/products/ProductDetails";
-import InvoiceList from "../pages/pre-built/invoice/InvoiceList";
-import InvoiceDetails from "../pages/pre-built/invoice/InvoiceDetails";
 import InvoicePrint from "../pages/pre-built/invoice/InvoicePrint";
-import PricingTable from "../pages/pre-built/pricing-table/PricingTable";
-import GalleryPreview from "../pages/pre-built/gallery/GalleryCardPreview";
-import ReactToastify from "../pages/components/misc/ReactToastify";
-
-import AppMessages from "../pages/app/messages/Messages";
-import Chat from "../pages/app/chat/ChatContainer";
-import Kanban from "../pages/app/kanban/Kanban";
-import FileManager from "../pages/app/file-manager/FileManager";
-import FileManagerFiles from "../pages/app/file-manager/FileManagerFiles";
-import FileManagerShared from "../pages/app/file-manager/FileManagerShared";
-import FileManagerStarred from "../pages/app/file-manager/FileManagerStarred";
-import FileManagerRecovery from "../pages/app/file-manager/FileManagerRecovery";
-import FileManagerSettings from "../pages/app/file-manager/FileManagerSettings";
-import Inbox from "../pages/app/inbox/Inbox";
-import Calender from "../pages/app/calender/Calender";
-import JsTreePreview from "../pages/components/misc/JsTree";
-import QuillPreview from "../pages/components/forms/rich-editor/QuillPreview";
-import TinymcePreview from "../pages/components/forms/rich-editor/TinymcePreview";
-import KnobPreview from "../pages/components/charts/KnobPreview";
 
 import Error404Classic from "../pages/error/404-classic";
 import Error404Modern from "../pages/error/404-modern";
 import Error504Modern from "../pages/error/504-modern";
 import Error504Classic from "../pages/error/504-classic";
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -148,6 +16,7 @@ import Register from "main/auth/Register";
 import ForgotPassword from "main/auth/ForgotPassword";
 import PasswordUpdate from "main/auth/PasswordUpdate";
 import PasswordReset from "main/auth/PasswordChange";
+import Application from "main/pages/application/Index";
 import Form from "main/forms/Form";
 import AdminBroadcast from "main/pages/Admin/AdminBroadcast" 
 import AdminListInstitutionAR from "main/pages/Admin/AdminListInstitutionAR" 
@@ -186,6 +55,7 @@ import LayoutNoSidebar from "layout/Index-nosidebar";
 
 import MainLayout from "main/layout/Index";
 import MainLayoutNoSidebar from "main/layout/Index-nosidebar";
+import LoggedInLayoutNoSidebar from "layout/loggedin-nosideber";
 
 
 import Landing from "main/auth/Landing";
@@ -214,8 +84,6 @@ const Router = () => {
             <Route path="form" element={<Form />}></Route>
             <Route index element={<Login />}></Route>
             
-            
-        
 
             <Route path="errors">
               <Route path="404-modern" element={<Error404Modern />}></Route>
@@ -230,6 +98,13 @@ const Router = () => {
         
       
 
+
+        <Route path={`${process.env.PUBLIC_URL}`} element={<LoggedInLayoutNoSidebar />}>
+ 
+            <Route path="application" element={<Application />}></Route>
+            
+        </Route>
+        
 
 
 
@@ -248,6 +123,7 @@ const Router = () => {
       
         
         <Route path={`${process.env.PUBLIC_URL}`} element={<UserLayout />}>
+          
           <Route path="dashboard" element={<UserHomepage />}></Route>
           <Route path="complaint" element={<Complaint />}></Route>
           <Route path="audit-log" element={<AuditLog />}></Route>

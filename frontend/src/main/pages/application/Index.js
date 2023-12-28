@@ -1,383 +1,167 @@
-import React, { useState, useRef, useEffect } from "react";
-import Head from "../../layout/head/Head";
-import Content from "../../layout/content/Content";
-import {
-  Block,
-  BlockHead,
-  BlockHeadContent,
-  BlockTitle,
-  BlockDes,
-  BackTo,
-  PreviewCard,
-} from "../../components/Component";
+import React, { useState, useRef, useEffect, forwardRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import Head from "layout/head/Head";
+import Content from "layout/content/Content";
+import { BlockTitle, Icon } from "components/Component";
 import { Steps, Step } from "react-step-builder";
-import { Row, Col, Button } from "reactstrap";
-import { HeaderLogo } from "../../pages/components/HeaderLogo";
+import { Row, Col, Button, Input } from "reactstrap";
+import { HeaderLogo } from "pages/components/HeaderLogo";
+import DatePicker from "react-datepicker";
+import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
+import { loadPageFields, loadFieldOption, uploadField } from "redux/stores/membership/applicationStore";
+import moment from 'moment';
 
 
-const PersonalForm = (props) => {
-    console.log(props)
-  const [formData, setFormData] = useState({
-    companyName: "",
-    rcNumber: "",
-    officeAddress: "",
-    emailAddress: "",
-    secondaryEmail: "",
-    mobileNumber: "",
-    secondaryNumber: "",
-    incorporationDate: "",
-    incorporationPlace: "",
-    website: "",
-    businessNature: "",
-    capital: "",
-    shareCapital: "",
-    name: "",
-    phone: "",
-    email: "",
-  });
+const ApplicantInformation = (props) => {
 
-  const onInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+    const authUser = useUser();
+    const authUserUpdate = useUserUpdate();
 
-  const { reset, register, handleSubmit, formState: { errors } } = useForm();
+    const dispatch = useDispatch();
 
-  const submitForm = (data) => {
-    props.next();
-  };
+    const [parentState, setParentState] = useState('Initial state');
+    const [loading, setLoading] = useState(false);
+    const [modalForm, setModalForm] = useState(false);
+    
+    const { reset, register, handleSubmit, formState: { errors }, setValue, clearErrors } = useForm();
+    const fields = useSelector((state) => state?.application?.all_fields) || null;
 
-  useEffect(() => {
-    reset(formData)
-  }, [formData]);
+    useEffect(() => {
+        dispatch(loadPageFields({"page" : "1", "category" : authUser.user_data.institution.category[0].id}));
+    }, [dispatch, parentState]);
+  
+    let initialValues = [];
+
+    if (fields) {
+      const fieldValues = fields.map((field) => ({ [field.name]: field.field_value?.uploaded_field ? field.field_value?.uploaded_field : null }))
+      initialValues = Object.assign({}, ...fieldValues);
+    //   console.log(initialValues, fieldValues)
+    }
+  
+    const onInputChange = async (values) => {
+        
+      if (!values.field_value || !values.field_name || !values.field_type) return
+        setValue(values.field_name, values.field_value)
+        clearErrors(values.field_name)
+        const postValues = new Object();
+        postValues.field_name = values.field_name;
+        postValues.field_value = values.field_value;
+        postValues.field_type = values.field_type;
+        postValues.category_id = authUser.user_data.institution.category[0].id;
+        
+        try {
+            
+            const resp = await dispatch(uploadField(postValues));
+
+            if (resp.payload?.message == "success") {
+                setParentState(Math.random())
+            } else {
+                
+            }
+            
+        } catch (error) {
+            
+      }
+    };
+
+
+    const submitForm = (data) => {
+        initialValues = []
+        props.next()
+    };
+    
+    const nextProcess = () => {
+        console.log(errors)
+    }
+
 
   return (
     <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
-      <h3>Applicant Information</h3>
+      {/* <h3>Applicant Information</h3> */}
       <Row className="gy-4">
-        <Col md="6">
-          <div className="form-group">
-            <label className="form-label" htmlFor="company-name">
-              Company Name
-            </label>
-            <div className="form-control-wrap">
-              <input
-                type="text"
-                id="company-name"
-                className="form-control"
-                {...register('companyName', { required: true })}
-                onChange={(e) => onInputChange(e)}
-                defaultValue={formData.companyName} />
-              {errors.companyName && <span className="invalid">This field is required</span>}
-            </div>
-          </div>
-        </Col>
-        <Col md="6">
-          <div className="form-group">
-            <label className="form-label" htmlFor="rc-number">
-              RC Number
-            </label>
-            <div className="form-control-wrap">
-              <input
-                type="text"
-                id="rc-number"
-                className="form-control"
-                {...register('rcNumber', { required: true })}
-                onChange={(e) => onInputChange(e)}
-                defaultValue={formData.rcNumber} />
-              {errors.rcNumber && <span className="invalid">This field is required</span>}
-            </div>
-          </div>
-        </Col>
-        <Col md="6">
-          <div className="form-group">
-            <label className="form-label" htmlFor="office-address">
-              Registered Office Address
-            </label>
-            <div className="form-control-wrap">
-              <input
-                type="text"
-                id="office-address"
-                className="form-control"
-                {...register('officeAddress', { required: true })}
-                onChange={(e) => onInputChange(e)}
-                defaultValue={formData.officeAddress} />
-              {errors.officeAddress && <span className="invalid">This field is required</span>}
-            </div>
-          </div>
-        </Col>
-        <Col md="6">
-          <div className="form-group">
-            <label className="form-label" htmlFor="email-address">
-              Company Email Address
-            </label>
-            <div className="form-control-wrap">
-              <input
-                type="text"
-                id="email-address"
-                className="form-control"
-                {...register('email', {
-                  required: true,
-                  pattern: {
-                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: "Invalid email address",
-                  },
-                })}
-                onChange={(e) => onInputChange(e)}
-                defaultValue={formData.emailAddress} />
-              {errors.email && errors.email.type === "required" && (
-                <span className="invalid">This field is required</span>
-              )}
-              {errors.emailAddress && errors.emailAddress.type === "pattern" && (
-                <span className="invalid">{errors.emailAddress.message}</span>
-              )}
-            </div>
-          </div>
-        </Col>
-        <Col md="6">
-          <div className="form-group">
-            <label className="form-label" htmlFor="secondary-email">
-              Secondary Company Email Address
-            </label>
-            <div className="form-control-wrap">
-              <input
-                type="text"
-                id="secondary-email"
-                className="form-control"
-                {...register('email', {
-                  required: true,
-                  pattern: {
-                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: "Invalid email address",
-                  },
-                })}
-                onChange={(e) => onInputChange(e)}
-                defaultValue={formData.secondaryEmail} />
-              {errors.secondaryEmail && errors.secondaryEmail.type === "required" && (
-                <span className="invalid">This field is required</span>
-              )}
-              {errors.secondaryEmail && errors.secondaryEmail.type === "pattern" && (
-                <span className="invalid">{errors.secondaryEmail.message}</span>
-              )}
-            </div>
-          </div>
-        </Col>
-        <Col md="6">
-          <div className="form-group">
-            <label className="form-label" htmlFor="mobile-number">
-              Company Telephone/Mobile Number
-            </label>
-            <div className="form-control-wrap">
-              <input
-                type="text"
-                id="mobile-number"
-                className="form-control"
-                {...register('firstName', { required: true })}
-                onChange={(e) => onInputChange(e)}
-                defaultValue={formData.mobileNumber} />
-              {errors.mobileNumber && <span className="invalid">This field is required</span>}
-            </div>
-          </div>
-        </Col>
-        <Col md="6">
-          <div className="form-group">
-            <label className="form-label" htmlFor="secondary-number">
-              Secondary Telephone/Mobile Number
-            </label>
-            <div className="form-control-wrap">
-              <input
-                type="text"
-                id="secondary-number"
-                className="form-control"
-                {...register('secondaryNumber', { required: true })}
-                onChange={(e) => onInputChange(e)}
-                defaultValue={formData.secondaryNumber} />
-              {errors.secondaryNumber && <span className="invalid">This field is required</span>}
-            </div>
-          </div>
-        </Col>
-        <Col md="6">
-          <div className="form-group">
-            <label className="form-label" htmlFor="incorporation-date">
-              Date of Incorporation
-            </label>
-            <div className="form-control-wrap">
-              <input
-                type="date"
-                id="incorporation-date"
-                className="form-control"
-                {...register('incorporationDate', { required: true })}
-                onChange={(e) => onInputChange(e)}
-                defaultValue={formData.incorporationDate} />
-              {errors.incorporationDate && <span className="invalid">This field is required</span>}
-            </div>
-          </div>
-        </Col>
-        <Col md="6">
-          <div className="form-group">
-            <label className="form-label" htmlFor="incorporation-place">
-              Place of Incorporation
-            </label>
-            <div className="form-control-wrap">
-              <input
-                type="text"
-                id="incorporation-place"
-                className="form-control"
-                {...register('incorporationPlace', { required: true })}
-                onChange={(e) => onInputChange(e)}
-                defaultValue={formData.incorporationPlace} />
-              {errors.incorporationPlace && <span className="invalid">This field is required</span>}
-            </div>
-          </div>
-        </Col>
-        <Col md="6">
-          <div className="form-group">
-            <label className="form-label" htmlFor="website">
-              Corporate Website Address
-            </label>
-            <div className="form-control-wrap">
-              <input
-                type="text"
-                id="website"
-                className="form-control"
-                {...register('website', { required: true })}
-                onChange={(e) => onInputChange(e)}
-                defaultValue={formData.website} />
-              {errors.website && <span className="invalid">This field is required</span>}
-            </div>
-          </div>
-        </Col>
-        <Col md="6">
-          <div className="form-group">
-            <label className="form-label" htmlFor="business-nature">
-              Nature of Business
-            </label>
-            <div className="form-control-wrap">
-              <input
-                type="text"
-                id="business-nature"
-                className="form-control"
-                {...register('businessNature', { required: true })}
-                onChange={(e) => onInputChange(e)}
-                defaultValue={formData.businessNature} />
-              {errors.businessNature && <span className="invalid">This field is required</span>}
-            </div>
-          </div>
-        </Col>
-        <Col md="6">
-          <div className="form-group">
-            <label className="form-label" htmlFor="capital">
-              Authorised Share Capital
-            </label>
-            <div style={{ display: 'flex', width: '100%' }}>
-              <select style={{ height: '35px', width: '15%', marginRight: '10px', paddingLeft: '5px' }}>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-              </select>
-              <input
-                type="text"
-                className="form-control"
-                style={{ width: '85%' }}
-                {...register('capital', { required: true })}
-                onChange={(e) => onInputChange(e)}
-                defaultValue={formData.capital} />
-              {errors.capital && <span className="invalid">This field is required</span>}
-            </div>
-          </div>
-        </Col>
-        <Col md="6">
-          <div className="form-group">
-            <label className="form-label" htmlFor="share-capital">
-              Paid-up Share Capital
-            </label>
-            <div style={{ display: 'flex', width: '100%' }}>
-              <select style={{ height: '35px', width: '15%', marginRight: '10px', paddingLeft: '5px' }}>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-              </select>
-              <input
-                type="text"
-                className="form-control"
-                style={{ width: '85%' }}
-                {...register('share-capital', { required: true })}
-                onChange={(e) => onInputChange(e)}
-                defaultValue={formData.shareCapital} />
-              {errors.shareCapital && <span className="invalid">This field is required</span>}
-            </div>
-          </div>
-        </Col>
-        <h4>Application Primary Contact Details</h4>
-        <Col md="6">
-          <div className="form-group">
-            <label className="form-label" htmlFor="name">
-              Name
-            </label>
-            <div className="form-control-wrap">
-              <input
-                type="text"
-                id="name"
-                className="form-control"
-                {...register('name', { required: true })}
-                onChange={(e) => onInputChange(e)}
-                defaultValue={formData.name} />
-              {errors.name && <span className="invalid">This field is required</span>}
-            </div>
-          </div>
-        </Col>
-        <Col md="6">
-          <div className="form-group">
-            <label className="form-label" htmlFor="phone-no">
-              Mobile Number
-            </label>
-            <div className="form-control-wrap">
-              <input
-                type="number"
-                id="phone-no"
-                className="form-control"
-                {...register('phone', { required: true })}
-                onChange={(e) => onInputChange(e)}
-                defaultValue={formData.phone} />
-              {errors.phone && <span className="invalid">This field is required</span>}
-            </div>
-          </div>
-        </Col>
-        <Col md="6">
-          <div className="form-group">
-            <label className="form-label" htmlFor="email">
-              Email Address
-            </label>
-            <div className="form-control-wrap">
-              <input
-                type="text"
-                id="email"
-                className="form-control"
-                {...register('email', {
-                  required: true,
-                  pattern: {
-                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: "Invalid email address",
-                  },
-                })}
-                onChange={(e) => onInputChange(e)}
-                defaultValue={formData.email} />
-              {errors.email && errors.email.type === "required" && (
-                <span className="invalid">This field is required</span>
-              )}
-              {errors.email && errors.email.type === "pattern" && (
-                <span className="invalid">{errors.email.message}</span>
-              )}
-            </div>
-          </div>
-        </Col>
+              {fields && fields.map((field, index) => {
+            
+            if (field.type == 'text') {
+                return (
+                    <Col md="6" key={index}>
+                    <div className="form-group">
+                        <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
+                        <div className="form-control-wrap">
+                        <input type="text" id={field.name} className="form-control" {...register(field.name, { required: 'This field is required' })} onInput={(e) => onInputChange({'field_name' : field.name, "field_value" : e.target.value, "field_type" : field.type})} defaultValue={initialValues[field.name]} />
+                        {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
+                        </div>
+                    </div>
+                    </Col>
+                )
+            } else if(field.type == 'date') {
+                
+                return (
+                    <Col md="6" key={index}>
+                        <div className="form-group">
+                            <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
+                            <div className="form-control-wrap">
+                                <DatePicker selected={initialValues[field.name] ? new Date(initialValues[field.name]) : new Date()}  {...register(field.name, { required: 'This field is required' })} id={field.name} onChange={(e) => onInputChange({'field_name' : field.name, "field_value" : moment(e).format('YYYY-MM-DD'), "field_type" : field.type})} defaultValue={initialValues[field.name]} className="form-control date-picker" />
+                                {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
+                            </div>
+                        </div>
+                    </Col>
+                )
+            }else if(field.type == 'email') {
+                return (
+                    <Col md="6" key={index}>
+                        <div className="form-group">
+                            <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
+                            <div className="form-control-wrap">
+                                <input type="text" id={field.name} className="form-control" {...register(field.name, {required: 'This field is required', pattern: {value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: "Invalid email address"},})} onKeyUp={(e) => onInputChange({'field_name' : field.name, "field_value" : e.target.value, "field_type" : field.type})} defaultValue={initialValues[field.name]} />
+                            {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
+                            </div>
+                        </div>
+                    </Col>
+                )
+            }else if(field.type == 'number') {
+                return (
+                    <Col md="6" key={index}>
+                        <div className="form-group">
+                            <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
+                            <div className="form-control-wrap">
+                                <input type="number"  id={field.name} className="form-control" {...register(field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({'field_name' : field.name, "field_value" : e.target.value, "field_type" : field.type})} defaultValue={initialValues[field.name]}  />
+                                {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
+                            </div>
+                        </div>
+                    </Col>
+                )
+            } else if (field.type == 'select') {
+                return (
+                    <Col md="6" key={index}>
+                        <div className="form-group">
+                            <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
+                            <div className="form-control-wrap">
+                                
+                                <div className="form-control-select" >
+                                    <select className="form-control form-select" type="select" name={field.name} id={field.name} {...register(field.name, { required: 'This field is required' })} onChange={(e) => onInputChange({'field_name' : field.name, "field_value" : e.target.value, "field_type" : field.type})} defaultValue={initialValues[field.name]}> 
+                                        <option>Select Option</option>
+                                        {field.field_options && field.field_options.map((option, index) => (
+                                            <option key={index} value={option.option_value}>{option.option_name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
+                            </div>
+                        </div>
+                    </Col>
+                )
+            }
+             
+        })}
+
+
       </Row>
       <div className="actions clearfix">
         <ul>
           <li>
-            <Button color="primary" type="submit">
+            <Button color="primary" type="submit" onClick={nextProcess}>
               Next
             </Button>
           </li>
@@ -387,342 +171,417 @@ const PersonalForm = (props) => {
   );
 };
 
-const UserSettings = (props) => {
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-    rePassword: "",
-    terms: true,
-  });
+const TradingDetail = (props) => {
+    
+    
+    const authUser = useUser();
+    const authUserUpdate = useUserUpdate();
 
-  const onInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+    const dispatch = useDispatch();
 
-  const { handleSubmit, register, watch, formState: { errors } } = useForm();
+    const [parentState, setParentState] = useState('Initial state');
+    const [loading, setLoading] = useState(false);
+    const [modalForm, setModalForm] = useState(false);
+    
+    const { reset, register, handleSubmit, formState: { errors }, setValue, clearErrors } = useForm();
+    const fields = useSelector((state) => state?.application?.all_fields) || null;
 
-  const submitForm = (data) => {
-    props.next();
-  };
+    useEffect(() => {
+        dispatch(loadPageFields({"page" : "2", "category" : authUser.user_data.institution.category[0].id}));
+    }, [dispatch, parentState]);
+  
+    let initialValues = [];
 
-  const password = useRef();
-  password.current = watch("password");
+    if (fields) {
+      const fieldValues = fields.map((field) => ({ [field.name]: field.field_value?.uploaded_field ? field.field_value?.uploaded_field : null }))
+      initialValues = Object.assign({}, ...fieldValues);
+    //   console.log(initialValues, fieldValues)
+    }
+    
+    const onInputChange = async (values) => {
+        
+      if (!values.field_value || !values.field_name || !values.field_type) return
+        setValue(values.field_name, values.field_value)
+        clearErrors(values.field_name)
+        const postValues = new Object();
+        postValues.field_name = values.field_name;
+        postValues.field_value = values.field_value;
+        postValues.field_type = values.field_type;
+        postValues.category_id = authUser.user_data.institution.category[0].id;
+        
+        try {
+            
+            const resp = await dispatch(uploadField(postValues));
+
+            if (resp.payload?.message == "success") {
+                setParentState(Math.random())
+            } else {
+                
+            }
+            
+        } catch (error) {
+            
+      }
+    };
 
 
-  // const [inputValue1, setInputValue1] = useState('');
-  // const [inputValue2, setInputValue2] = useState('');
-  // const [checkboxChecked, setCheckboxChecked] = useState(false);
+    const submitForm = (data) => {
+        props.next()
+    };
+    
+    const nextProcess = () => {
+        console.log(errors)
+    }
+
+    
+    const onInputChangeTest = async (values) => {
+
+        console.log(values)
+     
+    };
 
 
   return (
     <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
-      <h3>Banking Licence</h3>
+      {/* <h3>Applicant Information</h3> */}
       <Row className="gy-4">
-        <Col md="12">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <label>
-              International Banking Licence
-            </label>
-            <input
-              type="checkbox"
-            // checked={checkboxChecked}
-            // onChange={() => setCheckboxChecked(!checkboxChecked)}
-            />
-          </div>
+              {fields && fields.map((field, index) => {
+            
+            if (field.type == 'text') {
+                return (
+                    <Col md="6" key={index}>
+                        <div className="form-group">
+                            <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
+                            <div className="form-control-wrap">
+                            <input type="text" id={field.name} className="form-control" {...register(field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({'field_name' : field.name, "field_value" : e.target.value, "field_type" : field.type})} defaultValue={initialValues[field.name]} />
+                            {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
+                            </div>
+                        </div>
+                    </Col>
+                )
+            } else if(field.type == 'date') {
+                
+                return (
+                    <Col md="6" key={index}>
+                        <div className="form-group">
+                            <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
+                            <div className="form-control-wrap">
+                                <DatePicker selected={initialValues[field.name] ? new Date(initialValues[field.name]) : new Date()}  {...register(field.name, { required: 'This field is required' })} id={field.name} onBlur={(e) => onInputChange({'field_name' : field.name, "field_value" : moment(e).format('YYYY-MM-DD'), "field_type" : field.type})} defaultValue={initialValues[field.name]} className="form-control date-picker" />
+                                {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
+                            </div>
+                        </div>
+                    </Col>
+                )
+            }else if(field.type == 'email') {
+                return (
+                    <Col md="6" key={index}>
+                        <div className="form-group">
+                            <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
+                            <div className="form-control-wrap">
+                                <input type="text" id={field.name} className="form-control" {...register(field.name, {required: 'This field is required', pattern: {value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: "Invalid email address"},})} onKeyUp={(e) => onInputChange({'field_name' : field.name, "field_value" : e.target.value, "field_type" : field.type})} defaultValue={initialValues[field.name]} />
+                            {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
+                            </div>
+                        </div>
+                    </Col>
+                )
+            }else if(field.type == 'number') {
+                return (
+                    <Col md="6" key={index}>
+                        <div className="form-group">
+                            <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
+                            <div className="form-control-wrap">
+                                <input type="number"  id={field.name} className="form-control" {...register(field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({'field_name' : field.name, "field_value" : e.target.value, "field_type" : field.type})} defaultValue={initialValues[field.name]}  />
+                                {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
+                            </div>
+                        </div>
+                    </Col>
+                )
+            } else if (field.type == 'select') {
+                return (
+                    <Col md="6" key={index}>
+                        <div className="form-group">
+                            <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
+                            <div className="form-control-wrap">
+                                
+                                <div className="form-control-select" >
+                                    <select className="form-control form-select" type="select" name={field.name} id={field.name} {...register(field.name, { required: 'This field is required' })} onChange={(e) => onInputChange({'field_name' : field.name, "field_value" : e.target.value, "field_type" : field.type})} defaultValue={initialValues[field.name]}> 
+                                        <option>Select Option</option>
+                                        {field.field_options && field.field_options.map((option, index) => (
+                                            <option key={index} value={option.option_value}>{option.option_name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
+                            </div>
+                        </div>
+                    </Col>
+                )
+            } else if (field.type == 'checkbox') {
+                
+                const checkedBoxes = JSON.parse(field.field_value.uploaded_field);
+                const checkedValues = (values) => {
+                    console.log(checkedBoxes)
+                    checkedBoxes[values.option_value] = values.field_value
+                    const field_value = JSON.stringify(checkedBoxes)
+                    onInputChange({'field_name' : field.name, "field_value" : field_value, "field_type" : field.type})
+                }  
+                return (
+                    <div  key={index}>
+                        <Col md="12">
+                            <div className="form-group">
+                                <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
+                                <div className="form-control-wrap">
+                                    <ul className="custom-control-group gy-4">
+                                        {field.field_options && field.field_options.map((option, index) => (
+                                            
+                                                <li key={index}>
+                                                    <div className="custom-control custom-checkbox custom-control-pro no-control checked">
+                                                        <input type="checkbox" className="custom-control-input" name="btnCheck" id={`btnCheck${index}`}  onChange={(e) => checkedValues({'option_value' : option.option_value, "field_value" : e.target.checked, "option_name" : option.option_name})} />
+                                                        <label className="custom-control-label" htmlFor={`btnCheck${index}`}>
+                                                            {option.option_name}
+                                                        </label>
+                                                    </div>
+                                                </li>
+                                        ))}
+                                        
+                                    </ul>
+                                    
+                                    {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
+                                </div>
+                            </div>
+                            <Row>
+                        {field.child_fields && field.child_fields.map((child_field, index) => {
+                            
+                            if (checkedBoxes.bonds && child_field.name == 'MonthlyAverageValueOfTradesPerProductBonds' ) {
+                               
+                                 return (
+                                    <Col md="12" key={index}>
+                                        <div className="form-group">
+                                            <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
+                                            <div className="form-control-wrap">
+                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={initialValues[child_field.name]} />
+                                                {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
+                                            </div>
+                                        </div>
+                                    </Col>
+                                )
 
-        </Col>
-        <Col md="12">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <label>
-              National Banking Licence
-            </label>
-            <input
-              type="checkbox"
-            // checked={checkboxChecked}
-            // onChange={() => setCheckboxChecked(!checkboxChecked)}
-            />
-          </div>
+                            }
+                            
+                            if (checkedBoxes.treasuryBills && child_field.name == 'MonthlyAverageValueOfTradesPerProductTreasuryBills' ) {
+                               
+                                 return (
+                                    <Col md="12" key={index}>
+                                        <div className="form-group">
+                                            <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
+                                            <div className="form-control-wrap">
+                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={initialValues[child_field.name]} />
+                                                {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
+                                            </div>
+                                        </div>
+                                    </Col>
+                                )
 
-        </Col>
-        <Col md="12">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <label >
-              Regional Banking Licence
-            </label>
-            <input
-              type="checkbox"
-            // checked={checkboxChecked}
-            // onChange={() => setCheckboxChecked(!checkboxChecked)}
-            />
-          </div>
-        </Col>
-      </Row>
-      <h4 style={{ marginTop: '30px' }}>Trading Details</h4>
-      <h5 style={{ marginTop: '30px' }}>Product of Interest:</h5>
-      <Row >
-        <div>
-          <table style={{ borderCollapse: 'collapse', width: '100%' }}>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Product</th>
-                <th>Monthly Average Value of Trades per Product (₦)</th>
-                <th>Average Trade Size per Transaction (₦)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: "20px" }}>
-                  <label>
-                    Bond
-                  </label>
-                  <input
-                    type="checkbox"
-                  // checked={checkboxChecked}
-                  // onChange={() => setCheckboxChecked(!checkboxChecked)}
-                  />
-                </td>
-                <td>
-                  <input style={{ width: '90%' }}
-                    type="text"
-                  // value={inputValue1}
-                  // onChange={(e) => setInputValue1(e.target.value)}
-                  />
-                </td>
-                <td>
-                  <input style={{ width: '100%' }}
-                    type="text"
-                  // value={inputValue2}
-                  // onChange={(e) => setInputValue2(e.target.value)}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: "20px" }}>
-                  <label>
-                    Commercial Papers
-                  </label>
-                  <input
-                    type="checkbox"
-                  // checked={checkboxChecked}
-                  // onChange={() => setCheckboxChecked(!checkboxChecked)}
-                  />
-                </td>
-                <td>
-                  <input style={{ width: '90%' }}
-                    type="text"
-                  // value={inputValue1}
-                  // onChange={(e) => setInputValue1(e.target.value)}
-                  />
-                </td>
-                <td>
-                  <input style={{ width: '100%' }}
-                    type="text"
-                  // value={inputValue2}
-                  // onChange={(e) => setInputValue2(e.target.value)}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: "20px" }}>
-                  <label>
-                    Futures
-                  </label>
-                  <input
-                    type="checkbox"
-                  // checked={checkboxChecked}
-                  // onChange={() => setCheckboxChecked(!checkboxChecked)}
-                  />
-                </td>
-                <td>
-                  <input style={{ width: '90%' }}
-                    type="text"
-                  // value={inputValue1}
-                  // onChange={(e) => setInputValue1(e.target.value)}
-                  />
-                </td>
-                <td>
-                  <input style={{ width: '100%' }}
-                    type="text"
-                  // value={inputValue2}
-                  // onChange={(e) => setInputValue2(e.target.value)}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>4</td>
-                <td style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: "20px" }}>
-                  <label>
-                    Loans
-                  </label>
-                  <input
-                    type="checkbox"
-                  // checked={checkboxChecked}
-                  // onChange={() => setCheckboxChecked(!checkboxChecked)}
-                  />
-                </td>
-                <td>
-                  <input style={{ width: '90%' }}
-                    type="text"
-                  // value={inputValue1}
-                  // onChange={(e) => setInputValue1(e.target.value)}
-                  />
-                </td>
-                <td>
-                  <input style={{ width: '100%' }}
-                    type="text"
-                  // value={inputValue2}
-                  // onChange={(e) => setInputValue2(e.target.value)}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>5</td>
-                <td style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: "20px" }}>
-                  <label>
-                    Wrapped
-                  </label>
-                  <input
-                    type="checkbox"
-                  // checked={checkboxChecked}
-                  // onChange={() => setCheckboxChecked(!checkboxChecked)}
-                  />
-                </td>
-                <td>
-                  <input style={{ width: '90%' }}
-                    type="text"
-                  // value={inputValue1}
-                  // onChange={(e) => setInputValue1(e.target.value)}
-                  />
-                </td>
-                <td>
-                  <input style={{ width: '100%' }}
-                    type="text"
-                  // value={inputValue2}
-                  // onChange={(e) => setInputValue2(e.target.value)}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>6</td>
-                <td style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: "20px" }}>
-                  <label>
-                    Quakes
-                  </label>
-                  <input
-                    type="checkbox"
-                  // checked={checkboxChecked}
-                  // onChange={() => setCheckboxChecked(!checkboxChecked)}
-                  />
-                </td>
-                <td>
-                  <input style={{ width: '90%' }}
-                    type="text"
-                  // value={inputValue1}
-                  // onChange={(e) => setInputValue1(e.target.value)}
-                  />
-                </td>
-                <td>
-                  <input style={{ width: '100%' }}
-                    type="text"
-                  // value={inputValue2}
-                  // onChange={(e) => setInputValue2(e.target.value)}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>7</td>
-                <td style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: "20px" }}>
-                  <label>
-                    Pay
-                  </label>
-                  <input
-                    type="checkbox"
-                  // checked={checkboxChecked}
-                  // onChange={() => setCheckboxChecked(!checkboxChecked)}
-                  />
-                </td>
-                <td>
-                  <input style={{ width: '90%' }}
-                    type="text"
-                  // value={inputValue1}
-                  // onChange={(e) => setInputValue1(e.target.value)}
-                  />
-                </td>
-                <td>
-                  <input style={{ width: '100%' }}
-                    type="text"
-                  // value={inputValue2}
-                  // onChange={(e) => setInputValue2(e.target.value)}
-                  />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </Row>
-      <h5 style={{ marginTop: '30px' }}>Direction of Trade</h5>
-      <Row >
-        <div>
-          <table style={{ borderCollapse: 'collapse', width: '100%' }}>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Direction</th>
-                <th>check</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td style={{ display: 'flex', gap: '50px', alignItems: 'center' }}>
-                  Buy
-                </td>
-                <td>
-                  <input
-                    type="checkbox"
-                  // checked={checkboxChecked}
-                  // onChange={() => setCheckboxChecked(!checkboxChecked)}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td style={{ display: 'flex', gap: '50px', alignItems: 'center' }}>
-                  Sell
-                </td>
-                <td>
-                  <input
-                    type="checkbox"
-                  // checked={checkboxChecked}
-                  // onChange={() => setCheckboxChecked(!checkboxChecked)}
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td style={{ display: 'flex', gap: '50px', alignItems: 'center' }}>
-                  Both
-                </td>
-                <td>
-                  <input
-                    type="checkbox"
-                  // checked={checkboxChecked}
-                  // onChange={() => setCheckboxChecked(!checkboxChecked)}
-                  />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+                            }
+                            if (checkedBoxes.commercialPapers && child_field.name == 'MonthlyAverageValueOfTradesPerProductCommercialPaper' ) {
+                               
+                                 return (
+                                    <Col md="12" key={index}>
+                                        <div className="form-group">
+                                            <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
+                                            <div className="form-control-wrap">
+                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={initialValues[child_field.name]} />
+                                                {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
+                                            </div>
+                                        </div>
+                                    </Col>
+                                )
+
+                            }
+                            if (checkedBoxes.moneyMarket && child_field.name == 'MonthlyAverageValueOfTradesPerProductMoneyMarket' ) {
+                               
+                                 return (
+                                    <Col md="12" key={index}>
+                                        <div className="form-group">
+                                            <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
+                                            <div className="form-control-wrap">
+                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={initialValues[child_field.name]} />
+                                                {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
+                                            </div>
+                                        </div>
+                                    </Col>
+                                )
+
+                            }
+                            if (checkedBoxes.foreignExchange && child_field.name == 'MonthlyAverageValueOfTradesPerProductForeignExchange' ) {
+                               
+                                 return (
+                                    <Col md="12" key={index}>
+                                        <div className="form-group">
+                                            <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
+                                            <div className="form-control-wrap">
+                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={initialValues[child_field.name]} />
+                                                {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
+                                            </div>
+                                        </div>
+                                    </Col>
+                                )
+
+                            }
+                            if (checkedBoxes.derivatives && child_field.name == 'MonthlyAverageValueOfTradesPerProductDerivatives' ) {
+                               
+                                 return (
+                                    <Col md="12" key={index}>
+                                        <div className="form-group">
+                                            <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
+                                            <div className="form-control-wrap">
+                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={initialValues[child_field.name]} />
+                                                {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
+                                            </div>
+                                        </div>
+                                    </Col>
+                                )
+
+                            }
+                            if (checkedBoxes.others && child_field.name == 'MonthlyAverageValueOfTradesPerProductOthers' ) {
+                               
+                                 return (
+                                    <Col md="12" key={index}>
+                                        <div className="form-group">
+                                            <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
+                                            <div className="form-control-wrap">
+                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={initialValues[child_field.name]} />
+                                                {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
+                                            </div>
+                                        </div>
+                                    </Col>
+                                )
+
+                            }
+                            if (checkedBoxes.bonds && child_field.name == 'AverageTradeSizePerTransactionBonds' ) {
+                               
+                                 return (
+                                    <Col md="12" key={index}>
+                                        <div className="form-group">
+                                            <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
+                                            <div className="form-control-wrap">
+                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={initialValues[child_field.name]} />
+                                                {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
+                                            </div>
+                                        </div>
+                                    </Col>
+                                )
+
+                            }
+                            if (checkedBoxes.treasuryBills && child_field.name == 'AverageTradeSizePerTransactionTreasuryBills' ) {
+                               
+                                 return (
+                                    <Col md="12" key={index}>
+                                        <div className="form-group">
+                                            <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
+                                            <div className="form-control-wrap">
+                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={initialValues[child_field.name]} />
+                                                {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
+                                            </div>
+                                        </div>
+                                    </Col>
+                                )
+
+                            }
+                            if (checkedBoxes.commercialPapers && child_field.name == 'AverageTradeSizePerTransactionCommercialPaper' ) {
+                               
+                                 return (
+                                    <Col md="12" key={index}>
+                                        <div className="form-group">
+                                            <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
+                                            <div className="form-control-wrap">
+                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={initialValues[child_field.name]} />
+                                                {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
+                                            </div>
+                                        </div>
+                                    </Col>
+                                )
+
+                            }
+                            if (checkedBoxes.moneyMarket && child_field.name == 'AverageTradeSizePerTransactionMoneyMarket' ) {
+                               
+                                 return (
+                                    <Col md="12" key={index}>
+                                        <div className="form-group">
+                                            <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
+                                            <div className="form-control-wrap">
+                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={initialValues[child_field.name]} />
+                                                {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
+                                            </div>
+                                        </div>
+                                    </Col>
+                                )
+
+                            }
+                            if (checkedBoxes.foreignExchange && child_field.name == 'AverageTradeSizePerTransactionForeignExchange' ) {
+                               
+                                 return (
+                                    <Col md="12" key={index}>
+                                        <div className="form-group">
+                                            <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
+                                            <div className="form-control-wrap">
+                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={initialValues[child_field.name]} />
+                                                {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
+                                            </div>
+                                        </div>
+                                    </Col>
+                                )
+
+                            }
+                            if (checkedBoxes.derivatives && child_field.name == 'AverageTradeSizePerTransactionDerivatives' ) {
+                               
+                                 return (
+                                    <Col md="12" key={index}>
+                                        <div className="form-group">
+                                            <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
+                                            <div className="form-control-wrap">
+                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={initialValues[child_field.name]} />
+                                                {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
+                                            </div>
+                                        </div>
+                                    </Col>
+                                )
+
+                            }
+                            if (checkedBoxes.others && child_field.name == 'AverageTradeSizePerTransactionOthers' ) {
+                               
+                                 return (
+                                    <Col md="12" key={index}>
+                                        <div className="form-group">
+                                            <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
+                                            <div className="form-control-wrap">
+                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={initialValues[child_field.name]} />
+                                                {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
+                                            </div>
+                                        </div>
+                                    </Col>
+                                )
+
+                            }
+                           
+                        })}
+                            </Row>
+
+                        
+                        </Col>
+                    </div>
+
+                )
+            }
+             
+        })}
+
+
       </Row>
       <div className="actions clearfix">
         <ul>
           <li>
-            <Button color="primary" type="submit">
+            <Button color="primary" type="submit" onClick={nextProcess}>
               Next
             </Button>
           </li>
@@ -735,134 +594,158 @@ const UserSettings = (props) => {
       </div>
     </form>
   );
+
 };
 
-const PaymentInfo = (props) => {
-  const [formData, setFormData] = useState({
-    name: "",
-    address: "",
-    telephone: "",
-    accountManagerNumber: "",
-    accountManagerEmail: "",
-    accountNumber: ""
-  });
+const DisplinaryHistory = (props) => {
 
-  const onInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+    
+    const authUser = useUser();
+    const authUserUpdate = useUserUpdate();
 
-  const { register, handleSubmit, formState: { errors } } = useForm();
+    const dispatch = useDispatch();
 
-  const submitForm = (data) => {
-    //window.location.reload();
-    props.next();
-  };
+    const [parentState, setParentState] = useState('Initial state');
+    const [loading, setLoading] = useState(false);
+    const [modalForm, setModalForm] = useState(false);
+    
+    const { reset, register, handleSubmit, formState: { errors }, setValue, clearErrors } = useForm();
+    const fields = useSelector((state) => state?.application?.all_fields) || null;
+
+    useEffect(() => {
+        dispatch(loadPageFields({"page" : "3", "category" : authUser.user_data.institution.category[0].id}));
+    }, [dispatch, parentState]);
+  
+    let initialValues = [];
+
+    if (fields) {
+      const fieldValues = fields.map((field) => ({ [field.name]: field.field_value?.uploaded_field ? field.field_value?.uploaded_field : null }))
+      initialValues = Object.assign({}, ...fieldValues);
+    //   console.log(initialValues, fieldValues)
+    }
+  
+    const onInputChange = async (values) => {
+        
+      if (!values.field_value || !values.field_name || !values.field_type) return
+        setValue(values.field_name, values.field_value)
+        clearErrors(values.field_name)
+        const postValues = new Object();
+        postValues.field_name = values.field_name;
+        postValues.field_value = values.field_value;
+        postValues.field_type = values.field_type;
+        postValues.category_id = authUser.user_data.institution.category[0].id;
+        
+        try {
+            
+            const resp = await dispatch(uploadField(postValues));
+
+            if (resp.payload?.message == "success") {
+                setParentState(Math.random())
+            } else {
+                
+            }
+            
+        } catch (error) {
+            
+      }
+    };
+
+
+    const submitForm = (data) => {
+        initialValues = []
+        props.next()
+    };
+    
+    const nextProcess = () => {
+        console.log(errors)
+    }
+
 
   return (
     <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
-      <h3>Bank Details</h3>
-      <Row className="gy-3">
-        <Col md="6">
-          <div className="form-group">
-            <label className="form-label" htmlFor="name">
-              Name
-            </label>
-            <div className="form-control-wrap">
-              <input
-                type="text"
-                className="form-control"
-                id="name"
-                {...register('tokenAddress', { required: true })}
-                onChange={(e) => onInputChange(e)} />
-              {errors.name && <span className="invalid">This field is required</span>}
-            </div>
-          </div>
-        </Col>
-        <Col md="6">
-          <div className="form-group">
-            <label className="form-label" htmlFor="address">
-              Address
-            </label>
-            <div className="form-control-wrap">
-              <input
-                type="text"
-                className="form-control"
-                id="address"
-                {...register('address', { required: true })}
-                onChange={(e) => onInputChange(e)} />
-              {errors.address && <span className="invalid">This field is required</span>}
-            </div>
-          </div>
-        </Col>
-        <Col md="6">
-          <div className="form-group">
-            <label className="form-label" htmlFor="telephone">
-              Telephone Number
-            </label>
-            <div className="form-control-wrap">
-              <input
-                type="text"
-                className="form-control"
-                id="telephone"
-                {...register('telephone', { required: true })}
-                onChange={(e) => onInputChange(e)} />
-              {errors.telephone && <span className="invalid">This field is required</span>}
-            </div>
-          </div>
-        </Col>
-        <Col md="6">
-          <div className="form-group">
-            <label className="form-label" htmlFor="account-manager-number">
-              Mobile Number of Account Manager
-            </label>
-            <div className="form-control-wrap">
-              <input
-                type="text"
-                className="form-control"
-                id="account-manager-number"
-                {...register('accountManagerNumber', { required: true })}
-                onChange={(e) => onInputChange(e)} />
-              {errors.accountManagerNumber && <span className="invalid">This field is required</span>}
-            </div>
-          </div>
-        </Col>
-        <Col md="6">
-          <div className="form-group">
-            <label className="form-label" htmlFor="account-manager-email">
-              Email Address of Account Manager
-            </label>
-            <div className="form-control-wrap">
-              <input
-                type="text"
-                className="form-control"
-                id="account-manager-email"
-                {...register('accountManagerEmail', { required: true })}
-                onChange={(e) => onInputChange(e)} />
-              {errors.accountManagerEmail && <span className="invalid">This field is required</span>}
-            </div>
-          </div>
-        </Col>
-        <Col md="6">
-          <div className="form-group">
-            <label className="form-label" htmlFor="corporate-account-number">
-              Corporate Account Number
-            </label>
-            <div className="form-control-wrap">
-              <input
-                type="text"
-                className="form-control"
-                id="corporate-account-number"
-                {...register('accountNumber', { required: true })}
-                onChange={(e) => onInputChange(e)} />
-              {errors.accountNumber && <span className="invalid">This field is required</span>}
-            </div>
-          </div>
-        </Col>
+      {/* <h3>Applicant Information</h3> */}
+      <Row className="gy-4">
+              {fields && fields.map((field, index) => {
+            
+            if (field.type == 'text') {
+                return (
+                    <Col md="6" key={index}>
+                    <div className="form-group">
+                        <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
+                        <div className="form-control-wrap">
+                        <input type="text" id={field.name} className="form-control" {...register(field.name, { required: 'This field is required' })} onInput={(e) => onInputChange({'field_name' : field.name, "field_value" : e.target.value, "field_type" : field.type})} defaultValue={initialValues[field.name]} />
+                        {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
+                        </div>
+                    </div>
+                    </Col>
+                )
+            } else if(field.type == 'date') {
+                
+                return (
+                    <Col md="6" key={index}>
+                        <div className="form-group">
+                            <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
+                            <div className="form-control-wrap">
+                                <DatePicker selected={initialValues[field.name] ? new Date(initialValues[field.name]) : new Date()}  {...register(field.name, { required: 'This field is required' })} id={field.name} onChange={(e) => onInputChange({'field_name' : field.name, "field_value" : moment(e).format('YYYY-MM-DD'), "field_type" : field.type})} defaultValue={initialValues[field.name]} className="form-control date-picker" />
+                                {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
+                            </div>
+                        </div>
+                    </Col>
+                )
+            }else if(field.type == 'email') {
+                return (
+                    <Col md="6" key={index}>
+                        <div className="form-group">
+                            <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
+                            <div className="form-control-wrap">
+                                <input type="text" id={field.name} className="form-control" {...register(field.name, {required: 'This field is required', pattern: {value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: "Invalid email address"},})} onKeyUp={(e) => onInputChange({'field_name' : field.name, "field_value" : e.target.value, "field_type" : field.type})} defaultValue={initialValues[field.name]} />
+                            {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
+                            </div>
+                        </div>
+                    </Col>
+                )
+            }else if(field.type == 'number') {
+                return (
+                    <Col md="6" key={index}>
+                        <div className="form-group">
+                            <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
+                            <div className="form-control-wrap">
+                                <input type="number"  id={field.name} className="form-control" {...register(field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({'field_name' : field.name, "field_value" : e.target.value, "field_type" : field.type})} defaultValue={initialValues[field.name]}  />
+                                {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
+                            </div>
+                        </div>
+                    </Col>
+                )
+            } else if (field.type == 'select') {
+                return (
+                    <Col md="6" key={index}>
+                        <div className="form-group">
+                            <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
+                            <div className="form-control-wrap">
+                                
+                                <div className="form-control-select" >
+                                    <select className="form-control form-select" type="select" name={field.name} id={field.name} {...register(field.name, { required: 'This field is required' })} onChange={(e) => onInputChange({'field_name' : field.name, "field_value" : e.target.value, "field_type" : field.type})} defaultValue={initialValues[field.name]}> 
+                                        <option>Select Option</option>
+                                        {field.field_options && field.field_options.map((option, index) => (
+                                            <option key={index} value={option.option_value}>{option.option_name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
+                            </div>
+                        </div>
+                    </Col>
+                )
+            }
+             
+        })}
+
+
       </Row>
       <div className="actions clearfix">
         <ul>
           <li>
-            <Button color="primary" onClick={props.next}>
+            <Button color="primary" type="submit" onClick={nextProcess}>
               Next
             </Button>
           </li>
@@ -871,7 +754,6 @@ const PaymentInfo = (props) => {
               Previous
             </Button>
           </li>
-
         </ul>
       </div>
     </form>
@@ -2268,6 +2150,11 @@ const config = {
 };
 
 const Form = () => {
+    
+    
+    const authUser = useUser();
+    const authUserUpdate = useUserUpdate();
+
   const [loading, setLoading] = useState(false);
   const [passState, setPassState] = useState(false);
   const [errorVal, setError] = useState("");
@@ -2299,14 +2186,14 @@ const Form = () => {
       <div style={{ 'margin': '0px 10px !important' }}>
         <div style={styles.card}>
           <div style={styles.color}>
-            <h2>Dealing Member (Banks) Application</h2>
+            <h2>{`${authUser.user_data.institution.category[0].name} Application`} </h2>
             <p>Please fill forms to complete your application</p>
           </div>
           <div className="nk-wizard nk-wizard-simple is-alter wizard clearfix">
             <Steps config={config}>
-              <Step component={PersonalForm} />
-              <Step component={UserSettings} />
-              <Step component={PaymentInfo} />
+              <Step component={ApplicantInformation} />
+              <Step component={TradingDetail} />
+              <Step component={DisplinaryHistory} />
               <Step component={StepFive} />
               <Step component={StepSix} />
               <Step component={StepSeven} />

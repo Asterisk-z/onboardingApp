@@ -61,6 +61,7 @@
     "reactstrap": "^9.1.5",
     "redux": "^4.2.1",
     "sass": "1.56.1",
+    "select2": "^4.1.0-rc.0",
     "simplebar-react": "^2.4.3",
     "slick-carousel": "^1.8.1",
     "styled-components": "^5.3.6",

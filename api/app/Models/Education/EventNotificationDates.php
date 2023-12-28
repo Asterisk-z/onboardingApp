@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Education;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Application extends Model
+class EventNotificationDates extends Model
 {
     use HasFactory;
+    protected $guarded = ['id'];
 
-    protected $guarded = [];
 }
