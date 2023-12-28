@@ -53,7 +53,7 @@ const navData = [{
     },
     {
     icon: "dashboard-fill",
-    text: "Disciplinary and Sanctions",
+    text: "Disciplinary and Sanctions History",
     link: "/admin-sanctions",
   },
   {
@@ -130,7 +130,7 @@ const navData = [{
    },
   {
     icon: "tile-thumb-fill",
-    text: "Disciplinary and Sanctions",
+    text: "Disciplinary and Sanctions History",
     access: ['cco'],
     link: "/sanctions",
   },

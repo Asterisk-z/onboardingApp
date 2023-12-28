@@ -20,6 +20,7 @@ class CreateCompetencyFrameworksTable extends Migration
             $table->string('position');
             $table->string('member_category');
             $table->tinyInteger('is_del')->default(0);
+            $table->string('created_by');
             $table->timestamps();
         });
     }

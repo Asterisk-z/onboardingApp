@@ -3,6 +3,7 @@
 use App\Http\Controllers\ARController;
 use App\Http\Controllers\AuditController;
 use App\Http\Controllers\BroadcastMessageController;
+use App\Http\Controllers\CompetencyController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\ComplaintTypeController;
 use App\Http\Controllers\InstitutionController;
@@ -67,7 +68,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/logs', [AuditController::class, 'userLog']);
     });
 
-    //MEG ROUTES
+    // MEG ROUTES
     Route::middleware('authRole:' . Role::MEG)->group(function () {
         // complaint
         Route::group(['prefix' => 'complaint'],  function () {
@@ -132,9 +133,16 @@ Route::middleware('auth')->group(function () {
         Route::group(['prefix' => 'disciplinary-sanctions'],  function () {
             Route::get('/list_all', [SanctionsController::class, 'index']);
         });
+        // competency
+        Route::group(['prefix' => 'meg/competency-framework'],  function () {
+            Route::get('/list-all', [CompetencyController::class, 'listAll']);
+            Route::post('/create', [CompetencyController::class, 'store']);
+            Route::post('/update/{id}', [CompetencyController::class, 'update']);
+            Route::get('/update-status/{id}', [CompetencyController::class, 'updateStatus']);
+        });
     });
 
-    // CCO and MEG ROUTES
+    // CCO ROUTES
     Route::middleware('cco')->group(function () {
         // sanctions
         Route::group(['prefix' => 'disciplinary-sanctions'], function () {
@@ -170,11 +178,14 @@ Route::middleware('auth')->group(function () {
             Route::post('/change-status/{ARUser}', [ARController::class, 'changeStatus']);
             Route::post('/process-change-status/{record}', [ARController::class, 'processChangeStatus']);
         });
-
+        //
         Route::group(['prefix' => 'regulators'], function () {
             Route::get('/list', [RegulatorsController::class, 'list']);
         });
-
+        //
+        Route::group(['prefix' => 'competency'], function () {
+            Route::get('/list-active', [CompetencyController::class, 'listActive']);
+        });
     });
 
     Route::group(['prefix' => 'user'], function () {
