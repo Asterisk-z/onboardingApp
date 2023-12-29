@@ -13,60 +13,75 @@ import { megProcessTransferUserAR } from "redux/stores/authorize/representative"
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 import Swal from "sweetalert2";
 
+
 const Export = ({ data }) => {
-  const [modal, setModal] = useState(false);
+    const [modal, setModal] = useState(false);
 
-  useEffect(() => {
-    if (modal === true) {
-      setTimeout(() => setModal(false), 2000);
-    }
-  }, [modal]);
+    useEffect(() => {
+        if (modal === true) {
+        setTimeout(() => setModal(false), 2000);
+        }
+    }, [modal]);
 
-  const fileName = "data";
+    const newData = data.map((item) => {
+        return ({
+            "IID": item.id,
+            "Name": `${item.name}`,
+            "Categories": item.category.map((cat) => cat.name).toString(),
+            "Total ARs": item.ars.length,
+            "Status": `Pending Registration`,
+            "Date Created": moment(item.createdAt).format('MMM. DD, YYYY HH:mm')
+        })
+    });
 
-  const exportCSV = () => {
-    const exportType = exportFromJSON.types.csv;
-    exportFromJSON({ data, fileName, exportType });
-  };
+    const fileName = "data";
 
-  const exportExcel = () => {
-    const exportType = exportFromJSON.types.xls;
-    exportFromJSON({ data, fileName, exportType });
-  };
+    const exportCSV = () => {
+        const exportType = exportFromJSON.types.csv;
+        exportFromJSON({ data: newData, fileName: fileName, exportType: exportType });
 
-  const copyToClipboard = () => {
-    setModal(true);
-  };
+    };
 
-  return (
-    <React.Fragment>
-      <div className="dt-export-buttons d-flex align-center">
-        <div className="dt-export-title d-none d-md-inline-block">Export</div>
-        <div className="dt-buttons btn-group flex-wrap">
-          <CopyToClipboard text={JSON.stringify(data)}>
-            <Button className="buttons-copy buttons-html5" onClick={() => copyToClipboard()}>
-              <span>Copy</span>
-            </Button>
-          </CopyToClipboard>{" "}
-          <button className="btn btn-secondary buttons-csv buttons-html5" type="button" onClick={() => exportCSV()}>
-            <span>CSV</span>
-          </button>{" "}
-          <button className="btn btn-secondary buttons-excel buttons-html5" type="button" onClick={() => exportExcel()}>
-            <span>Excel</span>
-          </button>{" "}
+    const exportExcel = () => {
+        const exportType = exportFromJSON.types.xls;
+        exportFromJSON({ data: newData, fileName: fileName, exportType: exportType });
+
+    };
+
+    const copyToClipboard = () => {
+        setModal(true);
+    };
+
+    return (
+        <React.Fragment>
+        <div className="dt-export-buttons d-flex align-center">
+            <div className="dt-export-title d-none d-md-inline-block">Export</div>
+            <div className="dt-buttons btn-group flex-wrap">
+            <CopyToClipboard text={JSON.stringify(newData)}>
+                <Button className="buttons-copy buttons-html5" onClick={() => copyToClipboard()}>
+                <span>Copy</span>
+                </Button>
+            </CopyToClipboard>{" "}
+            <button className="btn btn-secondary buttons-csv buttons-html5" type="button" onClick={() => exportCSV()}>
+                <span>CSV</span>
+            </button>{" "}
+            <button className="btn btn-secondary buttons-excel buttons-html5" type="button" onClick={() => exportExcel()}>
+                <span>Excel</span>
+            </button>{" "}
+            </div>
         </div>
-      </div>
-      <Modal isOpen={modal} className="modal-dialog-centered text-center" size="sm">
-        <ModalBody className="text-center m-2">
-          <h5>Copied to clipboard</h5>
-        </ModalBody>
-        <div className="p-3 bg-light">
-          <div className="text-center">Copied {data.length} rows to clipboard</div>
-        </div>
-      </Modal>
-    </React.Fragment>
-  );
+        <Modal isOpen={modal} className="modal-dialog-centered text-center" size="sm">
+            <ModalBody className="text-center m-2">
+                <h5>Copied to clipboard</h5>
+            </ModalBody>
+            <div className="p-3 bg-light">
+                <div className="text-center">Copied {newData.length} rows to clipboard</div>
+            </div>
+        </Modal>
+        </React.Fragment>
+    );
 };
+
 
 const ActionTab = (props) => {
         

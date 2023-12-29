@@ -16,20 +16,32 @@ const Export = ({ data }) => {
 
     useEffect(() => {
         if (modal === true) {
-            setTimeout(() => setModal(false), 2000);
+        setTimeout(() => setModal(false), 2000);
         }
     }, [modal]);
+
+    const newData = data.map((item) => {
+        return ({
+            "PID": item.id,
+            "Name": `${item.name}`,
+            "Website": item.url,
+            "Status": item.active,
+            "Date Created": moment(item.createdAt).format('MMM. DD, YYYY HH:mm')
+        })
+    });
 
     const fileName = "data";
 
     const exportCSV = () => {
         const exportType = exportFromJSON.types.csv;
-        exportFromJSON({ data, fileName, exportType });
+        exportFromJSON({ data: newData, fileName: fileName, exportType: exportType });
+
     };
 
     const exportExcel = () => {
         const exportType = exportFromJSON.types.xls;
-        exportFromJSON({ data, fileName, exportType });
+        exportFromJSON({ data: newData, fileName: fileName, exportType: exportType });
+
     };
 
     const copyToClipboard = () => {
@@ -38,30 +50,30 @@ const Export = ({ data }) => {
 
     return (
         <React.Fragment>
-            <div className="dt-export-buttons d-flex align-center">
-                <div className="dt-export-title d-none d-md-inline-block">Export</div>
-                <div className="dt-buttons btn-group flex-wrap">
-                    <CopyToClipboard text={JSON.stringify(data)}>
-                        <Button className="buttons-copy buttons-html5" onClick={() => copyToClipboard()}>
-                            <span>Copy</span>
-                        </Button>
-                    </CopyToClipboard>{" "}
-                    <button className="btn btn-secondary buttons-csv buttons-html5" type="button" onClick={() => exportCSV()}>
-                        <span>CSV</span>
-                    </button>{" "}
-                    <button className="btn btn-secondary buttons-excel buttons-html5" type="button" onClick={() => exportExcel()}>
-                        <span>Excel</span>
-                    </button>{" "}
-                </div>
+        <div className="dt-export-buttons d-flex align-center">
+            <div className="dt-export-title d-none d-md-inline-block">Export</div>
+            <div className="dt-buttons btn-group flex-wrap">
+            <CopyToClipboard text={JSON.stringify(newData)}>
+                <Button className="buttons-copy buttons-html5" onClick={() => copyToClipboard()}>
+                <span>Copy</span>
+                </Button>
+            </CopyToClipboard>{" "}
+            <button className="btn btn-secondary buttons-csv buttons-html5" type="button" onClick={() => exportCSV()}>
+                <span>CSV</span>
+            </button>{" "}
+            <button className="btn btn-secondary buttons-excel buttons-html5" type="button" onClick={() => exportExcel()}>
+                <span>Excel</span>
+            </button>{" "}
             </div>
-            <Modal isOpen={modal} className="modal-dialog-centered text-center" size="sm">
-                <ModalBody className="text-center m-2">
-                    <h5>Copied to clipboard</h5>
-                </ModalBody>
-                <div className="p-3 bg-light">
-                    <div className="text-center">Copied {data.length} rows to clipboard</div>
-                </div>
-            </Modal>
+        </div>
+        <Modal isOpen={modal} className="modal-dialog-centered text-center" size="sm">
+            <ModalBody className="text-center m-2">
+                <h5>Copied to clipboard</h5>
+            </ModalBody>
+            <div className="p-3 bg-light">
+                <div className="text-center">Copied {newData.length} rows to clipboard</div>
+            </div>
+        </Modal>
         </React.Fragment>
     );
 };
@@ -304,7 +316,7 @@ const AdminRegulatorTable = ({ data, pagination, actions, className, selectableR
     useEffect(() => {
         setTableData(data)
     }, [data]);
-    
+
 
     useEffect(() => {
         let defaultData = tableData;

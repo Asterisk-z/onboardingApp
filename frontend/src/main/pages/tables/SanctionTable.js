@@ -18,15 +18,15 @@ const Export = ({ data }) => {
 
     const newData = data.map((item) => {
         return ({
-            "UID ID": item.id,
-            "Institution": `${item.new_institution.category[0].name}`,
-            "Email": item.ar.email,
-            "Status": item.approval_status,
-            "Role": item.ar.role.name,
+            "ID": item.id,
+            "Sanction Summary": `${item.sanction_summary}`,
+            "AR Summary": item.ar_summary,
+            "CCO": item.sanctioner.full_name,
+            "AR": item.sanctionee.full_name_with_mail,
             "Date Created": moment(item.createdAt).format('MMM. DD, YYYY HH:mm')
         })
     });
-
+  
     const fileName = "data";
 
     const exportCSV = () => {
