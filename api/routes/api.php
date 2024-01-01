@@ -3,6 +3,7 @@
 use App\Http\Controllers\ARController;
 use App\Http\Controllers\AuditController;
 use App\Http\Controllers\BroadcastMessageController;
+use App\Http\Controllers\CompetencyController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\ComplaintTypeController;
 use App\Http\Controllers\EventController;
@@ -36,7 +37,7 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('/login', [UsersController::class, 'login']);
     Route::post('/register', [UsersController::class, 'register']);
 
-    Route::prefix('password')->group(function () { 
+    Route::prefix('password')->group(function () {
         Route::post('/change', [PasswordController::class, 'changePassword'])->middleware('throttle:10,5');
         Route::post('/set', [PasswordController::class, 'setPassword'])->middleware('throttle:10,5');
 
@@ -70,7 +71,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/logs', [AuditController::class, 'userLog']);
     });
 
-    //MEG ROUTES
+    // MEG ROUTES
     Route::middleware('authRole:' . Role::MEG)->group(function () {
         // complaint
         Route::group(['prefix' => 'complaint'],  function () {
@@ -135,9 +136,16 @@ Route::middleware('auth')->group(function () {
         Route::group(['prefix' => 'disciplinary-sanctions'],  function () {
             Route::get('/list_all', [SanctionsController::class, 'index']);
         });
+        // competency
+        Route::group(['prefix' => 'meg/competency-framework'],  function () {
+            Route::get('/list-all', [CompetencyController::class, 'listAll']);
+            Route::post('/create', [CompetencyController::class, 'store']);
+            Route::post('/update/{id}', [CompetencyController::class, 'update']);
+            Route::get('/update-status/{id}', [CompetencyController::class, 'updateStatus']);
+        });
     });
 
-    // CCO and MEG ROUTES
+    // CCO ROUTES
     Route::middleware('cco')->group(function () {
         // sanctions
         Route::group(['prefix' => 'disciplinary-sanctions'], function () {
@@ -173,11 +181,14 @@ Route::middleware('auth')->group(function () {
             Route::post('/change-status/{ARUser}', [ARController::class, 'changeStatus']);
             Route::post('/process-change-status/{record}', [ARController::class, 'processChangeStatus']);
         });
-
+        //
         Route::group(['prefix' => 'regulators'], function () {
             Route::get('/list', [RegulatorsController::class, 'list']);
         });
-
+        //
+        Route::group(['prefix' => 'competency'], function () {
+            Route::get('/list-active', [CompetencyController::class, 'listActive']);
+        });
         Route::group(['prefix' => 'membership'], function () {
             Route::get('application/fields', [MembershipApplicationController::class, 'getField']);
             Route::get('application/field/option', [MembershipApplicationController::class, 'getFieldOption']);
@@ -211,7 +222,6 @@ Route::middleware('auth')->group(function () {
         Route::middleware('authRole:' . Role::ARAUTHORISER . ',' . Role::ARINPUTTER)->group(function () {
             Route::post('/register/{event}', [EventController::class, 'register']);
         });
-
     });
 });
 

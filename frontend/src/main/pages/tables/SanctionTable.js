@@ -152,14 +152,14 @@ const sanctionColumn = [
     width: "150px",
   },
   {
-    name: "Sanctioner",
+    name: "CCO",
     selector: (row) => row.sanctioner.full_name,
     sortable: true,
     width: "auto",
     wrap: true
   },
   {
-    name: "Sanctionee",
+    name: "AR",
     selector: (row) => row.sanctionee.full_name_with_mail,
     sortable: true,
     width: "auto",
