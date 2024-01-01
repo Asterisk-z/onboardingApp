@@ -229,7 +229,7 @@ class EventController extends Controller
         $requestedPositions = $request->input('positions', []);
 
         //Notify newly added AR
-        if($requestedPositions)
+        if ($requestedPositions)
             $this->addInviteesToEvent($event, $requestedPositions);
 
         $event->refresh();
@@ -256,7 +256,8 @@ class EventController extends Controller
     }
 
     //Change to re-useable method
-    protected function addInviteesToEvent(Event $event, $positions){
+    protected function addInviteesToEvent(Event $event, $positions)
+    {
         // Get the existing positions for the event
         $existingPositions = $event->invitePosition()->pluck('position_id')->toArray();
 
@@ -275,7 +276,7 @@ class EventController extends Controller
             ];
         }
 
-        if($newPositionToAdd){
+        if ($newPositionToAdd) {
             EventInvitePosition::insert($newPositionToAdd);
         }
 
@@ -284,8 +285,14 @@ class EventController extends Controller
             ->whereIn('position_id', $positionsToRemove)
             ->delete();
 
+
+
+        $event->update([
+            'last_reminder_date' => now(),
+        ]);
+
         //SEND NOTIFICATION TO ADDED POSITIONS
-        if($newPositionToAdd){
+        if ($newPositionToAdd) {
             EventNotificationUtility::eventAdded($event->refresh());
         }
 
@@ -384,7 +391,7 @@ class EventController extends Controller
         logAction($request->user()->email, 'Register for Event', $logMessage, $request->ip());
 
         //Notify FSD Cc MBG and MEG For payment Approval
-        if ($event->fee > 0){
+        if ($event->fee > 0) {
             EventNotificationUtility::pendingPaymentEventRegistration($eventReg);
         }
 
@@ -416,7 +423,7 @@ class EventController extends Controller
 
         //Change approved status to registered
         $eventReg->update([
-            'status' => ($request->status == "Approved") ? EventRegistration::STATUS_APPROVED : EventRegistration::STATUS_DECLINED, 
+            'status' => ($request->status == "Approved") ? EventRegistration::STATUS_APPROVED : EventRegistration::STATUS_DECLINED,
             'admin_remark' => $request->reason
         ]);
 
