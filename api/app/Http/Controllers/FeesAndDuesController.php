@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class FeesAndDuesController extends Controller
 {
     //
-    public function index()
+    public function listAll()
     {
         $fees = FeesAndDues::orderBy('created_at', 'DESC')->get();
 
@@ -74,9 +74,9 @@ class FeesAndDuesController extends Controller
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'Does not exist');
         }
         //
-        FeesAndDues::where('status', true)->update(['status' => false]);
+        FeesAndDues::where('is_del', 0)->update(['is_del' => 1]);
         //
-        $fees->update(['status', 1]);
+        $fees->update(['is_del', 1]);
         // $fees->status = 1;
         // $update = $fees->update();
         //
@@ -84,5 +84,12 @@ class FeesAndDuesController extends Controller
         $logMessage = $user->email . ' updated the status FMDQ Fees and Dues Framework';
         logAction($user->email, 'Updated Status the Fees and Dues Framework', $logMessage, $request->ip());
         return successResponse('Status Updated Successfully');
+    }
+    //
+    public function listCurrent()
+    {
+        $fees = FeesAndDues::where('is_del', 0)->orderBy('created_at', 'DESC')->first();
+
+        return successResponse('Successful', $fees);
     }
 }

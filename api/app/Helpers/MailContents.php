@@ -11,7 +11,7 @@ class MailContents
 
     public static function signupMail($email, $date, $signature): string
     {
-        $url = config('app.front_end_url')."/set/password?signature=".$signature;
+        $url = config('app.front_end_url') . "/set/password?signature=" . $signature;
 
         return "<p>Your account has been successfully created.</p>
         <p>Your login details are as follows:</p>
@@ -106,5 +106,15 @@ class MailContents
             <li>AR Summary<strong>{$ar_summary}</strong></li>
             <li>Sanction Summary<strong>{$sanction_summary}</strong></li>
         </ul>";
+    }
+
+    public static function submitCompetencySubject(): string
+    {
+        return "Competency Submitted";
+    }
+
+    public static function submitCompetencyMessage(): string
+    {
+        return "<p>A new competency has been submitted.</p>";
     }
 }
