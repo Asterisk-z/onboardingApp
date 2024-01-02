@@ -86,7 +86,6 @@ class UsersController extends Controller
             'nationality' => $request->input('nationality'),
             'email' => $request->input('email'),
             'phone' => $request->input('phone'),
-            'password' => Hash::make($request->input('password')),
             'approval_status' => 'approved',
             'role_id' => Role::ARINPUTTER,
             'institution_id' => $institution->id,
@@ -95,9 +94,11 @@ class UsersController extends Controller
             'verified_at' => now(),
         ]);
 
-        $password = PasswordSet::create([
+        $signature = Str::random(30);
+
+        PasswordSet::create([
             "email" => $user->email,
-            "signature" => crypt::encrypt(Str::random(30))
+            "signature" => $signature
         ]);
 
         Application::create([
@@ -106,13 +107,11 @@ class UsersController extends Controller
             'status' => 'pending',
         ]);
 
-        $regID = $user->getRegID();
-
         logAction($request->email, 'Successful User Registration', 'Registration Successful', $request->ip());
 
         $membership = MembershipCategory::find($request->input('category'));
 
-        $user->notify(new InfoNotification(MailContents::signupMail($user->email, $user->created_at->format('Y-m-d'), $password->signature), MailContents::signupMailSubject()));
+        $user->notify(new InfoNotification(MailContents::signupMail($user->email, $user->created_at->format('Y-m-d'), crypt::encrypt($signature)), MailContents::signupMailSubject()));
 
         $MEGs = Utility::getUsersByCategory(Role::MEG);
         if (count($MEGs)) {
