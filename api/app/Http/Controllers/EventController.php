@@ -20,8 +20,12 @@ use Illuminate\Validation\Rule;
 
 class EventController extends Controller
 {
-    public function view(Event $event)
+    public function view($eventId)
     {
+        if(! $event = Event::find($eventId)){
+            return errorResponse(ResponseStatusCodes::BAD_REQUEST, "Record not found");
+        }
+
         return successResponse('Successful', EventResource::make($event));
     }
 
@@ -222,6 +226,8 @@ class EventController extends Controller
             $logMessage = "Updated an Event: $event->name";
             logAction($request->user()->email, 'Update Event', $logMessage, $request->ip());
 
+            $event->refresh();
+
             EventNotificationUtility::eventUpdated($event);
         }
 
@@ -232,7 +238,6 @@ class EventController extends Controller
         if ($requestedPositions)
             $this->addInviteesToEvent($event, $requestedPositions);
 
-        $event->refresh();
         return successResponse('Successful', EventResource::make($event));
     }
 
@@ -285,8 +290,6 @@ class EventController extends Controller
             ->whereIn('position_id', $positionsToRemove)
             ->delete();
 
-
-
         $event->update([
             'last_reminder_date' => now(),
         ]);
@@ -301,10 +304,8 @@ class EventController extends Controller
 
     public function delete(Request $request, $eventID)
     {
-        // did not inject the model so even already existing records can return success
+        // did not inject the model so even already deleted records can return success
         $event = Event::find($eventID);
-
-        $eventName = $event->name;
 
         if ($event) {
 
@@ -346,7 +347,7 @@ class EventController extends Controller
                         $formattedDates[] = $trimmedDate;
                     } else {
                         // Handle past date
-                        return 'Invalid date: ' . $trimmedDate . ' (is in the past)';
+                        return 'Invalid date: ' . $trimmedDate . ' is in the past';
                     }
                 } else {
                     // Handle invalid PHP date
@@ -402,6 +403,7 @@ class EventController extends Controller
     {
 
         $records = EventRegistration::with(['user', 'event'])->where('user_id', $request->user()->id)->latest()->get();
+
         return successResponse('Successful', EventRegistrationWithEventResource::collection($records));
     }
 
@@ -410,7 +412,6 @@ class EventController extends Controller
         $records = EventRegistration::with(['user', 'event'])->where('event_id', $event->id)->latest()->get();
         return successResponse('Successful', EventRegistrationWithEventResource::collection($records));
     }
-
 
     public function approveEventRegistration(Request $request, EventRegistration $eventReg)
     {
@@ -422,10 +423,9 @@ class EventController extends Controller
         $oldStatus = $eventReg->status;
 
         //Change approved status to registered
-        $eventReg->update([
-            'status' => ($request->status == "Approved") ? EventRegistration::STATUS_APPROVED : EventRegistration::STATUS_DECLINED,
-            'admin_remark' => $request->reason
-        ]);
+        $eventReg->status = ($request->status == "Approved") ? EventRegistration::STATUS_APPROVED : EventRegistration::STATUS_DECLINED;
+        $eventReg->admin_remark = $request->reason;
+        $eventReg->save();
 
         $logMessage = "Updated Event Registration Status from $oldStatus to $eventReg->status  (# $eventReg->id)";
         logAction($request->user()->email, 'Update Event Registration Status', $logMessage, $request->ip());

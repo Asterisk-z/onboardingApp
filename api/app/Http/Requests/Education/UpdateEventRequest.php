@@ -40,7 +40,7 @@ class UpdateEventRequest extends FormRequest
             'registered_remainder_dates' => 'sometimes|nullable|string',
             'unregistered_remainder_frequency' => 'sometimes|nullable|in:Daily,Weekly,Monthly',
             'unregistered_remainder_dates' => 'sometimes|nullable|string',
-            'positions' => 'sometimes|array', // Ensure 'positions' is present and is an array
+            'positions' => 'required|array', // Ensure 'positions' is present and is an array
             'positions.*' => [
                 'integer',
                 Rule::exists('positions', 'id'), // Ensure each position ID exists in the 'positions' table

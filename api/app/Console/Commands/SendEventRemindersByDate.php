@@ -74,9 +74,8 @@ class SendEventRemindersByDate extends Command
         $this->log([
             'dates_count' => count($dates),
             'registered_count' => $registered_count,
-            '$unregistered_count' => $unregistered_count,
+            'unregistered_count' => $unregistered_count,
         ]);
-
 
         return 0;
     }
