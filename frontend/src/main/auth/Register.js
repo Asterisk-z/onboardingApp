@@ -38,8 +38,8 @@ const Register = ({ drawer }) => {
         formData.append('category', values.category)
         formData.append('email', values.email)
         formData.append('phone', values.phone)
-        formData.append('password', values.password)
-        formData.append('confirm_password', values.confirm_password)
+        // formData.append('password', values.password)
+        // formData.append('confirm_password', values.confirm_password)
         
         const resp = await dispatch(registerUser(formData));
 
@@ -228,7 +228,7 @@ const Register = ({ drawer }) => {
               </div>
               
               {/* type,message,ref */}
-              <div className="d-flex flex-row g-4">
+              {false && <div className="d-flex flex-row g-4">
                 <div className="form-group w-50">
                   <div className="form-label-group">
                     <label className="form-label" >
@@ -266,7 +266,8 @@ const Register = ({ drawer }) => {
                     {errors.passcode && <span className="invalid">{errors.passcode.message}</span>}
                   </div>
                 </div>
-              </div>
+              </div>}
+
 
               {/* <div className="checkbox-flex">
                 <input type="checkbox" />
