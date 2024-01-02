@@ -11,7 +11,7 @@ class ApplicantGuidesController extends Controller
     //
     public function listAll()
     {
-        $guides = ApplicantGuide::where('is_del', 0)->orderBy('created_at', 'DESC')->get();
+        $guides = ApplicantGuide::where('is_del', 0)->orderBy('created_at', 'DESC')->first();
 
         return successResponse('Successful', $guides);
     }

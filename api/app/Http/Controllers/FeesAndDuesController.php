@@ -11,7 +11,7 @@ class FeesAndDuesController extends Controller
     //
     public function listAll()
     {
-        $fees = FeesAndDues::orderBy('created_at', 'DESC')->get();
+        $fees = FeesAndDues::orderBy('created_at', 'DESC')->first();
 
         return successResponse('Successful', $fees);
     }

@@ -11,7 +11,7 @@ class MemberGuidesController extends Controller
     //
     public function listAll()
     {
-        $guides = MemberGuide::where('is_del', 0)->orderBy('created_at', 'DESC')->get();
+        $guides = MemberGuide::where('is_del', 0)->orderBy('created_at', 'DESC')->first();
 
         return successResponse('Successful', $guides);
     }
