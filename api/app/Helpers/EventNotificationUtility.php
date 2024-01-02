@@ -37,7 +37,7 @@ class EventNotificationUtility
         $message = null;
 
         if ($eventReg->status == EventRegistration::STATUS_APPROVED) {
-            $message = EventMailContents::paymentApprovedARBody($eventReg->event->name, $eventReg->admin_remark);
+            $message = EventMailContents::paymentApprovedARBody($eventReg->event->name);
             $subject = EventMailContents::paymentApprovedARSubject($eventReg->event->name);
         } elseif ($eventReg->status == EventRegistration::STATUS_DECLINED) {
             $message = EventMailContents::paymentDeclinedARBody($eventReg->event->name, $eventReg->admin_remark);
@@ -49,7 +49,7 @@ class EventNotificationUtility
         }
     }
 
-    private static function sendNotification($subject, $message, $users, $CCs = [])
+    private static function sendNotification($message, $subject, $users, $CCs = [])
     {
         Notification::send($users, new InfoNotification($message, $subject, $CCs));
     }
@@ -66,6 +66,7 @@ class EventNotificationUtility
 
         $registeredUsers = $event->getRegisteredUsers();
 
+        //TODO:: Send email notification to all registered and new position or remove registered that are not in present position and notify
         if ($registeredUsers) {
             // email registered AR and copy MEG
             $to = $registeredUsers;
@@ -91,6 +92,62 @@ class EventNotificationUtility
         $eventName = $event->name;
         $message = EventMailContents::eventAddedBody($event);
         $subject = EventMailContents::eventAddedSubject($eventName);
+
+        $invitedUsers = $event->newlyInvitedUsers();
+
+        if ($invitedUsers) {
+            // email registered AR and copy MEG
+            $to = $invitedUsers;
+            $CCs = Utility::getUsersEmailByCategory(Role::MEG);
+        } else {
+            // Email MEGs
+            $MEGs = Utility::getUsersByCategory(Role::MEG);
+
+            if (count($MEGs))
+                $to = $MEGs;
+        }
+
+        if ($to) {
+            self::sendNotification($message, $subject, $to, $CCs);
+        }
+    }
+
+    public static function reminderNotification(Event $event)
+    {
+        $to = null;
+        $CCs = [];
+
+        $eventName = $event->name;
+        $message = EventMailContents::reminderBody($event);
+        $subject = EventMailContents::reminderSubject($eventName);
+
+        $registeredUsers = $event->getRegisteredUsers();
+
+        if ($registeredUsers) {
+            // email registered AR and copy MEG
+            $to = $registeredUsers;
+            $CCs = Utility::getUsersEmailByCategory(Role::MEG);
+        } else {
+            // Email MEGs
+            $MEGs = Utility::getUsersByCategory(Role::MEG);
+
+            if (count($MEGs))
+                $to = $MEGs;
+        }
+
+        if ($to) {
+            self::sendNotification($message, $subject, $to, $CCs);
+        }
+    }
+
+    public static function inviteNotification(Event $event)
+    {
+        $to = null;
+        $CCs = [];
+
+        $eventName = $event->name;
+        $message = EventMailContents::invitedBody($event);
+        $subject = EventMailContents::invitedSubject($eventName);
 
         $invitedUsers = $event->newlyInvitedUsers();
 

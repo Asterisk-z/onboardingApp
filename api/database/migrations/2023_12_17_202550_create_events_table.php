@@ -34,11 +34,11 @@ class CreateEventsTable extends Migration
 
             // for system use
             $table->date('last_reminder_date')->nullable();
-            $table->date('next_reminder_date')->nullable();
+            //$table->date('next_reminder_date')->nullable();
 
             // for system use
             $table->date('last_reminder_date_non_registered')->nullable();
-            $table->date('next_reminder_date_non_registered')->nullable();
+            //$table->date('next_reminder_date_non_registered')->nullable();
 
             $table->bigInteger('user_id');
 

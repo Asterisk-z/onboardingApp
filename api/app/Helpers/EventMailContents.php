@@ -5,6 +5,7 @@ use App\Models\User;
 
 class EventMailContents
 {
+
     public static function paymentDeclinedARSubject(string $eventName): string
     {
         return "$eventName Payment Declined";
@@ -33,7 +34,7 @@ class EventMailContents
         return "$eventName Payment Confirmation";
     }
 
-    public static function paymentApprovedARBody(string $eventName, string $reason): string
+    public static function paymentApprovedARBody(string $eventName): string
     {
 
         $message = "<p>
@@ -67,9 +68,9 @@ class EventMailContents
 
     public static function eventUpdatedBody(string $eventName): string
     {
-
+        $url = config('app.front_end_url');
         $message = "<p>
-                Please be informed that the event: $eventName has been updated. Kindly login to the “MROIS portal” to view the new details.
+                Please be informed that the event: $eventName has been updated. Kindly login to the <a href='{$url}'>MROIS portal</a> to view the new details.
             </p>";
 
         return $message;
@@ -77,14 +78,51 @@ class EventMailContents
 
     public static function eventAddedSubject(string $eventName): string
     {
-        return "$eventName Has Been Added";
+        return "Register $eventName";
     }
 
     public static function eventAddedBody($event): string
     {
+        $url = config('app.front_end_url');
+        $message = "<p>
+                Please be informed that you have been invited for {$event->name} scheduled to hold {$event->date} {$event->time}. Kindly login to the <a href='{$url}'>MROIS Portal</a> to register
+            </p>";
+
+        return $message;
+    }
+
+    public static function invitedSubject(string $eventName): string
+    {
+        return "Register for $eventName";
+    }
+
+    public static function invitedBody($event): string
+    {
 
         $message = "<p>
                 Please be informed that you have been invited for {$event->name} scheduled to hold {$event->date} {$event->time}. Kindly login to the MROIS Portal to register
+            </p>";
+
+        return $message;
+    }
+
+
+    public static function reminderSubject(string $eventName): string
+    {
+        return "$eventName Reminder";
+    }
+
+    public static function reminderBody($event): string
+    {
+
+        $message = "<p>
+                Trust this mail meets you well. 
+            </p>
+            <p>
+            We wish to remind you of the {$event->name} event scheduled {$event->date} {$event->time}.
+            </p>
+            <p>
+            We look forward to your attendance.
             </p>";
 
         return $message;
