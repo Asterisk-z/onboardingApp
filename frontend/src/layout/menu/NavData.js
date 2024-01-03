@@ -97,6 +97,10 @@ const navData = [{
         text: "Regulators",
         link: "/admin-regulators",
       },
+      {
+        text: "Fees and Dues Framework",
+        link: "/admin-fees-framework",
+      },
     ],
   },
   ],
@@ -138,6 +142,11 @@ const navData = [{
     icon: "tile-thumb-fill",
     text: "Regulators",
     link: "/regulators",
+  },
+  {
+    icon: "tile-thumb-fill",
+    text: "Fees and Dues Framework",
+    link: "/fees-framework",
   },
   // {
   //   icon: "tile-thumb-fill",

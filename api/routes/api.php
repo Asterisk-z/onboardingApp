@@ -149,7 +149,7 @@ Route::middleware('auth')->group(function () {
         });
         // fees and dues
         Route::group(['prefix' => 'meg/fees-and-dues'],  function () {
-            Route::get('/list-all', [FeesAndDuesController::class, 'listAll']);
+            Route::get('/list_all', [FeesAndDuesController::class, 'listAll']);
             Route::post('/create', [FeesAndDuesController::class, 'store']);
             Route::post('/update/{id}', [FeesAndDuesController::class, 'update']);
             Route::post('/update-status/{id}', [FeesAndDuesController::class, 'updateStatus']);

@@ -28,6 +28,7 @@ import AdminPositions from "main/pages/Admin/AdminPositions"
 import AdminComplaint from "main/pages/Admin/AdminComplaint" 
 import AdminRegulators from "main/pages/Admin/AdminRegulators"
 import AdminSanctions from "main/pages/Admin/AdminSanctions"
+import AdminFeesFramework from "main/pages/Admin/AdminFeesFramework"
 
 import Complaint from "main/pages/Complaint" 
 import AuditLog from "main/pages/AuditLog" 
@@ -154,6 +155,7 @@ const Router = () => {
           <Route path="admin-positions" element={<AdminPositions />}></Route>
           <Route path="admin-regulators" element={<AdminRegulators />}></Route>
           <Route path="admin-sanctions" element={<AdminSanctions />}></Route>
+          <Route path="admin-fees-framework" element={<AdminFeesFramework/>}></Route>
           <Route path="wizard" element={<WizardTest />}></Route>
 
 
