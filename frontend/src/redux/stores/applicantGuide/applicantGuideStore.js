@@ -42,7 +42,8 @@ export const createApplicantGuide = createAsyncThunk(
       const { data } = await axios.post(`meg/applicant-guides/create`, values, {
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json;charset=UTF-8",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
         },
       });
       return successHandler(data, data.message);

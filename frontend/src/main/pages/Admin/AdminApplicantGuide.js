@@ -111,7 +111,7 @@ const AdminApplicantGuide = ({ drawer }) => {
     const handleFormSubmit = async (values) => {
         const formData = new FormData();
         formData.append('name', values.name)
-        formData.append('file', values.file)
+        formData.append('file', values.file[0])
         try {
             setLoading(true);
 
