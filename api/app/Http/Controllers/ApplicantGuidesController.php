@@ -27,7 +27,7 @@ class ApplicantGuidesController extends Controller
         //
         $applicant = ApplicantGuide::create([
             'name' => $request->input('name'),
-            'file' => $request->hasFile('file') ? $request->file('file')->storePublicly('applicant-guides', 'public') : null,
+            // 'file' => $request->hasFile('file') ? $request->file('file')->storePublicly('applicant-guides', 'public') : null,
             'created_by' => auth()->user()->email
         ]);
         //
