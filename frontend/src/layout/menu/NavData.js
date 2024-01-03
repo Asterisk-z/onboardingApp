@@ -101,6 +101,14 @@ const navData = [{
         text: "Fees and Dues Framework",
         link: "/admin-fees-framework",
       },
+      {
+        text: "Applicants Guide",
+        link: "/admin-applicant-guide",
+      },
+      {
+        text: "Members Guide",
+        link: "/admin-members-guide",
+      },
     ],
   },
   ],
@@ -147,6 +155,26 @@ const navData = [{
     icon: "tile-thumb-fill",
     text: "Fees and Dues Framework",
     link: "/fees-framework",
+  },
+  {
+    icon: "tile-thumb-fill",
+    text: "Portals Guide",
+    active: false,
+    subMenu: [
+      // {
+      //   text: "Complaint Type",
+      //   link: "/admin-complaint-type",
+      // },
+      {
+        text: "Applicant Guide",
+        link: "/applicant-guide",
+      }, 
+      {
+        text: "Members Guide",
+        link: "/membership-guide",
+      },
+       
+    ],
   },
   // {
   //   icon: "tile-thumb-fill",

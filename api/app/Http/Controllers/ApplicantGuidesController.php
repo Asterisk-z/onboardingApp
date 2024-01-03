@@ -22,12 +22,19 @@ class ApplicantGuidesController extends Controller
         //
         $request->validate([
             "name" => "required",
-            "file" => "required|mimes:pdf",
+            "file" => "required"
         ]);
         //
+        $attachment = [];
+        if ($request->hasFile('file')) {
+            $attachment = Utility::saveFile('guides', $request->file('file'));
+        }
+        // 
         $applicant = ApplicantGuide::create([
             'name' => $request->input('name'),
-            'file' => $request->hasFile('file') ? $request->file('file')->storePublicly('applicant-guides', 'public') : null,
+            // 'file' => $request->hasFile('file') ? $request->file('file')->storePublicly('guides', 'public') : null,
+            // 'document' => $request->hasFile('document') ? $request->file('document')->storePublicly('complaint', 'public') : null,
+            'file' => $attachment ? $attachment['path'] : null,
             'created_by' => auth()->user()->email
         ]);
         //
