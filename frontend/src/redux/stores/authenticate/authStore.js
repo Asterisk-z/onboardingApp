@@ -146,6 +146,28 @@ export const passwordResetComplete = createAsyncThunk(
 );
 
 
+export const passwordSetComplete = createAsyncThunk(
+  "authenticate/passwordSetComplete",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+        url: `auth/password/set`,
+        data: values,
+      });
+      
+      return successHandler(data, data.message);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
+
 const authStore = createSlice({
   name: "authenticate",
   initialState,
@@ -219,6 +241,21 @@ const authStore = createSlice({
     });
 
     builder.addCase(passwordResetOtp.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+    
+    // ====== builders for passwordSetComplete ======
+
+    builder.addCase(passwordSetComplete.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(passwordSetComplete.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(passwordSetComplete.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });

@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate,Link } from "react-router-dom";
+import { useNavigate,Link, useParams, useSearchParams } from "react-router-dom";
 import { Spinner } from "reactstrap";
 import { useForm } from "react-hook-form";
 import Head from "layout/head/Head";
 import { Block, BlockContent, BlockHeadContent, BlockDes, BlockHead, BlockTitle, Button, PreviewCard, Icon } from "../../components/Component";
 import Logo from "images/fmdq/FMDQ-Logo.png";
-import { passwordResetComplete } from "../../redux/stores/authenticate/authStore";
+import { passwordSetComplete } from "redux/stores/authenticate/authStore";
 
-const PasswordUpdate = () => {
+const PasswordSet = () => {
 
+  const [searchParams, setSearchParams] = useSearchParams();
   const [loading, setLoading] = useState(false);
-  const [mailSent, setMailSent] = useState(true);
   const [passState, setPassState] = useState(false);
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  
+
   const { register, handleSubmit, formState: { errors }, setValue,  getValues, setError, clearErrors } = useForm();
   
 
@@ -24,15 +24,20 @@ const PasswordUpdate = () => {
       setLoading(true);
     
       try {
-        setLoading(true);
-        
-          const resp = await dispatch(passwordResetComplete(formData));
+          setLoading(true);
+          
+          const postValues = new Object();
+          postValues.email = formData.email;
+          postValues.signature = searchParams.get('signature');
+          postValues.password = formData.password;
+
+          const resp = await dispatch(passwordSetComplete(postValues));
           
           if (resp.payload?.message == "success") {
-            setTimeout(() => {
-              navigate(`${process.env.PUBLIC_URL}/login`);
-              setLoading(false);
-            }, 1000);
+              setTimeout(() => {
+                navigate(`${process.env.PUBLIC_URL}/login`);
+                setLoading(false);
+              }, 1000);
               setLoading(false);
           } else {
           setLoading(false);
@@ -65,11 +70,6 @@ const PasswordUpdate = () => {
         clearErrors('password')
         clearErrors('new_password')
     }
-    
-  const handleFormSubmitTwo = () => {
-    console.log('feer');
-    console.log(errors)
-  }
   
   return (
     <>
@@ -83,9 +83,9 @@ const PasswordUpdate = () => {
                   <img className="logo" src={Logo} alt="fmdq logo"/>
                   <h4>Members Registration Oversight Information System (MROIS)</h4>
                 </div>
-                <BlockTitle tag="h5">New  password</BlockTitle>
+                <BlockTitle tag="h5">Create  password</BlockTitle>
                 <BlockDes>
-                  <p>Create New Password</p>
+                  <p></p>
                 </BlockDes>
               </BlockContent>
             </BlockHead>
@@ -97,7 +97,7 @@ const PasswordUpdate = () => {
                   </label>
                 </div>
                 <div className="form-control-wrap">
-                <input type="email"  {...register('email', { required: "This field is required" })} readOnly={true} value={localStorage.getItem('reset-password-email')} className="form-control form-control-lg" placeholder="Enter your email address" />
+                <input type="email"  {...register('email', { required: "This field is required" })}  className="form-control form-control-lg" placeholder="Enter your email address" />
                   {errors.email && <p className="invalid">{errors.email.message}</p>}
                  </div>
               </div>
@@ -140,8 +140,8 @@ const PasswordUpdate = () => {
                 </div>
               </div>
               <div className="form-group">
-                <Button color="primary" size="lg" type="submit" className="btn-block" onClick={handleFormSubmitTwo}>
-                  {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Update Password"}
+                <Button color="primary" size="lg" type="submit" className="btn-block" >
+                  {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Set Password"}
                 </Button>
               </div>
             </form>
@@ -156,4 +156,4 @@ const PasswordUpdate = () => {
     </>
   );
 };
-export default PasswordUpdate;
+export default PasswordSet;
