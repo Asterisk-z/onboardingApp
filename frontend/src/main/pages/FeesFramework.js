@@ -1,12 +1,22 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Head from "layout/head/Head";
 import Content from "layout/content/Content";
-import { Card } from "reactstrap";
-import { Block, BlockHead, BlockHeadContent, BlockTitle, Row, Col, BlockBetween} from "components/Component";
+import { Card, CardTitle, CardBody, CardLink } from "reactstrap";
+import { Block, BlockHead, BlockHeadContent, BlockTitle, Row, Col, BlockBetween, PreviewCard } from "components/Component";
+import { loadActiveFees } from "redux/stores/feesAndDues/feesAndDuesStore";
 
 
 
 const Homepage = () => {
+
+  const [counter, setCounter] = useState(false);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(loadActiveFees());
+  }, [dispatch, counter]);
+  const fees = useSelector((state) => state?.fees?.active) || null;
+  const $fees = fees ? JSON.parse(fees) : null;
 
 
   return (
@@ -17,28 +27,24 @@ const Homepage = () => {
           <BlockBetween>
             <BlockHeadContent>
               <BlockTitle page tag="h3">
-                Fee Framework
+                FMDQ Fees and Dues Framework
               </BlockTitle>
             </BlockHeadContent>
           </BlockBetween>
         </BlockHead>
-        <Block>
+        <PreviewCard>
           <Row className="g-gs">
-            <Col xxl="3" sm="6">
-              <Card className="color1">
-                <div className="nk-ecwg nk-ecwg6">
-                  <div className="card-inner">
-                    <div className="card-title-group">
-                      <div className="card-title">
-                        <h6 className="title">{"Goto Fee Framework"}</h6>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </Card>
-            </Col>
+            {$fees &&
+              <Col lg="3">
+                <Card className="card-bordered">
+                  <CardBody className="card-inner">
+                    <CardTitle tag="h5">{$fees.title}</CardTitle>
+                    <CardLink href={$fees.url} target="_blank" className="btn btn-primary" color="primary">Click to Visit</CardLink>
+                  </CardBody>
+                </Card>
+              </Col>}
           </Row>
-        </Block>
+        </PreviewCard>
       </Content>
     </React.Fragment>
   );

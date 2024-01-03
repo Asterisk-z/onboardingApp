@@ -5,9 +5,9 @@ import { errorHandler, successHandler } from "../../../utils/Functions";
 // import queryGenerator from "../../../utils/QueryGenerator";
 // import category from "../memberCategory/category";
 const initialState = {
-                    list: null,
-                    error: "", view_all: null, active_list: null,
-                    loading: false,
+  list: null,
+  error: "", view_all: null, active_list: null,
+  loading: false,
 };
 
 
@@ -119,8 +119,8 @@ const regulatorStore = createSlice({
 
     builder.addCase(loadAllActiveRegulators.fulfilled, (state, action) => {
       state.loading = false;
-        // state.list = action.payload?.data?.data?.positions;
-        state.active_list = JSON.stringify(action.payload?.data?.data);
+      // state.list = action.payload?.data?.data?.positions;
+      state.active_list = JSON.stringify(action.payload?.data?.data);
     });
 
     builder.addCase(loadAllActiveRegulators.rejected, (state, action) => {
@@ -135,9 +135,9 @@ const regulatorStore = createSlice({
     });
 
     builder.addCase(loadAllRegulators.fulfilled, (state, action) => {
-        state.loading = false;
-        // state.list = action.payload?.data?.data?.categories;
-        state.view_all = JSON.stringify(action.payload?.data?.data);
+      state.loading = false;
+      // state.list = action.payload?.data?.data?.categories;
+      state.view_all = JSON.stringify(action.payload?.data?.data);
     });
 
     builder.addCase(loadAllRegulators.rejected, (state, action) => {
@@ -160,7 +160,7 @@ const regulatorStore = createSlice({
       state.loading = false;
       state.error = action.payload.message;
     });
-    
+
     // ====== builders for updateRegulatorStatus ======
 
     builder.addCase(updateRegulatorStatus.pending, (state) => {
@@ -175,7 +175,7 @@ const regulatorStore = createSlice({
       state.loading = false;
       state.error = action.payload.message;
     });
-    
+
     // ====== builders for createRegulator ======
 
     builder.addCase(createRegulator.pending, (state) => {

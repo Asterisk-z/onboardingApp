@@ -268,7 +268,7 @@ const ActionTab = ({ updateParentParent, tabItem, positions}) => {
                   </form>
               </ModalBody>
               <ModalFooter className="bg-light">
-                  <span className="sub-text">Feedback</span>
+                  <span className="sub-text">Update Category</span>
               </ModalFooter>
           </Modal>
           <Modal isOpen={modalPositionForm} toggle={togglePositionForm} size="xl" >
