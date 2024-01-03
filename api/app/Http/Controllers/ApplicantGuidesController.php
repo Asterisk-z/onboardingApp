@@ -27,13 +27,15 @@ class ApplicantGuidesController extends Controller
         ]);
         //
         $attachment = [];
+
         if ($request->hasFile('file')) {
             $attachment = Utility::saveFile('guides', $request->file('file'));
         }
         //
         $applicant = ApplicantGuide::create([
             'name' => $request->input('name'),
-            // 'file' => $request->hasFile('file') ? $request->file('file')->storePublicly('applicant-guides', 'public') : null,
+            // 'file' => $request->hasFile('file') ? $request->file('file')->storePublicly('guides', 'public') : null,
+            'file' => $attachment ? $attachment['path'] : null,
             'created_by' => auth()->user()->email
         ]);
         //
