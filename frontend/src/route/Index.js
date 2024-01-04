@@ -43,7 +43,7 @@ import FeesFramework from "main/pages/FeesFramework"
 import Regulators from "main/pages/Regulators"
 import Sanction from "main/pages/Sanction"
 import ApplicantsGuide from "main/pages/ApplicantsGuide"
-import MembershipGuide from "main/pages/MembershipGuide"
+import MembersGuide from "main/pages/MembersGuide"
 
 import AdminAuditLog from "main/pages/Admin/AdminAuditLog" 
 import AdminInstitutions from "main/pages/Admin/AdminInstitutions";
@@ -144,7 +144,7 @@ const Router = () => {
           <Route path="sanctions" element={<Sanction />}></Route>
           <Route path="regulators" element={<Regulators />}></Route>
           <Route path="applicant-guide" element={<ApplicantsGuide />}></Route>
-          <Route path="membership-guide" element={<MembershipGuide />}></Route>
+          <Route path="membership-guide" element={<MembersGuide />}></Route>
         </Route>
 
         <Route path={`${process.env.PUBLIC_URL}`} element={<AdminLayout />}>
