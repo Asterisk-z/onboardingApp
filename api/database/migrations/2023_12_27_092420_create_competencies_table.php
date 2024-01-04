@@ -20,7 +20,7 @@ class CreateCompetenciesTable extends Migration
             $table->string('institution_id');
             $table->string('is_competent');
             $table->string('evidence')->nullable();
-            $table->string('cco_id');
+            $table->string('cco_id')->nullable();
             $table->string('status');
             $table->timestamps();
         });

@@ -28,6 +28,7 @@ import AdminPositions from "main/pages/Admin/AdminPositions"
 import AdminComplaint from "main/pages/Admin/AdminComplaint" 
 import AdminRegulators from "main/pages/Admin/AdminRegulators"
 import AdminSanctions from "main/pages/Admin/AdminSanctions"
+import AdminFeesFramework from "main/pages/Admin/AdminFeesFramework"
 
 import Complaint from "main/pages/Complaint" 
 import AuditLog from "main/pages/AuditLog" 
@@ -40,11 +41,15 @@ import PendingAuthRepresentative from "main/pages/PendingAuthRepresentative"
 import FeesFramework from "main/pages/FeesFramework"
 import Regulators from "main/pages/Regulators"
 import Sanction from "main/pages/Sanction"
+import ApplicantsGuide from "main/pages/ApplicantsGuide"
+import MembershipGuide from "main/pages/MembershipGuide"
 
 import AdminAuditLog from "main/pages/Admin/AdminAuditLog" 
 import AdminInstitutions from "main/pages/Admin/AdminInstitutions";
 import AddBroadcast from "main/pages/Admin/AddBroadcast";
 import UserAuditLog from "main/pages/Admin/AuditLog" 
+import AdminApplicantGuide from "main/pages/Admin/AdminApplicantGuide"
+import AdminMembersGuide from "main/pages/Admin/AdminMembersGuide"
 import Success from "pages/auth/Success";
 
 import Layout from "layout/Index";
@@ -136,6 +141,8 @@ const Router = () => {
           <Route path="fees-framework" element={<FeesFramework />}></Route>
           <Route path="sanctions" element={<Sanction />}></Route>
           <Route path="regulators" element={<Regulators />}></Route>
+          <Route path="applicant-guide" element={<ApplicantsGuide />}></Route>
+          <Route path="membership-guide" element={<MembershipGuide />}></Route>
         </Route>
 
         <Route path={`${process.env.PUBLIC_URL}`} element={<AdminLayout />}>
@@ -154,6 +161,9 @@ const Router = () => {
           <Route path="admin-positions" element={<AdminPositions />}></Route>
           <Route path="admin-regulators" element={<AdminRegulators />}></Route>
           <Route path="admin-sanctions" element={<AdminSanctions />}></Route>
+          <Route path="admin-fees-framework" element={<AdminFeesFramework/>}></Route>
+          <Route path="admin-applicant-guide" element={<AdminApplicantGuide/>}></Route>
+          <Route path="admin-members-guide" element={<AdminMembersGuide/>}></Route>
           <Route path="wizard" element={<WizardTest />}></Route>
 
 

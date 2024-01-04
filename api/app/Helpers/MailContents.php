@@ -107,4 +107,14 @@ class MailContents
             <li>Sanction Summary<strong>{$sanction_summary}</strong></li>
         </ul>";
     }
+
+    public static function submitCompetencySubject(): string
+    {
+        return "Competency Submitted";
+    }
+
+    public static function submitCompetencyMessage(): string
+    {
+        return "<p>A new competency has been submitted.</p>";
+    }
 }
