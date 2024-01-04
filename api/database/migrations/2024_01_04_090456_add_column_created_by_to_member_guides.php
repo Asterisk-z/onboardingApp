@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnCreatedByToApplicantGuides extends Migration
+class AddColumnCreatedByToMemberGuides extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class AddColumnCreatedByToApplicantGuides extends Migration
      */
     public function up()
     {
-        Schema::table('applicant_guides', function (Blueprint $table) {
+        Schema::table('member_guides', function (Blueprint $table) {
             //
             $table->string('created_by')->after('file');
         });
@@ -26,7 +26,7 @@ class AddColumnCreatedByToApplicantGuides extends Migration
      */
     public function down()
     {
-        Schema::table('applicant_guides', function (Blueprint $table) {
+        Schema::table('member_guides', function (Blueprint $table) {
             //
             $table->dropColumn('created_by');
         });

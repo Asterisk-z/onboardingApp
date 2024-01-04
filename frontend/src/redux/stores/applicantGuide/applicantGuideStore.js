@@ -27,7 +27,7 @@ export const loadApplicantGuide = createAsyncThunk(
   "applicant-guide/loadApplicantGuide",
   async (arg) => {
     try {
-      const { data } = await axios.get(`meg/applicant-guides/list_all`);
+      const { data } = await axios.get(`meg/applicant-guides/list-all`);
       return successHandler(data);
     } catch (error) {
       return errorHandler(error);
@@ -42,7 +42,8 @@ export const createApplicantGuide = createAsyncThunk(
       const { data } = await axios.post(`meg/applicant-guides/create`, values, {
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json;charset=UTF-8",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
         },
       });
       return successHandler(data, data.message);
@@ -60,7 +61,7 @@ export const updateApplicantGuide = createAsyncThunk(
       const { data } = await axios.post(`meg/applicant-guides/update/${id}`, values, {
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
         },
       });
       return successHandler(data, data.message);
@@ -78,7 +79,7 @@ export const updateApplicantGuideStatus = createAsyncThunk(
       const { data } = await axios.post(`meg/applicant-guides/update-status/${id}`, values, {
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
         },
       });
       return successHandler(data, data.message);
@@ -92,7 +93,7 @@ const applicantGuideStore = createSlice({
   name: "applicant_guide",
   initialState,
   reducers: {
-    clearFeesAndDues: (state) => {
+    clearApplicantGuide: (state) => {
       state.list = null;
     },
   },
@@ -171,4 +172,4 @@ const applicantGuideStore = createSlice({
 });
 
 export default applicantGuideStore.reducer;
-export const { clearFeesAndDues } = applicantGuideStore.actions;
+export const { clearApplicantGuide } = applicantGuideStore.actions;
