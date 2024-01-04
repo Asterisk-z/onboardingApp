@@ -133,20 +133,20 @@ class PasswordController extends Controller
         $request->validate([
             "signature" => "required|string",
             "email" => "required|string|email",
-            'password' => 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/'
+            'password' => 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/',
         ]);
 
         $signature = Crypt::decrypt($request->signature);
 
-        if(! $passwordReset = PasswordSet::where('signature', $signature)->first()){
+        if (!$passwordReset = PasswordSet::where('signature', $request->signature)->first()) {
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, "Invalid signature.");
         }
 
-        if($passwordReset->status == "completed"){
+        if ($passwordReset->status == "completed") {
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, "You have initially completed this process. Kindly proceed to login.");
         }
 
-        if($passwordReset->email != $request->email){
+        if ($passwordReset->email != $request->email) {
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, "Invalid Email Address.");
         }
 
@@ -155,7 +155,7 @@ class PasswordController extends Controller
         $user->save();
 
         $user->passwords()->create([
-            'password' => Hash::make($request->input('password'))
+            'password' => Hash::make($request->input('password')),
         ]);
 
         $passwordReset->status = "completed";

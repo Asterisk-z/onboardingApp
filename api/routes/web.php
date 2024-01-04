@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\ARController;
+use App\Http\Controllers\SystemController;
+use App\Models\User;
+use App\Notifications\InfoNotification;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,14 +17,14 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
-Route::group(['prefix' => 'auth'], function () {
-    Route::post('/login', [UsersController::class, 'login']);
-    Route::post('/register', [UsersController::class, 'register']);
-});
-
 Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('execute-commands', [SystemController::class, 'executeCommands'])->name('executeCommands');
 
-Route::get('/ar/test', [ARController::class, 'test']);
+Route::get('test-job', function() {
+    $user = User::where('email', 'damilare.oluwole@fmdqgroup.com')->first();
+    $user->notify(new InfoNotification('Just testing notification.',"my subject"));
+    return response()->json(['message' => "Email sent. Did you receive?"]);
+});
