@@ -154,7 +154,6 @@ const AdminMembersGuide = ({ drawer }) => {
                         <BlockHeadContent>
                             <BlockTitle page tag="h3">
                                 Members Guide
-                            
                             </BlockTitle>
                         </BlockHeadContent>
                         <BlockHeadContent>
@@ -219,7 +218,7 @@ const AdminMembersGuide = ({ drawer }) => {
                             <Block size="xl">
                                 <BlockHead>
                                     <BlockHeadContent>
-                                        {membersGuide}
+                                        {/* {membersGuide} */}
                                         {/* <BlockTitle tag="h4">All Membership</BlockTitle> */}
                                         {/* <p>{regulators}</p> */}
                                         {/* {<p>{parentState}</p>} */}
