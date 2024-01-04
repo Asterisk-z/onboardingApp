@@ -12,66 +12,73 @@ import { userUpdateUserAR, userCancelUpdateUserAR, userProcessUpdateUserAR, user
 import moment from "moment";
 import Icon from "components/icon/Icon";
 import Swal from "sweetalert2";
-import Skeleton from 'react-loading-skeleton'
-import Countdown from 'react-countdown';
-// import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
-
-// const aUser = useUser();
-// const aUserUpdate = useUserUpdate();
 
 const Export = ({ data }) => {
-  const [modal, setModal] = useState(false);
+    const [modal, setModal] = useState(false);
 
-  useEffect(() => {
-    if (modal === true) {
-      setTimeout(() => setModal(false), 2000);
-    }
-  }, [modal]);
+    useEffect(() => {
+        if (modal === true) {
+        setTimeout(() => setModal(false), 2000);
+        }
+    }, [modal]);
 
-  const fileName = "user-data";
+    const newData = data.map((item) => {
+        return ({
+            "UID ID": item.id,
+            "Institution": `${item.new_institution.category[0].name}`,
+            "Email": item.ar.email,
+            "Status": item.approval_status,
+            "Role": item.ar.role.name,
+            "Date Created": moment(item.createdAt).format('MMM. DD, YYYY HH:mm')
+        })
+    });
 
-  const exportCSV = () => {
-    const exportType = exportFromJSON.types.csv;
-    exportFromJSON({ data, fileName, exportType });
-  };
+    const fileName = "data";
 
-  const exportExcel = () => {
-    const exportType = exportFromJSON.types.xls;
-    exportFromJSON({ data, fileName, exportType });
-  };
+    const exportCSV = () => {
+        const exportType = exportFromJSON.types.csv;
+        exportFromJSON({ data: newData, fileName: fileName, exportType: exportType });
 
-  const copyToClipboard = () => {
-    setModal(true);
-  };
+    };
 
-  return (
-    <React.Fragment>
-      <div className="dt-export-buttons d-flex align-center">
-        <div className="dt-export-title d-none d-md-inline-block">Export</div>
-        <div className="dt-buttons btn-group flex-wrap">
-          <CopyToClipboard text={JSON.stringify(data)}>
-            <Button className="buttons-copy buttons-html5" onClick={() => copyToClipboard()}>
-              <span>Copy</span>
-            </Button>
-          </CopyToClipboard>{" "}
-          <button className="btn btn-secondary buttons-csv buttons-html5" type="button" onClick={() => exportCSV()}>
-            <span>CSV</span>
-          </button>{" "}
-          <button className="btn btn-secondary buttons-excel buttons-html5" type="button" onClick={() => exportExcel()}>
-            <span>Excel</span>
-          </button>{" "}
+    const exportExcel = () => {
+        const exportType = exportFromJSON.types.xls;
+        exportFromJSON({ data: newData, fileName: fileName, exportType: exportType });
+
+    };
+
+    const copyToClipboard = () => {
+        setModal(true);
+    };
+
+    return (
+        <React.Fragment>
+        <div className="dt-export-buttons d-flex align-center">
+            <div className="dt-export-title d-none d-md-inline-block">Export</div>
+            <div className="dt-buttons btn-group flex-wrap">
+            <CopyToClipboard text={JSON.stringify(newData)}>
+                <Button className="buttons-copy buttons-html5" onClick={() => copyToClipboard()}>
+                <span>Copy</span>
+                </Button>
+            </CopyToClipboard>{" "}
+            <button className="btn btn-secondary buttons-csv buttons-html5" type="button" onClick={() => exportCSV()}>
+                <span>CSV</span>
+            </button>{" "}
+            <button className="btn btn-secondary buttons-excel buttons-html5" type="button" onClick={() => exportExcel()}>
+                <span>Excel</span>
+            </button>{" "}
+            </div>
         </div>
-      </div>
-      <Modal isOpen={modal} className="modal-dialog-centered text-center" size="sm">
-        <ModalBody className="text-center m-2">
-          <h5>Copied to clipboard</h5>
-        </ModalBody>
-        <div className="p-3 bg-light">
-          <div className="text-center">Copied {data.length} rows to clipboard</div>
-        </div>
-      </Modal>
-    </React.Fragment>
-  );
+        <Modal isOpen={modal} className="modal-dialog-centered text-center" size="sm">
+            <ModalBody className="text-center m-2">
+                <h5>Copied to clipboard</h5>
+            </ModalBody>
+            <div className="p-3 bg-light">
+                <div className="text-center">Copied {newData.length} rows to clipboard</div>
+            </div>
+        </Modal>
+        </React.Fragment>
+    );
 };
 
 
@@ -187,64 +194,64 @@ const ActionTab = (props) => {
 
 const TransferAuthRepTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState }) => {
     const authRepColumn = [
-    {
-        name: "UID",
-        selector: (row) => row.id,
-        sortable: true,
-        width: "150px",
-        wrap: true,
-    },
-    {
-        name: "Institution",
-        selector: (row) => (`${row.new_institution.category[0].name}`),
-        sortable: true,
-        width: "auto",
-        wrap: true,
-    },
-    {
-        name: "Email",
-        selector: (row) => (`${row.ar.email}`),
-        sortable: true,
-        width: "auto",
-        wrap: true,
-    },
-    {
-        name: "Status",
-        selector: (row) => { return (<><Badge color="success"  className="text-uppercase">{`${row.approval_status}`}</Badge></>) },
-        sortable: true,
-        width: "auto",
-        wrap: true,
-    },
-    {
-        name: "Role",
-        selector: (row) => { return (<><Badge color="success">{`${row.ar.role.name}`}</Badge></>) },
-        sortable: true,
-        width: "auto",
-        wrap: true,
-    },
-    {
-        name: "Date Created",
-        selector: (row) => moment(row.createdAt).format('MMM. DD, YYYY HH:mm'),
-        sortable: true,
-        width: "auto",
-        wrap: true,
-    },
-    {
-        name: "Action",
-        selector: (row) => (<>
-                        <ActionTab ar_user={row} updateParentParent={updateParent} />
-                    </>),
-        width: "18%",
-    },
+        {
+            name: "UID",
+            selector: (row) => row.id,
+            sortable: true,
+            width: "150px",
+            wrap: true,
+        },
+        {
+            name: "Institution",
+            selector: (row) => (`${row.new_institution.category[0].name}`),
+            sortable: true,
+            width: "auto",
+            wrap: true,
+        },
+        {
+            name: "Email",
+            selector: (row) => (`${row.ar.email}`),
+            sortable: true,
+            width: "auto",
+            wrap: true,
+        },
+        {
+            name: "Status",
+            selector: (row) => { return (<><Badge color="success"  className="text-uppercase">{`${row.approval_status}`}</Badge></>) },
+            sortable: true,
+            width: "auto",
+            wrap: true,
+        },
+        {
+            name: "Role",
+            selector: (row) => { return (<><Badge color="success">{`${row.ar.role.name}`}</Badge></>) },
+            sortable: true,
+            width: "auto",
+            wrap: true,
+        },
+        {
+            name: "Date Created",
+            selector: (row) => moment(row.createdAt).format('MMM. DD, YYYY HH:mm'),
+            sortable: true,
+            width: "auto",
+            wrap: true,
+        },
+        {
+            name: "Action",
+            selector: (row) => (<>
+                            <ActionTab ar_user={row} updateParentParent={updateParent} />
+                        </>),
+            width: "18%",
+        },
     ];
-  const [tableData, setTableData] = useState(data);
-  const [searchText, setSearchText] = useState("");
-  const [rowsPerPageS, setRowsPerPage] = useState(10);
-  const [mobileView, setMobileView] = useState();
+    const [tableData, setTableData] = useState(data);
+    const [searchText, setSearchText] = useState("");
+    const [rowsPerPageS, setRowsPerPage] = useState(10);
+    const [mobileView, setMobileView] = useState();
 
-  if (data != tableData) {
-    setTableData(data)
-  }
+    useEffect(() => {
+        setTableData(data)
+    }, [data]);
   
   useEffect(() => {
     let defaultData = tableData;

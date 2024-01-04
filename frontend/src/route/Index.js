@@ -16,6 +16,7 @@ import Register from "main/auth/Register";
 import ForgotPassword from "main/auth/ForgotPassword";
 import PasswordUpdate from "main/auth/PasswordUpdate";
 import PasswordReset from "main/auth/PasswordChange";
+import PasswordSet from "main/auth/PasswordSet";
 import Application from "main/pages/application/Index";
 import Form from "main/forms/Form";
 import AdminBroadcast from "main/pages/Admin/AdminBroadcast" 
@@ -80,6 +81,7 @@ const Router = () => {
         <Route path={`${process.env.PUBLIC_URL}`} element={<MainLayoutNoSidebar />}>
             {/* <Route path="auth-success" element={<Success />}></Route> */}
             <Route path="auth-password-reset" element={<PasswordReset />}></Route>
+            <Route path="set/password" element={<PasswordSet />}></Route>
             <Route path="auth-password-update" element={<PasswordUpdate />}></Route>
             <Route path="auth-reset" element={<ForgotPassword />}></Route>
             <Route path="auth-register" element={<Register />}></Route>
@@ -165,7 +167,6 @@ const Router = () => {
           <Route path="admin-applicant-guide" element={<AdminApplicantGuide/>}></Route>
           <Route path="admin-members-guide" element={<AdminMembersGuide/>}></Route>
           <Route path="wizard" element={<WizardTest />}></Route>
-
 
         </Route>
       </Routes>
