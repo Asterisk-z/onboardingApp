@@ -23,7 +23,7 @@ class ApplicantGuidesController extends Controller
         //
         $request->validate([
             "name" => "required",
-            "file" => "required"
+            "file" => "required|file|mimes:pdf"
         ]);
         //
         $attachment = [];

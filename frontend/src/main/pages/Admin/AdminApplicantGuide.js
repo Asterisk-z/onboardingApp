@@ -7,13 +7,10 @@ import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col,
 import { loadApplicantGuide, createApplicantGuide, updateApplicantGuide } from "redux/stores/applicantGuide/applicantGuideStore";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
-import moment from "moment";
-// import data from "@srcMain";
-// import AdminRegulatorTable from "./Tables/AdminRegulatorTable";
 
 
 
-const UpdateFeeComponent = ({fee, updateParent}) => {
+const UpdateGuideComponent = ({applicantGuide, updateParent}) => {
 
     const dispatch = useDispatch();
 
@@ -25,9 +22,9 @@ const UpdateFeeComponent = ({fee, updateParent}) => {
         
 
         const postValues = {};
-        postValues.title = values.title;
-        postValues.url = values.url;
-        postValues.id = fee.id;
+        postValues.name = values.name;
+        postValues.file = values.file[0];
+        postValues.id = applicantGuide.id;
         
         
         try {
@@ -41,8 +38,8 @@ const UpdateFeeComponent = ({fee, updateParent}) => {
 
                 setTimeout(() => {
                     setLoading(false);
-                    resetField('title')
-                    resetField('url')
+                    resetField('name')
+                    resetField('file')
                     updateParent(Math.random())
                 }, 1000);
             } else {
@@ -61,21 +58,21 @@ const UpdateFeeComponent = ({fee, updateParent}) => {
     return (
         <form onSubmit={handleSubmit(handleFormUpdate)} className="is-alter" encType="multipart/form-data">
             <div className="form-group">
-                <label className="form-label" htmlFor="code">
-                    Title
+                <label className="form-label" htmlFor="name">
+                    name
                 </label>
                 <div className="form-control-wrap">
-                    <input type="text" id="title" className="form-control" {...register('title', { required: "This Field is required", })} defaultValue={fee.title} />
-                    {errors.title && <span className="invalid">{errors.title.message}</span>}
+                    <input type="text" id="name" className="form-control" {...register('name', { required: "This Field is required", })} defaultValue={applicantGuide.name} />
+                    {errors.name && <span className="invalid">{errors.name.message}</span>}
                 </div>
             </div>
             <div className="form-group">
-                <label className="form-label" htmlFor="full-name">
-                    URL
+                <label className="form-label" htmlFor="file">
+                    Upload Document 
                 </label>
                 <div className="form-control-wrap">
-                    <input type="text" id="url" className="form-control" {...register('url', { required: "This Field is required" })} defaultValue={fee.url} />
-                    {errors.name && <span className="invalid">{errors.url.message}</span>}
+                    <input type="file" id="file" className="form-control" {...register('file', { required: "This Field is required" })} />
+                    {errors.file && <span className="invalid">{errors.file.message}</span>}
                 </div>
             </div>
             <div className="form-group">
@@ -96,7 +93,7 @@ const AdminApplicantGuide = ({ drawer }) => {
     const [modalForm, setModalForm] = useState(false);
     const [modalFormUpdate, setModalFormUpdate] = useState(false);
 
-    const applicantGuide = useSelector((state) => state?.applicant_guide?.view_all) || null;
+    const applicantGuide = useSelector((state) => state?.applicantGuide?.view_all) || null;
 
     useEffect(() => {
         dispatch(loadApplicantGuide());
@@ -111,14 +108,14 @@ const AdminApplicantGuide = ({ drawer }) => {
     const handleFormSubmit = async (values) => {
         const formData = new FormData();
         formData.append('name', values.name)
-        formData.append('file', values.file)
+        formData.append('file', values.file[0])
         try {
             setLoading(true);
 
             const resp = await dispatch(createApplicantGuide(formData));
 
             if (resp.payload?.message === "success") {
-                console.log(formData);
+                // console.log(formData);
                 setTimeout(() => {
                     setLoading(false);
                     setModalForm(!modalForm)
@@ -147,7 +144,7 @@ const AdminApplicantGuide = ({ drawer }) => {
 
     return (
         <React.Fragment>
-            <Head title="Fees and Dues Framework"></Head>
+            <Head title="Applicant Guide"></Head>
             <Content>
                 <BlockHead size="sm">
                     <BlockBetween>
@@ -229,12 +226,12 @@ const AdminApplicantGuide = ({ drawer }) => {
                                     {$applicantGuide && 
                                     <Card className="card-bordered">
                                         <CardHeader className="border-bottom">
-                                            Fees and Dues
+                                            Applicant Guide
                                         </CardHeader>
                                         <CardBody className="card-inner">
                                             <CardTitle tag="h5">{$applicantGuide.name}</CardTitle>
                                             <CardText>
-                                                {$applicantGuide.url}
+                                                {/* {$applicantGuide.url} */}
                                             </CardText>
                                             <Button color="primary" onClick={toggleUpdateForm}>Edit</Button>
                                         </CardBody>
@@ -245,10 +242,10 @@ const AdminApplicantGuide = ({ drawer }) => {
                                                 Update
                                             </ModalHeader>
                                             <ModalBody>
-                                                <UpdateFeeComponent applicantGuide={$applicantGuide} updateParent={updateParentState}/>
+                                                <UpdateGuideComponent applicantGuide={$applicantGuide} updateParent={updateParentState}/>
                                             </ModalBody>
                                             <ModalFooter className="bg-light">
-                                                <span className="sub-text">Update Fees and Dues</span>
+                                                <span className="sub-text">Update Applicant Guide</span>
                                             </ModalFooter>
                                         </Modal>                                    
                                         </Card>

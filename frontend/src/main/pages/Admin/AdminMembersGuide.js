@@ -4,16 +4,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, CardFooter, CardText, CardTitle, CardBody, CardHeader } from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
-import { loadFeesAndDues, createFeesAndDues, updateFeesAndDues } from "redux/stores/feesAndDues/feesAndDuesStore";
+import { loadAllMembersGuide, createMembersGuide, updateMembersGuide } from "redux/stores/membersGuide/membersGuideStore";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
-import moment from "moment";
 // import data from "@srcMain";
 // import AdminRegulatorTable from "./Tables/AdminRegulatorTable";
 
 
 
-const UpdateFeeComponent = ({fee, updateParent}) => {
+const UpdateMembersComponent = ({membersGuide, updateParent}) => {
 
     const dispatch = useDispatch();
 
@@ -25,24 +24,24 @@ const UpdateFeeComponent = ({fee, updateParent}) => {
         
 
         const postValues = {};
-        postValues.title = values.title;
-        postValues.url = values.url;
-        postValues.id = fee.id;
+        postValues.name = values.name;
+        postValues.file = values.file[0];
+        postValues.id = membersGuide.id;
         
         
         try {
             setLoading(true);
 
 
-            const resp = await dispatch(updateFeesAndDues(postValues));
+            const resp = await dispatch(updateMembersGuide(postValues));
             
             // console.log(values, postValues, loading, resp.payload)
             if (resp.payload?.message === "success") {
 
                 setTimeout(() => {
                     setLoading(false);
-                    resetField('title')
-                    resetField('url')
+                    resetField('name')
+                    resetField('file')
                     updateParent(Math.random())
                 }, 1000);
             } else {
@@ -61,21 +60,21 @@ const UpdateFeeComponent = ({fee, updateParent}) => {
     return (
         <form onSubmit={handleSubmit(handleFormUpdate)} className="is-alter" encType="multipart/form-data">
             <div className="form-group">
-                <label className="form-label" htmlFor="code">
-                    Title
+                <label className="form-label" htmlFor="name">
+                    name
                 </label>
                 <div className="form-control-wrap">
-                    <input type="text" id="title" className="form-control" {...register('title', { required: "This Field is required", })} defaultValue={fee.title} />
-                    {errors.title && <span className="invalid">{errors.title.message}</span>}
+                    <input type="text" id="name" className="form-control" {...register('name', { required: "This Field is required", })} defaultValue={membersGuide.name} />
+                    {errors.name && <span className="invalid">{errors.name.message}</span>}
                 </div>
             </div>
             <div className="form-group">
-                <label className="form-label" htmlFor="full-name">
-                    URL
+                <label className="form-label" htmlFor="file">
+                    Upload Document 
                 </label>
                 <div className="form-control-wrap">
-                    <input type="text" id="url" className="form-control" {...register('url', { required: "This Field is required" })} defaultValue={fee.url} />
-                    {errors.name && <span className="invalid">{errors.url.message}</span>}
+                    <input type="file" id="file" className="form-control" {...register('file', { required: "This Field is required" })} />
+                    {errors.file && <span className="invalid">{errors.file.message}</span>}
                 </div>
             </div>
             <div className="form-group">
@@ -87,7 +86,7 @@ const UpdateFeeComponent = ({fee, updateParent}) => {
     )
 }
 
-const AdminFees = ({ drawer }) => {
+const AdminMembersGuide = ({ drawer }) => {
 
     const dispatch = useDispatch();
 
@@ -96,12 +95,13 @@ const AdminFees = ({ drawer }) => {
     const [modalForm, setModalForm] = useState(false);
     const [modalFormUpdate, setModalFormUpdate] = useState(false);
 
-    const fees = useSelector((state) => state?.fees?.view_all) || null;
+    const membersGuide = useSelector((state) => state?.membersGuide?.all_guides) || null;
 
     useEffect(() => {
-        dispatch(loadFeesAndDues());
+        dispatch(loadAllMembersGuide());
     }, [dispatch, parentState]);
 
+    const $membersGuide = membersGuide ? JSON.parse(membersGuide) : null;
 
     const { register, handleSubmit, formState: { errors }, resetField } = useForm();
 
@@ -110,20 +110,20 @@ const AdminFees = ({ drawer }) => {
 
     const handleFormSubmit = async (values) => {
         const formData = new FormData();
-        formData.append('title', values.title)
-        formData.append('url', values.url)
+        formData.append('name', values.name)
+        formData.append('file', values.file[0])
         try {
             setLoading(true);
 
-            const resp = await dispatch(createFeesAndDues(formData));
+            const resp = await dispatch(createMembersGuide(formData));
 
             if (resp.payload?.message === "success") {
-
+                // console.log(formData);
                 setTimeout(() => {
                     setLoading(false);
                     setModalForm(!modalForm)
-                    resetField('title')
-                    resetField('url')
+                    resetField('name')
+                    resetField('file')
                     setParentState(Math.random())
                 }, 1000);
             } else {
@@ -136,7 +136,6 @@ const AdminFees = ({ drawer }) => {
 
     };
 
-    const $fees = fees ? JSON.parse(fees) : null;
 
     const updateParentState = (newState) => {
         setModalFormUpdate(!modalFormUpdate)
@@ -147,13 +146,14 @@ const AdminFees = ({ drawer }) => {
 
     return (
         <React.Fragment>
-            <Head title="Fees and Dues Framework"></Head>
+            <Head title="Members Guide"></Head>
             <Content>
                 <BlockHead size="sm">
                     <BlockBetween>
                         <BlockHeadContent>
                             <BlockTitle page tag="h3">
-                                Fees and Dues Framework
+                                Members Guide
+                            
                             </BlockTitle>
                         </BlockHeadContent>
                         <BlockHeadContent>
@@ -162,7 +162,7 @@ const AdminFees = ({ drawer }) => {
                                     <ul className="nk-block-tools g-3">
                                         <li className="nk-block-tools-opt">
                                             <Button color="primary">
-                                                <span onClick={toggleForm}>Create Fees Framework</span>
+                                                <span onClick={toggleForm}>Create Members Guide</span>
                                             </Button>
                                         </li>
                                     </ul>
@@ -178,27 +178,27 @@ const AdminFees = ({ drawer }) => {
                         </button>
                     }
                     >
-                        Create Fees Framework
+                        Create Members Guide
                     </ModalHeader>
                     <ModalBody>
                         <form onSubmit={handleSubmit(handleFormSubmit)} className="is-alter" encType="multipart/form-data">
                             <div className="form-group">
-                                <label className="form-label" htmlFor="full-name">
-                                    Title
+                                <label className="form-label" htmlFor="name">
+                                    Name
                                 </label>
                                 <div className="form-control-wrap">
-                                    <input type="text" id="title" className="form-control" {...register('title', { required: "This Field is required" })} />
-                                    {errors.title && <span className="invalid">{errors.title.message}</span>}
+                                    <input type="text" id="name" className="form-control" {...register('name', { required: "This Field is required" })} />
+                                    {errors.name && <span className="invalid">{errors.name.message}</span>}
                                 </div>
                             </div>
 
                             <div className="form-group">
-                                <label className="form-label" htmlFor="full-name">
-                                    Website url
+                                <label className="form-label" htmlFor="file">
+                                    Upload File
                                 </label>
                                 <div className="form-control-wrap">
-                                    <input type="url" id="url" className="form-control" {...register('url', { required: "This Field is required" })} />
-                                    {errors.url && <span className="invalid">{errors.url.message}</span>}
+                                    <input type="file" id="file" accept=".pdf" className="form-control" {...register('file', { required: "This Field is required" })} />
+                                    {errors.file && <span className="invalid">{errors.file.message}</span>}
                                 </div>
                             </div>
                             <div className="form-group">
@@ -209,7 +209,7 @@ const AdminFees = ({ drawer }) => {
                         </form>
                     </ModalBody>
                     <ModalFooter className="bg-light">
-                        <span className="sub-text">Fees And Dues</span>
+                        <span className="sub-text">Members Guide</span>
                     </ModalFooter>
                 </Modal>
                 <Block size="lg">
@@ -217,7 +217,7 @@ const AdminFees = ({ drawer }) => {
                         <Content>
                             <Block size="xl">
                                 <BlockHead>
-                                    <BlockHeadContent>
+                                    <BlockHeadContent>{membersGuide}
                                         {/* <BlockTitle tag="h4">All Membership</BlockTitle> */}
                                         {/* <p>{regulators}</p> */}
                                         {/* {<p>{parentState}</p>} */}
@@ -226,29 +226,29 @@ const AdminFees = ({ drawer }) => {
 
                                 <PreviewCard>
                                     {/* {$fees && <AdminRegulatorTable  updateParent={updateParentState} parentState={parentState} data={$regulators} expandableRows pagination actions />} */}
-                                    {$fees && 
+                                    {$membersGuide && 
                                     <Card className="card-bordered">
                                         <CardHeader className="border-bottom">
-                                            Fees and Dues
+                                            Members Guide
                                         </CardHeader>
                                         <CardBody className="card-inner">
-                                            <CardTitle tag="h5">{$fees.title}</CardTitle>
+                                            <CardTitle tag="h5">{$membersGuide.name}</CardTitle>
                                             <CardText>
-                                                {$fees.url}
+                                                {/* {$applicantGuide.url} */}
                                             </CardText>
                                             <Button color="primary" onClick={toggleUpdateForm}>Edit</Button>
                                         </CardBody>
-                                        <CardFooter className="border-top">{moment($fees.created_at).format('ll')}</CardFooter>
+                                        {/* <CardFooter className="border-top">{moment($applicantGuide.created_at).format('ll')}</CardFooter> */}
 
                                         <Modal isOpen={modalFormUpdate} toggle={toggleUpdateForm} >
                                             <ModalHeader toggle={toggleUpdateForm} close={<button className="close" onClick={toggleUpdateForm}><Icon name="cross" /></button>}>
                                                 Update
                                             </ModalHeader>
                                             <ModalBody>
-                                                <UpdateFeeComponent fee={$fees} updateParent={updateParentState}/>
+                                                <UpdateMembersComponent membersGuide={$membersGuide} updateParent={updateParentState}/>
                                             </ModalBody>
                                             <ModalFooter className="bg-light">
-                                                <span className="sub-text">Update Fees and Dues</span>
+                                                <span className="sub-text">Update Members Guide</span>
                                             </ModalFooter>
                                         </Modal>                                    
                                         </Card>
@@ -266,4 +266,4 @@ const AdminFees = ({ drawer }) => {
         </React.Fragment>
     );
 };
-export default AdminFees;
+export default AdminMembersGuide ;
