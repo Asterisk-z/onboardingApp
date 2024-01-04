@@ -11,17 +11,6 @@ const initialState = {
   loading: false,
 };
 
-// export const loadActiveFees = createAsyncThunk(
-//   "fees/loadActiveFees",
-//   async (arg) => {
-//     try {
-//       const { data } = await axios.get(`fees-and-dues/current`);
-//       return successHandler(data);
-//     } catch (error) {
-//       return errorHandler(error);
-//     }
-//   }
-// );
 
 export const loadAllMembersGuide = createAsyncThunk(
   "members-guide/loadAllMembersGuide",
@@ -36,7 +25,7 @@ export const loadAllMembersGuide = createAsyncThunk(
 );
 
 export const createMembersGuide = createAsyncThunk(
-  "members-guide/createMemberGuide",
+  "members-guide/createMembersGuide",
   async (values) => {
     try {
       const { data } = await axios.post(`meg/member-guides/create`, values, {
@@ -98,9 +87,6 @@ const membersGuideStore = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // builder.addCase(loadFeesAndDues.fulfilled, (state, action) => {
-    //   state.list_all = JSON.stringify(action.payload?.data?.data);
-    // });
 
     builder.addCase(loadAllMembersGuide.pending, (state) => {
       state.loading = true;
@@ -117,25 +103,12 @@ const membersGuideStore = createSlice({
       state.error = action.payload.message;
     });
 
-    // builder.addCase(loadActiveFees.pending, (state) => {
-    //   state.loading = true;
-    // });
-
-    // builder.addCase(loadActiveFees.fulfilled, (state, action) => {
-    //   state.loading = false;
-    //   state.active = JSON.stringify(action.payload?.data?.data);
-    // });
-
-    // builder.addCase(loadActiveFees.rejected, (state, action) => {
-    //   state.loading = false;
-    //   state.error = action.payload.message;
-    // });
-
     builder.addCase(createMembersGuide.pending, (state) => {
       state.loading = true;
     });
 
     builder.addCase(createMembersGuide.fulfilled, (state, action) => {
+      console.log('herer')
       state.loading = false;
     });
 

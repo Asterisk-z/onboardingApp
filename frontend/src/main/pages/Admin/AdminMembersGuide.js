@@ -108,6 +108,7 @@ const AdminMembersGuide = ({ drawer }) => {
     const toggleForm = () => setModalForm(!modalForm);
     const toggleUpdateForm = () => setModalFormUpdate(!modalFormUpdate);
 
+    
     const handleFormSubmit = async (values) => {
         const formData = new FormData();
         formData.append('name', values.name)
@@ -217,7 +218,8 @@ const AdminMembersGuide = ({ drawer }) => {
                         <Content>
                             <Block size="xl">
                                 <BlockHead>
-                                    <BlockHeadContent>{membersGuide}
+                                    <BlockHeadContent>
+                                        {membersGuide}
                                         {/* <BlockTitle tag="h4">All Membership</BlockTitle> */}
                                         {/* <p>{regulators}</p> */}
                                         {/* {<p>{parentState}</p>} */}

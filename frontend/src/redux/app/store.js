@@ -17,7 +17,7 @@ import sanctionStore from "redux/stores/sanctions/sanctionStore";
 import applicationStore from "redux/stores/membership/applicationStore"
 import feesAndDuesStore from "redux/stores/feesAndDues/feesAndDuesStore";
 import applicantGuideStore from "redux/stores/applicantGuide/applicantGuideStore";
-import membersGuideStore from "redux/stores/applicantGuide/applicantGuideStore";
+import membersGuideStore from "redux/stores/membersGuide/membersGuideStore";
 
 const store = configureStore({
   reducer: {
