@@ -16,6 +16,8 @@ import regulatorStore from "redux/stores/regulators/regulatorStore";
 import sanctionStore from "redux/stores/sanctions/sanctionStore";
 import applicationStore from "redux/stores/membership/applicationStore"
 import feesAndDuesStore from "redux/stores/feesAndDues/feesAndDuesStore";
+import applicantGuideStore from "redux/stores/applicantGuide/applicantGuideStore";
+import membersGuideStore from "redux/stores/applicantGuide/applicantGuideStore";
 
 const store = configureStore({
   reducer: {
@@ -36,6 +38,8 @@ const store = configureStore({
     sanctions: sanctionStore,
     application: applicationStore,
     fees: feesAndDuesStore,
+    applicantGuide: applicantGuideStore,
+    membersGuide: membersGuideStore,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

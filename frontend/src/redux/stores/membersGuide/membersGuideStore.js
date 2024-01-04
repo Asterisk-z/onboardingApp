@@ -5,17 +5,29 @@ import { errorHandler, successHandler } from "../../../utils/Functions";
 const initialState = {
   list: null,
   error: "",
-  view_all: null,
+  all_guides: null,
   active_list: null,
   active: null,
   loading: false,
 };
 
-export const loadActiveFees = createAsyncThunk(
-  "fees/loadActiveFees",
+// export const loadActiveFees = createAsyncThunk(
+//   "fees/loadActiveFees",
+//   async (arg) => {
+//     try {
+//       const { data } = await axios.get(`fees-and-dues/current`);
+//       return successHandler(data);
+//     } catch (error) {
+//       return errorHandler(error);
+//     }
+//   }
+// );
+
+export const loadAllMembersGuide = createAsyncThunk(
+  "members-guide/loadAllMembersGuide",
   async (arg) => {
     try {
-      const { data } = await axios.get(`fees-and-dues/current`);
+      const { data } = await axios.get(`meg/member-guides/list-all`);
       return successHandler(data);
     } catch (error) {
       return errorHandler(error);
@@ -23,26 +35,15 @@ export const loadActiveFees = createAsyncThunk(
   }
 );
 
-export const loadFeesAndDues = createAsyncThunk(
-  "fees/loadFeesAndDues",
-  async (arg) => {
-    try {
-      const { data } = await axios.get(`meg/fees-and-dues/list_all`);
-      return successHandler(data);
-    } catch (error) {
-      return errorHandler(error);
-    }
-  }
-);
-
-export const createFeesAndDues = createAsyncThunk(
-  "fees/createFeesAndDues",
+export const createMembersGuide = createAsyncThunk(
+  "members-guide/createMemberGuide",
   async (values) => {
     try {
-      const { data } = await axios.post(`meg/fees-and-dues/create`, values, {
+      const { data } = await axios.post(`meg/member-guides/create`, values, {
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json;charset=UTF-8",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
         },
       });
       return successHandler(data, data.message);
@@ -52,15 +53,15 @@ export const createFeesAndDues = createAsyncThunk(
   }
 );
 
-export const updateFeesAndDues = createAsyncThunk(
-  "fees/updateFeesAndDues",
+export const updateMembersGuide = createAsyncThunk(
+  "members-guide/updateMemberGuide",
   async (values) => {
     const id = values.id;
     try {
-      const { data } = await axios.post(`meg/fees-and-dues/update/${id}`, values, {
+      const { data } = await axios.post(`meg/member-guides/update/${id}`, values, {
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
         },
       });
       return successHandler(data, data.message);
@@ -70,15 +71,15 @@ export const updateFeesAndDues = createAsyncThunk(
   }
 );
 
-export const updateFeesAndDuesStatus = createAsyncThunk(
-  "fees/updateFeesAndDuesStatus",
+export const updateMembersGuideStatus = createAsyncThunk(
+  "members-guide/updateMembersGuideStatus",
   async (values) => {
     const id = values.get('id');
     try {
-      const { data } = await axios.post(`meg/fees-and-dues/update-status/${id}`, values, {
+      const { data } = await axios.post(`meg/member-guides/update-status/${id}`, values, {
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
         },
       });
       return successHandler(data, data.message);
@@ -88,11 +89,11 @@ export const updateFeesAndDuesStatus = createAsyncThunk(
   }
 );
 
-const feesAndDuesStore = createSlice({
-  name: "fees",
+const membersGuideStore = createSlice({
+  name: "members_guide",
   initialState,
   reducers: {
-    clearFeesAndDues: (state) => {
+    clearMembersGuide: (state) => {
       state.list = null;
     },
   },
@@ -101,74 +102,75 @@ const feesAndDuesStore = createSlice({
     //   state.list_all = JSON.stringify(action.payload?.data?.data);
     // });
 
-    builder.addCase(loadFeesAndDues.pending, (state) => {
+    builder.addCase(loadAllMembersGuide.pending, (state) => {
       state.loading = true;
     });
 
-    builder.addCase(loadFeesAndDues.fulfilled, (state, action) => {
+    builder.addCase(loadAllMembersGuide.fulfilled, (state, action) => {
       state.loading = false;
-      state.view_all = JSON.stringify(action.payload?.data?.data);
+      console.log('frefrf')
+      state.all_guides = JSON.stringify(action.payload?.data?.data);
     });
 
-    builder.addCase(loadFeesAndDues.rejected, (state, action) => {
+    builder.addCase(loadAllMembersGuide.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });
 
-    builder.addCase(loadActiveFees.pending, (state) => {
+    // builder.addCase(loadActiveFees.pending, (state) => {
+    //   state.loading = true;
+    // });
+
+    // builder.addCase(loadActiveFees.fulfilled, (state, action) => {
+    //   state.loading = false;
+    //   state.active = JSON.stringify(action.payload?.data?.data);
+    // });
+
+    // builder.addCase(loadActiveFees.rejected, (state, action) => {
+    //   state.loading = false;
+    //   state.error = action.payload.message;
+    // });
+
+    builder.addCase(createMembersGuide.pending, (state) => {
       state.loading = true;
     });
 
-    builder.addCase(loadActiveFees.fulfilled, (state, action) => {
+    builder.addCase(createMembersGuide.fulfilled, (state, action) => {
       state.loading = false;
-      state.active = JSON.stringify(action.payload?.data?.data);
     });
 
-    builder.addCase(loadActiveFees.rejected, (state, action) => {
+    builder.addCase(createMembersGuide.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });
 
-    builder.addCase(createFeesAndDues.pending, (state) => {
+    builder.addCase(updateMembersGuide.pending, (state) => {
       state.loading = true;
     });
 
-    builder.addCase(createFeesAndDues.fulfilled, (state, action) => {
+    builder.addCase(updateMembersGuide.fulfilled, (state, action) => {
       state.loading = false;
     });
 
-    builder.addCase(createFeesAndDues.rejected, (state, action) => {
+    builder.addCase(updateMembersGuide.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });
 
-    builder.addCase(updateFeesAndDues.pending, (state) => {
+    builder.addCase(updateMembersGuideStatus.pending, (state) => {
       state.loading = true;
     });
 
-    builder.addCase(updateFeesAndDues.fulfilled, (state, action) => {
+    builder.addCase(updateMembersGuideStatus.fulfilled, (state, action) => {
       state.loading = false;
     });
 
-    builder.addCase(updateFeesAndDues.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.payload.message;
-    });
-
-    builder.addCase(updateFeesAndDuesStatus.pending, (state) => {
-      state.loading = true;
-    });
-
-    builder.addCase(updateFeesAndDuesStatus.fulfilled, (state, action) => {
-      state.loading = false;
-    });
-
-    builder.addCase(updateFeesAndDuesStatus.rejected, (state, action) => {
+    builder.addCase(updateMembersGuideStatus.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });
   },
 });
 
-export default feesAndDuesStore.reducer;
-export const { clearFeesAndDues } = feesAndDuesStore.actions;
+export default membersGuideStore.reducer;
+export const { clearMembersGuide } = membersGuideStore.actions;
