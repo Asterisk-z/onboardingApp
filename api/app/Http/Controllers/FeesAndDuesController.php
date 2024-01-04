@@ -28,8 +28,7 @@ class FeesAndDuesController extends Controller
         //
         FeesAndDues::create([
             'title' => $request->input('title'),
-            'url' => $request->input('url'),
-            'status' => $request->input('status')
+            'url' => $request->input('url')
         ]);
         //
         $user = auth()->user();
