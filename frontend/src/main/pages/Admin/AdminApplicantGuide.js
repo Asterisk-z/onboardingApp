@@ -59,7 +59,7 @@ const UpdateFeeComponent = ({fee, updateParent}) => {
         console.log("errors")
     }
     return (
-        <form onSubmit={handleSubmit(handleFormUpdate)} className="is-alter" encType="multipart/form-data">
+        <form onSubmit={handleSubmit(handleFormUpdate)} className="is-alter" enctype="multipart/form-data">
             <div className="form-group">
                 <label className="form-label" htmlFor="code">
                     Title
@@ -181,7 +181,7 @@ const AdminApplicantGuide = ({ drawer }) => {
                         Create Applicant Guide
                     </ModalHeader>
                     <ModalBody>
-                        <form onSubmit={handleSubmit(handleFormSubmit)} className="is-alter" encType="multipart/form-data">
+                        <form onSubmit={handleSubmit(handleFormSubmit)} className="is-alter" enctype="multipart/form-data">
                             <div className="form-group">
                                 <label className="form-label" htmlFor="name">
                                     Name
