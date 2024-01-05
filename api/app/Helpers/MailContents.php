@@ -11,7 +11,7 @@ class MailContents
 
     public static function signupMail($email, $date, $signature): string
     {
-        $url = config('app.front_end_url') . "/set/password?signature=" . $signature . "&email=" . $email;
+        $url = config("app.front_end_url")."/set/password?signature=".$signature;
 
         return "<p>Your account has been successfully created.</p>
         <p>Your login details are as follows:</p>

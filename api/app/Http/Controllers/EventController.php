@@ -7,6 +7,7 @@ use App\Helpers\ResponseStatusCodes;
 use App\Http\Requests\Education\AddEventRequest;
 use App\Http\Requests\Education\UpdateEventRequest;
 use App\Http\Resources\Education\EventBasicResource;
+use App\Http\Resources\Education\EventInvitationWithEventResource;
 use App\Http\Resources\Education\EventRegistrationResource;
 use App\Http\Resources\Education\EventRegistrationWithEventResource;
 use App\Http\Resources\Education\EventResource;
@@ -399,6 +400,13 @@ class EventController extends Controller
         return successResponse('Successful', EventRegistrationResource::make($eventReg));
     }
 
+    public function myInvitedEvents(Request $request)
+    {
+
+        $records = EventInvitePosition::with(['event'])->where('position_id', $request->user()->position_id)->latest()->get();
+
+        return successResponse('Successful', EventInvitationWithEventResource::collection($records));
+    }
     public function myRegisteredEvents(Request $request)
     {
 
