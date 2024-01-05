@@ -4,7 +4,7 @@ import Head from "layout/head/Head";
 import Content from "layout/content/Content";
 import { Card, CardTitle, CardBody, CardLink } from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Row, Col, BlockBetween, PreviewCard } from "components/Component";
-import { loadActiveFees } from "redux/stores/feesAndDues/feesAndDuesStore";
+import { loadActiveGuide } from "redux/stores/applicantGuide/applicantGuideStore";
 
 
 
@@ -13,10 +13,10 @@ const Homepage = () => {
   const [counter, setCounter] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(loadActiveFees());
+    dispatch(loadActiveGuide());
   }, [dispatch, counter]);
-  const fees = useSelector((state) => state?.fees?.active) || null;
-  const $fees = fees ? JSON.parse(fees) : null;
+  const applicantGuide = useSelector((state) => state?.applicantGuide?.active) || null;
+  const $applicantGuide = applicantGuide ? JSON.parse(applicantGuide) : null;
 
 
   return (
@@ -27,19 +27,19 @@ const Homepage = () => {
           <BlockBetween>
             <BlockHeadContent>
               <BlockTitle page tag="h3">
-                FMDQ Fees and Dues Framework
+                Applicant Guide
               </BlockTitle>
             </BlockHeadContent>
           </BlockBetween>
         </BlockHead>
         <PreviewCard>
           <Row className="g-gs">
-            {$fees &&
+            {$applicantGuide &&
               <Col lg="3">
                 <Card className="card-bordered">
                   <CardBody className="card-inner">
-                    <CardTitle tag="h5">{$fees.title}</CardTitle>
-                    <CardLink href={$fees.url} target="_blank" className="btn btn-primary" color="primary">Click to Visit</CardLink>
+                    <CardTitle tag="h5">{$applicantGuide.name}</CardTitle>
+                    <CardLink href={$applicantGuide.file} target="_blank" className="btn btn-primary" color="primary">View Document</CardLink>
                   </CardBody>
                 </Card>
               </Col>}

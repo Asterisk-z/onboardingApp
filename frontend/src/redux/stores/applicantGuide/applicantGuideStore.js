@@ -11,17 +11,17 @@ const initialState = {
   loading: false,
 };
 
-// export const loadActiveFees = createAsyncThunk(
-//   "fees/loadActiveFees",
-//   async (arg) => {
-//     try {
-//       const { data } = await axios.get(`fees-and-dues/current`);
-//       return successHandler(data);
-//     } catch (error) {
-//       return errorHandler(error);
-//     }
-//   }
-// );
+export const loadActiveGuide = createAsyncThunk(
+  "applicant-guide/loadActiveGuide",
+  async (arg) => {
+    try {
+      const { data } = await axios.get(`applicant-guide/current`);
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
+    }
+  }
+);
 
 export const loadApplicantGuide = createAsyncThunk(
   "applicant-guide/loadApplicantGuide",
@@ -116,19 +116,19 @@ const applicantGuideStore = createSlice({
       state.error = action.payload.message;
     });
 
-    // builder.addCase(loadActiveFees.pending, (state) => {
-    //   state.loading = true;
-    // });
+    builder.addCase(loadActiveGuide.pending, (state) => {
+      state.loading = true;
+    });
 
-    // builder.addCase(loadActiveFees.fulfilled, (state, action) => {
-    //   state.loading = false;
-    //   state.active = JSON.stringify(action.payload?.data?.data);
-    // });
+    builder.addCase(loadActiveGuide.fulfilled, (state, action) => {
+      state.loading = false;
+      state.active = JSON.stringify(action.payload?.data?.data);
+    });
 
-    // builder.addCase(loadActiveFees.rejected, (state, action) => {
-    //   state.loading = false;
-    //   state.error = action.payload.message;
-    // });
+    builder.addCase(loadActiveGuide.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
 
     builder.addCase(createApplicantGuide.pending, (state) => {
       state.loading = true;

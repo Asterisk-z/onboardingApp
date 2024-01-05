@@ -10,29 +10,29 @@ import Head from "layout/head/Head";
 
 
 
-const UpdateGuideComponent = ({applicantGuide, updateParent}) => {
+const UpdateGuideComponent = ({ applicantGuide, updateParent }) => {
 
     const dispatch = useDispatch();
 
     const [loading, setLoading] = useState(false);
 
     const { register, handleSubmit, formState: { errors }, resetField } = useForm();
-    
+
     const handleFormUpdate = async (values) => {
-        
+
 
         const postValues = {};
         postValues.name = values.name;
         postValues.file = values.file[0];
         postValues.id = applicantGuide.id;
-        
-        
+
+
         try {
             setLoading(true);
 
 
             const resp = await dispatch(updateApplicantGuide(postValues));
-            
+
             // console.log(values, postValues, loading, resp.payload)
             if (resp.payload?.message === "success") {
 
@@ -68,7 +68,7 @@ const UpdateGuideComponent = ({applicantGuide, updateParent}) => {
             </div>
             <div className="form-group">
                 <label className="form-label" htmlFor="file">
-                    Upload Document 
+                    Upload Document
                 </label>
                 <div className="form-control-wrap">
                     <input type="file" id="file" className="form-control" {...register('file', { required: "This Field is required" })} />
@@ -140,7 +140,7 @@ const AdminApplicantGuide = ({ drawer }) => {
         setParentState(newState);
     };
 
-    
+
 
     return (
         <React.Fragment>
@@ -158,9 +158,10 @@ const AdminApplicantGuide = ({ drawer }) => {
                                 <div className="toggle-expand-content" >
                                     <ul className="nk-block-tools g-3">
                                         <li className="nk-block-tools-opt">
-                                            <Button color="primary">
+                                            {!$applicantGuide &&
+                                                <Button color="primary">
                                                 <span onClick={toggleForm}>Create Applicant Guide</span>
-                                            </Button>
+                                            </Button>}
                                         </li>
                                     </ul>
                                 </div>
@@ -223,31 +224,32 @@ const AdminApplicantGuide = ({ drawer }) => {
 
                                 <PreviewCard>
                                     {/* {$fees && <AdminRegulatorTable  updateParent={updateParentState} parentState={parentState} data={$regulators} expandableRows pagination actions />} */}
-                                    {$applicantGuide && 
-                                    <Card className="card-bordered">
-                                        <CardHeader className="border-bottom">
-                                            Applicant Guide
-                                        </CardHeader>
-                                        <CardBody className="card-inner">
-                                            <CardTitle tag="h5">{$applicantGuide.name}</CardTitle>
-                                            <CardText>
-                                                {/* {$applicantGuide.url} */}
-                                            </CardText>
-                                            <Button color="primary" onClick={toggleUpdateForm}>Edit</Button>
-                                        </CardBody>
-                                        {/* <CardFooter className="border-top">{moment($applicantGuide.created_at).format('ll')}</CardFooter> */}
+                                    {$applicantGuide &&
+                                        <Card className="card-bordered">
+                                            <CardHeader className="border-bottom">
+                                                Applicant Guide
+                                            </CardHeader>
+                                            <CardBody className="card-inner">
+                                                <CardTitle tag="h5">{$applicantGuide.name}</CardTitle>
+                                                <CardText>
+                                                    {/* {$applicantGuide.url} */}
+                                                </CardText>
+                                                <a style={{marginRight:'10px'}} href={$applicantGuide.file} target="_blank" className="btn btn-primary" rel="noreferrer">View Document</a>
+                                                <Button color="primary" onClick={toggleUpdateForm}>Edit</Button>
+                                            </CardBody>
+                                            {/* <CardFooter className="border-top">{moment($applicantGuide.created_at).format('ll')}</CardFooter> */}
 
-                                        <Modal isOpen={modalFormUpdate} toggle={toggleUpdateForm} >
-                                            <ModalHeader toggle={toggleUpdateForm} close={<button className="close" onClick={toggleUpdateForm}><Icon name="cross" /></button>}>
-                                                Update
-                                            </ModalHeader>
-                                            <ModalBody>
-                                                <UpdateGuideComponent applicantGuide={$applicantGuide} updateParent={updateParentState}/>
-                                            </ModalBody>
-                                            <ModalFooter className="bg-light">
-                                                <span className="sub-text">Update Applicant Guide</span>
-                                            </ModalFooter>
-                                        </Modal>                                    
+                                            <Modal isOpen={modalFormUpdate} toggle={toggleUpdateForm} >
+                                                <ModalHeader toggle={toggleUpdateForm} close={<button className="close" onClick={toggleUpdateForm}><Icon name="cross" /></button>}>
+                                                    Update
+                                                </ModalHeader>
+                                                <ModalBody>
+                                                    <UpdateGuideComponent applicantGuide={$applicantGuide} updateParent={updateParentState} />
+                                                </ModalBody>
+                                                <ModalFooter className="bg-light">
+                                                    <span className="sub-text">Update Applicant Guide</span>
+                                                </ModalFooter>
+                                            </Modal>
                                         </Card>
 
                                     }
@@ -263,4 +265,4 @@ const AdminApplicantGuide = ({ drawer }) => {
         </React.Fragment>
     );
 };
-export default AdminApplicantGuide ;
+export default AdminApplicantGuide;

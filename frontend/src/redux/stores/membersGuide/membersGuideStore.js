@@ -11,6 +11,18 @@ const initialState = {
   loading: false,
 };
 
+export const loadActiveGuide = createAsyncThunk(
+  "members-guide/loadActiveGuide",
+  async (arg) => {
+    try {
+      const { data } = await axios.get(`member-guide/current`);
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
+    }
+  }
+);
+
 
 export const loadAllMembersGuide = createAsyncThunk(
   "members-guide/loadAllMembersGuide",
@@ -102,6 +114,21 @@ const membersGuideStore = createSlice({
       state.loading = false;
       state.error = action.payload.message;
     });
+
+    builder.addCase(loadActiveGuide.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(loadActiveGuide.fulfilled, (state, action) => {
+      state.loading = false;
+      state.active = JSON.stringify(action.payload?.data?.data);
+    });
+
+    builder.addCase(loadActiveGuide.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
 
     builder.addCase(createMembersGuide.pending, (state) => {
       state.loading = true;

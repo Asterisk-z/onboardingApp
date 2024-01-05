@@ -12,29 +12,29 @@ import Head from "layout/head/Head";
 
 
 
-const UpdateMembersComponent = ({membersGuide, updateParent}) => {
+const UpdateMembersComponent = ({ membersGuide, updateParent }) => {
 
     const dispatch = useDispatch();
 
     const [loading, setLoading] = useState(false);
 
     const { register, handleSubmit, formState: { errors }, resetField } = useForm();
-    
+
     const handleFormUpdate = async (values) => {
-        
+
 
         const postValues = {};
         postValues.name = values.name;
         postValues.file = values.file[0];
         postValues.id = membersGuide.id;
-        
-        
+
+
         try {
             setLoading(true);
 
 
             const resp = await dispatch(updateMembersGuide(postValues));
-            
+
             // console.log(values, postValues, loading, resp.payload)
             if (resp.payload?.message === "success") {
 
@@ -70,7 +70,7 @@ const UpdateMembersComponent = ({membersGuide, updateParent}) => {
             </div>
             <div className="form-group">
                 <label className="form-label" htmlFor="file">
-                    Upload Document 
+                    Upload Document
                 </label>
                 <div className="form-control-wrap">
                     <input type="file" id="file" className="form-control" {...register('file', { required: "This Field is required" })} />
@@ -108,7 +108,7 @@ const AdminMembersGuide = ({ drawer }) => {
     const toggleForm = () => setModalForm(!modalForm);
     const toggleUpdateForm = () => setModalFormUpdate(!modalFormUpdate);
 
-    
+
     const handleFormSubmit = async (values) => {
         const formData = new FormData();
         formData.append('name', values.name)
@@ -143,7 +143,7 @@ const AdminMembersGuide = ({ drawer }) => {
         setParentState(newState);
     };
 
-    
+
 
     return (
         <React.Fragment>
@@ -161,9 +161,11 @@ const AdminMembersGuide = ({ drawer }) => {
                                 <div className="toggle-expand-content" >
                                     <ul className="nk-block-tools g-3">
                                         <li className="nk-block-tools-opt">
-                                            <Button color="primary">
-                                                <span onClick={toggleForm}>Create Members Guide</span>
-                                            </Button>
+                                            {!$membersGuide &&
+                                                <Button color="primary">
+                                                    <span onClick={toggleForm}>Create Members Guide</span>
+                                                </Button>
+                                            }
                                         </li>
                                     </ul>
                                 </div>
@@ -227,31 +229,32 @@ const AdminMembersGuide = ({ drawer }) => {
 
                                 <PreviewCard>
                                     {/* {$fees && <AdminRegulatorTable  updateParent={updateParentState} parentState={parentState} data={$regulators} expandableRows pagination actions />} */}
-                                    {$membersGuide && 
-                                    <Card className="card-bordered">
-                                        <CardHeader className="border-bottom">
-                                            Members Guide
-                                        </CardHeader>
-                                        <CardBody className="card-inner">
-                                            <CardTitle tag="h5">{$membersGuide.name}</CardTitle>
-                                            <CardText>
-                                                {/* {$applicantGuide.url} */}
-                                            </CardText>
-                                            <Button color="primary" onClick={toggleUpdateForm}>Edit</Button>
-                                        </CardBody>
-                                        {/* <CardFooter className="border-top">{moment($applicantGuide.created_at).format('ll')}</CardFooter> */}
+                                    {$membersGuide &&
+                                        <Card className="card-bordered">
+                                            <CardHeader className="border-bottom">
+                                                Members Guide
+                                            </CardHeader>
+                                            <CardBody className="card-inner">
+                                                <CardTitle tag="h5">{$membersGuide.name}</CardTitle>
+                                                <CardText>
+                                                    {/* {$applicantGuide.url} */}
+                                                </CardText>
+                                                <a style={{marginRight:'10px'}} href={$membersGuide.file} target="_blank" className="btn btn-primary" rel="noreferrer">View Document</a>
+                                                <Button color="primary" onClick={toggleUpdateForm}>Edit</Button>
+                                            </CardBody>
+                                            {/* <CardFooter className="border-top">{moment($applicantGuide.created_at).format('ll')}</CardFooter> */}
 
-                                        <Modal isOpen={modalFormUpdate} toggle={toggleUpdateForm} >
-                                            <ModalHeader toggle={toggleUpdateForm} close={<button className="close" onClick={toggleUpdateForm}><Icon name="cross" /></button>}>
-                                                Update
-                                            </ModalHeader>
-                                            <ModalBody>
-                                                <UpdateMembersComponent membersGuide={$membersGuide} updateParent={updateParentState}/>
-                                            </ModalBody>
-                                            <ModalFooter className="bg-light">
-                                                <span className="sub-text">Update Members Guide</span>
-                                            </ModalFooter>
-                                        </Modal>                                    
+                                            <Modal isOpen={modalFormUpdate} toggle={toggleUpdateForm} >
+                                                <ModalHeader toggle={toggleUpdateForm} close={<button className="close" onClick={toggleUpdateForm}><Icon name="cross" /></button>}>
+                                                    Update
+                                                </ModalHeader>
+                                                <ModalBody>
+                                                    <UpdateMembersComponent membersGuide={$membersGuide} updateParent={updateParentState} />
+                                                </ModalBody>
+                                                <ModalFooter className="bg-light">
+                                                    <span className="sub-text">Update Members Guide</span>
+                                                </ModalFooter>
+                                            </Modal>
                                         </Card>
 
                                     }
@@ -267,4 +270,4 @@ const AdminMembersGuide = ({ drawer }) => {
         </React.Fragment>
     );
 };
-export default AdminMembersGuide ;
+export default AdminMembersGuide;
