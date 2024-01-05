@@ -117,7 +117,7 @@ export const updateStatusCompetency = createAsyncThunk(
 );
 
 export const loadCCOArCompetency = createAsyncThunk(
-  "competency/loadArCompetency",
+  "competency/loadCCOArCompetency",
   async (arg) => {
     try {
       const { data } = await axios.get(`cco/competency/ar`);
@@ -180,18 +180,18 @@ const competencyStore = createSlice({
     });
 
     
-    // ====== builders for loadArCompetency ======
+    // ====== builders for loadCCOArCompetency ======
 
-    builder.addCase(loadArCompetency.pending, (state) => {
+    builder.addCase(loadCCOArCompetency.pending, (state) => {
       state.loading = true;
     });
 
-    builder.addCase(loadArCompetency.fulfilled, (state, action) => {
+    builder.addCase(loadCCOArCompetency.fulfilled, (state, action) => {
         state.loading = false;
         state.list_active = JSON.stringify(action.payload?.data?.data);
     });
 
-    builder.addCase(loadArCompetency.rejected, (state, action) => {
+    builder.addCase(loadCCOArCompetency.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });
