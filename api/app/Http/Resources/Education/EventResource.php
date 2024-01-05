@@ -28,7 +28,7 @@ class EventResource extends JsonResource
             'unregistered_remainder_frequency' => $this->unregistered_remainder_frequency,
 
             'image' => $this->image,
-            'image_url' => $this->image ? asset('storage/' . $this->image) : null, // Adjust the path based on your storage setup
+            'image_url' => $this->image ? config('app.url') .'/storage/app/public/'.$this->image : null, // Adjust the path based on your storage setup
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
 

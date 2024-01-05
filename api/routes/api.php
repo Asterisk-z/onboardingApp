@@ -236,6 +236,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [EventController::class, 'list']);
         Route::get('/view/{event}', [EventController::class, 'view']);
         Route::get('/registered', [EventController::class, 'myRegisteredEvents']);
+        Route::get('/invited', [EventController::class, 'myInvitedEvents']);
 
         Route::middleware('authRole:' . Role::MEG)->group(function () {
             Route::post('/add', [EventController::class, 'add']);
