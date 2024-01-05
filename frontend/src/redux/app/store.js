@@ -18,6 +18,7 @@ import applicationStore from "redux/stores/membership/applicationStore"
 import feesAndDuesStore from "redux/stores/feesAndDues/feesAndDuesStore";
 import applicantGuideStore from "redux/stores/applicantGuide/applicantGuideStore";
 import membersGuideStore from "redux/stores/membersGuide/membersGuideStore";
+import competencyStore from "redux/stores/competency/competencyStore";
 
 const store = configureStore({
   reducer: {
@@ -40,6 +41,7 @@ const store = configureStore({
     fees: feesAndDuesStore,
     applicantGuide: applicantGuideStore,
     membersGuide: membersGuideStore,
+    competency: competencyStore,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
