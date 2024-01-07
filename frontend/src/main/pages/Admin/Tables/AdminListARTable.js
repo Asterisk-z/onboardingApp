@@ -22,9 +22,9 @@ const Export = ({ data }) => {
         }
     }, [modal]);
 
-    const newData = data.map((item) => {
+    const newData = data.map((item, index) => {
         return ({
-            "ID": item.id,
+            "ID": ++index,
             "User": `${item.firstName} ${item.lastName} ${item.email}`,
             "Institution": item.institution.name,
             "Nationality": item.nationality,
@@ -251,7 +251,7 @@ const AdminListARTable = ({ data, pagination, actions, className, selectableRows
     const complainColumn = [
       {
           name: "UID",
-          selector: (row) => row.id,
+          selector: (row, index) => ++index,
           sortable: true,
           width: "100px",
           wrap: true

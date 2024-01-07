@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { errorHandler, successHandler } from "../../../utils/Functions";
-const initialState = { list: null, list_active: null, user: null, total: null, error: "", loading: false };
+const initialState = { list: null, list_com_ars: null, list_non_com_ars: null, list_approval: null, list_active: null, user: null, total: null, error: "", loading: false };
 
 
 
@@ -44,6 +44,32 @@ export const loadAllCompetency = createAsyncThunk(
   async (arg) => {
     try {
       const { data } = await axios.get(`meg/competency-framework/list-all`);
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
+    }
+  }
+);
+
+export const loadAllCompliantArs = createAsyncThunk(
+  "competency/loadAllCompliantArs",
+  async (arg) => {
+    const id = arg.competency_id
+    try {
+      const { data } = await axios.get(`meg/competency-framework/list-compliant-ars/${id}`);
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
+    }
+  }
+);
+
+export const loadAllNonCompliantArs = createAsyncThunk(
+  "competency/loadAllNonCompliantArs",
+  async (arg) => {
+    const id = arg.competency_id
+    try {
+      const { data } = await axios.get(`meg/competency-framework/list-non-complaint-ars/${id}`);
       return successHandler(data);
     } catch (error) {
       return errorHandler(error);
@@ -188,7 +214,7 @@ const competencyStore = createSlice({
 
     builder.addCase(loadCCOArCompetency.fulfilled, (state, action) => {
         state.loading = false;
-        state.list_active = JSON.stringify(action.payload?.data?.data);
+        state.list_approval = JSON.stringify(action.payload?.data?.data);
     });
 
     builder.addCase(loadCCOArCompetency.rejected, (state, action) => {
@@ -227,6 +253,39 @@ const competencyStore = createSlice({
       state.loading = false;
       state.error = action.payload.message;
     });
+    
+    // ====== builders for loadAllCompliantArs ======
+
+    builder.addCase(loadAllCompliantArs.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(loadAllCompliantArs.fulfilled, (state, action) => {
+        state.loading = false;
+        state.list_com_ars = JSON.stringify(action.payload?.data?.data);
+    });
+
+    builder.addCase(loadAllCompliantArs.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+    
+    // ====== builders for loadAllNonCompliantArs ======
+
+    builder.addCase(loadAllNonCompliantArs.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(loadAllNonCompliantArs.fulfilled, (state, action) => {
+        state.loading = false;
+        state.list_non_com_ars = JSON.stringify(action.payload?.data?.data);
+    });
+
+    builder.addCase(loadAllNonCompliantArs.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
 
     // ====== builders for createCompetency ======
 

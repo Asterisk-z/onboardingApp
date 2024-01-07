@@ -20,9 +20,9 @@ const Export = ({ data }) => {
         }
     }, [modal]);
 
-    const newData = data.map((item) => {
+    const newData = data.map((item, index) => {
         return ({
-            "CDID ID": item.id,
+            "CDID ID": ++index,
             "Code": `${item.code}`,
             "Name": item.name,
             "Positions": item.positions.map((position) => position.name).toString(),
@@ -501,7 +501,7 @@ const AdminCategoryTable = ({ data, pagination, actions, className, selectableRo
     const tableColumn = [
     {
         name: "CDID",
-        selector: (row) => row.id,
+        selector: (row, index) => ++index,
         sortable: true,
         width: "100px",
         wrap: true

@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import exportFromJSON from "export-from-json";
+import { useDispatch } from "react-redux";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { Col, Modal, ModalBody, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge,  ModalHeader,  ModalFooter } from "reactstrap";
 import { DataTablePagination } from "components/Component";
+import {  updateCCOStatusCompetency } from "redux/stores/competency/competencyStore";
 import moment from "moment";
 import Icon from "components/icon/Icon";
+import Swal from "sweetalert2";
+
 
 const Export = ({ data }) => {
     const [modal, setModal] = useState(false);
@@ -18,15 +22,15 @@ const Export = ({ data }) => {
 
     const newData = data.map((item, index) => {
         return ({
-            "ID": ++index,
-            "Sanction Summary": `${item.sanction_summary}`,
-            "AR Summary": item.ar_summary,
-            "CCO": item.sanctioner.full_name,
-            "AR": item.sanctionee.full_name_with_mail,
+            "TID": ++index,
+            "Competency": `${item.framework.description}`,
+            "AR Detail": item.ar.email,
+            "Response": item.is_competent ? 'YES' : 'NO',
+            "Evidence": item.evidence_file,
             "Date Created": moment(item.createdAt).format('MMM. DD, YYYY HH:mm')
         })
     });
-  
+
     const fileName = "data";
 
     const exportCSV = () => {
@@ -92,53 +96,121 @@ const CustomCheckbox = React.forwardRef(({ onClick, ...rest }, ref) => (
 
 
 
-const DropdownTrans = (props) => {
+const ActionTab = (props) => {
+  const tabItem = props.complaint
   
-    const complaint = props.complaint
+  const updateParentParent = props.updateParentParent
+  
+   const tabItem_id = tabItem.id
     const [modalForm, setModalForm] = useState(false);
 
+  const dispatch = useDispatch()
     const toggleForm = () => setModalForm(!modalForm);
+          
+    const askAction = async (action) => {
+
+      if(action == 'open') {
+          Swal.fire({
+              title: "Are you sure?",
+              text: "Do you want to approve this Competency Response!",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonText: "Yes, approve it!",
+          }).then((result) => {
+
+            if (result.isConfirmed) {
+                  
+                  const formData = new FormData();
+                  formData.append('competency_id', tabItem_id);
+                  formData.append('action', 'activate');
+                  formData.append('status', 'approved');
+                  const resp = dispatch(updateCCOStatusCompetency(formData));
+                  updateParentParent(Math.random())
+                  
+                  
+              }
+          });
+      }
+      
+      if(action == 'close') {
+          Swal.fire({
+              title: "Are you sure?",
+              text: "Do you want to reject this Competency Response!",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonText: "Yes, reject it!",
+          }).then((result) => {
+
+            if (result.isConfirmed) {
+                  
+                  const formData = new FormData();
+                  formData.append('competency_id', tabItem_id);
+                  formData.append('action', 'deactivate');
+                  formData.append('status', 'rejected');
+                  formData.append('reason', 'deactivate');
+                  const resp = dispatch(updateCCOStatusCompetency(formData));
+                  updateParentParent(Math.random())
+                
+              }
+          });
+      }
+      
+
+  };
   
   return (
     <>
-      <Button color="secondary"  className="btn"  onClick={toggleForm}> <Icon name="eye"></Icon> View</Button>
-          <Modal isOpen={modalForm} toggle={toggleForm} size="xl">
-            <ModalHeader toggle={toggleForm} close={<button className="close" onClick={toggleForm}><Icon name="cross" /></button>}>
-                View
-            </ModalHeader>
-            <ModalBody className="modal-body-xl">
-                <div className="nk-modal">
-                    <h6 className="title">Complaint Type:</h6>
-                    <p>
-                        {complaint.complaint_type.name}
-                    </p>
-                    <h6 className="title">Complaint Description: </h6>
-                    <p>
-                        {complaint.body}
-                    </p>
-                    
-                      {complaint.documment &&
-                        <>
-                          <a href={complaint.documment} target="_blank" className="btn btn-secondary">View Document</a>
-                        </>}
-                      
-                        {complaint.comment.length > 0 && <><h6 className="title">Comment(s):</h6></> }
-                        {complaint.comment.length > 0 && complaint.comment?.map((comment, index) => (<p key={index}>{comment.comment}<br />{ comment.commenter.first_name } <br />{ moment(comment.createdAt).format('MMM. DD, YYYY HH:mm') }</p>))}
-                </div>
-            </ModalBody>
-            <ModalFooter className="bg-light">
-                <div className="text-center w-100">
-                    <p>
-                        Members Registration Oversight Information System (MROIS)
-                    </p>
-                </div>
-            </ModalFooter>
-        </Modal> 
+
+        <div className="toggle-expand-content" style={{ display: "block" }}>
+            <ul className="nk-block-tools g-3">
+                 <li className="nk-block-tools-opt">
+                    <UncontrolledDropdown direction="right">
+                        <DropdownToggle className="dropdown-toggle btn btn-sm" color="secondary">Action</DropdownToggle>
+
+                        <DropdownMenu>
+                            <ul className="link-list-opt">
+                        
+                              <li size="xs">
+                                  <DropdownItem tag="a"  onClick={toggleForm} >
+                                      <Icon name="eye"></Icon>
+                                      <span>View</span>
+                                  </DropdownItem>
+                              </li>
+                              {(tabItem.status == 'pending') ? <>
+                              <li size="xs">
+                                  <DropdownItem tag="a"  onClick={(e) => askAction('open')} >
+                                      <Icon name="eye"></Icon>
+                                      <span>Approve</span>
+                                  </DropdownItem>
+                              </li>
+                              <li size="xs">
+                                    <DropdownItem tag="a"  onClick={(e) => askAction('close')} >
+                                        <Icon name="eye"></Icon>
+                                        <span>Reject</span>
+                                    </DropdownItem>
+                                </li>
+                              </> : ""
+                              }
+
+                            </ul>
+                        </DropdownMenu>
+                    </UncontrolledDropdown>
+                </li>
+
+            </ul>
+        </div>
     </>
   );
 };
 
-const sanctionColumn = [
+
+const ApproveCompetencyTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent }) => {
+  const [tableData, setTableData] = useState(data);
+  const [searchText, setSearchText] = useState("");
+  const [rowsPerPageS, setRowsPerPage] = useState(10);
+  const [mobileView, setMobileView] = useState();
+
+const ApproveCompetencyColumn = [
   {
     name: "ID",
     selector: (row, index) => ++index,
@@ -146,57 +218,55 @@ const sanctionColumn = [
     width: "80px",
   },
   {
-    name: "Sanction Summary",
-    selector: (row) => row.sanction_summary,
+    name: "Competency",
+    selector: (row) => { return (<><p>{`${row.framework.name} `}<br/>{`${row.framework.description}`}</p></>) },
     sortable: true,
     width: "auto",
     wrap: true
   },
   {
-    name: "AR Summary",
-    selector: (row) => row.ar_summary,
+    name: "AR Detail",
+    selector: (row) => { return (<><p>{`${row.ar.first_name} ${row.ar.last_name}`}<br/>{`${row.ar.email}`}</p></>) },
     sortable: true,
     width: "auto",
     wrap: true
+  },
+  {
+    name: "Status",
+    selector: (row) => { return (<><Badge color={row.status == 'approved' ? 'success' : 'gray'}>{row.status=='approved' ? 'Approved' : 'Pending'}</Badge></>) },
+    sortable: true,
+    width: "150px",
+  },
+  {
+    name: "Response",
+    selector: (row) => { return (<><Badge color={row.is_competent ? 'success' : 'gray'}>{row.is_competent ? 'YES' : 'NO'}</Badge></>) },
+    sortable: true,
+    width: "150px",
   },
   {
     name: "Evidence",
-    selector: (row) => { return row.evidence_file ? (<><a href={row.evidence_file}  target="_blank"  className="btn btn-success">{`View`}</a></>) : (<><Badge color="warning">{`No evidence`}</Badge></>) },
+    selector: (row) => { return row.evidence ? (<><a href={row.evidence_file} target="_blank" className="btn btn-secondary">View</a></>) : "" },
     sortable: true,
     width: "150px",
-  },
-  {
-    name: "CCO",
-    selector: (row) => row.sanctioner.full_name,
-    sortable: true,
-    width: "auto",
-    wrap: true
-  },
-  {
-    name: "AR",
-    selector: (row) => row.sanctionee.full_name_with_mail,
-    sortable: true,
-    width: "auto",
-    wrap: true
   },
   {
     name: "Date Created",
-    selector: (row) => moment(row.created_at).format('MMM. DD, YYYY HH:mm'),
+    selector: (row) => moment(row.createdAt).format('MMM. DD, YYYY HH:mm'),
     sortable: true,
     width: "150px",
-  }
-];
-
-const SanctionTable = ({ data, pagination, actions, className, selectableRows, expandableRows }) => {
-  const [tableData, setTableData] = useState(data);
-  const [searchText, setSearchText] = useState("");
-  const [rowsPerPageS, setRowsPerPage] = useState(10);
-  const [mobileView, setMobileView] = useState();
-
+  },
+  {
+    name: "Action",
+    selector: (row) => (<> <ActionTab complaint={row} updateParentParent={ updateParent } /></>),
+    sortable: true,
+    width: "150px",
+  },
+  ];
+  
     useEffect(() => {
         setTableData(data)
     }, [data]);
-  
+    
   useEffect(() => {
     let defaultData = tableData;
     if (searchText !== "") {
@@ -274,7 +344,7 @@ const SanctionTable = ({ data, pagination, actions, className, selectableRows, e
                     </Row>
                     <DataTable
                         data={tableData}
-                        columns={sanctionColumn}
+                        columns={ApproveCompetencyColumn}
                         className={className + ' customMroisDatatable'} id='customMroisDatatable'
                         selectableRows={selectableRows}
                         selectableRowsComponent={CustomCheckbox}
@@ -322,4 +392,4 @@ const SanctionTable = ({ data, pagination, actions, className, selectableRows, e
     //         );
 };
 
-export default SanctionTable;
+export default ApproveCompetencyTable;

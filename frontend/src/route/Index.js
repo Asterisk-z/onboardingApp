@@ -44,14 +44,22 @@ import Regulators from "main/pages/Regulators"
 import Sanction from "main/pages/Sanction"
 import ApplicantsGuide from "main/pages/ApplicantsGuide"
 import MembersGuide from "main/pages/MembersGuide"
+import UpdateCompetency from "main/pages/UpdateCompetency"
+import ApproveCompetency from "main/pages/ApproveCompetency"
+
 
 import AdminAuditLog from "main/pages/Admin/AdminAuditLog" 
 import AdminInstitutions from "main/pages/Admin/AdminInstitutions";
 import AddBroadcast from "main/pages/Admin/AddBroadcast";
 import UserAuditLog from "main/pages/Admin/AuditLog" 
 import AdminApplicantGuide from "main/pages/Admin/AdminApplicantGuide"
+import AdminCompetencyFramework from "main/pages/Admin/AdminCompetencyFramework"
+import AdminCompetencyDone from "main/pages/Admin/AdminCompetencyDone"
+import AdminCompetencyUndone from "main/pages/Admin/AdminCompetencyUndone"
 import AdminMembersGuide from "main/pages/Admin/AdminMembersGuide"
 import Success from "pages/auth/Success";
+
+
 
 import Layout from "layout/Index";
 import AdminLayout from "layout/AdminLayout";
@@ -145,7 +153,10 @@ const Router = () => {
           <Route path="regulators" element={<Regulators />}></Route>
           <Route path="applicant-guide" element={<ApplicantsGuide />}></Route>
           <Route path="membership-guide" element={<MembersGuide />}></Route>
+          <Route path="update-competency" element={<UpdateCompetency />}></Route>
+          <Route path="approve-competency" element={<ApproveCompetency />}></Route>
         </Route>
+
 
         <Route path={`${process.env.PUBLIC_URL}`} element={<AdminLayout />}>
           <Route path="admin-dashboard" element={<AdminHomepage />}></Route>
@@ -166,6 +177,9 @@ const Router = () => {
           <Route path="admin-fees-framework" element={<AdminFeesFramework/>}></Route>
           <Route path="admin-applicant-guide" element={<AdminApplicantGuide/>}></Route>
           <Route path="admin-members-guide" element={<AdminMembersGuide/>}></Route>
+          <Route path="admin-competency-framework" element={<AdminCompetencyFramework/>}></Route>
+          <Route path="admin-competency-done/:competency_id" element={<AdminCompetencyDone/>}></Route>
+          <Route path="admin-competency-undone/:competency_id" element={<AdminCompetencyUndone/>}></Route>
           <Route path="wizard" element={<WizardTest />}></Route>
 
         </Route>

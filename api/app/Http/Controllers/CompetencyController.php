@@ -2,32 +2,63 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CompetencyFramework;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+use App\Helpers\MailContents;
 use App\Helpers\ResponseStatusCodes;
 use App\Models\Competency;
+use App\Models\CompetencyFramework;
 use App\Models\Position;
 use App\Models\User;
 use App\Notifications\InfoNotification;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
-use App\Helpers\MailContents;
-use App\Helpers\Utility;
 
 class CompetencyController extends Controller
 {
     //
     public function listAll()
     {
-        $competencies = CompetencyFramework::where('is_del', 0)->orderBy('created_at', 'DESC')->get();
+        $competencies = CompetencyFramework::orderBy('created_at', 'DESC')->get();
         return successResponse('Successful', $competencies);
     }
 
     //
     public function listActive()
     {
-        $competencies = CompetencyFramework::where('is_del', 0)->orderBy('created_at', 'DESC')->get();
+        $competencies = CompetencyFramework::where('is_del', 0)->where('position', auth()->user()->position_id)->orderBy('created_at', 'DESC')->get()->toArray();
         return successResponse('Successful', $competencies);
+    }
+
+    //
+    public function listCompliantArs($id): JsonResponse
+    {
+
+        $competency = CompetencyFramework::find($id);
+        if (!$competency) {
+            return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'Does not exist');
+        }
+
+        $ar_ids = Competency::where('framework_id', $id)->where('status', 'approved')->pluck('ar_id');
+
+        $ars = User::where('position_id', $competency->position)->whereIn('id', $ar_ids)->with(['institution', 'position', 'competency_response'])->get()->toArray();
+
+        return successResponse('successful', $ars);
+    }
+
+    //
+    public function listNonCompliantArs($id): JsonResponse
+    {
+
+        $competency = CompetencyFramework::find($id);
+        if (!$competency) {
+            return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'Does not exist');
+        }
+
+        $ar_ids = Competency::where('framework_id', $id)->where('status', 'approved')->pluck('ar_id');
+
+        $ars = User::where('position_id', $competency->position)->whereNotIn('id', $ar_ids)->with(['institution', 'position', 'competency_response'])->get()->toArray();
+
+        return successResponse('successful', $ars);
     }
 
     //
@@ -37,16 +68,16 @@ class CompetencyController extends Controller
             "name" => "required|string",
             "description" => "required",
             "position" => "required|exists:positions,id",
-            "member_category" => "required|exists:membership_categories,id"
+            "member_category" => "required|exists:membership_categories,id",
         ]);
 
         $user = auth()->user();
-        $competency =   CompetencyFramework::create([
-            'name' =>  $validated['name'],
+        $competency = CompetencyFramework::create([
+            'name' => $validated['name'],
             'description' => $validated['description'],
             'member_category' => $validated['member_category'],
             'position' => $validated['position'],
-            'created_by' => $user->email
+            'created_by' => $user->email,
         ]);
 
         $logMessage = $user->email . ' created a new competency framework named : ' . $validated['name'];
@@ -68,11 +99,11 @@ class CompetencyController extends Controller
             "name" => "required|string",
             "description" => "required",
             "position" => "required|exists:positions,id",
-            "member_category" => "required|exists:membership_categories,id"
+            "member_category" => "required|exists:membership_categories,id",
         ]);
         //
         $competencies->update([
-            'name' =>  $validated['name'],
+            'name' => $validated['name'],
             'description' => $validated['description'],
             'member_category' => $validated['member_category'],
             'position' => $validated['position'],
@@ -89,9 +120,27 @@ class CompetencyController extends Controller
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'Does not exist');
         }
 
-        $competencies->update([
-            'is_del' => $request->status,
+        $request->validate([
+            'action' => 'required',
         ]);
+
+        if (request('action') == 'activate') {
+            $competencies->update([
+                'is_del' => 0,
+                'reason' => null,
+            ]);
+        } else {
+
+            $request->validate([
+                'reason' => 'required',
+            ]);
+
+            $competencies->update([
+                'is_del' => 1,
+                'reason' => request('reason'),
+            ]);
+
+        }
 
         return successResponse('Status updated', $competencies);
     }
@@ -100,22 +149,43 @@ class CompetencyController extends Controller
     public function listARCompetencies(): JsonResponse
     {
         //
-        $competencies = Competency::orderBy('created_at', 'DESC')->get();
+        $competencies = Competency::where('institution_id', auth()->user()->institution_id)->with('framework')->orderBy('status', 'DESC')->orderBy('created_at', 'DESC')->get();
         return successResponse('Successful', $competencies);
     }
 
     //
-    public function statusCompetency(Request $request, $id): JsonResponse
+    public function statusCompetency(Request $request): JsonResponse
     {
-        //
-        $competencies = Competency::find($id);
+
+        $request->validate([
+            'action' => 'required',
+            'status' => 'required',
+            'competency_id' => 'required',
+        ]);
+
+        $competencies = Competency::find(request('competency_id'));
         if (!$competencies) {
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'Does not exist');
         }
-        //
-        $competencies->update([
-            'status' => $request->status,
-        ]);
+
+        if (request('action') == 'activate') {
+            $competencies->update([
+                'status' => $request->status,
+                'cco_id' => auth()->user()->id,
+            ]);
+        } else {
+
+            $request->validate([
+                'reason' => 'required',
+            ]);
+
+            $ar = User::where('id', $competencies->id)->first();
+
+            Notification::send($ar, new InfoNotification(MailContents::rejectedCompetencyMessage(request('reason')), MailContents::rejectedCompetencySubject()));
+
+            $competencies->delete();
+
+        }
 
         return successResponse('Competency status updated', $competencies);
     }
@@ -125,20 +195,23 @@ class CompetencyController extends Controller
     {
         $validated = $request->validate([
             "framework_id" => "required",
-            "ar_id" => "required",
-            "institution_id" => "required",
             "is_competent" => "required|boolean",
             "evidence" => "nullable|mimes:jpeg,png,jpg,pdf",
         ]);
 
         $user = auth()->user();
-        $competency =   Competency::create([
-            'framework_id' =>  $validated['framework_id'],
+        $competency_response = Competency::where('framework_id', $request->framework_id)->where('ar_id', auth()->user()->id)->first();
+        if ($competency_response) {
+            return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'You have responded to this competency');
+        }
+
+        $competency = Competency::create([
+            'framework_id' => $validated['framework_id'],
             'ar_id' => auth()->user()->id,
             'institution_id' => auth()->user()->institution_id,
             'is_competent' => $validated['is_competent'],
             'evidence' => $request->hasFile('evidence') ? $request->file('evidence')->storePublicly('evidence', 'public') : null,
-            'status' => 'pending'
+            'status' => 'pending',
         ]);
         // mail
         $cco_position = Position::where('name', Position::CCO)->first();

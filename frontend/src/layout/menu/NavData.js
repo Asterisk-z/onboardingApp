@@ -56,6 +56,11 @@ const navData = [{
     text: "Disciplinary and Sanctions History",
     link: "/admin-sanctions",
   },
+    {
+    icon: "dashboard-fill",
+    text: "Competency Framework",
+    link: "/admin-competency-framework",
+  },
   {
     icon: "dashboard-fill",
     text: "Institutions",
@@ -161,10 +166,6 @@ const navData = [{
     text: "Portals Guide",
     active: false,
     subMenu: [
-      // {
-      //   text: "Complaint Type",
-      //   link: "/admin-complaint-type",
-      // },
       {
         text: "Applicant Guide",
         link: "/applicant-guide",
@@ -174,6 +175,21 @@ const navData = [{
         link: "/membership-guide",
       },
        
+    ],
+  },
+  {
+    icon: "tile-thumb-fill",
+    text: "Competency Framework",
+    active: false,
+    subMenu: [
+      {
+        text: "Update Competency",
+        link: "/update-competency",
+      }, 
+      {
+        text: "Approve Competency",
+        link: "/approve-competency",
+      },
     ],
   },
   // {

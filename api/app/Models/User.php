@@ -88,6 +88,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(PasswordHistory::class);
     }
 
+    public function competency_response()
+    {
+        return $this->hasMany(Competency::class, 'ar_id', 'id');
+    }
+
     public function getFullName(): string
     {
         return $this->first_name . ' ' . $this->last_name;

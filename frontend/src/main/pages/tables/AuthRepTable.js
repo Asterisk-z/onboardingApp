@@ -24,9 +24,9 @@ const Export = ({ data }) => {
         }
     }, [modal]);
 
-    const newData = data.map((item) => {
+    const newData = data.map((item, index) => {
         return ({
-            "User ID": item.id,
+            "User ID": ++index,
             "Name": `${item.firstName} ${item.lastName}`,
             "Email": item.email,
             "Phone": item.phone,
@@ -600,7 +600,7 @@ const AuthRepTable = ({ data, pagination, actions, className, selectableRows, ex
     const authRepColumn = [
     {
         name: "User ID",
-        selector: (row) => row.id,
+        selector: (row, index) => ++index,
         sortable: true,
         width: "100px",
         wrap: true

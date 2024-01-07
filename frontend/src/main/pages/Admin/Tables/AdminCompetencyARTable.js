@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
+import { useNavigate, useParams } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import exportFromJSON from "export-from-json";
 import CopyToClipboard from "react-copy-to-clipboard";
-import { Col, Modal, ModalBody, Row, Button } from "reactstrap";
+import Icon from "components/icon/Icon";
+import { useDispatch } from "react-redux";
+import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge,  Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, CardBody, CardTitle } from "reactstrap";
 import { DataTablePagination } from "components/Component";
 import moment from "moment";
-import Skeleton from 'react-loading-skeleton'
-import Countdown from 'react-countdown';
+import { megProcessAddUserAR } from "redux/stores/authorize/representative";
+import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
+import Swal from "sweetalert2";
 
 const Export = ({ data }) => {
     const [modal, setModal] = useState(false);
@@ -20,13 +25,17 @@ const Export = ({ data }) => {
     const newData = data.map((item, index) => {
         return ({
             "ID": ++index,
-            "User": `${item.user}`,
-            "Description": item.description,
-            "IP Address": item.ip_address,
+            "User": `${item.firstName} ${item.lastName} ${item.email}`,
+            "Institution": item.institution.name,
+            "Nationality": item.nationality,
+            "Status": item.approval_status,
+            "Role": item.role.name,
+            "Position": item.position.name,
+            "Reg No": item.reg_Id,
             "Date Created": moment(item.createdAt).format('MMM. DD, YYYY HH:mm')
         })
     });
-
+  
     const fileName = "data";
 
     const exportCSV = () => {
@@ -76,60 +85,88 @@ const Export = ({ data }) => {
 };
 
 
-const CustomCheckbox = React.forwardRef(({ onClick, ...rest }, ref) => (
-  <div className="custom-control custom-control-sm custom-checkbox notext">
-    <input
-      id={rest.name}
-      type="checkbox"
-      className="custom-control-input"
-      ref={ref}
-      onClick={onClick}
-      {...rest}
-    />
-    <label className="custom-control-label" htmlFor={rest.name} />
-  </div>
-));
+const ActionTab = (props) => {
+        
+    const aUser = useUser();
+    const aUserUpdate = useUserUpdate();
+    const ar_user = props.ar_user
+
+    const { competency_id } = useParams();
+
+    const competency_response = ar_user.competency_response.filter((response) => response.framework_id == competency_id)[0]
 
 
-const tableColumn = [
+  
+  return (
+    <>
+        <div className="toggle-expand-content" style={{ display: "block" }}>
+        {competency_response?.evidence_file && <a href={competency_response.evidence_file} target="_blank" className="btn btn-secondary btn-sm">View</a>}
+        </div>
+    </>
+
+
+  );
+};
+
+const AdminCompetencyARTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState }) => {
+    const complainColumn = [
       {
-        name: "ID",
-        selector: (row, index) => ++index,
-        sortable: true,
+          name: "UID",
+          selector: (row, index) => ++index,
+          sortable: true,
+          width: "100px",
+          wrap: true
+      },
+      {
+          name: "User Detail",
+          selector: (row) => { return (<><p>{`${row.first_name} ${row.last_name}`}<br/>{`${row.email}`}</p></>) },
+          sortable: true,
+          width: "auto",
+          wrap: true
+      },
+      {
+          name: "Institution",
+          selector: (row) => { return (<>{`${row.institution.name}`}</>) },
+          sortable: true,
+          width: "auto",
+          wrap: true
+      },
+      {
+          name: "Role",
+          selector: (row) =>  { return (<><Badge color="success">{`${row.role.name}`}</Badge></>) },
+          sortable: true,
+          width: "auto",
+          wrap: true
+      },
+      {
+          name: "Position",
+          selector: (row) => { return (<>{`${row.position.name}`}</>) },
+          sortable: true,
+          width: "auto",
+          wrap: true
+      },
+      {
+          name: "Reg No",
+          selector: (row) => { return (<>{`${row.reg_id}`}</>) },
+          sortable: true,
+          width: "auto",
+          wrap: true
+      },
+      {
+          name: "Date Created",
+          selector: (row) => moment(row.created_at).format('MMM. DD, YYYY HH:mm'),
+          sortable: true,
+          width: "auto",
+          wrap: true
+      },
+      {
+        name: "Action",
+        selector: (row) => (row.competency_response.length > 0 ? <>
+                        <ActionTab ar_user={row}  updateParentParent={updateParent} />
+                    </> : ""),
         width: "100px",
-        wrap: true
       },
-      {
-        name: "User",
-        selector: (row) => row.user,
-        sortable: true,
-        width: "auto",
-        wrap: true
-      },
-      {
-        name: "Description",
-        selector: (row) => row.description,
-        sortable: [true],
-        width: "auto",
-        wrap: true
-      },
-      {
-        name: "IP Address",
-        selector: (row) => row.ip_address,
-        sortable: true,
-        width: "auto",
-        wrap: true
-      },
-      {
-        name: "Date Created",
-        selector: (row) => moment(row.created_at).format('MMM. DD, YYYY HH:mm'),
-        sortable: true,
-        width: "auto",
-        wrap: true
-      },
-  ];
-
-const AllActivities = ({ data, pagination, actions, className, selectableRows, expandableRows }) => {
+    ];
   const [tableData, setTableData] = useState(data);
   const [searchText, setSearchText] = useState("");
   const [rowsPerPageS, setRowsPerPage] = useState(10);
@@ -138,17 +175,15 @@ const AllActivities = ({ data, pagination, actions, className, selectableRows, e
     useEffect(() => {
         setTableData(data)
     }, [data]);
-  
+
   useEffect(() => {
     let defaultData = tableData;
-    // console.log(searchText, defaultData)
     if (searchText !== "") {
       defaultData = data.filter((item) => {
         // return item.name.toLowerCase().includes(searchText.toLowerCase());
         return (Object.values(item).join('').toLowerCase()).includes(searchText.toLowerCase())
       });
       setTableData(defaultData);
-      // setTableData(defaultData);
     } else {
       setTableData(data);
     }
@@ -173,7 +208,7 @@ const AllActivities = ({ data, pagination, actions, className, selectableRows, e
 
     // const renderer = ({ hours, minutes, seconds, completed }) => {
     //         if (completed) {
-                  
+              
   return (
     <div className={`dataTables_wrapper dt-bootstrap4 no-footer ${className ? className : ""}`}>
       <Row className={`justify-between g-2 ${actions ? "with-export" : ""}`}>
@@ -191,7 +226,7 @@ const AllActivities = ({ data, pagination, actions, className, selectableRows, e
         </Col>
         <Col className="col-5 text-end" sm="8">
           <div className="datatable-filter">
-            
+
             <div className="d-flex justify-content-end g-2">
               {actions && <Export data={data} />}
               <div className="dataTables_length" id="DataTables_Table_0_length">
@@ -219,10 +254,9 @@ const AllActivities = ({ data, pagination, actions, className, selectableRows, e
       </Row>
       <DataTable
         data={tableData}
-        columns={tableColumn}
+        columns={complainColumn}
         className={className + ' customMroisDatatable'} id='customMroisDatatable'
         selectableRows={selectableRows}
-        selectableRowsComponent={CustomCheckbox}
         expandableRows={mobileView}
         noDataComponent={<div className="p-2">There are no records found</div>}
         sortIcon={
@@ -268,4 +302,4 @@ const AllActivities = ({ data, pagination, actions, className, selectableRows, e
     //         );
 };
 
-export default AllActivities;
+export default AdminCompetencyARTable;

@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
+import { useNavigate } from "react-router-dom";
 import exportFromJSON from "export-from-json";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge,  Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner } from "reactstrap";
 import { DataTablePagination } from "components/Component";
-import { updateComplaintTypes, updateComplaintTypesStatus } from "redux/stores/complaints/complaintTypes";
+import { updateMembershipCategoryStatus, updateMembershipCategory, mapToPositions, unlinkFromPositions } from "redux/stores/memberCategory/category";
+import { updateCompetency, updateStatusCompetency } from "redux/stores/competency/competencyStore";
 import moment from "moment";
 import Icon from "components/icon/Icon";
 import Swal from "sweetalert2";
@@ -22,9 +24,11 @@ const Export = ({ data }) => {
 
     const newData = data.map((item, index) => {
         return ({
-            "CDID": ++index,
+            "ID": ++index,
             "Name": `${item.name}`,
-            "Status": item.active,
+            "Description": item.description,
+            "Category": item.category_obj.name,
+            "Position": item.position_obj.name,
             "Date Created": moment(item.createdAt).format('MMM. DD, YYYY HH:mm')
         })
     });
@@ -77,13 +81,13 @@ const Export = ({ data }) => {
     );
 };
 
-const ActionTab = ({ updateParentParent, tabItem}) => {
+
+const ActionTab = ({ updateParentParent, tabItem, positions, categories}) => {
     const tabItem_id = tabItem.id
     const [modalForm, setModalForm] = useState(false);
-    const [modalDetail, setModalDetail] = useState(false);
+    const navigate = useNavigate();
 
     const toggleForm = () => setModalForm(!modalForm);
-    const toggleModalDetail = () => { setModalDetail(!modalForm) };
     
     const dispatch = useDispatch();
     const { register, handleSubmit, formState: { errors }, resetField } = useForm();
@@ -91,24 +95,28 @@ const ActionTab = ({ updateParentParent, tabItem}) => {
     
     const [formData, setFormData] = useState({
         name: tabItem.name ,
+        description: tabItem.description ,
+        position: tabItem.position ,
+        member_category: tabItem.member_category ,
     });
     const handleFormSubmit = async (values) => {
 
         const formData = new FormData();
-        formData.append('complaintType_id', tabItem_id)
+        formData.append('competency_id', tabItem_id)
         formData.append('name', values.name)
+        formData.append('description', values.description)
+        formData.append('position', values.position)
+        formData.append('member_category', values.member_category)
         
         try {
             setLoading(true);
             
-            const resp = await dispatch(updateComplaintTypes(formData));
+            const resp = await dispatch(updateCompetency(formData));
 
             if (resp.payload?.message == "success") {
                 setTimeout(() => {
                     setLoading(false);
                     setModalForm(!modalForm)
-                    resetField('name')
-                    resetField('code')
                     updateParentParent(Math.random())
                 }, 1000);
             
@@ -121,59 +129,55 @@ const ActionTab = ({ updateParentParent, tabItem}) => {
       }
     }; 
 
-    const toggleModalDetailTwo = () => {
-        setModalDetail(false)
-    }
-    
-        
-  const askAction = async (action) => {
-    
-    if(action == 'open') {
-        Swal.fire({
-            title: "Are you sure?",
-            text: "Do you want to activate this category!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes, open it!",
-        }).then((result) => {
+          
+    const askAction = async (action) => {
 
-          if (result.isConfirmed) {
-                
-                const formData = new FormData();
-                formData.append('complaintType_id', tabItem_id);
-                formData.append('action', 'activate');
-                const resp = dispatch(updateComplaintTypesStatus(formData));
-                
-                updateParentParent(Math.random())
-                
-                
-            }
-        });
-    }
-    
-    if(action == 'close') {
-        Swal.fire({
-            title: "Are you sure?",
-            text: "Do you want to deactivate this category!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes, close it!",
-        }).then((result) => {
+      if(action == 'open') {
+          Swal.fire({
+              title: "Are you sure?",
+              text: "Do you want to activate this Competency!",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonText: "Yes, open it!",
+          }).then((result) => {
 
-          if (result.isConfirmed) {
-                
-                const formData = new FormData();
-                formData.append('complaintType_id', tabItem_id);
-                formData.append('action', 'deactivate');
-                const resp = dispatch(updateComplaintTypesStatus(formData));
-                updateParentParent(Math.random())
-              
-            }
-        });
-    }
-    
+            if (result.isConfirmed) {
+                  
+                  const formData = new FormData();
+                  formData.append('competency_id', tabItem_id);
+                  formData.append('action', 'activate');
+                  const resp = dispatch(updateStatusCompetency(formData));
+                  updateParentParent(Math.random())
+                  
+                  
+              }
+          });
+      }
+      
+      if(action == 'close') {
+          Swal.fire({
+              title: "Are you sure?",
+              text: "Do you want to deactivate this Competency!",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonText: "Yes, close it!",
+          }).then((result) => {
 
-  };
+            if (result.isConfirmed) {
+                  
+                  const formData = new FormData();
+                  formData.append('competency_id', tabItem_id);
+                  formData.append('action', 'deactivate');
+                  formData.append('reason', 'deactivate');
+                  const resp = dispatch(updateStatusCompetency(formData));
+                  updateParentParent(Math.random())
+                
+              }
+          });
+      }
+      
+
+    };
   
     return (
       <>
@@ -193,6 +197,18 @@ const ActionTab = ({ updateParentParent, tabItem}) => {
                                       <span>Edit</span>
                                   </DropdownItem>
                               </li>
+                              <li size="xs">
+                                  <DropdownItem tag="a"  onClick={(e) => navigate(`${process.env.PUBLIC_URL}/admin-competency-done/${tabItem_id}`)} >
+                                      <Icon name="eye"></Icon>
+                                      <span>View Compliant ARs</span>
+                                  </DropdownItem>
+                              </li>
+                              <li size="xs">
+                                  <DropdownItem tag="a"  onClick={(e) => navigate(`${process.env.PUBLIC_URL}/admin-competency-undone/${tabItem_id}`)} >
+                                      <Icon name="eye"></Icon>
+                                      <span>View Non-Compliant ARs</span>
+                                  </DropdownItem>
+                              </li>
                               {(!tabItem.active) ? <>
                               <li size="xs">
                                   <DropdownItem tag="a"  onClick={(e) => askAction('open')} >
@@ -208,7 +224,6 @@ const ActionTab = ({ updateParentParent, tabItem}) => {
                                 </li>
                               </>
                               }
-                                     
 
                             </ul>
                         </DropdownMenu>
@@ -217,42 +232,89 @@ const ActionTab = ({ updateParentParent, tabItem}) => {
 
             </ul>
         </div>
-          <Modal isOpen={modalForm} toggle={toggleForm} >
-              <ModalHeader toggle={toggleForm} close={<button className="close" onClick={toggleForm}><Icon name="cross" /></button>}>
-                  Update
-              </ModalHeader>
-              <ModalBody>
-                  <form  onSubmit={handleSubmit(handleFormSubmit)}  className="is-alter" encType="multipart/form-data">
-                      <div className="form-group">
-                          <label className="form-label" htmlFor="full-name">
-                              Name
-                          </label>
-                          <div className="form-control-wrap">
-                              <input type="text" id="name" className="form-control" {...register('name', { required: "This Field is required" })} defaultValue={formData.name} />
-                              {errors.name && <span className="invalid">{ errors.name.message }</span>}
+        <Modal isOpen={modalForm} toggle={toggleForm} >
+            <ModalHeader toggle={toggleForm} close={<button className="close" onClick={toggleForm}><Icon name="cross" /></button>}>
+                Update
+            </ModalHeader>
+            <ModalBody>
+                <form  onSubmit={handleSubmit(handleFormSubmit)}  className="is-alter" encType="multipart/form-data">
+                    
+                          <div className="form-group">
+                              <label className="form-label" htmlFor="name">
+                                  Name
+                              </label>
+                              <div className="form-control-wrap">
+                                  <input type="text" id="name" className="form-control" {...register('name', { required: "This Field is required" })}  defaultValue={formData.name} />
+                                  {errors.name && <span className="invalid">{ errors.name.message }</span>}
+                              </div>
                           </div>
-                      </div>
-                      <div className="form-group">
-                          <Button color="primary" type="submit"  size="lg">
-                              {loading ? ( <span><Spinner size="sm" color="light" /> Processing...</span>) : "Update"}
-                          </Button>
-                      </div>
-                  </form>
-              </ModalBody>
-              <ModalFooter className="bg-light">
-                  <span className="sub-text">Feedback</span>
-              </ModalFooter>
-          </Modal>
+                          <div className="form-group">
+                              <label className="form-label" htmlFor="description">
+                                  Description
+                              </label>
+                              <div className="form-control-wrap">
+                                  <textarea id="description" className="form-control" {...register('description', { required: "This Field is required" })} defaultValue={formData.description} ></textarea>
+                                  {errors.description && <span className="invalid">{errors.description.message}</span>}
+                              </div>
+                          </div>
+                          <div className="form-group">
+                              <label className="form-label" htmlFor="member_category">
+                                  Membership Category
+                              </label>
+                              <div className="form-control-wrap">
+                                  <div className="form-control-select">
+                                      <select className="form-control form-select" id="member_category"  style={{ color: "black !important" }} {...register('member_category', { required: "This Field is Required" })} defaultValue={formData.member_category} >
+                                      <option value="">Select Membership Category</option>
+                                      {categories && categories?.map((category) => (
+                                          <option key={category.id} value={category.id}>
+                                              {category.name}
+                                          </option>
+                                      ))}
+                                      </select>
+                                      {errors.member_category && <p className="invalid">{`${errors.member_category.message}`}</p>}
+                                  </div>
+                              </div>
+                          </div>
+                          <div className="form-group">
+                              <label className="form-label" htmlFor="position">
+                                  Position
+                              </label>
+                              <div className="form-control-wrap">
+                                  <div className="form-control-select">
+                                      <select className="form-control form-select" id="position" style={{ color: "black !important" }} {...register('position', { required: "THis Field is Required" })} defaultValue={formData.position} >
+                                      <option value="">Select Position</option>
+                                      {positions && positions?.map((position) => (
+                                          <option key={position.id} value={position.id}>
+                                              {position.name}
+                                          </option>
+                                      ))}
+                                      </select>
+                                      {errors.positions && <p className="invalid">{`${errors.positions.message}`}</p>}
+                                  </div>
+                              </div>
+                          </div>
+                    <div className="form-group">
+                        <Button color="primary" type="submit"  size="lg">
+                            {loading ? ( <span><Spinner size="sm" color="light" /> Processing...</span>) : "Update Competency"}
+                        </Button>
+                    </div>
+                </form>
+            </ModalBody>
+            <ModalFooter className="bg-light">
+                <span className="sub-text">Update Competency</span>
+            </ModalFooter>
+        </Modal>
       </>
 
 
     );
 };
 
-const AdminCategoryTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState }) => {
+
+const AdminCompetencyTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState, positions, categories}) => {
     const tableColumn = [
     {
-        name: "CDID",
+        name: "ID",
         selector: (row, index) => ++index,
         sortable: true,
         width: "100px",
@@ -266,8 +328,35 @@ const AdminCategoryTable = ({ data, pagination, actions, className, selectableRo
         wrap: true
     },
     {
+        name: "Description",
+        selector: (row) => row.description,
+        sortable: true,
+        width: "auto",
+        wrap: true
+    },
+    {
         name: "Status",
-        selector: (row) => { return (<><Badge color="success">{ (row.active) ? `Activated` : `Deactivated`}</Badge></>) },
+        selector: (row) => {
+                return (
+                    <>
+                        <Badge color={row.active ? "success" : "danger"}>{row.active ? 'Active' : 'Deactivated'} </Badge>
+                    </>
+                );
+            },
+        sortable: true,
+        width: "auto",
+        wrap: true
+    },
+    {
+        name: "Category",
+        selector: (row) => row.category_obj.name,
+        sortable: true,
+        width: "auto",
+        wrap: true
+    },
+    {
+        name: "Position",
+        selector: (row) => row.position_obj.name,
         sortable: true,
         width: "auto",
         wrap: true
@@ -282,7 +371,7 @@ const AdminCategoryTable = ({ data, pagination, actions, className, selectableRo
     {
         name: "Action",
         selector: (row) => (<>
-                        <ActionTab tabItem={row} updateParentParent={updateParent} />
+                        <ActionTab tabItem={row} updateParentParent={updateParent} positions={positions} categories={categories}/>
                     </>),
     },
     ];
@@ -421,4 +510,4 @@ const AdminCategoryTable = ({ data, pagination, actions, className, selectableRo
     //         );
 };
 
-export default AdminCategoryTable;
+export default AdminCompetencyTable;
