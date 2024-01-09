@@ -145,6 +145,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/list-all', [CompetencyController::class, 'listAll']);
             Route::get('/list-compliant-ars/{id}', [CompetencyController::class, 'listCompliantArs']);
             Route::get('/list-non-complaint-ars/{id}', [CompetencyController::class, 'listNonCompliantArs']);
+            Route::get('/list-all-compliant-ars', [CompetencyController::class, 'listAllCompliantArs']);
+            Route::get('/list-all-non-complaint-ars', [CompetencyController::class, 'listAllNonCompliantArs']);
             Route::post('/create', [CompetencyController::class, 'store']);
             Route::post('/update/{id}', [CompetencyController::class, 'update']);
             Route::post('/update-status/{id}', [CompetencyController::class, 'updateStatus']);

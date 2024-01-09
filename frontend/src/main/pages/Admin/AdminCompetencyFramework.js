@@ -16,6 +16,7 @@ import AdminCompetencyTable from './Tables/AdminCompetencyTable'
 const AdminCompetencyFramework = ({ drawer }) => {
         
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const [parentState, setParentState] = useState('Initial state');
     const [loading, setLoading] = useState(false);
@@ -95,6 +96,16 @@ const AdminCompetencyFramework = ({ drawer }) => {
                             <div className="toggle-wrap nk-block-tools-toggle">
                                 <div className="toggle-expand-content" >
                                     <ul className="nk-block-tools g-3">
+                                        <li className="nk-block-tools-opt">
+                                            <Button color="primary">
+                                                <span onClick={(ev) => navigate(`${process.env.PUBLIC_URL}/admin-competency-done-all`)}>All Compliant ARs</span>
+                                            </Button>
+                                        </li>
+                                        <li className="nk-block-tools-opt">
+                                            <Button color="primary">
+                                                <span onClick={(ev) => navigate(`${process.env.PUBLIC_URL}/admin-competency-undone-all`)}>All Non Compliant ARs</span>
+                                            </Button>
+                                        </li>
                                         <li className="nk-block-tools-opt">
                                             <Button color="primary">
                                                 <span onClick={toggleForm}>Add new Competency Framework</span>
