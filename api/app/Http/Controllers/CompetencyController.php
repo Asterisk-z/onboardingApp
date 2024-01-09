@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Notifications\InfoNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 
 class CompetencyController extends Controller
@@ -30,6 +31,36 @@ class CompetencyController extends Controller
     }
 
     //
+
+    public function listAllCompliantArs(): JsonResponse
+    {
+
+        $competency = Competency::select('competency_frameworks.name', 'competency_frameworks.created_at', 'competency_frameworks.description', 'users.first_name', 'users.first_name', 'users.last_name', 'users.email', DB::raw('institutions.name as institution_name'))
+            ->where('status', 'approved')
+            ->leftJoin('competency_frameworks', 'competency_frameworks.id', '=', 'competencies.framework_id')
+            ->join('users', 'users.id', '=', 'competencies.ar_id')
+            ->join('institutions', 'institutions.id', '=', 'users.institution_id')->with(['framework'])
+            ->get();
+
+        return successResponse('successful', $competency);
+    }
+
+    //
+    public function listAllNonCompliantArs(): JsonResponse
+    {
+        $competency = CompetencyFramework::select(DB::raw('users.id as user_ids'), DB::raw('competency_frameworks.id as competency_framework_id'), DB::raw('institutions.name as institution_name'), 'competency_frameworks.name', 'competency_frameworks.created_at', 'competency_frameworks.description', 'users.first_name', 'users.last_name', 'users.email')
+            ->join('users', 'users.position_id', '=', 'competency_frameworks.position')
+            ->join('institutions', 'institutions.id', '=', 'users.institution_id')
+            ->leftJoin('competencies', function ($join) {
+                $join->on('competencies.framework_id', '=', 'competency_frameworks.id');
+                $join->on('competencies.ar_id', '=', 'users.id');
+            })
+            ->where('competencies.is_competent', null)
+            ->get();
+
+        return successResponse('successful', $competency);
+    }
+
     public function listCompliantArs($id): JsonResponse
     {
 

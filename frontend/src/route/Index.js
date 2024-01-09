@@ -56,8 +56,12 @@ import AdminApplicantGuide from "main/pages/Admin/AdminApplicantGuide"
 import AdminCompetencyFramework from "main/pages/Admin/AdminCompetencyFramework"
 import AdminCompetencyDone from "main/pages/Admin/AdminCompetencyDone"
 import AdminCompetencyUndone from "main/pages/Admin/AdminCompetencyUndone"
+import AdminCompetencyDoneAll from "main/pages/Admin/AdminCompetencyDoneAll"
+import AdminCompetencyUndoneAll from "main/pages/Admin/AdminCompetencyUndoneAll"
 import AdminMembersGuide from "main/pages/Admin/AdminMembersGuide"
+import AdminEvents from "main/pages/Admin/AdminEvents"
 import Success from "pages/auth/Success";
+
 
 
 
@@ -180,6 +184,9 @@ const Router = () => {
           <Route path="admin-competency-framework" element={<AdminCompetencyFramework/>}></Route>
           <Route path="admin-competency-done/:competency_id" element={<AdminCompetencyDone/>}></Route>
           <Route path="admin-competency-undone/:competency_id" element={<AdminCompetencyUndone/>}></Route>
+          <Route path="admin-competency-done-all" element={<AdminCompetencyDoneAll/>}></Route>
+          <Route path="admin-competency-undone-all" element={<AdminCompetencyUndoneAll/>}></Route>
+          <Route path="admin-events" element={<AdminEvents/>}></Route>
           <Route path="wizard" element={<WizardTest />}></Route>
 
         </Route>
