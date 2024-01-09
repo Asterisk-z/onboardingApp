@@ -201,14 +201,14 @@ const ActionTab = (props) => {
                             <CardTitle tag="h5">{ `${ar_user.firstName} ${ar_user.lastName} (${ar_user.email})` }</CardTitle>
                             {/* <CardText> */}
                                 <ul className="gy-3">
-                                    <li><span className="lead">Phone : </span>{`${ar_user.phone}`}</li>
-                                    <li><span className="lead">Nationality : </span>{`${ar_user.nationality}`}</li>
-                                    <li><span className="lead">Role : </span>{`${ar_user.role.name}`}</li>
-                                    <li><span className="lead">Position : </span>{`${ar_user.position.name}`}</li>
-                                    <li><span className="lead">Status : </span>{`${ar_user.approval_status}`}</li>
-                                    <li><span className="lead">RegID : </span>{`${ar_user.regId}`}</li>
-                                    <li><span className="lead">Institution : </span>{`${ar_user.institution.name}`}</li>
-                                    <li><span className="lead">Profile Photo : </span>{ar_user.img ? (
+                                    <li className="text-capitalize"><span className="lead">Phone : </span>{`${ar_user.phone}`}</li>
+                                    <li className="text-capitalize"><span className="lead">Nationality : </span>{`${ar_user.nationality}`}</li>
+                                    <li className="text-capitalize"><span className="lead">Role : </span><span className="text-capitalize">{`${ar_user.role.name.toLowerCase()}`}</span></li>
+                                    <li className="text-capitalize"><span className="lead">Position : </span><span className="text-capitalize">{`${ar_user.position.name.toLowerCase()}`}</span></li>
+                                    <li className="text-capitalize"><span className="lead">Status : </span>{`${ar_user.approval_status.toLowerCase()}`}</li>
+                                    <li className="text-capitalize"><span className="lead">RegID : </span>{`${ar_user.regId}`}</li>
+                                    <li className="text-capitalize"><span className="lead">Institution : </span>{`${ar_user?.institution?.name?.toLowerCase()}`}</li>
+                                    <li className="text-capitalize"><span className="lead">Profile Photo : </span>{ar_user.img ? (
                                             <a  size="lg" href={ar_user.img}  target="_blank" className="active btn btn-primary">
                                                 {"View Image"}
                                             </a>
