@@ -55,7 +55,7 @@ const Regulators = ({ drawer }) => {
                                         <Row className="g-gs">
                                             {$regulators && $regulators.map((regulator, index) => 
                                                 <Col lg="3" key={index}>
-                                                    <Card className="card-bordered">
+                                                    <Card className="card-bordered gold">
                                                         <CardBody className="card-inner">
                                                             <CardTitle tag="h5">{regulator.name}</CardTitle>
                                                             {/* <CardSubtitle tag="h6" className="mb-2 ff-base">

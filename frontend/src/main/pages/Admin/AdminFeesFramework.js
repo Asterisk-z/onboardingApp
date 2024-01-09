@@ -161,9 +161,9 @@ const AdminFees = ({ drawer }) => {
                                 <div className="toggle-expand-content" >
                                     <ul className="nk-block-tools g-3">
                                         <li className="nk-block-tools-opt">
-                                            <Button color="primary">
+                                            {!fees && <Button color="primary">
                                                 <span onClick={toggleForm}>Create Fees Framework</span>
-                                            </Button>
+                                            </Button>}
                                         </li>
                                     </ul>
                                 </div>
@@ -227,7 +227,7 @@ const AdminFees = ({ drawer }) => {
                                 <PreviewCard>
                                     {/* {$fees && <AdminRegulatorTable  updateParent={updateParentState} parentState={parentState} data={$regulators} expandableRows pagination actions />} */}
                                     {$fees && 
-                                    <Card className="card-bordered">
+                                    <Card className="card-bordered gold">
                                         <CardHeader className="border-bottom">
                                             Fees and Dues
                                         </CardHeader>

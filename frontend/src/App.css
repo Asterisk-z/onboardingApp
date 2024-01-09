@@ -153,3 +153,23 @@ span.asc.__rdt_custom_sort_icon__ {
 .customMroisDatatable .bRaWwA {
     color: #fff !important;
 }
+
+.card-bordered .gold {
+    background-color: #C79D51 !important;
+    color: #fff;
+}
+
+.card-inner .gold {
+    background-color: #C79D51 !important;
+    color: #fff;
+}
+
+.white {
+    color: white !important;
+    font-weight: bold !important;
+}
+
+.flex{
+    display: flex;
+    align-items: center;
+}

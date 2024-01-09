@@ -36,7 +36,7 @@ const Homepage = () => {
           <Row className="g-gs">
             {$membersGuide &&
               <Col lg="3">
-                <Card className="card-bordered">
+                <Card className="card-bordered gold">
                   <CardBody className="card-inner">
                     <CardTitle tag="h5">{$membersGuide.name}</CardTitle>
                     <CardLink href={$membersGuide.file} target="_blank" className="btn btn-primary" color="primary">View Document</CardLink>
