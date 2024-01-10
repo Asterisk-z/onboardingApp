@@ -194,3 +194,13 @@ span.asc.__rdt_custom_sort_icon__ {
     display: flex;
     align-items: center;
 }
+
+.custom-container {
+  width: 100%;
+}
+
+.custom-container .rmdp-input {
+  width: 100%;
+  box-sizing: border-box;
+  height: 26px;
+}
