@@ -7,7 +7,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner } from "react
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, MultiDatePicker, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
 import { loadAllActiveCategories } from "redux/stores/memberCategory/category";
 import { loadAllCategoryPositions } from "redux/stores/positions/positionStore";
-import { createCompetency, loadAllCompetency } from "redux/stores/competency/competencyStore";
+import { megCreateEvent } from "redux/stores/education/eventStore";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
 import moment from "moment";
@@ -16,18 +16,13 @@ import moment from "moment";
 const AdminEvents = ({ drawer }) => {
 
     const dispatch = useDispatch();
-
+    const navigate = useNavigate();
     const [parentState, setParentState] = useState('Initial state');
     const [loading, setLoading] = useState(false);
     const [modalForm, setModalForm] = useState(false);
 
     const categories = useSelector((state) => state?.category?.list) || null;
     const positions = useSelector((state) => state?.position?.list) || null;
-    const competencies = useSelector((state) => state?.competency?.list) || null;
-
-    useEffect(() => {
-        dispatch(loadAllCompetency());
-    }, [dispatch, parentState]);
 
     useEffect(() => {
         dispatch(loadAllActiveCategories());
@@ -51,42 +46,39 @@ const AdminEvents = ({ drawer }) => {
     const handleFormSubmit = async (values) => {
         
           const postValues = new Object();
-          postValues.name = values.email;
-          postValues.description = values.email;
-          postValues.date = values.email;
-          postValues.time = values.email;
-          postValues.is_annual = values.email;
-          postValues.fee = values.email;
-          postValues.img = values.email;
-          postValues.registered_remainder_frequency = values.email;
-          postValues.registered_remainder_dates = values.email;
-          postValues.unregistered_remainder_frequency = values.email;
-          postValues.unregistered_remainder_dates = values.email;
-          postValues.positions = positions.map((val) => (val.value));
+          postValues.name = values.name;
+          postValues.description = values.description;
+          postValues.date = moment(values.eventDate).format('YYYY-MM-DD');
+          postValues.time = moment(values.eventTime).format('HH:mm');
+          postValues.is_annual = values.isEventAnnual == 'no' ? 0 : 1;
+          postValues.fee = values.isEventFree == 'no' ? values.eventFee : 0;
+          postValues.img = values.img[0];
+          postValues.registered_remainder_frequency = values.registered_remainder_frequency;
+          postValues.registered_remainder_dates = values.registered_remainders;
+          postValues.unregistered_remainder_frequency = values.unregistered_remainder_frequency;
+          postValues.unregistered_remainder_dates = values.registered_remainders;
+          postValues.positions = values.positions.map((val) => (val.value));
           
-    console.log(values, isEventFree)
-        // try {
-        //     setLoading(true);
+    console.log(values)
+    console.log(postValues)
+        try {
+            setLoading(true);
 
-        //     const resp = await dispatch(createCompetency(formData));
+            const resp = await dispatch(megCreateEvent(postValues));
 
-        //     if (resp.payload?.message == "success") {
-        //         setTimeout(() => {
-        //             setLoading(false);
-        //             setModalForm(!modalForm)
-        //             resetField('name')
-        //             resetField('description')
-        //             resetField('position')
-        //             resetField('member_category')
-        //             setParentState(Math.random())
-        //         }, 1000);
-        //     } else {
-        //       setLoading(false);
-        //     }
+            if (resp.payload?.message == "success") {
+                setTimeout(() => {
+                    setLoading(false);
+                    navigate(process.env.PUBLIC_URL+'/admin-events')
+                }, 1000);
+            } else {
+              setLoading(false);
+            }
 
-        // } catch (error) {
-        //     setLoading(false);
-        // }
+        } catch (error) {
+            console.log(error)
+            setLoading(false);
+        }
 
     }; 
     
@@ -308,9 +300,9 @@ const AdminEvents = ({ drawer }) => {
                                                             <select className="form-control form-select" {...register('registered_remainder_frequency')} id="registered_remainder_frequency" onChange={(value) => setRegisteredFrequency(value.target.value)} >
                                                                 <option value="">Select Frequency</option>
                                                                 <option value='none'>None</option>
-                                                                <option value='daily'>Daily</option>
-                                                                <option value='weekly'>Weekly</option>
-                                                                <option value='monthly'>Monthly</option>
+                                                                <option value='Daily'>Daily</option>
+                                                                <option value='Weekly'>Weekly</option>
+                                                                <option value='Monthly'>Monthly</option>
                                                             </select>
                                                             {errors.registered_remainder_frequency && <p className="invalid">{`${errors.registered_remainder_frequency.message}`}</p>}
                                                         </div>
@@ -342,9 +334,9 @@ const AdminEvents = ({ drawer }) => {
                                                             <select className="form-control form-select" {...register('unregistered_remainder_frequency')} id="unregistered_remainder_frequency" onChange={(value) => setUnregisteredFrequency(value.target.value)} >
                                                                 <option value="">Select Frequency</option>
                                                                 <option value='none'>None</option>
-                                                                <option value='daily'>Daily</option>
-                                                                <option value='weekly'>Weekly</option>
-                                                                <option value='monthly'>Monthly</option>
+                                                                <option value='Daily'>Daily</option>
+                                                                <option value='Weekly'>Weekly</option>
+                                                                <option value='Monthly'>Monthly</option>
                                                             </select>
                                                             {errors.unregistered_remainder_frequency && <p className="invalid">{`${errors.unregistered_remainder_frequency.message}`}</p>}
                                                         </div>
