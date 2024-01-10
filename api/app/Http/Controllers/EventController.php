@@ -326,7 +326,7 @@ class EventController extends Controller
 
     // array on success, string on error.
     // Returns an array on success, or a string on error.
-    private function stringToDateArray($dateStr): array|string
+    private function stringToDateArray($dateStr)
     {
         $unregisteredDates = explode(',', $dateStr);
 
