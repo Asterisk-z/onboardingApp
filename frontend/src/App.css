@@ -204,3 +204,7 @@ span.asc.__rdt_custom_sort_icon__ {
   box-sizing: border-box;
   height: 26px;
 }
+
+.decline {
+    background: #C79D51 !important;
+}
