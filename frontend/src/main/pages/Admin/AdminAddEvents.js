@@ -88,8 +88,9 @@ const AdminEvents = ({ drawer }) => {
         //     setLoading(false);
         // }
 
-    };
-
+    }; 
+    
+    const $categories = categories ? JSON.parse(categories) : null;
     const $positions = positions ? JSON.parse(positions) : null;
     const $positionOptions = $positions ? $positions.map((val) => ({ 'label': val.name, 'value': val.id })) : {}
 
