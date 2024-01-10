@@ -299,7 +299,7 @@ const AdminEvents = ({ drawer }) => {
                                                             {/* <select className="form-control form-select" {...register('registered_remainder_frequency')} id="registered_remainder_frequency" onChange={(value) => updateRegisteredFrequency(value)} > */}
                                                             <select className="form-control form-select" {...register('registered_remainder_frequency')} id="registered_remainder_frequency" onChange={(value) => setRegisteredFrequency(value.target.value)} >
                                                                 <option value="">Select Frequency</option>
-                                                                <option value='none'>None</option>
+                                                                {/* <option value='none'>None</option> */}
                                                                 <option value='Daily'>Daily</option>
                                                                 <option value='Weekly'>Weekly</option>
                                                                 <option value='Monthly'>Monthly</option>
@@ -318,7 +318,7 @@ const AdminEvents = ({ drawer }) => {
                                                     <div className="form-control-wrap">
                                                         {/* {getValues('registered_remainder_frequency')} */}
                                                         <input type="hidden" {...register('registered_remainders', { required: "This Field is required" })} value={registeredDate} />
-                                                        <MultiDatePicker nameAttr='registered_remainders' changeAction={update_registered_remainders} max={getValues('eventDate')} properties={{ 'readOnly': (!registeredFrequency || registeredFrequency == 'none') ? true : false }} />
+                                                        <MultiDatePicker nameAttr='registered_remainders' changeAction={update_registered_remainders} max={getValues('eventDate')} />
                                                         {errors.registered_remainders && <span className="invalid">{errors.registered_remainders.message}</span>}
                                                     </div>
                                                 </div>
@@ -333,7 +333,7 @@ const AdminEvents = ({ drawer }) => {
                                                         <div className="form-control-select">
                                                             <select className="form-control form-select" {...register('unregistered_remainder_frequency')} id="unregistered_remainder_frequency" onChange={(value) => setUnregisteredFrequency(value.target.value)} >
                                                                 <option value="">Select Frequency</option>
-                                                                <option value='none'>None</option>
+                                                                {/* <option value='none'>None</option> */}
                                                                 <option value='Daily'>Daily</option>
                                                                 <option value='Weekly'>Weekly</option>
                                                                 <option value='Monthly'>Monthly</option>
@@ -352,7 +352,9 @@ const AdminEvents = ({ drawer }) => {
                                                     <div className="form-control-wrap">
                                                         {/* {getValues('unregistered_remainder_frequency')} */}
                                                         <input type="hidden" {...register('unregistered_remainders', { required: "This Field is required" })} value={unregisteredDate} />
-                                                        <MultiDatePicker nameAttr='unregistered_remainders' changeAction={update_unregistered_remainders} max={getValues('eventDate')} properties={{ 'readOnly': (!unregisteredFrequency || unregisteredFrequency == 'none') ? true : false }} />
+                                                        <MultiDatePicker nameAttr='unregistered_remainders' changeAction={update_unregistered_remainders} max={getValues('eventDate')} 
+                                                        // properties={{ 'readOnly': (!unregisteredFrequency || unregisteredFrequency == 'none') ? true : false }} 
+                                                        />
                                                         {errors.unregistered_remainders && <span className="invalid">{errors.unregistered_remainders.message}</span>}
                                                     </div>
                                                 </div>
