@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner} from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween,MultiDatePicker, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
 import { loadAllActiveCategories } from "redux/stores/memberCategory/category";
-import { loadAllActivePositions } from "redux/stores/positions/positionStore";
+import { loadAllCategoryPositions } from "redux/stores/positions/positionStore";
 import { createCompetency, loadAllCompetency } from "redux/stores/competency/competencyStore";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
@@ -30,7 +30,6 @@ const AdminEvents = ({ drawer }) => {
     }, [dispatch, parentState]);
     
     useEffect(() => {
-        dispatch(loadAllActivePositions());
         dispatch(loadAllActiveCategories());
     }, [dispatch]);
 
@@ -43,27 +42,28 @@ const AdminEvents = ({ drawer }) => {
     const [unregisteredFrequency, setUnregisteredFrequency] = useState("");
     const [registeredFrequency, setRegisteredFrequency] = useState("");
     const [isEventFree, setIsEventFree] = useState(false);
-      const [formData, setFormData] = useState({
-    category: [],
-  });
 
-  const today = new Date()
-  const tomorrow = new Date()
-
-  tomorrow.setDate(tomorrow.getDate() + 1)
-
-  const [values, setValues] = useState([today, tomorrow])
  
  
     const toggleForm = () => setModalForm(!modalForm);
     const toggleEvent = () => setIsEventFree(!isEventFree);
 
     const handleFormSubmit = async (values) => {
-        const formData = new FormData();
-        formData.append('name', values.name)
-        formData.append('description', values.description)
-        formData.append('position', values.position)
-        formData.append('member_category', values.member_category)
+        
+          const postValues = new Object();
+          postValues.name = values.email;
+          postValues.description = values.email;
+          postValues.date = values.email;
+          postValues.time = values.email;
+          postValues.is_annual = values.email;
+          postValues.fee = values.email;
+          postValues.img = values.email;
+          postValues.registered_remainder_frequency = values.email;
+          postValues.registered_remainder_dates = values.email;
+          postValues.unregistered_remainder_frequency = values.email;
+          postValues.unregistered_remainder_dates = values.email;
+          postValues.positions = positions.map((val) => (val.value));
+          
     console.log(values, isEventFree)
         // try {
         //     setLoading(true);
@@ -93,6 +93,7 @@ const AdminEvents = ({ drawer }) => {
     const $categories = categories ? JSON.parse(categories) : null;
     const $positions = positions ? JSON.parse(positions) : null;
     const $positionOptions = $positions ? $positions.map((val) => ({'label' : val.name, 'value' : val.id})) : {}
+    const $categoryOptions = $categories ? $categories.map((val) => ({'label' : val.name, 'value' : val.id})) : {}
 
     
     const update_unregistered_remainders = (unregistered_remainders) => {
@@ -108,6 +109,12 @@ const AdminEvents = ({ drawer }) => {
             setRegisteredDate(registered_remainders.toString())
             setValue('registered_remainders', registered_remainders.toString())
         }
+    };
+
+    const updateCategory = (value) => {
+        setValue('category', value)
+        const category = getValues('category').map((val) => (val.value))
+        dispatch(loadAllCategoryPositions({'category_ids' : category}));
     };
 
     const updateRegisteredFrequency = (value) => {
@@ -359,7 +366,23 @@ const AdminEvents = ({ drawer }) => {
                                                 </div>
                                             </Col>
 
-                                            <Col md='12'>
+                                            <Col md='6'>
+                                                <div className="form-group">
+
+                                                    <label className="form-label" htmlFor="position">
+                                                        Category
+                                                    </label>
+                                                    <div className="form-control-wrap">
+                                                        <div className="form-control-select">
+                                                            <input type="hidden" {...register('category', { required: "This Field is Required" })}/>
+                                                            <RSelect name="category" isMulti options={$categoryOptions} onChange={(value) => updateCategory(value)} />
+                                                            {errors.category && <p className="invalid">{`${errors.category.message}`}</p>}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </Col>
+                                            <Col md='6'>
                                                 <div className="form-group">
 
                                                     <label className="form-label" htmlFor="position">
@@ -368,7 +391,7 @@ const AdminEvents = ({ drawer }) => {
                                                     <div className="form-control-wrap">
                                                         <div className="form-control-select">
                                                             <input type="hidden" {...register('positions', { required: "This Field is Required" })}/>
-                                                            <RSelect name="category" isMulti options={$positionOptions} onChange={(value) => setValue('positions', value)}/>
+                                                            {$positions ? <><RSelect name="positions" isMulti options={$positionOptions} onChange={(value) => setValue('positions', value)} /></> : <><input type="text"  disabled className="form-control"/></> }
                                                             {errors.positions && <p className="invalid">{`${errors.positions.message}`}</p>}
                                                         </div>
                                                     </div>
