@@ -33,13 +33,13 @@ class ARMailContents
             </p>
             
             <p>
-                Please not that your ID would be required in future correspondence with FMDQ. We advise that you keep it safely.
+                Please note that your ID would be required in future correspondence with FMDQ. We advise that you keep it safely.
             </p>";
     }
 
     public static function applicationMEGSubject(): string
     {
-        return "Authorised Representative Application";
+        return "New Authorised Representative";
     }
 
     public static function applicationMEGBody(User $ARUser): string
@@ -47,21 +47,16 @@ class ARMailContents
 
         $link = env("APP_FRONTEND_URL");
 
-        $company = $ARUser->institution->name ?? "a company";
+        $company = $ARUser->institution->name ?? "Undefined";
         $regID = $ARUser->getRegID();
 
         $message = "<p>
-                Please be informed that there is a new Authorised Representative for $company.
-            </p>
-            
-            <p>
-                The AR details is given below:
+                    Please be informed that $company has added a new Authorised Representative.
+                </p>
                 <br>
-                Surname: $ARUser->last_name <br>
-                First Name: $ARUser->first_name <br>
-                Email: $ARUser->email <br>
-                ID number: $regID 
-            </p>";
+                <p>
+                    Kindly login to the <a href='".$link."'>MROIS Portal</a> to approve or reject
+                </p>";
 
         return $message;
     }
