@@ -54,22 +54,23 @@ class EventNotificationUtility
         Notification::send($users, new InfoNotification($message, $subject, $CCs));
     }
 
-    public static function eventUpdated(Event $event)
+    public static function eventUpdated(Event $event, $toUsers = [])
     {
 
-        $to = null;
         $CCs = [];
+        $to = [];
 
         $eventName = $event->name;
         $message = EventMailContents::eventUpdatedBody($eventName);
         $subject = EventMailContents::eventUpdatedSubject($eventName);
 
-        $registeredUsers = $event->getRegisteredUsers();
+        $newlyInvitedUsers = $event->newlyInvitedUsers();
 
-        //TODO:: Send email notification to all registered and new position or remove registered that are not in present position and notify
-        if ($registeredUsers) {
+        $sendto = $toUsers ?? $newlyInvitedUsers;
+
+        if ($sendto) {
             // email registered AR and copy MEG
-            $to = $registeredUsers;
+            $to = $sendto;
             $CCs = Utility::getUsersEmailByCategory(Role::MEG);
         } else {
             // Email MEGs
@@ -109,6 +110,16 @@ class EventNotificationUtility
 
         if ($to) {
             self::sendNotification($message, $subject, $to, $CCs);
+        }
+    }
+
+    public static function eventUninvited($to, $eventName)
+    {
+        $message = EventMailContents::eventUninvitedBody($eventName);
+        $subject = EventMailContents::eventUninvitedSubject($eventName);
+
+        if ($to) {
+            self::sendNotification($message, $subject, $to);
         }
     }
 

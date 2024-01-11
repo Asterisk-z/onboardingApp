@@ -12,17 +12,13 @@ class ARMailContents
 
     public static function approvedARBody(User $ARUser, string $password): string
     {
-        $link = config("app.front_end_url");
+        $link = config("app.front_end_url")."/auth-password-reset";
 
-        if ($link) {
-            $link = $link . '?email=' . $ARUser->email;
-        }
-
-        $company = $ARUser->institution->name ?? "a company";
+        $company = $ARUser->institution->name ?? "undefined";
         $regID = $ARUser->getRegID();
 
         return "<p>
-                Please be informed that you have been selected as an Authorised Representative for the  $company.
+                Please be informed that you have been selected as an Authorised Representative for the $company.
                 </p>
             
             <p>
@@ -30,6 +26,10 @@ class ARMailContents
                 <br>
                 Username: $ARUser->email <br>
                 Password: $password 
+            </p>
+
+            <p>
+                Click the link to <a href=".$link.">reset</a> the password
             </p>
             
             <p>
@@ -44,12 +44,8 @@ class ARMailContents
 
     public static function applicationMEGBody(User $ARUser): string
     {
-
         $link = env("APP_FRONTEND_URL");
-
         $company = $ARUser->institution->name ?? "Undefined";
-        $regID = $ARUser->getRegID();
-
         $message = "<p>
                     Please be informed that $company has added a new Authorised Representative.
                 </p>
@@ -60,8 +56,6 @@ class ARMailContents
 
         return $message;
     }
-
-
 
     public static function transferAuthoriserSubject(): string
     {
