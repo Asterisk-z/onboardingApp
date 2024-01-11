@@ -18,7 +18,7 @@ class EventRegistration extends Model
 
     public function event()
     {
-        return $this->belongsTo(Event::class);
+        return $this->belongsTo(Event::class)->where('is_del', 0);
     }
 
     public function user()

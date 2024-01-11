@@ -14,6 +14,7 @@ use App\Http\Resources\Education\EventResource;
 use App\Models\Education\Event;
 use App\Models\Education\EventNotificationDates;
 use App\Models\Education\EventInvitePosition;
+use App\Models\Education\EventNotification;
 use App\Models\Education\EventRegistration;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -33,7 +34,7 @@ class EventController extends Controller
 
     public function list(Request $request)
     {
-        $query = Event::query();
+        $query = Event::query()->where('is_del', 0);
 
         // Filter by event name
         if ($request->name) {
@@ -331,6 +332,11 @@ class EventController extends Controller
             $event->is_del = 1;
             $event->save();
 
+            EventNotificationDates::where('event_id', $eventID)->update(['is_del' => 1]);
+            EventInvitePosition::where('event_id', $eventID)->update(['is_del' => 1]);
+            EventRegistration::where('event_id', $eventID)->update(['is_del' => 1]);
+            EventNotification::where('event_id', $eventID)->update(['is_del' => 1]);
+
             $logMessage = "Deleted the Event: $eventName";
             logAction($request->user()->email, 'Delete Event', $logMessage, $request->ip());
 
@@ -385,6 +391,10 @@ class EventController extends Controller
             'evidence_of_payment_img' => 'sometimes|mimes:jpeg,png,jpg|max:5048',
         ]);
 
+        if($event->is_del){
+            return errorResponse(ResponseStatusCodes::BAD_REQUEST, "You are unable to register for this event at this time");
+        }
+
         // Store the image
         $imagePath = null;
 
@@ -418,22 +428,19 @@ class EventController extends Controller
 
     public function myInvitedEvents(Request $request)
     {
-
-        $records = EventInvitePosition::with(['event'])->where('position_id', $request->user()->position_id)->latest()->get();
+        $records = EventInvitePosition::with(['event'])->where('is_del', 0)->where('position_id', $request->user()->position_id)->latest()->get();
 
         return successResponse('Successful', EventInvitationWithEventResource::collection($records));
     }
     public function myRegisteredEvents(Request $request)
     {
-
-        $records = EventRegistration::with(['user', 'event'])->where('user_id', $request->user()->id)->latest()->get();
-
+        $records = EventRegistration::with(['user', 'event'])->where('is_del', 0)->where('user_id', $request->user()->id)->latest()->get();
         return successResponse('Successful', EventRegistrationWithEventResource::collection($records));
     }
 
     public function eventRegistrations(Request $request, Event $event)
     {
-        $records = EventRegistration::with(['user', 'event'])->where('event_id', $event->id)->latest()->get();
+        $records = EventRegistration::with(['user', 'event'])->where('is_del', 0)->where('event_id', $event->id)->latest()->get();
         return successResponse('Successful', EventRegistrationWithEventResource::collection($records));
     }
 
