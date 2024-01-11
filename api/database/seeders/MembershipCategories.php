@@ -14,14 +14,16 @@ class MembershipCategories extends Seeder
      */
     public function run()
     {
+
         $categories = [
             ["code" => "dmb", "name" => "Dealing Member (Banks)"],
-            ["code" => "dms", "name" => "Dealing Member (Specialists)"],
-            ["code" => "ami", "name" => "Associate Member (Inter-Dealer Brokers)"],
-            ["code" => "amb", "name" => "Associate Member (Brokers)"],
-            ["code" => "amc", "name" => "Associate Member (Clients)"],
+            ["code" => "dms", "name" => "Dealing Member (Specialist)"],
+            ["code" => "amb", "name" => "Associate Members (Brokers)"],
+            ["code" => "ami", "name" => "Associate Members (Inter-Dealer Broker)"],
+            ["code" => "amc", "name" => "Associate Members (Clients)"],
             ["code" => "rml", "name" => "Registration Member (Listings)"],
             ["code" => "rmq", "name" => "Registration Member (Quotations)"],
+
             ["code" => "lnq", "name" => "Registration Member"],
             ["code" => "afs", "name" => "Affiliate Member (Standard) - Individual"],
             ["code" => "afc", "name" => "Affiliate Member (Standard) - Corporates"],
@@ -29,8 +31,8 @@ class MembershipCategories extends Seeder
             ["code" => "afi", "name" => "Affiliate Member (Fixed Income)"],
         ];
 
-        foreach($categories as $category){
-            if(MembershipCategory::where('code', $category['code'])->exists()){
+        foreach ($categories as $category) {
+            if (MembershipCategory::where('code', $category['code'])->exists()) {
                 continue;
             }
 
