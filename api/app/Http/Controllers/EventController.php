@@ -15,6 +15,7 @@ use App\Models\Education\Event;
 use App\Models\Education\EventNotificationDates;
 use App\Models\Education\EventInvitePosition;
 use App\Models\Education\EventRegistration;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
@@ -228,16 +229,17 @@ class EventController extends Controller
             logAction($request->user()->email, 'Update Event', $logMessage, $request->ip());
 
             $event->refresh();
-
-            EventNotificationUtility::eventUpdated($event);
         }
 
         // Get the positions from the request
         $requestedPositions = $request->input('positions', []);
 
         //Notify newly added AR
-        if ($requestedPositions)
+        if ($requestedPositions){
             $this->addInviteesToEvent($event, $requestedPositions);
+        }else{
+            EventNotificationUtility::eventUpdated($event);
+        }
 
         return successResponse('Successful', EventResource::make($event));
     }
@@ -268,6 +270,7 @@ class EventController extends Controller
         $existingPositions = $event->invitePosition()->pluck('position_id')->toArray();
 
         // Determine positions to add and positions to remove
+        $positionToUpdate = array_intersect($positions, $existingPositions);
         $positionsToAdd = array_diff($positions, $existingPositions);
         $positionsToRemove = array_diff($existingPositions, $positions);
 
@@ -300,6 +303,17 @@ class EventController extends Controller
             EventNotificationUtility::eventAdded($event->refresh());
         }
 
+        if(count($positionToUpdate)){
+            $users = User::whereIn('position_id', $positionToUpdate)->get();
+            EventNotificationUtility::eventUpdated($event, $users);
+        }
+
+        if(count($positionsToRemove)){
+            $eventName = $event->name;
+            $users = User::whereIn('position_id', $positionsToRemove)->get();
+            EventNotificationUtility::eventUninvited($users, $eventName);
+        }
+
         return true;
     }
 
@@ -311,14 +325,16 @@ class EventController extends Controller
         if ($event) {
 
             $eventName = $event->name;
-            $registeredUsers = $event->getRegisteredUsers();
+            //$registeredUsers = $event->getRegisteredUsers();
+            $invitedUsers = $event->newlyInvitedUsers();
 
-            $event->delete();
+            $event->is_del = 1;
+            $event->save();
 
             $logMessage = "Deleted the Event: $eventName";
             logAction($request->user()->email, 'Delete Event', $logMessage, $request->ip());
 
-            EventNotificationUtility::eventDeleted($registeredUsers, $eventName);
+            EventNotificationUtility::eventDeleted($invitedUsers, $eventName);
         }
 
         return successResponse('Successful');

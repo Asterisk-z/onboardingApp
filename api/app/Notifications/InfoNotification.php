@@ -53,7 +53,7 @@ class InfoNotification extends Notification implements ShouldQueue
         $subject = $this->subject ?? '';
         $displayName = $user->first_name;
 
-        if($user->role_id != "5" && ($subject == 'New Membership Signup' || $subject == 'Payment Rejected by MBG' || $subject == 'MROIS Document Upload' || $subject == 'Profiling Request:' || $subject == 'Profiling Request' || str_contains($subject, "Update of") || str_contains($subject, "Email Group Update for"))){
+        if($subject == 'New Membership Signup' || $subject == 'Payment Rejected by MBG' || $subject == 'MROIS Document Upload' || $subject == 'Profiling Request:' || $subject == 'Profiling Request' || str_contains($subject, "Update of") || str_contains($subject, "Email Group Update for")){
             $displayName = "Team";
         }else{
             if($user->role_id == "1"){
