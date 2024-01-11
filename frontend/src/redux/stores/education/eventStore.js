@@ -12,7 +12,7 @@ export const loadAllEvent = createAsyncThunk(
   async (arg) => {
     // ?show_past_events=1&name=ar&from_date=2023-07-12&to_date
     // {'show_past_events' : 1, "name" : "ar", "from_date" : "2023-07-12", "to_date" : "2023-07-12"}
-    const query = queryGenerator(values);
+    const query = queryGenerator(arg);
     try {
       const { data } = await axios.get(`events?${query}`);
       return successHandler(data);
@@ -25,7 +25,7 @@ export const loadAllEvent = createAsyncThunk(
 export const loadSingleEvent = createAsyncThunk(
   "educationEvent/loadSingleEvent",
   async (arg) => {
-    const query = values.event_id;
+    const query = arg.event_id;
     try {
       const { data } = await axios.get(`events/view/${query}`);
       return successHandler(data);
