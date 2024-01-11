@@ -8,7 +8,7 @@ import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col,
 // import { loadAllActiveCategories } from "redux/stores/memberCategory/category";
 // import { loadAllActivePositions } from "redux/stores/positions/positionStore";
 // import { createCompetency, loadAllCompetency } from "redux/stores/competency/competencyStore";
-import { megUpdateEvent, megDeleteEvent } from "redux/stores/education/eventStore";
+import { megUpdateEvent, megDeleteEvent, loadAllEvent } from "redux/stores/education/eventStore";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
 import AdminEventTable from './Tables/AdminEventTable'
@@ -23,17 +23,14 @@ const AdminEvents = ({ drawer }) => {
     const [loading, setLoading] = useState(false);
     const [modalForm, setModalForm] = useState(false);
 
-    const categories = useSelector((state) => state?.category?.list) || null;
-    const positions = useSelector((state) => state?.position?.list) || null;
-    const competencies = useSelector((state) => state?.competency?.list) || null;
+    const events = useSelector((state) => state?.educationEvent?.list_all) || null;
 
     useEffect(() => {
-        dispatch(loadAllCompetency());
+        dispatch(loadAllEvent({'show_past_events' : 1, "name" : "", "from_date" : "", "to_date" : ""}));
     }, [dispatch, parentState]);
 
     useEffect(() => {
-        dispatch(loadAllActivePositions());
-        dispatch(loadAllActiveCategories());
+        dispatch(megDeleteEvent());
     }, [dispatch]);
 
 
@@ -51,41 +48,39 @@ const AdminEvents = ({ drawer }) => {
 
     const toggleForm = () => setModalForm(!modalForm);
 
-    const handleFormSubmit = async (values) => {
-        // const formData = new FormData();
-        // formData.append('name', values.name)
-        // formData.append('description', values.description)
-        // formData.append('position', values.position)
-        // formData.append('member_category', values.member_category)
-        console.log(values)
-        // try {
-        //     setLoading(true);
+    // const handleFormSubmit = async (values) => {
+    //     // const formData = new FormData();
+    //     // formData.append('name', values.name)
+    //     // formData.append('description', values.description)
+    //     // formData.append('position', values.position)
+    //     // formData.append('member_category', values.member_category)
+    //     console.log(values)
+    //     // try {
+    //     //     setLoading(true);
 
-        //     const resp = await dispatch(createCompetency(formData));
+    //     //     const resp = await dispatch(createCompetency(formData));
 
-        //     if (resp.payload?.message == "success") {
-        //         setTimeout(() => {
-        //             setLoading(false);
-        //             setModalForm(!modalForm)
-        //             resetField('name')
-        //             resetField('description')
-        //             resetField('position')
-        //             resetField('member_category')
-        //             setParentState(Math.random())
-        //         }, 1000);
-        //     } else {
-        //       setLoading(false);
-        //     }
+    //     //     if (resp.payload?.message == "success") {
+    //     //         setTimeout(() => {
+    //     //             setLoading(false);
+    //     //             setModalForm(!modalForm)
+    //     //             resetField('name')
+    //     //             resetField('description')
+    //     //             resetField('position')
+    //     //             resetField('member_category')
+    //     //             setParentState(Math.random())
+    //     //         }, 1000);
+    //     //     } else {
+    //     //       setLoading(false);
+    //     //     }
 
-        // } catch (error) {
-        //     setLoading(false);
-        // }
+    //     // } catch (error) {
+    //     //     setLoading(false);
+    //     // }
 
-    };
+    // };
 
-    const $categories = categories ? JSON.parse(categories) : null;
-    const $positions = positions ? JSON.parse(positions) : null;
-    const $competencies = competencies ? JSON.parse(competencies) : null;
+    const $events = events ? JSON.parse(events) : null;
 
     const updateParentState = (newState) => {
         setParentState(newState);
@@ -133,7 +128,8 @@ const AdminEvents = ({ drawer }) => {
                                 </BlockHead>
 
                                 <PreviewCard>
-                                    {$competencies && <AdminEventTable updateParent={updateParentState} parentState={parentState} data={$competencies} positions={$positions} categories={$categories} expandableRows pagination actions />}
+                                    {$events && <AdminEventTable updateParent={updateParentState} parentState={parentState} data={$events} expandableRows pagination actions />}
+                                    {events}
                                 </PreviewCard>
                             </Block>
 
