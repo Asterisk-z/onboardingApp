@@ -35,6 +35,8 @@ export const loadSingleEvent = createAsyncThunk(
   }
 );
 
+
+//Store to View Events that you've Registerd for as an AR
 export const loadAllRegisteredEvent = createAsyncThunk(
   "educationEvent/loadAllRegisteredEvent",
   async (arg) => {
@@ -47,6 +49,8 @@ export const loadAllRegisteredEvent = createAsyncThunk(
   }
 );
 
+
+//Store to show AR's events that are available for them
 export const loadAllInvitedEvent = createAsyncThunk(
   "educationEvent/loadAllInvitedEvent",
   async (arg) => {
@@ -83,7 +87,7 @@ export const megCreateEvent = createAsyncThunk(
 export const megUpdateEvent = createAsyncThunk(
   "educationEvent/megUpdateEvent",
   async (values) => {
-    const event_id = values.get('event_id');
+    const event_id = values.event_id;
     try {
       const { data } = await axios({
         method: "post",

@@ -146,7 +146,7 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
                     </DropdownItem>
                   </li>
                   <li size="xs">
-                    <DropdownItem tag="a" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/admin-competency-done/${tabItem_id}`)} >
+                    <DropdownItem tag="a" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/admin-edit-event/${tabItem_id}`)} >
                       <Icon name="pen"></Icon>
                       <span>Edit</span>
                     </DropdownItem>
@@ -160,7 +160,7 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
                   <li size="xs">
                     <DropdownItem tag="a" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/admin-competency-undone/${tabItem_id}`)} >
                       <Icon name="eye"></Icon>
-                      <span>View Registrants</span>
+                      <span>View Registrations</span>
                     </DropdownItem>
                   </li>
                   {/* {(!tabItem.active) ? <>
