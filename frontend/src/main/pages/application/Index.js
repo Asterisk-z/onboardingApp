@@ -189,14 +189,7 @@ const TradingDetail = (props) => {
     useEffect(() => {
         dispatch(loadPageFields({"page" : "2", "category" : authUser.user_data.institution.category[0].id}));
     }, [dispatch, parentState]);
-  
-    let initialValues = [];
 
-    if (fields) {
-      const fieldValues = fields.map((field) => ({ [field.name]: field.field_value?.uploaded_field ? field.field_value?.uploaded_field : null }))
-      initialValues = Object.assign({}, ...fieldValues);
-    //   console.log(initialValues, fieldValues)
-    }
     
     const onInputChange = async (values) => {
         
@@ -245,15 +238,15 @@ const TradingDetail = (props) => {
     <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
       {/* <h3>Applicant Information</h3> */}
       <Row className="gy-4">
-              {fields && fields.map((field, index) => {
-            
+        {fields && fields.map((field, index) => {
+                
             if (field.type == 'text') {
                 return (
                     <Col md="6" key={index}>
                         <div className="form-group">
                             <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
                             <div className="form-control-wrap">
-                            <input type="text" id={field.name} className="form-control" {...register(field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({'field_name' : field.name, "field_value" : e.target.value, "field_type" : field.type})} defaultValue={initialValues[field.name]} />
+                            <input type="text" id={field.name} className="form-control" {...register(field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({'field_name' : field.name, "field_value" : e.target.value, "field_type" : field.type})} defaultValue={field?.field_value?.uploaded_field} />
                             {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
                             </div>
                         </div>
@@ -266,7 +259,7 @@ const TradingDetail = (props) => {
                         <div className="form-group">
                             <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
                             <div className="form-control-wrap">
-                                <DatePicker selected={initialValues[field.name] ? new Date(initialValues[field.name]) : new Date()}  {...register(field.name, { required: 'This field is required' })} id={field.name} onBlur={(e) => onInputChange({'field_name' : field.name, "field_value" : moment(e).format('YYYY-MM-DD'), "field_type" : field.type})} defaultValue={initialValues[field.name]} className="form-control date-picker" />
+                                <DatePicker selected={field?.field_value?.uploaded_field ? new Date(field?.field_value?.uploaded_field) : new Date()}  {...register(field.name, { required: 'This field is required' })} id={field.name} onBlur={(e) => onInputChange({'field_name' : field.name, "field_value" : moment(e).format('YYYY-MM-DD'), "field_type" : field.type})} defaultValue={field?.field_value?.uploaded_field} className="form-control date-picker" />
                                 {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
                             </div>
                         </div>
@@ -278,19 +271,20 @@ const TradingDetail = (props) => {
                         <div className="form-group">
                             <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
                             <div className="form-control-wrap">
-                                <input type="text" id={field.name} className="form-control" {...register(field.name, {required: 'This field is required', pattern: {value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: "Invalid email address"},})} onKeyUp={(e) => onInputChange({'field_name' : field.name, "field_value" : e.target.value, "field_type" : field.type})} defaultValue={initialValues[field.name]} />
+                                <input type="text" id={field.name} className="form-control" {...register(field.name, {required: 'This field is required', pattern: {value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: "Invalid email address"},})} onKeyUp={(e) => onInputChange({'field_name' : field.name, "field_value" : e.target.value, "field_type" : field.type})} defaultValue={field?.field_value?.uploaded_field} />
                             {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
                             </div>
                         </div>
                     </Col>
                 )
-            }else if(field.type == 'number') {
+            } else if (field.type == 'number') {
+              
                 return (
                     <Col md="6" key={index}>
                         <div className="form-group">
                             <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
                             <div className="form-control-wrap">
-                                <input type="number"  id={field.name} className="form-control" {...register(field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({'field_name' : field.name, "field_value" : e.target.value, "field_type" : field.type})} defaultValue={initialValues[field.name]}  />
+                                <input type="number"  id={field.name} className="form-control" {...register(field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({'field_name' : field.name, "field_value" : e.target.value, "field_type" : field.type})} defaultValue={field?.field_value?.uploaded_field ? field?.field_value?.uploaded_field : 0}  />
                                 {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
                             </div>
                         </div>
@@ -304,7 +298,7 @@ const TradingDetail = (props) => {
                             <div className="form-control-wrap">
                                 
                                 <div className="form-control-select" >
-                                    <select className="form-control form-select" type="select" name={field.name} id={field.name} {...register(field.name, { required: 'This field is required' })} onChange={(e) => onInputChange({'field_name' : field.name, "field_value" : e.target.value, "field_type" : field.type})} defaultValue={initialValues[field.name]}> 
+                                    <select className="form-control form-select" type="select" name={field.name} id={field.name} {...register(field.name, { required: 'This field is required' })} onChange={(e) => onInputChange({'field_name' : field.name, "field_value" : e.target.value, "field_type" : field.type})} defaultValue={field?.field_value?.uploaded_field}> 
                                         <option>Select Option</option>
                                         {field.field_options && field.field_options.map((option, index) => (
                                             <option key={index} value={option.option_value}>{option.option_name}</option>
@@ -317,11 +311,11 @@ const TradingDetail = (props) => {
                     </Col>
                 )
             } else if (field.type == 'checkbox') {
-                
-                const checkedBoxes = JSON.parse(field.field_value.uploaded_field);
+                const checkedBoxes = field.field_value?.uploaded_field ? JSON.parse(field.field_value?.uploaded_field) : {};
                 const checkedValues = (values) => {
-                    console.log(checkedBoxes)
+                  
                     checkedBoxes[values.option_value] = values.field_value
+                    
                     const field_value = JSON.stringify(checkedBoxes)
                     onInputChange({'field_name' : field.name, "field_value" : field_value, "field_type" : field.type})
                 }  
@@ -336,7 +330,7 @@ const TradingDetail = (props) => {
                                             
                                                 <li key={index}>
                                                     <div className="custom-control custom-checkbox custom-control-pro no-control checked">
-                                                        <input type="checkbox" className="custom-control-input" name="btnCheck" id={`btnCheck${index}`}  onChange={(e) => checkedValues({'option_value' : option.option_value, "field_value" : e.target.checked, "option_name" : option.option_name})} />
+                                                        <input type="checkbox" className="custom-control-input" name="btnCheck" id={`btnCheck${index}`} defaultChecked={checkedBoxes[option.option_value] ? true : false}  onChange={(e) => checkedValues({'option_value' : option.option_value, "field_value" : e.target.checked, "option_name" : option.option_name})} />
                                                         <label className="custom-control-label" htmlFor={`btnCheck${index}`}>
                                                             {option.option_name}
                                                         </label>
@@ -351,31 +345,30 @@ const TradingDetail = (props) => {
                             </div>
                             <Row>
                         {field.child_fields && field.child_fields.map((child_field, index) => {
-                            
+                        
                             if (checkedBoxes.bonds && child_field.name == 'MonthlyAverageValueOfTradesPerProductBonds' ) {
                                
                                  return (
-                                    <Col md="12" key={index}>
+                                    <Col md="6" key={index}>
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
-                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={initialValues[child_field.name]} />
+                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                 {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                             </div>
                                         </div>
                                     </Col>
                                 )
-
                             }
                             
                             if (checkedBoxes.treasuryBills && child_field.name == 'MonthlyAverageValueOfTradesPerProductTreasuryBills' ) {
                                
                                  return (
-                                    <Col md="12" key={index}>
+                                    <Col md="6" key={index}>
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
-                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={initialValues[child_field.name]} />
+                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                 {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                             </div>
                                         </div>
@@ -386,11 +379,11 @@ const TradingDetail = (props) => {
                             if (checkedBoxes.commercialPapers && child_field.name == 'MonthlyAverageValueOfTradesPerProductCommercialPaper' ) {
                                
                                  return (
-                                    <Col md="12" key={index}>
+                                    <Col md="6" key={index}>
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
-                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={initialValues[child_field.name]} />
+                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                 {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                             </div>
                                         </div>
@@ -401,11 +394,11 @@ const TradingDetail = (props) => {
                             if (checkedBoxes.moneyMarket && child_field.name == 'MonthlyAverageValueOfTradesPerProductMoneyMarket' ) {
                                
                                  return (
-                                    <Col md="12" key={index}>
+                                    <Col md="6" key={index}>
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
-                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={initialValues[child_field.name]} />
+                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                 {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                             </div>
                                         </div>
@@ -416,11 +409,11 @@ const TradingDetail = (props) => {
                             if (checkedBoxes.foreignExchange && child_field.name == 'MonthlyAverageValueOfTradesPerProductForeignExchange' ) {
                                
                                  return (
-                                    <Col md="12" key={index}>
+                                    <Col md="6" key={index}>
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
-                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={initialValues[child_field.name]} />
+                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                 {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                             </div>
                                         </div>
@@ -431,11 +424,11 @@ const TradingDetail = (props) => {
                             if (checkedBoxes.derivatives && child_field.name == 'MonthlyAverageValueOfTradesPerProductDerivatives' ) {
                                
                                  return (
-                                    <Col md="12" key={index}>
+                                    <Col md="6" key={index}>
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
-                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={initialValues[child_field.name]} />
+                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                 {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                             </div>
                                         </div>
@@ -446,11 +439,11 @@ const TradingDetail = (props) => {
                             if (checkedBoxes.others && child_field.name == 'MonthlyAverageValueOfTradesPerProductOthers' ) {
                                
                                  return (
-                                    <Col md="12" key={index}>
+                                    <Col md="6" key={index}>
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
-                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={initialValues[child_field.name]} />
+                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                 {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                             </div>
                                         </div>
@@ -461,11 +454,11 @@ const TradingDetail = (props) => {
                             if (checkedBoxes.bonds && child_field.name == 'AverageTradeSizePerTransactionBonds' ) {
                                
                                  return (
-                                    <Col md="12" key={index}>
+                                    <Col md="6" key={index}>
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
-                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={initialValues[child_field.name]} />
+                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                 {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                             </div>
                                         </div>
@@ -476,11 +469,11 @@ const TradingDetail = (props) => {
                             if (checkedBoxes.treasuryBills && child_field.name == 'AverageTradeSizePerTransactionTreasuryBills' ) {
                                
                                  return (
-                                    <Col md="12" key={index}>
+                                    <Col md="6" key={index}>
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
-                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={initialValues[child_field.name]} />
+                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                 {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                             </div>
                                         </div>
@@ -491,11 +484,11 @@ const TradingDetail = (props) => {
                             if (checkedBoxes.commercialPapers && child_field.name == 'AverageTradeSizePerTransactionCommercialPaper' ) {
                                
                                  return (
-                                    <Col md="12" key={index}>
+                                    <Col md="6" key={index}>
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
-                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={initialValues[child_field.name]} />
+                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                 {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                             </div>
                                         </div>
@@ -506,11 +499,11 @@ const TradingDetail = (props) => {
                             if (checkedBoxes.moneyMarket && child_field.name == 'AverageTradeSizePerTransactionMoneyMarket' ) {
                                
                                  return (
-                                    <Col md="12" key={index}>
+                                    <Col md="6" key={index}>
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
-                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={initialValues[child_field.name]} />
+                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                 {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                             </div>
                                         </div>
@@ -521,11 +514,11 @@ const TradingDetail = (props) => {
                             if (checkedBoxes.foreignExchange && child_field.name == 'AverageTradeSizePerTransactionForeignExchange' ) {
                                
                                  return (
-                                    <Col md="12" key={index}>
+                                    <Col md="6" key={index}>
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
-                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={initialValues[child_field.name]} />
+                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                 {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                             </div>
                                         </div>
@@ -536,11 +529,11 @@ const TradingDetail = (props) => {
                             if (checkedBoxes.derivatives && child_field.name == 'AverageTradeSizePerTransactionDerivatives' ) {
                                
                                  return (
-                                    <Col md="12" key={index}>
+                                    <Col md="6" key={index}>
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
-                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={initialValues[child_field.name]} />
+                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                 {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                             </div>
                                         </div>
@@ -551,11 +544,11 @@ const TradingDetail = (props) => {
                             if (checkedBoxes.others && child_field.name == 'AverageTradeSizePerTransactionOthers' ) {
                                
                                  return (
-                                    <Col md="12" key={index}>
+                                    <Col md="6" key={index}>
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
-                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={initialValues[child_field.name]} />
+                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                 {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                             </div>
                                         </div>
@@ -596,8 +589,8 @@ const TradingDetail = (props) => {
   );
 
 };
-
-const DisplinaryHistory = (props) => {
+ 
+const DisciplinaryHistory = (props) => {
 
     
     const authUser = useUser();
@@ -663,7 +656,8 @@ const DisplinaryHistory = (props) => {
 
   return (
     <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
-      {/* <h3>Applicant Information</h3> */}
+      <h3>Disciplinary History</h3>
+      <p>The questions below relate to the company and the key officers listed above. Responses should cover material events which occurred in the past ten (10) years and should include events that have occurred anywhere in the world. If in doubt as to the materiality or relevance of the event, please disclose the event. If the answer to the any of the questions below is “YES”, the applicant is required to provide additional information/details in a separate sheet.</p>
       <Row className="gy-4">
               {fields && fields.map((field, index) => {
             
@@ -2087,7 +2081,7 @@ const Header = (props) => {
         </li>
         <li className={props.current >= 3 ? "done" : ""}>
           <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="number"></span> <h5>Step 3</h5>
+            <span className="number">DISCIPLINARY</span> <h5>HISTORY</h5>
           </a>
         </li>
         <li className={props.current >= 4 ? "done" : ""}>
@@ -2180,7 +2174,7 @@ const Form = () => {
     <Head title="Form" />
     <HeaderLogo />
     
-            <Content page="component">
+            <Content>
                 <Content>
     <div className="">
       <div style={{ 'margin': '0px 10px !important' }}>
@@ -2193,7 +2187,7 @@ const Form = () => {
             <Steps config={config}>
               <Step component={ApplicantInformation} />
               <Step component={TradingDetail} />
-              <Step component={DisplinaryHistory} />
+              <Step component={DisciplinaryHistory} />
               <Step component={StepFive} />
               <Step component={StepSix} />
               <Step component={StepSeven} />

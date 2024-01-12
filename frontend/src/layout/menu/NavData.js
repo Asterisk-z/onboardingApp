@@ -143,6 +143,11 @@ const navData = [{
   },
   {
     icon: "dashboard-fill",
+    text: "Application",
+    link: "/application",
+  },
+  {
+    icon: "dashboard-fill",
     text: "Complaints",
     link: "/complaint",
   },

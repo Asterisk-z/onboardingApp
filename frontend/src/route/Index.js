@@ -119,12 +119,11 @@ const Router = () => {
       
 
 
-        <Route path={`${process.env.PUBLIC_URL}`} element={<LoggedInLayoutNoSidebar />}>
+        {/* <Route path={`${process.env.PUBLIC_URL}`} element={<LoggedInLayoutNoSidebar />}>
  
-            <Route path="application" element={<Application />}></Route>
             
         </Route>
-        
+         */}
 
 
 
@@ -159,7 +158,9 @@ const Router = () => {
           <Route path="applicant-guide" element={<ApplicantsGuide />}></Route>
           <Route path="membership-guide" element={<MembersGuide />}></Route>
           <Route path="update-competency" element={<UpdateCompetency />}></Route>
-          <Route path="approve-competency" element={<ApproveCompetency />}></Route>
+        <Route path="approve-competency" element={<ApproveCompetency />}></Route>
+        
+            <Route path="application" element={<Application />}></Route>
         </Route>
 
 

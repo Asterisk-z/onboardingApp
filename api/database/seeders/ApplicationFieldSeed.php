@@ -163,6 +163,24 @@ class ApplicationFieldSeed extends Seeder
                 "required" => 1,
                 "page" => '2',
             ],
+        ];
+
+        foreach ($fields as $field) {
+            if (ApplicationField::where('category', $field['category'])->where('name', $field['name'])->exists()) {
+                continue;
+            }
+
+            ApplicationField::create([
+                "category" => $field['category'],
+                "name" => $field['name'],
+                "description" => $field['description'],
+                "type" => $field['type'],
+                "required" => $field['required'],
+                "page" => $field['page'],
+            ]);
+        }
+
+       $fields = [
             [
                 "category" => '1',
                 "name" => 'MonthlyAverageValueOfTradesPerProductBonds',
@@ -170,7 +188,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => 18,
+                "parent_id" => ApplicationField::where('category', 'dmb')->where('name', 'productOfInterest')->first()->id,//'18',
             ],
             [
                 "category" => '1',
@@ -179,7 +197,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => 18,
+                "parent_id" => ApplicationField::where('category', 'dmb')->where('name', 'productOfInterest')->first()->id,//'18',
             ],
             [
                 "category" => '1',
@@ -188,7 +206,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => 18,
+                "parent_id" => ApplicationField::where('category', 'dmb')->where('name', 'productOfInterest')->first()->id,//'18',
             ],
             [
                 "category" => '1',
@@ -197,7 +215,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => 18,
+                "parent_id" => ApplicationField::where('category', 'dmb')->where('name', 'productOfInterest')->first()->id,//'18',
             ],
             [
                 "category" => '1',
@@ -206,7 +224,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => 18,
+                "parent_id" => ApplicationField::where('category', 'dmb')->where('name', 'productOfInterest')->first()->id,//'18',
             ],
             [
                 "category" => '1',
@@ -215,7 +233,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => 18,
+                "parent_id" => ApplicationField::where('category', 'dmb')->where('name', 'productOfInterest')->first()->id,//'18',
             ],
             [
                 "category" => '1',
@@ -224,7 +242,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => 18,
+                "parent_id" => ApplicationField::where('category', 'dmb')->where('name', 'productOfInterest')->first()->id,//'18',
             ],
             [
                 "category" => '1',
@@ -233,7 +251,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => 18,
+                "parent_id" => ApplicationField::where('category', 'dmb')->where('name', 'productOfInterest')->first()->id,//'18',
             ],
             [
                 "category" => '1',
@@ -242,7 +260,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => 18,
+                "parent_id" => ApplicationField::where('category', 'dmb')->where('name', 'productOfInterest')->first()->id,//'18',
             ],
             [
                 "category" => '1',
@@ -251,7 +269,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => 18,
+                "parent_id" => ApplicationField::where('category', 'dmb')->where('name', 'productOfInterest')->first()->id,//'18',
             ],
             [
                 "category" => '1',
@@ -260,7 +278,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => 18,
+                "parent_id" => ApplicationField::where('category', 'dmb')->where('name', 'productOfInterest')->first()->id,//'18',
             ],
             [
                 "category" => '1',
@@ -269,7 +287,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => 18,
+                "parent_id" => ApplicationField::where('category', 'dmb')->where('name', 'productOfInterest')->first()->id,//'18',
             ],
             [
                 "category" => '1',
@@ -278,7 +296,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => 18,
+                "parent_id" => ApplicationField::where('category', 'dmb')->where('name', 'productOfInterest')->first()->id,//'18',
             ],
             [
                 "category" => '1',
@@ -287,7 +305,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => 18,
+                "parent_id" => ApplicationField::where('category', 'dmb')->where('name', 'productOfInterest')->first()->id,//'18',
             ],
             [
                 "category" => '1',

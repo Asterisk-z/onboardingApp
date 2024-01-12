@@ -66,7 +66,7 @@ class MembershipApplicationController extends Controller
 
         $data = ['uploaded_field' => $request->field_value];
 
-        if($request->field_type == 'file') {
+        if ($request->field_type == 'file') {
             $data = ['uploaded_file' => $request->field_value];
         }
 
