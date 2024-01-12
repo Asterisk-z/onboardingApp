@@ -14,7 +14,7 @@ class ApplicationFieldSeed extends Seeder
      */
     public function run()
     {
-        // ApplicationField::query()->truncate();
+
         $fields = [
             [
                 "category" => '1',
@@ -179,8 +179,10 @@ class ApplicationFieldSeed extends Seeder
                 "page" => $field['page'],
             ]);
         }
+        // $product = ApplicationField::where('category', '1')->where('name', 'productOfInterest')->first();
 
-       $fields = [
+        // dd($product);
+        $fields = [
             [
                 "category" => '1',
                 "name" => 'MonthlyAverageValueOfTradesPerProductBonds',
@@ -188,7 +190,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => ApplicationField::where('category', 'dmb')->where('name', 'productOfInterest')->first()->id,//'18',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'productOfInterest')->first()->id, //'18',
             ],
             [
                 "category" => '1',
@@ -197,7 +199,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => ApplicationField::where('category', 'dmb')->where('name', 'productOfInterest')->first()->id,//'18',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'productOfInterest')->first()->id, //'18',
             ],
             [
                 "category" => '1',
@@ -206,7 +208,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => ApplicationField::where('category', 'dmb')->where('name', 'productOfInterest')->first()->id,//'18',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'productOfInterest')->first()->id, //'18',
             ],
             [
                 "category" => '1',
@@ -215,7 +217,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => ApplicationField::where('category', 'dmb')->where('name', 'productOfInterest')->first()->id,//'18',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'productOfInterest')->first()->id, //'18',
             ],
             [
                 "category" => '1',
@@ -224,7 +226,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => ApplicationField::where('category', 'dmb')->where('name', 'productOfInterest')->first()->id,//'18',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'productOfInterest')->first()->id, //'18',
             ],
             [
                 "category" => '1',
@@ -233,7 +235,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => ApplicationField::where('category', 'dmb')->where('name', 'productOfInterest')->first()->id,//'18',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'productOfInterest')->first()->id, //'18',
             ],
             [
                 "category" => '1',
@@ -242,7 +244,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => ApplicationField::where('category', 'dmb')->where('name', 'productOfInterest')->first()->id,//'18',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'productOfInterest')->first()->id, //'18',
             ],
             [
                 "category" => '1',
@@ -251,7 +253,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => ApplicationField::where('category', 'dmb')->where('name', 'productOfInterest')->first()->id,//'18',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'productOfInterest')->first()->id, //'18',
             ],
             [
                 "category" => '1',
@@ -260,7 +262,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => ApplicationField::where('category', 'dmb')->where('name', 'productOfInterest')->first()->id,//'18',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'productOfInterest')->first()->id, //'18',
             ],
             [
                 "category" => '1',
@@ -269,7 +271,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => ApplicationField::where('category', 'dmb')->where('name', 'productOfInterest')->first()->id,//'18',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'productOfInterest')->first()->id, //'18',
             ],
             [
                 "category" => '1',
@@ -278,7 +280,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => ApplicationField::where('category', 'dmb')->where('name', 'productOfInterest')->first()->id,//'18',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'productOfInterest')->first()->id, //'18',
             ],
             [
                 "category" => '1',
@@ -287,7 +289,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => ApplicationField::where('category', 'dmb')->where('name', 'productOfInterest')->first()->id,//'18',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'productOfInterest')->first()->id, //'18',
             ],
             [
                 "category" => '1',
@@ -296,7 +298,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => ApplicationField::where('category', 'dmb')->where('name', 'productOfInterest')->first()->id,//'18',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'productOfInterest')->first()->id, //'18',
             ],
             [
                 "category" => '1',
@@ -305,7 +307,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => ApplicationField::where('category', 'dmb')->where('name', 'productOfInterest')->first()->id,//'18',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'productOfInterest')->first()->id, //'18',
             ],
             [
                 "category" => '1',
@@ -403,22 +405,393 @@ class ApplicationFieldSeed extends Seeder
                 "required" => 1,
                 "page" => '2',
             ],
+
+            [
+                "category" => '1',
+                "name" => 'companyDisciplinary',
+                "description" => 'The Company',
+                "type" => 'select',
+                "required" => 1,
+                "page" => '3',
+            ],
+        ];
+
+        foreach ($fields as $field) {
+            if (ApplicationField::where('category', $field['category'])->where('name', $field['name'])->exists()) {
+                continue;
+            }
+
+            ApplicationField::create([
+                "category" => $field['category'],
+                "name" => $field['name'],
+                "description" => $field['description'],
+                "type" => $field['type'],
+                "required" => $field['required'],
+                "page" => $field['page'],
+            ]);
+        }
+
+        $fields = [
+            [
+                "category" => '1',
+                "name" => 'companyDisciplinaryOne',
+                "description" => 'Has the company (or any of its affiliates ), been denied registration or expelled from membership of any securities exchange, self-regulatory organisation (SRO) or associations?',
+                "type" => 'select',
+                "required" => 1,
+                "page" => '3',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'companyDisciplinary')->first()->id,
+            ],
+            [
+                "category" => '1',
+                "name" => 'companyDisciplinaryTwo',
+                "description" => 'Has your membership, or that of any affiliates, in any of the institutions/ associations mentioned above at any time been revoked, suspended or withdrawn?',
+                "type" => 'select',
+                "required" => 1,
+                "page" => '3',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'companyDisciplinary')->first()->id,
+            ],
+            [
+                "category" => '1',
+                "name" => 'companyDisciplinaryThree',
+                "description" => 'Has your company, or any of its affiliates, ever been refused a Fidelity Bond?',
+                "type" => 'select',
+                "required" => 1,
+                "page" => '3',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'companyDisciplinary')->first()->id,
+            ],
+            [
+                "category" => '1',
+                "name" => 'companyDisciplinaryFour',
+                "description" => 'Has your company, or any of its affiliates, been subject to any winding up order/receivership arrangement? ',
+                "type" => 'select',
+                "required" => 1,
+                "page" => '3',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'companyDisciplinary')->first()->id,
+            ],
+            [
+                "category" => '1',
+                "name" => 'mdceoDisciplinary',
+                "description" => 'The MD/CEO',
+                "type" => 'select',
+                "required" => 1,
+                "page" => '3',
+            ],
+        ];
+
+        foreach ($fields as $field) {
+            if (ApplicationField::where('category', $field['category'])->where('name', $field['name'])->exists()) {
+                continue;
+            }
+
+            ApplicationField::create([
+                "category" => $field['category'],
+                "name" => $field['name'],
+                "description" => $field['description'],
+                "type" => $field['type'],
+                "required" => $field['required'],
+                "page" => $field['page'],
+            ]);
+        }
+
+        $fields = [
+            [
+                "category" => '1',
+                "name" => 'mdceoDisciplinaryOne',
+                "description" => 'Ever been convicted of any criminal offence? ',
+                "type" => 'select',
+                "required" => 1,
+                "page" => '3',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'mdceoDisciplinary')->first()->id,
+            ],
+            [
+                "category" => '1',
+                "name" => 'mdceoDisciplinaryTwo',
+                "description" => 'Ever been the subject of an adverse finding by, or settlement with, any government agency, court, securities exchange, SRO, tribunal or other regulatory authority? ',
+                "type" => 'select',
+                "required" => 1,
+                "page" => '3',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'mdceoDisciplinary')->first()->id,
+            ],
+            [
+                "category" => '1',
+                "name" => 'mdceoDisciplinaryThree',
+                "description" => 'Ever been a Director, partner or otherwise concerned in the management of a business which has gone into insolvency, liquidation, administration or the equivalent proceedings within or outside of the Nigerian jurisdiction while connected with such organisation within one year of that connection? ',
+                "type" => 'select',
+                "required" => 1,
+                "page" => '3',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'mdceoDisciplinary')->first()->id,
+            ],
+            [
+                "category" => '1',
+                "name" => 'mdceoDisciplinaryFour',
+                "description" => 'Ever been declared bankrupt or entered into any compromise arrangement with creditors related to bankruptcy or insolvency?',
+                "type" => 'select',
+                "required" => 1,
+                "page" => '3',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'mdceoDisciplinary')->first()->id,
+            ],
+            [
+                "category" => '1',
+                "name" => 'mdceoDisciplinaryFive',
+                "description" => 'Ever been the subject of any disciplinary or criminal proceedings or been the subject of any investigation by any authority which may lead to such proceedings?	',
+                "type" => 'select',
+                "required" => 1,
+                "page" => '3',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'mdceoDisciplinary')->first()->id,
+            ],
+            [
+                "category" => '1',
+                "name" => 'mdceoDisciplinarySix',
+                "description" => 'Ever been refused authorisation or licence to carry on a trade, business or profession or to be a member of a securities exchange?',
+                "type" => 'select',
+                "required" => 1,
+                "page" => '3',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'mdceoDisciplinary')->first()->id,
+            ],
+            [
+                "category" => '1',
+                "name" => 'mdceoDisciplinarySeven',
+                "description" => 'Ever had such authorisation, membership or licence (referred to above) revoked or terminated?',
+                "type" => 'select',
+                "required" => 1,
+                "page" => '3',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'mdceoDisciplinary')->first()->id,
+            ],
+            [
+                "category" => '1',
+                "name" => 'mdceoDisciplinaryEight',
+                "description" => 'Ever been disqualified from acting as a Director?',
+                "type" => 'select',
+                "required" => 1,
+                "page" => '3',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'mdceoDisciplinary')->first()->id,
+            ],
+
+            [
+                "category" => '1',
+                "name" => 'treasureDisciplinary',
+                "description" => 'The Treasure',
+                "type" => 'select',
+                "required" => 1,
+                "page" => '3',
+            ],
+        ];
+
+        foreach ($fields as $field) {
+            if (ApplicationField::where('category', $field['category'])->where('name', $field['name'])->exists()) {
+                continue;
+            }
+
+            ApplicationField::create([
+                "category" => $field['category'],
+                "name" => $field['name'],
+                "description" => $field['description'],
+                "type" => $field['type'],
+                "required" => $field['required'],
+                "page" => $field['page'],
+            ]);
+        }
+
+        $fields = [
+            [
+                "category" => '1',
+                "name" => 'treasureDisciplinaryOne',
+                "description" => 'Ever been convicted of any criminal offence?  ',
+                "type" => 'select',
+                "required" => 1,
+                "page" => '3',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'treasureDisciplinary')->first()->id,
+            ],
+            [
+                "category" => '1',
+                "name" => 'treasureDisciplinaryTwo',
+                "description" => 'Ever been the subject of an adverse finding by, or settlement with, any government agency, court, securities exchange, SRO, tribunal or other regulatory authority?  ',
+                "type" => 'select',
+                "required" => 1,
+                "page" => '3',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'treasureDisciplinary')->first()->id,
+            ],
+            [
+                "category" => '1',
+                "name" => 'treasureDisciplinaryThree',
+                "description" => 'Ever been concerned in the management of a business which has gone into insolvency, liquidation, administration or the equivalent proceedings within or outside of the Nigerian jurisdiction while connected with such organisation within one year of that connection?',
+                "type" => 'select',
+                "required" => 1,
+                "page" => '3',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'treasureDisciplinary')->first()->id,
+            ],
+            [
+                "category" => '1',
+                "name" => 'treasureDisciplinaryFour',
+                "description" => 'Ever been declared bankrupt or entered into any compromise arrangement with creditors related to bankruptcy or insolvency?',
+                "type" => 'select',
+                "required" => 1,
+                "page" => '3',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'treasureDisciplinary')->first()->id,
+            ],
+            [
+                "category" => '1',
+                "name" => 'treasureDisciplinaryFive',
+                "description" => 'Ever been the subject of any disciplinary or criminal proceedings or been the subject of any investigation by any authority which may lead to such proceedings?',
+                "type" => 'select',
+                "required" => 1,
+                "page" => '3',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'treasureDisciplinary')->first()->id,
+            ],
+
+            [
+                "category" => '1',
+                "name" => 'chiefComplianceOfficerDisciplinary',
+                "description" => 'The Chief Compliance Officer',
+                "type" => 'select',
+                "required" => 1,
+                "page" => '3',
+            ],
+        ];
+
+        foreach ($fields as $field) {
+            if (ApplicationField::where('category', $field['category'])->where('name', $field['name'])->exists()) {
+                continue;
+            }
+
+            ApplicationField::create([
+                "category" => $field['category'],
+                "name" => $field['name'],
+                "description" => $field['description'],
+                "type" => $field['type'],
+                "required" => $field['required'],
+                "page" => $field['page'],
+            ]);
+        }
+
+        $fields = [
+            [
+                "category" => '1',
+                "name" => 'chiefComplianceOfficerDisciplinaryOne',
+                "description" => 'Ever been convicted of any criminal offence? ',
+                "type" => 'select',
+                "required" => 1,
+                "page" => '3',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'chiefComplianceOfficerDisciplinary')->first()->id,
+            ],
+            [
+                "category" => '1',
+                "name" => 'chiefComplianceOfficerDisciplinaryTwo',
+                "description" => 'Ever been the subject of an adverse finding by, or settlement with, any government agency, court, securities exchange, SRO, tribunal or other regulatory authority?   ',
+                "type" => 'select',
+                "required" => 1,
+                "page" => '3',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'chiefComplianceOfficerDisciplinary')->first()->id,
+            ],
+            [
+                "category" => '1',
+                "name" => 'chiefComplianceOfficerDisciplinaryThree',
+                "description" => 'Ever been concerned in the management of a business which has gone into insolvency, liquidation, administration or the equivalent proceedings within or outside of the Nigerian jurisdiction while connected with such organisation within one year of that connection? ',
+                "type" => 'select',
+                "required" => 1,
+                "page" => '3',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'chiefComplianceOfficerDisciplinary')->first()->id,
+            ],
+            [
+                "category" => '1',
+                "name" => 'chiefComplianceOfficerDisciplinaryFour',
+                "description" => 'Ever been declared bankrupt or entered into any compromise arrangement with creditors related to bankruptcy or insolvency?',
+                "type" => 'select',
+                "required" => 1,
+                "page" => '3',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'chiefComplianceOfficerDisciplinary')->first()->id,
+            ],
+            [
+                "category" => '1',
+                "name" => 'chiefComplianceOfficerDisciplinaryFive',
+                "description" => 'Ever been the subject of any disciplinary or criminal proceedings or been the subject of any investigation by any Authority which may lead to such proceedings?',
+                "type" => 'select',
+                "required" => 1,
+                "page" => '3',
+                "parent_id" => ApplicationField::where('category', '1')->where('name', 'chiefComplianceOfficerDisciplinary')->first()->id,
+            ],
+
             // [
             //     "category" => '1',
-            //     "name" => 'companyName',
-            //     "description" => 'Company Name',
-            //     "type" => 'text',
+            //     "name" => 'mdceoDisciplinaryOne',
+            //     "description" => 'mdceoDisciplinaryOne',
+            //     "type" => 'select',
             //     "required" => 1,
-            //     "page" => '1',
+            //     "page" => '3',
             // ],
             // [
             //     "category" => '1',
-            //     "name" => 'companyName',
-            //     "description" => 'Company Name',
-            //     "type" => 'text',
+            //     "name" => 'companyDisciplinaryOne',
+            //     "description" => 'companyDisciplinaryOne',
+            //     "type" => 'select',
             //     "required" => 1,
-            //     "page" => '1',
+            //     "page" => '3',
             // ],
+            // [
+            //     "category" => '1',
+            //     "name" => 'companyDisciplinaryOne',
+            //     "description" => 'companyDisciplinaryOne',
+            //     "type" => 'select',
+            //     "required" => 1,
+            //     "page" => '3',
+            // ],
+            // [
+            //     "category" => '1',
+            //     "name" => 'companyDisciplinaryOne',
+            //     "description" => 'companyDisciplinaryOne',
+            //     "type" => 'select',
+            //     "required" => 1,
+            //     "page" => '3',
+            // ],
+            // [
+            //     "category" => '1',
+            //     "name" => 'companyDisciplinaryOne',
+            //     "description" => 'companyDisciplinaryOne',
+            //     "type" => 'select',
+            //     "required" => 1,
+            //     "page" => '3',
+            // ],
+            // [
+            //     "category" => '1',
+            //     "name" => 'companyDisciplinaryOne',
+            //     "description" => 'companyDisciplinaryOne',
+            //     "type" => 'select',
+            //     "required" => 1,
+            //     "page" => '3',
+            // ],
+            // [
+            //     "category" => '1',
+            //     "name" => 'companyDisciplinaryOne',
+            //     "description" => 'companyDisciplinaryOne',
+            //     "type" => 'select',
+            //     "required" => 1,
+            //     "page" => '3',
+            // ],
+            // [
+            //     "category" => '1',
+            //     "name" => 'companyDisciplinaryOne',
+            //     "description" => 'companyDisciplinaryOne',
+            //     "type" => 'select',
+            //     "required" => 1,
+            //     "page" => '3',
+            // ],
+            // [
+            //     "category" => '1',
+            //     "name" => 'companyDisciplinaryOne',
+            //     "description" => 'companyDisciplinaryOne',
+            //     "type" => 'select',
+            //     "required" => 1,
+            //     "page" => '3',
+            // ],
+            // [
+            //     "category" => '1',
+            //     "name" => 'companyDisciplinaryOne',
+            //     "description" => 'companyDisciplinaryOne',
+            //     "type" => 'select',
+            //     "required" => 1,
+            //     "page" => '3',
+            // ],
+
         ];
 
         foreach ($fields as $field) {
