@@ -12,7 +12,7 @@ export const loadAllEvent = createAsyncThunk(
   async (arg) => {
     // ?show_past_events=1&name=ar&from_date=2023-07-12&to_date
     // {'show_past_events' : 1, "name" : "ar", "from_date" : "2023-07-12", "to_date" : "2023-07-12"}
-    const query = queryGenerator(values);
+    const query = queryGenerator(arg);
     try {
       const { data } = await axios.get(`events?${query}`);
       return successHandler(data);
@@ -25,7 +25,7 @@ export const loadAllEvent = createAsyncThunk(
 export const loadSingleEvent = createAsyncThunk(
   "educationEvent/loadSingleEvent",
   async (arg) => {
-    const query = values.event_id;
+    const query = arg.event_id;
     try {
       const { data } = await axios.get(`events/view/${query}`);
       return successHandler(data);
@@ -35,6 +35,8 @@ export const loadSingleEvent = createAsyncThunk(
   }
 );
 
+
+//Store to View Events that you've Registerd for as an AR
 export const loadAllRegisteredEvent = createAsyncThunk(
   "educationEvent/loadAllRegisteredEvent",
   async (arg) => {
@@ -47,6 +49,8 @@ export const loadAllRegisteredEvent = createAsyncThunk(
   }
 );
 
+
+//Store to show AR's events that are available for them
 export const loadAllInvitedEvent = createAsyncThunk(
   "educationEvent/loadAllInvitedEvent",
   async (arg) => {
@@ -83,7 +87,7 @@ export const megCreateEvent = createAsyncThunk(
 export const megUpdateEvent = createAsyncThunk(
   "educationEvent/megUpdateEvent",
   async (values) => {
-    const event_id = values.get('event_id');
+    const event_id = values.event_id;
     try {
       const { data } = await axios({
         method: "post",

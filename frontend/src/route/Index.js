@@ -61,6 +61,7 @@ import AdminCompetencyUndoneAll from "main/pages/Admin/AdminCompetencyUndoneAll"
 import AdminMembersGuide from "main/pages/Admin/AdminMembersGuide"
 import AdminAddEvents from "main/pages/Admin/AdminAddEvents"
 import AdminEvents from "main/pages/Admin/AdminEvents"
+import AdminEditEvents from "main/pages/Admin/AdminEditEvents"
 import Success from "pages/auth/Success";
 
 
@@ -189,6 +190,7 @@ const Router = () => {
           <Route path="admin-competency-done-all" element={<AdminCompetencyDoneAll/>}></Route>
           <Route path="admin-competency-undone-all" element={<AdminCompetencyUndoneAll/>}></Route>
           <Route path="admin-create-event" element={<AdminAddEvents/>}></Route>
+          <Route path="admin-edit-event/:event_id" element={<AdminEditEvents/>}></Route>
           <Route path="admin-events" element={<AdminEvents/>}></Route>
           <Route path="wizard" element={<WizardTest />}></Route>
 
