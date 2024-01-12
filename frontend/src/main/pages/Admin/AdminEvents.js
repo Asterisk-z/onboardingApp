@@ -116,8 +116,6 @@ const AdminEvents = ({ drawer }) => {
                 <Block size="lg">
                     <Card className="card-bordered card-preview">
                         <Content>
-
-
                             <Block size="xl">
                                 <BlockHead>
                                     <BlockHeadContent>
@@ -129,11 +127,8 @@ const AdminEvents = ({ drawer }) => {
 
                                 <PreviewCard>
                                     {$events && <AdminEventTable updateParent={updateParentState} parentState={parentState} data={$events} expandableRows pagination actions />}
-                                    {events}
                                 </PreviewCard>
                             </Block>
-
-
                         </Content>
                     </Card>
                 </Block>

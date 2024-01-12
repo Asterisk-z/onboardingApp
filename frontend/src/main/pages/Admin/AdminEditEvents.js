@@ -145,7 +145,7 @@ const AdminEvents = ({ drawer }) => {
     return (
         <React.Fragment>
             <Head title="Conference And Events"></Head>
-            <p>{event}</p>
+            {/* <p>{event}</p> */}
             <Content>
                 <BlockHead size="sm">
                     <BlockBetween>
@@ -187,7 +187,7 @@ const AdminEvents = ({ drawer }) => {
                                             <Col md='12'>
                                                 <div className="form-group">
                                                     <label className="form-label" htmlFor="name">
-                                                        Name Of Event {$event?.name}
+                                                        Name Of Event
                                                     </label>
                                                     <div className="form-control-wrap">
                                                         <input type="text" id="name" className="form-control" {...register('name', { required: "This Field is required" })} defaultValue={initValues.name} />
