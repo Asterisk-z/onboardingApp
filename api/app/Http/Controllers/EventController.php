@@ -244,9 +244,9 @@ class EventController extends Controller
         $requestedPositions = $request->input('positions', []);
 
         //Notify newly added AR
-        if ($requestedPositions){
+        if ($requestedPositions) {
             $this->addInviteesToEvent($event, $requestedPositions);
-        }else{
+        } else {
             EventNotificationUtility::eventUpdated($event);
         }
 
@@ -312,12 +312,12 @@ class EventController extends Controller
             EventNotificationUtility::eventAdded($event->refresh());
         }
 
-        if(count($positionToUpdate)){
+        if (count($positionToUpdate)) {
             $users = User::whereIn('position_id', $positionToUpdate)->get();
             EventNotificationUtility::eventUpdated($event, $users);
         }
 
-        if(count($positionsToRemove)){
+        if (count($positionsToRemove)) {
             $eventName = $event->name;
             $users = User::whereIn('position_id', $positionsToRemove)->get();
             EventNotificationUtility::eventUninvited($users, $eventName);
@@ -399,7 +399,7 @@ class EventController extends Controller
             'evidence_of_payment_img' => 'sometimes|mimes:jpeg,png,jpg|max:5048',
         ]);
 
-        if($event->is_del){
+        if ($event->is_del) {
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, "You are unable to register for this event at this time");
         }
 
@@ -527,25 +527,36 @@ class EventController extends Controller
 
     public function certificateSample(Event $event)
     {
-        $name = "Jon Doe";
+        $name = "John Doe";
         $isDownload = false;
 
         $eventName = $event->name;
         $eventDate = $event->date;
 
-        return view('mails.certificate', compact('event', 'name', 'eventName', 'eventDate', 'isDownload'));
+        return view('mails.certificate', compact('event', 'name', 'isDownload'));
+    }
+
+    public function certificateSamplePreview(Event $event)
+    {
+        $name = "John Doe";
+        $isDownload = true;
+
+        $eventName = $event->name;
+        $eventDate = $event->date;
+
+        return view('mails.certificate', compact('event', 'name', 'isDownload'));
     }
 
     public function certificateSampleDownload(Event $event)
     {
-        $name = "Jon Doe";
+        $name = "John Doe";
         $isDownload = true;
 
         $pdf = App::make('dompdf.wrapper');
 
         $eventName = $event->name;
         $eventDate = $event->date;
-        $pdf->loadView('mails.certificate', compact('event', 'name', 'eventName', 'eventDate', 'isDownload'))->setPaper($this->certPaperSize);
+        $pdf->loadView('mails.certificate', compact('event', 'name', 'isDownload'))->setPaper($this->certPaperSize);
 
         return $pdf->download('certificate.pdf');
     }

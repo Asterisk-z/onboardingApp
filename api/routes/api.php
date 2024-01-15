@@ -248,14 +248,13 @@ Route::middleware('auth')->group(function () {
         Route::post('/delete/{eventID}', [EventController::class, 'delete']);
 
         Route::post('/send-certificates', [EventController::class, 'sendCertificates']);
-        Route::get('/preview-certificate/{event}', [EventController::class, 'certificateSample'])->name('clearModel');
+        Route::get('/preview-certificate/{event}', [EventController::class, 'certificateSamplePreview'])->name('clearModel');
+        //});
 
-        // });
-
-        // Route::middleware('authRole:' . Role::MEG . ',' . Role::FSD)->group(function () {
-        Route::get('/registrations/{event}', [EventController::class, 'eventRegistrations']);
-        Route::post('/registration-update-status/{eventReg}', [EventController::class, 'approveEventRegistration']);
-        // });
+        Route::middleware('authRole:' . Role::MEG . ',' . Role::FSD)->group(function () {
+            Route::get('/registrations/{event}', [EventController::class, 'eventRegistrations']);
+            Route::post('/registration-update-status/{eventReg}', [EventController::class, 'approveEventRegistration']);
+        });
 
         Route::middleware('authRole:' . Role::ARAUTHORISER . ',' . Role::ARINPUTTER)->group(function () {
             Route::post('/register/{event}', [EventController::class, 'register']);

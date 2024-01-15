@@ -57,7 +57,7 @@ class GenerateAndSendCertificateJob implements ShouldQueue
             $filePath = "certificate_" . $eventReg->id . ".pdf";
 
             $pdf = App::make('dompdf.wrapper');
-            $pdf->loadView('mails.certificate', compact('event', 'name', 'eventName', 'eventDate', 'isDownload'))->setPaper($this->certPaperSize);
+            $pdf->loadView('mails.certificate', compact('event', 'name', 'isDownload'))->setPaper($this->certPaperSize);
 
 
             $pdf->save($eventReg->getCertificateFullPath($filePath));
@@ -68,7 +68,6 @@ class GenerateAndSendCertificateJob implements ShouldQueue
 
             // send the certificate
             SendGeneratedCertificateJob::dispatch($eventReg);
-
 
         }
 
