@@ -19,11 +19,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 
+use Illuminate\Support\Facades\App;
+
+
 class EventController extends Controller
 {
+
+    protected $certPaperSize = array(0, 0, 800, 480);
+
     public function view($eventId)
     {
-        if(! $event = Event::find($eventId)){
+        if (!$event = Event::find($eventId)) {
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, "Record not found");
         }
 
@@ -441,4 +447,26 @@ class EventController extends Controller
         EventNotificationUtility::paymentStatusUpdated($eventReg);
         return successResponse('Successful', EventRegistrationWithEventResource::make($eventReg));
     }
+
+
+    public function certificateSample(Event $event)
+    {
+        $name = "Jon Doe";
+        $isDownload = false;
+        return view('mails.certificate', compact('name', 'event', 'isDownload'));
+    }
+
+    public function certificateSampleDownload(Event $event)
+    {
+        $name = "Jon Doe";
+        $isDownload = true;
+
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadView('mails.certificate', compact('name', 'event', 'isDownload'))->setPaper($this->certPaperSize);
+
+        return $pdf->download('certificate.pdf');
+    }
+
+
+
 }
