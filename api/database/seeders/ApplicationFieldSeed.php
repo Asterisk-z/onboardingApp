@@ -177,11 +177,11 @@ class ApplicationFieldSeed extends Seeder
                 "type" => $field['type'],
                 "required" => $field['required'],
                 "page" => $field['page'],
+                "parent_id" => isset($field['parent_id']) ? $field['parent_id'] : null,
             ]);
         }
-        // $product = ApplicationField::where('category', '1')->where('name', 'productOfInterest')->first();
+        $product = ApplicationField::where('category', '1')->where('name', 'productOfInterest')->first();
 
-        // dd($product);
         $fields = [
             [
                 "category" => '1',
@@ -190,7 +190,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => ApplicationField::where('category', '1')->where('name', 'productOfInterest')->first()->id, //'18',
+                "parent_id" => $product->id, //'18',
             ],
             [
                 "category" => '1',
@@ -199,7 +199,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => ApplicationField::where('category', '1')->where('name', 'productOfInterest')->first()->id, //'18',
+                "parent_id" => $product->id, //'18',
             ],
             [
                 "category" => '1',
@@ -208,7 +208,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => ApplicationField::where('category', '1')->where('name', 'productOfInterest')->first()->id, //'18',
+                "parent_id" => $product->id, //'18',
             ],
             [
                 "category" => '1',
@@ -217,7 +217,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => ApplicationField::where('category', '1')->where('name', 'productOfInterest')->first()->id, //'18',
+                "parent_id" => $product->id, //'18',
             ],
             [
                 "category" => '1',
@@ -226,7 +226,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => ApplicationField::where('category', '1')->where('name', 'productOfInterest')->first()->id, //'18',
+                "parent_id" => $product->id, //'18',
             ],
             [
                 "category" => '1',
@@ -235,7 +235,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => ApplicationField::where('category', '1')->where('name', 'productOfInterest')->first()->id, //'18',
+                "parent_id" => $product->id, //'18',
             ],
             [
                 "category" => '1',
@@ -244,7 +244,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => ApplicationField::where('category', '1')->where('name', 'productOfInterest')->first()->id, //'18',
+                "parent_id" => $product->id, //'18',
             ],
             [
                 "category" => '1',
@@ -253,7 +253,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => ApplicationField::where('category', '1')->where('name', 'productOfInterest')->first()->id, //'18',
+                "parent_id" => $product->id, //'18',
             ],
             [
                 "category" => '1',
@@ -262,7 +262,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => ApplicationField::where('category', '1')->where('name', 'productOfInterest')->first()->id, //'18',
+                "parent_id" => $product->id, //'18',
             ],
             [
                 "category" => '1',
@@ -271,7 +271,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => ApplicationField::where('category', '1')->where('name', 'productOfInterest')->first()->id, //'18',
+                "parent_id" => $product->id, //'18',
             ],
             [
                 "category" => '1',
@@ -280,7 +280,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => ApplicationField::where('category', '1')->where('name', 'productOfInterest')->first()->id, //'18',
+                "parent_id" => $product->id, //'18',
             ],
             [
                 "category" => '1',
@@ -289,7 +289,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => ApplicationField::where('category', '1')->where('name', 'productOfInterest')->first()->id, //'18',
+                "parent_id" => $product->id, //'18',
             ],
             [
                 "category" => '1',
@@ -298,7 +298,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => ApplicationField::where('category', '1')->where('name', 'productOfInterest')->first()->id, //'18',
+                "parent_id" => $product->id, //'18',
             ],
             [
                 "category" => '1',
@@ -307,7 +307,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
-                "parent_id" => ApplicationField::where('category', '1')->where('name', 'productOfInterest')->first()->id, //'18',
+                "parent_id" => $product->id, //'18',
             ],
             [
                 "category" => '1',
@@ -428,6 +428,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => $field['type'],
                 "required" => $field['required'],
                 "page" => $field['page'],
+                "parent_id" => isset($field['parent_id']) ? $field['parent_id'] : null,
             ]);
         }
 
@@ -490,6 +491,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => $field['type'],
                 "required" => $field['required'],
                 "page" => $field['page'],
+                "parent_id" => isset($field['parent_id']) ? $field['parent_id'] : null,
             ]);
         }
 
@@ -589,6 +591,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => $field['type'],
                 "required" => $field['required'],
                 "page" => $field['page'],
+                "parent_id" => isset($field['parent_id']) ? $field['parent_id'] : null,
             ]);
         }
 
@@ -661,6 +664,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => $field['type'],
                 "required" => $field['required'],
                 "page" => $field['page'],
+                "parent_id" => isset($field['parent_id']) ? $field['parent_id'] : null,
             ]);
         }
 
@@ -711,14 +715,119 @@ class ApplicationFieldSeed extends Seeder
                 "parent_id" => ApplicationField::where('category', '1')->where('name', 'chiefComplianceOfficerDisciplinary')->first()->id,
             ],
 
-            // [
-            //     "category" => '1',
-            //     "name" => 'mdceoDisciplinaryOne',
-            //     "description" => 'mdceoDisciplinaryOne',
-            //     "type" => 'select',
-            //     "required" => 1,
-            //     "page" => '3',
-            // ],
+            [
+                "category" => '1',
+                "name" => 'CompanyOverview',
+                "description" => 'Company Profile containing brief description of the following inter alias: History & Company Overview  & Details of Business Services & Profiles of Board of Directors & Profiles of Executive Management Staff',
+                "type" => 'file',
+                "required" => 1,
+                "page" => '4',
+            ],
+            [
+                "category" => '1',
+                "name" => 'certificateOfIncorporation',
+                "description" => 'Certificate of Incorporation',
+                "type" => 'file',
+                "required" => 1,
+                "page" => '4',
+            ],
+            [
+                "category" => '1',
+                "name" => 'memorandumAndArticlesOfAssociation',
+                "description" => 'Memorandum and Articles of Association',
+                "type" => 'file',
+                "required" => 1,
+                "page" => '4',
+            ],
+            [
+                "category" => '1',
+                "name" => 'particularsOfDirectors',
+                "description" => 'Particulars of Directors – CAC Form 7',
+                "type" => 'file',
+                "required" => 1,
+                "page" => '4',
+            ],
+            [
+                "category" => '1',
+                "name" => 'particularsOfShareholders',
+                "description" => 'Particulars of Shareholders – CAC Form 2 [for Private Companies (Ltd.) only]	',
+                "type" => 'file',
+                "required" => 1,
+                "page" => '4',
+            ],
+            [
+                "category" => '1',
+                "name" => 'evidenceOfRegistration',
+                "description" => 'Evidence of registration with the Securities and Exchange Commission (SEC) of Nigeria ',
+                "type" => 'file',
+                "required" => 1,
+                "page" => '4',
+            ],
+            [
+                "category" => '1',
+                "name" => 'detailedResumesOfSEC',
+                "description" => 'Detailed resumes of SEC registered sponsored individuals',
+                "type" => 'file',
+                "required" => 1,
+                "page" => '4',
+            ],
+            [
+                "category" => '1',
+                "name" => 'evidenceOfCompliance',
+                "description" => 'Evidence of compliance with the minimum paid-up capital as stipulated by SEC/Central Bank of Nigeria (CBN)	',
+                "type" => 'file',
+                "required" => 1,
+                "page" => '4',
+            ],
+            [
+                "category" => '1',
+                "name" => 'listOfAuthorisedRepresentatives',
+                "description" => 'List of Authorised Representatives  (stating their designations)	',
+                "type" => 'file',
+                "required" => 1,
+                "page" => '4',
+            ],
+            [
+                "category" => '1',
+                "name" => 'latestFidelityBond ',
+                "description" => 'Latest Fidelity Bond ',
+                "type" => 'file',
+                "required" => 1,
+                "page" => '4',
+            ],
+            [
+                "category" => '1',
+                "name" => 'mostRecentYearAuditedFinancialStatements',
+                "description" => 'Most recent one (1) year audited financial statements, not exceeding eighteen (18) months from end of the last financial year',
+                "type" => 'file',
+                "required" => 1,
+                "page" => '4',
+            ],
+            [
+                "category" => '1',
+                "name" => 'evidenceFXAuthorisedDealershipLicence',
+                "description" => 'Evidence of an FX Authorised Dealership Licence (if applicable)',
+                "type" => 'file',
+                "required" => 1,
+                "page" => '4',
+            ],
+            [
+                "category" => '1',
+                "name" => 'evidenceOfPaymentOfApplicationFee',
+                "description" => 'Evidence of Payment of Application Fee ',
+                "type" => 'file',
+                "required" => 1,
+                "page" => '4',
+            ],
+            [
+                "category" => '1',
+                "name" => 'applicantDeclaration',
+                "description" => 'Applicant Declaration',
+                "type" => 'file',
+                "required" => 1,
+                "page" => '5',
+            ],
+
             // [
             //     "category" => '1',
             //     "name" => 'companyDisciplinaryOne',
@@ -806,6 +915,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => $field['type'],
                 "required" => $field['required'],
                 "page" => $field['page'],
+                "parent_id" => isset($field['parent_id']) ? $field['parent_id'] : null,
             ]);
         }
 

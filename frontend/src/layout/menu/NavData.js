@@ -208,6 +208,11 @@ const navData = [{
       },
     ],
   },
+  {
+    icon: "tile-thumb-fill",
+    text: "Education And Learning",
+    link: "/education-and-learning",
+  },
   // {
   //   icon: "tile-thumb-fill",
   //   text: "FMDQ Fees and Dues",

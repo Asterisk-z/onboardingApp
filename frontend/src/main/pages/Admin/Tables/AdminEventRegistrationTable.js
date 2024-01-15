@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge, Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, CardTitle, CardBody } from "reactstrap";
 import { DataTablePagination } from "components/Component";
-import { loadAllEvent, megDeleteEvent } from "redux/stores/education/eventStore";
+import { loadAllEvent, MEGFSGUpdateEventRegistrationStatus } from "redux/stores/education/eventStore";
 import moment from "moment";
 import Icon from "components/icon/Icon";
 import Swal from "sweetalert2";
@@ -103,29 +103,52 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
 
 
   const askAction = async (action) => {
-    
-    if (action == 'delete') {
+
+    if (action == 'approve') {
       Swal.fire({
         title: "Are you sure?",
-        text: "Do you want to delete this event!",
+        text: "Do you want to approve this registration!",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonText: "Yes, Delete it!",
+        confirmButtonText: "Yes, approve it!",
       }).then((result) => {
 
         if (result.isConfirmed) {
-          console.log('herer')
+
           const formData = new FormData();
           formData.append('event_id', tabItem_id);
-          dispatch(megDeleteEvent(formData));
-
+          formData.append('status', 'Approved');
+          dispatch(MEGFSGUpdateEventRegistrationStatus(formData));
           updateParentParent(Math.random())
 
 
         }
       });
     }
-  }
+
+    if (action === 'decline') {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "Do you want to decline this Registration!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, decline it!",
+        html: '<label htmlFor="comments">Comment</label><textarea id="comments" className="form-control" rows="4" cols="50" placeholder="Enter Comment" required></textarea>', // Add textarea to the alert
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const comments = document.getElementById('comments').value; // Get value from the textarea
+          const formData = new FormData();
+          formData.append('competency_id', tabItem_id);
+          formData.append('status', 'Declined');
+          formData.append('reason', rejectReason); // Append the rejection reason
+          dispatch(MEGFSGUpdateEventRegistrationStatus(formData));
+          updateParentParent(Math.random());
+        }
+      });
+    }
+  
+
+  };
 
   return (
     <>
@@ -146,38 +169,17 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
                     </DropdownItem>
                   </li>
                   <li size="xs">
-                    <DropdownItem tag="a" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/admin-edit-event/${tabItem_id}`)} >
+                    <DropdownItem tag="a"  onClick={(e) => askAction('approve')}  >
                       <Icon name="pen"></Icon>
-                      <span>Edit</span>
+                      <span>Approve</span>
                     </DropdownItem>
                   </li>
                   <li size="xs">
-                    <DropdownItem tag="a" onClick={(e) => askAction('delete')} >
+                    <DropdownItem tag="a" onClick={(e) => askAction('decline')} >
                       <Icon name="trash"></Icon>
-                      <span>Delete</span>
+                      <span>Decline</span>
                     </DropdownItem>
                   </li>
-                  <li size="xs">
-                    <DropdownItem tag="a" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/admin-event-registration/${tabItem_id}`)} >
-                      <Icon name="eye"></Icon>
-                      <span>View Registrations</span>
-                    </DropdownItem>
-                  </li>
-                  {/* {(!tabItem.active) ? <>
-                    <li size="xs">
-                      <DropdownItem tag="a" onClick={(e) => askAction('open')} >
-                        <Icon name="eye"></Icon>
-                        <span>Activate</span>
-                      </DropdownItem>
-                    </li></> : <>
-                    <li size="xs">
-                      <DropdownItem tag="a" onClick={(e) => askAction('close')} >
-                        <Icon name="eye"></Icon>
-                        <span>Deactivate</span>
-                      </DropdownItem>
-                    </li>
-                  </>
-                  } */}
 
                 </ul>
               </DropdownMenu>
@@ -213,7 +215,7 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
 };
 
 
-const AdminEventTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState }) => {
+const AdminEventRegistrationTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState }) => {
 
   const tableColumn = [
     {
@@ -224,46 +226,60 @@ const AdminEventTable = ({ data, pagination, actions, className, selectableRows,
       wrap: true
     },
     {
+      name: "User",
+      selector: (row) => { return (<><p>{`${row.user.firstName} ${row.user.lastName}`}<br/>{`${row.user.email}`}</p></>) },
+      sortable: true,
+      width: "auto",
+      wrap: true
+    },
+    {
       name: "Event Name",
-      selector: (row) => row.name,
+      selector: (row) => row.event.name,
       sortable: true,
       width: "auto",
       wrap: true
     },
     {
       name: "Description",
-      selector: (row) => row.description,
+      selector: (row) => row.event.description,
       sortable: true,
       width: "auto",
       wrap: true
     },
     {
       name: "Date",
-      selector: (row) => moment(row.date).format("MMM D, YYYY"),
+      selector: (row) => moment(row.event.date).format("MMM D, YYYY"),
       sortable: true,
       width: "auto",
       wrap: true
     },
     {
-      name: "Annual",
-      selector: (row) => { return (<><Badge color={(row.is_annual == 1) ? 'success' : 'gray'}>{(row.is_annual == 1) ? `Yes` : `No`}</Badge></>) },
+        name: "Status",
+        selector: (row) => { return (<><Badge color={(row.status == 'Registered') ? 'success' : 'gray'}>{row.status}</Badge></>) },
+        sortable: true,
+        width: "auto",
+        wrap: true
+    },
+    
+    {
+      name: "Evidence",
+      selector: (row) => { return row.evidence_of_payment_url ? (<><a href={row.evidence_of_payment_url}  target="_blank"  className="btn btn-success btn-sm">{`View`}</a></>) : (<><Badge color="warning">{`No evidence`}</Badge></>) },
       sortable: true,
       width: "auto",
       wrap: true
     },
     {
-      name: "Registration Fee",
-      selector: (row) => (row.fee < 1) ? 'Free' : `${row.fee}`,
-      sortable: true,
-      width: "auto",
-      wrap: true
+        name: "Registration Fee",
+        selector: (row) => (row.event.fee < 1) ? 'Free' : `${row.event.fee}`,
+        sortable: true,
+        width: "auto",
+        wrap: true
     },
     {
-      name: "Interests",
-      selector: (row) => `${row.registrations_count} users`,
-      sortable: true,
-      width: "auto",
-      wrap: true
+    name: "Date Created",
+    selector: (row) => moment(row.createdAt).format('MMM. DD, YYYY HH:mm'),
+    sortable: true,
+    width: "150px",
     },
     {
       name: "Action",
@@ -408,4 +424,4 @@ const AdminEventTable = ({ data, pagination, actions, className, selectableRows,
   //         );
 };
 
-export default AdminEventTable;
+export default AdminEventRegistrationTable;

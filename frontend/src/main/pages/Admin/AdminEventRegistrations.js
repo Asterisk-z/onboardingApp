@@ -1,43 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import DatePicker from "react-datepicker"
 import { useForm } from "react-hook-form";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner } from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, MultiDatePicker, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
-import { megUpdateEvent, megDeleteEvent, loadAllEvent } from "redux/stores/education/eventStore";
+import { MEGFSGLoadAllEventRegistration } from "redux/stores/education/eventStore";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
-import AdminEventTable from './Tables/AdminEventTable'
+import AdminEventRegistrationTable from './Tables/AdminEventRegistrationTable'
 
 
 
 const AdminEvents = ({ drawer }) => {
 
+    const { event_id } = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [parentState, setParentState] = useState('Initial state');
     const [loading, setLoading] = useState(false);
     const [modalForm, setModalForm] = useState(false);
 
-    const events = useSelector((state) => state?.educationEvent?.list_all) || null;
+    const event_registrations = useSelector((state) => state?.educationEvent?.list_all_registrations) || null;
 
     useEffect(() => {
-        dispatch(loadAllEvent({'show_past_events' : 1, "name" : "", "from_date" : "", "to_date" : ""}));
+        dispatch(MEGFSGLoadAllEventRegistration({'event_id' : event_id}));
     }, [dispatch, parentState]);
 
-    useEffect(() => {
-        dispatch(megDeleteEvent());
-    }, [dispatch]);
-
-
-    const { register, handleSubmit, formState: { errors }, resetField, getValues } = useForm();
- 
-
-
-
-
-    const $events = events ? JSON.parse(events) : null;
+    const $event_registrations = event_registrations ? JSON.parse(event_registrations) : null;
 
     const updateParentState = (newState) => {
         setParentState(newState);
@@ -52,21 +42,10 @@ const AdminEvents = ({ drawer }) => {
                     <BlockBetween>
                         <BlockHeadContent>
                             <BlockTitle page tag="h3">
-                                Conference And Events
+                                ARs Event Registrations
                             </BlockTitle>
                         </BlockHeadContent>
                         <BlockHeadContent>
-                            <div className="toggle-wrap nk-block-tools-toggle">
-                                <div className="toggle-expand-content" >
-                                    <ul className="nk-block-tools g-3">
-                                        <li className="nk-block-tools-opt">
-                                            <Button color="primary">
-                                                <span onClick={(e) => navigate(process.env.PUBLIC_URL + '/admin-create-event')}>Add new Event</span>
-                                            </Button>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
                         </BlockHeadContent>
                     </BlockBetween>
                 </BlockHead>
@@ -77,13 +56,13 @@ const AdminEvents = ({ drawer }) => {
                                 <BlockHead>
                                     <BlockHeadContent>
                                         {/* <BlockTitle tag="h4">All Membership</BlockTitle> */}
-                                        {/* <p>{competencies}</p> */}
+                                        {/* <p>{events}</p> */}
                                         {/* {<p>{parentState}</p>} */}
                                     </BlockHeadContent>
                                 </BlockHead>
 
                                 <PreviewCard>
-                                    {$events && <AdminEventTable updateParent={updateParentState} parentState={parentState} data={$events} expandableRows pagination actions />}
+                                    {$event_registrations && <AdminEventRegistrationTable updateParent={updateParentState} parentState={parentState} data={$event_registrations} expandableRows pagination actions />}
                                 </PreviewCard>
                             </Block>
                         </Content>
