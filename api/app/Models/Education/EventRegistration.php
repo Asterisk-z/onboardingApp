@@ -29,6 +29,6 @@ class EventRegistration extends Model
 
     public function getCertificateFullPath($filePath)
     {
-        storage_path('app/public/event_certs') . "/" . $filePath;
+        return storage_path('app/public/event_certs') . "/" . $filePath;
     }
 }
