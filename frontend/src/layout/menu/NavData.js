@@ -143,6 +143,11 @@ const navData = [{
   },
   {
     icon: "dashboard-fill",
+    text: "Application",
+    link: "/application",
+  },
+  {
+    icon: "dashboard-fill",
     text: "Complaints",
     link: "/complaint",
   },
@@ -202,6 +207,11 @@ const navData = [{
         link: "/approve-competency",
       },
     ],
+  },
+  {
+    icon: "tile-thumb-fill",
+    text: "Education And Learning",
+    link: "/education-and-learning",
   },
   // {
   //   icon: "tile-thumb-fill",

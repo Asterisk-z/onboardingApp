@@ -44,6 +44,8 @@ import Regulators from "main/pages/Regulators"
 import Sanction from "main/pages/Sanction"
 import ApplicantsGuide from "main/pages/ApplicantsGuide"
 import MembersGuide from "main/pages/MembersGuide"
+import Education from "main/pages/Education"
+import RegisteredEvent from "main/pages/RegisteredEvent"
 import UpdateCompetency from "main/pages/UpdateCompetency"
 import ApproveCompetency from "main/pages/ApproveCompetency"
 
@@ -61,6 +63,8 @@ import AdminCompetencyUndoneAll from "main/pages/Admin/AdminCompetencyUndoneAll"
 import AdminMembersGuide from "main/pages/Admin/AdminMembersGuide"
 import AdminAddEvents from "main/pages/Admin/AdminAddEvents"
 import AdminEvents from "main/pages/Admin/AdminEvents"
+import AdminEventRegistrations from "main/pages/Admin/AdminEventRegistrations"
+import AdminEditEvents from "main/pages/Admin/AdminEditEvents"
 import Success from "pages/auth/Success";
 
 
@@ -119,12 +123,11 @@ const Router = () => {
       
 
 
-        <Route path={`${process.env.PUBLIC_URL}`} element={<LoggedInLayoutNoSidebar />}>
+        {/* <Route path={`${process.env.PUBLIC_URL}`} element={<LoggedInLayoutNoSidebar />}>
  
-            <Route path="application" element={<Application />}></Route>
             
         </Route>
-        
+         */}
 
 
 
@@ -159,7 +162,11 @@ const Router = () => {
           <Route path="applicant-guide" element={<ApplicantsGuide />}></Route>
           <Route path="membership-guide" element={<MembersGuide />}></Route>
           <Route path="update-competency" element={<UpdateCompetency />}></Route>
-          <Route path="approve-competency" element={<ApproveCompetency />}></Route>
+          <Route path="education-and-learning" element={<Education />}></Route>
+          <Route path="registered-events" element={<RegisteredEvent />}></Route>
+        <Route path="approve-competency" element={<ApproveCompetency />}></Route>
+        
+            <Route path="application" element={<Application />}></Route>
         </Route>
 
 
@@ -188,7 +195,9 @@ const Router = () => {
           <Route path="admin-competency-done-all" element={<AdminCompetencyDoneAll/>}></Route>
           <Route path="admin-competency-undone-all" element={<AdminCompetencyUndoneAll/>}></Route>
           <Route path="admin-create-event" element={<AdminAddEvents/>}></Route>
+          <Route path="admin-edit-event/:event_id" element={<AdminEditEvents/>}></Route>
           <Route path="admin-events" element={<AdminEvents/>}></Route>
+          <Route path="admin-event-registration/:event_id" element={<AdminEventRegistrations/>}></Route>
           <Route path="wizard" element={<WizardTest />}></Route>
 
         </Route>

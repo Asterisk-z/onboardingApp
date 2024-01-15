@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Utility;
 use App\Models\ApplicationField;
 use App\Models\ApplicationFieldOption;
 use App\Models\ApplicationFieldUpload;
@@ -66,8 +67,14 @@ class MembershipApplicationController extends Controller
 
         $data = ['uploaded_field' => $request->field_value];
 
-        if($request->field_type == 'file') {
-            $data = ['uploaded_file' => $request->field_value];
+        if ($request->field_type == 'file') {
+
+            if ($request->hasFile('field_value')) {
+                $attachment = Utility::saveFile('application', $request->file('field_value'));
+            }
+            $data['uploaded_field'] = null;
+            $data = ['uploaded_file' => $attachment['path']];
+
         }
 
         ApplicationFieldUpload::updateOrCreate(

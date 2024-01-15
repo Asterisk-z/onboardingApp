@@ -13,7 +13,7 @@ class Position extends Model
 
     const DEACTIVATE = "1";
     const ACTIVATE = "0";
-    const CCO = "CCO";
+    const CCO = "Chief Compliance Officer";
 
     // protected $with = ['categories'];
     protected $appends = ['active'];
