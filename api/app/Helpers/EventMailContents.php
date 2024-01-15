@@ -6,6 +6,23 @@ use App\Models\User;
 class EventMailContents
 {
 
+
+    public static function certificateARSubject(string $eventName): string
+    {
+        return "$eventName Certificate";
+    }
+
+    public static function certificateARBody(string $eventName): string
+    {
+
+        $message = "<p>
+                Please be find attached your certificate of participation for <b>$eventName</b>.
+            </p>";
+
+        return $message;
+    }
+
+
     public static function paymentDeclinedARSubject(string $eventName): string
     {
         return "$eventName Payment Declined";

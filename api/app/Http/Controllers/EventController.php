@@ -11,6 +11,8 @@ use App\Http\Resources\Education\EventInvitationWithEventResource;
 use App\Http\Resources\Education\EventRegistrationResource;
 use App\Http\Resources\Education\EventRegistrationWithEventResource;
 use App\Http\Resources\Education\EventResource;
+use App\Jobs\GenerateAndSendCertificateJob;
+use App\Jobs\SendGeneratedCertificateJob;
 use App\Models\Education\Event;
 use App\Models\Education\EventNotificationDates;
 use App\Models\Education\EventInvitePosition;
@@ -375,6 +377,15 @@ class EventController extends Controller
             'evidence_of_payment_img' => 'sometimes|mimes:jpeg,png,jpg|max:5048',
         ]);
 
+        $registered = EventRegistration::where('user_id', $request->user()->id)
+            ->where('event_id', $event->id)->first();
+
+
+        if ($registered) {
+            return errorResponse(ResponseStatusCodes::BAD_REQUEST, "You have already registered for this event. You can can update your POP instead.");
+        }
+
+
         // Store the image
         $imagePath = null;
 
@@ -388,6 +399,7 @@ class EventController extends Controller
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, "Evidence of payment is required");
         }
 
+
         $eventReg = EventRegistration::create([
             'user_id' => $request->user()->id,
             'event_id' => $event->id,
@@ -396,6 +408,51 @@ class EventController extends Controller
         ]);
 
         $logMessage = "Registered for the Event: $event->name";
+        logAction($request->user()->email, 'Register for Event', $logMessage, $request->ip());
+
+        //Notify FSD Cc MBG and MEG For payment Approval
+        if ($event->fee > 0) {
+            EventNotificationUtility::pendingPaymentEventRegistration($eventReg);
+        }
+
+        return successResponse('Successful', EventRegistrationResource::make($eventReg));
+    }
+
+    public function registerUpdatePOP(Request $request, EventRegistration $eventReg)
+    {
+        $request->validate([
+            'evidence_of_payment_img' => 'required|mimes:jpeg,png,jpg|max:5048',
+        ]);
+
+        if ($eventReg->user_id != $request->user()->id) {
+            return errorResponse(ResponseStatusCodes::PERMISSION_DENIED, "You are not allowed to perform this action");
+        }
+
+
+        if ($eventReg->status = EventRegistration::STATUS_APPROVED) {
+            return errorResponse(ResponseStatusCodes::BAD_REQUEST, "This registration payment has already been approved");
+        }
+
+        // Store the image
+        $imagePath = null;
+
+        if (isset($request->evidence_of_payment_img) && $request->hasFile('evidence_of_payment_img')) {
+            $image = $request->file('evidence_of_payment_img');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $imagePath = $image->storeAs('event_pop', $imageName, 'public');
+        }
+
+        if (!$imagePath) {
+            return errorResponse(ResponseStatusCodes::BAD_REQUEST, "Evidence of payment is required");
+        }
+
+        $eventReg->evidence_of_payment = $imagePath;
+        $eventReg->save();
+
+        $event = $eventReg->event;
+
+
+        $logMessage = "Updated POP for the Event: $event->name";
         logAction($request->user()->email, 'Register for Event', $logMessage, $request->ip());
 
         //Notify FSD Cc MBG and MEG For payment Approval
@@ -453,7 +510,11 @@ class EventController extends Controller
     {
         $name = "Jon Doe";
         $isDownload = false;
-        return view('mails.certificate', compact('name', 'event', 'isDownload'));
+
+        $eventName = $event->name;
+        $eventDate = $event->date;
+
+        return view('mails.certificate', compact('name', 'eventName', 'eventDate', 'isDownload'));
     }
 
     public function certificateSampleDownload(Event $event)
@@ -462,11 +523,34 @@ class EventController extends Controller
         $isDownload = true;
 
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadView('mails.certificate', compact('name', 'event', 'isDownload'))->setPaper($this->certPaperSize);
+
+        $eventName = $event->name;
+        $eventDate = $event->date;
+        $pdf->loadView('mails.certificate', compact('name', 'eventName', 'eventDate', 'isDownload'))->setPaper($this->certPaperSize);
 
         return $pdf->download('certificate.pdf');
     }
 
+
+    public function sendCertificates(Request $request, Event $event)
+    {
+        $request->validate([
+            'event_registrations' => 'required|array',
+            'event_registrations.*' => [
+                'integer',
+                Rule::exists('event_registrations', 'id'), // Ensure each  ID exists in the 'EventRegistration' table
+            ],
+        ]);
+
+
+        $requestedIDs = $request->input('event_registrations');
+
+
+        GenerateAndSendCertificateJob::dispatch($requestedIDs, $this->certPaperSize);
+
+        return successResponse('Certificates will be sent to the selected participants');
+
+    }
 
 
 }

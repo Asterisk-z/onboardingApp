@@ -12,6 +12,15 @@ use App\Notifications\InfoNotification;
 
 class EventNotificationUtility
 {
+
+    public static function certificate(EventRegistration $eventReg)
+    {
+        $message = EventMailContents::certificateARBody($eventReg->event->name);
+        $subject = EventMailContents::certificateARSubject($eventReg->event->name);
+
+        Notification::send($eventReg->user, new InfoNotification($message, $subject, [], [$eventReg->getCertificateFullPath($eventReg->certificate_path)]));
+    }
+
     public static function pendingPaymentEventRegistration(EventRegistration $eventReg)
     {
         $FSDs = Utility::getUsersByCategory(Role::FSD);

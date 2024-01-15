@@ -111,11 +111,11 @@
     <div class="certificate">
         <img src="{{ $logo }}" alt="Event Logo">
         <div class="event-name secondary-color">Certificate of Participation</div>
-        <div class="event-name secondary-color"><strong class="tertiary-color">{{ $event->name }} </strong></div>
+        <div class="event-name secondary-color"><strong class="tertiary-color">{{ $eventName }} </strong></div>
         <div class="participant-name secondary-color">This is to certify that</div>
         <div class="participant-name secondary-color"><strong class="tertiary-color">{{ $name }}</strong></div>
         <div class="date tertiary-color">has successfully participated in the event on
-            {{ date('M d, Y', strtotime($event->date)) }}.</div>
+            {{ date('M d, Y', strtotime($eventDate)) }}.</div>
         <div class="signature">
             <img src="{{ $signature }}" alt="Organizer Signature" class="organizer-signature">
             <p class="secondary-color">{{ $organizerName }}</p>
