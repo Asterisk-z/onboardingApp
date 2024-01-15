@@ -36,8 +36,8 @@ const Homepage = () => {
           <Row className="g-gs">
             {$fees &&
               <Col lg="3">
-                <Card className="card-bordered">
-                  <CardBody className="card-inner">
+                <Card className="card-bordered gold">
+                  <CardBody className="card-inner gold">
                     <CardTitle tag="h5">{$fees.title}</CardTitle>
                     <CardLink href={$fees.url} target="_blank" className="btn btn-primary" color="primary">Click to Visit</CardLink>
                   </CardBody>

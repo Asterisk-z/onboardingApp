@@ -6,7 +6,7 @@ import exportFromJSON from "export-from-json";
 import CopyToClipboard from "react-copy-to-clipboard";
 import Icon from "components/icon/Icon";
 import { useDispatch } from "react-redux";
-import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge,  Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, CardBody, CardTitle } from "reactstrap";
+import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge, Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, CardBody, CardTitle, CardLink } from "reactstrap";
 import { DataTablePagination } from "components/Component";
 import moment from "moment";
 import { megProcessAddUserAR } from "redux/stores/authorize/representative";
@@ -14,233 +14,239 @@ import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 import Swal from "sweetalert2";
 
 const Export = ({ data }) => {
-    const [modal, setModal] = useState(false);
+  const [modal, setModal] = useState(false);
 
-    useEffect(() => {
-        if (modal === true) {
-        setTimeout(() => setModal(false), 2000);
-        }
-    }, [modal]);
+  useEffect(() => {
+    if (modal === true) {
+      setTimeout(() => setModal(false), 2000);
+    }
+  }, [modal]);
 
-    const newData = data.map((item) => {
-        return ({
-            "ID": item.id,
-            "User": `${item.firstName} ${item.lastName} ${item.email}`,
-            "Institution": item.institution.name,
-            "Nationality": item.nationality,
-            "Status": item.approval_status,
-            "Role": item.role.name,
-            "Position": item.position.name,
-            "Reg No": item.regId,
-            "Date Created": moment(item.createdAt).format('MMM. DD, YYYY HH:mm')
-        })
-    });
-  
-    const fileName = "data";
+  const newData = data.map((item, index) => {
+    return ({
+      "ID": ++index,
+      "User": `${item.firstName} ${item.lastName} ${item.email}`,
+      "Institution": item.institution.name,
+      "Nationality": item.nationality,
+      "Status": item.approval_status,
+      "Role": item.role.name,
+      "Position": item.position.name,
+      "Reg No": item.regId,
+      "Date Created": moment(item.createdAt).format('MMM. DD, YYYY HH:mm')
+    })
+  });
 
-    const exportCSV = () => {
-        const exportType = exportFromJSON.types.csv;
-        exportFromJSON({ data: newData, fileName: fileName, exportType: exportType });
+  const fileName = "data";
 
-    };
+  const exportCSV = () => {
+    const exportType = exportFromJSON.types.csv;
+    exportFromJSON({ data: newData, fileName: fileName, exportType: exportType });
 
-    const exportExcel = () => {
-        const exportType = exportFromJSON.types.xls;
-        exportFromJSON({ data: newData, fileName: fileName, exportType: exportType });
+  };
 
-    };
+  const exportExcel = () => {
+    const exportType = exportFromJSON.types.xls;
+    exportFromJSON({ data: newData, fileName: fileName, exportType: exportType });
 
-    const copyToClipboard = () => {
-        setModal(true);
-    };
+  };
 
-    return (
-        <React.Fragment>
-        <div className="dt-export-buttons d-flex align-center">
-            <div className="dt-export-title d-none d-md-inline-block">Export</div>
-            <div className="dt-buttons btn-group flex-wrap">
-            <CopyToClipboard text={JSON.stringify(newData)}>
-                <Button className="buttons-copy buttons-html5" onClick={() => copyToClipboard()}>
-                <span>Copy</span>
-                </Button>
-            </CopyToClipboard>{" "}
-            <button className="btn btn-secondary buttons-csv buttons-html5" type="button" onClick={() => exportCSV()}>
-                <span>CSV</span>
-            </button>{" "}
-            <button className="btn btn-secondary buttons-excel buttons-html5" type="button" onClick={() => exportExcel()}>
-                <span>Excel</span>
-            </button>{" "}
-            </div>
+  const copyToClipboard = () => {
+    setModal(true);
+  };
+
+  return (
+    <React.Fragment>
+      <div className="dt-export-buttons d-flex align-center">
+        <div className="dt-export-title d-none d-md-inline-block">Export</div>
+        <div className="dt-buttons btn-group flex-wrap">
+          <CopyToClipboard text={JSON.stringify(newData)}>
+            <Button className="buttons-copy buttons-html5" onClick={() => copyToClipboard()}>
+              <span>Copy</span>
+            </Button>
+          </CopyToClipboard>{" "}
+          <button className="btn btn-secondary buttons-csv buttons-html5" type="button" onClick={() => exportCSV()}>
+            <span>CSV</span>
+          </button>{" "}
+          <button className="btn btn-secondary buttons-excel buttons-html5" type="button" onClick={() => exportExcel()}>
+            <span>Excel</span>
+          </button>{" "}
         </div>
-        <Modal isOpen={modal} className="modal-dialog-centered text-center" size="sm">
-            <ModalBody className="text-center m-2">
-                <h5>Copied to clipboard</h5>
-            </ModalBody>
-            <div className="p-3 bg-light">
-                <div className="text-center">Copied {newData.length} rows to clipboard</div>
-            </div>
-        </Modal>
-        </React.Fragment>
-    );
+      </div>
+      <Modal isOpen={modal} className="modal-dialog-centered text-center" size="sm">
+        <ModalBody className="text-center m-2">
+          <h5>Copied to clipboard</h5>
+        </ModalBody>
+        <div className="p-3 bg-light">
+          <div className="text-center">Copied {newData.length} rows to clipboard</div>
+        </div>
+      </Modal>
+    </React.Fragment>
+  );
 };
 
 
 const ActionTab = (props) => {
-        
-    const aUser = useUser();
-    const aUserUpdate = useUserUpdate();
-    const ar_user = props.ar_user
-    
-    const [modalViewUpdate, setModalViewUpdate] = useState(false);
 
-    const toggleViewUpdate = () => setModalViewUpdate(!modalViewUpdate);
-    
-    const dispatch = useDispatch();
-  
-    
-    const askAction = async (action) => {
-      
-      if(action == 'approve') {
-          Swal.fire({
-              title: "Are you sure?",
-              text: "You won't be able to revert this!",
-              icon: "warning",
-              showCancelButton: true,
-              confirmButtonText: "Yes, approve it!",
-          }).then((result) => {
-              if (result.isConfirmed) {
-                  
-                  const formData = new FormData();
-                  formData.append('user_id', ar_user.id);
-                  formData.append('action', 'approve');
-                  const resp = dispatch(megProcessAddUserAR(formData));
+  const aUser = useUser();
+  const aUserUpdate = useUserUpdate();
+  const ar_user = props.ar_user
 
-                  props.updateParentParent(Math.random())
-                  setModalViewUpdate(false)
-                     
-              }
-          });
-      }
-      
-      if(action == 'decline') {
-          Swal.fire({
-              title: "Are you sure?",
-              text: "You won't be able to revert this!",
-              icon: "warning",
-              showCancelButton: true,
-              confirmButtonText: "Yes, decline it!",
-          }).then((result) => {
-              if (result.isConfirmed) {
-                  
-                  const formData = new FormData();
-                  formData.append('user_id', ar_user.id);
-                  formData.append('action', 'decline');
-                  const resp = dispatch(megProcessAddUserAR(formData));
+  const [modalViewUpdate, setModalViewUpdate] = useState(false);
 
-                  props.updateParentParent(Math.random())
-                  setModalViewUpdate(false)
-              }
-          });
-      }
-      
+  const toggleViewUpdate = () => setModalViewUpdate(!modalViewUpdate);
 
-    };
-  
+  const dispatch = useDispatch();
+
+
+  const askAction = async (action) => {
+
+    if (action == 'approve') {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, approve it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+
+          const formData = new FormData();
+          formData.append('user_id', ar_user.id);
+          formData.append('action', 'approve');
+          const resp = dispatch(megProcessAddUserAR(formData));
+
+          props.updateParentParent(Math.random())
+          setModalViewUpdate(false)
+
+        }
+      });
+    }
+
+    if (action == 'decline') {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, decline it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+
+          const formData = new FormData();
+          formData.append('user_id', ar_user.id);
+          formData.append('action', 'decline');
+          const resp = dispatch(megProcessAddUserAR(formData));
+
+          props.updateParentParent(Math.random())
+          setModalViewUpdate(false)
+        }
+      });
+    }
+
+
+  };
+
   return (
     <>
-        <div className="toggle-expand-content" style={{ display: "block" }}>
-            <ul className="nk-block-tools g-3">
-                 <li className="nk-block-tools-opt">
-                    <UncontrolledDropdown direction="right">
-                        <DropdownToggle className="dropdown-toggle btn btn-md" color="secondary">Action</DropdownToggle>
+      <div className="toggle-expand-content" style={{ display: "block" }}>
+        <ul className="nk-block-tools g-3">
+          <li className="nk-block-tools-opt">
+            <UncontrolledDropdown direction="right">
+              <DropdownToggle className="dropdown-toggle btn btn-md" color="primary">Action</DropdownToggle>
 
-                        <DropdownMenu>
-                            <ul className="link-list-opt">
-                        
-                                    <li size="xs">
-                                        <DropdownItem tag="a"  onClick={toggleViewUpdate} >
-                                            <Icon name="eye"></Icon>
-                                            <span>View AR</span>
-                                        </DropdownItem>
-                                    </li>
-                                    
+              <DropdownMenu>
+                <ul className="link-list-opt">
 
-                                    {(aUser.is_admin_meg() && ar_user.approval_status == 'pending' ) &&
-                                        <>
-                                            <li size="xs">
-                                                <DropdownItem tag="a"  onClick={(e) => askAction('approve')} >
-                                                    <Icon name="eye"></Icon>
-                                                    <span>Approve</span>
-                                                </DropdownItem>
-                                            </li>
-                                            <li size="xs">
-                                                <DropdownItem tag="a"  onClick={(e) => askAction('decline')} >
-                                                    <Icon name="eye"></Icon>
-                                                    <span>Decline</span>
-                                                </DropdownItem>
-                                            </li>
-                                        </>
-                                    }
+                  <li size="xs">
+                    <DropdownItem tag="a" onClick={toggleViewUpdate} >
+                      <Icon name="eye"></Icon>
+                      <span>View AR</span>
+                    </DropdownItem>
+                  </li>
 
-                                
-                            </ul>
-                        </DropdownMenu>
-                    </UncontrolledDropdown>
-                </li>
 
-            </ul>
-        </div>
-       
-        <Modal isOpen={modalViewUpdate} toggle={toggleViewUpdate} size="lg">
-            <ModalHeader toggle={toggleViewUpdate} close={<button className="close" onClick={toggleViewUpdate}><Icon name="cross" /></button>}>
-                View Authorised Representative
-            </ModalHeader>
-            <ModalBody>
-                    <Card className="card">   
-                        <CardBody className="card-inner">
-                            <CardTitle tag="h5">{ `${ar_user.firstName} ${ar_user.lastName} (${ar_user.email})` }</CardTitle>
-                            {/* <CardText> */}
-                                <ul className="gy-3">
-                                    <li><span className="lead">Phone : </span>{`${ar_user.phone}`}</li>
-                                    <li><span className="lead">Nationality : </span>{`${ar_user.nationality}`}</li>
-                                    <li><span className="lead">Role : </span>{`${ar_user.role.name}`}</li>
-                                    <li><span className="lead">Position : </span>{`${ar_user.position.name}`}</li>
-                                    <li><span className="lead">Status : </span>{`${ar_user.approval_status}`}</li>
-                                    <li><span className="lead">RegID : </span>{`${ar_user.regId}`}</li>
-                                    <li><span className="lead">Institution : </span>{`${ar_user.institution.name}`}</li>
-                                    <li><span className="lead">Profile Photo : </span>{ar_user.img ? (
-                                            <a  size="lg" href={ar_user.img}  target="_blank" className="active btn btn-primary">
-                                                {"View Image"}
-                                            </a>
-                                        ) : `Not Uploaded`}</li>
-                                    <li><span className="lead">Signature Mandate : </span>{ ar_user.mandate_form ?  (
-                                            <a  size="lg" href={ar_user.mandate_form}  target="_blank" className="active btn btn-primary">
-                                                {"View Mandate"}
-                                            </a>
-                                        ) : `Not Uploaded`}</li>
-                                </ul>
+                  {(aUser.is_admin_meg() && ar_user.approval_status == 'pending') &&
+                    <>
+                      <li size="xs">
+                        <DropdownItem tag="a" onClick={(e) => askAction('approve')} >
+                          <Icon name="eye"></Icon>
+                          <span>Approve</span>
+                        </DropdownItem>
+                      </li>
+                      <li size="xs">
+                        <DropdownItem tag="a" onClick={(e) => askAction('decline')} >
+                          <Icon name="eye"></Icon>
+                          <span>Decline</span>
+                        </DropdownItem>
+                      </li>
+                    </>
+                  }
 
-                                {(aUser.is_admin_meg() && ar_user.approval_status == 'pending' ) &&
-                                    <>   
-                                      <ul className="g-4 center">
-                                          <li className="btn-group">
-                                              <Button color="secondary" size="md"  onClick={(e) => askAction('approve')} >Approve</Button>
-                                          </li>
-                                          <li className="btn-group">
-                                              <Button color="warning" size="md"  onClick={(e) => askAction('decline')} >Decline</Button>
-                                          </li>
-                                      </ul>
-                                      </>
-                                  }
-                                
-                            {/* </CardText> */}
-                        </CardBody>
-                    </Card>
-            </ModalBody>
-            <ModalFooter className="bg-light">
-                <span className="sub-text">View Authorised Representative</span>
-            </ModalFooter>
-        </Modal>
+
+                </ul>
+              </DropdownMenu>
+            </UncontrolledDropdown>
+          </li>
+
+        </ul>
+      </div>
+
+      <Modal isOpen={modalViewUpdate} toggle={toggleViewUpdate} size="lg">
+        <ModalHeader toggle={toggleViewUpdate} close={<button className="close" onClick={toggleViewUpdate}><Icon name="cross" /></button>}>
+          View Authorised Representative
+        </ModalHeader>
+        <ModalBody>
+          <Card className="card">
+            <CardBody className="card-inner">
+              <CardTitle tag="h5">{`${ar_user.firstName} ${ar_user.lastName} (${ar_user.email})`}</CardTitle>
+              {/* <CardText> */}
+              <ul className="gy-3">
+                <li className="text-capitalize"><span className="lead">Phone : </span>{`${ar_user.phone}`}</li>
+                <li className="text-capitalize"><span className="lead">Nationality : </span>{`${ar_user.nationality}`}</li>
+                <li className="text-capitalize"><span className="lead">Role : </span><span className="text-capitalize">{`${ar_user.role.name.toLowerCase()}`}</span></li>
+                <li className="text-capitalize"><span className="lead">Position : </span><span className="text-capitalize">{`${ar_user.position.name.toLowerCase()}`}</span></li>
+                <li className="text-capitalize"><span className="lead">Status : </span>{`${ar_user.approval_status.toLowerCase()}`}</li>
+                <li className="text-capitalize"><span className="lead">RegID : </span>{`${ar_user.regId}`}</li>
+                <li className="text-capitalize"><span className="lead">Institution : </span>{`${ar_user?.institution?.name?.toLowerCase()}`}</li>
+                <li className="text-capitalize"><span className="lead">Profile Photo : </span>{ar_user.img ? (
+                  <a size="lg" href={ar_user.img}  target="_blank">
+                    <Button color="primary">
+                      <span >{"View Image"}</span>
+                    </Button>
+                  </a>
+
+
+                ) : `Not Uploaded`}</li>
+                <li><span className="lead">Signature Mandate : </span>{ar_user.mandate_form ? (
+                  <a size="lg" href={ar_user.mandate_form} target="_blank" className="btn-primary">
+                    <Button color="primary">
+                      <span >{"View Mandate"}</span>
+                    </Button>
+                  </a>
+                ) : `Not Uploaded`}</li>
+              </ul>
+
+              {(aUser.is_admin_meg() && ar_user.approval_status == 'pending') &&
+                <>
+                  <ul className="g-4 center">
+                    <li className="btn-group">
+                      <Button color="primary" size="md" onClick={(e) => askAction('approve')} ><span>Approve</span></Button>
+                    </li>
+                    <li className="btn-group">
+                      <Button className="decline" size="md" onClick={(e) => askAction('decline')} >Decline</Button>
+                    </li>
+                  </ul>
+                </>
+              }
+
+              {/* </CardText> */}
+            </CardBody>
+          </Card>
+        </ModalBody>
+        {/* <ModalFooter className="bg-light">
+          <span className="sub-text">View Authorised Representative</span>
+        </ModalFooter> */}
+      </Modal>
     </>
 
 
@@ -248,86 +254,86 @@ const ActionTab = (props) => {
 };
 
 const AdminListARTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState }) => {
-    const complainColumn = [
-      {
-          name: "UID",
-          selector: (row) => row.id,
-          sortable: true,
-          width: "100px",
-          wrap: true
-      },
-      {
-          name: "User",
-          selector: (row) => { return (<><p>{`${row.firstName} ${row.lastName}`}<br/>{`${row.email}`}</p></>) },
-          sortable: true,
-          width: "auto",
-          wrap: true
-      },
-      {
-          name: "Institution",
-          selector: (row) => { return (<>{`${row.institution.name}`}</>) },
-          sortable: true,
-          width: "auto",
-          wrap: true
-      },
-      {
-          name: "Nationality",
-          selector: (row) => { return (<>{`${row.nationality}`}</>) },
-          sortable: true,
-          width: "auto",
-          wrap: true
-      },
-      {
-          name: "Status",
-          selector: (row) => { return (<><Badge color="success" className="text-uppercase">{`${row.approval_status}`}</Badge></>) },
-          sortable: true,
-          width: "auto",
-          wrap: true
-      },
-      {
-          name: "Role",
-          selector: (row) =>  { return (<><Badge color="success">{`${row.role.name}`}</Badge></>) },
-          sortable: true,
-          width: "auto",
-          wrap: true
-      },
-      {
-          name: "Position",
-          selector: (row) => { return (<>{`${row.position.name}`}</>) },
-          sortable: true,
-          width: "auto",
-          wrap: true
-      },
-      {
-          name: "Reg No",
-          selector: (row) => { return (<>{`${row.regId}`}</>) },
-          sortable: true,
-          width: "auto",
-          wrap: true
-      },
-      {
-          name: "Date Created",
-          selector: (row) => moment(row.createdAt).format('MMM. DD, YYYY HH:mm'),
-          sortable: true,
-          width: "auto",
-          wrap: true
-      },
-      {
-        name: "Action",
-        selector: (row) => (<>
-                        <ActionTab ar_user={row}  updateParentParent={updateParent} />
-                    </>),
-        width: "100px",
-      },
-    ];
+  const complainColumn = [
+    {
+      name: "UID",
+      selector: (row, index) => ++index,
+      sortable: true,
+      width: "100px",
+      wrap: true
+    },
+    {
+      name: "User",
+      selector: (row) => { return (<><p>{`${row.firstName} ${row.lastName}`}<br />{`${row.email}`}</p></>) },
+      sortable: true,
+      width: "auto",
+      wrap: true
+    },
+    {
+      name: "Institution",
+      selector: (row) => { return (<>{`${row.institution.name}`}</>) },
+      sortable: true,
+      width: "auto",
+      wrap: true
+    },
+    {
+      name: "Nationality",
+      selector: (row) => { return (<>{`${row.nationality}`}</>) },
+      sortable: true,
+      width: "auto",
+      wrap: true
+    },
+    {
+      name: "Status",
+      selector: (row) => { return (<><Badge color="success" className="text-uppercase">{`${row.approval_status}`}</Badge></>) },
+      sortable: true,
+      width: "auto",
+      wrap: true
+    },
+    {
+      name: "Role",
+      selector: (row) => { return (<><Badge color="success">{`${row.role.name}`}</Badge></>) },
+      sortable: true,
+      width: "auto",
+      wrap: true
+    },
+    {
+      name: "Position",
+      selector: (row) => { return (<>{`${row.position.name}`}</>) },
+      sortable: true,
+      width: "auto",
+      wrap: true
+    },
+    {
+      name: "Reg No",
+      selector: (row) => { return (<>{`${row.regId}`}</>) },
+      sortable: true,
+      width: "auto",
+      wrap: true
+    },
+    {
+      name: "Date Created",
+      selector: (row) => moment(row.createdAt).format('MMM. DD, YYYY HH:mm'),
+      sortable: true,
+      width: "auto",
+      wrap: true
+    },
+    {
+      name: "Action",
+      selector: (row) => (<>
+        <ActionTab ar_user={row} updateParentParent={updateParent} />
+      </>),
+      width: "100px",
+    },
+  ];
   const [tableData, setTableData] = useState(data);
   const [searchText, setSearchText] = useState("");
   const [rowsPerPageS, setRowsPerPage] = useState(10);
   const [mobileView, setMobileView] = useState();
 
-    useEffect(() => {
-        setTableData(data)
-    }, [data]);
+  useEffect(() => {
+    setTableData(data)
+  }, [data]);
 
   useEffect(() => {
     let defaultData = tableData;
@@ -359,9 +365,9 @@ const AdminListARTable = ({ data, pagination, actions, className, selectableRows
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    // const renderer = ({ hours, minutes, seconds, completed }) => {
-    //         if (completed) {
-              
+  // const renderer = ({ hours, minutes, seconds, completed }) => {
+  //         if (completed) {
+
   return (
     <div className={`dataTables_wrapper dt-bootstrap4 no-footer ${className ? className : ""}`}>
       <Row className={`justify-between g-2 ${actions ? "with-export" : ""}`}>
@@ -433,26 +439,26 @@ const AdminListARTable = ({ data, pagination, actions, className, selectableRows
       ></DataTable>
     </div>
   );
-  
-    //         } else {
 
-    //             return (
-    //                     <>
-    //                         <Skeleton count={10} height={20}  style={{display: 'block',lineHeight: 2, padding: '1rem',width: 'auto',}}/>
-    //                     </>
-                        
-    //                 )
-    //         }
-    // };
-    
-    //       return (
-    //               <Countdown
-    //                 date={Date.now() + 5000}
-    //                 renderer={renderer}
-    //             />
+  //         } else {
 
-                
-    //         );
+  //             return (
+  //                     <>
+  //                         <Skeleton count={10} height={20}  style={{display: 'block',lineHeight: 2, padding: '1rem',width: 'auto',}}/>
+  //                     </>
+
+  //                 )
+  //         }
+  // };
+
+  //       return (
+  //               <Countdown
+  //                 date={Date.now() + 5000}
+  //                 renderer={renderer}
+  //             />
+
+
+  //         );
 };
 
 export default AdminListARTable;

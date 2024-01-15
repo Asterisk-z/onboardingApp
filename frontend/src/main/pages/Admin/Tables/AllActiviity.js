@@ -17,9 +17,9 @@ const Export = ({ data }) => {
         }
     }, [modal]);
 
-    const newData = data.map((item) => {
+    const newData = data.map((item, index) => {
         return ({
-            "ID": item.id,
+            "ID": ++index,
             "User": `${item.user}`,
             "Description": item.description,
             "IP Address": item.ip_address,
@@ -94,7 +94,7 @@ const CustomCheckbox = React.forwardRef(({ onClick, ...rest }, ref) => (
 const tableColumn = [
       {
         name: "ID",
-        selector: (row) => row.id,
+        selector: (row, index) => ++index,
         sortable: true,
         width: "100px",
         wrap: true

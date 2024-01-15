@@ -15,9 +15,9 @@ const Export = ({ data }) => {
         }
     }, [modal]);
 
-    const newData = data.map((item) => {
+    const newData = data.map((item, index) => {
         return ({
-            "BID ID": item.id,
+            "BID ID": ++index,
             "Title": `${item.title}`,
             "Content": item.content,
             "Categories": item.category_obj.map((cat) => cat.name).toString(),
@@ -78,7 +78,7 @@ const AdminBroadcastTable = ({ data, pagination, actions, className, selectableR
     const complainColumn = [
       {
           name: "BID",
-          selector: (row) => row.id,
+          selector: (row, index) => ++index,
           sortable: true,
           width: "100px",
           wrap: true

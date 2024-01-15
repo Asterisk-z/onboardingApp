@@ -1,9 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { errorHandler, successHandler } from "../../../utils/Functions";
-const initialState = { list: null, list_active: null, user: null, total: null, error: "", loading: false };
-
-
+const initialState = { list: null, list_com_ars: null, list_non_com_ars: null, list_all_com_ars: null, list_all_non_com_ars: null, list_approval: null, list_active: null, user: null, total: null, error: "", loading: false };
 
 
 export const loadAllActiveCompetency = createAsyncThunk(
@@ -44,6 +42,57 @@ export const loadAllCompetency = createAsyncThunk(
   async (arg) => {
     try {
       const { data } = await axios.get(`meg/competency-framework/list-all`);
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
+    }
+  }
+);
+
+export const loadAllCompliantArs = createAsyncThunk(
+  "competency/loadAllCompliantArs",
+  async (arg) => {
+    const id = arg.competency_id
+    try {
+      const { data } = await axios.get(`meg/competency-framework/list-compliant-ars/${id}`);
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
+    }
+  }
+);
+
+export const loadAllNonCompliantArs = createAsyncThunk(
+  "competency/loadAllNonCompliantArs",
+  async (arg) => {
+    const id = arg.competency_id
+    try {
+      const { data } = await axios.get(`meg/competency-framework/list-non-complaint-ars/${id}`);
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
+    }
+  }
+);
+
+
+export const loadOverAllCompliantArs = createAsyncThunk(
+  "competency/loadOverAllCompliantArs",
+  async (arg) => {
+    try {
+      const { data } = await axios.get(`meg/competency-framework/list-all-compliant-ars`);
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
+    }
+  }
+);
+
+export const loadOverAllNonCompliantArs = createAsyncThunk(
+  "competency/loadOverAllNonCompliantArs",
+  async (arg) => {
+    try {
+      const { data } = await axios.get(`meg/competency-framework/list-all-non-complaint-ars`);
       return successHandler(data);
     } catch (error) {
       return errorHandler(error);
@@ -188,7 +237,7 @@ const competencyStore = createSlice({
 
     builder.addCase(loadCCOArCompetency.fulfilled, (state, action) => {
         state.loading = false;
-        state.list_active = JSON.stringify(action.payload?.data?.data);
+        state.list_approval = JSON.stringify(action.payload?.data?.data);
     });
 
     builder.addCase(loadCCOArCompetency.rejected, (state, action) => {
@@ -224,6 +273,70 @@ const competencyStore = createSlice({
     });
 
     builder.addCase(loadAllCompetency.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+    
+    // ====== builders for loadAllCompliantArs ======
+
+    builder.addCase(loadAllCompliantArs.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(loadAllCompliantArs.fulfilled, (state, action) => {
+        state.loading = false;
+        state.list_com_ars = JSON.stringify(action.payload?.data?.data);
+    });
+
+    builder.addCase(loadAllCompliantArs.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+    
+    // ====== builders for loadAllNonCompliantArs ======
+
+    builder.addCase(loadAllNonCompliantArs.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(loadAllNonCompliantArs.fulfilled, (state, action) => {
+        state.loading = false;
+        state.list_non_com_ars = JSON.stringify(action.payload?.data?.data);
+    });
+
+    builder.addCase(loadAllNonCompliantArs.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+    
+    // ====== builders for loadOverAllCompliantArs ======
+
+    builder.addCase(loadOverAllCompliantArs.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(loadOverAllCompliantArs.fulfilled, (state, action) => {
+        state.loading = false;
+        state.list_all_com_ars = JSON.stringify(action.payload?.data?.data);
+    });
+
+    builder.addCase(loadOverAllCompliantArs.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+    
+    // ====== builders for loadOverAllNonCompliantArs ======
+
+    builder.addCase(loadOverAllNonCompliantArs.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(loadOverAllNonCompliantArs.fulfilled, (state, action) => {
+        state.loading = false;
+        state.list_all_non_com_ars = JSON.stringify(action.payload?.data?.data);
+    });
+
+    builder.addCase(loadOverAllNonCompliantArs.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });

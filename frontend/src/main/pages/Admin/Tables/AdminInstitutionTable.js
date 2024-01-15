@@ -23,9 +23,9 @@ const Export = ({ data }) => {
         }
     }, [modal]);
 
-    const newData = data.map((item) => {
+    const newData = data.map((item, index) => {
         return ({
-            "IID": item.id,
+            "IID": ++index,
             "Name": `${item.name}`,
             "Categories": item.category.map((cat) => cat.name).toString(),
             "Total ARs": item.ars.length,
@@ -236,7 +236,7 @@ const AdminInstitutionTable = ({ data, pagination, actions, className, selectabl
     const complainColumn = [
       {
           name: "IID",
-          selector: (row) => row.id,
+          selector: (row, index) => ++index,
           sortable: true,
           width: "100px",
           wrap: true

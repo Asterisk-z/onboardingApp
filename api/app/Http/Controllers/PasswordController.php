@@ -138,7 +138,7 @@ class PasswordController extends Controller
 
         $signature = Crypt::decrypt($request->signature);
 
-        if (!$passwordReset = PasswordSet::where('signature', $request->signature)->first()) {
+        if (!$passwordReset = PasswordSet::where('signature', $signature)->first()) {
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, "Invalid signature.");
         }
 
@@ -161,6 +161,6 @@ class PasswordController extends Controller
         $passwordReset->status = "completed";
         $passwordReset->save();
 
-        return successResponse("Password set successfully.");
+        return successResponse("You have successfully created your password. Kindly login with your new credentials.");
     }
 }

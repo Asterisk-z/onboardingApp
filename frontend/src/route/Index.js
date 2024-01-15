@@ -44,14 +44,31 @@ import Regulators from "main/pages/Regulators"
 import Sanction from "main/pages/Sanction"
 import ApplicantsGuide from "main/pages/ApplicantsGuide"
 import MembersGuide from "main/pages/MembersGuide"
+import Education from "main/pages/Education"
+import RegisteredEvent from "main/pages/RegisteredEvent"
+import UpdateCompetency from "main/pages/UpdateCompetency"
+import ApproveCompetency from "main/pages/ApproveCompetency"
+
 
 import AdminAuditLog from "main/pages/Admin/AdminAuditLog" 
 import AdminInstitutions from "main/pages/Admin/AdminInstitutions";
 import AddBroadcast from "main/pages/Admin/AddBroadcast";
 import UserAuditLog from "main/pages/Admin/AuditLog" 
 import AdminApplicantGuide from "main/pages/Admin/AdminApplicantGuide"
+import AdminCompetencyFramework from "main/pages/Admin/AdminCompetencyFramework"
+import AdminCompetencyDone from "main/pages/Admin/AdminCompetencyDone"
+import AdminCompetencyUndone from "main/pages/Admin/AdminCompetencyUndone"
+import AdminCompetencyDoneAll from "main/pages/Admin/AdminCompetencyDoneAll"
+import AdminCompetencyUndoneAll from "main/pages/Admin/AdminCompetencyUndoneAll"
 import AdminMembersGuide from "main/pages/Admin/AdminMembersGuide"
+import AdminAddEvents from "main/pages/Admin/AdminAddEvents"
+import AdminEvents from "main/pages/Admin/AdminEvents"
+import AdminEventRegistrations from "main/pages/Admin/AdminEventRegistrations"
+import AdminEditEvents from "main/pages/Admin/AdminEditEvents"
 import Success from "pages/auth/Success";
+
+
+
 
 import Layout from "layout/Index";
 import AdminLayout from "layout/AdminLayout";
@@ -106,12 +123,11 @@ const Router = () => {
       
 
 
-        <Route path={`${process.env.PUBLIC_URL}`} element={<LoggedInLayoutNoSidebar />}>
+        {/* <Route path={`${process.env.PUBLIC_URL}`} element={<LoggedInLayoutNoSidebar />}>
  
-            <Route path="application" element={<Application />}></Route>
             
         </Route>
-        
+         */}
 
 
 
@@ -145,7 +161,14 @@ const Router = () => {
           <Route path="regulators" element={<Regulators />}></Route>
           <Route path="applicant-guide" element={<ApplicantsGuide />}></Route>
           <Route path="membership-guide" element={<MembersGuide />}></Route>
+          <Route path="update-competency" element={<UpdateCompetency />}></Route>
+          <Route path="education-and-learning" element={<Education />}></Route>
+          <Route path="registered-events" element={<RegisteredEvent />}></Route>
+        <Route path="approve-competency" element={<ApproveCompetency />}></Route>
+        
+            <Route path="application" element={<Application />}></Route>
         </Route>
+
 
         <Route path={`${process.env.PUBLIC_URL}`} element={<AdminLayout />}>
           <Route path="admin-dashboard" element={<AdminHomepage />}></Route>
@@ -166,6 +189,15 @@ const Router = () => {
           <Route path="admin-fees-framework" element={<AdminFeesFramework/>}></Route>
           <Route path="admin-applicant-guide" element={<AdminApplicantGuide/>}></Route>
           <Route path="admin-members-guide" element={<AdminMembersGuide/>}></Route>
+          <Route path="admin-competency-framework" element={<AdminCompetencyFramework/>}></Route>
+          <Route path="admin-competency-done/:competency_id" element={<AdminCompetencyDone/>}></Route>
+          <Route path="admin-competency-undone/:competency_id" element={<AdminCompetencyUndone/>}></Route>
+          <Route path="admin-competency-done-all" element={<AdminCompetencyDoneAll/>}></Route>
+          <Route path="admin-competency-undone-all" element={<AdminCompetencyUndoneAll/>}></Route>
+          <Route path="admin-create-event" element={<AdminAddEvents/>}></Route>
+          <Route path="admin-edit-event/:event_id" element={<AdminEditEvents/>}></Route>
+          <Route path="admin-events" element={<AdminEvents/>}></Route>
+          <Route path="admin-event-registration/:event_id" element={<AdminEventRegistrations/>}></Route>
           <Route path="wizard" element={<WizardTest />}></Route>
 
         </Route>

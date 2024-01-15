@@ -15,9 +15,9 @@ const Export = ({ data }) => {
         }
     }, [modal]);
 
-    const newData = data.map((item) => {
+    const newData = data.map((item, index) => {
         return ({
-            "ID": item.id,
+            "ID": ++index,
             "Institution": `${item.new_institution.category[0].name}`,
             "Email": item.ar.email,
             "Status": item.approval_status,
@@ -78,7 +78,7 @@ const AdminListARTable = ({ data, pagination, actions, className, selectableRows
     const complainColumn = [
     {
         name: "UID",
-        selector: (row) => row.id,
+        selector: (row, index) => ++index,
         sortable: true,
         width: "150px",
         wrap: true,

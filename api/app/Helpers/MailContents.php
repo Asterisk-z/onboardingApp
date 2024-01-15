@@ -117,4 +117,14 @@ class MailContents
     {
         return "<p>A new competency has been submitted.</p>";
     }
+
+    public static function rejectedCompetencySubject(): string
+    {
+        return "Competency Response Rejected";
+    }
+
+    public static function rejectedCompetencyMessage($reason): string
+    {
+        return "<p>A new competency has been submitted.</p><p>Reason: {$reason}.</p>";
+    }
 }

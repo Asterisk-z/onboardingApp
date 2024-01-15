@@ -5,13 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Certificate</title>
-
-
-
     <!-- Include the Google Font -->
     {{-- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"> --}}
-
-
     <style>
         @page {
             margin: 0px;
@@ -35,8 +30,7 @@
             border: 10px solid #273466;
             /* Organization's primary color */
         }
-
-
+        
         .donload-container {
 
             text-align: center;

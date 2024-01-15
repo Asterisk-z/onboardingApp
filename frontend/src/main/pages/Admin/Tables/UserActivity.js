@@ -17,14 +17,12 @@ const Export = ({ data }) => {
         }
     }, [modal]);
 
-    const newData = data.map((item) => {
+    const newData = data.map((item, index) => {
         return ({
-            "UID ID": item.id,
-            "Institution": `${item.new_institution.category[0].name}`,
-            "Email": item.ar.email,
-            "Status": item.approval_status,
-            "Role": item.ar.role.name,
-            "Date Created": moment(item.createdAt).format('MMM. DD, YYYY HH:mm')
+            "ID": ++index,
+            "Description": item.description,
+            "IP Address": item.ip_address,
+            "Date Created": moment(item.created_at).format('MMM. DD, YYYY HH:mm')
         })
     });
 
@@ -113,7 +111,7 @@ const CustomCheckbox = React.forwardRef(({ onClick, ...rest }, ref) => (
 const tableColumn = [
       {
         name: "ID",
-        selector: (row) => row.id,
+        selector: (row, index) => ++index,
         sortable: true,
         width: "100px",
         wrap: true

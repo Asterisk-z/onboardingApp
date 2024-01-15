@@ -58,6 +58,10 @@ const applicationStore = createSlice({
   reducers: {
     clearArUser: (state) => {
       state.customer = null;
+      state.all_fields = null;
+    },
+    clearAllFields: (state) => {
+      state.all_fields = null;
     },
   },
   extraReducers: (builder) => {

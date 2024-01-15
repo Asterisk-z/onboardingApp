@@ -51,12 +51,13 @@ class GenerateAndSendCertificateJob implements ShouldQueue
         foreach ($eventRegs as $eventReg) {
             // generate certificate
             $name = $eventReg->user->getFullNameAttribute();
+            $event = $eventReg->event;
             $eventName = $eventReg->event->name;
             $eventDate = $eventReg->event->date;
             $filePath = "certificate_" . $eventReg->id . ".pdf";
 
             $pdf = App::make('dompdf.wrapper');
-            $pdf->loadView('mails.certificate', compact('name', 'eventName', 'eventDate', 'isDownload'))->setPaper($this->certPaperSize);
+            $pdf->loadView('mails.certificate', compact('event', 'name', 'eventName', 'eventDate', 'isDownload'))->setPaper($this->certPaperSize);
 
 
             $pdf->save($eventReg->getCertificateFullPath($filePath));

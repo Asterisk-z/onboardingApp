@@ -12,7 +12,6 @@ use App\Models\Institution;
 use App\Models\InstitutionMembership;
 use App\Models\MembershipCategory;
 use App\Models\PasswordSet;
-use App\Models\Position;
 use App\Models\Role;
 use App\Models\User;
 use App\Notifications\InfoNotification;
@@ -20,8 +19,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 class UsersController extends Controller
@@ -98,7 +97,7 @@ class UsersController extends Controller
 
         PasswordSet::create([
             "email" => $user->email,
-            "signature" => $signature
+            "signature" => $signature,
         ]);
 
         Application::create([
@@ -106,6 +105,8 @@ class UsersController extends Controller
             'submitted_by' => $user->id,
             'status' => 'pending',
         ]);
+
+        $user->getRegID();
 
         logAction($request->email, 'Successful User Registration', 'Registration Successful', $request->ip());
 

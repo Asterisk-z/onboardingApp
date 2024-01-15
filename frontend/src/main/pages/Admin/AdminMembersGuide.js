@@ -230,7 +230,7 @@ const AdminMembersGuide = ({ drawer }) => {
                                 <PreviewCard>
                                     {/* {$fees && <AdminRegulatorTable  updateParent={updateParentState} parentState={parentState} data={$regulators} expandableRows pagination actions />} */}
                                     {$membersGuide &&
-                                        <Card className="card-bordered">
+                                        <Card className="card-bordered gold">
                                             <CardHeader className="border-bottom">
                                                 Members Guide
                                             </CardHeader>

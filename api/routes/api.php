@@ -143,6 +143,10 @@ Route::middleware('auth')->group(function () {
         // competency
         Route::group(['prefix' => 'meg/competency-framework'], function () {
             Route::get('/list-all', [CompetencyController::class, 'listAll']);
+            Route::get('/list-compliant-ars/{id}', [CompetencyController::class, 'listCompliantArs']);
+            Route::get('/list-non-complaint-ars/{id}', [CompetencyController::class, 'listNonCompliantArs']);
+            Route::get('/list-all-compliant-ars', [CompetencyController::class, 'listAllCompliantArs']);
+            Route::get('/list-all-non-complaint-ars', [CompetencyController::class, 'listAllNonCompliantArs']);
             Route::post('/create', [CompetencyController::class, 'store']);
             Route::post('/update/{id}', [CompetencyController::class, 'update']);
             Route::post('/update-status/{id}', [CompetencyController::class, 'updateStatus']);
@@ -232,7 +236,6 @@ Route::middleware('auth')->group(function () {
     });
     //
     Route::group(['prefix' => 'events'], function () {
-
         Route::get('/', [EventController::class, 'list']);
         Route::get('/view/{event}', [EventController::class, 'view']);
         Route::get('/registered', [EventController::class, 'myRegisteredEvents']);
@@ -244,8 +247,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/update-invited/{event}', [EventController::class, 'updateInvitePositions']);
         Route::post('/delete/{eventID}', [EventController::class, 'delete']);
 
-
         Route::post('/send-certificates', [EventController::class, 'sendCertificates']);
+        Route::get('/preview-certificate/{event}', [EventController::class, 'certificateSample'])->name('clearModel');
 
         // });
 
@@ -278,3 +281,7 @@ Route::middleware('auth')->group(function () {
 
 Route::get('execute-commands', [SystemController::class, 'executeCommands'])->name('executeCommands');
 Route::get('clear-model/{model}', [SystemController::class, 'clearModel'])->name('clearModel');
+
+
+Route::get('cert-sample/{event}', [EventController::class, 'certificateSample'])->name('clearModel');
+Route::get('cert-sample-download/{event}', [EventController::class, 'certificateSampleDownload'])->name('clearModel');

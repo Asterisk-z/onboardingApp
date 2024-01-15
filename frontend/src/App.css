@@ -128,22 +128,14 @@ article input {
     color: #fff !important;
 }
 
-/* .dropdown-menu {
-    background-color: #CC9933 !important;
+.dropdown-menu li {
+    cursor: pointer !important;
     color: #fff;
-} */
+}
 
 span.asc.__rdt_custom_sort_icon__ {
     color: #fff !important;
 }
-
-/* .link-list-opt a {
-    color: #fff !important;
-}
-
-.link-list-opt a:hover {
-    color: #1D326C !important;
-} */
 
 .zeroMarginBottom {
     margin-bottom: 0px;
@@ -152,4 +144,59 @@ span.asc.__rdt_custom_sort_icon__ {
 
 .customMroisDatatable .bRaWwA {
     color: #fff !important;
+}
+
+.react-datepicker-popper {
+    z-index: 99 !important;
+}
+
+#form-control {
+        display: block;
+    width: 100%;
+    padding: 0.4375rem 1rem;
+    font-size: 0.8125rem;
+    font-weight: 400;
+    line-height: 1.25rem;
+    color: #3c4d62;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #dbdfea;
+    appearance: none;
+    border-radius: 4px;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+}
+
+.card-bordered .gold {
+    background-color: #C79D51 !important;
+    color: #fff;
+}
+
+.card-inner .gold {
+    background-color: #C79D51 !important;
+    color: #fff;
+}
+
+.white {
+    color: white !important;
+    font-weight: bold !important;
+}
+
+.flex{
+    display: flex;
+    align-items: center;
+}
+
+.custom-container {
+  width: 100%;
+}
+
+.custom-container .rmdp-input {
+  width: 100%;
+  box-sizing: border-box;
+  height: 26px;
+}
+
+.decline {
+    background: #C79D51 !important;
 }
