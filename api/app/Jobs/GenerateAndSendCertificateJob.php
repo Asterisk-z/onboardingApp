@@ -43,8 +43,7 @@ class GenerateAndSendCertificateJob implements ShouldQueue
         // mark the event as attended.
         EventRegistration::whereIn('id', $this->requestedIDs)->update(['attended' => 1]);
 
-        $eventRegs = EventRegistration::with('user', 'event')->whereIn('id', $this->requestedIDs)->get();
-
+        $eventRegs = EventRegistration::with('user', 'event')->whereIn('id', $this->requestedIDs)->where('is_del', 0)->get();
 
         $isDownload = true;
 
@@ -59,17 +58,13 @@ class GenerateAndSendCertificateJob implements ShouldQueue
             $pdf = App::make('dompdf.wrapper');
             $pdf->loadView('mails.certificate', compact('event', 'name', 'eventName', 'eventDate', 'isDownload'))->setPaper($this->certPaperSize);
 
-
             $pdf->save($eventReg->getCertificateFullPath($filePath));
-
 
             $eventReg->certificate_path = $filePath;
             $eventReg->save();
 
             // send the certificate
             SendGeneratedCertificateJob::dispatch($eventReg);
-
-
         }
 
         logger("Certificates generated for: " . json_encode($this->requestedIDs));

@@ -248,7 +248,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/delete/{eventID}', [EventController::class, 'delete']);
 
         Route::post('/send-certificates', [EventController::class, 'sendCertificates']);
-        Route::get('/preview-certificate/{event}', [EventController::class, 'certificateSample'])->name('clearModel');
+        Route::get('/preview-certificate/{event}', [EventController::class, 'certificateSample'])->name('preview.certificate');
 
         // });
 
@@ -276,12 +276,8 @@ Route::middleware('auth')->group(function () {
     });
 });
 
-
-
-
 Route::get('execute-commands', [SystemController::class, 'executeCommands'])->name('executeCommands');
 Route::get('clear-model/{model}', [SystemController::class, 'clearModel'])->name('clearModel');
-
 
 Route::get('cert-sample/{event}', [EventController::class, 'certificateSample'])->name('clearModel');
 Route::get('cert-sample-download/{event}', [EventController::class, 'certificateSampleDownload'])->name('clearModel');

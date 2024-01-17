@@ -5,7 +5,7 @@ namespace App\Helpers;
 use App\Models\Education\Event;
 use App\Models\Education\EventRegistration;
 use App\Models\Role;
-
+use Illuminate\Support\Str;
 use App\Models\User;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\InfoNotification;
@@ -18,7 +18,12 @@ class EventNotificationUtility
         $message = EventMailContents::certificateARBody($eventReg->event->name);
         $subject = EventMailContents::certificateARSubject($eventReg->event->name);
 
-        Notification::send($eventReg->user, new InfoNotification($message, $subject, [], [$eventReg->getCertificateFullPath($eventReg->certificate_path)]));
+        $attachment = [
+            'saved_path' => config('app.url').'/storage/event_certs/'.$eventReg->certificate_path,
+            'name' => Str::slug($eventReg->event->name).'-certificate.pdf'
+        ];
+
+        Notification::send($eventReg->user, new InfoNotification($message, $subject, [], $attachment));
     }
 
     public static function pendingPaymentEventRegistration(EventRegistration $eventReg)
