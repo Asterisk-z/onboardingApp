@@ -236,18 +236,19 @@ Route::middleware('auth')->group(function () {
     });
     //
     Route::group(['prefix' => 'events'], function () {
-
         Route::get('/', [EventController::class, 'list']);
         Route::get('/view/{event}', [EventController::class, 'view']);
         Route::get('/registered', [EventController::class, 'myRegisteredEvents']);
         Route::get('/invited', [EventController::class, 'myInvitedEvents']);
 
-        Route::middleware('authRole:' . Role::MEG)->group(function () {
-            Route::post('/add', [EventController::class, 'add']);
-            Route::post('/update/{event}', [EventController::class, 'update']);
-            Route::post('/update-invited/{event}', [EventController::class, 'updateInvitePositions']);
-            Route::post('/delete/{eventID}', [EventController::class, 'delete']);
-        });
+        // Route::middleware('authRole:' . Role::MEG)->group(function () {
+        Route::post('/add', [EventController::class, 'add']);
+        Route::post('/update/{event}', [EventController::class, 'update']);
+        Route::post('/update-invited/{event}', [EventController::class, 'updateInvitePositions']);
+        Route::post('/delete/{eventID}', [EventController::class, 'delete']);
+
+        Route::post('/send-certificates', [EventController::class, 'sendCertificates']);
+        Route::get('/preview-certificate/{event}', [EventController::class, 'certificateSample'])->name('preview.certificate');
 
         Route::middleware('authRole:' . Role::MEG . ',' . Role::FSD)->group(function () {
             Route::get('/registrations/{event}', [EventController::class, 'eventRegistrations']);
@@ -256,6 +257,7 @@ Route::middleware('auth')->group(function () {
 
         Route::middleware('authRole:' . Role::ARAUTHORISER . ',' . Role::ARINPUTTER)->group(function () {
             Route::post('/register/{event}', [EventController::class, 'register']);
+            Route::post('/update-pop/{eventReg}', [EventController::class, 'registerUpdatePOP']);
         });
     });
     //
@@ -274,3 +276,6 @@ Route::middleware('auth')->group(function () {
 
 Route::get('execute-commands', [SystemController::class, 'executeCommands'])->name('executeCommands');
 Route::get('clear-model/{model}', [SystemController::class, 'clearModel'])->name('clearModel');
+
+Route::get('cert-sample/{event}', [EventController::class, 'certificateSample'])->name('clearModel');
+Route::get('cert-sample-download/{event}', [EventController::class, 'certificateSampleDownload'])->name('clearModel');

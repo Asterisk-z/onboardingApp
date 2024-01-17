@@ -5,13 +5,34 @@ namespace App\Helpers;
 use App\Models\Education\Event;
 use App\Models\Education\EventRegistration;
 use App\Models\Role;
-
+use Illuminate\Support\Str;
 use App\Models\User;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\InfoNotification;
 
 class EventNotificationUtility
 {
+
+    public static function certificate(EventRegistration $eventReg)
+    {
+        $message = EventMailContents::certificateARBody($eventReg->event->name);
+        $subject = EventMailContents::certificateARSubject($eventReg->event->name);
+
+<<<<<<< HEAD
+        $attachment = [
+            'saved_path' => config('app.url').'/storage/event_certs/'.$eventReg->certificate_path,
+            'name' => Str::slug($eventReg->event->name).'-certificate.pdf'
+        ];
+
+        Notification::send($eventReg->user, new InfoNotification($message, $subject, [], $attachment));
+=======
+        Notification::send($eventReg->user, new InfoNotification($message, $subject, [], [
+            'saved_path' => $eventReg->getCertificateFullPath($eventReg->certificate_path),
+            'name' => $eventReg->certificate_path,
+        ]));
+>>>>>>> 9d9b8f1f27c00615f6303d38447ac96c8dd6ed20
+    }
+
     public static function pendingPaymentEventRegistration(EventRegistration $eventReg)
     {
         $FSDs = Utility::getUsersByCategory(Role::FSD);

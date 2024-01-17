@@ -26,4 +26,9 @@ class EventRegistration extends Model
         return $this->belongsTo(User::class);
     }
 
+
+    public function getCertificateFullPath($filePath)
+    {
+        return storage_path('app/public/event_certs') . "/" . $filePath;
+    }
 }
