@@ -126,7 +126,7 @@ const ApplicantInformation = (props) => {
                         <div className="form-group">
                             <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
                             <div className="form-control-wrap">
-                                <input type="number"  id={field.name} className="form-control" {...register(field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({'field_name' : field.name, "field_value" : e.target.value, "field_type" : field.type})} defaultValue={initialValues[field.name]}  />
+                                <input type="number"  onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={field.name} className="form-control" {...register(field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({'field_name' : field.name, "field_value" : e.target.value, "field_type" : field.type})} defaultValue={initialValues[field.name]}  />
                                 {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
                             </div>
                         </div>
@@ -278,13 +278,12 @@ const TradingDetail = (props) => {
                     </Col>
                 )
             } else if (field.type == 'number') {
-              
                 return (
                     <Col md="6" key={index}>
                         <div className="form-group">
                             <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
                             <div className="form-control-wrap">
-                                <input type="number"  id={field.name} className="form-control" {...register(field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({'field_name' : field.name, "field_value" : e.target.value, "field_type" : field.type})} defaultValue={field?.field_value?.uploaded_field ? field?.field_value?.uploaded_field : 0}  />
+                                <input type="number"  onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={field.name} className="form-control" {...register(field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({'field_name' : field.name, "field_value" : e.target.value, "field_type" : field.type})} defaultValue={field?.field_value?.uploaded_field ? field?.field_value?.uploaded_field : 0}  />
                                 {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
                             </div>
                         </div>
@@ -353,7 +352,7 @@ const TradingDetail = (props) => {
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
-                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                                <input type="number" id={child_field.name} className="form-control"  onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                 {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                             </div>
                                         </div>
@@ -368,7 +367,7 @@ const TradingDetail = (props) => {
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
-                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                                <input type="number" id={child_field.name} className="form-control"  onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                 {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                             </div>
                                         </div>
@@ -398,7 +397,7 @@ const TradingDetail = (props) => {
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
-                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                                <input type="number"  onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                 {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                             </div>
                                         </div>
@@ -413,7 +412,7 @@ const TradingDetail = (props) => {
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
-                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                                <input type="number"  onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                 {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                             </div>
                                         </div>
@@ -428,7 +427,7 @@ const TradingDetail = (props) => {
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
-                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                                <input type="number"  onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                 {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                             </div>
                                         </div>
@@ -443,7 +442,7 @@ const TradingDetail = (props) => {
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
-                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                                <input type="number"  onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                 {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                             </div>
                                         </div>
@@ -458,7 +457,7 @@ const TradingDetail = (props) => {
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
-                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                                <input type="number"  onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                 {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                             </div>
                                         </div>
@@ -473,7 +472,7 @@ const TradingDetail = (props) => {
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
-                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                                <input type="number"  onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                 {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                             </div>
                                         </div>
@@ -488,7 +487,7 @@ const TradingDetail = (props) => {
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
-                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                                <input type="number"  onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                 {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                             </div>
                                         </div>
@@ -503,7 +502,7 @@ const TradingDetail = (props) => {
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
-                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                                <input type="number"  onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                 {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                             </div>
                                         </div>
@@ -518,7 +517,7 @@ const TradingDetail = (props) => {
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
-                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                                <input type="number"  onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                 {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                             </div>
                                         </div>
@@ -533,7 +532,7 @@ const TradingDetail = (props) => {
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
-                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                                <input type="number"  onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                 {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                             </div>
                                         </div>
@@ -548,7 +547,7 @@ const TradingDetail = (props) => {
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
-                                                <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                                <input type="number"  onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onKeyUp={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                 {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                             </div>
                                         </div>

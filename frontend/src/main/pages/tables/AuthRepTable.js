@@ -237,6 +237,16 @@ const ActionTab = (props) => {
     const handleDificalFileChange = (event) => {
 		  setDocument(event.target.files[0]);
     };
+
+    // const checkValue = (value) => {
+    //     console.log(parseInt(value.target.value))
+    //     // parseInt(value) ? setValue(parseInt(value)) : ""
+    //     if (!isNaN(parseInt(value.target.value))) {
+    //         value.target.value = parseInt(value.target.value)
+    //     }
+    // };
+
+    
   return (
     <>
         <div className="toggle-expand-content" style={{ display: "block" }}>
@@ -465,9 +475,10 @@ const ActionTab = (props) => {
                             <div className="form-group">
                                 <Label htmlFor="phone" className="form-label">
                                     Phone Number
-                                </Label>
+                                  </Label>
+                                  
                                 <div className="form-control-wrap">
-                                    <input className="form-control" type="text" id="phone" placeholder="Enter Last Name"  {...register('phone', { required: "Phone is Required" })}  defaultValue={initValues.phone}/>
+                                    <input className="form-control"  type="text" id="phone" placeholder="Enter Last Name" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""}  {...register('phone', { required: "Phone is Required" })}  defaultValue={parseInt(initValues.phone) ? parseInt(initValues.phone) : 0}/>
                                     {errors.phone && <p className="invalid">{`${errors.phone.message}`}</p>}
                                 </div>
                             </div>

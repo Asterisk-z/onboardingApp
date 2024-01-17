@@ -161,6 +161,6 @@ class PasswordController extends Controller
         $passwordReset->status = "completed";
         $passwordReset->save();
 
-        return successResponse("Password set successfully.");
+        return successResponse("You have successfully created your password. Kindly login with your new credentials.");
     }
 }

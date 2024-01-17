@@ -294,7 +294,7 @@ const AdminEvents = ({ drawer }) => {
                                                         Event Fee
                                                     </label>
                                                     <div className="form-control-wrap">
-                                                        <input type="number" id="eventFee" className="form-control" {...register('eventFee', { required: "This Field is required", valueAsNumber: true, })} defaultValue={0} />
+                                                        <input type="number"   onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""}   id="eventFee" className="form-control" {...register('eventFee', { required: "This Field is required", valueAsNumber: true, })} defaultValue={0} />
                                                         {errors.eventFee && <span className="invalid">{errors.eventFee.message}</span>}
                                                     </div>
                                                 </div>

@@ -102,7 +102,7 @@ const ActionTab = (props) => {
                 const formData = new FormData();
                 formData.append('user_id', ar_user.id);
                 formData.append('action', 'approve');
-                const resp = dispatch(userProcessTransferUserAR(formData));
+                dispatch(userProcessTransferUserAR(formData));
 
                 props.updateParentParent(Math.random())
                     
