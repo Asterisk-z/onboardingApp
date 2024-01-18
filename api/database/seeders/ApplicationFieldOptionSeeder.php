@@ -503,10 +503,21 @@ class ApplicationFieldOptionSeeder extends Seeder
                 "option_name" => "No",
                 "option_value" => "no",
             ],
-
-
-
-
+// Dealing Member (Banks)
+// Dealing Member (Specialists)
+// Dealing Members (Non-bank Financial Institutions)
+// Associate Member (Inter-Dealer Brokers)
+// Associate Member (Brokers)
+// Associate Member (Clients)
+// Registration Member (Listings)
+// Registration Member (Quotations)
+// Registration Member (Listings & Quotations)
+// Affiliate Member (Standard) - Individual
+// Affiliate Member (Standard) – Corporates
+// Affiliate Member (Regulator)
+// Affiliate Member (Foreign Exchange Trading)
+// Affiliate Member (Fixed Income)
+// Foreign Exchange (Corporates)
 
             // [
             //     "category" => "1",

@@ -221,8 +221,8 @@ const Register = ({ drawer }) => {
                     </label>
                   </div>
                   <div className="form-control-wrap">
-                    <input type="text" bssize="lg" {...register('phone', { required: true, minLength: 11, valueAsNumber: true })} onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} className="form-control-lg form-control" placeholder="Enter your phone number" />
-                    {errors.phone && <p className="invalid">{`This field is required`}</p>}
+                    <input type="number" bssize="lg" {...register('phone', { required: true, minLength: 11, valueAsNumber: true })} onKeyUp={(value) => parseInt(value.target.value) ? value.target.value = parseInt(value.target.value) : value.target.value = parseInt(value.target.value) } className="form-control-lg form-control" placeholder="Enter your phone number" />
+                    {errors.phone && <p className="invalid">{`This field is required`}</p>}7
                   </div>
                 </div>
               </div>
