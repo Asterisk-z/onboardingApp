@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { userLoadUserARs } from "redux/stores/authorize/representative";
 import AuthRepTable from './Tables/AuthRepTable'
 
+import { loadArDashboard } from "redux/stores/dashboard/dashboardStore";
 
 
 
@@ -25,8 +26,13 @@ const Homepage = () => {
   const dispatch = useDispatch();
   const arUsers = useSelector((state) => state?.arUsers?.list) || null;
 
+  const complaints = useSelector((state) => state?.dashboard?.complaints) || 0;
+  const applications = useSelector((state) => state?.dashboard?.applications) || 0;
+  const ars = useSelector((state) => state?.dashboard?.ars) || 0;
+
   useEffect(() => {
     dispatch(userLoadUserARs({"approval_status" : "", "role_id": ""}));
+    dispatch(loadArDashboard());
   }, [dispatch]);
 
 
@@ -57,7 +63,7 @@ const Homepage = () => {
                     </div>
                     <div className="data">
                       <div className="data-group">
-                        <div className="amount">{"0"}</div>
+                        <div className="amount">{applications}</div>
                       </div>
                     </div>
                   </div>
@@ -75,7 +81,7 @@ const Homepage = () => {
                     </div>
                     <div className="data">
                       <div className="data-group">
-                        <div className="amount">{"0"}</div>
+                        <div className="amount">{ars}</div>
                       </div>
                     </div>
                   </div>
@@ -93,7 +99,7 @@ const Homepage = () => {
                     </div>
                     <div className="data">
                       <div className="data-group">
-                        <div className="amount">{"0"}</div>
+                        <div className="amount">{complaints}</div>
                       </div>
                     </div>
                   </div>

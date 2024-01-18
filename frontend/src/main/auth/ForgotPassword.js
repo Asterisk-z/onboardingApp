@@ -95,7 +95,7 @@ const ForgotPassword = () => {
                     Email
                   </label>
                 </div>
-                <input type="email"  {...register('email', { required: "This field is required" })} readOnly={mailSent} className="form-control form-control-lg" placeholder="Enter your email address"/>
+                <input type="email"  {...register('email', { required: "This field is required" })} readOnly={mailSent} className="form-control form-control-lg" placeholder="Enter your email address" autocomplete="off" />
               </div>
               {mailSent && <div className="form-group">
                 <div className="form-label-group">
@@ -103,7 +103,7 @@ const ForgotPassword = () => {
                     OTP
                   </label>
                 </div>
-                <input type="text"  {...register('otp', { required: "This field is required" })} className="form-control form-control-lg" placeholder="Enter OTP" />
+                <input type="text"  {...register('otp', { required: "This field is required" })} className="form-control form-control-lg" placeholder="Enter OTP" autocomplete="off"/>
               </div>}
               <div className="form-group">
                 <Button color="primary" size="lg" type="submit" className="btn-block" >

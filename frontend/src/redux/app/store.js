@@ -20,6 +20,7 @@ import applicantGuideStore from "redux/stores/applicantGuide/applicantGuideStore
 import membersGuideStore from "redux/stores/membersGuide/membersGuideStore";
 import competencyStore from "redux/stores/competency/competencyStore";
 import eventStore from "redux/stores/education/eventStore";
+import dashboardStore from "redux/stores/dashboard/dashboardStore";
 
 const store = configureStore({
   reducer: {
@@ -43,6 +44,7 @@ const store = configureStore({
     applicantGuide: applicantGuideStore,
     membersGuide: membersGuideStore,
     competency: competencyStore,
+    dashboard: dashboardStore,
     educationEvent: eventStore,
   },
   middleware: (getDefaultMiddleware) =>

@@ -66,7 +66,7 @@ const PasswordSet = () => {
             setError("new_password", { type: "new_password",  message: "Password does not match"  }, { shouldFocus: false })
             return
         }
-        setValue('email', localStorage.getItem('reset-password-email'))
+        
         clearErrors('password')
         clearErrors('new_password')
     }
@@ -97,7 +97,7 @@ const PasswordSet = () => {
                   </label>
                 </div>
                 <div className="form-control-wrap">
-                <input type="email"  {...register('email', { required: "This field is required" })}  className="form-control form-control-lg" placeholder="Enter your email address" />
+                <input type="email"  {...register('email', { required: "This field is required" })}  className="form-control form-control-lg" placeholder="Enter your email address" autocomplete="off"/>
                   {errors.email && <p className="invalid">{errors.email.message}</p>}
                  </div>
               </div>
@@ -112,7 +112,7 @@ const PasswordSet = () => {
                       <Icon name="eye" className="passcode-icon icon-show"></Icon>
                       <Icon name="eye-off" className="passcode-icon icon-hide"></Icon>
                     </a>
-                    <input type={passState ? "text" : "password"} id="password" onKeyUp={passwordPolicy} {...register('password', { required: "This field is required" })} placeholder="Enter your password" className={`form-control-lg form-control ${passState ? "is-hidden" : "is-shown"}`} />
+                    <input type={passState ? "text" : "password"} id="password" onKeyUp={passwordPolicy} {...register('password', { required: "This field is required" })} autocomplete="off" placeholder="Enter your password" className={`form-control-lg form-control ${passState ? "is-hidden" : "is-shown"}`} />
                     {errors.password && <span className="invalid">{errors.password.message}</span>}
                   </div>
             </div>
@@ -135,7 +135,7 @@ const PasswordSet = () => {
                     <Icon name="eye" className="passcode-icon icon-show"></Icon>
                     <Icon name="eye-off" className="passcode-icon icon-hide"></Icon>
                   </a>
-                  <input  type={passState ? "text" : "password"}  id="new_password"  {...register('new_password', { required: "This field is required" })}  onKeyUp={passwordPolicy}  placeholder="Confirm your password"  className={`form-control-lg form-control ${passState ? "is-hidden" : "is-shown"}`} />
+                  <input  type={passState ? "text" : "password"}  id="new_password"  {...register('new_password', { required: "This field is required" })}  onKeyUp={passwordPolicy} autocomplete="off" placeholder="Confirm your password"  className={`form-control-lg form-control ${passState ? "is-hidden" : "is-shown"}`} />
                   {errors.passcode && <span className="invalid">{errors.new_password.message}</span>}
                 </div>
               </div>

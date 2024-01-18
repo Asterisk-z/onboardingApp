@@ -94,7 +94,7 @@ const Login = () => {
                   type="email"
                   {...register('email', { required: "This field is required" })}
                   placeholder="Enter your email address or username"
-                  className="form-control-lg form-control" />
+                  className="form-control-lg form-control" autocomplete="off" />
                 {errors.email && <span className="invalid">{errors.email.message}</span>}
               </div>
             </div>
@@ -124,7 +124,7 @@ const Login = () => {
                   type={passState ? "text" : "password"}
                   id="password"
                   {...register('password', { required: "This field is required" })}
-                  placeholder="Enter your password"
+                  placeholder="Enter your password" autocomplete="off"
                   className={`form-control-lg form-control ${passState ? "is-hidden" : "is-shown"}`} />
                 {errors.password && <span className="invalid">{errors.password.message}</span>}
               </div>
