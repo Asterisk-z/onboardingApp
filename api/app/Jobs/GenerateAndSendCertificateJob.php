@@ -65,10 +65,6 @@ class GenerateAndSendCertificateJob implements ShouldQueue
 
             // send the certificate
             SendGeneratedCertificateJob::dispatch($eventReg);
-<<<<<<< HEAD
-=======
-
->>>>>>> 9d9b8f1f27c00615f6303d38447ac96c8dd6ed20
         }
 
         logger("Certificates generated for: " . json_encode($this->requestedIDs));
