@@ -86,17 +86,17 @@ Route::middleware('auth')->group(function () {
     // MEG ROUTES
     Route::middleware('authRole:' . Role::MEG)->group(function () {
         // complaint
-        Route::group(['prefix' => 'complaint'],  function () {
+        Route::group(['prefix' => 'complaint'], public function () {
             Route::post('/feedback', [ComplaintController::class, 'feedback']);
             Route::post('/status', [ComplaintController::class, 'changeStatus']);
             Route::get('/all', [ComplaintController::class, 'allComplaints']);
         });
         // audit
-        Route::group(['prefix' => 'audits'],  function () {
+        Route::group(['prefix' => 'audits'], public function () {
             Route::get('/logs', [AuditController::class, 'index']);
         });
         //
-        Route::group(['prefix' => 'meg/ar'],  function () {
+        Route::group(['prefix' => 'meg/ar'], public function () {
             Route::get('/list', [ARController::class, 'listMEG']);
             Route::get('/transfer', [ARController::class, 'listTransferMEG']);
 
@@ -104,17 +104,17 @@ Route::middleware('auth')->group(function () {
             Route::post('/process-transfer/{record}', [ARController::class, 'processTransferByMEG']);
         });
         // broadcast
-        Route::group(['prefix' => 'broadcasts'],  function () {
+        Route::group(['prefix' => 'broadcasts'], public function () {
             Route::get('/view-messages', [BroadcastMessageController::class, 'index']);
             Route::post('/create-message', [BroadcastMessageController::class, 'store']);
         });
 
         // institutions
-        Route::group(['prefix' => 'institution'],  function () {
+        Route::group(['prefix' => 'institution'], public function () {
             Route::get('/list', [InstitutionController::class, 'listInstitution']);
         });
         // Membership Category
-        Route::group(['prefix' => 'membership/category'],  function () {
+        Route::group(['prefix' => 'membership/category'], public function () {
             Route::get('/list', [MemberCategoryController::class, 'listAll']);
             Route::post('/create', [MemberCategoryController::class, 'addCategory']);
             Route::post('/mapToPositions', [MemberCategoryController::class, 'mapToPositions']);
@@ -123,7 +123,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/update-status/{category}', [MemberCategoryController::class, 'changeStatusCategory']);
         });
         // Positions
-        Route::group(['prefix' => 'meg/position'],  function () {
+        Route::group(['prefix' => 'meg/position'], public function () {
             Route::get('/list', [PositionController::class, 'listAll']);
             Route::post('/create', [PositionController::class, 'addPosition']);
             Route::post('/mapToCategories', [PositionController::class, 'mapToCategories']);
@@ -132,25 +132,25 @@ Route::middleware('auth')->group(function () {
             Route::post('/update-status/{position}', [PositionController::class, 'changeStatusPosition']);
         });
         // Complaint
-        Route::group(['prefix' => 'meg/complain-type'],  function () {
+        Route::group(['prefix' => 'meg/complain-type'], public function () {
             Route::get('/list', [ComplaintTypeController::class, 'listAll']);
             Route::post('/create', [ComplaintTypeController::class, 'addComplainType']);
             Route::post('/update/{complainType}', [ComplaintTypeController::class, 'updateComplainType']);
             Route::post('/update-status/{complainType}', [ComplaintTypeController::class, 'changeStatusComplainType']);
         });
         // regulators
-        Route::group(['prefix' => 'meg/regulators'],  function () {
+        Route::group(['prefix' => 'meg/regulators'], public function () {
             Route::get('/view_all', [RegulatorsController::class, 'index']);
             Route::post('/create', [RegulatorsController::class, 'store']);
             Route::post('/update/{id}', [RegulatorsController::class, 'update']);
             Route::post('/update-status/{id}', [RegulatorsController::class, 'updateStatus']);
         });
         // sanctions
-        Route::group(['prefix' => 'disciplinary-sanctions'],  function () {
+        Route::group(['prefix' => 'disciplinary-sanctions'], public function () {
             Route::get('/list_all', [SanctionsController::class, 'index']);
         });
         // competency
-        Route::group(['prefix' => 'meg/competency-framework'],  function () {
+        Route::group(['prefix' => 'meg/competency-framework'], public function () {
             Route::get('/list-all', [CompetencyController::class, 'listAll']);
             Route::get('/list-compliant-ars/{id}', [CompetencyController::class, 'listCompliantArs']);
             Route::get('/list-non-complaint-ars/{id}', [CompetencyController::class, 'listNonCompliantArs']);
@@ -161,21 +161,21 @@ Route::middleware('auth')->group(function () {
             Route::post('/update-status/{id}', [CompetencyController::class, 'updateStatus']);
         });
         // fees and dues
-        Route::group(['prefix' => 'meg/fees-and-dues'],  function () {
+        Route::group(['prefix' => 'meg/fees-and-dues'], public function () {
             Route::get('/list_all', [FeesAndDuesController::class, 'listAll']);
             Route::post('/create', [FeesAndDuesController::class, 'store']);
             Route::post('/update/{id}', [FeesAndDuesController::class, 'update']);
             Route::post('/update-status/{id}', [FeesAndDuesController::class, 'updateStatus']);
         });
         // applicant guides
-        Route::group(['prefix' => 'meg/applicant-guides'],  function () {
+        Route::group(['prefix' => 'meg/applicant-guides'], public function () {
             Route::get('/list-all', [ApplicantGuidesController::class, 'listAll']);
             Route::post('/create', [ApplicantGuidesController::class, 'store']);
             Route::post('/update/{id}', [ApplicantGuidesController::class, 'update']);
             Route::post('/update-status/{id}', [ApplicantGuidesController::class, 'updateStatus']);
         });
         // membership guides
-        Route::group(['prefix' => 'meg/member-guides'],  function () {
+        Route::group(['prefix' => 'meg/member-guides'], public function () {
             Route::get('/list-all', [MemberGuidesController::class, 'listAll']);
             Route::post('/create', [MemberGuidesController::class, 'store']);
             Route::post('/update/{id}', [MemberGuidesController::class, 'update']);
@@ -206,7 +206,7 @@ Route::middleware('auth')->group(function () {
 
     // AR ROUTES
     Route::middleware('authRole:' . Role::ARAUTHORISER . ',' . Role::ARINPUTTER)->group(function () {
-        Route::group(['prefix' => 'ar'],  function () {
+        Route::group(['prefix' => 'ar'], public function () {
             Route::get('/list', [ARController::class, 'list']);
             Route::get('/search', [ARController::class, 'search']);
             Route::get('/view/{ARUser}', [ARController::class, 'view']);
@@ -225,19 +225,21 @@ Route::middleware('auth')->group(function () {
             Route::post('/process-change-status/{record}', [ARController::class, 'processChangeStatus']);
         });
         //
-        Route::group(['prefix' => 'regulators'],  function () {
+        Route::group(['prefix' => 'regulators'], public function () {
             Route::get('/list', [RegulatorsController::class, 'list']);
         });
         //
-        Route::group(['prefix' => 'competency'],  function () {
+        Route::group(['prefix' => 'competency'], public function () {
             Route::get('/list-active', [CompetencyController::class, 'listActive']);
             Route::post('/submit-competency', [CompetencyController::class, 'submitCompetency']);
         });
-        Route::group(['prefix' => 'membership'], function () {
-            Route::get('application/fields', [MembershipApplicationController::class, 'getField']);
-            Route::get('application/field/option', [MembershipApplicationController::class, 'getFieldOption']);
-            Route::get('application/extra', [MembershipApplicationController::class, 'getFieldExtra']);
-            Route::post('application/upload', [MembershipApplicationController::class, 'uploadField']);
+        Route::group(['prefix' => 'membership/application'], function () {
+            Route::get('/fields', [MembershipApplicationController::class, 'getField']);
+            Route::get('/field/option', [MembershipApplicationController::class, 'getFieldOption']);
+            Route::get('/extra', [MembershipApplicationController::class, 'getFieldExtra']);
+            Route::post('/upload', [MembershipApplicationController::class, 'uploadField']);
+
+            Route::post('/complete', [MembershipApplicationController::class, 'complete']);
         });
     });
     //

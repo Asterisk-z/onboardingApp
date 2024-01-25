@@ -10,4 +10,14 @@ class Application extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    const AWAITINGAPPROVAL = 'Awaiting Approval';
+
+    public function institution(){
+        return $this->belongsTo(Institution::class, 'institution_id');
+    }
+
+    public function uploads() {
+        return $this->hasMany(ApplicationFieldUpload::class, 'application_id');
+    }
 }

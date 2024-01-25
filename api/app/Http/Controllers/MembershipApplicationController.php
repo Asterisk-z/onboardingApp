@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ApplicationSubmissionEvent;
+use App\Helpers\ResponseStatusCodes;
 use App\Helpers\Utility;
+use App\Models\Application;
 use App\Models\ApplicationExtra;
 use App\Models\ApplicationField;
 use App\Models\ApplicationFieldOption;
 use App\Models\ApplicationFieldUpload;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class MembershipApplicationController extends Controller
 {
@@ -98,5 +103,71 @@ class MembershipApplicationController extends Controller
 
         return successResponse('Fields Fetched Successfully', auth()->user()->institution->application);
 
+    }
+
+    /**
+     * This method does the final submission of an application
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function complete(Request $request)
+    {
+        $request->validate([
+            'application_id' => 'required|exists:applications,id',
+        ]);
+
+        //Get authenticated user
+        $user = auth()->user();
+
+        //Get the application model
+        $application = Application::find($request->application_id);
+
+        if ($application->status == Application::AWAITINGAPPROVAL) {
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, "Your application has already been submitted and it is currently under review.");
+        }
+
+        //Get the insitution from the application
+        $institution = $application->institution;
+
+        $errorMsg = "Unable to complete your request at this point.";
+
+        if (!$institution) {
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+        }
+
+        //Checks that the institution returned is the same as that of the authenticated user
+        if ($user->institution_id != $institution->id) {
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+        }
+
+        //Get the first membership of an institution
+        $membershipCategory = $institution->membershipCategories->first();
+
+        if (!$membershipCategory) {
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+        }
+
+        //Get all the required fields per membership category
+        $requiredFieldIds = $membershipCategory->fields->where('required', 1)->pluck('id')->toArray();
+
+        //Check for any missing required field by comparing what is required and all that was uploaded
+        $applicationFieldIds = $application->uploads->pluck('application_field_id')->toArray();
+
+        $missingFieldIds = array_diff(
+            $requiredFieldIds,
+            $applicationFieldIds
+        );
+
+        if (!empty($missingFieldIds)) {
+            return errorResponse(ResponseStatusCodes::BAD_REQUEST, "Submission failed. There are required fields you are yet to fill.");
+        }
+
+        $application->status = Application::AWAITINGAPPROVAL;
+        $application->save();
+
+        event(new ApplicationSubmissionEvent($user, $application, $institution, $membershipCategory));
+
+        return successResponse("Your Application has been submitted and is under review. You will be notified any feedback soon");
     }
 }

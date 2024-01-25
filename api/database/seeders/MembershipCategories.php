@@ -35,11 +35,9 @@ class MembershipCategories extends Seeder
         ];
 
         foreach ($categories as $category) {
-            if (MembershipCategory::where('code', $category['code'])->exists()) {
-                continue;
-            }
-
-            MembershipCategory::create($category);
+            MembershipCategory::updateOrCreate(['code' => $category['code']], [
+                "name" => $category['name']
+            ]);
         }
     }
 }

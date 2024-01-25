@@ -31,4 +31,8 @@ class MembershipCategory extends Model
     {
         return !$this->is_del ? true : false;
     }
+
+    public function fields() {
+        return $this->hasMany(ApplicationField::class, 'category');
+    }
 }

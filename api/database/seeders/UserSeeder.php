@@ -22,7 +22,7 @@ class UserSeeder extends Seeder
 
             $email = "test" . $role . "@fmdqgroup.com";
 
-            if (User::where('email', $email)->exists()) {
+            if (User::where('email', $email)->orWhere('phone', '0816667778' . $index)->exists()) {
                 continue;
             }
 

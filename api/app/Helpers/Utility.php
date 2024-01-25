@@ -1,9 +1,11 @@
 <?php
 namespace App\Helpers;
 
+use App\Mail\NotificationMail;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -100,6 +102,19 @@ class Utility
             "path" => $path,
             "saved_path" => config('app.url') .'/storage/'.$path
         ];
+    }
+
+    public static function emailHelper($emailData, $recipients, $ccs = null, $attachment = null){
+        // Send the email
+        $mail = Mail::to($recipients);
+
+        if($ccs){
+            $mail = $mail->cc($ccs);
+        }
+
+        $mail->send(new NotificationMail($emailData));
+
+        return;
     }
 
 }
