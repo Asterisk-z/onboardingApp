@@ -9,4 +9,11 @@ class ApplicationFieldUpload extends Model
 {
     use HasFactory;
     protected $guarded = [];
+
+    protected $appends = ['file_path'];
+
+    public function getFilePathAttribute()
+    {
+        return $this->uploaded_file ? config('app.url') . 'storage/' . $this->uploaded_file : null;
+    }
 }

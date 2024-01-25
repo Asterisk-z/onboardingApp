@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Utility;
+use App\Models\ApplicationExtra;
 use App\Models\ApplicationField;
 use App\Models\ApplicationFieldOption;
 use App\Models\ApplicationFieldUpload;
@@ -25,6 +26,19 @@ class MembershipApplicationController extends Controller
         }
 
         $data = $application_fields->orderBy('id', 'ASC')->get();
+
+        return successResponse('Fields Fetched Successfully', $data);
+    }
+
+    public function getFieldExtra(Request $request)
+    {
+        $application_fields = ApplicationExtra::query();
+        $data = [];
+
+        if ($request->category && $request->name) {
+            $application_fields->where('category_id', $request->category)->where('name', $request->name);
+            $data = $application_fields->orderBy('id', 'ASC')->first();
+        }
 
         return successResponse('Fields Fetched Successfully', $data);
     }
@@ -70,7 +84,7 @@ class MembershipApplicationController extends Controller
         if ($request->field_type == 'file') {
 
             if ($request->hasFile('field_value')) {
-                $attachment = Utility::saveFile('application', $request->file('field_value'));
+                $attachment = Utility::saveFile('application/' . auth()->user()->institution->application->id . '/' . $request->field_name, $request->file('field_value'));
             }
             $data['uploaded_field'] = null;
             $data = ['uploaded_file' => $attachment['path']];

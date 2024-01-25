@@ -24,11 +24,14 @@ class MembershipCategories extends Seeder
             ["code" => "rml", "name" => "Registration Member (Listings)"],
             ["code" => "rmq", "name" => "Registration Member (Quotations)"],
 
-            ["code" => "lnq", "name" => "Registration Member"],
+            ["code" => "lnq", "name" => "Registration Member (Listings & Quotations)"],
+            ["code" => "dmn", "name" => "Dealing Members (Non-bank Financial Institutions)"],
             ["code" => "afs", "name" => "Affiliate Member (Standard) - Individual"],
             ["code" => "afc", "name" => "Affiliate Member (Standard) - Corporates"],
             ["code" => "aft", "name" => "Affiliate Member (Foreign Exchange Trading)"],
             ["code" => "afi", "name" => "Affiliate Member (Fixed Income)"],
+            ["code" => "afr", "name" => "Affiliate Member (Regulator)"],
+            ["code" => "aec", "name" => "Affiliate Exchange (Corporates)"],
         ];
 
         foreach ($categories as $category) {
