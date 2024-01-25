@@ -224,10 +224,12 @@ Route::middleware('auth')->group(function () {
             Route::get('/list-active', [CompetencyController::class, 'listActive']);
             Route::post('/submit-competency', [CompetencyController::class, 'submitCompetency']);
         });
-        Route::group(['prefix' => 'membership'], function () {
-            Route::get('application/fields', [MembershipApplicationController::class, 'getField']);
-            Route::get('application/field/option', [MembershipApplicationController::class, 'getFieldOption']);
-            Route::post('application/upload', [MembershipApplicationController::class, 'uploadField']);
+        Route::group(['prefix' => 'membership/application'], function () {
+            Route::get('/fields', [MembershipApplicationController::class, 'getField']);
+            Route::get('/field/option', [MembershipApplicationController::class, 'getFieldOption']);
+            Route::post('/upload', [MembershipApplicationController::class, 'uploadField']);
+
+            Route::post('/complete', [MembershipApplicationController::class, 'complete']);
         });
     });
     //
