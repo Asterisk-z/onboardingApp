@@ -15,6 +15,11 @@ class CreateFmdqBankAccountsTable extends Migration
     {
         Schema::create('fmdq_bank_accounts', function (Blueprint $table) {
             $table->id();
+            $table->string('bank_name')->nullable();
+            $table->string('account_name')->nullable();
+            $table->string('account_number')->nullable();
+            $table->string('sort_code')->nullable();
+            $table->string('bank_code')->nullable();
             $table->timestamps();
         });
     }

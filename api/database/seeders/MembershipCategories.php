@@ -89,6 +89,18 @@ class MembershipCategories extends Seeder
                 "application_fee" => 650000,
                 "membership_dues" =>7500000
             ],
+            [
+                "code" => "afr", 
+                "name" => "Affiliate Member (Regulator)",
+                "application_fee" => 700000,
+                "membership_dues" =>8000000
+            ],
+            [
+                "code" => "aec", 
+                "name" => "Affiliate Exchange (Corporates)",
+                "application_fee" => 750000,
+                "membership_dues" =>8500000
+            ],
         ];
 
         foreach ($categories as $category) {

@@ -7,6 +7,7 @@ use App\Helpers\MailContents;
 use App\Helpers\ResponseStatusCodes;
 use App\Helpers\Utility;
 use App\Models\Application;
+use App\Models\ApplicationExtra;
 use App\Models\ApplicationField;
 use App\Models\ApplicationFieldOption;
 use App\Models\ApplicationFieldUpload;
@@ -53,6 +54,19 @@ class MembershipApplicationController extends Controller
         return successResponse('Fields Fetched Successfully', $data);
     }
 
+    public function getFieldExtra(Request $request)
+    {
+        $application_fields = ApplicationExtra::query();
+        $data = [];
+
+        if ($request->category && $request->name) {
+            $application_fields->where('category_id', $request->category)->where('name', $request->name);
+            $data = $application_fields->orderBy('id', 'ASC')->first();
+        }
+
+        return successResponse('Fields Fetched Successfully', $data);
+    }
+
     public function getFieldOption(Request $request)
     {
         $application_fields = ApplicationFieldOption::query();
@@ -94,7 +108,7 @@ class MembershipApplicationController extends Controller
         if ($request->field_type == 'file') {
 
             if ($request->hasFile('field_value')) {
-                $attachment = Utility::saveFile('application', $request->file('field_value'));
+                $attachment = Utility::saveFile('application/' . auth()->user()->institution->application->id . '/' . $request->field_name, $request->file('field_value'));
             }
             $data['uploaded_field'] = null;
             $data = ['uploaded_file' => $attachment['path']];
@@ -112,14 +126,14 @@ class MembershipApplicationController extends Controller
 
     /**
      * This method does the final submission of an application
-     * 
+     *
      * @param Request $request
      * @return JsonResponse
      */
     public function complete(Request $request)
     {
         $request->validate([
-            'application_id' => 'required|exists:applications,id'
+            'application_id' => 'required|exists:applications,id',
         ]);
 
         //Get authenticated user
@@ -128,6 +142,7 @@ class MembershipApplicationController extends Controller
         //Get the application model
         $application = Application::find($request->application_id);
 
+<<<<<<< HEAD
         $errorMsg = "Unable to complete your request at this point.";
 
         if(strtolower($application->currentStatus()) != strtolower(Application::statuses['PEN'])){
@@ -136,24 +151,34 @@ class MembershipApplicationController extends Controller
 
         if($application->office_to_perform_next_action != Application::office['AP']){
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+=======
+        if ($application->status == Application::AWAITINGAPPROVAL) {
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, "Your application has already been submitted and it is currently under review.");
+>>>>>>> 2b51fdb668e61659ce76e4a48988f00ac1500c8e
         }
 
         //Get the insitution from the application
         $institution = $application->institution;
 
+<<<<<<< HEAD
         if(! $institution){
+=======
+        $errorMsg = "Unable to complete your request at this point.";
+
+        if (!$institution) {
+>>>>>>> 2b51fdb668e61659ce76e4a48988f00ac1500c8e
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
         //Checks that the institution returned is the same as that of the authenticated user
-        if($user->institution_id != $institution->id){
+        if ($user->institution_id != $institution->id) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
         //Get the first membership of an institution
         $membershipCategory = $institution->membershipCategories->first();
 
-        if(! $membershipCategory){
+        if (!$membershipCategory) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
@@ -168,7 +193,7 @@ class MembershipApplicationController extends Controller
             $applicationFieldIds
         );
 
-        if (! empty($missingFieldIds)) {
+        if (!empty($missingFieldIds)) {
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, "Submission failed. There are required fields you are yet to fill.");
         }
 

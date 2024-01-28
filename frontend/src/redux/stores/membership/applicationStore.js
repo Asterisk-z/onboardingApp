@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { errorHandler, successHandler } from "utils/Functions";
 import queryGenerator from "utils/QueryGenerator";
-const initialState = { all: null, list: null, all_fields: null, single_ar: null, status_list: null, transfer_list: null, user: null, total: null, error: "", loading: false };
+const initialState = { all: null, list: null, all_fields: null, list_extra: {}, status_list: null, transfer_list: null, user: null, total: null, error: "", loading: false };
 
 export const loadPageFields = createAsyncThunk(
   "application/loadPageFields",
@@ -29,6 +29,20 @@ export const loadFieldOption = createAsyncThunk(
     }
   }
 );
+
+export const loadExtra = createAsyncThunk(
+  "application/loadExtra",
+  async (values) => {
+    const query = queryGenerator(values);
+    try {
+      const { data } = await axios.get(`membership/application/extra?${query}`);
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
+    }
+  }
+);
+
 
 export const uploadField = createAsyncThunk(
   "application/uploadField",
@@ -88,6 +102,31 @@ const applicationStore = createSlice({
     });
 
     builder.addCase(loadFieldOption.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+    
+    // ====== builders for loadExtra ======
+
+    builder.addCase(loadExtra.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(loadExtra.fulfilled, (state, action) => {
+        state.loading = false;
+        // state.list = action.payload?.data?.data?.categories;
+          
+        if (!Array.isArray(state.list_extra)) {
+          state.list_extra = {};
+      }
+      
+      const list_extra = state.list_extra;
+      const data = { ...list_extra, [action.payload?.data.data.name]: action.payload?.data.data };
+      state.list_extra = data;
+
+    });
+
+    builder.addCase(loadExtra.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });

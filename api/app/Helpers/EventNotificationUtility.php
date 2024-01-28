@@ -5,10 +5,10 @@ namespace App\Helpers;
 use App\Models\Education\Event;
 use App\Models\Education\EventRegistration;
 use App\Models\Role;
-use Illuminate\Support\Str;
 use App\Models\User;
-use Illuminate\Support\Facades\Notification;
 use App\Notifications\InfoNotification;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Str;
 
 class EventNotificationUtility
 {
@@ -19,8 +19,8 @@ class EventNotificationUtility
         $subject = EventMailContents::certificateARSubject($eventReg->event->name);
 
         $attachment = [
-            'saved_path' => config('app.url').'/storage/event_certs/'.$eventReg->certificate_path,
-            'name' => Str::slug($eventReg->event->name).'-certificate.pdf'
+            'saved_path' => config('app.url') . '/storage/event_certs/' . $eventReg->certificate_path,
+            'name' => Str::slug($eventReg->event->name) . '-certificate.pdf',
         ];
 
         Notification::send($eventReg->user, new InfoNotification($message, $subject, [], $attachment));
@@ -90,8 +90,10 @@ class EventNotificationUtility
             // Email MEGs
             $MEGs = Utility::getUsersByCategory(Role::MEG);
 
-            if (count($MEGs))
+            if (count($MEGs)) {
                 $to = $MEGs;
+            }
+
         }
 
         if ($to) {
@@ -118,8 +120,10 @@ class EventNotificationUtility
             // Email MEGs
             $MEGs = Utility::getUsersByCategory(Role::MEG);
 
-            if (count($MEGs))
+            if (count($MEGs)) {
                 $to = $MEGs;
+            }
+
         }
 
         if ($to) {
@@ -156,8 +160,10 @@ class EventNotificationUtility
             // Email MEGs
             $MEGs = Utility::getUsersByCategory(Role::MEG);
 
-            if (count($MEGs))
+            if (count($MEGs)) {
                 $to = $MEGs;
+            }
+
         }
 
         if ($to) {
@@ -184,8 +190,10 @@ class EventNotificationUtility
             // Email MEGs
             $MEGs = Utility::getUsersByCategory(Role::MEG);
 
-            if (count($MEGs))
+            if (count($MEGs)) {
                 $to = $MEGs;
+            }
+
         }
 
         if ($to) {
@@ -209,8 +217,10 @@ class EventNotificationUtility
             // Email MEGs
             $MEGs = Utility::getUsersByCategory(Role::MEG);
 
-            if (count($MEGs))
+            if (count($MEGs)) {
                 $to = $MEGs;
+            }
+
         }
 
         if ($to) {

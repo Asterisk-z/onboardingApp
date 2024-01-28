@@ -27,9 +27,8 @@ class SystemController extends Controller
         ]);
     }
 
-
     public function executeCommands()
-    {        
+    {
         // Execute the desired commands using Artisan and exec
         Artisan::call('migrate');
         Artisan::call('db:seed');
@@ -54,5 +53,17 @@ class SystemController extends Controller
         } else {
             return response()->json(['message' => "Model $modelName not found"]);
         }
+    }
+
+    public function refreshDatabase($modelName)
+    {
+
+        Artisan::call('migrate:fresh');
+        Artisan::call('db:seed');
+        Artisan::call('optimize:clear');
+        Artisan::call('config:cache');
+
+        return response()->json(['message' => 'Commands executed successfully']);
+
     }
 }
