@@ -127,4 +127,82 @@ class MailContents
     {
         return "<p>A new competency has been submitted.</p><p>Reason: {$reason}.</p>";
     }
+
+    public static function invoiceSubject(): string
+    {
+        return "MROIS Membership Payment Notification";
+    }
+
+    public static function invoiceMail(): string
+    {
+        $url = config("app.front_end_url");
+
+        return "<p>Kindly log on to the <a href=$url>MROIS Portal</a> to view your invoice, 
+        make payment and upload evidence of payment to complete your registration.</p>";
+    }
+
+    public static function concessionSubject(): string
+    {
+        return "New Membership Application: Concession Confirmation";
+    }
+
+    public static function concessionMail($companyName): string
+    {
+        return "<p>A new institution, {$companyName}, has been granted a concession.</p>";
+    }
+
+    public static function paymentSubject(): string
+    {
+        return "Payment Notification";
+    }
+
+    public static function paymentMail($user): string
+    {
+        $url = config("app.front_end_url");
+
+        return "<p>Kindly log on to the <a href=$url>MROIS Portal</a> to 
+        review the payment upload information for the Applicant, {$user->first_name} {$user->last_name}.</p>";
+    }
+
+    public static function approvedPaymentSubject(): string
+    {
+        return "Payment Confirmation by FSD";
+    }
+
+    public static function approvedPaymentMail($user): string
+    {
+        $url = config("app.front_end_url");
+
+        return "<p>FSD has confirmed payment for {$user->first_name} {$user->last_name}. 
+        
+        <p>Kindly log on to the <a href=$url>MROIS Portal</a> to 
+        review and approve payment</p>
+        
+        </p>";
+    }
+
+    public static function mbgPaymentRejectedSubject(): string
+    {
+        return "Payment Rejected by MBG";
+    }
+
+    public static function mbgPaymentRejectedMail($companyName, $reason): string
+    {
+        return "<p>Please be informed that MBG rejected the FSD review for {$companyName}
+                <p>Reason: {$reason}</p>
+                
+                </p>";
+    }
+
+    public static function mbgPaymentApprovedSubject(): string
+    {
+        return "Payment Verified by MBG";
+    }
+
+    public static function mbgPaymentApprovedMail($companyName): string
+    {
+        $url = config("app.front_end_url");
+        return "<p>Please be informed that MBG has confirmed payment for 
+        {$companyName}. Kindly log on to <a href=$url>MROIS Portal</a> to review the application.</p>";
+    }
 }

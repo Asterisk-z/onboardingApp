@@ -3,19 +3,38 @@
 namespace App\Http\Controllers;
 
 use App\Events\ApplicationSubmissionEvent;
+use App\Helpers\MailContents;
 use App\Helpers\ResponseStatusCodes;
 use App\Helpers\Utility;
 use App\Models\Application;
 use App\Models\ApplicationField;
 use App\Models\ApplicationFieldOption;
 use App\Models\ApplicationFieldUpload;
+use App\Models\Invoice;
+use App\Models\ProofOfPayment;
+use App\Models\Role;
+use App\Models\Status;
+use App\Notifications\InfoNotification;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 use Symfony\Component\HttpFoundation\Response;
 
 class MembershipApplicationController extends Controller
 {
-    //
+    public function application(Request $request){
+        $user = $request->user();
+
+        $data = Application::where([
+            'submitted_by' => $user->id
+        ]);
+
+        $data = Utility::applicationDetails($data);
+        $data = $data->first();
+
+        return successResponse("Here you go", $data ?? []);
+    }
 
     public function getField(Request $request)
     {
@@ -109,14 +128,18 @@ class MembershipApplicationController extends Controller
         //Get the application model
         $application = Application::find($request->application_id);
 
-        if($application->status == Application::AWAITINGAPPROVAL){
-            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, "Your application has already been submitted and it is currently under review.");
+        $errorMsg = "Unable to complete your request at this point.";
+
+        if(strtolower($application->currentStatus()) != strtolower(Application::statuses['PEN'])){
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+        }
+
+        if($application->office_to_perform_next_action != Application::office['AP']){
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
         //Get the insitution from the application
         $institution = $application->institution;
-
-        $errorMsg = "Unable to complete your request at this point.";
 
         if(! $institution){
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
@@ -149,11 +172,67 @@ class MembershipApplicationController extends Controller
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, "Submission failed. There are required fields you are yet to fill.");
         }
 
-        $application->status = Application::AWAITINGAPPROVAL;
-        $application->save();
+        Utility::applicationStatusHelper($application, Application::statuses['ACS'], Application::office['MBG']);
 
+        logAction($user->email, 'Application submitted', 'Membership application has been submitted successfully.', $request->ip());
         event(new ApplicationSubmissionEvent($user, $application, $institution, $membershipCategory));
-
         return successResponse("Your Application has been submitted and is under review. You will be notified any feedback soon");
+    }
+
+        /**
+     * This method does the final submission of an application
+     * 
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function uploadProofOfPayment(Request $request)
+    {
+        $request->validate([
+            'application_id' => 'required|exists:applications,id',
+            'proof_of_payment' => 'required|mimes:jpeg,png,jpg,pdf,doc,docx,csv,xls,xlsx|max:5048'
+        ]);
+
+        $user = $request->user();
+        $application = Application::find($request->application_id);
+        $invoice = Invoice::find($application->invoice_id);
+        
+        $errorMsg = "Unable to complete your request at this point.";
+
+        if($application->office_to_perform_next_action != Application::office['AP']){
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+        }
+
+        if($application->currentStatus() != Application::statuses['APU']){
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+        }
+
+        if($application->submitted_by != $user->id){
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+        }
+
+        $proof = ProofOfPayment::create([
+            'proof' => $request->file('proof_of_payment')->storePublicly('proof_of_payment', 'public')
+        ]);
+
+        Utility::applicationStatusHelper($application, Application::statuses['AFR'], Application::office['FSD']);
+        $application->proof_of_payment = $proof->id;
+        $application->save();
+        
+        $application->proof_of_payment()->save($proof);
+
+        $invoice->date_paid = Carbon::now()->format('Y-m-d');
+        $invoice->is_paid = 1;
+        $invoice->save();
+
+        logAction($user->email, 'Proof of payment uploaded', "Applicant successfully uploaded proof of payment.", $request->ip());
+
+        $MBGs = Utility::getUsersEmailByCategory(Role::MBG);
+        $MEGs = Utility::getUsersEmailByCategory(Role::MEG);
+        $FSDs = Utility::getUsersByCategory(Role::FSD);
+        $CCs = array_merge($MBGs, $MEGs);
+        Notification::send($FSDs, new InfoNotification(MailContents::paymentMail($user), MailContents::paymentSubject(), $CCs));
+
+        return successResponse("Your payment upload has been recieved and it is currently under review");
+
     }
 }

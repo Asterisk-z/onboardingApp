@@ -18,15 +18,17 @@ class SystemSettingSeeder extends Seeder
             [
                 "name" => "mandate_form",
                 "value" => config('app.url')."/mandate_form.pdf"
+            ],
+            [
+                "name" => "tax",
+                "value" => 7.5
             ]
         ];
 
         foreach($configs as $config){
-            if(SystemSetting::where('name', $config['name'])->exists()){
-                continue;
-            }
-
-            SystemSetting::create($config);
+            SystemSetting::updateOrCreate(['name' => $config['name']], [
+                "value" => $config['value']
+            ]);
         }
     }
 }

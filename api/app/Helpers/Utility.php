@@ -2,8 +2,11 @@
 namespace App\Helpers;
 
 use App\Mail\NotificationMail;
+use App\Models\Application;
+use App\Models\Status;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -117,4 +120,52 @@ class Utility
         return;
     }
 
+    public static function status($id){
+        $status = Status::find($id); 
+        return $status ? $status->status : '';
+    }
+
+    public static function applicationDetails($builder)
+    {
+        return $builder->join('institutions', 'applications.institution_id', '=', 'institutions.id')
+        ->join('institution_memberships', 'institutions.id', '=', 'institution_memberships.institution_id')
+        ->join('membership_categories', 'institution_memberships.membership_category_id', '=', 'membership_categories.id')
+        ->join('application_field_uploads', 'applications.id', '=', 'application_field_uploads.application_id')
+        ->join('application_fields', 'application_field_uploads.application_field_id', '=', 'application_fields.id')
+        ->select(
+            'institutions.id AS institution_id',
+            'applications.id AS application_id',
+            'applications.concession_stage AS concession_stage',
+            'applications.amount_received_by_fsd AS amount_received_by_fsd',
+            'applications.mbg_review_stage AS mbg_review_stage',
+            'applications.meg_review_stage AS meg_review_stage',
+            'applications.meg2_review_stage AS meg2_review_stage',
+            'applications.fsd_review_stage AS fsd_review_stage',
+            'membership_categories.id AS category_id', 
+            'membership_categories.name AS category_name',
+            DB::raw("MAX(CASE WHEN application_fields.name = 'companyName' THEN application_field_uploads.uploaded_field END) AS company_name"),
+            DB::raw("MAX(CASE WHEN application_fields.name = 'companyEmailAddress' THEN application_field_uploads.uploaded_field END) AS company_email"),
+            DB::raw("MAX(CASE WHEN application_fields.name = 'applicationPrimaryContactEmailAddress' THEN application_field_uploads.uploaded_field END) AS primary_contact_email"),
+            DB::raw("MAX(CASE WHEN application_fields.name = 'rcNumber' THEN application_field_uploads.uploaded_field END) AS rc_number"),
+            DB::raw("MAX(CASE WHEN application_fields.name = 'registeredOfficeAddress' THEN application_field_uploads.uploaded_field END) AS registered_office_address"),
+            DB::raw("MAX(CASE WHEN application_fields.name = 'registeredOfficeAddress' THEN application_field_uploads.uploaded_field END) AS registered_office_address"),
+        )
+        ->groupBy('institutions.id', 'applications.id', 'membership_categories.id', 'membership_categories.name', 'applications.concession_stage', 'applications.amount_received_by_fsd', 'applications.fsd_review_stage', 'applications.mbg_review_stage', 'applications.meg_review_stage', 'applications.meg2_review_stage');
+    }
+
+    public static function applicationStatusHelper(Application $application, $newstatus, $nextOffice, $comment = null, $file = null){
+        $status = new Status();
+        $status->status = $newstatus;
+        $status->comment = $comment;
+        $status->file = $file;
+        $status->save();
+
+        $application->status = $status->id;
+        $application->office_to_perform_next_action = $nextOffice;
+        $application->save();
+
+        $application->status()->save($status);
+
+        return;
+    }
 }
