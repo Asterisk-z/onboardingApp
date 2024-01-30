@@ -55,7 +55,7 @@ const UserProvider = ({...props}) => {
       is_admin_fsd: function () {
         return localStorage.getItem('role') == "FSD" ? true : false;
       },
-      is_admin_blg: function () {
+      is_admin_mbg: function () {
         return localStorage.getItem('role') == "MBG" ? true : false;
       },
       is_admin_blg: function () {

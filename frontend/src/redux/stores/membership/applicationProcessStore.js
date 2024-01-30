@@ -2,10 +2,53 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { errorHandler, successHandler } from "utils/Functions";
 import queryGenerator from "utils/QueryGenerator";
-const initialState = { all: null, list: null, all_fields: null, list_extra: {}, status_list: null, transfer_list: null, user: null, total: null, error: "", loading: false };
+const initialState = { all_institutions: null, all: null, list: null, all_fields: null, list_extra: {}, status_list: null, transfer_list: null, user: null, total: null, error: "", loading: false };
+
+export const loadInstitutionApplications = createAsyncThunk(
+  "applicationProcess/loadInstitutionApplications",
+  async () => {
+    
+    try {
+      const { data } = await axios.get(`membership/application/mbg/institutions`);
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
+    }
+  }
+);
+
+export const uploadConcession = createAsyncThunk(
+  "applicationProcess/uploadConcession",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `membership/application/mbg/upload-concession`,
+        data: values,
+      });
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
+
+
+
+
+
+
+
+
 
 export const loadPageFields = createAsyncThunk(
-  "application/loadPageFields",
+  "applicationProcess/loadPageFields",
   async (values) => {
     const query = queryGenerator(values);
     try {
@@ -18,7 +61,7 @@ export const loadPageFields = createAsyncThunk(
 );
 
 export const loadFieldOption = createAsyncThunk(
-  "application/loadFieldOption",
+  "applicationProcess/loadFieldOption",
   async (values) => {
     const query = queryGenerator(values);
     try {
@@ -31,7 +74,7 @@ export const loadFieldOption = createAsyncThunk(
 );
 
 export const loadExtra = createAsyncThunk(
-  "application/loadExtra",
+  "applicationProcess/loadExtra",
   async (values) => {
     const query = queryGenerator(values);
     try {
@@ -44,7 +87,7 @@ export const loadExtra = createAsyncThunk(
 );
 
 export const uploadField = createAsyncThunk(
-  "application/uploadField",
+  "applicationProcess/uploadField",
   async (values) => {
     try {
       const { data } = await axios({
@@ -66,7 +109,7 @@ export const uploadField = createAsyncThunk(
 
 
 export const completeApplication = createAsyncThunk(
-  "application/completeApplication",
+  "applicationProcess/completeApplication",
   async () => {
     try {
       const { data } = await axios({
@@ -88,11 +131,11 @@ export const completeApplication = createAsyncThunk(
 
 
 
-const applicationStore = createSlice({
-  name: "application",
+const applicationProcess = createSlice({
+  name: "applicationProcess",
   initialState,
   reducers: {
-    clearArUser: (state) => {
+    clearApplicationProcess: (state) => {
       state.customer = null;
       state.all_fields = null;
     },
@@ -101,6 +144,58 @@ const applicationStore = createSlice({
     },
   },
   extraReducers: (builder) => {
+
+    // ====== builders for loadInstitutionApplications ======
+
+    builder.addCase(loadInstitutionApplications.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(loadInstitutionApplications.fulfilled, (state, action) => {
+        state.loading = false;
+        // state.list = action.payload?.data?.data?.categories;
+          
+        state.all_institutions = JSON.stringify(action.payload?.data?.data);
+
+    });
+
+    builder.addCase(loadInstitutionApplications.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
+    // ====== builders for uploadConcession ======
+
+    builder.addCase(uploadConcession.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(uploadConcession.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(uploadConcession.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // ====== builders for loadFieldOption ======
 
@@ -217,5 +312,5 @@ const applicationStore = createSlice({
   },
 });
 
-export default applicationStore.reducer;
-export const { clearArUser } = applicationStore.actions;
+export default applicationProcess.reducer;
+export const { clearApplicationProcess } = applicationProcess.actions;

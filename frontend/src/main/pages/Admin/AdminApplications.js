@@ -3,14 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner} from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
-import {loadAllActiveInstitutions} from "redux/stores/institution/institutionStore"
+import {loadInstitutionApplications} from "redux/stores/membership/applicationProcessStore"
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
-import AdminInstitutionTable from './Tables/AdminInstitutionTable'
+import AdminApplicationInstitutionTable from './Tables/AdminApplicationInstitutionTable'
 
 
 
-const AdminInstitutions = ({ drawer }) => {
+const AdminProcessInstitutions = ({ drawer }) => {
         
     const dispatch = useDispatch();
     const [parentState, setParentState] = useState('Initial state');
@@ -19,13 +19,14 @@ const AdminInstitutions = ({ drawer }) => {
         setParentState(newState);
     };
 
-    const institutions = useSelector((state) => state?.institutions?.list) || null;
+    const all_institutions = useSelector((state) => state?.applicationProcess?.all_institutions) || null;
     useEffect(() => {
-        dispatch(loadAllActiveInstitutions());
+        dispatch(loadInstitutionApplications());
     }, [dispatch,parentState]);
     
-    const $institutions = institutions ? JSON.parse(institutions) : null;
+    const $all_institutions = all_institutions ? JSON.parse(all_institutions) : null;
 
+    console.log( $all_institutions )
     return (
         <React.Fragment>
             <Head title="Authorised Representation"></Head>
@@ -46,18 +47,17 @@ const AdminInstitutions = ({ drawer }) => {
                     <Card className="card-bordered card-preview">
                 <Content>
 
-
                     <Block size="xl">
                         <BlockHead>
                             <BlockHeadContent>
-                                <BlockTitle tag="h4">Institutions Application</BlockTitle>
+                                <BlockTitle tag="h4">Institutions Applications</BlockTitle>
                                 {/* <p>{institutions}</p> */}
                                 {/* {<p>{parentState}</p>} */}
                             </BlockHeadContent>
                         </BlockHead>
 
                         <PreviewCard>
-                            {$institutions && <AdminInstitutionTable  updateParent={updateParentState} parentState={parentState} data={$institutions} expandableRows pagination actions />}
+                            {$all_institutions && <AdminApplicationInstitutionTable  updateParent={updateParentState} parentState={parentState} data={$all_institutions} expandableRows pagination actions />}
                         </PreviewCard>
                     </Block>
 
@@ -69,4 +69,4 @@ const AdminInstitutions = ({ drawer }) => {
         </React.Fragment>
     );
 };
-export default AdminInstitutions;
+export default AdminProcessInstitutions;

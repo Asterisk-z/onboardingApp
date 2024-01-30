@@ -24,11 +24,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class MembershipApplicationController extends Controller
 {
-    public function application(Request $request){
+    public function application(Request $request)
+    {
         $user = $request->user();
 
         $data = Application::where([
-            'submitted_by' => $user->id
+            'submitted_by' => $user->id,
         ]);
 
         $data = Utility::applicationDetails($data);
@@ -146,18 +147,18 @@ class MembershipApplicationController extends Controller
 
         $errorMsg = "Unable to complete your request at this point.";
 
-        if(strtolower($application->currentStatus()) != strtolower(Application::statuses['PEN'])){
+        if (strtolower($application->currentStatus()) != strtolower(Application::statuses['PEN'])) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
-        if($application->office_to_perform_next_action != Application::office['AP']){
+        if ($application->office_to_perform_next_action != Application::office['AP']) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
         //Get the insitution from the application
         $institution = $application->institution;
 
-        if(! $institution){
+        if (!$institution) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
@@ -195,9 +196,9 @@ class MembershipApplicationController extends Controller
         return successResponse("Your Application has been submitted and is under review. You will be notified any feedback soon");
     }
 
-        /**
+    /**
      * This method does the final submission of an application
-     * 
+     *
      * @param Request $request
      * @return JsonResponse
      */
@@ -205,38 +206,38 @@ class MembershipApplicationController extends Controller
     {
         $request->validate([
             'application_id' => 'required|exists:applications,id',
-            'proof_of_payment' => 'required|mimes:jpeg,png,jpg,pdf,doc,docx,csv,xls,xlsx|max:5048'
+            'proof_of_payment' => 'required|mimes:jpeg,png,jpg,pdf,doc,docx,csv,xls,xlsx|max:5048',
         ]);
 
         $user = $request->user();
         $application = Application::find($request->application_id);
         $invoice = Invoice::find($application->invoice_id);
-        
+
         $errorMsg = "Unable to complete your request at this point.";
 
-        if($application->office_to_perform_next_action != Application::office['AP']){
+        if ($application->office_to_perform_next_action != Application::office['AP']) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
-        if($application->currentStatus() != Application::statuses['CG'] && 
-        $application->currentStatus() != Application::statuses['CNG'] && 
-        $application->currentStatus() != Application::statuses['FDP'] &&
-        $application->currentStatus() != Application::statuses['MDP']){
+        if ($application->currentStatus() != Application::statuses['CG'] &&
+            $application->currentStatus() != Application::statuses['CNG'] &&
+            $application->currentStatus() != Application::statuses['FDP'] &&
+            $application->currentStatus() != Application::statuses['MDP']) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
-        if($application->submitted_by != $user->id){
+        if ($application->submitted_by != $user->id) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
         $proof = ProofOfPayment::create([
-            'proof' => $request->file('proof_of_payment')->storePublicly('proof_of_payment', 'public')
+            'proof' => $request->file('proof_of_payment')->storePublicly('proof_of_payment', 'public'),
         ]);
 
         Utility::applicationStatusHelper($application, Application::statuses['PPU'], Application::office['AP'], Application::office['FSD']);
         $application->proof_of_payment = $proof->id;
         $application->save();
-        
+
         $application->proof_of_payment()->save($proof);
 
         $invoice->date_paid = Carbon::now()->format('Y-m-d');
@@ -259,29 +260,29 @@ class MembershipApplicationController extends Controller
     {
         $request->validate([
             'application_id' => 'required|exists:applications,id',
-            'executed_member_agreement' => 'required|mimes:jpeg,png,jpg,pdf,doc,docx,csv,xls,xlsx|max:5048'
+            'executed_member_agreement' => 'required|mimes:jpeg,png,jpg,pdf,doc,docx,csv,xls,xlsx|max:5048',
         ]);
 
         $user = $request->user();
         $application = Application::find($request->application_id);
         $applicant = User::find($application->submitted_by);
-        $name = $applicant->first_name.' '.$applicant->last_name;
-        
+        $name = $applicant->first_name . ' ' . $applicant->last_name;
+
         $errorMsg = "Unable to complete your request at this point.";
 
-        if($application->office_to_perform_next_action != Application::office['AP']){
+        if ($application->office_to_perform_next_action != Application::office['AP']) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
-        if($application->currentStatus() != Application::statuses['M2AMR']){
+        if ($application->currentStatus() != Application::statuses['M2AMR']) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
-        if($application->submitted_by != $user->id){
+        if ($application->submitted_by != $user->id) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
-        if($application->is_applicant_executed_membership_agreement){
+        if ($application->is_applicant_executed_membership_agreement) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
@@ -296,6 +297,6 @@ class MembershipApplicationController extends Controller
         Notification::send($MEGs, new InfoNotification(MailContents::applicantUploadAgreementMail($name), MailContents::applicantUploadAgreementSubject()));
 
         return successResponse("Agreement uploaded successfully");
-        
+
     }
 }

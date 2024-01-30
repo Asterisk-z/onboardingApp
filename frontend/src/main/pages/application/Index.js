@@ -1091,7 +1091,8 @@ const Form = () => {
 
   }
 
-
+  const fields = useSelector((state) => state?.application?.all_fields) || null;
+console.log(fields)
   return <>
     <Head title="Form" />
     <HeaderLogo />
@@ -1103,6 +1104,7 @@ const Form = () => {
         <div style={styles.card}>
           <div style={styles.color}>
             <h2>{`${authUser.user_data.institution.category[0].name} Application`} </h2>
+            
             <p>Please fill forms to complete your application</p>
           </div>
           <div className="nk-wizard nk-wizard-simple is-alter wizard clearfix">

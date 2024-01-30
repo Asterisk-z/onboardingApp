@@ -21,6 +21,7 @@ import membersGuideStore from "redux/stores/membersGuide/membersGuideStore";
 import competencyStore from "redux/stores/competency/competencyStore";
 import eventStore from "redux/stores/education/eventStore";
 import dashboardStore from "redux/stores/dashboard/dashboardStore";
+import applicationProcessStore from "redux/stores/membership/applicationProcessStore"
 
 const store = configureStore({
   reducer: {
@@ -46,6 +47,7 @@ const store = configureStore({
     competency: competencyStore,
     dashboard: dashboardStore,
     educationEvent: eventStore,
+    applicationProcess: applicationProcessStore,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
