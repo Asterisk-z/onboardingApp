@@ -18,6 +18,7 @@ class CreateStatusesTable extends Migration
             $table->string('status');
             $table->text('comment')->nullable();
             $table->string('file')->nullable();
+            $table->string('office')->nullable();
             $table->unsignedBigInteger('statusable_id')->nullable();
             $table->string('statusable_type')->nullable();
             $table->timestamps();

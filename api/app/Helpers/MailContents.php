@@ -205,4 +205,16 @@ class MailContents
         return "<p>Please be informed that MBG has confirmed payment for 
         {$companyName}. Kindly log on to <a href=$url>MROIS Portal</a> to review the application.</p>";
     }
+
+    public static function megReportValidationSubject(): string
+    {
+        return "MEG Report Validation";
+    }
+
+    public static function megReportValidationMail($companyName): string
+    {
+        $url = config("app.front_end_url");
+        return "<p>Please be informed that MEG has uploaded the Application Report for 
+        {$companyName}. Kindly log on to <a href=$url>MROIS Portal</a> to approve the application report.</p>";
+    }
 }

@@ -13,6 +13,7 @@ use App\Http\Controllers\FeesAndDuesController;
 use App\Http\Controllers\FsdApplicationController;
 use App\Http\Controllers\InstitutionController;
 use App\Http\Controllers\MbgApplicationController;
+use App\Http\Controllers\MegApplicationController;
 use App\Http\Controllers\MemberCategoryController;
 use App\Http\Controllers\MemberGuidesController;
 use App\Http\Controllers\MembershipApplicationController;
@@ -224,6 +225,14 @@ Route::middleware('auth')->group(function () {
             Route::post('/payment-details', [MbgApplicationController::class, 'paymentReviewDetails']);
             Route::post('/fsd-review-summary', [MbgApplicationController::class, 'fsdReviewSummary']);
             Route::post('/review', [MbgApplicationController::class, 'mbgReview']);
+        });
+    });
+
+    //MEG ROUTES 
+    Route::middleware('authRole:' . Role::MEG)->group(function () {
+        Route::group(['prefix' => 'membership/application/meg'], function () {
+            Route::get('/institutions', [MegApplicationController::class, 'institutions']);
+            Route::post('/review', [MegApplicationController::class, 'megReview']);
         });
     });
 

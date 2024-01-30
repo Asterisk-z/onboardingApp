@@ -8,25 +8,25 @@ use App\Models\ProofOfPayment;
 
 trait ApplicationTraits
 {
-    public function subPaymentInformation($request)
+    public function subPaymentInformation($application_id)
     {
-        $application = Application::find($request->application_id);
-        $invoice = $application->invoice;
+        $application = Application::find($application_id);
+        $invoice = Invoice::find($application->invoice_id);
 
-        return successResponse("Here you go", $invoice ?? []);
+        return $invoice;
     }
 
-    public function subLatestEvidence($request)
+    public function subLatestEvidence($application_id)
     {
-        $application = Application::find($request->application_id);
+        $application = Application::find($application_id);
         $proof = ProofOfPayment::find($application->proof_of_payment);
 
-        return successResponse("Here you go", $proof ?? []);
+        return $proof;
     }
 
-    public function subPaymentReviewDetails($request)
+    public function subPaymentReviewDetails($application_id)
     {
-        $application = Application::find($request->application_id);
+        $application = Application::find($application_id);
         $invoice = Invoice::find($application->invoice_id);
         $invoiceContents = $invoice->contents; 
 
@@ -56,7 +56,7 @@ trait ApplicationTraits
             'total' => $total
         ];
 
-        return successResponse("Here you go", $data ?? []);
+        return $data;
 
     }
 }

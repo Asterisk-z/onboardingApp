@@ -4,17 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Helpers\MailContents;
 use App\Helpers\Utility;
+use App\Http\Resources\ApplicationResource;
 use App\Models\Application;
-use App\Models\ApplicationField;
-use App\Models\Invoice;
-use App\Models\ProofOfPayment;
 use App\Models\Role;
-use App\Models\Status;
 use App\Models\User;
 use App\Notifications\InfoNotification;
 use App\Traits\ApplicationTraits;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -38,7 +34,7 @@ class FsdApplicationController extends Controller
         $data = Utility::applicationDetails($data);
         $data = $data->get();
 
-        return successResponse("Here you go", $data ?? []);
+        return successResponse("Here you go", ApplicationResource::collection($data));
     }
 
     public function paymentInformation(Request $request)
@@ -47,7 +43,9 @@ class FsdApplicationController extends Controller
             'application_id' => 'required|exists:applications,id'
         ]);
 
-        return $this->subPaymentInformation($request);
+        $data = $this->subPaymentInformation($request->application_id);
+
+        return successResponse("Here you go", $data ?? []);
     }
 
     public function latestEvidence(Request $request)
@@ -56,7 +54,8 @@ class FsdApplicationController extends Controller
             'application_id' => 'required|exists:applications,id'
         ]);
 
-        return $this->subLatestEvidence($request);
+        $data = $this->subLatestEvidence($request->application_id);
+        return successResponse("Here you go", $data ?? []);
     }
 
     public function paymentReviewDetails(Request $request)
@@ -65,8 +64,8 @@ class FsdApplicationController extends Controller
             'application_id' => 'required|exists:applications,id'
         ]);
 
-        return $this->subPaymentReviewDetails($request);
-
+        $data = $this->subPaymentReviewDetails($request->application_id);
+        return successResponse("Here you go", $data ?? []);
     }
 
     public function fsdReview(Request $request)
@@ -83,6 +82,11 @@ class FsdApplicationController extends Controller
 
         $errorMsg = "Unable to complete your request at this point.";
         if($application->office_to_perform_next_action != Application::office['FSD']){
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+        }
+
+        if($application->currentStatus() != Application::statuses['MDFR'] &&
+        $application->currentStatus() != Application::statuses['PPU']){
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
@@ -120,12 +124,12 @@ class FsdApplicationController extends Controller
             $ccEmails = array_merge($Meg, $Mbg, $fsd);
 
             Utility::emailHelper($emailData, $toEmails, $ccEmails);
-            Utility::applicationStatusHelper($application, Application::statuses['APU'], Application::office['AP'], $request->comment);
+            Utility::applicationStatusHelper($application, Application::statuses['FDP'], Application::office['FSD'], Application::office['AP'], $request->comment);
             logAction($user->email, 'FSD Declined', "FSD Declined an Applicant payment details.", $request->ip());
         }
 
         if($request->status == 'approve'){
-            Utility::applicationStatusHelper($application, Application::statuses['ABR'], Application::office['MBG'], $request->comment);
+            Utility::applicationStatusHelper($application, Application::statuses['FAP'], Application::office['FSD'], Application::office['MBG'], $request->comment);
             $application->amount_received_by_fsd = $request->amount_received;
             $application->fsd_review_stage = 1;
             $application->save();

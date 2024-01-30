@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\MailContents;
 use App\Helpers\Utility;
+use App\Http\Resources\ApplicationResource;
 use App\Models\Application;
 use App\Models\Invoice;
 use App\Models\Role;
@@ -33,7 +34,7 @@ class MbgApplicationController extends Controller
         $data = Utility::applicationDetails($data);
         $data = $data->get();
 
-        return successResponse("Here you go", $data ?? []);
+        return successResponse("Here you go", ApplicationResource::collection($data));
     }
 
     public function paymentInformation(Request $request)
@@ -42,7 +43,9 @@ class MbgApplicationController extends Controller
             'application_id' => 'required|exists:applications,id'
         ]);
 
-        return $this->subPaymentInformation($request);
+        $data = $this->subPaymentInformation($request->application_id);
+
+        return successResponse("Here you go", $data ?? []);
     }
 
     public function latestEvidence(Request $request)
@@ -51,7 +54,8 @@ class MbgApplicationController extends Controller
             'application_id' => 'required|exists:applications,id'
         ]);
 
-        return $this->subLatestEvidence($request);
+        $data = $this->subLatestEvidence($request->application_id);
+        return successResponse("Here you go", $data ?? []);
     }
 
     public function paymentReviewDetails(Request $request)
@@ -60,8 +64,8 @@ class MbgApplicationController extends Controller
             'application_id' => 'required|exists:applications,id'
         ]);
 
-        return $this->subPaymentReviewDetails($request);
-
+        $data = $this->subPaymentReviewDetails($request->application_id);
+        return successResponse("Here you go", $data ?? []);
     }
 
     public function fsdReviewSummary(Request $request)
@@ -102,7 +106,7 @@ class MbgApplicationController extends Controller
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
-        if($application->currentStatus() != Application::statuses['ACS']){
+        if($application->currentStatus() != Application::statuses['AS']){
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
@@ -110,7 +114,10 @@ class MbgApplicationController extends Controller
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, "An approval mandate is required to grant concession.");
         }
 
+        $status = Application::statuses['CNG'];
+
         if($request->concession_amount){
+            $status = Application::statuses['CG'];
             $concession_file = $request->hasFile('concession_file') ? $request->file('concession_file')->storePublicly('concession', 'public') : null;
 
             $invoice = Invoice::find($application->invoice_id);
@@ -151,7 +158,7 @@ class MbgApplicationController extends Controller
             logAction($user->email, 'Concession added', "Concession was granted to {$apllication_details->company_name}.", $request->ip());
         }
 
-        Utility::applicationStatusHelper($application, Application::statuses['APU'], Application::office['AP']);
+        Utility::applicationStatusHelper($application, $status, Application::office['MBG'], Application::office['AP']);
         
         $application = $application->refresh();
         $application->concession_stage = true;
@@ -192,6 +199,11 @@ class MbgApplicationController extends Controller
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
+        if($application->currentStatus() != Application::statuses['MDMR'] &&
+        $application->currentStatus() != Application::statuses['FAP']){
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+        }
+
         $applicant = User::find($application->submitted_by);
         $institution = $application->institution;
         $membershipCategory = $institution->membershipCategories->first();
@@ -226,9 +238,10 @@ class MbgApplicationController extends Controller
                 $ccEmails = array_merge($Meg, $Mbg, $fsd);
 
                 Utility::emailHelper($emailData, $toEmails, $ccEmails);
-                Utility::applicationStatusHelper($application, Application::statuses['APU'], Application::office['AP'], $request->comment);
+                Utility::applicationStatusHelper($application, Application::statuses['MDP'], Application::office['MBG'], Application::office['AP'], $request->comment);
+                logAction($user->email, 'MBG Declined', "MBG Declined FSD review of applicant payment due to incomplete payment", $request->ip());
             }else{
-                Utility::applicationStatusHelper($application, Application::statuses['MRF'], Application::office['FSD'], $request->comment);
+                Utility::applicationStatusHelper($application, Application::statuses['MDFR'], Application::office['MBG'], Application::office['FSD'], $request->comment);
                 $application = $application->refresh();
 
                 $MBGs = Utility::getUsersEmailByCategory(Role::MBG);
@@ -241,7 +254,7 @@ class MbgApplicationController extends Controller
         }
 
         if($request->status == 'approve'){
-            Utility::applicationStatusHelper($application, Application::statuses['AER'], Application::office['MEG'], $request->comment);
+            Utility::applicationStatusHelper($application, Application::statuses['MAFR'], Application::office['MBG'], Application::office['MEG'], $request->comment);
             $application = $application->refresh();
             $application->mbg_review_stage = 1;
             $application->save();

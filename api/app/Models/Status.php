@@ -11,6 +11,13 @@ class Status extends Model
 
     protected $guarded = ['id'];
 
+    public function toArray(){
+        return [
+            "status" => $this->status,
+            "comment" => $this->comment
+        ];
+    }
+
     public function statusable()
     {
         return $this->morphTo();

@@ -15,19 +15,34 @@ class Application extends Model
 
     const statuses = [
         'PEN' => 'PENDING',
+        'FDP' => 'FSD DECLINE PAYMENT',
+        'FAP' => 'FSD APPROVE PAYMENT',
+        'AS'  => 'APPLICATION SUBMITTED',
         'ACS' => 'AWAITING CONCESSION STAGE',
+        'CG' => 'CONCESSION GRANTED',
+        'CNG' => 'CONCESSION NOT GRANTED',
         'AFR' => 'AWAITING FSD REVIEW',
         'APU' => 'AWAITING PROOF OF PAYMENT UPLOAD',
+        'PPU' => 'PROOF OF PAYMENT UPLOADED',
         'ABR' => 'AWAITING MBG REVIEW',
         'AER' => 'AWAITING MEG REVIEW',
         'RJ'  => 'REJECTED',
         'MRF' => 'MBG REJECTED FSD REVIEW',
+        'MDP' => 'MBG DECLINE PAYMENT',
+        'MDFR' => 'MBG DECLINE FSD REVIEW',
+        'MAFR' => 'MBG APPROVE FSD REVIEW',
+        'MDD' => "MEG DECLINE DOCUMENT",
+        'MDMR' => "MEG DECLINE MBG REVIEW",
+        'MAMR' => "MEG APPROVE MBG REVIEW",
+        'M2DMR' => "MEG2 DECLINE MEG REVIEW",
+        'M2AMR' => "MEG2 APPROVE MEG REVIEW",
     ];
 
     const office = [
         'AP' => 'APPLICANT',
         'MBG' => 'MBG',
         'MEG' => 'MEG',
+        'MEG2' => 'MEG2',
         'FSD' => 'FSD',
         'BL'  => 'BACKLOG'
     ];
