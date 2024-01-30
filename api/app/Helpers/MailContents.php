@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 class MailContents
 {
+    protected $url = config("app.front_end_url");
     public static function signupMailSubject(): string
     {
         return "Registration Successful";
@@ -11,7 +12,7 @@ class MailContents
 
     public static function signupMail($email, $date, $signature): string
     {
-        $url = config("app.front_end_url")."/set/password?signature=".$signature;
+        $url = self::$url."/set/password?signature=".$signature;
 
         return "<p>Your account has been successfully created.</p>
         <p>Your login details are as follows:</p>
@@ -126,5 +127,131 @@ class MailContents
     public static function rejectedCompetencyMessage($reason): string
     {
         return "<p>A new competency has been submitted.</p><p>Reason: {$reason}.</p>";
+    }
+
+    public static function invoiceSubject(): string
+    {
+        return "MROIS Membership Payment Notification";
+    }
+
+    public static function invoiceMail(): string
+    {
+        $url = config("app.front_end_url");
+
+        return "<p>Kindly log on to the <a href=$url>MROIS Portal</a> to view your invoice, 
+        make payment and upload evidence of payment to complete your registration.</p>";
+    }
+
+    public static function concessionSubject(): string
+    {
+        return "New Membership Application: Concession Confirmation";
+    }
+
+    public static function concessionMail($companyName): string
+    {
+        return "<p>A new institution, {$companyName}, has been granted a concession.</p>";
+    }
+
+    public static function paymentSubject(): string
+    {
+        return "Payment Notification";
+    }
+
+    public static function paymentMail($user): string
+    {
+        $url = self::$url;
+        return "<p>Kindly log on to the <a href=$url>MROIS Portal</a> to 
+        review the payment upload information for the Applicant, {$user->first_name} {$user->last_name}.</p>";
+    }
+
+    public static function approvedPaymentSubject(): string
+    {
+        return "Payment Confirmation by FSD";
+    }
+
+    public static function approvedPaymentMail($user): string
+    {
+        $url = self::$url;
+
+        return "<p>FSD has confirmed payment for {$user->first_name} {$user->last_name}. 
+        
+        <p>Kindly log on to the <a href=$url>MROIS Portal</a> to 
+        review and approve payment</p>
+        
+        </p>";
+    }
+
+    public static function mbgPaymentRejectedSubject(): string
+    {
+        return "Payment Rejected by MBG";
+    }
+
+    public static function mbgPaymentRejectedMail($companyName, $reason): string
+    {
+        return "<p>Please be informed that MBG rejected the FSD review for {$companyName}
+                <p>Reason: {$reason}</p>
+                
+                </p>";
+    }
+
+    public static function mbgPaymentApprovedSubject(): string
+    {
+        return "Payment Verified by MBG";
+    }
+
+    public static function mbgPaymentApprovedMail($companyName): string
+    {
+        $url = self::$url;
+        return "<p>Please be informed that MBG has confirmed payment for 
+        {$companyName}. Kindly log on to <a href=$url>MROIS Portal</a> to review the application.</p>";
+    }
+
+    public static function megReportValidationSubject(): string
+    {
+        return "MEG Report Validation";
+    }
+
+    public static function megReportValidationMail($companyName): string
+    {
+        $url = self::$url;
+        return "<p>Please be informed that MEG has uploaded the Application Report for 
+        {$companyName}. Kindly log on to <a href=$url>MROIS Portal</a> to approve the application report.</p>";
+    }
+
+    public static function memberAgreementSubject(): string
+    {
+        return "Membership Agreement";
+    }
+
+    public static function memberAgreementMail(): string
+    {
+        $url = self::$url;
+        return "<p>Kindly log on to <a href=$url>MROIS Portal</a> to view the latest update concerning Agreement Review.</p>";
+    }
+
+    public static function meG2ApprovalSubject(): string
+    {
+        return "Application Report Update";
+    }
+
+    public static function meG2ApprovalMail($companyName, $categoryName): string
+    {
+        $url = self::$url;
+        return "<p>Kindly be informed that {$companyName} Application Report for {$categoryName} Category has been approved.</p>
+        <p>Kindly log on to <a href=$url>MROIS Portal</a> to proceed with the Application.</p>";
+    }
+
+    public static function applicantUploadAgreementSubject(): string
+    {
+        return "MROIS Agreement Upload Notification";
+    }
+
+    public static function applicantUploadAgreementMail($name): string
+    {
+        $url = self::$url;
+
+        return "<p>{$name}, has updated its application with the executed Membership Agreement.</p>
+        
+        <p>Kindly log on to the <a href=$url>MROIS Portal</a> to review and execute the Agreement.</p>";
     }
 }

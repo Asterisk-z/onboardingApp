@@ -133,7 +133,8 @@ class PasswordController extends Controller
         $request->validate([
             "signature" => "required|string",
             "email" => "required|string|email",
-            'password' => 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/',
+            'password' => 'required|string|min:8',
+            //'password' => 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/',
         ]);
 
         $signature = Crypt::decrypt($request->signature);

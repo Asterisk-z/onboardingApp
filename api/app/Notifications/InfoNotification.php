@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Models\Role;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -56,23 +57,23 @@ class InfoNotification extends Notification implements ShouldQueue
         if($subject == 'New Membership Signup' || $subject == 'Payment Rejected by MBG' || $subject == 'MROIS Document Upload' || $subject == 'Profiling Request:' || $subject == 'Profiling Request' || str_contains($subject, "Update of") || str_contains($subject, "Email Group Update for")){
             $displayName = "Team";
         }else{
-            if($user->role_id == "1"){
+            if($user->role_id == Role::MSG){
                 $displayName = "MSG";
             }
             
-            if($user->role_id == "2"){
+            if($user->role_id == Role::MEG){
                 $displayName = "MEG";
             }
             
-            if($user->role_id == "3"){
+            if($user->role_id == Role::FSD){
                 $displayName = "FSD";
             }
             
-            if($user->role_id == "4"){
+            if($user->role_id == Role::MBG){
                 $displayName = "MBG";
             }
             
-            if($user->role_id == "7"){
+            if($user->role_id == Role::BLG){
                 $displayName = "BLG";
             }
         }

@@ -3,9 +3,15 @@
 namespace App\Listeners;
 
 use App\Events\ApplicationSubmissionEvent;
+use App\Helpers\InvoiceGenerator;
 use App\Helpers\Utility;
 use App\Models\ApplicationField;
+use App\Models\Invoice;
+use App\Models\InvoiceContent;
+use App\Models\MonthlyDiscount;
 use App\Models\Role;
+use App\Models\SystemSetting;
+use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -33,6 +39,9 @@ class ApplicationSubmissionListener implements ShouldQueue
         $application = $event->application;
         $institution = $event->institution;
         $membershipCategory = $event->membershipCategory;
+
+        //Generate Bill and create Invoice
+        $this->generateApplicationBill($user, $application, $membershipCategory, $institution);
 
         //SEND FIRST BATCH OF EMAIL
         $data = ApplicationField::where('name', 'companyEmailAddress')
@@ -104,5 +113,87 @@ class ApplicationSubmissionListener implements ShouldQueue
         ];
 
         Utility::emailHelper($emailC, $to, $ccs);
+    }
+
+    protected function generateApplicationBill($user, $application, $membershipCategory, $institution)
+    {
+        $year = Carbon::now()->format('Y');
+        $discounted_percent = $discounted_amount = $vat = $total = 0;
+
+        $application_fee = $membershipCategory->application_fee;
+        $membership_dues = $membershipCategory->membership_dues;
+
+        $application_month = Carbon::now()->format('m');
+        if($discounted = MonthlyDiscount::where('month', $application_month)->first()){
+            $discounted_percent = $discounted->discounted_percent ?? 0;
+            $discounted_amount = 0.01 * $discounted_percent * $membership_dues;
+        }
+
+        $total = $application_fee + $membership_dues - $discounted_amount;
+
+        if($tax = SystemSetting::where('name', 'tax')->first()){
+            $tax_val = $tax->value ?? 0;
+            $vat = (0.01 * $tax_val) * $total;
+        }
+
+        //Create Invoice
+        $invoice = Invoice::create([
+            'invoice_number' => InvoiceGenerator::generateInvoiceNumber(),
+            'reference' => InvoiceGenerator::generateInvoiceReference()
+        ]);
+
+        //Create Invoice content
+        if($application_fee){
+            InvoiceContent::create([
+                "invoice_id" => $invoice->id,
+                "name" => "{$membershipCategory->name} - Commercial (National) - Application Fee (Non-Refundable)",
+                "value" => $application_fee,
+                "is_discount" => 0,
+                "parent_id" => null,
+                "type" => "debit"
+            ]);
+        }
+
+        $due = null;
+
+        if($membership_dues){
+            $due = InvoiceContent::create([
+                "invoice_id" => $invoice->id,
+                "name" => "{$membershipCategory->name} - {$year} Membership Dues",
+                "value" => $membership_dues,
+                "is_discount" => 0,
+                "parent_id" => null,
+                "type" => "debit"
+            ]);
+        }
+        
+        if($discounted_amount && $due){
+            InvoiceContent::create([
+                "invoice_id" => $invoice->id,
+                "name" => "{$discounted_percent}% Discount on {$year} Membership Dues",
+                "value" => $discounted_amount,
+                "is_discount" => 1,
+                "parent_id" => $due->id,
+                "type" => "credit"
+            ]);
+        }
+
+        if($vat){
+            InvoiceContent::create([
+                "invoice_id" => $invoice->id,
+                "name" => "VAT",
+                "value" => $vat,
+                "is_discount" => 0,
+                "parent_id" => null,
+                "type" => "debit"
+            ]);
+        }
+
+        //assignment
+        $application->invoice_id = $invoice->id;
+        $application->save();
+        $application->invoice()->save($invoice);
+
+        return;
     }
 }

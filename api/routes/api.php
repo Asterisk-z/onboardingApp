@@ -10,7 +10,11 @@ use App\Http\Controllers\ComplaintTypeController;
 use App\Http\Controllers\DashboardControler;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\FeesAndDuesController;
+use App\Http\Controllers\FsdApplicationController;
 use App\Http\Controllers\InstitutionController;
+use App\Http\Controllers\MbgApplicationController;
+use App\Http\Controllers\Meg2ApplicationController;
+use App\Http\Controllers\MegApplicationController;
 use App\Http\Controllers\MemberCategoryController;
 use App\Http\Controllers\MemberGuidesController;
 use App\Http\Controllers\MembershipApplicationController;
@@ -206,8 +210,45 @@ Route::middleware('auth')->group(function () {
     //MSG ROUTES
 
     //FSD ROUTES
+    Route::middleware('authRole:' . Role::FSD)->group(function () {
+        Route::group(['prefix' => 'membership/application/fsd'], function () {
+            Route::get('/institutions', [FsdApplicationController::class, 'institutions']);
+            Route::post('/payment-information', [FsdApplicationController::class, 'paymentInformation']);
+            Route::post('/latest-payment-evidence', [FsdApplicationController::class, 'latestEvidence']);
+            Route::post('/payment-details', [FsdApplicationController::class, 'paymentReviewDetails']);
+            Route::post('/payment-review', [FsdApplicationController::class, 'fsdReview']);
+        });
+    });
 
-    //MBG ROUTES
+
+    //MBG ROUTES 
+    Route::middleware('authRole:' . Role::MBG)->group(function () {
+        Route::group(['prefix' => 'membership/application/mbg'], function () {
+            Route::get('/institutions', [MbgApplicationController::class, 'institutions']);
+            Route::post('/upload-concession', [MbgApplicationController::class, 'concession']);
+            Route::post('/payment-information', [MbgApplicationController::class, 'paymentInformation']);
+            Route::post('/latest-payment-evidence', [MbgApplicationController::class, 'latestEvidence']);
+            Route::post('/payment-details', [MbgApplicationController::class, 'paymentReviewDetails']);
+            Route::post('/fsd-review-summary', [MbgApplicationController::class, 'fsdReviewSummary']);
+            Route::post('/review', [MbgApplicationController::class, 'mbgReview']);
+        });
+    });
+
+    //MEG ROUTES 
+    Route::middleware('authRole:' . Role::MEG)->group(function () {
+        Route::group(['prefix' => 'membership/application/meg'], function () {
+            Route::get('/institutions', [MegApplicationController::class, 'institutions']);
+            Route::post('/review', [MegApplicationController::class, 'megReview']);
+        });
+    });
+
+    //MEG2 ROUTES 
+    Route::middleware('authRole:' . Role::MEG2)->group(function () {
+        Route::group(['prefix' => 'membership/application/meg2'], function () {
+            Route::get('/institutions', [Meg2ApplicationController::class, 'institutions']);
+            Route::post('/review', [Meg2ApplicationController::class, 'meg2Approval']);
+        });
+    });
 
     // AR ROUTES
     Route::middleware('authRole:' . Role::ARAUTHORISER . ',' . Role::ARINPUTTER)->group(function () {
@@ -239,11 +280,12 @@ Route::middleware('auth')->group(function () {
             Route::post('/submit-competency', [CompetencyController::class, 'submitCompetency']);
         });
         Route::group(['prefix' => 'membership/application'], function () {
+            Route::get('/', [MembershipApplicationController::class, 'application']);
             Route::get('/fields', [MembershipApplicationController::class, 'getField']);
             Route::get('/field/option', [MembershipApplicationController::class, 'getFieldOption']);
             Route::get('/extra', [MembershipApplicationController::class, 'getFieldExtra']);
             Route::post('/upload', [MembershipApplicationController::class, 'uploadField']);
-
+            Route::post('/upload-payment-proof', [MembershipApplicationController::class, 'uploadProofOfPayment']);
             Route::post('/complete', [MembershipApplicationController::class, 'complete']);
         });
     });

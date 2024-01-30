@@ -16,13 +16,14 @@ class UserSeeder extends Seeder
     public function run()
     {
         // User::truncate();
-        $roles = ['msg', 'meg', 'fsg', 'mbg'];
+        $roles = ['msg', 'meg', 'fsd', 'mbg', 'blg', 'meg2'];
 
         foreach ($roles as $index => $role) {
 
             $email = "test" . $role . "@fmdqgroup.com";
+            $phone = '0816667778' . $index;
 
-            if (User::where('email', $email)->orWhere('phone', '0816667778' . $index)->exists()) {
+            if (User::where('email', $email)->orWhere('phone', $phone)->exists()) {
                 continue;
             }
 
@@ -31,7 +32,7 @@ class UserSeeder extends Seeder
                 'last_name' => "Admin" . $role,
                 'nationality' => 'NG',
                 'email' => $email,
-                'phone' => '0816667778' . $index,
+                'phone' => $phone,
                 'password' => Hash::make('password'),
                 'approval_status' => 'approved',
                 'role_id' => $index + 1,

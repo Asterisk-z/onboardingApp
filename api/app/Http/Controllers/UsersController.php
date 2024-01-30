@@ -13,6 +13,7 @@ use App\Models\InstitutionMembership;
 use App\Models\MembershipCategory;
 use App\Models\PasswordSet;
 use App\Models\Role;
+use App\Models\Status;
 use App\Models\User;
 use App\Notifications\InfoNotification;
 use Illuminate\Http\JsonResponse;
@@ -100,11 +101,18 @@ class UsersController extends Controller
             "signature" => $signature,
         ]);
 
-        Application::create([
+        $status = new Status();
+        $status->status = Application::statuses['PEN'];
+        $status->save();
+
+        $application = Application::create([
             'institution_id' => $institution->id,
             'submitted_by' => $user->id,
-            'status' => 'pending',
+            'status' => $status->id,
+            'office_to_perform_next_action' => Application::office['AP']
         ]);
+        
+        $application->status()->save($status);
 
         $user->getRegID();
 
