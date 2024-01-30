@@ -14,6 +14,7 @@ use App\Models\ApplicationFieldUpload;
 use App\Models\Invoice;
 use App\Models\ProofOfPayment;
 use App\Models\Role;
+use App\Models\User;
 use App\Notifications\InfoNotification;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -255,9 +256,44 @@ class MembershipApplicationController extends Controller
     public function uploadMemberAgreement(Request $request)
     {
         $request->validate([
-            'member_agreement' => 'required|mimes:jpeg,png,jpg,pdf,doc,docx,csv,xls,xlsx|max:5048'
+            'application_id' => 'required|exists:applications,id',
+            'executed_member_agreement' => 'required|mimes:jpeg,png,jpg,pdf,doc,docx,csv,xls,xlsx|max:5048'
         ]);
 
+        $user = $request->user();
+        $application = Application::find($request->application_id);
+        $applicant = User::find($application->submitted_by);
+        $name = $applicant->first_name.' '.$applicant->last_name;
+        
+        $errorMsg = "Unable to complete your request at this point.";
+
+        if($application->office_to_perform_next_action != Application::office['AP']){
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+        }
+
+        if($application->currentStatus() != Application::statuses['M2AMR']){
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+        }
+
+        if($application->submitted_by != $user->id){
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+        }
+
+        if($application->is_applicant_executed_membership_agreement){
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+        }
+
+        $application->applicant_executed_membership_agreement = $request->hasFile('executed_member_agreement') ? $request->file('executed_member_agreement')->storePublicly('applicant_executed_member_agreement', 'public') : null;
+        $application->is_applicant_executed_membership_agreement = 1;
+        $application->save();
+
+        logAction($user->email, 'Membership agreement uploaded by applicant', "Executed membership agreement uploaded by applicant.", $request->ip());
+        Utility::applicationStatusHelper($application, Application::statuses['AEM'], Application::office['AP'], Application::office['MEG']);
+
+        $MEGs = Utility::getUsersByCategory(Role::MEG);
+        Notification::send($MEGs, new InfoNotification(MailContents::applicantUploadAgreementMail($name), MailContents::applicantUploadAgreementSubject()));
+
+        return successResponse("Agreement uploaded successfully");
         
     }
 }

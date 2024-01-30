@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\MailContents;
 use App\Helpers\Utility;
 use App\Http\Resources\ApplicationResource;
+use App\Jobs\FinalApplicationProcessingJob;
 use App\Models\Application;
 use App\Models\Role;
 use App\Models\User;
@@ -113,5 +114,38 @@ class MegApplicationController extends Controller
 
             return successResponse("Application Report has been submitted");
         }        
+    }
+
+    public function uploadMemberAgreement(Request $request)
+    {
+        $request->validate([
+            'application_id' => 'required|exists:applications,id',
+            'executed_member_agreement' => 'required|mimes:jpeg,png,jpg,pdf,doc,docx,csv,xls,xlsx|max:5048'
+        ]);
+
+        $user = $request->user();
+        $application = Application::find($request->application_id);
+        
+        $errorMsg = "Unable to complete your request at this point.";
+
+        if($application->office_to_perform_next_action != Application::office['MEG']){
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+        }
+
+        if($application->currentStatus() != Application::statuses['AEM']){
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+        }
+
+        $application->meg_executed_membership_agreement = $request->hasFile('executed_member_agreement') ? $request->file('executed_member_agreement')->storePublicly('applicant_executed_member_agreement', 'public') : null;
+        $application->is_meg_executed_membership_agreement = 1;
+        $application->save();
+
+        logAction($user->email, 'Membership agreement uploaded by MEG', "Executed membership agreement uploaded by MEG.", $request->ip());
+        Utility::applicationStatusHelper($application, Application::statuses['MEM'], Application::office['MEG'], Application::office['AP']);
+
+        FinalApplicationProcessingJob::dispatch($request->application_id);
+
+        return successResponse("Agreement uploaded successfully");
+        
     }
 }

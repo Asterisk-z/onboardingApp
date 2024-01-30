@@ -28,11 +28,13 @@ class AddFeeApplication extends Migration
             $table->string('office_to_perform_next_action')->after('meg2_review_stage')->nullable();
             $table->string('membership_agreement')->after('office_to_perform_next_action')->nullable();
             $table->string('applicant_executed_membership_agreement')->after('membership_agreement')->nullable();
-            $table->string('meg_executed_membership_agreement')->after('applicant_executed_membership_agreement')->nullable();
-            $table->string('e_success_letter')->after('mg_executed_membership_agreement')->nullable();
+            $table->boolean('is_applicant_executed_membership_agreement')->after('applicant_executed_membership_agreement')->default(false);
+            $table->string('meg_executed_membership_agreement')->after('is_applicant_executed_membership_agreement')->nullable();
+            $table->boolean('is_meg_executed_membership_agreement')->after('meg_executed_membership_agreement')->default(false);
+            $table->string('e_success_letter')->after('is_meg_executed_membership_agreement')->nullable();
             $table->boolean('e_success_letter_send')->after('e_success_letter')->default(false);
-
-            $table->boolean('all_ar_uploaded')->after('e_success_letter_send')->default(false);
+            $table->boolean('member_agreement_send')->after('e_success_letter_send')->default(false);
+            $table->boolean('all_ar_uploaded')->after('member_agreement_send')->default(false);
         });
     }
 

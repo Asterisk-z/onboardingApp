@@ -4,6 +4,7 @@ namespace App\Helpers;
 
 class MailContents
 {
+    protected $url = config("app.front_end_url");
     public static function signupMailSubject(): string
     {
         return "Registration Successful";
@@ -11,7 +12,7 @@ class MailContents
 
     public static function signupMail($email, $date, $signature): string
     {
-        $url = config("app.front_end_url")."/set/password?signature=".$signature;
+        $url = self::$url."/set/password?signature=".$signature;
 
         return "<p>Your account has been successfully created.</p>
         <p>Your login details are as follows:</p>
@@ -158,8 +159,7 @@ class MailContents
 
     public static function paymentMail($user): string
     {
-        $url = config("app.front_end_url");
-
+        $url = self::$url;
         return "<p>Kindly log on to the <a href=$url>MROIS Portal</a> to 
         review the payment upload information for the Applicant, {$user->first_name} {$user->last_name}.</p>";
     }
@@ -171,7 +171,7 @@ class MailContents
 
     public static function approvedPaymentMail($user): string
     {
-        $url = config("app.front_end_url");
+        $url = self::$url;
 
         return "<p>FSD has confirmed payment for {$user->first_name} {$user->last_name}. 
         
@@ -201,7 +201,7 @@ class MailContents
 
     public static function mbgPaymentApprovedMail($companyName): string
     {
-        $url = config("app.front_end_url");
+        $url = self::$url;
         return "<p>Please be informed that MBG has confirmed payment for 
         {$companyName}. Kindly log on to <a href=$url>MROIS Portal</a> to review the application.</p>";
     }
@@ -213,7 +213,7 @@ class MailContents
 
     public static function megReportValidationMail($companyName): string
     {
-        $url = config("app.front_end_url");
+        $url = self::$url;
         return "<p>Please be informed that MEG has uploaded the Application Report for 
         {$companyName}. Kindly log on to <a href=$url>MROIS Portal</a> to approve the application report.</p>";
     }
@@ -225,7 +225,7 @@ class MailContents
 
     public static function memberAgreementMail(): string
     {
-        $url = config("app.front_end_url");
+        $url = self::$url;
         return "<p>Kindly log on to <a href=$url>MROIS Portal</a> to view the latest update concerning Agreement Review.</p>";
     }
 
@@ -236,8 +236,22 @@ class MailContents
 
     public static function meG2ApprovalMail($companyName, $categoryName): string
     {
-        $url = config("app.front_end_url");
+        $url = self::$url;
         return "<p>Kindly be informed that {$companyName} Application Report for {$categoryName} Category has been approved.</p>
         <p>Kindly log on to <a href=$url>MROIS Portal</a> to proceed with the Application.</p>";
+    }
+
+    public static function applicantUploadAgreementSubject(): string
+    {
+        return "MROIS Agreement Upload Notification";
+    }
+
+    public static function applicantUploadAgreementMail($name): string
+    {
+        $url = self::$url;
+
+        return "<p>{$name}, has updated its application with the executed Membership Agreement.</p>
+        
+        <p>Kindly log on to the <a href=$url>MROIS Portal</a> to review and execute the Agreement.</p>";
     }
 }

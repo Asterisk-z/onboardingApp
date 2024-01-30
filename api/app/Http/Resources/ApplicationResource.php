@@ -30,7 +30,9 @@ class ApplicationResource extends JsonResource
                 "fsd_review_stage" => $this->fsd_review_stage,
                 "category_id" => $this->category_id,
                 "category_name" => $this->category_name,
-                "completed_at" => $this->completed_at
+                "completed_at" => $this->completed_at,
+                "is_applicant_executed_membership_agreement" => $this->is_applicant_executed_membership_agreement,
+                "all_ar_uploaded" => $this->all_ar_uploaded,
             ],
 
             "basic_details" => [
