@@ -66,24 +66,44 @@ class Meg2ApplicationController extends Controller
         $data = $data->first();
 
         $companyName = $data->company_name; 
-
-        Utility::applicationStatusHelper($application, Application::statuses['MAFR'], Application::office['MBG'], Application::office['MEG'], $request->comment);
+        $companyEmail = $data->company_email; 
+        $contactEmail = $data->primary_contact_email;
         
         $application = $application->refresh();
-        $application->mbg_review_stage = 1;
+        $application->meg2_review_stage = 1;
         $application->save();
         
-        $MEGs = Utility::getUsersEmailByCategory(Role::MEG);
-        $MEG2s = Utility::getUsersByCategory(Role::MEG2);
-        $CCs = $MEGs;
+        $MEGs = Utility::getUsersByCategory(Role::MEG);
+        $MEG2s = Utility::getUsersEmailByCategory(Role::MEG2);
+        $CCs = $MEG2s;
 
-        Notification::send($MEG2s, new InfoNotification(MailContents::megReportValidationMail($data->company_name), MailContents::megReportValidationSubject(), $CCs));
-        
-        logAction($user->email, 'MEG Approved', "MBG Approved applicant Document", $request->ip());
-        
-        $application->application_report = $application_report;
-        $application->save();
+        //NOTIFY MEG OF APPROVAL
+        Notification::send($MEGs, new InfoNotification(MailContents::meG2ApprovalMail($companyName, $membershipCategory->name), MailContents::meG2ApprovalSubject(), $CCs));
 
-        return successResponse("Application Report has been submitted");        
+        //NOTIFY APPLICANT AND SEND MEMBERSHIP AGREEMENT
+        $emailData = [
+            'name' => $name,
+            'subject' => MailContents::memberAgreementSubject(),
+            'content' => MailContents::memberAgreementMail()
+        ];
+
+        //TODO::GENERATE MEMBERSHIP AGREEMENT
+        // $application->membership_agreement = '';
+        // $application->save();
+        
+        // Recipient email addresses
+        $toEmails = [$applicant->email, $companyEmail, $contactEmail];
+        
+        // CC email addresses
+        $Meg = Utility::getUsersEmailByCategory(Role::MEG);
+        $ccEmails = $Meg;
+
+        Utility::emailHelper($emailData, $toEmails, $ccEmails);
+
+        Utility::applicationStatusHelper($application, Application::statuses['M2AMR'], Application::office['MEG2'], Application::office['AP']);
+        
+        logAction($user->email, 'MEG2 Approval', "MEG2 Approved MEG Review", $request->ip());
+
+        return successResponse("Application Review has been submitted");        
     }
 }

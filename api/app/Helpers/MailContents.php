@@ -217,4 +217,27 @@ class MailContents
         return "<p>Please be informed that MEG has uploaded the Application Report for 
         {$companyName}. Kindly log on to <a href=$url>MROIS Portal</a> to approve the application report.</p>";
     }
+
+    public static function memberAgreementSubject(): string
+    {
+        return "Membership Agreement";
+    }
+
+    public static function memberAgreementMail(): string
+    {
+        $url = config("app.front_end_url");
+        return "<p>Kindly log on to <a href=$url>MROIS Portal</a> to view the latest update concerning Agreement Review.</p>";
+    }
+
+    public static function meG2ApprovalSubject(): string
+    {
+        return "Application Report Update";
+    }
+
+    public static function meG2ApprovalMail($companyName, $categoryName): string
+    {
+        $url = config("app.front_end_url");
+        return "<p>Kindly be informed that {$companyName} Application Report for {$categoryName} Category has been approved.</p>
+        <p>Kindly log on to <a href=$url>MROIS Portal</a> to proceed with the Application.</p>";
+    }
 }

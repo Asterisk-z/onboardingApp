@@ -106,7 +106,7 @@ class MegApplicationController extends Controller
 
             Notification::send($MEG2s, new InfoNotification(MailContents::megReportValidationMail($data->company_name), MailContents::megReportValidationSubject(), $CCs));
             
-            logAction($user->email, 'MEG Approved', "MBG Approved applicant Document", $request->ip());
+            logAction($user->email, 'MEG Approved', "MEG Approved applicant Document", $request->ip());
             
             $application->application_report = $request->hasFile('application_report') ? $request->file('application_report')->storePublicly('application_report', 'public') : null;
             $application->save();

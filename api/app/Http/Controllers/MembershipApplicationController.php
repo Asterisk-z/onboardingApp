@@ -251,4 +251,13 @@ class MembershipApplicationController extends Controller
         return successResponse("Your payment upload has been recieved and it is currently under review");
 
     }
+
+    public function uploadMemberAgreement(Request $request)
+    {
+        $request->validate([
+            'member_agreement' => 'required|mimes:jpeg,png,jpg,pdf,doc,docx,csv,xls,xlsx|max:5048'
+        ]);
+
+        
+    }
 }
