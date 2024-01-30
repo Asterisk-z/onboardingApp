@@ -10,13 +10,8 @@ class ApplicationField extends Model
     use HasFactory;
     protected $guarded = [];
 
-    protected $with = ['field_value', 'child_fields'];
-    protected $appends = ['field_options'];
-
-    public function field_value()
-    {
-        return $this->hasOne(ApplicationFieldUpload::class, 'application_field_id', 'id');
-    }
+    protected $with = ['child_fields'];
+    protected $appends = ['field_options', 'field_value'];
 
     public function child_fields()
     {
@@ -26,5 +21,10 @@ class ApplicationField extends Model
     public function getFieldOptionsAttribute()
     {
         return ApplicationFieldOption::where('field_name', $this->name)->where('category', $this->category)->get();
+    }
+
+    public function getFieldValueAttribute()
+    {
+        return ApplicationFieldUpload::where('application_id', auth()->user()->institution->application->id)->where('application_field_id', $this->id)->first();
     }
 }

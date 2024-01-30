@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Head from "layout/head/Head";
 import Content from "layout/content/Content";
-import { BlockTitle, Icon } from "components/Component";
+import { BlockContent, BlockTitle, Icon } from "components/Component";
 import { Steps, Step } from "react-step-builder";
 import { Row, Col, Button, Input } from "reactstrap";
 import { HeaderLogo } from "pages/components/HeaderLogo";
@@ -986,11 +986,20 @@ const ApplicationDeclaration = (props) => {
 
 const ApplicationCompleted = (props) => {
 
+  const navigate = useNavigate();
   return (
-    <div className="d-flex justify-content-center align-items-center p-3">
-      <BlockTitle tag="h6" className="text-center">
-        Thank you for completing membership application form
-      </BlockTitle>
+    <div className="flex flex-col justify-content-center align-items-center p-3">
+      <div>
+          <BlockTitle tag="h6" className="text-center">
+          Thank you for completing membership application form
+        </BlockTitle>
+        <BlockContent className="text-center">
+              <Button color="primary"  onClick={(ev) => navigate(`${process.env.PUBLIC_URL}/application_preview`) }>
+                Preview Application
+              </Button>
+        </BlockContent>
+      </div>
+
     </div>
   );
 };

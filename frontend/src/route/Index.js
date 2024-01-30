@@ -17,6 +17,7 @@ import ForgotPassword from "main/auth/ForgotPassword";
 import PasswordUpdate from "main/auth/PasswordUpdate";
 import PasswordReset from "main/auth/PasswordChange";
 import PasswordSet from "main/auth/PasswordSet";
+import ApplicationPreview from "main/pages/application/Preview";
 import Application from "main/pages/application/Index";
 import Form from "main/forms/Form";
 import AdminBroadcast from "main/pages/Admin/AdminBroadcast" 
@@ -64,6 +65,7 @@ import AdminMembersGuide from "main/pages/Admin/AdminMembersGuide"
 import AdminAddEvents from "main/pages/Admin/AdminAddEvents"
 import AdminEvents from "main/pages/Admin/AdminEvents"
 import AdminEventRegistrations from "main/pages/Admin/AdminEventRegistrations"
+import AdminApplications from "main/pages/Admin/AdminApplications"
 import AdminEditEvents from "main/pages/Admin/AdminEditEvents"
 import Success from "pages/auth/Success";
 
@@ -164,9 +166,11 @@ const Router = () => {
           <Route path="update-competency" element={<UpdateCompetency />}></Route>
           <Route path="education-and-learning" element={<Education />}></Route>
           <Route path="registered-events" element={<RegisteredEvent />}></Route>
-        <Route path="approve-competency" element={<ApproveCompetency />}></Route>
-        
-            <Route path="application" element={<Application />}></Route>
+          <Route path="approve-competency" element={<ApproveCompetency />}></Route>
+          
+          <Route path="application" element={<Application />}></Route>
+          <Route path="application_preview" element={<ApplicationPreview />}></Route>
+          
         </Route>
 
 
@@ -198,6 +202,7 @@ const Router = () => {
           <Route path="admin-edit-event/:event_id" element={<AdminEditEvents/>}></Route>
           <Route path="admin-events" element={<AdminEvents/>}></Route>
           <Route path="admin-event-registration/:event_id" element={<AdminEventRegistrations/>}></Route>
+          <Route path="admin-applications" element={<AdminApplications/>}></Route>
           <Route path="wizard" element={<WizardTest />}></Route>
 
         </Route>

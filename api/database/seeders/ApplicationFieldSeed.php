@@ -403,7 +403,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'companyDisciplinary',
                 "description" => 'The Company',
                 "type" => 'select',
-                "required" => 1,
+                "required" => 0,
                 "page" => '3',
             ],
         ];
@@ -466,7 +466,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'mdceoDisciplinary',
                 "description" => 'The MD/CEO',
                 "type" => 'select',
-                "required" => 1,
+                "required" => 0,
                 "page" => '3',
             ],
         ];
@@ -566,7 +566,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'treasureDisciplinary',
                 "description" => 'The Treasure',
                 "type" => 'select',
-                "required" => 1,
+                "required" => 0,
                 "page" => '3',
             ],
         ];
@@ -639,7 +639,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'chiefComplianceOfficerDisciplinary',
                 "description" => 'The Chief Compliance Officer',
                 "type" => 'select',
-                "required" => 1,
+                "required" => 0,
                 "page" => '3',
             ],
         ];
@@ -1237,7 +1237,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'companyDisciplinary',
                 "description" => 'The Company',
                 "type" => 'select',
-                "required" => 1,
+                "required" => 0,
                 "page" => '3',
             ],
         ];
@@ -1300,7 +1300,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'mdceoDisciplinary',
                 "description" => 'The MD/CEO',
                 "type" => 'select',
-                "required" => 1,
+                "required" => 0,
                 "page" => '3',
             ],
         ];
@@ -1400,7 +1400,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'dealerDisciplinary',
                 "description" => 'The Dealer',
                 "type" => 'select',
-                "required" => 1,
+                "required" => 0,
                 "page" => '3',
             ],
         ];
@@ -1473,7 +1473,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'chiefComplianceOfficerDisciplinary',
                 "description" => 'The Chief Compliance Officer',
                 "type" => 'select',
-                "required" => 1,
+                "required" => 0,
                 "page" => '3',
             ],
         ];
@@ -2077,7 +2077,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'companyDisciplinary',
                 "description" => 'The Company',
                 "type" => 'select',
-                "required" => 1,
+                "required" => 0,
                 "page" => '3',
             ],
         ];
@@ -2186,7 +2186,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'mdceoDisciplinary',
                 "description" => 'The MD/CEO',
                 "type" => 'select',
-                "required" => 1,
+                "required" => 0,
                 "page" => '3',
             ],
         ];
@@ -2286,7 +2286,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'treasureDisciplinary',
                 "description" => 'The Treasure',
                 "type" => 'select',
-                "required" => 1,
+                "required" => 0,
                 "page" => '3',
             ],
         ];
@@ -2359,7 +2359,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'chiefComplianceOfficerDisciplinary',
                 "description" => 'The Chief Compliance Officer',
                 "type" => 'select',
-                "required" => 1,
+                "required" => 0,
                 "page" => '3',
             ],
         ];
@@ -2981,7 +2981,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'companyDisciplinary',
                 "description" => 'The Company',
                 "type" => 'select',
-                "required" => 1,
+                "required" => 0,
                 "page" => '3',
             ],
         ];
@@ -3090,7 +3090,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'mdceoDisciplinary',
                 "description" => 'The MD/CEO',
                 "type" => 'select',
-                "required" => 1,
+                "required" => 0,
                 "page" => '3',
             ],
         ];
@@ -3190,7 +3190,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'treasureDisciplinary',
                 "description" => 'The Treasure',
                 "type" => 'select',
-                "required" => 1,
+                "required" => 0,
                 "page" => '3',
             ],
         ];
@@ -3263,7 +3263,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'chiefComplianceOfficerDisciplinary',
                 "description" => 'The Chief Compliance Officer',
                 "type" => 'select',
-                "required" => 1,
+                "required" => 0,
                 "page" => '3',
             ],
         ];
@@ -3959,7 +3959,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'companyDisciplinary',
                 "description" => 'The Company',
                 "type" => 'select',
-                "required" => 1,
+                "required" => 0,
                 "page" => '3',
             ],
         ];
@@ -4068,7 +4068,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'mdceoDisciplinary',
                 "description" => 'The MD/CEO',
                 "type" => 'select',
-                "required" => 1,
+                "required" => 0,
                 "page" => '3',
             ],
         ];
@@ -4168,7 +4168,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'treasureDisciplinary',
                 "description" => 'The Treasure',
                 "type" => 'select',
-                "required" => 1,
+                "required" => 0,
                 "page" => '3',
             ],
         ];
@@ -4241,7 +4241,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'chiefComplianceOfficerDisciplinary',
                 "description" => 'The Chief Compliance Officer',
                 "type" => 'select',
-                "required" => 1,
+                "required" => 0,
                 "page" => '3',
             ],
         ];
@@ -4778,7 +4778,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'companyDisciplinary',
                 "description" => 'The Company',
                 "type" => 'select',
-                "required" => 1,
+                "required" => 0,
                 "page" => '3',
             ],
         ];
@@ -4841,7 +4841,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'mdceoDisciplinary',
                 "description" => 'The MD/CEO',
                 "type" => 'select',
-                "required" => 1,
+                "required" => 0,
                 "page" => '3',
             ],
         ];
@@ -4941,7 +4941,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'treasureDisciplinary',
                 "description" => 'The TREASURER/CHIEF FINANCIAL OFFICER',
                 "type" => 'select',
-                "required" => 1,
+                "required" => 0,
                 "page" => '3',
             ],
         ];
@@ -5014,7 +5014,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'chiefComplianceOfficerDisciplinary',
                 "description" => 'The Chief Compliance Officer',
                 "type" => 'select',
-                "required" => 1,
+                "required" => 0,
                 "page" => '3',
             ],
         ];

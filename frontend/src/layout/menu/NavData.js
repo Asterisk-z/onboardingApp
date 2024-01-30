@@ -13,6 +13,11 @@ const navData = [{
     text: "Dashboard",
     link: "/admin-dashboard",
   },
+  {
+    icon: "dashboard-fill",
+    text: "Applications",
+    link: "/admin-applications",
+    },
   // {
   //   icon: "dashboard-fill",
   //   text: "Complaints",

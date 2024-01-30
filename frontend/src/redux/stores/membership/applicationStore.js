@@ -66,6 +66,29 @@ export const uploadField = createAsyncThunk(
 );
 
 
+export const completeApplication = createAsyncThunk(
+  "application/completeApplication",
+  async () => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `membership/application/complete`,
+        // data: values,
+      });
+      return successHandler(data, data.message);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
+
+
 const applicationStore = createSlice({
   name: "application",
   initialState,
@@ -171,6 +194,22 @@ const applicationStore = createSlice({
     });
 
     builder.addCase(uploadField.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+  
+
+    // ====== builders for completeApplication ======
+
+    builder.addCase(completeApplication.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(completeApplication.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(completeApplication.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });

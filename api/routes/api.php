@@ -77,6 +77,13 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('authRole:' . Role::MSG . ',' . Role::MEG . ',' . Role::FSD . ',' . Role::MBG . ',' . Role::BLG)->group(function () {
         Route::get('admin/dashboard', [DashboardControler::class, 'adminDashboard']);
+
+        // List AR For Admins
+        Route::group(['prefix' => 'meg/ar'], function () {
+            Route::get('/list', [ARController::class, 'listMEG']);
+            Route::get('/transfer', [ARController::class, 'listTransferMEG']);
+        });
+
     });
 
     Route::middleware('authRole:' . Role::ARAUTHORISER . ',' . Role::ARINPUTTER)->group(function () {
@@ -97,8 +104,6 @@ Route::middleware('auth')->group(function () {
         });
         //
         Route::group(['prefix' => 'meg/ar'],  function () {
-            Route::get('/list', [ARController::class, 'listMEG']);
-            Route::get('/transfer', [ARController::class, 'listTransferMEG']);
 
             Route::post('/process-add/{ARUser}', [ARController::class, 'processAddByMEG']);
             Route::post('/process-transfer/{record}', [ARController::class, 'processTransferByMEG']);

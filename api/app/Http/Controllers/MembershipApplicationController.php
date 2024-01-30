@@ -86,6 +86,10 @@ class MembershipApplicationController extends Controller
 
         $data = ['uploaded_field' => $request->field_value];
 
+        if (auth()->user()->institution->application->status == Application::AWAITINGAPPROVAL) {
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, "Your application has already been submitted and it is currently under review.");
+        }
+
         if ($request->field_type == 'file') {
 
             if ($request->hasFile('field_value')) {
@@ -113,15 +117,13 @@ class MembershipApplicationController extends Controller
      */
     public function complete(Request $request)
     {
-        $request->validate([
-            'application_id' => 'required|exists:applications,id',
-        ]);
-
         //Get authenticated user
         $user = auth()->user();
 
+        $application_id = $user->institution->application->id;
+
         //Get the application model
-        $application = Application::find($request->application_id);
+        $application = Application::find($application_id);
 
         if ($application->status == Application::AWAITINGAPPROVAL) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, "Your application has already been submitted and it is currently under review.");
