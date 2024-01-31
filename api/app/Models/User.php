@@ -147,10 +147,23 @@ class User extends Authenticatable implements JWTSubject
 
     private function createRegID(): string
     {
-        $this->reg_id = 'FMDQ/' . str_pad($this->id, 4, "0", STR_PAD_LEFT) . date("Ymd", strtotime($this->created_at));
+        $this->reg_id = 'FMDQ/MB' . str_pad($this->id, 4, "0", STR_PAD_LEFT) . date("Ymd", strtotime($this->created_at));
 
         $this->update(['reg_id' => $this->reg_id]);
 
         return $this->reg_id;
+
+        //FMDQ/MB-SERIALNO+FULL JOIN DATE
+    }
+
+    private function createRegIDAr(): string
+    {
+        $this->reg_id = 'FMDQ/AR' . str_pad($this->id, 4, "0", STR_PAD_LEFT) . date("Ymd", strtotime($this->created_at));
+
+        $this->update(['reg_id' => $this->reg_id]);
+
+        return $this->reg_id;
+
+        //FMDQ/MB-SERIALNO+FULL JOIN DATE
     }
 }

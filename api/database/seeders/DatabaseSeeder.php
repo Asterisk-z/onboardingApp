@@ -27,5 +27,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ApplicationFieldOptionSeeder::class);
         $this->call(QuarterDiscountSeeder::class);
         $this->call(ReasonSeeder::class);
+        $this->call(AccountDetailsSeeder::class);
     }
 }

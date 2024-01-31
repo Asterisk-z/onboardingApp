@@ -3,6 +3,7 @@ namespace App\Helpers;
 
 use App\Mail\NotificationMail;
 use App\Models\Application;
+use App\Models\Role;
 use App\Models\Status;
 use App\Models\User;
 use Carbon\Carbon;
@@ -107,17 +108,42 @@ class Utility
         ];
     }
 
-    public static function emailHelper($emailData, $recipients, $ccs = null, $attachment = null){
+    public static function emailHelper($emailData, $recipients, $ccs = [], $attachment = []){
         // Send the email
         $mail = Mail::to($recipients);
 
         if($ccs){
             $mail = $mail->cc($ccs);
         }
-
-        $mail->send(new NotificationMail($emailData));
+        
+        $mail->send(new NotificationMail($emailData, $attachment));
 
         return;
+    }
+
+    public static function notifyApplicantAndContact($application_id, $applicant, $emailData, $ccs = [], $attachment = []){
+        $data = Application::where('applications.id', $application_id);
+        $data = Utility::applicationDetails($data);
+        $data = $data->first();
+        $companyEmail = $data->company_email; 
+        $contactEmail = $data->primary_contact_email;
+        
+        // Recipient email addresses
+        $toEmails = [$applicant->email, $companyEmail, $contactEmail];
+        return self::emailHelper($emailData, $toEmails, $ccs, $attachment);
+    }
+
+    public static function notifyApplicantAndContactArUpdate($application){
+        $institution = $application->institution;
+        $membershipCategory = $institution->membershipCategories->first();
+        $applicant = User::find($application->submitted_by);
+        $emailData = [
+            'name' => "{$applicant->first_name} {$applicant->last_name}",
+            'subject' => MailContents::ApplicantArUpdateSubject(),
+            'content' => MailContents::ApplicantArUpdateMail($membershipCategory->name)
+        ];
+        $Meg = self::getUsersEmailByCategory(Role::MEG);
+        return self::notifyApplicantAndContact($application->id, $applicant, $emailData, $Meg);
     }
 
     public static function status($id){
@@ -144,8 +170,10 @@ class Utility
             'applications.completed_at AS completed_at',
             'applications.is_applicant_executed_membership_agreement AS is_applicant_executed_membership_agreement',
             'applications.all_ar_uploaded AS all_ar_uploaded',
+            'applications.e_success_letter AS e_success_letter',
+            'applications.meg_executed_membership_agreement AS meg_executed_membership_agreement',
             'applications.e_success_letter_send AS e_success_letter_send',
-            'applications.member_agreement_send AS e_success_letter_send',
+            'applications.member_agreement_send AS member_agreement_send',
             'applications.all_ar_uploaded AS all_ar_uploaded',
             'membership_categories.id AS category_id', 
             'membership_categories.name AS category_name',
@@ -263,7 +291,8 @@ class Utility
         )
         ->groupBy('institutions.id', 'applications.id', 'membership_categories.id', 'membership_categories.name', 'applications.concession_stage', 'applications.amount_received_by_fsd', 
         'applications.fsd_review_stage', 'applications.mbg_review_stage', 'applications.meg_review_stage', 'applications.meg2_review_stage', 'applications.completed_at', 
-        'applications.is_applicant_executed_membership_agreement', 'applications.all_ar_uploaded', 'applications.member_agreement_send', 'applications.e_success_letter_send');
+        'applications.is_applicant_executed_membership_agreement', 'applications.all_ar_uploaded', 'applications.member_agreement_send', 'applications.e_success_letter_send',
+        'applications.e_success_letter', 'applications.meg_executed_membership_agreement',);
     }
 
     public static function applicationStatusHelper(Application $application, $newstatus, $currentOffice, $nextOffice, $comment = null, $file = null){

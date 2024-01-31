@@ -18,6 +18,7 @@ class Application extends Model
         'FDP' => 'FSD DECLINE PAYMENT',
         'FAP' => 'FSD APPROVE PAYMENT',
         'AS'  => 'APPLICATION SUBMITTED',
+        'MPC'  => 'MEMBERSHIP APPLICATION COMPLETED',
         'ACS' => 'AWAITING CONCESSION STAGE',
         'CG' => 'CONCESSION GRANTED',
         'CNG' => 'CONCESSION NOT GRANTED',

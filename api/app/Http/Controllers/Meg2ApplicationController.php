@@ -66,12 +66,29 @@ class Meg2ApplicationController extends Controller
         $data = $data->first();
 
         $companyName = $data->company_name; 
-        $companyEmail = $data->company_email; 
-        $contactEmail = $data->primary_contact_email;
         
         $application = $application->refresh();
         $application->meg2_review_stage = 1;
         $application->save();
+        
+        // CC email addresses
+        $Meg = Utility::getUsersEmailByCategory(Role::MEG);
+
+        //NOTIFY APPLICANT AND SEND MEMBERSHIP AGREEMENT
+        $emailData = [
+            'name' => $name,
+            'subject' => MailContents::memberAgreementSubject(),
+            'content' => MailContents::memberAgreementMail()
+        ];
+        
+        $attachment = [
+            [
+                "name" => "{$membershipCategory->name} Membership Agreement",
+                "saved_path" => $application->membership_agreement
+            ]
+        ];
+
+        Utility::notifyApplicantAndContact($request->application_id, $applicant, $emailData, $Meg, $attachment);
         
         $MEGs = Utility::getUsersByCategory(Role::MEG);
         $MEG2s = Utility::getUsersEmailByCategory(Role::MEG2);
@@ -80,25 +97,8 @@ class Meg2ApplicationController extends Controller
         //NOTIFY MEG OF APPROVAL
         Notification::send($MEGs, new InfoNotification(MailContents::meG2ApprovalMail($companyName, $membershipCategory->name), MailContents::meG2ApprovalSubject(), $CCs));
 
-        //NOTIFY APPLICANT AND SEND MEMBERSHIP AGREEMENT
-        $emailData = [
-            'name' => $name,
-            'subject' => MailContents::memberAgreementSubject(),
-            'content' => MailContents::memberAgreementMail()
-        ];
-
-        //TODO::GENERATE MEMBERSHIP AGREEMENT
-        // $application->membership_agreement = '';
-        // $application->save();
-        
-        // Recipient email addresses
-        $toEmails = [$applicant->email, $companyEmail, $contactEmail];
-        
-        // CC email addresses
-        $Meg = Utility::getUsersEmailByCategory(Role::MEG);
-        $ccEmails = $Meg;
-
-        Utility::emailHelper($emailData, $toEmails, $ccEmails);
+        $application->membership_agreement = $membershipCategory->membership_agreement;
+        $application->save();
 
         Utility::applicationStatusHelper($application, Application::statuses['M2AMR'], Application::office['MEG2'], Application::office['AP']);
         

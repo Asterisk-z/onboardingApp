@@ -3,7 +3,11 @@
 namespace App\Providers;
 
 use App\Events\ApplicationSubmissionEvent;
+use App\Events\ArAddedEvent;
+use App\Events\FinalApplicationProcessingEvent;
 use App\Listeners\ApplicationSubmissionListener;
+use App\Listeners\CheckAllRequiredArListener;
+use App\Listeners\FinalApplicationProcessingListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -22,6 +26,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         ApplicationSubmissionEvent::class => [
             ApplicationSubmissionListener::class,
+        ],
+        ArAddedEvent::class => [
+            CheckAllRequiredArListener::class,
         ],
     ];
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ArAddedEvent;
 use App\Helpers\ARMailContents;
 use App\Helpers\ResponseStatusCodes;
 use App\Helpers\Utility;
@@ -92,7 +93,7 @@ class ARController extends Controller
 
         $user = User::create($validated);
 
-        $regID = $user->getRegID();
+        $regID = $user->createRegIDAr();
 
         $logMessage = "Added a new AR - $user->email ($regID)";
         logAction($request->user()->email, 'Add AR', $logMessage, $request->ip());
@@ -107,6 +108,8 @@ class ARController extends Controller
         if (count($MEGs)) {
             Notification::send($MEGs, new InfoNotification(ARMailContents::applicationMEGBody($user), ARMailContents::applicationMEGSubject(), $CCs));
         }
+
+        event(new ArAddedEvent($request->user()->institution_id, $user));
 
         return successResponse('Successful', UserResource::make($user));
     }
