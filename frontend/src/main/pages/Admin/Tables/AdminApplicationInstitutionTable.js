@@ -258,6 +258,10 @@ const ActionTab = (props) => {
                             <li><span className="lead">Invoice Number : </span>{`${institution?.payment_information?.invoice_number}`}</li>
                             <li><span className="lead">Date of Payment : </span>{`${institution?.payment_information?.date_paid}`}</li>
                             <li><span className="lead">Reference : </span>{`${institution?.payment_information?.reference}`}</li>
+                            {(aUser.is_admin_mbg() && $latest_evidence) && <>
+                            <li><span className="lead">Amount received by FSD : </span>{`${institution?.internal?.amount_received_by_fsd}`}</li>
+                            <li><span className="lead">Comment : </span>{`${institution?.fsd_review?.comment}`}</li>
+                            </>}
                         </ul>
                         <div className="my-4">
                             <Button color="primary" className="mx-2">View Invoice</Button>
