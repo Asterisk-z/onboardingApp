@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ApplicantGuidesController;
+use App\Http\Controllers\ApplicationProcessController;
 use App\Http\Controllers\ARController;
 use App\Http\Controllers\AuditController;
 use App\Http\Controllers\BroadcastMessageController;
@@ -86,6 +87,10 @@ Route::middleware('auth')->group(function () {
         Route::group(['prefix' => 'meg/ar'], function () {
             Route::get('/list', [ARController::class, 'listMEG']);
             Route::get('/transfer', [ARController::class, 'listTransferMEG']);
+        });
+
+        Route::group(['prefix' => 'membership/application'], function () {
+            Route::get('/all_institutions', [ApplicationProcessController::class, 'all_institutions']);
         });
 
     });
@@ -193,7 +198,7 @@ Route::middleware('auth')->group(function () {
     });
 
     // CCO ROUTES
-    Route::middleware('cco')->group(function () {
+    Route::middleware('cco')->group( function () {
         // sanctions
         Route::group(['prefix' => 'disciplinary-sanctions'], function () {
             Route::get('/my_sanctions', [SanctionsController::class, 'mySanction']);
@@ -220,10 +225,9 @@ Route::middleware('auth')->group(function () {
         });
     });
 
-
-    //MBG ROUTES 
+    //MBG ROUTES
     Route::middleware('authRole:' . Role::MBG)->group(function () {
-        Route::group(['prefix' => 'membership/application/mbg'], function () {
+        Route::group(['prefix' => 'membership/application/mbg'],  function () {
             Route::get('/institutions', [MbgApplicationController::class, 'institutions']);
             Route::post('/upload-concession', [MbgApplicationController::class, 'concession']);
             Route::post('/payment-information', [MbgApplicationController::class, 'paymentInformation']);
@@ -234,7 +238,7 @@ Route::middleware('auth')->group(function () {
         });
     });
 
-    //MEG ROUTES 
+    //MEG ROUTES
     Route::middleware('authRole:' . Role::MEG)->group(function () {
         Route::group(['prefix' => 'membership/application/meg'], function () {
             Route::get('/institutions', [MegApplicationController::class, 'institutions']);
@@ -242,9 +246,9 @@ Route::middleware('auth')->group(function () {
         });
     });
 
-    //MEG2 ROUTES 
+    //MEG2 ROUTES
     Route::middleware('authRole:' . Role::MEG2)->group(function () {
-        Route::group(['prefix' => 'membership/application/meg2'], function () {
+        Route::group(['prefix' => 'membership/application/meg2'],  function () {
             Route::get('/institutions', [Meg2ApplicationController::class, 'institutions']);
             Route::post('/review', [Meg2ApplicationController::class, 'meg2Approval']);
         });
@@ -252,7 +256,7 @@ Route::middleware('auth')->group(function () {
 
     // AR ROUTES
     Route::middleware('authRole:' . Role::ARAUTHORISER . ',' . Role::ARINPUTTER)->group(function () {
-        Route::group(['prefix' => 'ar'],  function () {
+        Route::group(['prefix' => 'ar'], function () {
             Route::get('/list', [ARController::class, 'list']);
             Route::get('/search', [ARController::class, 'search']);
             Route::get('/view/{ARUser}', [ARController::class, 'view']);
@@ -271,11 +275,11 @@ Route::middleware('auth')->group(function () {
             Route::post('/process-change-status/{record}', [ARController::class, 'processChangeStatus']);
         });
         //
-        Route::group(['prefix' => 'regulators'],  function () {
+        Route::group(['prefix' => 'regulators'], function () {
             Route::get('/list', [RegulatorsController::class, 'list']);
         });
         //
-        Route::group(['prefix' => 'competency'],  function () {
+        Route::group(['prefix' => 'competency'], function () {
             Route::get('/list-active', [CompetencyController::class, 'listActive']);
             Route::post('/submit-competency', [CompetencyController::class, 'submitCompetency']);
         });

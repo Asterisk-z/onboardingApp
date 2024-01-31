@@ -9,6 +9,19 @@ export const loadInstitutionApplications = createAsyncThunk(
   async () => {
     
     try {
+      const { data } = await axios.get(`membership/application/all_institutions`);
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
+    }
+  }
+);
+
+export const loadMBGInstitutionApplications = createAsyncThunk(
+  "applicationProcess/loadMBGInstitutionApplications",
+  async () => {
+    
+    try {
       const { data } = await axios.get(`membership/application/mbg/institutions`);
       return successHandler(data);
     } catch (error) {
@@ -160,6 +173,25 @@ const applicationProcess = createSlice({
     });
 
     builder.addCase(loadInstitutionApplications.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
+    // ====== builders for loadMBGInstitutionApplications ======
+
+    builder.addCase(loadMBGInstitutionApplications.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(loadMBGInstitutionApplications.fulfilled, (state, action) => {
+        state.loading = false;
+        // state.list = action.payload?.data?.data?.categories;
+          
+        state.all_institutions = JSON.stringify(action.payload?.data?.data);
+
+    });
+
+    builder.addCase(loadMBGInstitutionApplications.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });

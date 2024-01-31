@@ -100,7 +100,32 @@ const ActionTab = (props) => {
     const toggleForm = () => setModalForm(!modalForm);
     const toggleView = () => setModalView(!modalView);
     const togglePaymentView = () => setModalPaymentView(!modalPaymentView);
-    const toggleConcession = () => setShowConcession(!showConcession);
+    const toggleConcession = () => {
+        if (!showConcession) {
+                Swal.fire({
+                title: "Do you want to add concession?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes!",
+            }).then((result) => {
+                if (result.isConfirmed) {
+
+                    setShowConcession(!showConcession)
+
+                } else {
+
+                    const postValues = new Object();
+                    postValues.application_id = institution.internal.application_id;
+                    const resp = dispatch(uploadConcession(postValues));
+                    props.updateParentParent(Math.random());
+
+                }
+            });
+            
+        } 
+
+    }
     const toggleViewUpdate = () => setModalViewUpdate(!modalViewUpdate);
     
 
@@ -179,7 +204,7 @@ const ActionTab = (props) => {
                                             <span>View Application</span>
                                         </DropdownItem>
                                     </li>
-                                    {(aUser.is_admin_mbg() ) &&
+                                    {(aUser.is_admin_mbg()) &&
                                         <>
                                             <li size="xs">
                                                 <DropdownItem tag="a"  onClick={togglePaymentView} >
@@ -222,25 +247,16 @@ const ActionTab = (props) => {
                 Payment View
             </ModalHeader>
             <ModalBody>
-                  <Button onClick={toggleConcession} >Upload Concession</Button>
+                  {(institution.concession_stage == 1) ? <>
+                    <Button onClick={toggleConcession} >Upload Concession</Button>
+                  </> : <>
+                    <h5>Not Paid</h5>
+                  </>}
+                  
                   {showConcession && <>
                     <UploadConcession tabItem={institution} updateParentParent={props.updateParentParent}/>
                   </>}
-                    {/* <Card className="card">   
-                        <CardBody className="card-inner">
-                            <CardTitle tag="h5">{ `${institution.firstName} ${institution.lastName} (${institution.email})` }</CardTitle>
-                          
-                              <ul>
-                                  <li><span className="lead">Phone : </span>{`${institution.phone}`}</li>
-                                  <li><span className="lead">Nationality : </span>{`${institution.nationality}`}</li>
-                                  <li><span className="lead">Role : </span>{`${institution.role.name}`}</li>
-                                  <li><span className="lead">Position : </span>{`${institution.position.name}`}</li>
-                                  <li><span className="lead">Status : </span>{`${institution.approval_status}`}</li>
-                                  <li><span className="lead">RegID : </span>{`${institution.regId}`}</li>
-                                  <li><span className="lead">Institution : </span>{`${institution.institution.name}`}</li>
-                              </ul>
-                        </CardBody>
-                    </Card> */}
+                  
             </ModalBody>
             <ModalFooter className="bg-light">
                 <span className="sub-text">View Institutions</span>
@@ -324,7 +340,6 @@ const UploadConcession = ({ updateParentParent, tabItem, positions, closeModel }
               postValues.concession_file = complainFile;
               postValues.application_id = tabItem.internal.application_id;
 
-            
               try {
                   setLoading(true);
                   
@@ -360,30 +375,30 @@ const UploadConcession = ({ updateParentParent, tabItem, positions, closeModel }
             
             <form className="content clearfix my-5" onSubmit={handleSubmit(submitForm)}  encType="multipart/form-data">
                 
-                
-                            <div className="form-group">
-                                <label className="form-label" htmlFor="concession_amount">
-                                    Concession Amount
-                                </label>
-                                <div className="form-control-wrap">
-                                    <input type="number" id="concession_amount" className="form-control" {...register('concession_amount', { required: "This Field is required" })}  />
-                                    {errors.concession_amount && <span className="invalid">{ errors.concession_amount.message }</span>}
-                                </div>
-                            </div>
-                            <div className="form-group">
-                                <label className="form-label" htmlFor="concession_file">
-                                    Concession File
-                                </label>
-                                <div className="form-control-wrap">
-                                    <input type="file" id="concession_file" className="form-control" {...register('concession_file', { required: "This Field is required" })} onChange={handleFileChange}/>
-                                    {errors.concession_file && <span className="invalid">{ errors.concession_file.message }</span>}
-                                </div>
-                            </div>
-                            <div className="form-group">
-                                <Button color="primary" type="submit"  size="lg">
-                                    {loading ? ( <span><Spinner size="sm" color="light" /> Processing...</span>) : "Upload Concession"}
-                                </Button>
-                            </div>
+    
+                <div className="form-group">
+                    <label className="form-label" htmlFor="concession_amount">
+                        Concession Amount
+                    </label>
+                    <div className="form-control-wrap">
+                        <input type="number" id="concession_amount" className="form-control" {...register('concession_amount', { required: "This Field is required" })}  />
+                        {errors.concession_amount && <span className="invalid">{ errors.concession_amount.message }</span>}
+                    </div>
+                </div>
+                <div className="form-group">
+                    <label className="form-label" htmlFor="concession_file">
+                        Concession File
+                    </label>
+                    <div className="form-control-wrap">
+                        <input type="file" id="concession_file" className="form-control" {...register('concession_file', { required: "This Field is required" })} onChange={handleFileChange}/>
+                        {errors.concession_file && <span className="invalid">{ errors.concession_file.message }</span>}
+                    </div>
+                </div>
+                <div className="form-group">
+                    <Button color="primary" type="submit"  size="lg">
+                        {loading ? ( <span><Spinner size="sm" color="light" /> Processing...</span>) : "Upload Concession"}
+                    </Button>
+                </div>
                 
           </form>
           
@@ -419,7 +434,7 @@ const AdminInstitutionTable = ({ data, pagination, actions, className, selectabl
       },
       {
           name: "Concession",
-          selector: (row) => { return row.internal.concession_stage ? (<><Badge color="success" className="text-uppercase">{`Pending Concession`}</Badge></>) : (<><Badge color="success" className="text-uppercase">{`Pending Concession`}</Badge></>) },
+          selector: (row) => { return row.internal.concession_stage == 1 ? (<><Badge color="success" className="text-uppercase">{`Concession Sent`}</Badge></>) : (<><Badge color="success" className="text-uppercase">{`Pending Concession`}</Badge></>) },
           sortable: true,
           width: "auto",
           wrap: true
