@@ -4,8 +4,6 @@ namespace App\Helpers;
 
 class MailContents
 {
-    // const URL = config("app.front_end_url");
-
     public static function signupMailSubject(): string
     {
         return "Registration Successful";
@@ -13,7 +11,7 @@ class MailContents
 
     public static function signupMail($email, $date, $signature): string
     {
-        $url = config("app.front_end_url") . "/set/password?signature=" . $signature;
+        $url = config("app.front_end_url")."/set/password?signature=".$signature;
 
         return "<p>Your account has been successfully created.</p>
         <p>Your login details are as follows:</p>
@@ -161,7 +159,8 @@ class MailContents
     public static function paymentMail($user): string
     {
         $url = config("app.front_end_url");
-        return "<p>Kindly log on to the <a href=$url>MROIS Portal</a> to
+
+        return "<p>Kindly log on to the <a href=$url>MROIS Portal</a> to 
         review the payment upload information for the Applicant, {$user->first_name} {$user->last_name}.</p>";
     }
 
@@ -203,7 +202,7 @@ class MailContents
     public static function mbgPaymentApprovedMail($companyName): string
     {
         $url = config("app.front_end_url");
-        return "<p>Please be informed that MBG has confirmed payment for
+        return "<p>Please be informed that MBG has confirmed payment for 
         {$companyName}. Kindly log on to <a href=$url>MROIS Portal</a> to review the application.</p>";
     }
 
@@ -215,7 +214,7 @@ class MailContents
     public static function megReportValidationMail($companyName): string
     {
         $url = config("app.front_end_url");
-        return "<p>Please be informed that MEG has uploaded the Application Report for
+        return "<p>Please be informed that MEG has uploaded the Application Report for 
         {$companyName}. Kindly log on to <a href=$url>MROIS Portal</a> to approve the application report.</p>";
     }
 
@@ -254,5 +253,59 @@ class MailContents
         return "<p>{$name}, has updated its application with the executed Membership Agreement.</p>
 
         <p>Kindly log on to the <a href=$url>MROIS Portal</a> to review and execute the Agreement.</p>";
+    }
+
+    
+    public static function ApplicantArUpdateSubject(): string
+    {
+        return "Update Authorised Representatives";
+    }
+
+    public static function ApplicantArUpdateMail($categoryName): string
+    {
+        $url = config("app.front_end_url");
+
+        return "<p>Kindly log on to the <a href=$url>MROIS Portal</a> to update your Institution's 
+        Authorised Representatives to complete the {$categoryName} application process.";
+    }
+    
+    public static function SuccessfulApplicationSubject(): string
+    {
+        return "Application Successful";
+    }
+
+    public static function SuccessfulApplicationMail($categoryName): string
+    {
+        $url = config("app.front_end_url");
+
+        return "<p>We are pleased to inform you that your application for the {$categoryName} 
+        category of FMDQ Securities Exchange Limited is successful.</p>
+        
+        <p>Kindly log on to the <a href=$url>MROIS Portal</a> to review application.</p>";
+    }
+
+    public static function msgProfilingSubject($categoryName): string
+    {
+        return "Profiling Request:$categoryName";
+    }
+
+    public static function msgProfilingMail($categoryName): string
+    {
+        return "<p>Please be informed that the Institution outlined below has fulfilled the registration requirements to become 
+                an FMDQ Exchange {$categoryName} and is entitled to have access to the e-Markets portal:
+                Kindly profile the Institution and confirm upon completion.</p>";
+    }
+
+    public static function helpdeskupdateSubject($categoryName): string
+    {
+        return "Update of {$categoryName} Register";
+    }
+
+    public static function helpdeskupdateMail($companyName, $categoryName): string
+    {
+        $url = "https://fmdqgroup.com/exchange/Membership/";
+        return "<p>Kindly add $companyName to the $categoryName Register on FMDQ Exchange Website.
+                The page link is as stated below:</p>
+        <p><a href=$url>https://fmdqgroup.com/exchange/Membership/</a></p>";
     }
 }

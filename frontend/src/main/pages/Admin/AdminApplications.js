@@ -3,15 +3,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner} from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
-import {loadInstitutionApplications} from "redux/stores/membership/applicationProcessStore"
+import {loadMBGInstitutionApplications,loadFSDInstitutionApplications,loadMEGInstitutionApplications,loadMEG2InstitutionApplications} from "redux/stores/membership/applicationProcessStore"
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
 import AdminApplicationInstitutionTable from './Tables/AdminApplicationInstitutionTable'
+import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 
 
 
 const AdminProcessInstitutions = ({ drawer }) => {
         
+    const authUser = useUser();
+    const authUserUpdate = useUserUpdate();
     const dispatch = useDispatch();
     const [parentState, setParentState] = useState('Initial state');
 
@@ -21,12 +24,22 @@ const AdminProcessInstitutions = ({ drawer }) => {
 
     const all_institutions = useSelector((state) => state?.applicationProcess?.all_institutions) || null;
     useEffect(() => {
-        dispatch(loadInstitutionApplications());
-    }, [dispatch,parentState]);
+        if (authUser.is_admin_meg()) {
+        dispatch(loadMEGInstitutionApplications());
+        }
+        if (authUser.is_admin_meg2()) {
+        dispatch(loadMEG2InstitutionApplications());
+        }
+        if (authUser.is_admin_fsd()) {
+        dispatch(loadFSDInstitutionApplications());
+        }
+        if (authUser.is_admin_mbg()) {
+        dispatch(loadMBGInstitutionApplications());
+        }
+    }, [dispatch, parentState]);
     
     const $all_institutions = all_institutions ? JSON.parse(all_institutions) : null;
 
-    console.log( $all_institutions )
     return (
         <React.Fragment>
             <Head title="Authorised Representation"></Head>

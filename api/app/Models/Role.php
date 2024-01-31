@@ -20,6 +20,8 @@ class Role extends Model
     const ARAUTHORISER = 6;
     const BLG = 7;
     const MEG2 = 8;
+    const BIG = 9;
+    const HELPDESK = 10;
 
     public function toArray()
     {

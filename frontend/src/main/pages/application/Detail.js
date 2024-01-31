@@ -6,11 +6,12 @@ import Head from "layout/head/Head";
 import Content from "layout/content/Content";
 import { BlockContent, BlockTitle, Icon } from "components/Component";
 import { Steps, Step } from "react-step-builder";
-import { Row, Col, Button, Input } from "reactstrap";
+import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge,  Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, CardBody, CardTitle, CardText } from "reactstrap";
 import { HeaderLogo } from "pages/components/HeaderLogo";
 import DatePicker from "react-datepicker";
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 import { loadApplication, loadExtra, completeApplication } from "redux/stores/membership/applicationStore";
+import { uploadPaymentProof } from "redux/stores/membership/applicationProcessStore";
 import moment from 'moment';
 import Swal from "sweetalert2";
 
@@ -27,6 +28,11 @@ const ApplicantInformation = (props) => {
     const [parentState, setParentState] = useState('Initial state');
     const [loading, setLoading] = useState(false);
     const [modalForm, setModalForm] = useState(false);
+    const [modalView, setModalView] = useState(false);
+    const [uploadView, setUploadView] = useState(false);
+    
+    const toggleView = () => setModalView(!modalView);
+    const toggleUploadView = () => setUploadView(!uploadView);
     
     const { reset, register, handleSubmit, formState: { errors }, setValue, clearErrors } = useForm();
     const user_application = useSelector((state) => state?.application?.user_application) || null;
@@ -48,35 +54,41 @@ const ApplicantInformation = (props) => {
       
       <Row className="gy-2">
         <Col md='12'>
-          {$user_application?.concession_stage == 1 && <>
-              <a className="btn btn-primary" href="#" target="_blank">View Invoice </a>
+          {$user_application?.application?.concession_stage == 1 && <>
+            
+              <a className="btn btn-primary mx-1" href="#" target="_blank"> Download Invoice </a>
+              <a className="btn btn-primary mx-1" href="#"  onClick={toggleView} >Make Payment </a>
           </>}
         </Col>
         <Col md='12'>
 
               
             <table className="table table-striped table-bordered">  
-    <thead>    
-        <tr>      
-            <th scope="col">#</th>      
-            <th scope="col">Name</th>      
-            <th scope="col">Value</th>      
-            <th scope="col">Status</th>    
-        </tr>  
-    </thead>  
-    <tbody>
-      {/* {$user_application} */}
-          {/* {$user_application && $user_application?.map((user_application_item, index) => (
-              <tr>      
-                  <th scope="row">{++index}</th>      
-                  <td>{user_application_item}</td>      
-                  <td>Otto</td>      
-                  <td>@mdo</td>    
-              </tr>
-            
-          ))} */}
-    </tbody>
-</table>
+              <thead>    
+                  <tr>      
+                      <th scope="col">#</th>      
+                      <th scope="col">Name</th>      
+                      <th scope="col">Value</th>      
+                  </tr>  
+              </thead>  
+              <tbody>
+                {/* {$user_application} */}
+                    {$user_application?.application_requirements && $user_application?.application_requirements?.map((user_application_item, index) => (
+                        <tr key={index}>      
+                            <th scope="row">{++index}</th>      
+                            <td>{user_application_item.field.description}</td>      
+                            <td>
+                                {user_application_item.uploaded_file != null ? <>
+                                  <a className="btn btn-primary" href={user_application_item.uploaded_file} target="_blank">View File </a>
+                                </> : <>
+                                  { user_application_item.uploaded_field }
+                                </>}
+                            </td>  
+                        </tr>
+                      
+                    ))}
+              </tbody>
+          </table>
             
           
         </Col>
@@ -85,24 +97,157 @@ const ApplicantInformation = (props) => {
               
              
       </Row>
-      <div className="actions clearfix">
-        {/* <ul>
-          <li>
-            <Button color="primary" onClick={onInputChange}>
-              Submit Application
-            </Button>
-          </li>
-          <li>
-            <Button color="primary"   onClick={(ev) => navigate(`${process.env.PUBLIC_URL}/application`) }>
-              Back To Application
-            </Button>
-          </li>
-        </ul> */}
-      </div>
+      
+        <Modal isOpen={modalView} toggle={toggleView} size="lg">
+            <ModalHeader toggle={toggleView} close={<button className="close" onClick={toggleView}><Icon name="cross" /></button>}>
+                Make Payment
+            </ModalHeader>
+            <ModalBody>
+                  {!uploadView ? <>
+                    <Row className="gy-5">
+                        <Col md='6'>
+                          <Card className="card-bordered">   
+                            <CardBody className="card-inner">
+                              <CardTitle tag="h5">Payment by Transfer</CardTitle>
+                              <CardText>
+                                Upload Prove Of Payment after transfer
+                              </CardText>
+                              <Button color="primary"  onClick={toggleUploadView}>Upload</Button>
+                            </CardBody>
+                          </Card>
+                        </Col>
+                        <Col md='6'>
+                          <Card className="card-bordered">   
+                            <CardBody className="card-inner">
+                              <CardTitle tag="h5">Online Payment</CardTitle>
+                              <CardText>
+                                Upload Prove Of Payment
+                              </CardText>
+                              <Button color="primary">Proceed to Payment</Button>
+                            </CardBody>
+                          </Card>
+                        </Col>
+                    </Row>                  
+                  </> : <>
+                    <Row className="gy-5">
+                        <Col md='12'>
+                          <Card className="card-bordered">   
+                            <CardBody className="card-inner">
+                              <CardTitle tag="h5">Payment by Transfer</CardTitle>
+                                {$user_application && <>
+                                    <PayWithTransfer tabItem={$user_application} updateParentParent={setParentState} closeModel={toggleView}  toggleMethod={toggleUploadView}/>
+                                </>}
+                              
+                              
+                            </CardBody>
+                          </Card>
+                        </Col>
+                    </Row>                  
+                  </>}
+
+                    
+
+                    {/* <Card className="card">   
+                        <CardBody className="card-inner">
+                            <CardTitle tag="h5">{ `${institution.firstName} ${institution.lastName} (${institution.email})` }</CardTitle>
+                          
+                              <ul>
+                                  <li><span className="lead">Phone : </span>{`${institution.phone}`}</li>
+                                  <li><span className="lead">Nationality : </span>{`${institution.nationality}`}</li>
+                                  <li><span className="lead">Role : </span>{`${institution.role.name}`}</li>
+                                  <li><span className="lead">Position : </span>{`${institution.position.name}`}</li>
+                                  <li><span className="lead">Status : </span>{`${institution.approval_status}`}</li>
+                                  <li><span className="lead">RegID : </span>{`${institution.regId}`}</li>
+                                  <li><span className="lead">Institution : </span>{`${institution.institution.name}`}</li>
+                              </ul>
+                        </CardBody>
+                    </Card> */}
+            </ModalBody>
+            <ModalFooter className="bg-light">
+                <span className="sub-text">View Institutions</span>
+            </ModalFooter>
+        </Modal>
     </section>
   );
 };
 
+
+const PayWithTransfer = ({ updateParentParent, tabItem, positions, closeModel, toggleMethod }) => {
+    
+    const aUser = useUser();
+    const aUserUpdate = useUserUpdate();
+    // console.log(tabItem)
+    const tabItem_id = tabItem.id
+    const [complainFile, setComplainFile] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch();
+    
+    const { handleSubmit, register, watch, formState: { errors } } = useForm();
+
+    const submitForm = async (data) => {
+            
+            const postValues = new Object();
+              postValues.proof_of_payment = complainFile;
+              postValues.application_id = tabItem?.application?.id;
+
+              try {
+                  setLoading(true);
+                  
+                  const resp = await dispatch(uploadPaymentProof(postValues));
+
+                  if (resp.payload?.message == "success") {
+                      setTimeout(() => {
+                          setLoading(false);
+                          updateParentParent(Math.random())
+                          closeModel()
+                          toggleMethod()
+                      }, 1000);
+                  
+                  } else {
+                    setLoading(false);
+                  }
+                  
+              } catch (error) {
+                setLoading(false);
+              }
+          
+        };
+
+    
+    const handleFileChange = (event) => {
+		setComplainFile(event.target.files[0]);
+    };
+    
+  
+    return (
+        <>
+            
+            <form className="content clearfix my-5" onSubmit={handleSubmit(submitForm)}  encType="multipart/form-data">
+                
+                <div className="form-group">
+                    <label className="form-label" htmlFor="proveOfPayment">
+                        Prove of Payment
+                    </label>
+                    <div className="form-control-wrap">
+                        <input type="file" id="proveOfPayment" className="form-control" {...register('proveOfPayment', { required: "This Field is required" })} onChange={handleFileChange}/>
+                        {errors.proveOfPayment && <span className="invalid">{ errors.proveOfPayment.message }</span>}
+                    </div>
+                </div>
+                <div className="form-group">
+                    <Button color="primary" type="submit"  size="md">
+                        {loading ? ( <span><Spinner size="sm" color="light" /> Processing...</span>) : "Upload Prove"}
+                    </Button>
+
+                    <Button color="primary" size='md' className="mx-3" onClick={toggleMethod}>Cancel</Button>
+                </div>
+                
+          </form>
+          
+      </>
+
+
+    );
+};
  
 
 

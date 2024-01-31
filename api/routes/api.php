@@ -290,6 +290,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/field/option', [MembershipApplicationController::class, 'getFieldOption']);
             Route::get('/extra', [MembershipApplicationController::class, 'getFieldExtra']);
             Route::post('/upload', [MembershipApplicationController::class, 'uploadField']);
+            Route::post('/invoice/download', [MembershipApplicationController::class, 'downloadInvoice']);
             Route::post('/upload-payment-proof', [MembershipApplicationController::class, 'uploadProofOfPayment']);
             Route::post('/complete', [MembershipApplicationController::class, 'complete']);
         });

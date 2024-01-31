@@ -228,17 +228,15 @@ class MbgApplicationController extends Controller
                             <p>Reason: {$request->comment}</p>
                             <p>Kindly contact Uju Iwuamadi +234 -1-2778771</p>",
                 ];
-
-                // Recipient email addresses
-                $toEmails = [$applicant->email, $companyEmail, $contactEmail];
-
+                
                 // CC email addresses
                 $Meg = Utility::getUsersEmailByCategory(Role::MEG);
                 $Mbg = Utility::getUsersEmailByCategory(Role::MBG);
                 $fsd = Utility::getUsersEmailByCategory(Role::FSD);
                 $ccEmails = array_merge($Meg, $Mbg, $fsd);
 
-                Utility::emailHelper($emailData, $toEmails, $ccEmails);
+                Utility::notifyApplicantAndContact($request->application_id, $applicant, $emailData, $ccEmails);
+
                 Utility::applicationStatusHelper($application, Application::statuses['MDP'], Application::office['MBG'], Application::office['AP'], $request->comment);
                 logAction($user->email, 'MBG Declined', "MBG Declined FSD review of applicant payment due to incomplete payment", $request->ip());
             } else {

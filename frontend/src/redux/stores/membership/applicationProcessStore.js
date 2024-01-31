@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { errorHandler, successHandler } from "utils/Functions";
 import queryGenerator from "utils/QueryGenerator";
-const initialState = { all_institutions: null, all: null, list: null, all_fields: null, list_extra: {}, status_list: null, transfer_list: null, user: null, total: null, error: "", loading: false };
+const initialState = { all_institutions: null, all: null, list: null, latest_evidence: null, all_fields: null, list_extra: {}, status_list: null, transfer_list: null, user: null, total: null, error: "", loading: false };
 
 export const loadInstitutionApplications = createAsyncThunk(
   "applicationProcess/loadInstitutionApplications",
@@ -20,12 +20,70 @@ export const loadInstitutionApplications = createAsyncThunk(
 export const loadMBGInstitutionApplications = createAsyncThunk(
   "applicationProcess/loadMBGInstitutionApplications",
   async () => {
-    
     try {
       const { data } = await axios.get(`membership/application/mbg/institutions`);
       return successHandler(data);
     } catch (error) {
       return errorHandler(error);
+    }
+  }
+);
+
+export const loadFSDInstitutionApplications = createAsyncThunk(
+  "applicationProcess/loadFSDInstitutionApplications",
+  async () => {
+    
+    try {
+      const { data } = await axios.get(`membership/application/fsd/institutions`);
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
+    }
+  }
+);
+
+export const loadMEGInstitutionApplications = createAsyncThunk(
+  "applicationProcess/loadMEGInstitutionApplications",
+  async () => {
+    
+    try {
+      const { data } = await axios.get(`membership/application/meg/institutions`);
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
+    }
+  }
+);
+
+export const loadMEG2InstitutionApplications = createAsyncThunk(
+  "applicationProcess/loadMEG2InstitutionApplications",
+  async () => {
+    try {
+      const { data } = await axios.get(`membership/application/meg2/institutions`);
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
+    }
+  }
+);
+
+export const uploadPaymentProof = createAsyncThunk(
+  "applicationProcess/uploadPaymentProof",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `membership/application/upload-payment-proof`,
+        data: values,
+      });
+      return successHandler(data, data.message);
+    } catch (error) {
+      return errorHandler(error, true);
     }
   }
 );
@@ -44,7 +102,7 @@ export const uploadConcession = createAsyncThunk(
         url: `membership/application/mbg/upload-concession`,
         data: values,
       });
-      return successHandler(data);
+      return successHandler(data, data.message);
     } catch (error) {
       return errorHandler(error, true);
     }
@@ -52,55 +110,8 @@ export const uploadConcession = createAsyncThunk(
 );
 
 
-
-
-
-
-
-
-
-
-export const loadPageFields = createAsyncThunk(
-  "applicationProcess/loadPageFields",
-  async (values) => {
-    const query = queryGenerator(values);
-    try {
-      const { data } = await axios.get(`membership/application/fields?${query}`);
-      return successHandler(data);
-    } catch (error) {
-      return errorHandler(error);
-    }
-  }
-);
-
-export const loadFieldOption = createAsyncThunk(
-  "applicationProcess/loadFieldOption",
-  async (values) => {
-    const query = queryGenerator(values);
-    try {
-      const { data } = await axios.get(`membership/application/field/option?${query}`);
-      return successHandler(data);
-    } catch (error) {
-      return errorHandler(error);
-    }
-  }
-);
-
-export const loadExtra = createAsyncThunk(
-  "applicationProcess/loadExtra",
-  async (values) => {
-    const query = queryGenerator(values);
-    try {
-      const { data } = await axios.get(`membership/application/extra?${query}`);
-      return successHandler(data);
-    } catch (error) {
-      return errorHandler(error);
-    }
-  }
-);
-
-export const uploadField = createAsyncThunk(
-  "applicationProcess/uploadField",
+export const MEGReview = createAsyncThunk(
+  "applicationProcess/MEGReview",
   async (values) => {
     try {
       const { data } = await axios({
@@ -110,7 +121,7 @@ export const uploadField = createAsyncThunk(
           // "Content-Type": "application/json;charset=UTF-8",
           "Content-Type": "multipart/form-data",
         },
-        url: `membership/application/upload`,
+        url: `membership/application/meg/review`,
         data: values,
       });
       return successHandler(data);
@@ -120,10 +131,9 @@ export const uploadField = createAsyncThunk(
   }
 );
 
-
-export const completeApplication = createAsyncThunk(
-  "applicationProcess/completeApplication",
-  async () => {
+export const MEG2Review = createAsyncThunk(
+  "applicationProcess/MEG2Review",
+  async (values) => {
     try {
       const { data } = await axios({
         method: "post",
@@ -132,8 +142,197 @@ export const completeApplication = createAsyncThunk(
           // "Content-Type": "application/json;charset=UTF-8",
           "Content-Type": "multipart/form-data",
         },
-        url: `membership/application/complete`,
-        // data: values,
+        url: `membership/application/meg2/review`,
+        data: values,
+      });
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
+export const MBGReview = createAsyncThunk(
+  "applicationProcess/MBGReview",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `membership/application/mbg/review`,
+        data: values,
+      });
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
+export const MBGPaymentInformation = createAsyncThunk(
+  "applicationProcess/MBGPaymentInformation",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `membership/application/mbg/payment-information`,
+        data: values,
+      });
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
+export const MBGPaymentEvidence = createAsyncThunk(
+  "applicationProcess/MBGPaymentEvidence",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `membership/application/mbg/latest-payment-evidence`,
+        data: values,
+      });
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
+export const MBGPaymentDetails = createAsyncThunk(
+  "applicationProcess/MBGPaymentDetails",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `membership/application/mbg/payment-details`,
+        data: values,
+      });
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
+export const MBGReviewSummary = createAsyncThunk(
+  "applicationProcess/MBGReviewSummary",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `membership/application/mbg/fsd-review-summary`,
+        data: values,
+      });
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
+export const FSDPaymentInformation = createAsyncThunk(
+  "applicationProcess/FSDPaymentInformation",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `membership/application/fsd/payment-information`,
+        data: values,
+      });
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
+export const FSDPaymentEvidence = createAsyncThunk(
+  "applicationProcess/FSDPaymentEvidence",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `membership/application/fsd/latest-payment-evidence`,
+        data: values,
+      });
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
+export const FSDPaymentDetails = createAsyncThunk(
+  "applicationProcess/FSDPaymentDetails",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `membership/application/fsd/payment-details`,
+        data: values,
+      });
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
+export const FSDReviewSummary = createAsyncThunk(
+  "applicationProcess/FSDReviewSummary",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `membership/application/fsd/payment-review`,
+        data: values,
       });
       return successHandler(data, data.message);
     } catch (error) {
@@ -188,10 +387,82 @@ const applicationProcess = createSlice({
         // state.list = action.payload?.data?.data?.categories;
           
         state.all_institutions = JSON.stringify(action.payload?.data?.data);
-
     });
 
     builder.addCase(loadMBGInstitutionApplications.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
+    // ====== builders for loadMEG2InstitutionApplications ======
+
+    builder.addCase(loadMEG2InstitutionApplications.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(loadMEG2InstitutionApplications.fulfilled, (state, action) => {
+        state.loading = false;
+        // state.list = action.payload?.data?.data?.categories;
+          
+        state.all_institutions = JSON.stringify(action.payload?.data?.data);
+
+    });
+
+    builder.addCase(loadMEG2InstitutionApplications.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
+    // ====== builders for loadMEGInstitutionApplications ======
+
+    builder.addCase(loadMEGInstitutionApplications.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(loadMEGInstitutionApplications.fulfilled, (state, action) => {
+        state.loading = false;
+        // state.list = action.payload?.data?.data?.categories;
+          
+        state.all_institutions = JSON.stringify(action.payload?.data?.data);
+
+    });
+
+    builder.addCase(loadMEGInstitutionApplications.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
+    // ====== builders for loadFSDInstitutionApplications ======
+
+    builder.addCase(loadFSDInstitutionApplications.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(loadFSDInstitutionApplications.fulfilled, (state, action) => {
+        state.loading = false;
+        // state.list = action.payload?.data?.data?.categories;
+          
+        state.all_institutions = JSON.stringify(action.payload?.data?.data);
+
+    });
+
+    builder.addCase(loadFSDInstitutionApplications.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
+
+    // ====== builders for uploadPaymentProof ======
+
+    builder.addCase(uploadPaymentProof.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(uploadPaymentProof.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(uploadPaymentProof.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });
@@ -210,136 +481,163 @@ const applicationProcess = createSlice({
       state.loading = false;
       state.error = action.payload.message;
     });
-  
 
+    // ====== builders for MEGReview ======
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // ====== builders for loadFieldOption ======
-
-    builder.addCase(loadFieldOption.pending, (state) => {
+    builder.addCase(MEGReview.pending, (state) => {
       state.loading = true;
     });
 
-    builder.addCase(loadFieldOption.fulfilled, (state, action) => {
-        state.loading = false;
-        // state.list = action.payload?.data?.data?.categories;
-          
-        if (!Array.isArray(state.all)) {
-          state.all = [];
-      }
-      
-      const all = [...state.all];
-      
-        all.push(action.payload?.data.data);
-        state.all = all;
-
+    builder.addCase(MEGReview.fulfilled, (state, action) => {
+      state.loading = false;
     });
 
-    builder.addCase(loadFieldOption.rejected, (state, action) => {
+    builder.addCase(MEGReview.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });
-    
-    // ====== builders for loadExtra ======
+    // ====== builders for MEG2Review ======
 
-    builder.addCase(loadExtra.pending, (state) => {
+    builder.addCase(MEG2Review.pending, (state) => {
       state.loading = true;
     });
 
-    builder.addCase(loadExtra.fulfilled, (state, action) => {
-        state.loading = false;
-        // state.list = action.payload?.data?.data?.categories;
-          
-        if (!Array.isArray(state.list_extra)) {
-          state.list_extra = {};
-      }
-      
-      const list_extra = state.list_extra;
-      const data = { ...list_extra, [action.payload?.data.data.name]: action.payload?.data.data };
-      state.list_extra = data;
-
+    builder.addCase(MEG2Review.fulfilled, (state, action) => {
+      state.loading = false;
     });
 
-    builder.addCase(loadExtra.rejected, (state, action) => {
+    builder.addCase(MEG2Review.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });
+    // ====== builders for MBGReview ======
 
-    
-    // ====== builders for loadPageFields ======
-
-    builder.addCase(loadPageFields.pending, (state) => {
+    builder.addCase(MBGReview.pending, (state) => {
       state.loading = true;
     });
 
-    builder.addCase(loadPageFields.fulfilled, (state, action) => {
-        state.loading = false;
-        // state.list = action.payload?.data?.data?.categories;
-        // state.list = JSON.stringify(action.payload?.data?.data);
-        
-        // if (!Array.isArray(state.all_fields)) {
-          state.all_fields = [];
-      // }
-      
-      // const all_fields = [...state.all_fields];
-      const all_fields = [];
-      // console.log(new Date())
-        all_fields.push(...action.payload?.data.data);
-        state.all_fields = all_fields;
+    builder.addCase(MBGReview.fulfilled, (state, action) => {
+      state.loading = false;
     });
 
-    builder.addCase(loadPageFields.rejected, (state, action) => {
+    builder.addCase(MBGReview.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });
+    // ====== builders for MBGPaymentInformation ======
 
-
-    // ====== builders for uploadField ======
-
-    builder.addCase(uploadField.pending, (state) => {
+    builder.addCase(MBGPaymentInformation.pending, (state) => {
       state.loading = true;
     });
 
-    builder.addCase(uploadField.fulfilled, (state, action) => {
+    builder.addCase(MBGPaymentInformation.fulfilled, (state, action) => {
       state.loading = false;
     });
 
-    builder.addCase(uploadField.rejected, (state, action) => {
+    builder.addCase(MBGPaymentInformation.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });
-  
+    // ====== builders for MBGPaymentEvidence ======
 
-    // ====== builders for completeApplication ======
-
-    builder.addCase(completeApplication.pending, (state) => {
+    builder.addCase(MBGPaymentEvidence.pending, (state) => {
       state.loading = true;
     });
 
-    builder.addCase(completeApplication.fulfilled, (state, action) => {
+    builder.addCase(MBGPaymentEvidence.fulfilled, (state, action) => {
       state.loading = false;
+      state.latest_evidence = JSON.stringify(action.payload?.data?.data);
     });
 
-    builder.addCase(completeApplication.rejected, (state, action) => {
+    builder.addCase(MBGPaymentEvidence.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });
-  
+    // ====== builders for MBGPaymentDetails ======
+
+    builder.addCase(MBGPaymentDetails.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(MBGPaymentDetails.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(MBGPaymentDetails.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+    // ====== builders for MBGReviewSummary ======
+
+    builder.addCase(MBGReviewSummary.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(MBGReviewSummary.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(MBGReviewSummary.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+    // ====== builders for FSDPaymentInformation ======
+
+    builder.addCase(FSDPaymentInformation.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(FSDPaymentInformation.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(FSDPaymentInformation.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+    // ====== builders for FSDPaymentEvidence ======
+
+    builder.addCase(FSDPaymentEvidence.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(FSDPaymentEvidence.fulfilled, (state, action) => {
+      state.loading = false;
+      state.latest_evidence = JSON.stringify(action.payload?.data?.data);
+    });
+
+    builder.addCase(FSDPaymentEvidence.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+    // ====== builders for FSDPaymentDetails ======
+
+    builder.addCase(FSDPaymentDetails.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(FSDPaymentDetails.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(FSDPaymentDetails.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+    // ====== builders for FSDReviewSummary ======
+
+    builder.addCase(FSDReviewSummary.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(FSDReviewSummary.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(FSDReviewSummary.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
     
   },
 });

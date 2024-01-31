@@ -33,11 +33,16 @@ class DashboardControler extends Controller
 
         $application = Application::where('submitted_by', auth()->user()->id)->first();
 
+        $application_list = Application::where('submitted_by', auth()->user()->id)->get();
+        // $application_list = Conversion::where('submitted_by', auth()->user()->id)->get();
+        // $application_list = Addition::where('submitted_by', auth()->user()->id)->get();
+
         $data = [
             'complaints' => $complaints,
             'applications' => $applications,
             'show_application' => $application->show_form,
             'ars' => $ars,
+            "application_list" => $application_list,
         ];
         return successResponse('Successfully', $data);
 

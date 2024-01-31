@@ -11,7 +11,7 @@ class ApplicationProcessController extends Controller
 {
     public function all_institutions(Request $request)
     {
-        $data = Application::whereIn('status', [2, 4]);
+        $data = Application::whereNotIn('status', [0]);
 
         $data = Utility::applicationDetails($data);
         $data = $data->get();
