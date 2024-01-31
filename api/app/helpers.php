@@ -2,6 +2,9 @@
 
 use App\Helpers\ResponseStatusCodes;
 use App\Models\Audit;
+use App\Models\FmdqBankAccount;
+use App\Models\Invoice;
+use App\Models\InvoiceContent;
 use PHPOpenSourceSaver\JWTAuth\JWTGuard;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -83,5 +86,45 @@ if (!function_exists('prettifyJson')) {
         $formattedJson = str_replace(['{', '}'], '', $formattedJson);
 
         return nl2br($formattedJson);
+    }
+}
+
+if (!function_exists('formatDate')) {
+    function formatDate($inputDate)
+    {
+        if (!$inputDate) {
+            return '';
+        }
+
+        try {
+            $dateTime = new DateTime($inputDate);
+            return $dateTime->format('M. j, Y');
+        } catch (\Throwable $th) {
+            return $inputDate;
+        }
+    }
+}
+
+if (!function_exists('fmdqAccountDetails')) {
+    function fmdqAccountDetails()
+    {
+        return FmdqBankAccount::all();
+    }
+}
+
+if (!function_exists('invoiceChildren')) {
+    function invoiceChildren($parent_id)
+    {
+        $a = InvoiceContent::where("parent_id", $parent_id)->get();
+        logger($a);
+
+        return $a;
+    }
+}
+
+if (!function_exists('formatNumber')) {
+    function formatNumber($amount)
+    {
+        return number_format($amount, 2);
     }
 }
