@@ -311,7 +311,7 @@ const UploadConcession = ({ updateParentParent, tabItem, positions, closeModel }
     const aUserUpdate = useUserUpdate();
     
     const tabItem_id = tabItem.id
-    const [positionIds, setPositionIds] = useState([]);
+    const [complainFile, setComplainFile] = useState([]);
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
     
@@ -321,8 +321,8 @@ const UploadConcession = ({ updateParentParent, tabItem, positions, closeModel }
             
             const postValues = new Object();
               postValues.concession_amount = data.concession_amount;
-              postValues.concession_file = data.concession_file;
-              postValues.application_id = checkedId;
+              postValues.concession_file = complainFile;
+              postValues.application_id = tabItem.internal.application_id;
 
             
               try {
@@ -348,11 +348,12 @@ const UploadConcession = ({ updateParentParent, tabItem, positions, closeModel }
         };
 
 
-        const checkItem = (event) => {
-            const ids = positionIds;
-            ids[event.target.value] = event.target.checked
-        };
-        console.log(aUser)
+
+    
+    const handleFileChange = (event) => {
+		setComplainFile(event.target.files[0]);
+    };
+    
   
     return (
         <>
@@ -365,7 +366,7 @@ const UploadConcession = ({ updateParentParent, tabItem, positions, closeModel }
                                     Concession Amount
                                 </label>
                                 <div className="form-control-wrap">
-                                    <input type="text" id="concession_amount" className="form-control" {...register('concession_amount', { required: "This Field is required" })}  />
+                                    <input type="number" id="concession_amount" className="form-control" {...register('concession_amount', { required: "This Field is required" })}  />
                                     {errors.concession_amount && <span className="invalid">{ errors.concession_amount.message }</span>}
                                 </div>
                             </div>
@@ -374,7 +375,7 @@ const UploadConcession = ({ updateParentParent, tabItem, positions, closeModel }
                                     Concession File
                                 </label>
                                 <div className="form-control-wrap">
-                                    <input type="file" id="concession_file" className="form-control" {...register('concession_file', { required: "This Field is required" })} />
+                                    <input type="file" id="concession_file" className="form-control" {...register('concession_file', { required: "This Field is required" })} onChange={handleFileChange}/>
                                     {errors.concession_file && <span className="invalid">{ errors.concession_file.message }</span>}
                                 </div>
                             </div>
