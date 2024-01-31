@@ -198,6 +198,7 @@ class Utility
             'applications.meg2_review_stage AS meg2_review_stage',
             'applications.fsd_review_stage AS fsd_review_stage',
             'applications.completed_at AS completed_at',
+            'applications.status AS status',
             'applications.is_applicant_executed_membership_agreement AS is_applicant_executed_membership_agreement',
             'applications.all_ar_uploaded AS all_ar_uploaded',
             'applications.e_success_letter AS e_success_letter',
@@ -322,7 +323,7 @@ class Utility
         ->groupBy('institutions.id', 'applications.id', 'membership_categories.id', 'membership_categories.name', 'applications.concession_stage', 'applications.amount_received_by_fsd',
         'applications.fsd_review_stage', 'applications.mbg_review_stage', 'applications.meg_review_stage', 'applications.meg2_review_stage', 'applications.completed_at',
         'applications.is_applicant_executed_membership_agreement', 'applications.all_ar_uploaded', 'applications.member_agreement_send', 'applications.e_success_letter_send',
-        'applications.e_success_letter', 'applications.meg_executed_membership_agreement',);
+        'applications.e_success_letter', 'applications.meg_executed_membership_agreement','applications.status');
     }
 
     public static function applicationStatusHelper(Application $application, $newstatus, $currentOffice, $nextOffice, $comment = null, $file = null)

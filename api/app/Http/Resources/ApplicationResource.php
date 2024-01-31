@@ -33,6 +33,7 @@ class ApplicationResource extends JsonResource
                 "completed_at" => $this->completed_at,
                 "is_applicant_executed_membership_agreement" => $this->is_applicant_executed_membership_agreement,
                 "all_ar_uploaded" => $this->all_ar_uploaded,
+                "status" => $application->currentStatus()
             ],
 
             "basic_details" => [

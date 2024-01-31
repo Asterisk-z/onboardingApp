@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ARController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\MembershipApplicationController;
 use App\Http\Controllers\SystemController;
 use App\Models\User;
 use App\Notifications\InfoNotification;
@@ -30,6 +31,7 @@ Route::get('test-job', function () {
     return response()->json(['message' => "Email sent. Did you receive?"]);
 });
 
+Route::get('applicant/invoice/{uuid}', [MembershipApplicationController::class, 'downloadApplicantInvoice'])->name('invoice');
 
 Route::get('sample/certificate/{event}', [EventController::class, 'certificateSample']);
 Route::get('sample/certificate/{event}/download', [EventController::class, 'certificateSampleDownload'])->name('certificateSampleDownload');

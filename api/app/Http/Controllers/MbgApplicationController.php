@@ -10,6 +10,7 @@ use App\Models\Invoice;
 use App\Models\Role;
 use App\Models\SystemSetting;
 use App\Models\User;
+use Illuminate\Support\Str;
 use App\Notifications\InfoNotification;
 use App\Traits\ApplicationTraits;
 use Illuminate\Http\Request;
@@ -164,6 +165,7 @@ class MbgApplicationController extends Controller
         $application = $application->refresh();
         $application->concession_stage = true;
         $application->concession_file = $concession_file ?? null;
+        $application->invoiceToken = Str::uuid();
         $application->save();
 
         logAction($user->email, 'Concession stage Passed', "Application successfully passed through concession stage.", $request->ip());
@@ -216,8 +218,6 @@ class MbgApplicationController extends Controller
 
         if ($request->status == 'decline') {
             if (str_contains(strtolower("Incomplete Payment"), strtolower($request->comment))) {
-                $companyEmail = $data->company_email;
-                $contactEmail = $data->primary_contact_email;
 
                 $categoryName = $membershipCategory->name;
 

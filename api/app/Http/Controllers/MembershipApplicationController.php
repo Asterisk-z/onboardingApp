@@ -16,13 +16,14 @@ use App\Models\ProofOfPayment;
 use App\Models\Role;
 use App\Models\User;
 use App\Notifications\InfoNotification;
-use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
+use Illuminate\Support\Facades\Storage;
+use NumberFormatter;
 
 class MembershipApplicationController extends Controller
 {
@@ -36,21 +37,6 @@ class MembershipApplicationController extends Controller
 
         $data = Utility::applicationDetails($data);
         $data = $data->first();
-
-        return successResponse("Here you go", $data ?? []);
-    }
-
-    public function getDetail(Request $request)
-    {
-        $user = $request->user();
-        $data = [];
-        $application = Application::where(['submitted_by' => $user->id])->first();
-        $application_requirements = ApplicationFieldUpload::where('application_id', $application->id)->with('field')->get();
-
-        $data = [
-            'application' => $application,
-            'application_requirements' => $application_requirements,
-        ];
 
         return successResponse("Here you go", $data ?? []);
     }
@@ -213,12 +199,6 @@ class MembershipApplicationController extends Controller
 
     public function downloadInvoice(Request $request)
     {
-        set_time_limit(180);
-
-        $request->validate([
-            'application_id' => 'required|exists:applications,id',
-        ]);
-
         $user = $request->user();
         $application = Application::find($request->application_id);
 
@@ -227,21 +207,48 @@ class MembershipApplicationController extends Controller
         if ($application->submitted_by != $user->id) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
+        
+        // Download the stored PDF
+        return response()->json([
+            "file_path" => route('invoice', ['uuid' => $application->invoiceToken])
+        ]);
+    }
 
+    public function downloadApplicantInvoice($invoiceToken)
+    {
+        $application = Application::where('invoiceToken', $invoiceToken)->first();
+        $applicant = $application->applicant;
         $invoice = Invoice::find($application->invoice_id);
         $invoiceContents = $invoice->contents;
 
-        $pdf = PDF::loadView('invoice');
+        $total = $vat = 0;
 
-        // Generate a unique filename for the PDF
-        $filename = 'your_file_' . time() . '.pdf';
-        $path = Storage::put('public/invoice/' . $filename, $pdf->output());
+        foreach ($invoiceContents as $invoiceContent) {
+            if ($invoiceContent->name == 'VAT') {
+                $vat += $invoiceContent->value;
+            }
 
-        // Save the PDF to the storage path
-        $pdf->save($path);
+            if ($invoiceContent->name == 'VAT') {
+                continue;
+            }
 
-        // Download the stored PDF
-        return response()->download($path, $filename);
+            if ($invoiceContent->type == 'credit') {
+                $total -= $invoiceContent->value;
+            }
+
+            if ($invoiceContent->type == 'debit') {
+                $total += $invoiceContent->value;
+            }
+        }
+
+        $f = new NumberFormatter("en", NumberFormatter::SPELLOUT);
+        
+        $amountDue = number_format($total + $vat, 2);
+        $amountInWords = $f->format($total + $vat);
+        $total = number_format($total, 2);
+        $vat = number_format($vat, 2);
+
+        return view('invoice', compact('invoice','invoiceContents', 'applicant', 'vat', 'total', 'amountInWords', 'amountDue'));
     }
 
     /**

@@ -5,9 +5,31 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="description" content="Emulating real sheets of paper in web documents (using HTML and CSS)">
-		<title>Sheets of Paper</title>
+		<title>Invoice</title>
 		<link rel="stylesheet" type="text/css" href="{{ asset('assets/invoice/css/sheets-of-paper-a4.css') }}">
-	</head>
+        <style>
+            @media print {
+                body {
+                    print-color-adjust: exact;
+                    -webkit-print-color-adjust: exact;
+                }
+                html, body {
+                    height:100vh; 
+                    margin: 0 !important; 
+                    padding: 0 !important;
+                    overflow: hidden;
+                }
+            }
+        </style>
+
+        <script>
+            // Trigger print dialog on page load
+            window.onload = function() {
+                // Uncomment the line below to automatically trigger the print dialog
+                window.print();
+            };
+        </script>
+    </head>
 	<body class="document">
 		<div class="page" contenteditable="false">
 			<section class="header">
@@ -33,16 +55,16 @@
 							<p>Bill To:</p>
 							<p>FMDQ</p>
 							<p>Lagos</p><br><br><br><br>
-							<p>Attention: Damilare Oluwole</p>
+							<p>Attention: {{$applicant->first_name}} {{$applicant->last_name}}</p>
 						</th>
 					</tr>
 					<tr>
 						<td>Date:</td>
-						<td>December 1, 2023</td>
+						<td>{{formatDate($invoice->created_at)}}</td>
 					</tr>
 					<tr>
 						<td>Invoice Number:</td>
-						<td>FMDQ/BDD/120123/DMB-19</td>
+						<td>{{$invoice->invoice_number}}</td>
 					</tr>
 					<tr>
 						<td>Our Contact:</td>
@@ -62,52 +84,111 @@
 						<th style="width: 20%;">₦</th>
 						<th style="width: 20%;">₦</th>
 					</tr>
-					<tr style="height: 200px;">
-						<td class="sn">
-							<ol>
-								<li></li><br>
-								<li class="snno2"></li>
-							</ol>
-						</td>
-						<td>
-							<ul class="description-col-2">
-								<li>Dealing Member (Banks) - Commercial (National) - Application Fee (Non-Refundable)</li><br>
-								<li class="description-item">
-									<p>Dealing Member (Banks) - 2023 Membership Dues</p>
-									<p>50% Discount on 2023 Membership Dues</p>
-								</li>
-							</ul>
-						</td>
-						<td class="description-col-3">
-							<div>
-								<p class="dc3-1">2,000,000.00</p>
-								<p>(1,000,000.00)</p>
-							</div>
-						</td>
-						<td class="description-col-4">
-							<div>
-								<p>22,500,000.00</p>
-								<p class="dc4-2">1,000,000.00</p>
-							</div>
-						</td>
-					</tr>
+
+                    {{-- <tr style="height: 70px;">
+                        <td style="text-align: center;">
+                            1
+                        </td>
+                        <td>
+                            <span class="description-col-2">
+                                Dealing Member (Banks) - Commercial (National) - Application Fee (Non-Refundable)
+                            </span>
+                        </td>
+                        <td style="text-align: center;">
+                        </td>
+                        <td style="text-align: center;">
+                            22,500,000.00
+                        </td>
+                    </tr> --}}
+                    @php
+                        $i = 1;
+                    @endphp
+                    @foreach($invoiceContents as $invoiceContent)
+                        @php 
+
+                            $subTotal = 0;
+                            $name = strtolower($invoiceContent->name);
+                            $children = invoiceChildren($invoiceContent->id);
+
+                            if(count($children)){
+                                $hasChildren = true;
+                            }else{
+                                $hasChildren = false;
+                            }
+                            
+                        @endphp
+
+                        @if($name != "vat" && $name != "concession" && ! $invoiceContent->parent_id)
+                            <tr style="height: 70px;">
+                                <td style="text-align: center;">
+                                    {{$i}}
+                                </td>
+                                <td>
+                                    <p style="margin-bottom: -15px;">{{$name}}</p>
+                                    @if($hasChildren)
+                                        @foreach($children as $child)
+                                            <p>{{$child->name}}</p>
+                                        @endforeach                                        
+                                    @endif
+                                </td>
+                                <td class="description-col-3">
+                                    @if($hasChildren == true)
+                                        @php 
+                                            if($invoiceContent->type == 'credit'){
+                                                $subTotal -= $invoiceContent->value;
+                                            }
+                                            
+                                            if($invoiceContent->type == 'debit'){
+                                                $subTotal += $invoiceContent->value;
+                                            }
+                                        @endphp
+                                        <p style="text-align: center;">{{formatNumber($invoiceContent->value)}}</p>
+                                        @foreach($children as $child)
+                                            @php 
+                                                if($child->type == 'credit'){
+                                                    $subTotal -= $child->value;
+                                                }
+                                                
+                                                if($child->type == 'debit'){
+                                                    $subTotal += $child->value;
+                                                }
+                                            @endphp
+                                            <p style="text-align: center;">({{formatNumber($child->value)}})</p>
+                                        @endforeach
+                                    @endif
+                                </td>
+                                <td style="text-align: center;">
+                                    @if($hasChildren == false)
+                                        {{formatNumber($invoiceContent->value)}}
+                                    @endif
+                                    @if($subTotal > 0)
+                                        {{formatNumber($subTotal)}}
+                                    @endif
+                                </td>
+                            </tr>
+                        @endif
+                        @php
+                            $i++;
+                        @endphp
+                    @endforeach
+
 					<tr style="text-align: right;font-weight: 700;">
 						<td></td>
 						<td>Total</td>
 						<td></td>
-						<td>23,500,000.00</td>
+						<td>{{$total}}</td>
 					</tr>
 					<tr style="text-align: right;font-weight: 700;">
 						<td></td>
 						<td>VAT</td>
 						<td></td>
-						<td>1,762,500.00</td>
+						<td>{{$vat}}</td>
 					</tr>
 					<tr style="text-align: right;font-weight: 700;">
 						<td></td>
 						<td>Amount Due</td>
 						<td></td>
-						<td>25,262,500.00</td>
+						<td>{{$amountDue}}</td>
 					</tr>
 				</table>
 			</section>		
@@ -115,7 +196,7 @@
 				<table style="width: 100%;">
 					<tr>
 						<td style="width: 30%;">Amount in Words</td>
-						<td style="width: 70%;">Twenty-Five Million, Two Hundred and Sixty-Two Thousand, Five Hundred Naira Only</td>
+						<td style="width: 70%;">{{$amountInWords}} Naira Only</td>
 					</tr>
 				</table>
 			</section>
@@ -132,16 +213,18 @@
 						<th>Account Number</th>
 						<th>Sort Code</th>
 					</tr>
-					<tr>
-						<td>Access Bank PLC</td>
-						<td>0689977404</td>
-						<td>044151106</td>
-					</tr>
-					<tr>
-						<td>Zenith Bank PLC</td>
-						<td>1013859207</td>
-						<td>057150796</td>
-					</tr>
+                    @php
+                        $accounts = fmdqAccountDetails();
+                    @endphp
+                    @if(isset($accounts))
+                        @foreach($accounts as $account)
+                            <tr>
+                                <td>{{$account->bank_name}}</td>
+                                <td>{{$account->account_number}}</td>
+                                <td>{{$account->sort_code}}</td>
+                            </tr>
+                        @endforeach
+                    @endif
 				</table>
 				<p>▪ In the case of online bank transfers, kindly specify payment reference by indicating the invoice number</p>
 				<p>▪ All cheques payable to 'FMDQ Holdings PLC'</p>
