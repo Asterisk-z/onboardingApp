@@ -61,32 +61,20 @@ class MegApplicationController extends Controller
         }
 
         $applicant = User::find($application->submitted_by);
-        $name = $applicant->first_name.' '.$applicant->last_name;
-
         $data = Application::where('applications.id', $request->application_id);
         $data = Utility::applicationDetails($data);
         $data = $data->first();
 
         if($request->status == 'decline'){
-            $companyEmail = $data->company_email; 
             $companyName = $data->company_name; 
-            $contactEmail = $data->primary_contact_email;
-
             $emailData = [
                 'name' => $companyName,
                 'subject' => 'MROIS Application Rejected - Incomplete Documentation',
                 'content' => "<p>Please be informed that we could not continue with your application because of the following:
                         <p>Reason: {$request->comment}</p></p>"
             ];
-            
-            // Recipient email addresses
-            $toEmails = [$applicant->email, $companyEmail, $contactEmail];
-            
-            // CC email addresses
             $Meg = Utility::getUsersEmailByCategory(Role::MEG);
-            $ccEmails = $Meg;
-
-            Utility::emailHelper($emailData, $toEmails, $ccEmails);
+            Utility::notifyApplicantAndContact($request->application_id, $applicant, $emailData, $Meg);
             Utility::applicationStatusHelper($application, Application::statuses['MDD'], Application::office['MEG'], Application::office['AP'], $request->comment);
 
             logAction($user->email, 'MEG Declined', "MEG Declined applicant Document", $request->ip());
