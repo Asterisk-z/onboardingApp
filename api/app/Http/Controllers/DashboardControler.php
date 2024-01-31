@@ -30,9 +30,13 @@ class DashboardControler extends Controller
         $complaints = Complaint::where('user_id', auth()->user()->id)->count();
         $applications = Application::where('institution_id', auth()->user()->institution_id)->count();
         $ars = User::whereIn('role_id', [Role::ARINPUTTER, Role::ARAUTHORISER])->where('institution_id', auth()->user()->institution_id)->where('is_del', 0)->count();
+
+        $application = Application::where('submitted_by', auth()->user()->id)->first();
+
         $data = [
             'complaints' => $complaints,
             'applications' => $applications,
+            'show_application' => $application->show_form,
             'ars' => $ars,
         ];
         return successResponse('Successfully', $data);

@@ -286,6 +286,7 @@ Route::middleware('auth')->group(function () {
         Route::group(['prefix' => 'membership/application'], function () {
             Route::get('/', [MembershipApplicationController::class, 'application']);
             Route::get('/fields', [MembershipApplicationController::class, 'getField']);
+            Route::get('/detail', [MembershipApplicationController::class, 'getDetail']);
             Route::get('/field/option', [MembershipApplicationController::class, 'getFieldOption']);
             Route::get('/extra', [MembershipApplicationController::class, 'getFieldExtra']);
             Route::post('/upload', [MembershipApplicationController::class, 'uploadField']);

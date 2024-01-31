@@ -14,6 +14,7 @@ import {
   BlockBetween,
   PreviewCard
 } from "components/Component";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { userLoadUserARs } from "redux/stores/authorize/representative";
 import AuthRepTable from './Tables/AuthRepTable'
@@ -24,11 +25,13 @@ import { loadArDashboard } from "redux/stores/dashboard/dashboardStore";
 
 const Homepage = () => {
   const dispatch = useDispatch();
+    const navigate = useNavigate();
   const arUsers = useSelector((state) => state?.arUsers?.list) || null;
 
   const complaints = useSelector((state) => state?.dashboard?.complaints) || 0;
   const applications = useSelector((state) => state?.dashboard?.applications) || 0;
   const ars = useSelector((state) => state?.dashboard?.ars) || 0;
+  const show_application = useSelector((state) => state?.dashboard?.show_application) || 0;
 
   useEffect(() => {
     dispatch(userLoadUserARs({"approval_status" : "", "role_id": ""}));
@@ -64,10 +67,16 @@ const Homepage = () => {
                     <div className="data">
                       <div className="data-group">
                         <div className="amount">{applications}</div>
+                        {show_application == 1 ? <>
+                          <div><Button color="secondary"  onClick={(ev) => navigate(`${process.env.PUBLIC_URL}/application`) } >Continue Application</Button></div>
+                        </> : <>
+                          <div><Button color="secondary"  onClick={(ev) => navigate(`${process.env.PUBLIC_URL}/application_detail`) } >Application Detail</Button></div>
+                        </>}
                       </div>
                     </div>
                   </div>
                 </div>
+                
               </Card>
             </Col>
             <Col xxl="3" sm="6">
@@ -82,6 +91,7 @@ const Homepage = () => {
                     <div className="data">
                       <div className="data-group">
                         <div className="amount">{ars}</div>
+                        <div><Button color="secondary">View</Button></div>
                       </div>
                     </div>
                   </div>
@@ -100,6 +110,7 @@ const Homepage = () => {
                     <div className="data">
                       <div className="data-group">
                         <div className="amount">{complaints}</div>
+                        <div><Button color="secondary">View</Button></div>
                       </div>
                     </div>
                   </div>
@@ -118,6 +129,7 @@ const Homepage = () => {
                     <div className="data">
                       <div className="data-group">
                         <div className="amount">{"0"}</div>
+                        <div><Button color="secondary">View</Button></div>
                       </div>
                     </div>
                   </div>

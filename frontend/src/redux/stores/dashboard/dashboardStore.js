@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { errorHandler, successHandler } from "utils/Functions";
 import queryGenerator from "utils/QueryGenerator";
-const initialState = { all: null, list: null, complaints: 0, applications: 0, ars: 0, transfer_list: null, user: null, total: null, error: "", loading: false };
+const initialState = { all: null, list: null, complaints: 0, applications: 0, show_application: null, ars: 0, transfer_list: null, user: null, total: null, error: "", loading: false };
 
 export const loadArDashboard = createAsyncThunk(
   "dashboard/loadArDashboard",
@@ -76,6 +76,7 @@ const dashboardStore = createSlice({
         state.complaints = action.payload?.data?.data?.complaints;
         state.applications = action.payload?.data?.data?.applications;
         state.ars = action.payload?.data?.data?.ars;
+        state.show_application = action.payload?.data?.data?.show_application;
     });
 
     builder.addCase(loadArDashboard.rejected, (state, action) => {

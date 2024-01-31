@@ -38,6 +38,22 @@ class MembershipApplicationController extends Controller
         return successResponse("Here you go", $data ?? []);
     }
 
+    public function getDetail(Request $request)
+    {
+        $user = $request->user();
+        $data = [];
+        $application = Application::where(['submitted_by' => $user->id])->first();
+        // $application_requirements = ApplicationField::where('category', auth()->user()->institution->category[0]->id)->where('application_id', $application->id)->get();
+
+        $data = [
+            'application' => $application,
+            "testing" => $application->institution->category,
+            // 'application_requirements' => $application_requirements,
+        ];
+
+        return successResponse("Here you go", $data ?? []);
+    }
+
     public function getField(Request $request)
     {
         $application_fields = ApplicationField::where('parent_id', null);
