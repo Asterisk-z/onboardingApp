@@ -2,7 +2,20 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { errorHandler, successHandler } from "utils/Functions";
 import queryGenerator from "utils/QueryGenerator";
-const initialState = { all: null, list: null, all_fields: null, list_extra: {}, status_list: null, transfer_list: null, user: null, total: null, error: "", loading: false };
+const initialState = { all: null, list: null, user_application: null, all_fields: null, list_extra: {}, status_list: null, transfer_list: null, user: null, total: null, error: "", loading: false };
+
+export const loadApplication = createAsyncThunk(
+  "application/loadApplication",
+  async () => {
+    
+    try {
+      const { data } = await axios.get(`membership/application/detail`);
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
+    }
+  }
+);
 
 export const loadPageFields = createAsyncThunk(
   "application/loadPageFields",
@@ -101,6 +114,22 @@ const applicationStore = createSlice({
     },
   },
   extraReducers: (builder) => {
+
+    // ====== builders for loadApplication ======
+
+    builder.addCase(loadApplication.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(loadApplication.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user_application = JSON.stringify(action.payload?.data?.data);
+    });
+
+    builder.addCase(loadApplication.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
 
     // ====== builders for loadFieldOption ======
 

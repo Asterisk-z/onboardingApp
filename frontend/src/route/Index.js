@@ -17,6 +17,7 @@ import ForgotPassword from "main/auth/ForgotPassword";
 import PasswordUpdate from "main/auth/PasswordUpdate";
 import PasswordReset from "main/auth/PasswordChange";
 import PasswordSet from "main/auth/PasswordSet";
+import ApplicationDetail from "main/pages/application/Detail";
 import ApplicationPreview from "main/pages/application/Preview";
 import Application from "main/pages/application/Index";
 import Form from "main/forms/Form";
@@ -170,6 +171,7 @@ const Router = () => {
           
           <Route path="application" element={<Application />}></Route>
           <Route path="application_preview" element={<ApplicationPreview />}></Route>
+          <Route path="application_detail" element={<ApplicationDetail />}></Route>
           
         </Route>
 

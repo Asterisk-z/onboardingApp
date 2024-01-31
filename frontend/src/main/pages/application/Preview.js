@@ -187,51 +187,6 @@ const Header = (props) => {
   return (
     <div className="steps clearfix">
       <ul>
-        {/* <li className={props.current >= 1 ? "first done" : "first"}>
-          <a href="#wizard-01-h-0" onClick={(ev) => ev.preventDefault()}>
-            <span className="number">APPLICANT</span> <h5>Information</h5>
-          </a>
-        </li>
-        <li className={props.current >= 2 ? "done" : ""}>
-          <a href="#wizard-01-h-1" onClick={(ev) => ev.preventDefault()}>
-            <span className="number">TRADING</span> <h5>DETAILS</h5>
-          </a>
-        </li>
-        <li className={props.current >= 3 ? "done" : ""}>
-          <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="number">DISCIPLINARY</span> <h5>HISTORY</h5>
-          </a>
-        </li>
-        <li className={props.current >= 4 ? "done" : ""}>
-          <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="number">SUPPORTING</span> <h5>DOCUMENT</h5>
-          </a>
-        </li>
-        <li className={props.current >= 5 ? "done" : ""}>
-          <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="number">APPLICANT</span> <h5>DECLARATION</h5>
-          </a>
-        </li>
-        <li className={props.current >= 6 ? "done" : ""}>
-          <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="number">APPLICATION</span> <h5>COMPLETED</h5>
-          </a>
-        </li> */}
-        {/* <li className={props.current >= 7 ? "done" : ""}>
-          <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="number"></span> <h5>Step 7</h5>
-          </a>
-        </li>
-        <li className={props.current >= 8 ? "done" : ""}>
-          <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="number"></span> <h5>Step 8</h5>
-          </a>
-        </li>
-        <li className={props.current === 9 ? "last done" : "last"}>
-          <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="number"></span> <h5>Step 9</h5>
-          </a>
-        </li> */}
       </ul>
     </div>
   );

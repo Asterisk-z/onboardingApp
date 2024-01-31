@@ -22,14 +22,14 @@ class FsdApplicationController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
-    */
+     */
     public function institutions(Request $request)
     {
         $data = Application::where([
-            'concession_stage'  => true,
-            'office_to_perform_next_action' => Application::office['FSD']
+            'concession_stage' => true,
+            'office_to_perform_next_action' => Application::office['FSD'],
         ])
-        ->whereNotNull('proof_of_payment');
+            ->whereNotNull('proof_of_payment');
 
         $data = Utility::applicationDetails($data);
         $data = $data->get();
@@ -40,7 +40,7 @@ class FsdApplicationController extends Controller
     public function paymentInformation(Request $request)
     {
         $request->validate([
-            'application_id' => 'required|exists:applications,id'
+            'application_id' => 'required|exists:applications,id',
         ]);
 
         $data = $this->subPaymentInformation($request->application_id);
@@ -51,7 +51,7 @@ class FsdApplicationController extends Controller
     public function latestEvidence(Request $request)
     {
         $request->validate([
-            'application_id' => 'required|exists:applications,id'
+            'application_id' => 'required|exists:applications,id',
         ]);
 
         $data = $this->subLatestEvidence($request->application_id);
@@ -61,7 +61,7 @@ class FsdApplicationController extends Controller
     public function paymentReviewDetails(Request $request)
     {
         $request->validate([
-            'application_id' => 'required|exists:applications,id'
+            'application_id' => 'required|exists:applications,id',
         ]);
 
         $data = $this->subPaymentReviewDetails($request->application_id);
@@ -74,34 +74,34 @@ class FsdApplicationController extends Controller
             'application_id' => 'required|exists:applications,id',
             'status' => 'required|in:decline,approve',
             'comment' => 'required|string',
-            'amount_received' => 'required_if:status,approve'
+            'amount_received' => 'required_if:status,approve',
         ]);
 
         $user = $request->user();
         $application = Application::find($request->application_id);
 
         $errorMsg = "Unable to complete your request at this point.";
-        if($application->office_to_perform_next_action != Application::office['FSD']){
+        if ($application->office_to_perform_next_action != Application::office['FSD']) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
-        if($application->currentStatus() != Application::statuses['MDFR'] &&
-        $application->currentStatus() != Application::statuses['PPU']){
+        if ($application->currentStatus() != Application::statuses['MDFR'] &&
+            $application->currentStatus() != Application::statuses['PPU']) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
         $applicant = User::find($application->submitted_by);
         $institution = $application->institution;
         $membershipCategory = $institution->membershipCategories->first();
-        $name = $applicant->first_name.' '.$applicant->last_name;
+        $name = $applicant->first_name . ' ' . $applicant->last_name;
 
         $data = Application::where('applications.id', $request->application_id);
         $data = Utility::applicationDetails($data);
         $data = $data->first();
 
-        if($request->status == 'decline'){
+        if ($request->status == 'decline') {
             //SEND FIRST BATCH OF EMAIL
-            $companyEmail = $data->company_email; 
+            $companyEmail = $data->company_email;
             $contactEmail = $data->primary_contact_email;
 
             $categoryName = $membershipCategory->name;
@@ -111,12 +111,12 @@ class FsdApplicationController extends Controller
                 'subject' => 'Membership Application Payment Declined',
                 'content' => "Please be informed that your payment as a {$categoryName} was declined.
                         <p>Reason: {$request->comment}</p>
-                        <p>Kindly contact Uju Iwuamadi +234 -1-2778771</p>"
+                        <p>Kindly contact Uju Iwuamadi +234 -1-2778771</p>",
             ];
-            
+
             // Recipient email addresses
             $toEmails = [$applicant->email, $companyEmail, $contactEmail];
-            
+
             // CC email addresses
             $Meg = Utility::getUsersEmailByCategory(Role::MEG);
             $Mbg = Utility::getUsersEmailByCategory(Role::MBG);
@@ -125,10 +125,12 @@ class FsdApplicationController extends Controller
 
             Utility::emailHelper($emailData, $toEmails, $ccEmails);
             Utility::applicationStatusHelper($application, Application::statuses['FDP'], Application::office['FSD'], Application::office['AP'], $request->comment);
+            $application->proof_of_payment = null;
+            $application->save();
             logAction($user->email, 'FSD Declined', "FSD Declined an Applicant payment details.", $request->ip());
         }
 
-        if($request->status == 'approve'){
+        if ($request->status == 'approve') {
             Utility::applicationStatusHelper($application, Application::statuses['FAP'], Application::office['FSD'], Application::office['MBG'], $request->comment);
             $application->amount_received_by_fsd = $request->amount_received;
             $application->fsd_review_stage = 1;

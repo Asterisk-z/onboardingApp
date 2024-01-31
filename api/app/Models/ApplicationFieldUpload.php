@@ -16,4 +16,8 @@ class ApplicationFieldUpload extends Model
     {
         return $this->uploaded_file ? config('app.url') . 'storage/' . $this->uploaded_file : null;
     }
+    public function field()
+    {
+        return $this->hasOne(ApplicationField::class, 'id', 'application_field_id');
+    }
 }

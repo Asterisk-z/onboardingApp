@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import exportFromJSON from "export-from-json";
 import CopyToClipboard from "react-copy-to-clipboard";
 import Icon from "components/icon/Icon";
-import { useDispatch } from "react-redux";
 import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge,  Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, CardBody, CardTitle } from "reactstrap";
 import { DataTablePagination } from "components/Component";
 import moment from "moment";
-import {uploadConcession} from "redux/stores/membership/applicationProcessStore"
+import {uploadConcession, FSDPaymentEvidence, FSDReviewSummary, MBGPaymentEvidence} from "redux/stores/membership/applicationProcessStore"
 import { megProcessTransferUserAR } from "redux/stores/authorize/representative";
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 import Swal from "sweetalert2";
@@ -85,7 +85,7 @@ const Export = ({ data }) => {
 
 
 const ActionTab = (props) => {
-        
+
     const aUser = useUser();
     const aUserUpdate = useUserUpdate();
     
@@ -93,69 +93,113 @@ const ActionTab = (props) => {
     const navigate = useNavigate();
     const [modalForm, setModalForm] = useState(false);
     const [modalView, setModalView] = useState(false);
+    const [modalReviewView, setModalReviewView] = useState(false);
     const [showConcession, setShowConcession] = useState(false);
     const [modalPaymentView, setModalPaymentView] = useState(false);
     const [modalViewUpdate, setModalViewUpdate] = useState(false);
 
     const toggleForm = () => setModalForm(!modalForm);
+    const toggleReviewView = () => setModalReviewView(!modalReviewView);
     const toggleView = () => setModalView(!modalView);
     const togglePaymentView = () => setModalPaymentView(!modalPaymentView);
-    const toggleConcession = () => setShowConcession(!showConcession);
-    const toggleViewUpdate = () => setModalViewUpdate(!modalViewUpdate);
-    
+    const toggleConcession = () => {
+        if (!showConcession) {
+              Swal.fire({
+                title: "Do you want to add concession?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                allowOutsideClick: false
+            }).then((result) => {
+                if (result.isConfirmed) {
 
+                    setShowConcession(!showConcession)
+
+                } else {
+
+                    const postValues = new Object();
+                    postValues.application_id = institution.internal.application_id;
+                    const resp = dispatch(uploadConcession(postValues));
+                    props.updateParentParent(Math.random());
+
+                }
+            });
+            
+        } 
+
+    }
+    const toggleViewUpdate = () => setModalViewUpdate(!modalViewUpdate);
 
     const dispatch = useDispatch();
   
-    
-    const askAction = async (action) => {
-      if(action == 'approve') {
-          Swal.fire({
-              title: "Are you sure?",
-              text: "You won't be able to revert this!",
-              icon: "warning",
-              showCancelButton: true,
-              confirmButtonText: "Yes, approve it!",
-          }).then((result) => {
-              if (result.isConfirmed) {
-                  
-                  const formData = new FormData();
-                  formData.append('user_id', institution.id);
-                  formData.append('action', 'approve');
-                  const resp = dispatch(megProcessTransferUserAR(formData));
+  
+    const latest_evidence = useSelector((state) => state?.applicationProcess?.latest_evidence) || null;
+  
+      useEffect(() => {
 
-                  if (resp.payload?.message == "success") {
-                      setTimeout(() => {
-                          props.updateParentParent(Math.random())
-                      }, 1000);
-                  
-                  }
+        if (aUser.is_admin_fsd()) {
+          dispatch(FSDPaymentEvidence({'application_id' : institution.internal.application_id}));
+        }
+        
+        if (aUser.is_admin_mbg()) {
+          dispatch(MBGPaymentEvidence({'application_id' : institution.internal.application_id}));
+        }
+
+        
+      }, [dispatch]);
+  
+      
+    const $latest_evidence = latest_evidence ? JSON.parse(latest_evidence) : null;
+    
+    const askAction = (action) => {
+      if(action == 'approvePaymentReview') {
+          Swal.fire({
+            title: "Are you sure?",
+            text: "Do you want to approve payment!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes!",
+            html: '<div class="flex flex-column text-left"><label htmlFor="amount">Amount</label><input type="number" id="amount" name="amount" class="form-control" required /><label htmlFor="comments">Comment</label><textarea id="comments" class="form-control" rows="4" cols="50" placeholder="Enter Comment" required></textarea></div>', // Add textarea to the alert
+          }).then((result) => {
+            if (result.isConfirmed) {
+              const comments = document.getElementById('comments').value; // Get value from the textarea
+              const amount = document.getElementById('amount').value; // Get value from the textarea
+              if (comments && amount) {
+                const formData = new FormData();
+                formData.append('application_id', institution.internal.application_id);
+                formData.append('status', 'approve');
+                formData.append('comment', comments); 
+                formData.append('amount_received', amount);
+                dispatch(FSDReviewSummary(formData));
+                updateParentParent(Math.random());
               }
+
+            }
           });
       }
       
-      if(action == 'decline') {
+      if(action == 'declinePaymentReview') {
           Swal.fire({
-              title: "Are you sure?",
-              text: "You won't be able to revert this!",
-              icon: "warning",
-              showCancelButton: true,
-              confirmButtonText: "Yes, decline it!",
+            title: "Are you sure?",
+            text: "Do you want to approve payment!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes!",
+            html: '<div class="flex flex-column text-left"><label htmlFor="comments">Comment</label><textarea id="comments" class="form-control" rows="4" cols="50" placeholder="Enter Comment" required></textarea></div>', // Add textarea to the alert
           }).then((result) => {
-              if (result.isConfirmed) {
-                  
-                  const formData = new FormData();
-                  formData.append('user_id', institution.id);
-                  formData.append('action', 'decline');
-                  const resp = dispatch(megProcessTransferUserAR(formData));
-
-                  if (resp.payload?.message == "success") {
-                      setTimeout(() => {
-                          props.updateParentParent(Math.random())
-                      }, 1000);
-                  
-                  }
+            if (result.isConfirmed) {
+              const comments = document.getElementById('comments').value; // Get value from the textarea
+              if (comments) {
+                const formData = new FormData();
+                formData.append('application_id', institution.internal.application_id);
+                formData.append('status', 'approve');
+                formData.append('comment', comments); 
+                dispatch(FSDReviewSummary(formData));
+                updateParentParent(Math.random());
               }
+            }
           });
       }
       
@@ -179,7 +223,7 @@ const ActionTab = (props) => {
                                             <span>View Application</span>
                                         </DropdownItem>
                                     </li>
-                                    {(aUser.is_admin_mbg() ) &&
+                                    {(aUser.is_admin_mbg() || aUser.is_admin_fsd()) &&
                                         <>
                                             <li size="xs">
                                                 <DropdownItem tag="a"  onClick={togglePaymentView} >
@@ -190,22 +234,6 @@ const ActionTab = (props) => {
                                         </>
                                     }
 
-                                    {(aUser.is_admin_meg() ) &&
-                                        <>
-                                            <li size="xs">
-                                                <DropdownItem tag="a"  onClick={(e) => navigate(`${process.env.PUBLIC_URL}/${institution.id}/list-ars`)} >
-                                                    <Icon name="eye"></Icon>
-                                                    <span>Authorised Representative Review</span>
-                                                </DropdownItem>
-                                            </li>
-                                            {/* <li size="xs">
-                                                <DropdownItem tag="a"  onClick={(e) => askAction('decline')} >
-                                                    <Icon name="eye"></Icon>
-                                                    <span>Decline</span>
-                                                </DropdownItem>
-                                            </li> */}
-                                        </>
-                                    }
 
                                 
                             </ul>
@@ -222,31 +250,71 @@ const ActionTab = (props) => {
                 Payment View
             </ModalHeader>
             <ModalBody>
-                  <Button onClick={toggleConcession} >Upload Concession</Button>
+                  {(institution.internal.concession_stage != '1') ? <>
+                        <Button onClick={toggleConcession} >Upload Concession</Button>
+                    </> : 
+                    (institution?.payment_information?.is_paid == '1') ? <>
+                        <ul>
+                            <li><span className="lead">Invoice Number : </span>{`${institution?.payment_information?.invoice_number}`}</li>
+                            <li><span className="lead">Date of Payment : </span>{`${institution?.payment_information?.date_paid}`}</li>
+                            <li><span className="lead">Reference : </span>{`${institution?.payment_information?.reference}`}</li>
+                        </ul>
+                        <div className="my-4">
+                            <Button color="primary" className="mx-2">View Invoice</Button>
+                            {(aUser.is_admin_fsd() && $latest_evidence) && <>
+                            
+                            <a className="btn btn-primary mx-2" href={$latest_evidence.proof} target="_blank">Latest evidence of payment</a>
+                            <Button color="primary" className="mx-2"  onClick={toggleReviewView}>Payment Review</Button>
+                            
+                            </>}
+                            {(aUser.is_admin_mbg() && $latest_evidence) && <>
+                            
+                            <a className="btn btn-primary mx-2" href={$latest_evidence.proof} target="_blank">Latest evidence of payment</a>
+                            {/* <Button color="primary" className="mx-2"  onClick={toggleReviewView}>Payment Review</Button> */}
+                            
+                            </>}
+                        </div>
+                      </> : <>
+                          <h5>Not Paid</h5>
+                      </>}
+                  
                   {showConcession && <>
-                    <UploadConcession tabItem={institution} updateParentParent={props.updateParentParent}/>
+                    <UploadConcession tabItem={institution} updateParentParent={props.updateParentParent} closeModel={togglePaymentView}/>
                   </>}
-                    {/* <Card className="card">   
-                        <CardBody className="card-inner">
-                            <CardTitle tag="h5">{ `${institution.firstName} ${institution.lastName} (${institution.email})` }</CardTitle>
-                          
-                              <ul>
-                                  <li><span className="lead">Phone : </span>{`${institution.phone}`}</li>
-                                  <li><span className="lead">Nationality : </span>{`${institution.nationality}`}</li>
-                                  <li><span className="lead">Role : </span>{`${institution.role.name}`}</li>
-                                  <li><span className="lead">Position : </span>{`${institution.position.name}`}</li>
-                                  <li><span className="lead">Status : </span>{`${institution.approval_status}`}</li>
-                                  <li><span className="lead">RegID : </span>{`${institution.regId}`}</li>
-                                  <li><span className="lead">Institution : </span>{`${institution.institution.name}`}</li>
-                              </ul>
-                        </CardBody>
-                    </Card> */}
+                  
             </ModalBody>
             <ModalFooter className="bg-light">
                 <span className="sub-text">View Institutions</span>
             </ModalFooter>
         </Modal>
         
+             
+        <Modal isOpen={modalReviewView} toggle={toggleReviewView} size="sm">
+            <ModalHeader toggle={toggleReviewView} close={<button className="close" onClick={toggleReviewView}><Icon name="cross" /></button>}>
+                Payment Review
+            </ModalHeader>
+            <ModalBody>
+                        <ul>
+                            <li><span className="lead">Concession Amount : </span>{`${institution?.payment_details?.concession_amount}`}</li>
+                            <li><span className="lead">Total Fee : </span>{`${institution?.payment_details?.total}`}</li>
+                        </ul>
+                        <div className="my-4">
+                          
+                            {(aUser.is_admin_fsd()) && <>
+                            
+                            <a className="btn btn-primary mx-2" href={institution?.payment_details?.concession_file} target="_blank">View Concession Document </a>
+                                
+                            <div className="my-4">
+                                <Button color="primary" className="mx-2" onClick={() => askAction('approvePaymentReview')}>Approve</Button>
+                                <Button color="primary" className="mx-2" onClick={() => askAction('declinePaymentReview')}>Decline</Button>
+                            </div>
+                            </>}
+                        </div>
+            </ModalBody>
+            <ModalFooter className="bg-light">
+                <span className="sub-text">View Institutions</span>
+            </ModalFooter>
+        </Modal>
        
         <Modal isOpen={modalView} toggle={toggleView} size="lg">
             <ModalHeader toggle={toggleView} close={<button className="close" onClick={toggleView}><Icon name="cross" /></button>}>
@@ -311,7 +379,7 @@ const UploadConcession = ({ updateParentParent, tabItem, positions, closeModel }
     const aUserUpdate = useUserUpdate();
     
     const tabItem_id = tabItem.id
-    const [positionIds, setPositionIds] = useState([]);
+    const [complainFile, setComplainFile] = useState([]);
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
     
@@ -321,10 +389,9 @@ const UploadConcession = ({ updateParentParent, tabItem, positions, closeModel }
             
             const postValues = new Object();
               postValues.concession_amount = data.concession_amount;
-              postValues.concession_file = data.concession_file;
-              postValues.application_id = checkedId;
+              postValues.concession_file = complainFile;
+              postValues.application_id = tabItem.internal.application_id;
 
-            
               try {
                   setLoading(true);
                   
@@ -334,7 +401,7 @@ const UploadConcession = ({ updateParentParent, tabItem, positions, closeModel }
                       setTimeout(() => {
                           setLoading(false);
                           updateParentParent(Math.random())
-                        //   closeModel()
+                          closeModel()
                       }, 1000);
                   
                   } else {
@@ -348,41 +415,42 @@ const UploadConcession = ({ updateParentParent, tabItem, positions, closeModel }
         };
 
 
-        const checkItem = (event) => {
-            const ids = positionIds;
-            ids[event.target.value] = event.target.checked
-        };
-        console.log(aUser)
+
+    
+    const handleFileChange = (event) => {
+		setComplainFile(event.target.files[0]);
+    };
+    
   
     return (
         <>
             
             <form className="content clearfix my-5" onSubmit={handleSubmit(submitForm)}  encType="multipart/form-data">
                 
-                
-                            <div className="form-group">
-                                <label className="form-label" htmlFor="concession_amount">
-                                    Concession Amount
-                                </label>
-                                <div className="form-control-wrap">
-                                    <input type="text" id="concession_amount" className="form-control" {...register('concession_amount', { required: "This Field is required" })}  />
-                                    {errors.concession_amount && <span className="invalid">{ errors.concession_amount.message }</span>}
-                                </div>
-                            </div>
-                            <div className="form-group">
-                                <label className="form-label" htmlFor="concession_file">
-                                    Concession File
-                                </label>
-                                <div className="form-control-wrap">
-                                    <input type="file" id="concession_file" className="form-control" {...register('concession_file', { required: "This Field is required" })} />
-                                    {errors.concession_file && <span className="invalid">{ errors.concession_file.message }</span>}
-                                </div>
-                            </div>
-                            <div className="form-group">
-                                <Button color="primary" type="submit"  size="lg">
-                                    {loading ? ( <span><Spinner size="sm" color="light" /> Processing...</span>) : "Upload Concession"}
-                                </Button>
-                            </div>
+    
+                <div className="form-group">
+                    <label className="form-label" htmlFor="concession_amount">
+                        Concession Amount
+                    </label>
+                    <div className="form-control-wrap">
+                        <input type="number" id="concession_amount" className="form-control" {...register('concession_amount', { required: "This Field is required" })}  />
+                        {errors.concession_amount && <span className="invalid">{ errors.concession_amount.message }</span>}
+                    </div>
+                </div>
+                <div className="form-group">
+                    <label className="form-label" htmlFor="concession_file">
+                        Concession File
+                    </label>
+                    <div className="form-control-wrap">
+                        <input type="file" id="concession_file" className="form-control" {...register('concession_file', { required: "This Field is required" })} onChange={handleFileChange}/>
+                        {errors.concession_file && <span className="invalid">{ errors.concession_file.message }</span>}
+                    </div>
+                </div>
+                <div className="form-group">
+                    <Button color="primary" type="submit"  size="lg">
+                        {loading ? ( <span><Spinner size="sm" color="light" /> Processing...</span>) : "Upload Concession"}
+                    </Button>
+                </div>
                 
           </form>
           
@@ -418,7 +486,7 @@ const AdminInstitutionTable = ({ data, pagination, actions, className, selectabl
       },
       {
           name: "Concession",
-          selector: (row) => { return row.internal.concession_stage ? (<><Badge color="success" className="text-uppercase">{`Pending Concession`}</Badge></>) : (<><Badge color="success" className="text-uppercase">{`Pending Concession`}</Badge></>) },
+          selector: (row) => { return row.internal.concession_stage == 1 ? (<><Badge color="success" className="text-uppercase">{`Concession Sent`}</Badge></>) : (<><Badge color="success" className="text-uppercase">{`Pending Concession`}</Badge></>) },
           sortable: true,
           width: "auto",
           wrap: true

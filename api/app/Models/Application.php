@@ -15,11 +15,11 @@ class Application extends Model
 
     const statuses = [
         'PEN' => 'PENDING',
-        'FDP' => 'FSD DECLINE PAYMENT',
-        'FAP' => 'FSD APPROVE PAYMENT',
-        'AS'  => 'APPLICATION SUBMITTED',
-        'MPC'  => 'MEMBERSHIP APPLICATION COMPLETED',
-        'ACS' => 'AWAITING CONCESSION STAGE',
+        'FDP' => 'FSD DECLINED PAYMENT',
+        'FAP' => 'FSD APPROVED PAYMENT',
+        'AS' => 'APPLICATION SUBMITTED',
+        'MPC' => 'MEMBERSHIP APPLICATION COMPLETED',
+        'ACS' => 'APPLICATION AWAITING CONCESSION',
         'CG' => 'CONCESSION GRANTED',
         'CNG' => 'CONCESSION NOT GRANTED',
         'AFR' => 'AWAITING FSD REVIEW',
@@ -27,18 +27,18 @@ class Application extends Model
         'PPU' => 'PROOF OF PAYMENT UPLOADED',
         'ABR' => 'AWAITING MBG REVIEW',
         'AER' => 'AWAITING MEG REVIEW',
-        'RJ'  => 'REJECTED',
+        'RJ' => 'APPLICATION REJECTED',
         'MRF' => 'MBG REJECTED FSD REVIEW',
-        'MDP' => 'MBG DECLINE PAYMENT',
-        'MDFR' => 'MBG DECLINE FSD REVIEW',
-        'MAFR' => 'MBG APPROVE FSD REVIEW',
-        'MDD' => "MEG DECLINE DOCUMENT",
-        'MDMR' => "MEG DECLINE MBG REVIEW",
-        'MAMR' => "MEG APPROVE MBG REVIEW",
-        'M2DMR' => "MEG2 DECLINE MEG REVIEW",
-        'M2AMR' => "MEG2 APPROVE MEG REVIEW",
-        'AEM' => "APPLICANT EXECUTED MEMBERSHIP AGREEMENT",
-        'MEM' => "MEG EXECUTED MEMBERSHIP AGREEMENT",
+        'MDP' => 'MBG DECLINED PAYMENT',
+        'MDFR' => 'FSD REVIEW DECLINED BY MBG',
+        'MAFR' => 'FSD REVIEW APPROVED BY MBG',
+        'MDD' => "MEG DECLINED DOCUMENT",
+        'MDMR' => "MEG DECLINED MBG REVIEW",
+        'MAMR' => "MEG APPROVED MBG REVIEW",
+        'M2DMR' => "MEG2 DECLINED MEG REVIEW",
+        'M2AMR' => "MEG2 APPROVED MEG REVIEW",
+        'AEM' => "MEMBERSHIP AGREEMENT EXECUTED APPLICANT",
+        'MEM' => "MEMBERSHIP AGREEMENT EXECUTED BY MEG",
     ];
 
     const office = [
@@ -47,8 +47,10 @@ class Application extends Model
         'MEG' => 'MEG',
         'MEG2' => 'MEG2',
         'FSD' => 'FSD',
-        'BL'  => 'BACKLOG'
+        'BL' => 'BACKLOG',
     ];
+
+    protected $appends = ['status_description'];
 
     public function status()
     {
@@ -65,27 +67,39 @@ class Application extends Model
         return $this->morphMany(ProofOfPayment::class, 'proofable');
     }
 
-    public function institution(){
+    public function institution()
+    {
         return $this->belongsTo(Institution::class, 'institution_id');
     }
 
-    public function uploads() {
+    public function uploads()
+    {
         return $this->hasMany(ApplicationFieldUpload::class, 'application_id');
     }
 
-    public function currentStatus(){
-        $status = Status::find($this->status); 
+    public function currentStatus()
+    {
+        $status = Status::find($this->status);
 
         return $status ? $status->status : 'pending';
     }
 
-    public function statusModel(){
-        $status = Status::find($this->status); 
+    public function statusModel()
+    {
+        $status = Status::find($this->status);
 
         return $status;
     }
 
-    public function applicant(){
+    public function applicant()
+    {
         return $this->belongsTo(User::class, 'submitted_by');
+    }
+
+    public function getStatusDescriptionAttribute()
+    {
+        $status = Status::find($this->status);
+
+        return $status->status;
     }
 }
