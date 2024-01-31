@@ -200,3 +200,26 @@ span.asc.__rdt_custom_sort_icon__ {
 .decline {
     background: #C79D51 !important;
 }
+.nk-wizard-simple .steps ul li h5 {
+    color: #36477A;
+}
+
+.nk-wizard-simple .steps ul li.done .number {
+    color: #C79D51 !important;
+}
+
+.nk-wizard-simple .steps ul li.done:after {
+    background: #C79D51 !important;
+}
+
+.nk-wizard-simple .steps ul li.done h5, .nk-wizard-simple .steps ul li.done .h5, .nk-wizard-simple .steps ul li.done .number, .nk-wizard-simple .steps ul li.current h5, .nk-wizard-simple .steps ul li.current .h5, .nk-wizard-simple .steps ul li.current .number {
+    color: #C79D51 !important;
+}
+
+.nk-wizard-simple .steps ul li h5, .nk-wizard-simple .steps ul li .h5 {
+    color: #36477A !important;
+}
+
+.nk-wizard-simple .steps ul li .number {
+    color: #36477A !important;
+}

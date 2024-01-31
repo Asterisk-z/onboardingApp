@@ -990,7 +990,7 @@ const ApplicationCompleted = (props) => {
   return (
     <div className="flex flex-col justify-content-center align-items-center p-3">
       <div>
-          <BlockTitle tag="h6" className="text-center">
+          <BlockTitle tag="h2" className="text-center">
           Thank you for completing membership application form
         </BlockTitle>
         <BlockContent className="text-center">
@@ -1103,7 +1103,7 @@ console.log(fields)
       <div style={{ 'margin': '0px 10px !important' }}>
         <div style={styles.card}>
           <div style={styles.color}>
-            <h2>{`${authUser.user_data.institution.category[0].name} Application`} </h2>
+            <h3>{`${authUser.user_data.institution.category[0].name} Application`} </h3>
             
             <p>Please fill forms to complete your application</p>
           </div>
