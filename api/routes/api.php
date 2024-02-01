@@ -243,6 +243,7 @@ Route::middleware('auth')->group(function () {
         Route::group(['prefix' => 'membership/application/meg'], function () {
             Route::get('/institutions', [MegApplicationController::class, 'institutions']);
             Route::post('/review', [MegApplicationController::class, 'megReview']);
+            Route::post('/upload-membership-agreement', [MegApplicationController::class, 'uploadMemberAgreement']);
         });
     });
 
@@ -293,6 +294,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/invoice/download', [MembershipApplicationController::class, 'downloadInvoice']);
             Route::post('/upload-payment-proof', [MembershipApplicationController::class, 'uploadProofOfPayment']);
             Route::post('/complete', [MembershipApplicationController::class, 'complete']);
+            Route::post('/upload-membership-agreement', [MembershipApplicationController::class, 'uploadMemberAgreement']);
         });
     });
     //
