@@ -9,7 +9,7 @@ import Icon from "components/icon/Icon";
 import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge,  Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, CardBody, CardTitle } from "reactstrap";
 import { DataTablePagination } from "components/Component";
 import moment from "moment";
-import {uploadConcession, FSDPaymentEvidence, FSDReviewSummary, MBGPaymentEvidence} from "redux/stores/membership/applicationProcessStore"
+import {uploadConcession, FSDPaymentEvidence, FSDReviewSummary, MBGPaymentEvidence, MBGReview, MEGReview, MEG2Review} from "redux/stores/membership/applicationProcessStore"
 import { megProcessTransferUserAR } from "redux/stores/authorize/representative";
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 import Swal from "sweetalert2";
@@ -156,12 +156,12 @@ const ActionTab = (props) => {
     const askAction = (action) => {
       if(action == 'approvePaymentReview') {
           Swal.fire({
-            title: "Are you sure?",
+            title: "Kindly confirm payment",
             text: "Do you want to approve payment!",
             icon: "warning",
             showCancelButton: true,
-            confirmButtonText: "Yes!",
-            html: '<div class="flex flex-column text-left"><label htmlFor="amount">Amount</label><input type="number" id="amount" name="amount" class="form-control" required /><label htmlFor="comments">Comment</label><textarea id="comments" class="form-control" rows="4" cols="50" placeholder="Enter Comment" required></textarea></div>', // Add textarea to the alert
+            confirmButtonText: "Approve!",
+            html: '<div class="flex flex-column text-left"><label htmlFor="amount">Amount Received</label><input type="number" id="amount" name="amount" class="form-control" required /><label htmlFor="comments">Comment</label><textarea id="comments" class="form-control" rows="4" cols="50" placeholder="Enter Comment" required></textarea></div>', // Add textarea to the alert
           }).then((result) => {
             if (result.isConfirmed) {
               const comments = document.getElementById('comments').value; // Get value from the textarea
@@ -173,7 +173,7 @@ const ActionTab = (props) => {
                 formData.append('comment', comments); 
                 formData.append('amount_received', amount);
                 dispatch(FSDReviewSummary(formData));
-                updateParentParent(Math.random());
+                props.updateParentParent(Math.random());
               }
 
             }
@@ -183,7 +183,30 @@ const ActionTab = (props) => {
       if(action == 'declinePaymentReview') {
           Swal.fire({
             title: "Are you sure?",
-            text: "Do you want to approve payment!",
+            text: "Do you want to decline payment!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes!",
+            html: '<div class="flex flex-column text-left"><label htmlFor="comments">Comment</label><textarea id="comments" class="form-control" rows="4" cols="50" placeholder="Enter Comment" required></textarea></div>', // Add textarea to the alert
+          }).then((result) => {
+            if (result.isConfirmed) {
+              const comments = document.getElementById('comments').value; // Get value from the textarea
+              if (comments) {
+                const formData = new FormData();
+                formData.append('application_id', institution.internal.application_id);
+                formData.append('status', 'decline');
+                formData.append('comment', comments); 
+                dispatch(FSDReviewSummary(formData));
+                props.updateParentParent(Math.random());
+              }
+            }
+          });
+      }
+      
+      if(action == 'approveFSDReview') {
+          Swal.fire({
+            title: "Are you sure?",
+            text: "Do you want to approve review!",
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Yes!",
@@ -196,15 +219,112 @@ const ActionTab = (props) => {
                 formData.append('application_id', institution.internal.application_id);
                 formData.append('status', 'approve');
                 formData.append('comment', comments); 
-                dispatch(FSDReviewSummary(formData));
-                updateParentParent(Math.random());
+                dispatch(MBGReview(formData));
+                props.updateParentParent(Math.random());
               }
             }
           });
       }
       
+      if(action == 'declineFSDReview') {
+          Swal.fire({
+            title: "Are you sure?",
+            text: "Do you want to approve review!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes!",
+            html: '<div class="flex flex-column text-left"><label htmlFor="comments">Comment</label><textarea id="comments" class="form-control" rows="4" cols="50" placeholder="Enter Comment" required></textarea></div>', // Add textarea to the alert
+          }).then((result) => {
+            if (result.isConfirmed) {
+              const comments = document.getElementById('comments').value; // Get value from the textarea
+              if (comments) {
+                const formData = new FormData();
+                formData.append('application_id', institution.internal.application_id);
+                formData.append('status', 'decline');
+                formData.append('comment', comments); 
+                dispatch(MBGReview(formData));
+                props.updateParentParent(Math.random());
+              }
+            }
+          });
+      }
+      
+      
+      if(action == 'approveApplicationsReview') {
+          Swal.fire({
+            title: "Are you sure?",
+            text: "Do you want to approve review!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes!",
+            html: '<div class="flex flex-column text-left"><label htmlFor="application_report">Amount Received</label><input type="file" id="application_report" name="application_report" class="form-control" required /><label htmlFor="comments">Comment</label><textarea id="comments" class="form-control" rows="4" cols="50" placeholder="Enter Comment" required></textarea></div>', // Add textarea to the alert
+          }).then((result) => {
+            if (result.isConfirmed) {
+              const application_report = document.getElementById('application_report').files[0]; // Get value from the textarea
+              const comments = document.getElementById('comments').value; // Get value from the textarea
+              console.log(application_report)
+              if (comments && application_report) {
+                const formData = new FormData();
+                formData.append('application_id', institution.internal.application_id);
+                formData.append('status', 'approve');
+                formData.append('comment', comments); 
+                formData.append('application_report', application_report); 
+                dispatch(MEGReview(formData));
+                props.updateParentParent(Math.random());
+              }
+            }
+          });
+      }
+      
+      if(action == 'declineApplicationReview') {
+          Swal.fire({
+            title: "Are you sure?",
+            text: "Do you want to approve review!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes!",
+            html: '<div class="flex flex-column text-left"><label htmlFor="comments">Comment</label><textarea id="comments" class="form-control" rows="4" cols="50" placeholder="Enter Comment" required></textarea></div>', // Add textarea to the alert
+          }).then((result) => {
+            if (result.isConfirmed) {
+              const comments = document.getElementById('comments').value; // Get value from the textarea
+              if (comments) {
+                const formData = new FormData();
+                formData.append('application_id', institution.internal.application_id);
+                formData.append('status', 'decline');
+                formData.append('comment', comments); 
+                dispatch(MEGReview(formData));
+                props.updateParentParent(Math.random());
+              }
+            }
+          });
+      }
+      
+      
+      if(action == 'approveMEGApplicationsReview') {
+          Swal.fire({
+            title: "Are you sure?",
+            text: "Do you want to approve review!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes!",
+          }).then((result) => {
+              if (result.isConfirmed) {
+                
+                const formData = new FormData();
+                formData.append('application_id', institution.internal.application_id); 
+                dispatch(MEG2Review(formData));
+                props.updateParentParent(Math.random());
+              
+            }
+          });
+      }
+      
+
+      
 
     };
+
+    // console.log(institution.fsd_review[institution.fsd_review.length-1].comment)
   
   return (
     <>
@@ -260,21 +380,26 @@ const ActionTab = (props) => {
                             <li><span className="lead">Reference : </span>{`${institution?.payment_information?.reference}`}</li>
                             {(aUser.is_admin_mbg() && $latest_evidence) && <>
                             <li><span className="lead">Amount received by FSD : </span>{`${institution?.internal?.amount_received_by_fsd}`}</li>
-                            <li><span className="lead">Comment : </span>{`${institution?.fsd_review?.comment}`}</li>
+                            <li><span className="lead">Comment : </span>{`${institution.fsd_review[institution.fsd_review.length-1].comment}`}</li>
                             </>}
                         </ul>
                         <div className="my-4">
                             <Button color="primary" className="mx-2">View Invoice</Button>
                             {(aUser.is_admin_fsd() && $latest_evidence) && <>
                             
-                            <a className="btn btn-primary mx-2" href={$latest_evidence.proof} target="_blank">Latest evidence of payment</a>
-                            <Button color="primary" className="mx-2"  onClick={toggleReviewView}>Payment Review</Button>
+                                <a className="btn btn-primary mx-2" href={$latest_evidence.proof} target="_blank">Latest evidence of payment</a>
+                                <Button color="primary" className="mx-2"  onClick={toggleReviewView}>Payment Review</Button>
                             
                             </>}
                             {(aUser.is_admin_mbg() && $latest_evidence) && <>
                             
                             <a className="btn btn-primary mx-2" href={$latest_evidence.proof} target="_blank">Latest evidence of payment</a>
                             {/* <Button color="primary" className="mx-2"  onClick={toggleReviewView}>Payment Review</Button> */}
+                                <div className="my-4">
+                                    <h6>Are you satisfied with FSD Review?</h6>
+                                    <Button color="primary" className="mx-2" onClick={() => askAction('approveFSDReview')}>Approve</Button>
+                                    <Button color="primary" className="mx-2" onClick={() => askAction('declineFSDReview')}>Decline</Button>
+                                </div>
                             
                             </>}
                         </div>
@@ -306,12 +431,12 @@ const ActionTab = (props) => {
                           
                             {(aUser.is_admin_fsd()) && <>
                             
-                            <a className="btn btn-primary mx-2" href={institution?.payment_details?.concession_file} target="_blank">View Concession Document </a>
-                                
-                            <div className="my-4">
-                                <Button color="primary" className="mx-2" onClick={() => askAction('approvePaymentReview')}>Approve</Button>
-                                <Button color="primary" className="mx-2" onClick={() => askAction('declinePaymentReview')}>Decline</Button>
-                            </div>
+                                <a className="btn btn-primary mx-2" href={institution?.payment_details?.concession_file} target="_blank">View Concession Document </a>
+                                    
+                                <div className="my-4">
+                                    <Button color="primary" className="mx-2" onClick={() => askAction('approvePaymentReview')}>Approve</Button>
+                                    <Button color="primary" className="mx-2" onClick={() => askAction('declinePaymentReview')}>Decline</Button>
+                                </div>
                             </>}
                         </div>
             </ModalBody>
@@ -322,24 +447,85 @@ const ActionTab = (props) => {
        
         <Modal isOpen={modalView} toggle={toggleView} size="lg">
             <ModalHeader toggle={toggleView} close={<button className="close" onClick={toggleView}><Icon name="cross" /></button>}>
-                View Institution
+                View Institution Application 
             </ModalHeader>
             <ModalBody>
-                    {/* <Card className="card">   
+                    <Card className="card">   
                         <CardBody className="card-inner">
-                            <CardTitle tag="h5">{ `${institution.firstName} ${institution.lastName} (${institution.email})` }</CardTitle>
-                          
+                            <CardTitle tag="h5">{ `Basic Information` }</CardTitle>
                               <ul>
-                                  <li><span className="lead">Phone : </span>{`${institution.phone}`}</li>
-                                  <li><span className="lead">Nationality : </span>{`${institution.nationality}`}</li>
-                                  <li><span className="lead">Role : </span>{`${institution.role.name}`}</li>
-                                  <li><span className="lead">Position : </span>{`${institution.position.name}`}</li>
-                                  <li><span className="lead">Status : </span>{`${institution.approval_status}`}</li>
-                                  <li><span className="lead">RegID : </span>{`${institution.regId}`}</li>
-                                  <li><span className="lead">Institution : </span>{`${institution.institution.name}`}</li>
+                                  <li><span className="lead">Company name :{`${institution?.basic_details.companyName}`} </span></li>
+                                  <li><span className="lead">RC Number :{`${institution?.basic_details.rcNumber}`} </span></li>
+                                  <li><span className="lead">Registered Office Address :{`${institution?.basic_details.registeredOfficeAddress}`} </span></li>
+                                  <li><span className="lead">Town/City :{`${institution?.basic_details.placeOfIncorporation}`} </span></li>
+                                  <li><span className="lead">Date of Incorporation :{`${institution?.basic_details.dateOfIncorporation}`} </span></li>
+                                  <li><span className="lead">Place of Incorporation :{`${institution?.basic_details.placeOfIncorporation}`} </span></li>
+                                  <li><span className="lead">Nature of Business :{`${institution?.basic_details.natureOfBusiness}`} </span></li>
+                                  <li><span className="lead">Company Primary Telephone Number :{`${institution?.basic_details.companyTelephoneNumber}`} </span></li>
+                                  <li><span className="lead">Company Secondary Telephone Number :{`${institution?.basic_details.companyTelephoneNumber}`} </span></li>
+                                  <li><span className="lead">Company Email Address :{`${institution?.basic_details.companyEmailAddress}`} </span></li>
+                                  <li><span className="lead">Company website address :{`${institution?.basic_details.corporateWebsiteAddress}`} </span></li>
                               </ul>
                         </CardBody>
-                    </Card> */}
+                        
+                        <CardBody className="card-inner">
+                            <CardTitle tag="h5">{ `Supporting Documents` }</CardTitle>
+                              <ul>
+                                  <li></li>
+                              </ul>
+                        </CardBody>
+                        
+                        <CardBody className="card-inner">
+                            <CardTitle tag="h5">{ `Payment Information` }</CardTitle>
+                              <ul>
+                                  <li><span className="lead">Invoice Number :{`${institution?.payment_information.invoice_number}`} </span></li>
+                                  <li><span className="lead">Payment Reference :{`${institution?.payment_information.reference}`} </span></li>
+                                  <li><span className="lead">Date Of Payment :{`${institution?.payment_information.date_paid}`} </span></li>
+                                  <li><span className="lead">Amount Paid :{`${institution?.payment_details.total}`} </span></li>
+                                  <li><span className="lead">Concession Amount :{`${institution?.payment_details.concession_amount}`} </span></li>
+                              </ul>
+                        </CardBody>
+                        <CardBody className="card-inner">
+                            <CardTitle tag="h5">{ `Membership Reason` }</CardTitle>
+                              <ul>
+                                  <li></li>
+                              </ul>
+                        </CardBody>
+                        <CardBody className="card-inner">
+                            <CardTitle tag="h5">{ `MBG Review` }</CardTitle>
+                              <ul>
+                                  <li><span className="lead">Status :{`${institution?.mbg_review[institution?.mbg_review.length - 1]?.status ? institution?.mbg_review[institution?.mbg_review.length - 1]?.status : ""}`} </span></li>
+                                  <li><span className="lead">Reason :{`${institution?.mbg_review[institution?.mbg_review.length - 1]?.comment ? institution?.mbg_review[institution?.mbg_review.length - 1]?.comment : ""}`} </span></li>
+                              </ul>
+                        </CardBody>
+                        <CardBody className="card-inner">
+                            <CardTitle tag="h5">{ `FSG Review` }</CardTitle>
+                              <ul>
+                                  <li><span className="lead">Status :{`${institution?.fsd_review[institution?.fsd_review.length - 1]?.status ? institution?.fsd_review[institution?.fsd_review.length - 1]?.status : ""}`} </span></li>
+                                  <li><span className="lead">Reason :{`${institution?.fsd_review[institution?.fsd_review.length - 1]?.comment ? institution?.fsd_review[institution?.fsd_review.length - 1]?.comment : ""}`} </span></li>
+                              </ul>
+                        </CardBody>
+                        <CardBody className="card-inner">
+                            <CardTitle tag="h5">{ `MEG Review` }</CardTitle>
+                              <ul>
+                                  <li><span className="lead">Status :{`${institution?.meg_review[institution?.meg_review.length - 1]?.status ? institution?.meg_review[institution?.meg_review.length - 1]?.status : ""}`} </span></li>
+                                  <li><span className="lead">Reason :{`${institution?.meg_review[institution?.meg_review.length - 1]?.comment ? institution?.meg_review[institution?.meg_review.length - 1]?.comment : ""}`} </span></li>
+                              </ul>
+                        </CardBody>
+                        {(aUser.is_admin_meg() && institution.internal.mbg_review_stage && !institution.internal.meg_review_stage ) && 
+                        <div className="gy-0">
+                                <h5>Application Review</h5>
+                                <Button className="btn btn-primary mx-2"  onClick={() => askAction('declineApplicationReview')}>Reject Application</Button>
+                                <Button className="btn btn-success mx-2"  onClick={() => askAction('approveApplicationsReview')}> Upload Application</Button>
+                          </div>
+                      }
+                        {(aUser.is_admin_meg2() && institution.internal.meg_review_stage && !institution.internal.meg2_review_stage) && 
+                        <div className="gy-0">
+                                <h5>Application Review</h5>
+                                <Button className="btn btn-success mx-2"  onClick={() => askAction('approveMEGApplicationsReview')}> Approve Application</Button>
+                          </div>
+                      }
+                    </Card>
             </ModalBody>
             <ModalFooter className="bg-light">
                 <span className="sub-text">View Institutions</span>
@@ -497,7 +683,7 @@ const AdminInstitutionTable = ({ data, pagination, actions, className, selectabl
       },
       {
           name: "Status",
-          selector: (row) => { return (<><Badge color="success" className="text-uppercase">{`Application Completed`}</Badge></>) },
+          selector: (row) => { return (<><Badge color="success" className="text-uppercase">{row.internal.status}</Badge></>) },
           sortable: true,
           width: "auto",
           wrap: true

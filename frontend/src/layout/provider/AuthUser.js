@@ -14,7 +14,7 @@ export function useUserUpdate(){
 
 const checkUser = (type, role) => {
   
-    const admin_type = ['MSG', 'MEG', 'FSD', 'MBG']
+    const admin_type = ['MSG', 'MEG', 'FSD', 'MBG', 'BLG', 'MEG2', 'BIG', 'HELP DESK']
     const user_type = ['AR INPUTER', 'AR AUTHORISER']
     
   if (type == 'user') {

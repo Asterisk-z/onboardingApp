@@ -80,7 +80,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/logs', [AuditController::class, 'userLog']);
     });
 
-    Route::middleware('authRole:' . Role::MSG . ',' . Role::MEG . ',' . Role::FSD . ',' . Role::MBG . ',' . Role::BLG)->group(function () {
+    Route::middleware('authRole:' . Role::MSG . ',' . Role::MEG . ',' . Role::FSD . ',' . Role::MBG . ',' . Role::BLG . ',' . Role::MEG2 . ',' . Role::BIG . ',' . Role::HELPDESK )->group(function () {
         Route::get('admin/dashboard', [DashboardControler::class, 'adminDashboard']);
 
         // List AR For Admins

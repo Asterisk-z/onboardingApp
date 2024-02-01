@@ -16,7 +16,8 @@ class UserSeeder extends Seeder
     public function run()
     {
         // User::truncate();
-        $roles = ['msg', 'meg', 'fsd', 'mbg', 'blg', 'meg2', 'big', 'FMDQ Help Desk'];
+        $roles = ['msg', 'meg', 'fsd', 'mbg', 'blg', 'meg2', 'big', 'helpdesk'];
+        $roleId = ['1', '2', '3', '4', '7', '8', '9', '10'];
 
         foreach ($roles as $index => $role) {
 
@@ -35,7 +36,7 @@ class UserSeeder extends Seeder
                 'phone' => $phone,
                 'password' => Hash::make('password'),
                 'approval_status' => 'approved',
-                'role_id' => $index + 1,
+                'role_id' => $roleId[$index],
                 'institution_id' => null,
                 'position_id' => null,
                 'verified_at' => now(),

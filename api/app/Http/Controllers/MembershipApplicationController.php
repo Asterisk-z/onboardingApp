@@ -20,10 +20,8 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
-use Symfony\Component\HttpFoundation\Response;
-use Barryvdh\DomPDF\Facade\Pdf as PDF;
-use Illuminate\Support\Facades\Storage;
 use NumberFormatter;
+use Symfony\Component\HttpFoundation\Response;
 
 class MembershipApplicationController extends Controller
 {
@@ -37,6 +35,21 @@ class MembershipApplicationController extends Controller
 
         $data = Utility::applicationDetails($data);
         $data = $data->first();
+
+        return successResponse("Here you go", $data ?? []);
+    }
+
+    public function getDetail(Request $request)
+    {
+        $user = $request->user();
+        $data = [];
+        $application = Application::where(['submitted_by' => $user->id])->first();
+        $application_requirements = ApplicationFieldUpload::where('application_id', $application->id)->with('field')->get();
+
+        $data = [
+            'application' => $application,
+            'application_requirements' => $application_requirements,
+        ];
 
         return successResponse("Here you go", $data ?? []);
     }
@@ -207,10 +220,10 @@ class MembershipApplicationController extends Controller
         if ($application->submitted_by != $user->id) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
-        
+
         // Download the stored PDF
         return response()->json([
-            "file_path" => route('invoice', ['uuid' => $application->invoiceToken])
+            "file_path" => route('invoice', ['uuid' => $application->invoiceToken]),
         ]);
     }
 
@@ -242,13 +255,13 @@ class MembershipApplicationController extends Controller
         }
 
         $f = new NumberFormatter("en", NumberFormatter::SPELLOUT);
-        
+
         $amountDue = number_format($total + $vat, 2);
         $amountInWords = $f->format($total + $vat);
         $total = number_format($total, 2);
         $vat = number_format($vat, 2);
 
-        return view('invoice', compact('invoice','invoiceContents', 'applicant', 'vat', 'total', 'amountInWords', 'amountDue'));
+        return view('invoice', compact('invoice', 'invoiceContents', 'applicant', 'vat', 'total', 'amountInWords', 'amountDue'));
     }
 
     /**

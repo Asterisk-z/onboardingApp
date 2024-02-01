@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { errorHandler, successHandler } from "utils/Functions";
 import queryGenerator from "utils/QueryGenerator";
-const initialState = { all_institutions: null, all: null, list: null, latest_evidence: null, all_fields: null, list_extra: {}, status_list: null, transfer_list: null, user: null, total: null, error: "", loading: false };
+const initialState = { all_institutions: null, all: null, list: null, latest_evidence: null, invoice_download: null, all_fields: null, list_extra: {}, status_list: null, transfer_list: null, user: null, total: null, error: "", loading: false };
 
 export const loadInstitutionApplications = createAsyncThunk(
   "applicationProcess/loadInstitutionApplications",
@@ -13,6 +13,28 @@ export const loadInstitutionApplications = createAsyncThunk(
       return successHandler(data);
     } catch (error) {
       return errorHandler(error);
+    }
+  }
+);
+
+
+export const loadInvoiceDownload = createAsyncThunk(
+  "applicationProcess/loadInvoiceDownload",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `membership/application/invoice/download`,
+        data: values,
+      });
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error, true);
     }
   }
 );
@@ -166,7 +188,7 @@ export const MBGReview = createAsyncThunk(
         url: `membership/application/mbg/review`,
         data: values,
       });
-      return successHandler(data);
+      return successHandler(data, data.message);
     } catch (error) {
       return errorHandler(error, true);
     }
@@ -372,6 +394,23 @@ const applicationProcess = createSlice({
     });
 
     builder.addCase(loadInstitutionApplications.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+    
+    // ====== builders for loadInvoiceDownload ======
+
+    builder.addCase(loadInvoiceDownload.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(loadInvoiceDownload.fulfilled, (state, action) => {
+        state.loading = false;
+        // state.list = action.payload?.data?.data?.categories;
+        state.invoice_download = JSON.stringify(action.payload?.data?.file_path);
+    });
+
+    builder.addCase(loadInvoiceDownload.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });

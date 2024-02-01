@@ -10,7 +10,8 @@ import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, Dropd
 import { HeaderLogo } from "pages/components/HeaderLogo";
 import DatePicker from "react-datepicker";
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
-import { loadApplication, loadExtra, completeApplication } from "redux/stores/membership/applicationStore";
+import { loadApplication, completeApplication } from "redux/stores/membership/applicationStore";
+import { loadInvoiceDownload } from "redux/stores/membership/applicationProcessStore";
 import { uploadPaymentProof } from "redux/stores/membership/applicationProcessStore";
 import moment from 'moment';
 import Swal from "sweetalert2";
@@ -29,35 +30,60 @@ const ApplicantInformation = (props) => {
     const [loading, setLoading] = useState(false);
     const [modalForm, setModalForm] = useState(false);
     const [modalView, setModalView] = useState(false);
+    const [uploadAgreeView, setUploadAgreeView] = useState(false);
     const [uploadView, setUploadView] = useState(false);
     
     const toggleView = () => setModalView(!modalView);
+    const toggleUploadAgreeView = () => setUploadAgreeView(!uploadAgreeView);
     const toggleUploadView = () => setUploadView(!uploadView);
     
     const { reset, register, handleSubmit, formState: { errors }, setValue, clearErrors } = useForm();
     const user_application = useSelector((state) => state?.application?.user_application) || null;
+    const invoice_download = useSelector((state) => state?.applicationProcess?.invoice_download) || null;
 
     useEffect(() => {
         dispatch(loadApplication());
     }, [dispatch, parentState]);
   
   
+  
 
     
     const $user_application = user_application ? JSON.parse(user_application) : null;
+    const $invoice_download = invoice_download ? JSON.parse(invoice_download) : null;
 
+
+    useEffect(() => {
+        if ($user_application) {
+            dispatch(loadInvoiceDownload({ 'application_id': $user_application?.application?.id }));
+        }
+    }, [user_application]);
     
+    
+    // console.log(invoice_download)
   console.log($user_application);
 
   return (
     <section>
       
       <Row className="gy-2">
+        <p>{ $user_application.application.status_description}</p>
         <Col md='12'>
           {$user_application?.application?.concession_stage == 1 && <>
             
-              <a className="btn btn-primary mx-1" href="#" target="_blank"> Download Invoice </a>
-              <a className="btn btn-primary mx-1" href="#"  onClick={toggleView} >Make Payment </a>
+              <a className="btn btn-primary mx-1" href={$invoice_download} target="_blank"> Download Invoice </a>
+              {!$user_application?.application?.proof_of_payment ? <>
+               <a className="btn btn-primary mx-1" href="#"  onClick={toggleView} >Make Payment </a>
+                      </> : <>
+               <a className="btn btn-success mx-1" href="#"  >Payment Sent</a>
+                      </>}
+             
+          </>}
+          
+          {$user_application?.application?.meg2_review_stage == 1 && <>
+            
+              <a className="btn btn-primary mx-1" href={$user_application?.application?.membership_agreement} target="_blank"> Download Agreement </a>
+                <a className="btn btn-primary mx-1" href="#"  onClick={toggleUploadAgreeView} >Upload Signed Agreement </a>
           </>}
         </Col>
         <Col md='12'>
@@ -167,16 +193,120 @@ const ApplicantInformation = (props) => {
                 <span className="sub-text">View Institutions</span>
             </ModalFooter>
         </Modal>
+        <Modal isOpen={uploadAgreeView} toggle={toggleUploadAgreeView} size="lg">
+            <ModalHeader toggle={toggleUploadAgreeView} close={<button className="close" onClick={toggleUploadAgreeView}><Icon name="cross" /></button>}>
+                Upload Signed Agreement
+            </ModalHeader>
+            <ModalBody>
+
+                    <Row className="gy-5">
+                        <Col md='12'>
+                          <Card className="card-bordered">   
+                            <CardBody className="card-inner">
+                              <CardTitle tag="h5">Payment by Transfer</CardTitle>
+                                {$user_application && <>
+                                    <UploadAgreement tabItem={$user_application} updateParentParent={setParentState} closeModel={toggleView}/>
+                                </>}
+                              
+                              
+                            </CardBody>
+                          </Card>
+                        </Col>
+                    </Row>                  
+            </ModalBody>
+            <ModalFooter className="bg-light">
+                <span className="sub-text">View Institutions</span>
+            </ModalFooter>
+        </Modal>
     </section>
   );
 };
 
+const UploadAgreement = ({ updateParentParent, tabItem, positions, closeModel }) => {
+    
+    const aUser = useUser();
+    const aUserUpdate = useUserUpdate();
+    
+    const navigate = useNavigate();
+    const tabItem_id = tabItem.id
+    const [complainFile, setComplainFile] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch();
+    
+    const { handleSubmit, register, watch, formState: { errors } } = useForm();
+
+    const submitForm = async (data) => {
+            
+            const postValues = new Object();
+              postValues.proof_of_payment = complainFile;
+              postValues.application_id = tabItem?.application?.id;
+
+              try {
+                  setLoading(true);
+                  
+                //   const resp = await dispatch(uploadPaymentProof(postValues));
+
+                  if (resp.payload?.message == "success") {
+                      setTimeout(() => {
+                          setLoading(false);
+                          updateParentParent(Math.random())
+                          closeModel()
+                          navigate(`${process.env.PUBLIC_URL}/dashboard`)
+                      }, 1000);
+                  
+                  } else {
+                    setLoading(false);
+                  }
+                  
+              } catch (error) {
+                setLoading(false);
+              }
+          
+        };
+
+    
+    const handleFileChange = (event) => {
+		setComplainFile(event.target.files[0]);
+    };
+    
+  
+    return (
+        <>
+            
+            <form className="content clearfix my-5" onSubmit={handleSubmit(submitForm)}  encType="multipart/form-data">
+                
+                <div className="form-group">
+                    <label className="form-label" htmlFor="proveOfPayment">
+                        Signed Agreement
+                    </label>
+                    <div className="form-control-wrap">
+                        <input type="file" id="proveOfPayment" className="form-control" {...register('proveOfPayment', { required: "This Field is required" })} onChange={handleFileChange}/>
+                        {errors.proveOfPayment && <span className="invalid">{ errors.proveOfPayment.message }</span>}
+                    </div>
+                </div>
+                <div className="form-group">
+                    <Button color="primary" type="submit"  size="md">
+                        {loading ? ( <span><Spinner size="sm" color="light" /> Processing...</span>) : "Upload "}
+                    </Button>
+
+                    <Button color="primary" size='md' className="mx-3" onClick={closeModel}>Cancel</Button>
+                </div>
+                
+          </form>
+          
+      </>
+
+
+    );
+};
+ 
 
 const PayWithTransfer = ({ updateParentParent, tabItem, positions, closeModel, toggleMethod }) => {
     
     const aUser = useUser();
     const aUserUpdate = useUserUpdate();
-    // console.log(tabItem)
+    
+    const navigate = useNavigate();
     const tabItem_id = tabItem.id
     const [complainFile, setComplainFile] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -201,6 +331,7 @@ const PayWithTransfer = ({ updateParentParent, tabItem, positions, closeModel, t
                           updateParentParent(Math.random())
                           closeModel()
                           toggleMethod()
+                          navigate(`${process.env.PUBLIC_URL}/dashboard`)
                       }, 1000);
                   
                   } else {
@@ -350,7 +481,7 @@ const Form = () => {
                       <div style={styles.card}>
                         <div style={styles.color}>
                           <h2>{`${authUser.user_data.institution.category[0].name} Application Details`} </h2>
-                          <p>Pending Approval</p>
+                          {/* <p>Pending Approval</p> */}
                         </div>
                         <div className="nk-wizard nk-wizard-simple is-alter wizard clearfix">
                           <Steps config={config}>
