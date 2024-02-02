@@ -82,11 +82,11 @@ class FinalApplicationProcessingJob implements ShouldQueue
 
         $attachment = [
             [
-                "name" => "e-Success Letter",
+                "name" => "{$companyName} Membership Agreement",
                 "saved_path" => config('app.url') .'/storage/'.$application->meg_executed_membership_agreement
             ],
             [
-                "name" => "{$companyName} Membership Agreement",
+                "name" => "e-Success Letter",
                 "saved_path" => config('app.url') .'/storage/'.$application->meg_executed_membership_agreement
             ]
         ];
