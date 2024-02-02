@@ -10,8 +10,7 @@
         <style>
             @media print {
                 body {
-                    print-color-adjust: exact;
-                    -webkit-print-color-adjust: exact;
+					-webkit-print-color-adjust: exact;
                 }
                 html, body {
                     height:100vh; 
@@ -53,8 +52,8 @@
 					<tr>
 						<th rowspan="5" style="width: 45%;" class="vHeader">
 							<p>Bill To:</p>
-							<p>FMDQ</p>
-							<p>Lagos</p><br><br><br><br>
+							<p>{{$companyName}}</p>
+							<p>{{$address}}</p><br><br><br><br>
 							<p>Attention: {{$applicant->first_name}} {{$applicant->last_name}}</p>
 						</th>
 					</tr>
@@ -77,29 +76,17 @@
 				</table>
 			</section>		
 			<section class="table two">
-				<table style="width: 100%;">
+				<table style="width: 100%;
+				background-image: url('{{ asset('assets/invoice/img/fmdqlogo-blurred.svg') }}');
+				background-position: center;
+				background-repeat: no-repeat;
+				background-size: contain;">
 					<tr>
 						<th style="width: 5%;">S/N</th>
 						<th style="width: 55%;">Description</th>
 						<th style="width: 20%;">₦</th>
 						<th style="width: 20%;">₦</th>
 					</tr>
-
-                    {{-- <tr style="height: 70px;">
-                        <td style="text-align: center;">
-                            1
-                        </td>
-                        <td>
-                            <span class="description-col-2">
-                                Dealing Member (Banks) - Commercial (National) - Application Fee (Non-Refundable)
-                            </span>
-                        </td>
-                        <td style="text-align: center;">
-                        </td>
-                        <td style="text-align: center;">
-                            22,500,000.00
-                        </td>
-                    </tr> --}}
                     @php
                         $i = 1;
                     @endphp

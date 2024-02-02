@@ -121,15 +121,15 @@ class MegApplicationController extends Controller
         }
 
         if($application->currentStatus() != Application::statuses['AEM']){
-            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg."1");
         }
 
-        $application->meg_executed_membership_agreement = $request->hasFile('executed_member_agreement') ? $request->file('executed_member_agreement')->storePublicly('applicant_executed_member_agreement', 'public') : null;
+        $application->meg_executed_membership_agreement = $request->hasFile('executed_member_agreement') ? $request->file('executed_member_agreement')->storePublicly('meg_executed_member_agreement', 'public') : null;
         $application->is_meg_executed_membership_agreement = 1;
         $application->save();
 
         logAction($user->email, 'Membership agreement uploaded by MEG', "Executed membership agreement uploaded by MEG.", $request->ip());
-        Utility::applicationStatusHelper($application, Application::statuses['MEM'], Application::office['MEG'], Application::office['AP']);
+        //Utility::applicationStatusHelper($application, Application::statuses['MEM'], Application::office['MEG'], Application::office['AP']);
 
         FinalApplicationProcessingJob::dispatch($request->application_id);
 

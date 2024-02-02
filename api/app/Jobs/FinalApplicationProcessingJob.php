@@ -7,6 +7,7 @@ use App\Helpers\Utility;
 use App\Models\Application;
 use App\Models\Role;
 use App\Models\User;
+use App\Notifications\InfoNotification;
 use App\Notifications\InfoTableNotification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -38,23 +39,22 @@ class FinalApplicationProcessingJob implements ShouldQueue
      */
     public function handle()
     {
-        $application = Application::find($this->applicationID)->first();
+        $application = Application::find($this->applicationID);
         $applicant = User::find($application->submitted_by);
 
         if(! $application->meg2_review_stage || ! $application->is_meg_executed_membership_agreement || ! $application->is_applicant_executed_membership_agreement || $application->completed_at)
             return;
 
-        $data = Application::where('id', $this->applicationID);
+        $data = Application::where('applications.id', $this->applicationID);
         $data = Utility::applicationDetails($data);
         $data = $data->first();
-
+        
         $categoryName = $data->category_name;
         $companyName = $data->company_name;
         $companyEail = $data->company_email;
 
         //Generated E-success letter
         if(! $application->e_success_letter){
-
             //generate
             $application->e_success_letter = '';
             $application->save();
@@ -66,7 +66,7 @@ class FinalApplicationProcessingJob implements ShouldQueue
             return;
         }
 
-        if($application->e_success_letter_send){
+        if($application->e_success_letter_send){                                                                                                                                                                                                                                                                                                                                                                                                               
             return;
         }
 
@@ -78,15 +78,15 @@ class FinalApplicationProcessingJob implements ShouldQueue
             'subject' => MailContents::SuccessfulApplicationSubject(),
             'content' => MailContents::SuccessfulApplicationMail($categoryName)
         ];
-        
+
         $attachment = [
             [
-                "name" => "{$companyName} Membership Agreement",
-                "saved_path" => config('app.url') .'/storage/app/public/'.$application->meg_executed_membership_agreement
+                "name" => "e-Success Letter",
+                "saved_path" => config('app.url') .'/storage/'.$application->meg_executed_membership_agreement
             ],
             [
-                "name" => "e-Success Letter",
-                "saved_path" => config('app.url') .'/storage/app/public/'.$application->e_success_letter
+                "name" => "{$companyName} Membership Agreement",
+                "saved_path" => config('app.url') .'/storage/'.$application->meg_executed_membership_agreement
             ]
         ];
 
@@ -122,7 +122,7 @@ class FinalApplicationProcessingJob implements ShouldQueue
         //FMDQ Help Desk Cc MEG
         $HelpDesk = Utility::getUsersByCategory(Role::HELPDESK);
         $Meg = Utility::getUsersEmailByCategory(Role::MEG);
-        Notification::send($HelpDesk, new InfoTableNotification(MailContents::helpdeskupdateMail($companyName, $categoryName), MailContents::helpdeskupdateSubject($categoryName), $Meg));
+        Notification::send($HelpDesk, new InfoNotification(MailContents::helpdeskupdateMail($companyName, $categoryName), MailContents::helpdeskupdateSubject($categoryName), $Meg));
 
         //TODO::SEND SECOND MAIL TO HELPDESK
         // Notification::send($HelpDesk, new InfoTableNotification(MailContents::mbgPaymentRejectedMail($data->company_name, $request->comment), MailContents::mbgPaymentRejectedSubject(), $Meg));

@@ -39,11 +39,9 @@ class NotificationMail extends Mailable implements ShouldQueue
 
         $mail = $this->view('mails.info', compact('user', 'info', 'displayName'))->subject($subject);
 
-        if($this->attachment){
+        if ($this->attachment) {
             foreach ($this->attachment as $attachment) {
-                $mail = $mail->attach($attachment['saved_path'], [
-                    'as' => $attachment['name'],
-                ]);
+                $mail->attach($attachment['saved_path'], ['as' => $attachment['name']]);
             }
         }
 
