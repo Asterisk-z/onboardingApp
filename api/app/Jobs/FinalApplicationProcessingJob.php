@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Helpers\MailContents;
 use App\Helpers\Utility;
 use App\Models\Application;
+use App\Models\Institution;
 use App\Models\Role;
 use App\Models\User;
 use App\Notifications\InfoNotification;
@@ -125,6 +126,12 @@ class FinalApplicationProcessingJob implements ShouldQueue
         Notification::send($HelpDesk, new InfoNotification(MailContents::helpdeskupdateMail($companyName, $categoryName), MailContents::helpdeskupdateSubject($categoryName), $Meg));
 
         //TODO::SEND SECOND MAIL TO HELPDESK
-        // Notification::send($HelpDesk, new InfoTableNotification(MailContents::mbgPaymentRejectedMail($data->company_name, $request->comment), MailContents::mbgPaymentRejectedSubject(), $Meg));
+
+        $institution = Institution::find($application->institution_id);
+        $membershipCategory = $institution->membershipCategories->first();
+        $compulsoryPositions = $membershipCategory->positions()->where('is_compulsory', 1)->pluck('position_id')->toArray();
+
+        $keyofficers = User::whereIn('position_id', $compulsoryPositions)->where('institution_id', $institution->id)->get();
+        Utility::sendMailGroupNotification($keyofficers, $membershipCategory);
     }
 }

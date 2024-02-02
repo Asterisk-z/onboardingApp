@@ -308,4 +308,14 @@ class MailContents
                 The page link is as stated below:</p>
         <p><a href=$url>https://fmdqgroup.com/exchange/Membership/</a></p>";
     }
+
+    public static function helpdeskMailingSubject($categoryName): string
+    {
+        return "Email Group Update for {$categoryName}";
+    }
+
+    public static function helpdeskMailingMail(): string
+    {
+        return "<p>Kindly update the mailing group with the details below:</p>";
+    }
 }

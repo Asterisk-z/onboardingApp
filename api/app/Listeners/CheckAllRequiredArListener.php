@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\ArAddedEvent;
+use App\Helpers\Utility;
 use App\Jobs\FinalApplicationProcessingJob;
 use App\Models\Application;
 use App\Models\Institution;
@@ -48,7 +49,7 @@ class CheckAllRequiredArListener implements ShouldQueue
 
             if($application->completed_at){
                 if(in_array($newAr->position_id, $compulsoryPositions)){
-                    //TODO::send to helpdesk
+                    Utility::sendMailGroupNotification([$newAr], $membershipCategory);
                 }
             }
 
