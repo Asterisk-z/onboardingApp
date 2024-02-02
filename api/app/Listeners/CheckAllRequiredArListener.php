@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\ArAddedEvent;
+use App\Helpers\Utility;
 use App\Jobs\FinalApplicationProcessingJob;
 use App\Models\Application;
 use App\Models\Institution;
@@ -37,9 +38,6 @@ class CheckAllRequiredArListener implements ShouldQueue
         $institution = Institution::find($institutionId);
         $application = Application::where('institution_id', $institutionId)->first();
 
-        if($application->all_ar_uploaded)
-            return;
-
         $membershipCategory = $institution->membershipCategories->first();
         $compulsoryPositions = $membershipCategory->positions()->where('is_compulsory', 1)->pluck('position_id')->toArray();
         $uploadedPositions = User::where('institution_id', $institutionId)->pluck('position_id')->toArray();
@@ -49,9 +47,9 @@ class CheckAllRequiredArListener implements ShouldQueue
             $application->all_ar_uploaded = 1;
             $application->save();
 
-            if($application->e_success_letter_send){
+            if($application->completed_at){
                 if(in_array($newAr->position_id, $compulsoryPositions)){
-                    //TODO::send to helpdesk
+                    Utility::sendMailGroupNotification([$newAr], $membershipCategory);
                 }
             }
 

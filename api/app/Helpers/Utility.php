@@ -3,18 +3,21 @@ namespace App\Helpers;
 
 use App\Mail\NotificationMail;
 use App\Models\Application;
+use App\Models\MembershipCategoryPostition;
+use App\Models\Position;
 use App\Models\Role;
 use App\Models\Status;
 use App\Models\User;
+use App\Notifications\InfoTableNotification;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 
 class Utility
 {
-
     public static function arrayKeysToCamelCase($array): array
     {
         $result = [];
@@ -348,5 +351,39 @@ class Utility
     public static function getOfficeStatus()
     {
 
+    }
+
+    public static function sendMailGroupNotification($users, $category)
+    {
+        $body = [];
+        
+        foreach($users as $user){
+            $firstname = $user->first_name;
+            $lastname = $user->last_name;
+            $fullname = $user->first_name." ".$user->last_name." ".$user->middle_name;
+            $position = Position::find($user->position_id);
+            $mailgroup = MembershipCategoryPostition::where([
+                'category_id' => $category->id,
+                'position_id' => $position->id
+            ])->first();
+
+            $body[] = [$category->name, $position->name, $mailgroup->groupMail->email, $firstname, $lastname, $fullname, $user->email];
+
+        }
+
+        $data = [
+            "header" => ["Membership Category", "Position", "Mailing Group", "First Name", "Surname", "Full Name", "Email Address"],
+            "body" => $body
+        ];
+
+        if(count($body)){
+            //FMDQ Help Desk Cc MEG
+            $HelpDesk = Utility::getUsersByCategory(Role::HELPDESK);
+            $Meg = Utility::getUsersEmailByCategory(Role::MEG);
+            Notification::send($HelpDesk, new InfoTableNotification(MailContents::helpdeskMailingMail(), MailContents::helpdeskMailingSubject($category->name), $data, $Meg));
+        }
+
+        logger(json_encode($data));
+        return true;
     }
 }

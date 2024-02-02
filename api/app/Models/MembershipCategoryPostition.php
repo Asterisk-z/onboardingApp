@@ -10,4 +10,8 @@ class MembershipCategoryPostition extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    public function groupMail(){
+        return $this->belongsTo(GroupMail::class, 'group_mail_id');
+    }
 }

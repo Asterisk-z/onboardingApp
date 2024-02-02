@@ -11,7 +11,7 @@ class MailContents
 
     public static function signupMail($email, $date, $signature): string
     {
-        $url = config("app.front_end_url")."/set/password?signature=".$signature;
+        $url = config("app.front_end_url")."/set/password?signature=".$signature."&email=".$email;
         $date = formatDate($date);
         return "<p>Your account has been successfully created.</p>
         <p>Your login details are as follows:</p>
@@ -307,5 +307,15 @@ class MailContents
         return "<p>Kindly add $companyName to the $categoryName Register on FMDQ Exchange Website.
                 The page link is as stated below:</p>
         <p><a href=$url>https://fmdqgroup.com/exchange/Membership/</a></p>";
+    }
+
+    public static function helpdeskMailingSubject($categoryName): string
+    {
+        return "Email Group Update for {$categoryName}";
+    }
+
+    public static function helpdeskMailingMail(): string
+    {
+        return "<p>Kindly update the mailing group with the details below:</p>";
     }
 }

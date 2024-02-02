@@ -124,7 +124,7 @@ class MegApplicationController extends Controller
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
-        $application->meg_executed_membership_agreement = $request->hasFile('executed_member_agreement') ? $request->file('executed_member_agreement')->storePublicly('applicant_executed_member_agreement', 'public') : null;
+        $application->meg_executed_membership_agreement = $request->hasFile('executed_member_agreement') ? $request->file('executed_member_agreement')->storePublicly('meg_executed_member_agreement', 'public') : null;
         $application->is_meg_executed_membership_agreement = 1;
         $application->save();
 
