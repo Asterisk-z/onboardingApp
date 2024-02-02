@@ -11,8 +11,7 @@ import { HeaderLogo } from "pages/components/HeaderLogo";
 import DatePicker from "react-datepicker";
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 import { loadApplication, completeApplication } from "redux/stores/membership/applicationStore";
-import { loadInvoiceDownload } from "redux/stores/membership/applicationProcessStore";
-import { uploadPaymentProof } from "redux/stores/membership/applicationProcessStore";
+import { loadInvoiceDownload, UploadAgreement, uploadPaymentProof } from "redux/stores/membership/applicationProcessStore";
 import moment from 'moment';
 import Swal from "sweetalert2";
 
@@ -67,7 +66,7 @@ const ApplicantInformation = (props) => {
     <section>
       
       <Row className="gy-2">
-        <p>{ $user_application.application.status_description}</p>
+        <p>{ $user_application?.application?.status_description}</p>
         <Col md='12'>
           {$user_application?.application?.concession_stage == 1 && <>
             
@@ -80,9 +79,9 @@ const ApplicantInformation = (props) => {
              
           </>}
           
-          {$user_application?.application?.meg2_review_stage == 1 && <>
+          {($user_application?.application?.meg2_review_stage == 1 && $user_application?.application?.is_applicant_executed_membership_agreement == 0) && <>
             
-              <a className="btn btn-primary mx-1" href={$user_application?.application?.membership_agreement} target="_blank"> Download Agreement </a>
+                <a className="btn btn-primary mx-1" href={$user_application?.application?.membership_agreement} target="_blank"> Download Agreement </a>
                 <a className="btn btn-primary mx-1" href="#"  onClick={toggleUploadAgreeView} >Upload Signed Agreement </a>
           </>}
         </Col>
@@ -203,9 +202,9 @@ const ApplicantInformation = (props) => {
                         <Col md='12'>
                           <Card className="card-bordered">   
                             <CardBody className="card-inner">
-                              <CardTitle tag="h5">Payment by Transfer</CardTitle>
+                              {/* <CardTitle tag="h5">Upload Agreement</CardTitle> */}
                                 {$user_application && <>
-                                    <UploadAgreement tabItem={$user_application} updateParentParent={setParentState} closeModel={toggleView}/>
+                                    <UploadAgreementModel tabItem={$user_application} updateParentParent={setParentState} closeModel={toggleView}/>
                                 </>}
                               
                               
@@ -222,7 +221,7 @@ const ApplicantInformation = (props) => {
   );
 };
 
-const UploadAgreement = ({ updateParentParent, tabItem, positions, closeModel }) => {
+const UploadAgreementModel = ({ updateParentParent, tabItem, positions, closeModel }) => {
     
     const aUser = useUser();
     const aUserUpdate = useUserUpdate();
@@ -238,13 +237,13 @@ const UploadAgreement = ({ updateParentParent, tabItem, positions, closeModel })
     const submitForm = async (data) => {
             
             const postValues = new Object();
-              postValues.proof_of_payment = complainFile;
+              postValues.executed_member_agreement = complainFile;
               postValues.application_id = tabItem?.application?.id;
 
               try {
                   setLoading(true);
                   
-                //   const resp = await dispatch(uploadPaymentProof(postValues));
+                  const resp = await dispatch(UploadAgreement(postValues));
 
                   if (resp.payload?.message == "success") {
                       setTimeout(() => {

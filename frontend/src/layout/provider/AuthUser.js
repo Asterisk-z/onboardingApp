@@ -41,7 +41,7 @@ const UserProvider = ({...props}) => {
       firstName: localStorage.getItem('firstName'),
       user_data: json_user,
       is_ar_inputter: function () {
-        return localStorage.getItem('role') == "ARINPUTTER" ? true : false;
+        return localStorage.getItem('role') == "ARINPUTER" ? true : false;
       },
       is_ar_authorizer: function () {
         return localStorage.getItem('role') == "ARAUTHORISER" ? true : false;

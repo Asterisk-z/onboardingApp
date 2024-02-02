@@ -146,7 +146,7 @@ export const MEGReview = createAsyncThunk(
         url: `membership/application/meg/review`,
         data: values,
       });
-      return successHandler(data);
+      return successHandler(data, data.message);
     } catch (error) {
       return errorHandler(error, true);
     }
@@ -167,7 +167,7 @@ export const MEG2Review = createAsyncThunk(
         url: `membership/application/meg2/review`,
         data: values,
       });
-      return successHandler(data);
+      return successHandler(data, data.message);
     } catch (error) {
       return errorHandler(error, true);
     }
@@ -354,6 +354,48 @@ export const FSDReviewSummary = createAsyncThunk(
           "Content-Type": "multipart/form-data",
         },
         url: `membership/application/fsd/payment-review`,
+        data: values,
+      });
+      return successHandler(data, data.message);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
+export const UploadAgreement = createAsyncThunk(
+  "applicationProcess/UploadAgreement",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `membership/application/upload-membership-agreement`,
+        data: values,
+      });
+      return successHandler(data, data.message);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
+export const MEGUploadAgreement = createAsyncThunk(
+  "applicationProcess/MEGUploadAgreement",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `membership/application/meg/upload-membership-agreement`,
         data: values,
       });
       return successHandler(data, data.message);
@@ -677,6 +719,36 @@ const applicationProcess = createSlice({
       state.loading = false;
       state.error = action.payload.message;
     });
+    // ====== builders for UploadAgreement ======
+
+    builder.addCase(UploadAgreement.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(UploadAgreement.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(UploadAgreement.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+    // ====== builders for MEGUploadAgreement ======
+
+    builder.addCase(MEGUploadAgreement.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(MEGUploadAgreement.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(MEGUploadAgreement.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+    
+
     
   },
 });

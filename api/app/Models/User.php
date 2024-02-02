@@ -156,7 +156,7 @@ class User extends Authenticatable implements JWTSubject
         //FMDQ/MB-SERIALNO+FULL JOIN DATE
     }
 
-    private function createRegIDAr(): string
+    public function createRegIDAr(): string
     {
         $this->reg_id = 'FMDQ/AR' . str_pad($this->id, 4, "0", STR_PAD_LEFT) . date("Ymd", strtotime($this->created_at));
 

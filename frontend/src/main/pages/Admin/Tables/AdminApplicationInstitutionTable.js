@@ -9,7 +9,7 @@ import Icon from "components/icon/Icon";
 import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge,  Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, CardBody, CardTitle } from "reactstrap";
 import { DataTablePagination } from "components/Component";
 import moment from "moment";
-import {uploadConcession, FSDPaymentEvidence, FSDReviewSummary, MBGPaymentEvidence, MBGReview, MEGReview, MEG2Review} from "redux/stores/membership/applicationProcessStore"
+import {uploadConcession, FSDPaymentEvidence, FSDReviewSummary, MBGPaymentEvidence, MBGReview, MEGReview, MEG2Review, MEGUploadAgreement} from "redux/stores/membership/applicationProcessStore"
 import { megProcessTransferUserAR } from "redux/stores/authorize/representative";
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 import Swal from "sweetalert2";
@@ -93,6 +93,7 @@ const ActionTab = (props) => {
     const navigate = useNavigate();
     const [modalForm, setModalForm] = useState(false);
     const [modalView, setModalView] = useState(false);
+    const [signedAgreement, setSignedAgreement] = useState(false);
     const [modalReviewView, setModalReviewView] = useState(false);
     const [showConcession, setShowConcession] = useState(false);
     const [modalPaymentView, setModalPaymentView] = useState(false);
@@ -101,7 +102,9 @@ const ActionTab = (props) => {
     const toggleForm = () => setModalForm(!modalForm);
     const toggleReviewView = () => setModalReviewView(!modalReviewView);
     const toggleView = () => setModalView(!modalView);
+    const toggleSignedAgreement = () => setSignedAgreement(!signedAgreement);
     const togglePaymentView = () => setModalPaymentView(!modalPaymentView);
+    
     const toggleConcession = () => {
         if (!showConcession) {
               Swal.fire({
@@ -262,7 +265,7 @@ const ActionTab = (props) => {
             if (result.isConfirmed) {
               const application_report = document.getElementById('application_report').files[0]; // Get value from the textarea
               const comments = document.getElementById('comments').value; // Get value from the textarea
-              console.log(application_report)
+            
               if (comments && application_report) {
                 const formData = new FormData();
                 formData.append('application_id', institution.internal.application_id);
@@ -525,6 +528,14 @@ const ActionTab = (props) => {
                                 <Button className="btn btn-success mx-2"  onClick={() => askAction('approveMEGApplicationsReview')}> Approve Application</Button>
                           </div>
                       }
+                      
+                        {(aUser.is_admin_meg() && institution.internal.is_applicant_executed_membership_agreement ) && 
+                        <div className="gy-0">
+                                <h5>Upload Signed Agreement</h5>
+                                <Button className="btn btn-primary mx-2"  >Download Signed Agreement</Button>
+                                <Button className="btn btn-success mx-2"  onClick={toggleSignedAgreement}>Upload MEG Signed Agreement</Button>
+                          </div>
+                      }
                     </Card>
             </ModalBody>
             <ModalFooter className="bg-light">
@@ -557,10 +568,110 @@ const ActionTab = (props) => {
                 <span className="sub-text">View Institutions</span>
             </ModalFooter>
         </Modal>
+        
+        <Modal isOpen={signedAgreement} toggle={toggleSignedAgreement} size="lg">
+            <ModalHeader toggle={toggleSignedAgreement} close={<button className="close" onClick={toggleSignedAgreement}><Icon name="cross" /></button>}>
+                Upload MEG Signed Agreement
+            </ModalHeader>
+            <ModalBody>
+                    <Row className="gy-5">
+                        <Col md='12'>
+                          <Card className="card-bordered">   
+                            <CardBody className="card-inner">
+                              
+                                    <UploadAgreementModel tabItem={institution} updateParentParent={props.updateParentParent} closeModel={toggleSignedAgreement}/>
+                              
+                            </CardBody>
+                          </Card>
+                        </Col>
+                    </Row>   
+            </ModalBody>
+            <ModalFooter className="bg-light">
+                <span className="sub-text">View Institutions</span>
+            </ModalFooter>
+        </Modal>
     </>
 
 
   );
+};
+
+
+const UploadAgreementModel = ({ updateParentParent, tabItem, positions, closeModel }) => {
+    
+
+    
+    const navigate = useNavigate();
+    const tabItem_id = tabItem.id
+    const [complainFile, setComplainFile] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch();
+    
+    const { handleSubmit, register, watch, formState: { errors } } = useForm();
+
+    const submitForm = async (data) => {
+            
+            const postValues = new Object();
+              postValues.executed_member_agreement = complainFile;
+              postValues.application_id = tabItem?.internal.application_id;
+
+              try {
+                  setLoading(true);
+                  
+                  const resp = await dispatch(MEGUploadAgreement(postValues));
+
+                  if (resp.payload?.message == "success") {
+                      setTimeout(() => {
+                          setLoading(false);
+                          updateParentParent(Math.random())
+                          closeModel()
+                        //   navigate(`${process.env.PUBLIC_URL}/dashboard`)
+                      }, 1000);
+                  
+                  } else {
+                    setLoading(false);
+                  }
+                  
+              } catch (error) {
+                setLoading(false);
+              }
+          
+        };
+
+    
+    const handleFileChange = (event) => {
+		setComplainFile(event.target.files[0]);
+    };
+    
+  
+    return (
+        <>
+            
+            <form className="content clearfix my-5" onSubmit={handleSubmit(submitForm)}  encType="multipart/form-data">
+                
+                <div className="form-group">
+                    <label className="form-label" htmlFor="proveOfPayment">
+                        Signed Agreement
+                    </label>
+                    <div className="form-control-wrap">
+                        <input type="file" id="proveOfPayment" className="form-control" {...register('proveOfPayment', { required: "This Field is required" })} onChange={handleFileChange}/>
+                        {errors.proveOfPayment && <span className="invalid">{ errors.proveOfPayment.message }</span>}
+                    </div>
+                </div>
+                <div className="form-group">
+                    <Button color="primary" type="submit"  size="md">
+                        {loading ? ( <span><Spinner size="sm" color="light" /> Processing...</span>) : "Upload "}
+                    </Button>
+
+                    <Button color="primary" size='md' className="mx-3" onClick={closeModel}>Cancel</Button>
+                </div>
+                
+          </form>
+          
+      </>
+
+
+    );
 };
 
 const UploadConcession = ({ updateParentParent, tabItem, positions, closeModel }) => {
