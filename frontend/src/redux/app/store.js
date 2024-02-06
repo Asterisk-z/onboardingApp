@@ -17,7 +17,11 @@ import sanctionStore from "redux/stores/sanctions/sanctionStore";
 import applicationStore from "redux/stores/membership/applicationStore"
 import feesAndDuesStore from "redux/stores/feesAndDues/feesAndDuesStore";
 import applicantGuideStore from "redux/stores/applicantGuide/applicantGuideStore";
-import membersGuideStore from "redux/stores/applicantGuide/applicantGuideStore";
+import membersGuideStore from "redux/stores/membersGuide/membersGuideStore";
+import competencyStore from "redux/stores/competency/competencyStore";
+import eventStore from "redux/stores/education/eventStore";
+import dashboardStore from "redux/stores/dashboard/dashboardStore";
+import applicationProcessStore from "redux/stores/membership/applicationProcessStore"
 
 const store = configureStore({
   reducer: {
@@ -40,6 +44,10 @@ const store = configureStore({
     fees: feesAndDuesStore,
     applicantGuide: applicantGuideStore,
     membersGuide: membersGuideStore,
+    competency: competencyStore,
+    dashboard: dashboardStore,
+    educationEvent: eventStore,
+    applicationProcess: applicationProcessStore,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

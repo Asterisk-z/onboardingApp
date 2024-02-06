@@ -64,7 +64,7 @@
             <img class="logo" src="{{asset('assets/img/logo.png')}}" alt="Logo">
         </div>
         <div class="content">
-            <p>Dear {{$user->first_name}},</p>
+            <p>Dear {{$displayName}},</p>
             <p>{!! $info !!}</p>
             <p>Thank You.</p>
             <p style="margin-top: -15px;">FMDQ Securities Exchange</p>

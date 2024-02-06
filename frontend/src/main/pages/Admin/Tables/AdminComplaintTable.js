@@ -20,9 +20,9 @@ const Export = ({ data }) => {
         }
     }, [modal]);
 
-    const newData = data.map((item) => {
+    const newData = data.map((item, index) => {
         return ({
-            "TID ID": item.id,
+            "TID ID": ++index,
             "Description": `${item.body}`,
             "Status": item.status,
             "Comment(s)": item.comment.length,
@@ -318,7 +318,7 @@ const ComplaintTableUser = ({ data, pagination, actions, className, selectableRo
     const complainColumn = [
     {
         name: "TID",
-        selector: (row) => row.id,
+        selector: (row, index) => ++index,
         sortable: true,
         width: "100px",
         wrap: true

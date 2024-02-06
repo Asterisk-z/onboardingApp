@@ -46,6 +46,11 @@ axios.interceptors.response.use(function (config) {
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
+
+function checkNumber() {
+  console.log('frefer')
+}
+
 root.render(
   <>
     <Provider store={store}>

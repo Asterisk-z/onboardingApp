@@ -24,9 +24,9 @@ const Export = ({ data }) => {
         }
     }, [modal]);
 
-    const newData = data.map((item) => {
+    const newData = data.map((item, index) => {
         return ({
-            "User ID": item.id,
+            "User ID": ++index,
             "Name": `${item.firstName} ${item.lastName}`,
             "Email": item.email,
             "Phone": item.phone,
@@ -237,6 +237,16 @@ const ActionTab = (props) => {
     const handleDificalFileChange = (event) => {
 		  setDocument(event.target.files[0]);
     };
+
+    // const checkValue = (value) => {
+    //     console.log(parseInt(value.target.value))
+    //     // parseInt(value) ? setValue(parseInt(value)) : ""
+    //     if (!isNaN(parseInt(value.target.value))) {
+    //         value.target.value = parseInt(value.target.value)
+    //     }
+    // };
+
+    
   return (
     <>
         <div className="toggle-expand-content" style={{ display: "block" }}>
@@ -371,14 +381,14 @@ const ActionTab = (props) => {
                         <CardBody className="card-inner">
                             <CardTitle tag="h5">{ `${ar_user.firstName} ${ar_user.lastName} (${ar_user.email})` }</CardTitle>
                             {/* <CardText> */}
-                                <ul>
-                                    <li><span className="lead">Phone : </span>{`${ar_user.phone}`}</li>
-                                    <li><span className="lead">Nationality : </span>{`${ar_user.nationality}`}</li>
-                                    <li><span className="lead">Role : </span>{`${ar_user.role.name}`}</li>
-                                    <li><span className="lead">Position : </span>{`${ar_user.position.name}`}</li>
-                                    <li><span className="lead">Status : </span>{`${ar_user.approval_status}`}</li>
-                                    <li><span className="lead">RegID : </span>{`${ar_user.regId}`}</li>
-                                    <li><span className="lead">Institution : </span>{`${ar_user.institution.name}`}</li>
+                                <ul className="gy-3">
+                                    <li  className="text-capitalize"><span className="lead">Phone : </span>{`${ar_user.phone}`}</li>
+                                    <li  className="text-capitalize"><span className="lead">Nationality : </span>{`${ar_user.nationality.toLowerCase()}`}</li>
+                                    <li  className="text-capitalize"><span className="lead">Role : </span>{`${ar_user.role.name.toLowerCase()}`}</li>
+                                    <li  className="text-capitalize"><span className="lead">Position : </span>{`${ar_user.position.name.toLowerCase()}`}</li>
+                                    <li  className="text-capitalize"><span className="lead">Status : </span>{`${ar_user.approval_status.toLowerCase()}`}</li>
+                                    <li  className="text-capitalize"><span className="lead">RegID : </span>{`${ar_user.regId}`}</li>
+                                    <li  className="text-capitalize"><span className="lead">Institution : </span>{`${ar_user?.institution?.name}`}</li>
                                 </ul>
                             {/* </CardText> */}
                         </CardBody>
@@ -465,9 +475,10 @@ const ActionTab = (props) => {
                             <div className="form-group">
                                 <Label htmlFor="phone" className="form-label">
                                     Phone Number
-                                </Label>
+                                  </Label>
+                                  
                                 <div className="form-control-wrap">
-                                    <input className="form-control" type="text" id="phone" placeholder="Enter Last Name"  {...register('phone', { required: "Phone is Required" })}  defaultValue={initValues.phone}/>
+                                    <input className="form-control"  type="text" id="phone" placeholder="Enter Last Name" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""}  {...register('phone', { required: "Phone is Required" })}  defaultValue={parseInt(initValues.phone) ? parseInt(initValues.phone) : 0}/>
                                     {errors.phone && <p className="invalid">{`${errors.phone.message}`}</p>}
                                 </div>
                             </div>
@@ -600,7 +611,7 @@ const AuthRepTable = ({ data, pagination, actions, className, selectableRows, ex
     const authRepColumn = [
     {
         name: "User ID",
-        selector: (row) => row.id,
+        selector: (row, index) => ++index,
         sortable: true,
         width: "100px",
         wrap: true

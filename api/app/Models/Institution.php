@@ -18,6 +18,7 @@ class Institution extends Model
             "name" => $this->name,
             "category" => $this->membershipCategories,
             "ars" => $this->ars,
+            "application" => $this->application
         ];
     }
 

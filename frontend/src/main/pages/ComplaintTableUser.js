@@ -17,9 +17,9 @@ const Export = ({ data }) => {
         }
     }, [modal]);
 
-    const newData = data.map((item) => {
+    const newData = data.map((item, index) => {
         return ({
-            "TID": item.id,
+            "TID": ++index,
             "Description": `${item.body}`,
             "Status": item.status,
             "Comments": item.comment.length,
@@ -141,7 +141,7 @@ const DropdownTrans = (props) => {
 const complainColumn = [
   {
     name: "TID",
-    selector: (row) => row.id,
+    selector: (row, index) => ++index,
     sortable: true,
     width: "80px",
   },

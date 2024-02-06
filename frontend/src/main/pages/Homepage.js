@@ -14,21 +14,32 @@ import {
   BlockBetween,
   PreviewCard
 } from "components/Component";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { userLoadUserARs } from "redux/stores/authorize/representative";
 import AuthRepTable from './Tables/AuthRepTable'
+import ApplicationTable from './Tables/ApplicationTable'
 
+import { loadArDashboard } from "redux/stores/dashboard/dashboardStore";
 
 
 
 const Homepage = () => {
   const dispatch = useDispatch();
+    const navigate = useNavigate();
   const arUsers = useSelector((state) => state?.arUsers?.list) || null;
+
+  const complaints = useSelector((state) => state?.dashboard?.complaints) || 0;
+  const applications = useSelector((state) => state?.dashboard?.applications) || 0;
+  const ars = useSelector((state) => state?.dashboard?.ars) || 0;
+  const show_application = useSelector((state) => state?.dashboard?.show_application) || 0;
+  const application_list = useSelector((state) => state?.dashboard?.application_list) || null;
 
   useEffect(() => {
     dispatch(userLoadUserARs({"approval_status" : "", "role_id": ""}));
+    dispatch(loadArDashboard());
   }, [dispatch]);
-
+  console.log(application_list);
 
   const $arUsers = arUsers ? JSON.parse(arUsers) : null;
   return (
@@ -57,11 +68,12 @@ const Homepage = () => {
                     </div>
                     <div className="data">
                       <div className="data-group">
-                        <div className="amount">{"0"}</div>
+                        <div className="amount">{applications}</div>
                       </div>
                     </div>
                   </div>
                 </div>
+                
               </Card>
             </Col>
             <Col xxl="3" sm="6">
@@ -75,7 +87,8 @@ const Homepage = () => {
                     </div>
                     <div className="data">
                       <div className="data-group">
-                        <div className="amount">{"0"}</div>
+                        <div className="amount">{ars}</div>
+                        <div><Button color="secondary">View</Button></div>
                       </div>
                     </div>
                   </div>
@@ -93,7 +106,8 @@ const Homepage = () => {
                     </div>
                     <div className="data">
                       <div className="data-group">
-                        <div className="amount">{"0"}</div>
+                        <div className="amount">{complaints}</div>
+                        <div><Button color="secondary">View</Button></div>
                       </div>
                     </div>
                   </div>
@@ -112,18 +126,14 @@ const Homepage = () => {
                     <div className="data">
                       <div className="data-group">
                         <div className="amount">{"0"}</div>
+                        <div><Button color="secondary">View</Button></div>
                       </div>
                     </div>
                   </div>
                 </div>
               </Card>
             </Col>
-            {/* <Col xxl="8">
-              <RecentOrders />
-            </Col>
-            <Col xxl="4" md="8" lg="6">
-              <TopProducts />
-            </Col> */}
+            
           </Row>
         </Block>
         <Content>
@@ -132,10 +142,23 @@ const Homepage = () => {
           <Block size="xl">
             <BlockHead>
               <BlockHeadContent>
-                <BlockTitle tag="h4">User</BlockTitle>
+                <BlockTitle tag="h4">Applications</BlockTitle>
               </BlockHeadContent>
             </BlockHead>
+            
+            <PreviewCard>
+              {application_list && <ApplicationTable data={application_list} expandableRows pagination actions />}
+            </PreviewCard>
+          </Block>
 
+          
+          <Block size="xl">
+            <BlockHead>
+              <BlockHeadContent>
+                <BlockTitle tag="h4">Authorised Representatives</BlockTitle>
+              </BlockHeadContent>
+            </BlockHead>
+            
             <PreviewCard>
               {$arUsers && <AuthRepTable data={$arUsers} expandableRows pagination actions />}
             </PreviewCard>

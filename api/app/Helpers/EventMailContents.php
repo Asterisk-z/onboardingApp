@@ -1,10 +1,25 @@
 <?php
 namespace App\Helpers;
 
-use App\Models\User;
-
 class EventMailContents
 {
+
+
+    public static function certificateARSubject(string $eventName): string
+    {
+        return "$eventName Certificate";
+    }
+
+    public static function certificateARBody(string $eventName): string
+    {
+
+        $message = "<p>
+                Please be find attached your certificate of participation for <b>$eventName</b>.
+            </p>";
+
+        return $message;
+    }
+
 
     public static function paymentDeclinedARSubject(string $eventName): string
     {
@@ -98,9 +113,9 @@ class EventMailContents
 
     public static function invitedBody($event): string
     {
-
+        $url = config('app.front_end_url');
         $message = "<p>
-                Please be informed that you have been invited for {$event->name} scheduled to hold {$event->date} {$event->time}. Kindly login to the MROIS Portal to register
+                Please be informed that you have been invited for {$event->name} scheduled to hold {$event->date} {$event->time}. Kindly login to the <a href='{$url}'>MROIS Portal</a> to register
             </p>";
 
         return $message;
@@ -138,6 +153,20 @@ class EventMailContents
 
         $message = "<p>
                 Please be informed that there is a new registration for $eventName event fee pending approval.
+            </p>";
+
+        return $message;
+    }
+
+    public static function eventUninvitedSubject(string $eventName): string
+    {
+        return "Univited from $eventName";
+    }
+
+    public static function eventUninvitedBody(string $eventName): string
+    {
+        $message = "<p>
+            You have been uninvited from $eventName event.
             </p>";
 
         return $message;

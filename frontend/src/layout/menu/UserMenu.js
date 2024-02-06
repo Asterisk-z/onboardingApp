@@ -3,6 +3,7 @@ import navData from "./NavData";
 import { NavLink, Link } from "react-router-dom";
 import Icon from "../../components/icon/Icon";
 import classNames from "classnames";
+import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 
 const MenuHeading = ({ heading }) => {
   return (
@@ -190,6 +191,8 @@ const MenuSub = ({ icon, link, text, sub, sidebarToggle, mobileView, ...props })
 
 
 const UserMenu = ({ sidebarToggle, mobileView }) => {
+    const authUser = useUser();
+    const authUserUpdate = useUserUpdate();
   const [data, setMenuData] = useState(navData);
   
   return (

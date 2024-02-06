@@ -22,9 +22,9 @@ const Export = ({ data }) => {
         }
     }, [modal]);
 
-    const newData = data.map((item) => {
+    const newData = data.map((item, index) => {
         return ({
-            "Request Type ID": item.id,
+            "Request Type ID": ++index,
             "Request Reason": `${item.request_type}`,
             "Email": `${item.ar.firstName} ${item.ar.lastName} ${item.ar.email}`,
             "Institution": item.ar.institution.category[0].name,
@@ -195,7 +195,7 @@ const ChangeStatusAuthRepTable = ({ data, pagination, actions, className, select
     const authRepColumn = [
     {
         name: "UID",
-        selector: (row) => row.id,
+        selector: (row, index) => ++index,
         sortable: true,
         width: "120px",
         wrap: true,

@@ -35,6 +35,7 @@ import {
   DataTableTitle,
 } from "../components/table/DataTable";
 import InputSwitch from "./input/switch/Switch";
+import MultiDatePicker from "./input/date/MultiDatePicker";
 import OutlinedInput from "./input/outlined-input/OutlinedInput";
 import { OverlineTitle } from "./text/Text";
 import Progress from "./progress/Progress";
@@ -56,6 +57,7 @@ export {
   UserAvatar,
   UserGroup,
   InputSwitch,
+  MultiDatePicker,
   Block,
   BlockContent,
   Rating,

@@ -18,7 +18,7 @@ class EventRegistration extends Model
 
     public function event()
     {
-        return $this->belongsTo(Event::class);
+        return $this->belongsTo(Event::class)->where('is_del', 0);
     }
 
     public function user()
@@ -26,4 +26,9 @@ class EventRegistration extends Model
         return $this->belongsTo(User::class);
     }
 
+
+    public function getCertificateFullPath($filePath)
+    {
+        return storage_path('app/public/event_certs') . "/" . $filePath;
+    }
 }

@@ -9,7 +9,7 @@ export const loadAllActivePositions = createAsyncThunk(
   "position/loadAllActivePositions",
   async (arg) => {
     try {
-      const { data } = await axios.get(`positions`);unlinkFromCategories
+      const { data } = await axios.get(`positions`);
       return successHandler(data);
     } catch (error) {
       return errorHandler(error);

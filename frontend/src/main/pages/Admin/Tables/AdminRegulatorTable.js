@@ -20,9 +20,9 @@ const Export = ({ data }) => {
         }
     }, [modal]);
 
-    const newData = data.map((item) => {
+    const newData = data.map((item, index) => {
         return ({
-            "PID": item.id,
+            "PID": ++index,
             "Name": `${item.name}`,
             "Website": item.url,
             "Status": item.active,
@@ -261,7 +261,7 @@ const AdminRegulatorTable = ({ data, pagination, actions, className, selectableR
     const tableColumn = [
         {
             name: "PID",
-            selector: (row) => row.id,
+            selector: (row, index) => ++index,
             sortable: true,
             width: "auto",
             wrap: true

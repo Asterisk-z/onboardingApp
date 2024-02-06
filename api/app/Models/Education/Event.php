@@ -51,6 +51,7 @@ class Event extends Model
             'time' => $this->time,
             'is_annual' => $this->is_annual,
             'fee' => $this->fee,
+            'image_url' => $this->image ? config('app.url') .'/storage/app/public/'.$this->image : null, // Adjust the path based on your storage setup
         ];
     }
 

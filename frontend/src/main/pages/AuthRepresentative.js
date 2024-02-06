@@ -340,8 +340,9 @@ const AuthRepresentative = ({ drawer }) => {
                                         <Label htmlFor="phone" className="form-label">
                                             Phone Number<span style={{color:'red'}}> *</span>
                                         </Label>
+                                         
                                         <div className="form-control-wrap">
-                                            <input className="form-control" type="text" id="phone" placeholder="Enter Phone Number"  {...register('phone', { required: "Phone is Required" })} />
+                                            <input className="form-control" type="number" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""}  id="phone" placeholder="Enter Phone Number"  {...register('phone', { required: "Phone is Required", setValueAs: (value) => parseInt(value) })} />  
                                             {errors.phone && <p className="invalid">{`${errors.phone.message}`}</p>}
                                         </div>
                                     </div>

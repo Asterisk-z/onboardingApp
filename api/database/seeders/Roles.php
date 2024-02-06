@@ -20,7 +20,11 @@ class Roles extends Seeder
             ["name" => "FSD"],
             ["name" => "MBG"],
             ["name" => "AR INPUTER"],
-            ["name" => "AR AUTHORISER"]
+            ["name" => "AR AUTHORISER"],
+            ["name" => "BLG"],
+            ["name" => "MEG2"],
+            ["name" => "BIG"],
+            ["name" => "FMDQ Help Desk"]
         ];
 
         foreach($roles as $role){

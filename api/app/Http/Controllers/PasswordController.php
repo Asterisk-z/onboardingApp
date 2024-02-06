@@ -133,12 +133,13 @@ class PasswordController extends Controller
         $request->validate([
             "signature" => "required|string",
             "email" => "required|string|email",
-            'password' => 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/',
+            'password' => 'required|string|min:8',
+            //'password' => 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/',
         ]);
 
         $signature = Crypt::decrypt($request->signature);
 
-        if (!$passwordReset = PasswordSet::where('signature', $request->signature)->first()) {
+        if (!$passwordReset = PasswordSet::where('signature', $signature)->first()) {
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, "Invalid signature.");
         }
 
@@ -161,6 +162,6 @@ class PasswordController extends Controller
         $passwordReset->status = "completed";
         $passwordReset->save();
 
-        return successResponse("Password set successfully.");
+        return successResponse("You have successfully created your password. Kindly login with your new credentials.");
     }
 }

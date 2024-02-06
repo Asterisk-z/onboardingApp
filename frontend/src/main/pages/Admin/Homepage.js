@@ -16,7 +16,8 @@ import {
 } from "components/Component";
 import { useDispatch, useSelector } from "react-redux";
 import { adminLoadUserARs } from "redux/stores/authorize/representative";
-import AuthRepTable from '../Tables/AuthRepTable'
+import { loadAdminDashboard } from "redux/stores/dashboard/dashboardStore";
+import DashARTable from './Tables/DashARTable'
 
 
 
@@ -24,9 +25,15 @@ import AuthRepTable from '../Tables/AuthRepTable'
 const Homepage = () => {
   const dispatch = useDispatch();
   const arUsers = useSelector((state) => state?.arUsers?.list) || null;
+  
+  const complaints = useSelector((state) => state?.dashboard?.complaints) || 0;
+  const applications = useSelector((state) => state?.dashboard?.applications) || 0;
+  const ars = useSelector((state) => state?.dashboard?.ars) || 0;
+
 
   useEffect(() => {
     dispatch(adminLoadUserARs({ "approval_status": "", "institution_id": "", "role_id": "" }));
+    dispatch(loadAdminDashboard());
   }, [dispatch]);
 
 
@@ -52,12 +59,12 @@ const Homepage = () => {
                   <div className="card-inner">
                     <div className="card-title-group">
                       <div className="card-title">
-                        <h6 className="title">{"My Applications"}</h6>
+                        <h6 className="title">{"Applications"}</h6>
                       </div>
                     </div>
                     <div className="data">
                       <div className="data-group">
-                        <div className="amount">{"0"}</div>
+                        <div className="amount">{applications}</div>
                       </div>
                     </div>
                   </div>
@@ -75,7 +82,7 @@ const Homepage = () => {
                     </div>
                     <div className="data">
                       <div className="data-group">
-                        <div className="amount">{"0"}</div>
+                        <div className="amount">{ars}</div>
                       </div>
                     </div>
                   </div>
@@ -93,7 +100,7 @@ const Homepage = () => {
                     </div>
                     <div className="data">
                       <div className="data-group">
-                        <div className="amount">{"0"}</div>
+                        <div className="amount">{complaints}</div>
                       </div>
                     </div>
                   </div>
@@ -132,12 +139,12 @@ const Homepage = () => {
           <Block size="xl">
             <BlockHead>
               <BlockHeadContent>
-                <BlockTitle tag="h4">Admin</BlockTitle>
+                <BlockTitle tag="h4">Authorised Representatives</BlockTitle>
               </BlockHeadContent>
             </BlockHead>
 
             <PreviewCard>
-              {/* {$arUsers && <AuthRepTable data={$arUsers} expandableRows pagination actions />} */}
+              {$arUsers && <DashARTable data={$arUsers} expandableRows pagination actions />}
             </PreviewCard>
           </Block>
 

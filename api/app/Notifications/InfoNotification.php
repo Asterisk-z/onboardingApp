@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Models\Role;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -50,10 +51,40 @@ class InfoNotification extends Notification implements ShouldQueue
     {
         $user = $notifiable;
         $info = $this->message;
+        $subject = $this->subject ?? '';
+        $displayName = $user->first_name;
+
+        if($subject == 'New Membership Signup' || $subject == 'Payment Rejected by MBG' || $subject == 'MROIS Document Upload' || $subject == 'Profiling Request:' || $subject == 'Profiling Request' || str_contains($subject, "Update of") || str_contains($subject, "Email Group Update for")){
+            $displayName = "Team";
+        }else{
+            if($user->role_id == Role::MSG){
+                $displayName = "MSG";
+            }
+            
+            if($user->role_id == Role::MEG){
+                $displayName = "MEG";
+            }
+            
+            if($user->role_id == Role::FSD){
+                $displayName = "FSD";
+            }
+            
+            if($user->role_id == Role::MBG){
+                $displayName = "MBG";
+            }
+            
+            if($user->role_id == Role::BLG){
+                $displayName = "BLG";
+            }
+
+            if($user->role_id == Role::HELPDESK){
+                $displayName = "HELP DESK";
+            }
+        }
 
         $mail = (new MailMessage)
-            ->subject(config('app.name') . " - " . $this->subject)
-            ->view('mails.info', compact('user', 'info'));
+            ->subject(config('app.name') . " - " . $subject)
+            ->view('mails.info', compact('user', 'info', 'displayName'));
 
         if ($this->cc) {
             $mail = $mail->cc($this->cc);
@@ -64,6 +95,8 @@ class InfoNotification extends Notification implements ShouldQueue
                 'as' => $this->attachment['name'],
             ]);
         }
+
+        $displayName = null;
 
         return $mail;
     }

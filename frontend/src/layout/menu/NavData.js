@@ -13,6 +13,11 @@ const navData = [{
     text: "Dashboard",
     link: "/admin-dashboard",
   },
+  {
+    icon: "dashboard-fill",
+    text: "Applications",
+    link: "/admin-applications",
+    },
   // {
   //   icon: "dashboard-fill",
   //   text: "Complaints",
@@ -56,6 +61,11 @@ const navData = [{
     text: "Disciplinary and Sanctions History",
     link: "/admin-sanctions",
   },
+    {
+    icon: "dashboard-fill",
+    text: "Competency Framework",
+    link: "/admin-competency-framework",
+  },
   {
     icon: "dashboard-fill",
     text: "Institutions",
@@ -73,6 +83,17 @@ const navData = [{
       {
         text: "Transfer AR",
         link: "/admin-transfer-ar",
+      },
+    ],
+  },
+  {
+    icon: "tile-thumb-fill",
+    text: "Education and Learning",
+    active: false,
+    subMenu: [
+      {
+        text: "Conference & Events",
+        link: "/admin-events",
       },
     ],
   },
@@ -127,6 +148,11 @@ const navData = [{
   },
   {
     icon: "dashboard-fill",
+    text: "Application",
+    link: "/application",
+  },
+  {
+    icon: "dashboard-fill",
     text: "Complaints",
     link: "/complaint",
   },
@@ -161,10 +187,6 @@ const navData = [{
     text: "Portals Guide",
     active: false,
     subMenu: [
-      // {
-      //   text: "Complaint Type",
-      //   link: "/admin-complaint-type",
-      // },
       {
         text: "Applicant Guide",
         link: "/applicant-guide",
@@ -175,6 +197,26 @@ const navData = [{
       },
        
     ],
+  },
+  {
+    icon: "tile-thumb-fill",
+    text: "Competency Framework",
+    active: false,
+    subMenu: [
+      {
+        text: "Update Competency",
+        link: "/update-competency",
+      }, 
+      {
+        text: "Approve Competency",
+        link: "/approve-competency",
+      },
+    ],
+  },
+  {
+    icon: "tile-thumb-fill",
+    text: "Education And Learning",
+    link: "/education-and-learning",
   },
   // {
   //   icon: "tile-thumb-fill",

@@ -16,14 +16,17 @@ class DatabaseSeeder extends Seeder
         $this->call(Countries::class);
         $this->call(MembershipCategories::class);
         $this->call(Positions::class);
+        $this->call(LinkGroupMailSeeder::class);
+        $this->call(CategoryPositions::class);
         $this->call(Roles::class);
         $this->call(ComplaintTypes::class);
         $this->call(UserSeeder::class);
-        // $this->call(MembershipPositionSeeder::class);
-        $this->call(CategoryPositions::class);
-        $this->call(MembershipPositionSeeder::class);
         $this->call(SystemSettingSeeder::class);
         $this->call(ApplicationFieldSeed::class);
+        $this->call(ApplicationExtraSeeder::class);
         $this->call(ApplicationFieldOptionSeeder::class);
+        $this->call(QuarterDiscountSeeder::class);
+        $this->call(ReasonSeeder::class);
+        $this->call(AccountDetailsSeeder::class);
     }
 }

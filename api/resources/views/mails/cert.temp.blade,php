@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Certificate</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        .certificate {
+            width: 800px;
+            max-width: 100%;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            border: 10px solid #273466;
+            /* Organization's primary color */
+        }
+
+        .certificate img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .event-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #273466;
+            /* Organization's primary color */
+        }
+
+        .participant-name {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .date {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .signature {
+            margin-top: 40px;
+        }
+
+        .organizer-signature {
+            max-width: 100px;
+            margin-top: 10px;
+        }
+
+        /* Styling for organization's secondary color */
+        .secondary-color {
+            color: #C49B47;
+        }
+
+        /* Styling for organization's tertiary color */
+        .tertiary-color {
+            color: #969698;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="certificate">
+        <img src="your-event-logo.png" alt="Event Logo">
+        <div class="event-name">Certificate of Participation</div>
+        <div class="participant-name secondary-color">This is to certify that</div>
+        <div class="participant-name secondary-color"><strong class="tertiary-color">{{ $name }}</strong></div>
+        <div class="date tertiary-color">has successfully participated in the event on January 15, 2024.</div>
+        <div class="signature">
+            <img src="organizer-signature.png" alt="Organizer Signature" class="organizer-signature">
+            <p class="secondary-color">Organizer Name</p>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -41,7 +41,7 @@ const UserProvider = ({...props}) => {
       firstName: localStorage.getItem('firstName'),
       user_data: json_user,
       is_ar_inputter: function () {
-        return localStorage.getItem('role') == "ARINPUTER" ? true : false;
+        return localStorage.getItem('role') == "ARINPUTTER" ? true : false;
       },
       is_ar_authorizer: function () {
         return localStorage.getItem('role') == "ARAUTHORISER" ? true : false;
@@ -52,17 +52,26 @@ const UserProvider = ({...props}) => {
       is_admin_meg: function () {
         return localStorage.getItem('role') == "MEG" ? true : false;
       },
+      is_admin_meg2: function () {
+        return localStorage.getItem('role') == "MEG2" ? true : false;
+      },
       is_admin_fsd: function () {
         return localStorage.getItem('role') == "FSD" ? true : false;
       },
-      is_admin_blg: function () {
+      is_admin_mbg: function () {
         return localStorage.getItem('role') == "MBG" ? true : false;
       },
       is_admin_blg: function () {
         return localStorage.getItem('role') == "BLG" ? true : false;
       },
+      is_admin_big: function () {
+        return localStorage.getItem('role') == "BIG" ? true : false;
+      },
+      is_admin_helpdesk: function () {
+        return localStorage.getItem('role') == "HELPDESK" ? true : false;
+      },
       is_position_cco: function () {
-        return json_user.position.name == "CCO" ? true : false;
+        return json_user.position.name == "Chief Compliance Officer" ? true : false;
       },
     }
     

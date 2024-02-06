@@ -20,9 +20,9 @@ const Export = ({ data }) => {
         }
     }, [modal]);
 
-    const newData = data.map((item) => {
+    const newData = data.map((item, index) => {
         return ({
-            "CDID": item.id,
+            "CDID": ++index,
             "Name": `${item.name}`,
             "Status": item.active,
             "Date Created": moment(item.createdAt).format('MMM. DD, YYYY HH:mm')
@@ -253,7 +253,7 @@ const AdminCategoryTable = ({ data, pagination, actions, className, selectableRo
     const tableColumn = [
     {
         name: "CDID",
-        selector: (row) => row.id,
+        selector: (row, index) => ++index,
         sortable: true,
         width: "100px",
         wrap: true

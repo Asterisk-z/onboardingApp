@@ -5,13 +5,27 @@ namespace App\Helpers;
 use App\Models\Education\Event;
 use App\Models\Education\EventRegistration;
 use App\Models\Role;
-
 use App\Models\User;
-use Illuminate\Support\Facades\Notification;
 use App\Notifications\InfoNotification;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Str;
 
 class EventNotificationUtility
 {
+
+    public static function certificate(EventRegistration $eventReg)
+    {
+        $message = EventMailContents::certificateARBody($eventReg->event->name);
+        $subject = EventMailContents::certificateARSubject($eventReg->event->name);
+
+        $attachment = [
+            'saved_path' => config('app.url') . '/storage/event_certs/' . $eventReg->certificate_path,
+            'name' => Str::slug($eventReg->event->name) . '-certificate.pdf',
+        ];
+
+        Notification::send($eventReg->user, new InfoNotification($message, $subject, [], $attachment));
+    }
+
     public static function pendingPaymentEventRegistration(EventRegistration $eventReg)
     {
         $FSDs = Utility::getUsersByCategory(Role::FSD);
@@ -54,29 +68,32 @@ class EventNotificationUtility
         Notification::send($users, new InfoNotification($message, $subject, $CCs));
     }
 
-    public static function eventUpdated(Event $event)
+    public static function eventUpdated(Event $event, $toUsers = [])
     {
 
-        $to = null;
         $CCs = [];
+        $to = [];
 
         $eventName = $event->name;
         $message = EventMailContents::eventUpdatedBody($eventName);
         $subject = EventMailContents::eventUpdatedSubject($eventName);
 
-        $registeredUsers = $event->getRegisteredUsers();
+        $newlyInvitedUsers = $event->newlyInvitedUsers();
 
-        //TODO:: Send email notification to all registered and new position or remove registered that are not in present position and notify
-        if ($registeredUsers) {
+        $sendto = $toUsers ?? $newlyInvitedUsers;
+
+        if ($sendto) {
             // email registered AR and copy MEG
-            $to = $registeredUsers;
+            $to = $sendto;
             $CCs = Utility::getUsersEmailByCategory(Role::MEG);
         } else {
             // Email MEGs
             $MEGs = Utility::getUsersByCategory(Role::MEG);
 
-            if (count($MEGs))
+            if (count($MEGs)) {
                 $to = $MEGs;
+            }
+
         }
 
         if ($to) {
@@ -103,12 +120,24 @@ class EventNotificationUtility
             // Email MEGs
             $MEGs = Utility::getUsersByCategory(Role::MEG);
 
-            if (count($MEGs))
+            if (count($MEGs)) {
                 $to = $MEGs;
+            }
+
         }
 
         if ($to) {
             self::sendNotification($message, $subject, $to, $CCs);
+        }
+    }
+
+    public static function eventUninvited($to, $eventName)
+    {
+        $message = EventMailContents::eventUninvitedBody($eventName);
+        $subject = EventMailContents::eventUninvitedSubject($eventName);
+
+        if ($to) {
+            self::sendNotification($message, $subject, $to);
         }
     }
 
@@ -131,8 +160,10 @@ class EventNotificationUtility
             // Email MEGs
             $MEGs = Utility::getUsersByCategory(Role::MEG);
 
-            if (count($MEGs))
+            if (count($MEGs)) {
                 $to = $MEGs;
+            }
+
         }
 
         if ($to) {
@@ -159,8 +190,10 @@ class EventNotificationUtility
             // Email MEGs
             $MEGs = Utility::getUsersByCategory(Role::MEG);
 
-            if (count($MEGs))
+            if (count($MEGs)) {
                 $to = $MEGs;
+            }
+
         }
 
         if ($to) {
@@ -184,8 +217,10 @@ class EventNotificationUtility
             // Email MEGs
             $MEGs = Utility::getUsersByCategory(Role::MEG);
 
-            if (count($MEGs))
+            if (count($MEGs)) {
                 $to = $MEGs;
+            }
+
         }
 
         if ($to) {

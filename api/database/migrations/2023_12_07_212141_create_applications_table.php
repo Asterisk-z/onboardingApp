@@ -18,6 +18,7 @@ class CreateApplicationsTable extends Migration
             $table->foreignId('institution_id')->constrained('institutions')->onDelete('cascade');
             $table->foreignId('submitted_by')->constrained('users')->onDelete('cascade');
             $table->string('status');
+            $table->string('show_form')->default(1);
             $table->timestamp('completed_at')->nullable();
             $table->timestamps();
         });

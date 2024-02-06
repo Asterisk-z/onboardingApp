@@ -88,6 +88,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(PasswordHistory::class);
     }
 
+    public function competency_response()
+    {
+        return $this->hasMany(Competency::class, 'ar_id', 'id');
+    }
+
     public function getFullName(): string
     {
         return $this->first_name . ' ' . $this->last_name;
@@ -105,7 +110,7 @@ class User extends Authenticatable implements JWTSubject
             'role' => $this->role->name,
             'approval_status' => $this->approval_status,
             'regId' => $this->reg_id,
-            'institution' => $this->institution->name,
+            'institution' => $this->institution->name ?? null,
             'createdAt' => $this->created_at,
         ];
 
@@ -131,7 +136,8 @@ class User extends Authenticatable implements JWTSubject
 
     public function getFullNameAttribute()
     {
-        return $this->first_name . " " . $this->last_name;
+        $middleName = $this->middle_name ? " $this->middle_name " : " ";
+        return $this->first_name . $middleName . $this->last_name;
     }
 
     public function getFullNameWithMailAttribute()
@@ -141,10 +147,23 @@ class User extends Authenticatable implements JWTSubject
 
     private function createRegID(): string
     {
-        $this->reg_id = 'FMDQ/' . str_pad($this->id, 4, "0", STR_PAD_LEFT) . date("Ymd", strtotime($this->created_at));
+        $this->reg_id = 'FMDQ/MB' . str_pad($this->id, 4, "0", STR_PAD_LEFT) . date("Ymd", strtotime($this->created_at));
 
         $this->update(['reg_id' => $this->reg_id]);
 
         return $this->reg_id;
+
+        //FMDQ/MB-SERIALNO+FULL JOIN DATE
+    }
+
+    private function createRegIDAr(): string
+    {
+        $this->reg_id = 'FMDQ/AR' . str_pad($this->id, 4, "0", STR_PAD_LEFT) . date("Ymd", strtotime($this->created_at));
+
+        $this->update(['reg_id' => $this->reg_id]);
+
+        return $this->reg_id;
+
+        //FMDQ/MB-SERIALNO+FULL JOIN DATE
     }
 }
