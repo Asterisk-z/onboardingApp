@@ -29,7 +29,7 @@ class SystemController extends Controller
 
 
     public function executeCommands()
-    {        
+    {
         // Execute the desired commands using Artisan and exec
         Artisan::call('migrate');
         Artisan::call('db:seed');

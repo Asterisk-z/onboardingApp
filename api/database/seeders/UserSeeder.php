@@ -43,8 +43,6 @@ class UserSeeder extends Seeder
             $user->passwords()->create([
                 'password' => Hash::make('password'),
             ]);
-
         }
-
     }
 }
