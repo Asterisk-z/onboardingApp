@@ -229,7 +229,7 @@ class MembershipApplicationController extends Controller
 
     public function downloadApplicantInvoice($invoiceToken)
     {
-        set_time_limit(300);
+        // set_time_limit(300);
 
         $application = Application::where('invoiceToken', $invoiceToken)->first();
         $applicant = $application->applicant;
@@ -269,8 +269,8 @@ class MembershipApplicationController extends Controller
         $total = number_format($total, 2);
         $vat = number_format($vat, 2);
 
-        $pdfC = view('letter')->render();
-        return PDF::loadHTML($pdfC)->download('letter.pdf');
+        // $pdfC = view('letter')->render();
+        // return PDF::loadHTML($pdfC)->download('letter.pdf');
 
         return view('invoice', compact('invoice', 'invoiceContents', 'applicant', 'vat', 'total', 'amountInWords', 'amountDue', 'address', 'companyName'));
     }
