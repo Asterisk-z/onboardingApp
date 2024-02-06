@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\Application;
+use App\Models\User;
 use App\Traits\ApplicationTraits;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -32,6 +33,8 @@ class ApplicationResource extends JsonResource
                 "category_name" => $this->category_name,
                 "completed_at" => $this->completed_at,
                 "is_applicant_executed_membership_agreement" => $this->is_applicant_executed_membership_agreement,
+                "meg_executed_membership_agreement" => $this->meg_executed_membership_agreement ? config('app.url') .'/storage/'.$this->meg_executed_membership_agreement : null,
+                "applicant_executed_membership_agreement" => $this->applicant_executed_membership_agreement ? config('app.url') .'/storage/'.$this->applicant_executed_membership_agreement : null,
                 "all_ar_uploaded" => $this->all_ar_uploaded,
                 "status" => $application->currentStatus()
             ],
@@ -123,31 +126,31 @@ class ApplicationResource extends JsonResource
             ],
 
             "supporting_document" => [
-                'CompanyOverview' => $this->CompanyOverview,
-                'certificateOfIncorporation' => $this->certificateOfIncorporation,
-                'memorandumAndArticlesOfAssociation' => $this->memorandumAndArticlesOfAssociation,
-                'particularsOfDirectors' => $this->particularsOfDirectors,
-                'particularsOfShareholders' => $this->particularsOfShareholders,
-                'evidenceOfRegistration' => $this->evidenceOfRegistration,
-                'detailedResumesOfSEC' => $this->detailedResumesOfSEC,
-                'evidenceOfCompliance' => $this->evidenceOfCompliance,
-                'listOfAuthorisedRepresentatives' => $this->listOfAuthorisedRepresentatives,
-                'latestFidelityBond' => $this->latestFidelityBond,
-                'mostRecentYearAuditedFinancialStatements' => $this->mostRecentYearAuditedFinancialStatements,
-                'evidenceFXAuthorisedDealershipLicence' => $this->evidenceFXAuthorisedDealershipLicence,
-                'evidenceOfPaymentOfApplicationFee' => $this->evidenceOfPaymentOfApplicationFee,
-                'applicantDeclaration' => $this->applicantDeclaration,
-                'dulyCompletedApplicationForm' => $this->dulyCompletedApplicationForm,
-                'companyProfile' => $this->companyProfile,
-                'letterOfExpressionOfInterest' => $this->letterOfExpressionOfInterest,
-                'resumeOfDealers' => $this->resumeOfDealers,
-                'evidenceOfMinimumShareholder' => $this->evidenceOfMinimumShareholder,
-                'confirmationOfTechnicalKnowledge' => $this->confirmationOfTechnicalKnowledge,
-                'thomsonReutersContractForm' => $this->thomsonReutersContractForm,
-                'thomsonReutersCertificateOfIncorporation' => $this->thomsonReutersCertificateOfIncorporation,
-                'thomsonReutersMemorandumAndArticles' => $this->thomsonReutersMemorandumAndArticles,
-                'thomsonReutersParticularsOfDirectors' => $this->thomsonReutersParticularsOfDirectors,
-                'thomsonReutersEvidenceOfRegulatoryStatus' => $this->thomsonReutersEvidenceOfRegulatoryStatus,
+                'CompanyOverview' => $this->CompanyOverview ? config('app.url') .'/storage/'.$this->CompanyOverview : null,
+                'certificateOfIncorporation' => $this->certificateOfIncorporation ? config('app.url') .'/storage/'.$this->certificateOfIncorporation : null,
+                'memorandumAndArticlesOfAssociation' => $this->memorandumAndArticlesOfAssociation ? config('app.url') .'/storage/'.$this->memorandumAndArticlesOfAssociation : null,
+                'particularsOfDirectors' => $this->particularsOfDirectors ? config('app.url') .'/storage/'.$this->particularsOfDirectors : null,
+                'particularsOfShareholders' => $this->particularsOfShareholders ? config('app.url') .'/storage/'.$this->particularsOfShareholders : null,
+                'evidenceOfRegistration' => $this->evidenceOfRegistration ? config('app.url') .'/storage/'.$this->evidenceOfRegistration : null,
+                'detailedResumesOfSEC' => $this->detailedResumesOfSEC ? config('app.url') .'/storage/'.$this->detailedResumesOfSEC : null,
+                'evidenceOfCompliance' => $this->evidenceOfCompliance ? config('app.url') .'/storage/'.$this->evidenceOfCompliance : null,
+                'listOfAuthorisedRepresentatives' => $this->listOfAuthorisedRepresentatives ? config('app.url') .'/storage/'.$this->listOfAuthorisedRepresentatives : null,
+                'latestFidelityBond' => $this->latestFidelityBond ? config('app.url') .'/storage/'.$this->latestFidelityBond : null,
+                'mostRecentYearAuditedFinancialStatements' => $this->mostRecentYearAuditedFinancialStatements ? config('app.url') .'/storage/'.$this->mostRecentYearAuditedFinancialStatements : null,
+                'evidenceFXAuthorisedDealershipLicence' => $this->evidenceFXAuthorisedDealershipLicence ? config('app.url') .'/storage/'.$this->evidenceFXAuthorisedDealershipLicence : null,
+                'evidenceOfPaymentOfApplicationFee' => $this->evidenceOfPaymentOfApplicationFee ? config('app.url') .'/storage/'.$this->evidenceOfPaymentOfApplicationFee : null,
+                'applicantDeclaration' => $this->applicantDeclaration ? config('app.url') .'/storage/'.$this->applicantDeclaration : null,
+                'dulyCompletedApplicationForm' => $this->dulyCompletedApplicationForm ? config('app.url') .'/storage/'.$this->dulyCompletedApplicationForm : null,
+                'companyProfile' => $this->companyProfile ? config('app.url') .'/storage/'.$this->companyProfile : null,
+                'letterOfExpressionOfInterest' => $this->letterOfExpressionOfInterest ? config('app.url') .'/storage/'.$this->letterOfExpressionOfInterest : null,
+                'resumeOfDealers' => $this->resumeOfDealers ? config('app.url') .'/storage/'.$this->resumeOfDealers : null,
+                'evidenceOfMinimumShareholder' => $this->evidenceOfMinimumShareholder ? config('app.url') .'/storage/'.$this->evidenceOfMinimumShareholder : null,
+                'confirmationOfTechnicalKnowledge' => $this->confirmationOfTechnicalKnowledge ? config('app.url') .'/storage/'.$this->confirmationOfTechnicalKnowledge : null,
+                'thomsonReutersContractForm' => $this->thomsonReutersContractForm ? config('app.url') .'/storage/'.$this->thomsonReutersContractForm : null,
+                'thomsonReutersCertificateOfIncorporation' => $this->thomsonReutersCertificateOfIncorporation ? config('app.url') .'/storage/'.$this->thomsonReutersCertificateOfIncorporation : null,
+                'thomsonReutersMemorandumAndArticles' => $this->thomsonReutersMemorandumAndArticles ? config('app.url') .'/storage/'.$this->thomsonReutersMemorandumAndArticles : null,
+                'thomsonReutersParticularsOfDirectors' => $this->thomsonReutersParticularsOfDirectors ? config('app.url') .'/storage/'.$this->thomsonReutersParticularsOfDirectors : null,
+                'thomsonReutersEvidenceOfRegulatoryStatus' => $this->thomsonReutersEvidenceOfRegulatoryStatus ? config('app.url') .'/storage/'.$this->thomsonReutersEvidenceOfRegulatoryStatus : null,
             ],
 
             "payment_information" => $this->subPaymentInformation($this->application_id),
@@ -161,6 +164,8 @@ class ApplicationResource extends JsonResource
             "mbg_review" => $application->status()->where('office', 'MBG')->get(),
 
             "meg_review" => $application->status()->where('office', 'MEG')->get(),
+
+            "ars" => UserResource::collection(User::where('institution_id', $this->institution_id)->get())
 
         ];
     }

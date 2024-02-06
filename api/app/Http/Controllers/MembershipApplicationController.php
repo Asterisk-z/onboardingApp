@@ -115,11 +115,13 @@ class MembershipApplicationController extends Controller
 
         if ($request->field_type == 'file') {
 
+            $attachment = null;
+
             if ($request->hasFile('field_value')) {
-                $attachment = Utility::saveFile('application/' . auth()->user()->institution->application->id . '/' . $request->field_name, $request->file('field_value'));
+                $attachment = $request->file('field_value')->storePublicly('application', 'public');
             }
             $data['uploaded_field'] = null;
-            $data = ['uploaded_file' => $attachment['path']];
+            $data = ['uploaded_file' => $attachment];
         }
 
         ApplicationFieldUpload::updateOrCreate(
@@ -138,15 +140,22 @@ class MembershipApplicationController extends Controller
      */
     public function complete(Request $request)
     {
+        $request->validate([
+            'application_id' => 'required|exists:applications,id'
+        ]);
         //Get authenticated user
         $user = auth()->user();
 
-        $application_id = $user->institution->application->id;
+        $application_id = $request->application_id;
 
         //Get the application model
         $application = Application::find($application_id);
 
         $errorMsg = "Unable to complete your request at this point.";
+
+        if($application->reupload){
+            return $this->processReupload($request);
+        }
 
         if (strtolower($application->currentStatus()) != strtolower(Application::statuses['PEN'])) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
@@ -194,6 +203,70 @@ class MembershipApplicationController extends Controller
 
         logAction($user->email, 'Application submitted', 'Membership application has been submitted successfully.', $request->ip());
         event(new ApplicationSubmissionEvent($user, $application, $institution, $membershipCategory));
+        return successResponse("Your Application has been submitted and is under review. You will be notified any feedback soon");
+    }
+
+    protected function processReupload(Request $request)
+    {
+        $user = auth()->user();
+
+        $application_id = $request->application_id;
+
+        //Get the application model
+        $application = Application::find($application_id);
+        $applicant = User::find($application->submitted_by);
+        $applicantName = $applicant->first_name." ".$applicant->last_name;
+
+        $errorMsg = "Unable to complete your request at this point.";
+
+        if (strtolower($application->currentStatus()) != strtolower(Application::statuses['MDD'])) {
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+        }
+
+        if ($application->office_to_perform_next_action != Application::office['AP']) {
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+        }
+
+        //Get the insitution from the application
+        $institution = $application->institution;
+
+        if (!$institution) {
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+        }
+
+        //Checks that the institution returned is the same as that of the authenticated user
+        if ($user->institution_id != $institution->id) {
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+        }
+
+        //Get the first membership of an institution
+        $membershipCategory = $institution->membershipCategories->first();
+
+        if (!$membershipCategory) {
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+        }
+
+        //Get all the required fields per membership category
+        $requiredFieldIds = $membershipCategory->fields->where('required', 1)->pluck('id')->toArray();
+
+        //Check for any missing required field by comparing what is required and all that was uploaded
+        $applicationFieldIds = $application->uploads->pluck('application_field_id')->toArray();
+
+        $missingFieldIds = array_diff(
+            $requiredFieldIds,
+            $applicationFieldIds
+        );
+
+        if (!empty($missingFieldIds)) {
+            return errorResponse(ResponseStatusCodes::BAD_REQUEST, "Submission failed. There are required fields you are yet to fill.");
+        }
+
+        Utility::applicationStatusHelper($application, Application::statuses['ARD'], Application::office['MEG'], Application::office['AP']);
+
+        logAction($user->email, 'Application re-uploaded', 'Membership application has been re-uploaded successfully.', $request->ip());
+        $MEGs = Utility::getUsersByCategory(Role::MEG);
+        Notification::send($MEGs, new InfoNotification(MailContents::documentReuploadMail($applicantName), MailContents::documentReuploadSubject()));
+
         return successResponse("Your Application has been submitted and is under review. You will be notified any feedback soon");
     }
 
@@ -255,9 +328,6 @@ class MembershipApplicationController extends Controller
         $amountInWords = $f->format($total + $vat);
         $total = number_format($total, 2);
         $vat = number_format($vat, 2);
-
-        $pdfC = view('letter')->render();
-        return PDF::loadHTML($pdfC)->download('letter.pdf');
         
         return view('invoice', compact('invoice','invoiceContents', 'applicant', 'vat', 'total', 'amountInWords', 'amountDue', 'address', 'companyName'));
     }

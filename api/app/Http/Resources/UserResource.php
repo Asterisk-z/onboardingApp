@@ -27,8 +27,8 @@ class UserResource extends JsonResource
             'approval_status' => $this->approval_status,
             'update_payload' => $this->update_payload,
             'regId' => $this->reg_id,
-            'img' => $this->img ? config('app.url') .'/storage/app/public/'.$this->img : null,
-            'mandate_form' => $this->mandate_form ? config('app.url') .'/storage/app/public/'.$this->mandate_form : null,
+            'img' => $this->img ? config('app.url') .'/storage/'.$this->img : null,
+            'mandate_form' => $this->mandate_form ? config('app.url') .'/storage/'.$this->mandate_form : null,
             'institution' => $this->institution,
             'is_active' => $this->is_active,
             'createdAt' => $this->created_at

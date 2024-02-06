@@ -39,6 +39,7 @@ class Application extends Model
         'M2AMR' => "MEG2 APPROVED MEG REVIEW",
         'AEM' => "MEMBERSHIP AGREEMENT EXECUTED BY APPLICANT",
         'MEM' => "MEMBERSHIP AGREEMENT EXECUTED BY MEG",
+        'ARD' => "APPLICANT REUPLOADED DOCUMENT",
     ];
 
     const office = [
