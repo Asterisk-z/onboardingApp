@@ -84,7 +84,7 @@ class Meg2ApplicationController extends Controller
         $attachment = [
             [
                 "name" => "{$membershipCategory->name} Membership Agreement",
-                "saved_path" => $application->membership_agreement
+                "saved_path" => $application->membership_agreement 
             ]
         ];
 
