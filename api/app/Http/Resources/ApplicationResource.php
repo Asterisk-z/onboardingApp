@@ -33,8 +33,8 @@ class ApplicationResource extends JsonResource
                 "category_name" => $this->category_name,
                 "completed_at" => $this->completed_at,
                 "is_applicant_executed_membership_agreement" => $this->is_applicant_executed_membership_agreement,
-                "meg_executed_membership_agreement" => $this->meg_executed_membership_agreement ? config('app.url') .'/storage/'.$this->meg_executed_membership_agreement : null,
-                "applicant_executed_membership_agreement" => $this->applicant_executed_membership_agreement ? config('app.url') .'/storage/'.$this->applicant_executed_membership_agreement : null,
+                "meg_executed_membership_agreement" =>  ($this->completed_at && $this->meg_executed_membership_agreement) ? config('app.url') .'/storage/'.$this->meg_executed_membership_agreement : null,
+                "applicant_executed_membership_agreement" => ($this->completed_at && $this->applicant_executed_membership_agreement) ? config('app.url') .'/storage/'.$this->applicant_executed_membership_agreement : null,
                 "all_ar_uploaded" => $this->all_ar_uploaded,
                 "status" => $application->currentStatus()
             ],
@@ -165,7 +165,11 @@ class ApplicationResource extends JsonResource
 
             "meg_review" => $application->status()->where('office', 'MEG')->get(),
 
-            "ars" => UserResource::collection(User::where('institution_id', $this->institution_id)->get())
+            "ars" => UserResource::collection(User::where('institution_id', $this->institution_id)->get()),
+
+            "executed_membership_agreement" =>($this->completed_at && $this->meg_executed_membership_agreement) ? config('app.url').'/stroage/'.$this->meg_executed_membership_agreement : null,
+
+            "e_success_letter" => ($this->completed_at && $this->e_success_letter) ? config('app.url') .'/storage/'.$this->e_success_letter : null
 
         ];
     }
