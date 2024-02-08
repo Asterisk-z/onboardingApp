@@ -244,6 +244,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/institutions', [MegApplicationController::class, 'institutions']);
             Route::post('/review', [MegApplicationController::class, 'megReview']);
             Route::post('/upload-membership-agreement', [MegApplicationController::class, 'uploadMemberAgreement']);
+            Route::post('/complete-company-application', [MegApplicationController::class, 'completeCompanyApplication']);
         });
     });
 

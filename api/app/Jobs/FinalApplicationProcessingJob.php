@@ -23,14 +23,16 @@ class FinalApplicationProcessingJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $applicationID;
+    protected $force;
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($applicationID)
+    public function __construct($applicationID, $force = false)
     {
         $this->applicationID = $applicationID;
+        $this->force = $force;
     }
 
     /**
@@ -61,14 +63,17 @@ class FinalApplicationProcessingJob implements ShouldQueue
             $application->save();
         }
 
-        //CHECK IF ALL ARS HAVE BEEN ADDED
-        if(! $application->all_ar_uploaded){
-            Utility::notifyApplicantAndContactArUpdate($application);
+        if($application->e_success_letter_send){                                                                                                                                                                                                                                                                                                                                                                                                               
             return;
         }
 
-        if($application->e_success_letter_send){                                                                                                                                                                                                                                                                                                                                                                                                               
-            return;
+        //CHECK IF ALL ARS HAVE BEEN ADDED
+        if(! $this->force) {
+            if(! $application->all_ar_uploaded){
+                Utility::notifyApplicantAndContactArUpdate($application);
+                Utility::applicationStatusHelper($application, Application::statuses['RMA'], Application::office['AP'], Application::office['MEG']);
+                return;
+            }
         }
 
         Utility::applicationStatusHelper($application, Application::statuses['MPC'], Application::office['MEG'], Application::office['AP']);

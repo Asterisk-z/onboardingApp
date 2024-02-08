@@ -40,6 +40,8 @@ class Application extends Model
         'AEM' => "MEMBERSHIP AGREEMENT EXECUTED BY APPLICANT",
         'MEM' => "MEMBERSHIP AGREEMENT EXECUTED BY MEG",
         'ARD' => "APPLICANT REUPLOADED DOCUMENT",
+        'MAA' => "MEG APPROVE APPLICATION",
+        'RMA' => "REQUIRE MEG APPROVAL"
     ];
 
     const office = [
