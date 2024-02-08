@@ -318,4 +318,16 @@ class MailContents
     {
         return "<p>Kindly update the mailing group with the details below:</p>";
     }
+
+    public static function documentReuploadSubject(): string
+    {
+        return "MROIS Document Upload";
+    }
+
+    public static function documentReuploadMail($apllicantName): string
+    {
+        $url = config("app.front_end_url");
+        return "<p>Please be informed that {$apllicantName} has resubmitted documents on the MROIS portal.</p>
+        <p>Kindly log on to the <a href=$url>MROIS Portal</a> to proceed with the application.</p>";
+    }
 }

@@ -56,7 +56,8 @@ class MegApplicationController extends Controller
         }
 
         if($application->currentStatus() != Application::statuses['MAFR'] &&
-        $application->currentStatus() != Application::statuses['M2DMR']){
+        $application->currentStatus() != Application::statuses['M2DMR'] &&
+        $application->currentStatus() != Application::statuses['ARD']){
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
@@ -78,6 +79,10 @@ class MegApplicationController extends Controller
             Utility::applicationStatusHelper($application, Application::statuses['MDD'], Application::office['MEG'], Application::office['AP'], $request->comment);
 
             logAction($user->email, 'MEG Declined', "MEG Declined applicant Document", $request->ip());
+
+            $application->reupload = true;
+            $application->show_form = 1;
+            $application->save();
 
             return successResponse("Application updated successfully");
         }

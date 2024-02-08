@@ -84,7 +84,7 @@ class Meg2ApplicationController extends Controller
         $attachment = [
             [
                 "name" => "{$membershipCategory->name} Membership Agreement",
-                "saved_path" => $application->membership_agreement
+                "saved_path" => $this->resolveCategoryToPath($membershipCategory->code) 
             ]
         ];
 
@@ -105,5 +105,9 @@ class Meg2ApplicationController extends Controller
         logAction($user->email, 'MEG2 Approval', "MEG2 Approved MEG Review", $request->ip());
 
         return successResponse("Application Review has been submitted");        
+    }
+
+    protected function resolveCategoryToPath($code){
+        return config("app.url")."/assets/membership_agreement/{$code}.pdf";
     }
 }
