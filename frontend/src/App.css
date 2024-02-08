@@ -254,3 +254,7 @@ span.asc.__rdt_custom_sort_icon__ {
 .toastr-text > h4, .toastr-text > .h4, .toastr-text > h5, .toastr-text > .h5, .toastr-text > h6, .toastr-text > .h6 {
     color: #fff !important;
 }
+
+.width-30 {
+    width: 30% !important;
+}

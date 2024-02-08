@@ -17,7 +17,7 @@ import { HeaderLogo } from "../../pages/components/HeaderLogo";
 
 
 const PersonalForm = (props) => {
-    console.log(props)
+
   const [formData, setFormData] = useState({
     companyName: "",
     rcNumber: "",

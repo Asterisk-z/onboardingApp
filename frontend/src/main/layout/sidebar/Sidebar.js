@@ -12,7 +12,7 @@ const Sidebar = ({ fixed, className, ...props }) => {
 
   const theme = useTheme();
   const themeUpdate = useThemeUpdate();
-  console.log(theme)
+
   const [mouseEnter, setMouseEnter] = useState(false);
 
   const handleMouseEnter = () => setMouseEnter(true);

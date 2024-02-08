@@ -260,7 +260,7 @@ const ActionTab = (props) => {
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Yes!",
-            html: '<div class="flex flex-column text-left"><label htmlFor="application_report">Amount Received</label><input type="file" id="application_report" name="application_report" class="form-control" required /><label htmlFor="comments">Comment</label><textarea id="comments" class="form-control" rows="4" cols="50" placeholder="Enter Comment" required></textarea></div>', // Add textarea to the alert
+            html: '<div class="flex flex-column text-left"><label htmlFor="application_report">Amount Received</label><input type="file"  accept=".pdf" id="application_report" name="application_report" class="form-control" required /><label htmlFor="comments">Comment</label><textarea id="comments" class="form-control" rows="4" cols="50" placeholder="Enter Comment" required></textarea></div>', // Add textarea to the alert
           }).then((result) => {
             if (result.isConfirmed) {
               const application_report = document.getElementById('application_report').files[0]; // Get value from the textarea
@@ -387,7 +387,7 @@ const ActionTab = (props) => {
                             </>}
                         </ul>
                         <div className="my-4">
-                            <Button color="primary" className="mx-2">View Invoice</Button>
+                            <a className="btn btn-primary mx-2" href={institution?.payment_details?.invoice_url} target="_blank">View Invoice</a>
                             {(aUser.is_admin_fsd() && $latest_evidence) && <>
                             
                                 <a className="btn btn-primary mx-2" href={$latest_evidence.proof} target="_blank">Latest evidence of payment</a>
@@ -427,8 +427,8 @@ const ActionTab = (props) => {
             </ModalHeader>
             <ModalBody>
                         <ul>
-                            <li><span className="lead">Concession Amount : </span>{`${institution?.payment_details?.concession_amount}`}</li>
-                            <li><span className="lead">Total Fee : </span>{`${institution?.payment_details?.total}`}</li>
+                            <li><span className="lead">Concession Amount : </span>{institution?.payment_details?.concession_amount ? `${institution?.payment_details?.concession_amount?.toLocaleString("en-US")}` : ``}</li>
+                            <li><span className="lead">Total Fee : </span>{institution?.payment_details?.total ? `${institution?.payment_details?.total?.toLocaleString("en-US")}` : ``}</li>
                         </ul>
                         <div className="my-4">
                           
@@ -654,7 +654,7 @@ const UploadAgreementModel = ({ updateParentParent, tabItem, positions, closeMod
                         Signed Agreement
                     </label>
                     <div className="form-control-wrap">
-                        <input type="file" id="proveOfPayment" className="form-control" {...register('proveOfPayment', { required: "This Field is required" })} onChange={handleFileChange}/>
+                        <input type="file" accept=".pdf" id="proveOfPayment" className="form-control" {...register('proveOfPayment', { required: "This Field is required" })} onChange={handleFileChange}/>
                         {errors.proveOfPayment && <span className="invalid">{ errors.proveOfPayment.message }</span>}
                     </div>
                 </div>
@@ -740,10 +740,10 @@ const UploadConcession = ({ updateParentParent, tabItem, positions, closeModel }
                 </div>
                 <div className="form-group">
                     <label className="form-label" htmlFor="concession_file">
-                        Concession File
+                        Concession Approval (pdf)
                     </label>
                     <div className="form-control-wrap">
-                        <input type="file" id="concession_file" className="form-control" {...register('concession_file', { required: "This Field is required" })} onChange={handleFileChange}/>
+                        <input type="file"  accept=".pdf" id="concession_file" className="form-control" {...register('concession_file', { required: "This Field is required" })} onChange={handleFileChange}/>
                         {errors.concession_file && <span className="invalid">{ errors.concession_file.message }</span>}
                     </div>
                 </div>

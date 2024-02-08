@@ -59,8 +59,6 @@ const AdminEvents = ({ drawer }) => {
           postValues.unregistered_remainder_dates = values.registered_remainders;
           postValues.positions = values.positions.map((val) => (val.value));
           
-    console.log(values)
-    console.log(postValues)
         try {
             setLoading(true);
 
@@ -76,7 +74,7 @@ const AdminEvents = ({ drawer }) => {
             }
 
         } catch (error) {
-            console.log(error)
+            
             setLoading(false);
         }
 
@@ -116,7 +114,7 @@ const AdminEvents = ({ drawer }) => {
 
 
     const checking = () => {
-        console.log(errors, isEventFree);
+        
     };
 
 

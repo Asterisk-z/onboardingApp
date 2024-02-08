@@ -55,7 +55,7 @@ const Sidebar = ({ fixed, className, ...props }) => {
         </div>
         <div className="nk-sidebar-content" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
           <SimpleBar className="nk-sidebar-menu">
-            {aUser.role == "ARINPUTER" || aUser.role == "ARAUTHORISER"  ? (
+            {aUser.is_ar_inputter() || aUser.is_ar_authorizer()  ? (
               <UserMenu />
             ) : (
               <AdminMenu />

@@ -11,6 +11,7 @@ import { passwordSetComplete } from "redux/stores/authenticate/authStore";
 const PasswordSet = () => {
 
   const [searchParams, setSearchParams] = useSearchParams();
+  const email = searchParams.get('email');
   const [loading, setLoading] = useState(false);
   const [passState, setPassState] = useState(false);
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ const PasswordSet = () => {
           setLoading(true);
           
           const postValues = new Object();
-          postValues.email = formData.email;
+          postValues.email = searchParams.get('email');
           postValues.signature = searchParams.get('signature');
           postValues.password = formData.password;
 
@@ -97,8 +98,7 @@ const PasswordSet = () => {
                   </label>
                 </div>
                 <div className="form-control-wrap">
-                <input type="email"  {...register('email', { required: "This field is required" })}  className="form-control form-control-lg" placeholder="Enter your email address" autocomplete="off"/>
-                  {errors.email && <p className="invalid">{errors.email.message}</p>}
+                <input type="email"  value={email} readOnly className="form-control form-control-lg" placeholder="Enter your email address"/>
                  </div>
               </div>
              <div className="form-group">
@@ -112,7 +112,7 @@ const PasswordSet = () => {
                       <Icon name="eye" className="passcode-icon icon-show"></Icon>
                       <Icon name="eye-off" className="passcode-icon icon-hide"></Icon>
                     </a>
-                    <input type={passState ? "text" : "password"} id="password" onKeyUp={passwordPolicy} {...register('password', { required: "This field is required" })} autocomplete="off" placeholder="Enter your password" className={`form-control-lg form-control ${passState ? "is-hidden" : "is-shown"}`} />
+                    <input type={passState ? "text" : "password"} id="password" onKeyUp={passwordPolicy} {...register('password', { required: "This field is required" })} autoComplete="off" placeholder="Enter your password" className={`form-control-lg form-control ${passState ? "is-hidden" : "is-shown"}`} />
                     {errors.password && <span className="invalid">{errors.password.message}</span>}
                   </div>
             </div>
@@ -135,7 +135,7 @@ const PasswordSet = () => {
                     <Icon name="eye" className="passcode-icon icon-show"></Icon>
                     <Icon name="eye-off" className="passcode-icon icon-hide"></Icon>
                   </a>
-                  <input  type={passState ? "text" : "password"}  id="new_password"  {...register('new_password', { required: "This field is required" })}  onKeyUp={passwordPolicy} autocomplete="off" placeholder="Confirm your password"  className={`form-control-lg form-control ${passState ? "is-hidden" : "is-shown"}`} />
+                  <input  type={passState ? "text" : "password"}  id="new_password"  {...register('new_password', { required: "This field is required" })}  onKeyUp={passwordPolicy} autoComplete="off" placeholder="Confirm your password"  className={`form-control-lg form-control ${passState ? "is-hidden" : "is-shown"}`} />
                   {errors.passcode && <span className="invalid">{errors.new_password.message}</span>}
                 </div>
               </div>

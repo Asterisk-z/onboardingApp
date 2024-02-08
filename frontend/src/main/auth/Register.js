@@ -127,7 +127,7 @@ const Register = ({ drawer }) => {
                             First Name<span style={{color:'red'}}> *</span>
                         </label>
                         <div className="form-control-wrap">
-                            <input type="text" {...register('firstName', { required: true })} placeholder="Enter your first name" className="form-control-lg form-control" autocomplete="off"/>
+                            <input type="text" {...register('firstName', { required: true })} placeholder="Enter your first name" className="form-control-lg form-control" autoComplete="off"/>
                             {errors.firstName && <p className="invalid">First Name field is required</p>}
                         </div>
                     </div>
@@ -136,7 +136,7 @@ const Register = ({ drawer }) => {
                             Last Name<span style={{color:'red'}}> *</span>
                         </label>
                         <div className="form-control-wrap">
-                            <input type="text" {...register('lastName', { required: true })} placeholder="Enter your last name" className="form-control-lg form-control" autocomplete="off"/>
+                            <input type="text" {...register('lastName', { required: true })} placeholder="Enter your last name" className="form-control-lg form-control" autoComplete="off"/>
                             {errors.lastName && <p className="invalid">Last Name field is required</p>}
                         </div>
                     </div>
@@ -210,7 +210,7 @@ const Register = ({ drawer }) => {
                     </label>
                   </div>
                   <div className="form-control-wrap">
-                    <input type="email" bssize="lg"  {...register('email', { required: true })} className="form-control-lg form-control" placeholder="Enter your email address" autocomplete="off" />
+                    <input type="email" bssize="lg"  {...register('email', { required: true })} className="form-control-lg form-control" placeholder="Enter your email address" autoComplete="off" />
                     {errors.email && <p className="invalid">Email field is required</p>}
                   </div>
                 </div>
@@ -221,7 +221,7 @@ const Register = ({ drawer }) => {
                     </label>
                   </div>
                   <div className="form-control-wrap">
-                    <input type="number" autocomplete="off" bssize="lg" {...register('phone', { required: true, minLength: 11, valueAsNumber: true })} onKeyUp={(value) => parseInt(value.target.value) ? value.target.value = parseInt(value.target.value) : value.target.value = parseInt(value.target.value) } className="form-control-lg form-control" placeholder="Enter your phone number" />
+                    <input type="number" autoComplete="off" bssize="lg" {...register('phone', { required: true, minLength: 11, valueAsNumber: true })} onKeyUp={(value) => parseInt(value.target.value) ? value.target.value = parseInt(value.target.value) : value.target.value = parseInt(value.target.value) } className="form-control-lg form-control" placeholder="Enter your phone number" />
                     {errors.phone && <p className="invalid">{`This field is required`}</p>}
                   </div>
                 </div>

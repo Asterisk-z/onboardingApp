@@ -53,14 +53,13 @@ const ApplicantInformation = (props) => {
 
 
     useEffect(() => {
-        if ($user_application) {
+        if ($user_application?.application?.concession_stage) {
             dispatch(loadInvoiceDownload({ 'application_id': $user_application?.application?.id }));
         }
     }, [user_application]);
     
     
-    // console.log(invoice_download)
-  console.log($user_application);
+    // console.log($user_application?.application?.concession_stage)
 
   return (
     <section>
@@ -70,11 +69,11 @@ const ApplicantInformation = (props) => {
         <Col md='12'>
           {$user_application?.application?.concession_stage == 1 && <>
             
-              <a className="btn btn-primary mx-1" href={$invoice_download} target="_blank"> Download Invoice </a>
               {!$user_application?.application?.proof_of_payment ? <>
-               <a className="btn btn-primary mx-1" href="#"  onClick={toggleView} >Make Payment </a>
+                <a className="btn btn-primary mx-1" href={$invoice_download} target="_blank"> Download Invoice </a>
+                <a className="btn btn-primary mx-1" href="#"  onClick={toggleView} >Make Payment </a>
                       </> : <>
-               <a className="btn btn-success mx-1" href="#"  >Payment Sent</a>
+                <a className="btn btn-success mx-1" href="#"  >Payment Sent</a>
                       </>}
              
           </>}
@@ -88,12 +87,12 @@ const ApplicantInformation = (props) => {
         <Col md='12'>
 
               
-            <table className="table table-striped table-bordered">  
+            <table className="table table-striped table-bordered table-hover">  
               <thead>    
                   <tr>      
                       <th scope="col">#</th>      
                       <th scope="col">Name</th>      
-                      <th scope="col">Value</th>      
+                      <th scope="col" className="width-30">Value</th>      
                   </tr>  
               </thead>  
               <tbody>
@@ -279,7 +278,7 @@ const UploadAgreementModel = ({ updateParentParent, tabItem, positions, closeMod
                         Signed Agreement
                     </label>
                     <div className="form-control-wrap">
-                        <input type="file" id="proveOfPayment" className="form-control" {...register('proveOfPayment', { required: "This Field is required" })} onChange={handleFileChange}/>
+                        <input type="file" accept=".pdf" id="proveOfPayment" className="form-control" {...register('proveOfPayment', { required: "This Field is required" })} onChange={handleFileChange}/>
                         {errors.proveOfPayment && <span className="invalid">{ errors.proveOfPayment.message }</span>}
                     </div>
                 </div>
@@ -359,7 +358,7 @@ const PayWithTransfer = ({ updateParentParent, tabItem, positions, closeModel, t
                         Prove of Payment
                     </label>
                     <div className="form-control-wrap">
-                        <input type="file" id="proveOfPayment" className="form-control" {...register('proveOfPayment', { required: "This Field is required" })} onChange={handleFileChange}/>
+                        <input type="file" accept=".pdf" id="proveOfPayment" className="form-control" {...register('proveOfPayment', { required: "This Field is required" })} onChange={handleFileChange}/>
                         {errors.proveOfPayment && <span className="invalid">{ errors.proveOfPayment.message }</span>}
                     </div>
                 </div>

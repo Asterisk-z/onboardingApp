@@ -34,7 +34,6 @@ const PasswordChange = () => {
             }, 1000);
               setLoading(false);
           } else {
-            console.log(resp.payload.response.data.statusCode)
             setLoading(false);
         }
         setLoading(false);
@@ -48,7 +47,7 @@ const PasswordChange = () => {
   };
 
       const passwordPolicy = (event) => {
-        console.log(event.target.name)
+        
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
         const isValidPassword = passwordRegex.test(getValues('password'));
         const isValidNewPassword = passwordRegex.test(getValues('new_password'));
@@ -68,10 +67,6 @@ const PasswordChange = () => {
         clearErrors('new_password')
     }
     
-  const handleFormSubmitTwo = () => {
-    console.log('feer');
-    console.log(errors)
-  }
   
   return (
     <>
@@ -99,7 +94,7 @@ const PasswordChange = () => {
                   </label>
                 </div>
                 <div className="form-control-wrap">
-                <input type="email"  {...register('email', { required: "This field is required" })} readOnly={true} value={localStorage.getItem('reset-password-email')} className="form-control form-control-lg" placeholder="Enter your email address" autocomplete="off"/>
+                <input type="email"  {...register('email', { required: "This field is required" })} readOnly={true} value={localStorage.getItem('reset-password-email')} className="form-control form-control-lg" placeholder="Enter your email address" autoComplete="off"/>
                   {errors.email && <p className="invalid">{errors.email.message}</p>}
                  </div>
               </div>
@@ -114,7 +109,7 @@ const PasswordChange = () => {
                       <Icon name="eye" className="passcode-icon icon-show"></Icon>
                       <Icon name="eye-off" className="passcode-icon icon-hide"></Icon>
                     </a>
-                    <input type={passState ? "text" : "password"} id="password" onKeyUp={passwordPolicy} {...register('password', { required: "This field is required" })} placeholder="Enter your password" className={`form-control-lg form-control ${passState ? "is-hidden" : "is-shown"}`} autocomplete="off" />
+                    <input type={passState ? "text" : "password"} id="password" onKeyUp={passwordPolicy} {...register('password', { required: "This field is required" })} placeholder="Enter your password" className={`form-control-lg form-control ${passState ? "is-hidden" : "is-shown"}`} autoComplete="off" />
                     {errors.password && <span className="invalid">{errors.password.message}</span>}
                   </div>
               </div>
@@ -137,12 +132,12 @@ const PasswordChange = () => {
                     <Icon name="eye" className="passcode-icon icon-show"></Icon>
                     <Icon name="eye-off" className="passcode-icon icon-hide"></Icon>
                   </a>
-                  <input  type={passState ? "text" : "password"}  id="new_password"  {...register('new_password', { required: "This field is required" })}  onKeyUp={passwordPolicy}  placeholder="Confirm your password"  className={`form-control-lg form-control ${passState ? "is-hidden" : "is-shown"}`} autocomplete="off" />
+                  <input  type={passState ? "text" : "password"}  id="new_password"  {...register('new_password', { required: "This field is required" })}  onKeyUp={passwordPolicy}  placeholder="Confirm your password"  className={`form-control-lg form-control ${passState ? "is-hidden" : "is-shown"}`} autoComplete="off" />
                   {errors.new_password && <span className="invalid">{errors.new_password.message}</span>}
                 </div>
               </div>
               <div className="form-group">
-                <Button color="primary" size="lg" type="submit" className="btn-block" onClick={handleFormSubmitTwo}>
+                <Button color="primary" size="lg" type="submit" className="btn-block" >
                   {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Update Password"}
                 </Button>
               </div>

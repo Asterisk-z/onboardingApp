@@ -39,7 +39,7 @@ const Homepage = () => {
     dispatch(userLoadUserARs({"approval_status" : "", "role_id": ""}));
     dispatch(loadArDashboard());
   }, [dispatch]);
-  console.log(application_list);
+  
 
   const $arUsers = arUsers ? JSON.parse(arUsers) : null;
   return (

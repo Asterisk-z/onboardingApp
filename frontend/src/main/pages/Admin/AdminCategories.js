@@ -65,7 +65,6 @@ const AdminCategory = ({ drawer }) => {
     const $positions = positions ? JSON.parse(positions) : null;
     
     const updateParentState = (newState) => {
-        console.log(newState)
         setParentState(newState);
     };
 

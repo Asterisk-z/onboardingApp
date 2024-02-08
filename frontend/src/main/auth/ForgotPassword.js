@@ -46,7 +46,7 @@ const ForgotPassword = () => {
               setLoading(false);
           }
         }
-        console.log(formData)
+        // console.log(formData)
         
         // if (resp.payload?.message == "success") {
         //     localStorage.setItem('reset-password-email', formData.email)
@@ -95,7 +95,7 @@ const ForgotPassword = () => {
                     Email
                   </label>
                 </div>
-                <input type="email"  {...register('email', { required: "This field is required" })} readOnly={mailSent} className="form-control form-control-lg" placeholder="Enter your email address" autocomplete="off" />
+                <input type="email"  {...register('email', { required: "This field is required" })} readOnly={mailSent} className="form-control form-control-lg" placeholder="Enter your email address" autoComplete="off" />
               </div>
               {mailSent && <div className="form-group">
                 <div className="form-label-group">
@@ -103,7 +103,7 @@ const ForgotPassword = () => {
                     OTP
                   </label>
                 </div>
-                <input type="text"  {...register('otp', { required: "This field is required" })} className="form-control form-control-lg" placeholder="Enter OTP" autocomplete="off"/>
+                <input type="text"  {...register('otp', { required: "This field is required" })} className="form-control form-control-lg" placeholder="Enter OTP" autoComplete="off"/>
               </div>}
               <div className="form-group">
                 <Button color="primary" size="lg" type="submit" className="btn-block" >

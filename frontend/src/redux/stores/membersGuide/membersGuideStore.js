@@ -106,7 +106,6 @@ const membersGuideStore = createSlice({
 
     builder.addCase(loadAllMembersGuide.fulfilled, (state, action) => {
       state.loading = false;
-      console.log('frefrf')
       state.all_guides = JSON.stringify(action.payload?.data?.data);
     });
 
@@ -135,7 +134,6 @@ const membersGuideStore = createSlice({
     });
 
     builder.addCase(createMembersGuide.fulfilled, (state, action) => {
-      console.log('herer')
       state.loading = false;
     });
 

@@ -48,8 +48,6 @@ export const loginUser = createAsyncThunk(
       }
       return successHandler(data, "Login Successful");
     } catch (error) {
-      console.log(error.response.data.statusCode)
-      console.log(values.email)
       if (error.response.data.statusCode == '666') {
         localStorage.setItem("reset-password-email", values.email);
       }

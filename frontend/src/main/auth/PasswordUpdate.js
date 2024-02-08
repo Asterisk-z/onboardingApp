@@ -66,10 +66,7 @@ const PasswordUpdate = () => {
         clearErrors('new_password')
     }
     
-  const handleFormSubmitTwo = () => {
-    console.log('feer');
-    console.log(errors)
-  }
+
   
   return (
     <>
@@ -140,7 +137,7 @@ const PasswordUpdate = () => {
                 </div>
               </div>
               <div className="form-group">
-                <Button color="primary" size="lg" type="submit" className="btn-block" onClick={handleFormSubmitTwo}>
+                <Button color="primary" size="lg" type="submit" className="btn-block" >
                   {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Update Password"}
                 </Button>
               </div>

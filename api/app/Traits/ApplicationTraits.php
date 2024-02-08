@@ -28,32 +28,35 @@ trait ApplicationTraits
     {
         $application = Application::find($application_id);
         $invoice = Invoice::find($application->invoice_id);
-        $invoiceContents = $invoice->contents; 
+        $invoiceContents = $invoice->contents;
 
         $concession = 0;
-        if($con = $invoice->contents()->where('name', 'Concession')->first()){
+        if ($con = $invoice->contents()->where('name', 'Concession')->first()) {
             $concession = $con->value;
         }
 
         $total = 0;
 
-        foreach($invoiceContents as $invoiceContent){
-            if($invoiceContent->name == 'Concession'){
+        foreach ($invoiceContents as $invoiceContent) {
+            if ($invoiceContent->name == 'Concession') {
                 continue;
             }
-            if($invoiceContent->type == 'credit'){
+            if ($invoiceContent->type == 'credit') {
                 $total -= $invoiceContent->value;
             }
 
-            if($invoiceContent->type == 'debit'){
+            if ($invoiceContent->type == 'debit') {
                 $total += $invoiceContent->value;
             }
         }
 
+        $payment_url = $application->invoiceToken ? route('invoice', ['uuid' => $application->invoiceToken]) : null;
+
         $data = [
             'concession_amount' => $concession,
-            'concession_file' => $application->concession_file ? config('app.url') .'/storage/app/public/'.$application->concession_file : null,
-            'total' => $total
+            'concession_file' => $application->concession_file ? config('app.url') . '/storage/app/public/' . $application->concession_file : null,
+            'total' => $total,
+            'invoice_url' => $payment_url,
         ];
 
         return $data;

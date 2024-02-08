@@ -208,8 +208,6 @@ const AdminBroadcast = ({ drawer }) => {
         };
         
 
-        console.log(overAllForm)
-
         return (
             <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
                 <Row className="gy-4">
@@ -259,7 +257,7 @@ const AdminBroadcast = ({ drawer }) => {
     const PositionSection = (props) => {
 
         const positions = useSelector((state) => state?.position?.list) || null;
-        console.log(overAllForm)
+
         useEffect(() => {
             dispatch(loadAllCategoryPositions({ 'category_ids': overAllForm.category_ids }));
         }, [dispatch]);

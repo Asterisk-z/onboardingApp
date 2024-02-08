@@ -85,7 +85,7 @@ const ApplicantInformation = (props) => {
             
             if (field.type == 'text') {
                 return (
-                    <Col md="6" key={index}>
+                    <Col md="6" key={`${field.name}${index}`}>
                     <div className="form-group">
                         <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
                         <div className="form-control-wrap">
@@ -98,13 +98,13 @@ const ApplicantInformation = (props) => {
             } else if(field.type == 'date') {
                 
                 return (
-                    <Col md="6" key={index}>
+                    <Col md="6" key={`${field.name}${index}`}>
                         <div className="form-group">
                             <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
                             <div className="form-control-wrap">
                               
                                   <input type="hidden" {...register(field.name, { required: 'This field is required' })} value={field?.field_value?.uploaded_field} />
-                                <DatePicker selected={field?.field_value?.uploaded_field ? new Date(field?.field_value?.uploaded_field) : new Date()}  id={field.name} onChange={(e) => onInputChange({'field_name' : field.name, "field_value" : moment(e).format('YYYY-MM-DD'), "field_type" : field.type})}  className="form-control date-picker" />
+                                <DatePicker selected={field?.field_value?.uploaded_field ? new Date(field?.field_value?.uploaded_field) : ""}  id={field.name} onChange={(e) => onInputChange({'field_name' : field.name, "field_value" : moment(e).format('YYYY-MM-DD'), "field_type" : field.type})}  className="form-control date-picker" />
                                 {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
                             </div>
                         </div>
@@ -112,7 +112,7 @@ const ApplicantInformation = (props) => {
                 )
             }else if(field.type == 'email') {
                 return (
-                    <Col md="6" key={index}>
+                    <Col md="6" key={`${field.name}${index}`}>
                         <div className="form-group">
                             <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
                             <div className="form-control-wrap">
@@ -124,7 +124,7 @@ const ApplicantInformation = (props) => {
                 )
             }else if(field.type == 'number') {
                 return (
-                    <Col md="6" key={index}>
+                    <Col md="6" key={`${field.name}${index}`}>
                         <div className="form-group">
                             <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
                             <div className="form-control-wrap">
@@ -136,7 +136,7 @@ const ApplicantInformation = (props) => {
                 )
             } else if (field.type == 'select') {
                 return (
-                    <Col md="6" key={index}>
+                    <Col md="6" key={`${field.name}${index}`}>
                         <div className="form-group">
                             <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
                             <div className="form-control-wrap">
@@ -145,7 +145,7 @@ const ApplicantInformation = (props) => {
                                     <select className="form-control form-select" type="select" name={field.name} id={field.name} {...register(field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({'field_name' : field.name, "field_value" : e.target.value, "field_type" : field.type})} defaultValue={field?.field_value?.uploaded_field}> 
                                         <option>Select Option</option>
                                         {field.field_options && field.field_options.map((option, index) => (
-                                            <option key={index} value={option.option_value}>{option.option_name}</option>
+                                            <option key={`${option.option_value}${index}`} value={option.option_value}>{option.option_name}</option>
                                         ))}
                                     </select>
                                 </div>
@@ -243,7 +243,7 @@ const TradingDetail = (props) => {
                 
             if (field.type == 'text') {
                 return (
-                    <Col md="6" key={index}>
+                    <Col md="6" key={`${field.name}${index}`}>
                         <div className="form-group">
                             <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
                             <div className="form-control-wrap">
@@ -256,7 +256,7 @@ const TradingDetail = (props) => {
             } else if(field.type == 'date') {
                 
                 return (
-                    <Col md="6" key={index}>
+                    <Col md="6" key={`${field.name}${index}`}>
                         <div className="form-group">
                             <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
                             <div className="form-control-wrap">
@@ -268,7 +268,7 @@ const TradingDetail = (props) => {
                 )
             }else if(field.type == 'email') {
                 return (
-                    <Col md="6" key={index}>
+                    <Col md="6" key={`${field.name}${index}`}>
                         <div className="form-group">
                             <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
                             <div className="form-control-wrap">
@@ -280,7 +280,7 @@ const TradingDetail = (props) => {
                 )
             } else if (field.type == 'number') {
                 return (
-                    <Col md="6" key={index}>
+                    <Col md="6" key={`${field.name}${index}`}>
                         <div className="form-group">
                             <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
                             <div className="form-control-wrap">
@@ -292,7 +292,7 @@ const TradingDetail = (props) => {
                 )
             } else if (field.type == 'select') {
                 return (
-                    <Col md="6" key={index}>
+                    <Col md="6" key={`${field.name}${index}`}>
                         <div className="form-group">
                             <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
                             <div className="form-control-wrap">
@@ -301,7 +301,7 @@ const TradingDetail = (props) => {
                                     <select className="form-control form-select" type="select" name={field.name} id={field.name} {...register(field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({'field_name' : field.name, "field_value" : e.target.value, "field_type" : field.type})} defaultValue={field?.field_value?.uploaded_field}> 
                                         <option>Select Option</option>
                                         {field.field_options && field.field_options.map((option, index) => (
-                                            <option key={index} value={option.option_value}>{option.option_name}</option>
+                                            <option key={`${option.option_value}${index}`} value={option.option_value}>{option.option_name}</option>
                                         ))}
                                     </select>
                                 </div>
@@ -320,7 +320,7 @@ const TradingDetail = (props) => {
                     onInputChange({'field_name' : field.name, "field_value" : field_value, "field_type" : field.type})
                 }  
                 return (
-                    <div  key={index}>
+                    <div  key={`${field.name}${index}`}>
                         <Col md="12">
                             <div className="form-group">
                                 <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
@@ -328,7 +328,7 @@ const TradingDetail = (props) => {
                                     <ul className="custom-control-group gy-4">
                                         {field.field_options && field.field_options.map((option, index) => (
                                             
-                                                <li key={index}>
+                                                <li key={`${option.option_value}${index}`}>
                                                     <div className="custom-control custom-checkbox custom-control-pro no-control checked">
                                                         <input type="checkbox" className="custom-control-input" name="btnCheck" id={`btnCheck${index}`} defaultChecked={checkedBoxes[option.option_value] ? true : false}  onChange={(e) => checkedValues({'option_value' : option.option_value, "field_value" : e.target.checked, "option_name" : option.option_name})} />
                                                         <label className="custom-control-label" htmlFor={`btnCheck${index}`}>
@@ -349,7 +349,7 @@ const TradingDetail = (props) => {
                             if (checkedBoxes.bonds && child_field.name == 'MonthlyAverageValueOfTradesPerProductBonds' ) {
                                
                                  return (
-                                    <Col md="6" key={index}>
+                                    <Col md="6" key={`${child_field.name}${index}`}>
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
@@ -364,7 +364,7 @@ const TradingDetail = (props) => {
                             if (checkedBoxes.treasuryBills && child_field.name == 'MonthlyAverageValueOfTradesPerProductTreasuryBills' ) {
                                
                                  return (
-                                    <Col md="6" key={index}>
+                                    <Col md="6" key={`${child_field.name}${index}`}>
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
@@ -379,7 +379,7 @@ const TradingDetail = (props) => {
                             if (checkedBoxes.commercialPapers && child_field.name == 'MonthlyAverageValueOfTradesPerProductCommercialPaper' ) {
                                
                                  return (
-                                    <Col md="6" key={index}>
+                                    <Col md="6" key={`${child_field.name}${index}`}>
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
@@ -394,7 +394,7 @@ const TradingDetail = (props) => {
                             if (checkedBoxes.moneyMarket && child_field.name == 'MonthlyAverageValueOfTradesPerProductMoneyMarket' ) {
                                
                                  return (
-                                    <Col md="6" key={index}>
+                                    <Col md="6" key={`${child_field.name}${index}`}>
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
@@ -409,7 +409,7 @@ const TradingDetail = (props) => {
                             if (checkedBoxes.foreignExchange && child_field.name == 'MonthlyAverageValueOfTradesPerProductForeignExchange' ) {
                                
                                  return (
-                                    <Col md="6" key={index}>
+                                    <Col md="6" key={`${child_field.name}${index}`}>
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
@@ -424,7 +424,7 @@ const TradingDetail = (props) => {
                             if (checkedBoxes.derivatives && child_field.name == 'MonthlyAverageValueOfTradesPerProductDerivatives' ) {
                                
                                  return (
-                                    <Col md="6" key={index}>
+                                    <Col md="6" key={`${child_field.name}${index}`}>
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
@@ -439,7 +439,7 @@ const TradingDetail = (props) => {
                             if (checkedBoxes.others && child_field.name == 'MonthlyAverageValueOfTradesPerProductOthers' ) {
                                
                                  return (
-                                    <Col md="6" key={index}>
+                                    <Col md="6" key={`${child_field.name}${index}`}>
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
@@ -454,7 +454,7 @@ const TradingDetail = (props) => {
                             if (checkedBoxes.bonds && child_field.name == 'AverageTradeSizePerTransactionBonds' ) {
                                
                                  return (
-                                    <Col md="6" key={index}>
+                                    <Col md="6" key={`${child_field.name}${index}`}>
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
@@ -469,7 +469,7 @@ const TradingDetail = (props) => {
                             if (checkedBoxes.treasuryBills && child_field.name == 'AverageTradeSizePerTransactionTreasuryBills' ) {
                                
                                  return (
-                                    <Col md="6" key={index}>
+                                    <Col md="6" key={`${child_field.name}${index}`}>
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
@@ -484,7 +484,7 @@ const TradingDetail = (props) => {
                             if (checkedBoxes.commercialPapers && child_field.name == 'AverageTradeSizePerTransactionCommercialPaper' ) {
                                
                                  return (
-                                    <Col md="6" key={index}>
+                                    <Col md="6" key={`${child_field.name}${index}`}>
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
@@ -499,7 +499,7 @@ const TradingDetail = (props) => {
                             if (checkedBoxes.moneyMarket && child_field.name == 'AverageTradeSizePerTransactionMoneyMarket' ) {
                                
                                  return (
-                                    <Col md="6" key={index}>
+                                    <Col md="6" key={`${child_field.name}${index}`}>
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
@@ -514,7 +514,7 @@ const TradingDetail = (props) => {
                             if (checkedBoxes.foreignExchange && child_field.name == 'AverageTradeSizePerTransactionForeignExchange' ) {
                                
                                  return (
-                                    <Col md="6" key={index}>
+                                    <Col md="6" key={`${child_field.name}${index}`}>
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
@@ -529,7 +529,7 @@ const TradingDetail = (props) => {
                             if (checkedBoxes.derivatives && child_field.name == 'AverageTradeSizePerTransactionDerivatives' ) {
                                
                                  return (
-                                    <Col md="6" key={index}>
+                                    <Col md="6" key={`${child_field.name}${index}`}>
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
@@ -544,7 +544,7 @@ const TradingDetail = (props) => {
                             if (checkedBoxes.others && child_field.name == 'AverageTradeSizePerTransactionOthers' ) {
                                
                                  return (
-                                    <Col md="6" key={index}>
+                                    <Col md="6" key={`${child_field.name}${index}`}>
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
                                             <div className="form-control-wrap">
@@ -655,7 +655,7 @@ const DisciplinaryHistory = (props) => {
             
            if (field.type == 'select') {
                 return (
-                    <Col md="12" key={index}>
+                    <Col md="12" key={`${field.name}${index}`}>
                         <div className="form-group">
                             <label className="form-label text-uppercase font-black" htmlFor="company-name">{field.description}</label>
                             <div className="form-control-wrap">
@@ -676,7 +676,7 @@ const DisciplinaryHistory = (props) => {
                         {field.child_fields && field.child_fields.map((child_field, index) => {
                             
                                  return (
-                                    <Col md="12" key={index}>
+                                    <Col md="12" key={`${child_field.name}${index}`}>
                                         <div className="form-group">
                                             <label className="form-label text-capitalize" htmlFor="company-name">{child_field.description}</label>
                                             <div className="form-control-wrap">
@@ -685,7 +685,7 @@ const DisciplinaryHistory = (props) => {
                                                     <select className="form-control form-select" type="select" name={child_field.name} id={child_field.name} {...register(child_field.name, { required: 'This field is required' })} onChange={(e) => onInputChange({'field_name' : child_field.name, "field_value" : e.target.value, "field_type" : child_field.type})} defaultValue={child_field?.field_value?.uploaded_field}> 
                                                         <option>Select Option</option>
                                                         {child_field.field_options && child_field.field_options.map((option, index) => (
-                                                            <option key={index} value={option.option_value}>{option.option_name}</option>
+                                                            <option key={`${option.option_value}${index}`} value={option.option_value}>{option.option_name}</option>
                                                         ))}
                                                     </select>
                                                 </div>
@@ -744,7 +744,7 @@ const SupportingDocuments = (props) => {
 
     useEffect(() => {
         dispatch(loadPageFields({"page" : "4", "category" : authUser.user_data.institution.category[0].id}));
-        dispatch(loadExtra({"name" : "invoice", "category" : authUser.user_data.institution.category[0].id}));
+        // dispatch(loadExtra({"name" : "invoice", "category" : authUser.user_data.institution.category[0].id}));
     }, [dispatch, parentState]);
   
   
@@ -787,22 +787,18 @@ const SupportingDocuments = (props) => {
   return (
     <form className="content clearfix" onSubmit={handleSubmit(submitForm)} encType="multipart/form-data">
       <h3>Supporting Documents</h3>
-      <ul>
-        <li>
-            {extra?.invoice && <a href={extra?.invoice.file} target="_blank" className="btn btn-primary">Download Invoice</a> }
-        </li>
-      </ul>
+
       <Row className="gy-4">
         {fields && fields.map((field, index) => {
                 
            if (field.type == 'file') {
                 return (
-                    <Col md="12" key={index}>
+                    <Col md="12" key={`${field.name}${index}`}>
                         <div className="form-group">
                             <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
                             <div className="form-control-wrap">
                                  <div className="input-group">
-                                    <input type="file"  accept="..jpg,.jpeg,.png,.pdf" id={field.name} className="form-control"  onBlur={(e) => onInputChange({'field_name' : field.name, "field_value" : e.target.files[0], "field_type" : field.type})} />
+                                    <input type="file"  accept="..jpg,.jpeg,.png,.pdf" id={field.name} className="form-control"  onChange={(e) => onInputChange({'field_name' : field.name, "field_value" : e.target.files[0], "field_type" : field.type})} />
 
                                       <div className="input-group-append">
                                           <input type="hidden" {...register(field.name, { required: 'This field is required' })} value={field.field_value?.file_path ? field.field_value?.file_path : ''}/>
@@ -825,7 +821,7 @@ const SupportingDocuments = (props) => {
             	
             	
                          	
-           <p>Accepted Modes of Payment: Cheque/Bank Draft/Online Transfer</p>
+           {/* <p>Accepted Modes of Payment: Cheque/Bank Draft/Online Transfer</p>
           <p>All cheques are payable to “FMDQ SECURITIES EXCHANGE LIMITED”</p>
           <table className="table">
               <tbody>    
@@ -846,7 +842,7 @@ const SupportingDocuments = (props) => {
                       <td>044151106</td>  
                   </tr>  
               </tbody>
-          </table>
+          </table> */}
         </Col>
 
       </Row>
@@ -940,12 +936,12 @@ const ApplicationDeclaration = (props) => {
                       
                 if (field.type == 'file') {
                       return (
-                          <Col md="12" key={index}>
+                          <Col md="12" key={`${field.name}${index}`}>
                               <div className="form-group">
                                   <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
                                   <div className="form-control-wrap">
                                       <div className="input-group">
-                                          <input type="file"  accept="..jpg,.jpeg,.png,.pdf" id={field.name} className="form-control"  onBlur={(e) => onInputChange({'field_name' : field.name, "field_value" : e.target.files[0], "field_type" : field.type})} />
+                                          <input type="file"  accept=".jpg,.jpeg,.png,.pdf" id={field.name} className="form-control"  onChange={(e) => onInputChange({'field_name' : field.name, "field_value" : e.target.files[0], "field_type" : field.type})} />
 
                                             <div className="input-group-append">
                                                 <input type="hidden" {...register(field.name, { required: 'This field is required' })} value={field.field_value?.file_path ? field.field_value?.file_path : ''}/>
@@ -1092,7 +1088,7 @@ const Form = () => {
   }
 
   const fields = useSelector((state) => state?.application?.all_fields) || null;
-console.log(fields)
+  
   return <>
     <Head title="Form" />
     <HeaderLogo />
