@@ -165,5 +165,9 @@ class User extends Authenticatable implements JWTSubject
         return $this->reg_id;
 
         //FMDQ/MB-SERIALNO+FULL JOIN DATE
+    } 
+
+    public function application(){
+        return $this->hasMany(Application::class, 'submitted_by');
     }
 }
