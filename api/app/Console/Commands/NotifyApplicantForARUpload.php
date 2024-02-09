@@ -39,7 +39,7 @@ class NotifyApplicantForARUpload extends Command
     public function handle()
     {
         Application::where('all_ar_uploaded', 0)
-            ->where('meg2_review_stage', 1)
+            ->where('is_meg_executed_membership_agreement', 1)
             ->orderBy('id')
             ->chunkById(200, function ($applications) {
                 foreach ($applications as $application) {

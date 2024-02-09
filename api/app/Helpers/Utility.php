@@ -128,31 +128,6 @@ class Utility
         return;
     }
 
-    // public static function notifyApplicantAndContact($application_id, $applicant, $emailData, $ccs = [], $attachment = []){
-    //     $data = Application::where('applications.id', $application_id);
-    //     $data = Utility::applicationDetails($data);
-    //     $data = $data->first();
-    //     $companyEmail = $data->company_email;
-    //     $contactEmail = $data->primary_contact_email;
-
-    //     // Recipient email addresses
-    //     $toEmails = [$applicant->email, $companyEmail, $contactEmail];
-    //     return self::emailHelper($emailData, $toEmails, $ccs, $attachment);
-    // }
-
-    // public static function notifyApplicantAndContactArUpdate($application){
-    //     $institution = $application->institution;
-    //     $membershipCategory = $institution->membershipCategories->first();
-    //     $applicant = User::find($application->submitted_by);
-    //     $emailData = [
-    //         'name' => "{$applicant->first_name} {$applicant->last_name}",
-    //         'subject' => MailContents::ApplicantArUpdateSubject(),
-    //         'content' => MailContents::ApplicantArUpdateMail($membershipCategory->name)
-    //     ];
-    //     $Meg = self::getUsersEmailByCategory(Role::MEG);
-    //     return self::notifyApplicantAndContact($application->id, $applicant, $emailData, $Meg);
-    // }
-
     public static function notifyApplicantAndContact($application_id, $applicant, $emailData, $ccs = [], $attachment = []){
         $data = Application::where('applications.id', $application_id);
         $data = Utility::applicationDetails($data);
@@ -166,8 +141,7 @@ class Utility
     }
 
     public static function notifyApplicantAndContactArUpdate($application){
-        $institution = $application->institution;
-        $membershipCategory = $institution->membershipCategories->first();
+        $membershipCategory = $application->membershipCategory;
         $applicant = User::find($application->submitted_by);
         $emailData = [
             'name' => "{$applicant->first_name} {$applicant->last_name}",
@@ -187,8 +161,7 @@ class Utility
     public static function applicationDetails($builder)
     {
         return $builder->join('institutions', 'applications.institution_id', '=', 'institutions.id')
-        ->join('institution_memberships', 'institutions.id', '=', 'institution_memberships.institution_id')
-        ->join('membership_categories', 'institution_memberships.membership_category_id', '=', 'membership_categories.id')
+        ->join('membership_categories', 'applications.membership_category_id', '=', 'membership_categories.id')
         ->join('application_field_uploads', 'applications.id', '=', 'application_field_uploads.application_id')
         ->join('application_fields', 'application_field_uploads.application_field_id', '=', 'application_fields.id')
         ->select(

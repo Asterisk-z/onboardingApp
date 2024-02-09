@@ -45,8 +45,7 @@ class Meg2ApplicationController extends Controller
 
         $user = $request->user();
         $application = Application::find($request->application_id);
-        $institution = $application->institution;
-        $membershipCategory = $institution->membershipCategories->first();
+        $membershipCategory = $application->membershipCategory;
 
         $errorMsg = "Unable to complete your request at this point.";
 
@@ -84,7 +83,7 @@ class Meg2ApplicationController extends Controller
         $attachment = [
             [
                 "name" => "{$membershipCategory->name} Membership Agreement",
-                "saved_path" => $this->resolveCategoryToPath($membershipCategory->code) 
+                "saved_path" => $membershipCategory->membership_agreement 
             ]
         ];
 
@@ -105,9 +104,5 @@ class Meg2ApplicationController extends Controller
         logAction($user->email, 'MEG2 Approval', "MEG2 Approved MEG Review", $request->ip());
 
         return successResponse("Application Review has been submitted");        
-    }
-
-    protected function resolveCategoryToPath($code){
-        return config("app.url")."/assets/membership_agreement/{$code}.pdf";
     }
 }

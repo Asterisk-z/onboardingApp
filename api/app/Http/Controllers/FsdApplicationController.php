@@ -91,8 +91,7 @@ class FsdApplicationController extends Controller
         }
 
         $applicant = User::find($application->submitted_by);
-        $institution = $application->institution;
-        $membershipCategory = $institution->membershipCategories->first();
+        $membershipCategory = $application->membershipCategory;
         $name = $applicant->first_name . ' ' . $applicant->last_name;
 
         $data = Application::where('applications.id', $request->application_id);

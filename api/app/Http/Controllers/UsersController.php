@@ -102,6 +102,7 @@ class UsersController extends Controller
         ]);
 
         $status = new Status();
+        $status->office = Application::office['AD'];
         $status->status = Application::statuses['PEN'];
         $status->save();
 

@@ -71,7 +71,7 @@ class FinalApplicationProcessingJob implements ShouldQueue
         if(! $this->force) {
             if(! $application->all_ar_uploaded){
                 Utility::notifyApplicantAndContactArUpdate($application);
-                Utility::applicationStatusHelper($application, Application::statuses['RMA'], Application::office['AP'], Application::office['MEG']);
+                Utility::applicationStatusHelper($application, Application::statuses['RMA'], Application::office['AD'], Application::office['MEG']);
                 return;
             }
         }
@@ -133,7 +133,7 @@ class FinalApplicationProcessingJob implements ShouldQueue
         //TODO::SEND SECOND MAIL TO HELPDESK
 
         $institution = Institution::find($application->institution_id);
-        $membershipCategory = $institution->membershipCategories->first();
+        $membershipCategory = $application->membershipCategory;
         $compulsoryPositions = $membershipCategory->positions()->where('is_compulsory', 1)->pluck('position_id')->toArray();
 
         $keyofficers = User::whereIn('position_id', $compulsoryPositions)->where('institution_id', $institution->id)->get();
