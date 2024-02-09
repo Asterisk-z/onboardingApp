@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import navData from "./NavData";
+import adminApplication from "./AdminApplications";
 import { NavLink, Link } from "react-router-dom";
 import Icon from "../../components/icon/Icon";
 import classNames from "classnames";
+import { useUser, useUserUpdate } from '../provider/AuthUser';
 
 const MenuHeading = ({ heading }) => {
   return (
@@ -24,7 +26,7 @@ const MenuItem = ({ icon, link, text, sub, subPanel, panel, newTab, mobileView, 
     for (var i = 0; i < el.length; i++) {
       var margin =  parseInt(window.getComputedStyle(el[i]).marginTop.slice(0, -2)) + parseInt(window.getComputedStyle(el[i]).marginBottom.slice(0, -2));
       var padding = parseInt(window.getComputedStyle(el[i]).paddingTop.slice(0, -2)) + parseInt(window.getComputedStyle(el[i]).paddingBottom.slice(0, -2));
-      var height = el[i].clientHeight + margin + padding;
+      var height = el[i].clientHeight + margin + padding;adminApplication
       totalHeight.push(height);
     }
     totalHeight = totalHeight.reduce((sum, value) => (sum += value));
@@ -190,7 +192,20 @@ const MenuSub = ({ icon, link, text, sub, sidebarToggle, mobileView, ...props })
 
 
 const UserMenu = ({ sidebarToggle, mobileView }) => {
-  const [data, setMenuData] = useState(navData);
+  const aUser = useUser();
+  const aUserUpdate = useUserUpdate();
+  const [data, setMenuData] = useState(adminApplication);
+  
+
+
+      useEffect(() => {
+        if (aUser.is_admin_meg()) {
+          setMenuData(navData)
+        } else {
+          setMenuData(adminApplication)
+        }
+    }, [aUser]);
+  
   
   return (
     <ul className="nk-menu">

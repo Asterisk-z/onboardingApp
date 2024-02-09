@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import navData from "./NavData";
+import arApplication from "./ArApplications";
 import { NavLink, Link } from "react-router-dom";
 import Icon from "../../components/icon/Icon";
 import classNames from "classnames";
@@ -193,17 +194,25 @@ const MenuSub = ({ icon, link, text, sub, sidebarToggle, mobileView, ...props })
 const UserMenu = ({ sidebarToggle, mobileView }) => {
     const authUser = useUser();
     const authUserUpdate = useUserUpdate();
-  const [data, setMenuData] = useState(navData);
-  
-  return (
-    <ul className="nk-menu">
-      {data.map((item, index) =>
-        item.heading ? (<MenuHeading heading={item.heading} key={item.heading} />) : (item.panel && !item.isAdmin) ? (
-          <PanelItem key={item.text} link={item.link} icon={item.icon} text={item.text} index={index} panel={item.panel} subPanel={item.subPanel} data={data} setMenuData={setMenuData} sidebarToggle={sidebarToggle}/>
-        ) : ''
-      )}
-    </ul>
-  );
+  const [data, setMenuData] = useState(arApplication); 
+
+  useEffect(() => {
+    if (authUser?.user_data?.institution?.application.completed_at) {
+      setMenuData(navData)
+    } else {
+      setMenuData(arApplication)
+    }
+  }, [authUser]);
+
+    return (
+      <ul className="nk-menu">
+        {data.map((item, index) =>
+          item.heading ? (<MenuHeading heading={item.heading} key={item.heading} />) : (item.panel && !item.isAdmin) ? (
+            <PanelItem key={item.text} link={item.link} icon={item.icon} text={item.text} index={index} panel={item.panel} subPanel={item.subPanel} data={data} setMenuData={setMenuData} sidebarToggle={sidebarToggle}/>
+          ) : ''
+        )}
+      </ul>
+    );
 };
 
 export default UserMenu;
