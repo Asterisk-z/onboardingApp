@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Models\Application;
+use App\Models\ApplicationField;
 use App\Models\Invoice;
 use App\Models\ProofOfPayment;
 
@@ -61,5 +62,17 @@ trait ApplicationTraits
 
         return $data;
 
+    }
+
+    public function subRequiredDocuments($application_id)
+    {
+        $application = Application::find($application_id);
+
+        $application_upload = ApplicationField::where('category', $application->membership_category_id)->where('type', 'file')->where('required', '1')->get();
+
+        // dd($application_upload);
+
+        // return $application_upload;
+        return $application->membership_category_id;
     }
 }

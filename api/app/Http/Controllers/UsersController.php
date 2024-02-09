@@ -108,10 +108,11 @@ class UsersController extends Controller
         $application = Application::create([
             'institution_id' => $institution->id,
             'submitted_by' => $user->id,
+            'membership_category_id' => $request->input('category'),
             'status' => $status->id,
-            'office_to_perform_next_action' => Application::office['AP']
+            'office_to_perform_next_action' => Application::office['AP'],
         ]);
-        
+
         $application->status()->save($status);
 
         $user->getRegID();
