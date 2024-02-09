@@ -23,17 +23,16 @@ class MegApplicationController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
-    */
+     */
     public function institutions(Request $request)
     {
         $data = Application::where([
-            'concession_stage'  => true,
-            'office_to_perform_next_action' => Application::office['MEG']
+            'concession_stage' => true,
+            'office_to_perform_next_action' => Application::office['MEG'],
         ]);
 
         $data = Utility::applicationDetails($data);
         $data = $data->get();
-
 
         return successResponse("Here you go", ApplicationResource::collection($data));
     }
@@ -44,20 +43,20 @@ class MegApplicationController extends Controller
             'application_id' => 'required|exists:applications,id',
             'status' => 'required|in:decline,approve',
             'application_report' => 'required_if:status,approve|mimes:jpeg,png,jpg,pdf,doc,docx,csv,xls,xlsx|max:5048',
-            'comment' => 'required|string'
+            'comment' => 'required|string',
         ]);
 
         $user = $request->user();
         $application = Application::find($request->application_id);
 
         $errorMsg = "Unable to complete your request at this point.";
-        if($application->office_to_perform_next_action != Application::office['MEG']){
+        if ($application->office_to_perform_next_action != Application::office['MEG']) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
-        if($application->currentStatus() != Application::statuses['MAFR'] &&
-        $application->currentStatus() != Application::statuses['M2DMR'] &&
-        $application->currentStatus() != Application::statuses['ARD']){
+        if ($application->currentStatus() != Application::statuses['MAFR'] &&
+            $application->currentStatus() != Application::statuses['M2DMR'] &&
+            $application->currentStatus() != Application::statuses['ARD']) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
@@ -66,13 +65,13 @@ class MegApplicationController extends Controller
         $data = Utility::applicationDetails($data);
         $data = $data->first();
 
-        if($request->status == 'decline'){
-            $companyName = $data->company_name; 
+        if ($request->status == 'decline') {
+            $companyName = $data->company_name;
             $emailData = [
                 'name' => $companyName,
                 'subject' => 'MROIS Application Rejected - Incomplete Documentation',
                 'content' => "<p>Please be informed that we could not continue with your application because of the following:
-                        <p>Reason: {$request->comment}</p></p>"
+                        <p>Reason: {$request->comment}</p></p>",
             ];
             $Meg = Utility::getUsersEmailByCategory(Role::MEG);
             Utility::notifyApplicantAndContact($request->application_id, $applicant, $emailData, $Meg);
@@ -87,45 +86,45 @@ class MegApplicationController extends Controller
             return successResponse("Application updated successfully");
         }
 
-        if($request->status == 'approve'){
+        if ($request->status == 'approve') {
 
             Utility::applicationStatusHelper($application, Application::statuses['MAMR'], Application::office['MEG'], Application::office['MEG2'], $request->comment);
             $application = $application->refresh();
             $application->meg_review_stage = 1;
             $application->save();
-            
+
             $MEGs = Utility::getUsersEmailByCategory(Role::MEG);
             $MEG2s = Utility::getUsersByCategory(Role::MEG2);
             $CCs = $MEGs;
 
             Notification::send($MEG2s, new InfoNotification(MailContents::megReportValidationMail($data->company_name), MailContents::megReportValidationSubject(), $CCs));
-            
+
             logAction($user->email, 'MEG Approved', "MEG Approved applicant Document", $request->ip());
-            
+
             $application->application_report = $request->hasFile('application_report') ? $request->file('application_report')->storePublicly('application_report', 'public') : null;
             $application->save();
 
             return successResponse("Application Report has been submitted");
-        }        
+        }
     }
 
     public function uploadMemberAgreement(Request $request)
     {
         $request->validate([
             'application_id' => 'required|exists:applications,id',
-            'executed_member_agreement' => 'required|mimes:jpeg,png,jpg,pdf,doc,docx,csv,xls,xlsx|max:5048'
+            'executed_member_agreement' => 'required|mimes:jpeg,png,jpg,pdf,doc,docx,csv,xls,xlsx|max:5048',
         ]);
 
         $user = $request->user();
         $application = Application::find($request->application_id);
-        
+
         $errorMsg = "Unable to complete your request at this point.";
 
-        if($application->office_to_perform_next_action != Application::office['MEG']){
+        if ($application->office_to_perform_next_action != Application::office['MEG']) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
-        if($application->currentStatus() != Application::statuses['AEM']){
+        if ($application->currentStatus() != Application::statuses['AEM']) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
@@ -139,21 +138,22 @@ class MegApplicationController extends Controller
         FinalApplicationProcessingJob::dispatch($request->application_id);
 
         return successResponse("Agreement uploaded successfully");
-        
+
     }
 
-    public function completeCompanyApplication(Request $request){
+    public function completeCompanyApplication(Request $request)
+    {
         $request->validate([
-            'application_id' => 'required|exists:applications,id'
+            'application_id' => 'required|exists:applications,id',
         ]);
 
         $user = $request->user();
         $application = Application::find($request->application_id);
         $institution = $application->institution;
-        
+
         $errorMsg = "Unable to complete your request at this point.";
 
-        if($application->completed_at){
+        if ($application->completed_at) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 

@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\ARController;
+use App\Helpers\ESuccessLetter;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\MembershipApplicationController;
 use App\Http\Controllers\SystemController;
+use App\Models\Application;
 use App\Models\User;
 use App\Notifications\InfoNotification;
 use Illuminate\Support\Facades\Route;
@@ -35,3 +36,13 @@ Route::get('applicant/invoice/{uuid}', [MembershipApplicationController::class, 
 
 Route::get('sample/certificate/{event}', [EventController::class, 'certificateSample']);
 Route::get('sample/certificate/{event}/download', [EventController::class, 'certificateSampleDownload'])->name('certificateSampleDownload');
+
+Route::get('/letter', function () {
+    $application = Application::where('id', 1)->first();
+    $content = ESuccessLetter::generate($application);
+    // $content = (new ESuccessLetter())->generate($application);
+    return view('success.e-letter', compact('content'));
+// return view('success.letter');
+// return view('success.letter');
+
+});

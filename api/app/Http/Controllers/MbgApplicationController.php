@@ -10,11 +10,11 @@ use App\Models\Invoice;
 use App\Models\Role;
 use App\Models\SystemSetting;
 use App\Models\User;
-use Illuminate\Support\Str;
 use App\Notifications\InfoNotification;
 use App\Traits\ApplicationTraits;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 class MbgApplicationController extends Controller
@@ -228,7 +228,7 @@ class MbgApplicationController extends Controller
                             <p>Reason: {$request->comment}</p>
                             <p>Kindly contact Uju Iwuamadi +234 -1-2778771</p>",
                 ];
-                
+
                 // CC email addresses
                 $Meg = Utility::getUsersEmailByCategory(Role::MEG);
                 $Mbg = Utility::getUsersEmailByCategory(Role::MBG);

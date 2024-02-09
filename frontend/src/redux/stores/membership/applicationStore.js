@@ -80,7 +80,7 @@ export const uploadField = createAsyncThunk(
 
 export const completeApplication = createAsyncThunk(
   "application/completeApplication",
-  async () => {
+  async (values) => {
     try {
       const { data } = await axios({
         method: "post",
@@ -90,7 +90,7 @@ export const completeApplication = createAsyncThunk(
           "Content-Type": "multipart/form-data",
         },
         url: `membership/application/complete`,
-        // data: values,
+        data: values,
       });
       return successHandler(data, data.message);
     } catch (error) {

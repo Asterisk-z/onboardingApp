@@ -67,6 +67,7 @@ import AdminAddEvents from "main/pages/Admin/AdminAddEvents"
 import AdminEvents from "main/pages/Admin/AdminEvents"
 import AdminEventRegistrations from "main/pages/Admin/AdminEventRegistrations"
 import AdminApplications from "main/pages/Admin/AdminApplications"
+import AdminAllApplications from "main/pages/Admin/AdminAllApplications"
 import AdminEditEvents from "main/pages/Admin/AdminEditEvents"
 import Success from "pages/auth/Success";
 
@@ -205,8 +206,9 @@ const Router = () => {
           <Route path="admin-events" element={<AdminEvents/>}></Route>
           <Route path="admin-event-registration/:event_id" element={<AdminEventRegistrations/>}></Route>
           <Route path="admin-applications" element={<AdminApplications/>}></Route>
+          <Route path="admin-all-applications" element={<AdminAllApplications/>}></Route>
           <Route path="wizard" element={<WizardTest />}></Route>
-
+        
         </Route>
       </Routes>
   );

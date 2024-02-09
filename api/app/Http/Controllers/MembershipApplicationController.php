@@ -274,7 +274,7 @@ class MembershipApplicationController extends Controller
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, "Submission failed. There are required fields you are yet to fill.");
         }
 
-        Utility::applicationStatusHelper($application, Application::statuses['ARD'], Application::office['MEG'], Application::office['AP']);
+        Utility::applicationStatusHelper($application, Application::statuses['ARD'], Application::office['AP'], Application::office['MEG']);
 
         logAction($user->email, 'Application re-uploaded', 'Membership application has been re-uploaded successfully.', $request->ip());
         $MEGs = Utility::getUsersByCategory(Role::MEG);

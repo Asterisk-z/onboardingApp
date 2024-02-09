@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner} from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
-import {loadMBGInstitutionApplications,loadFSDInstitutionApplications,loadMEGInstitutionApplications,loadMEG2InstitutionApplications} from "redux/stores/membership/applicationProcessStore"
+import { loadInstitutionApplications} from "redux/stores/membership/applicationProcessStore"
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
 import AdminApplicationInstitutionTable from './Tables/AdminApplicationInstitutionTable'
@@ -27,18 +27,7 @@ const AdminProcessInstitutions = ({ drawer }) => {
 
     const all_institutions = useSelector((state) => state?.applicationProcess?.all_institutions) || null;
     useEffect(() => {
-        if (authUser.is_admin_meg()) {
-        dispatch(loadMEGInstitutionApplications());
-        }
-        if (authUser.is_admin_meg2()) {
-        dispatch(loadMEG2InstitutionApplications());
-        }
-        if (authUser.is_admin_fsd()) {
-        dispatch(loadFSDInstitutionApplications());
-        }
-        if (authUser.is_admin_mbg()) {
-        dispatch(loadMBGInstitutionApplications());
-        }
+            dispatch(loadInstitutionApplications());
     }, [dispatch, parentState]);
     
     const $all_institutions = all_institutions ? JSON.parse(all_institutions) : null;
@@ -51,7 +40,7 @@ const AdminProcessInstitutions = ({ drawer }) => {
                     <BlockBetween>
                         <BlockHeadContent>
                             <BlockTitle page tag="h3">
-                                Applications
+                                All Applications
                             </BlockTitle>
                             {/* {categories} */}
                         </BlockHeadContent>
@@ -62,7 +51,7 @@ const AdminProcessInstitutions = ({ drawer }) => {
                                     <ul className="nk-block-tools g-3">
                                         <li className="nk-block-tools-opt">
                                             <Button color="primary">
-                                                <span onClick={() => navigate(process.env.PUBLIC_URL + '/admin-all-applications')}>All Application</span>
+                                                <span onClick={() => navigate(process.env.PUBLIC_URL + '/admin-applications')}>Back</span>
                                             </Button>
                                         </li>
                                     </ul>

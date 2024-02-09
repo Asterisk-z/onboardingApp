@@ -25,6 +25,10 @@ class ApplicationField extends Model
 
     public function getFieldValueAttribute()
     {
-        return ApplicationFieldUpload::where('application_id', auth()->user()->institution->application->id)->where('application_field_id', $this->id)->first();
+
+        return auth()->user()->institution ?
+        ApplicationFieldUpload::where('application_id', auth()->user()->institution->application->id)->where('application_field_id', $this->id)->first() :
+        ApplicationFieldUpload::where('application_field_id', $this->id)->first();
     }
+
 }

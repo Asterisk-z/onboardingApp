@@ -59,7 +59,7 @@ const ApplicantInformation = (props) => {
     const submitApplication = async () => {
         try {
             
-            const resp = await dispatch(completeApplication());
+            const resp = await dispatch(completeApplication({'application_id' : authUser.user_data.institution.application.id}));
 
             if (resp.payload?.message == "success") {
                 setParentState(Math.random())

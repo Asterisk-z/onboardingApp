@@ -190,6 +190,7 @@ const ActionTab = (props) => {
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Yes!",
+            cancelButtonText: "No",
             html: '<div class="flex flex-column text-left"><label htmlFor="comments">Comment</label><textarea id="comments" class="form-control" rows="4" cols="50" placeholder="Enter Comment" required></textarea></div>', // Add textarea to the alert
           }).then((result) => {
             if (result.isConfirmed) {
@@ -213,6 +214,7 @@ const ActionTab = (props) => {
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Yes!",
+            cancelButtonText: "No",
             html: '<div class="flex flex-column text-left"><label htmlFor="comments">Comment</label><textarea id="comments" class="form-control" rows="4" cols="50" placeholder="Enter Comment" required></textarea></div>', // Add textarea to the alert
           }).then((result) => {
             if (result.isConfirmed) {
@@ -236,6 +238,7 @@ const ActionTab = (props) => {
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Yes!",
+            cancelButtonText: "No",
             html: '<div class="flex flex-column text-left"><label htmlFor="comments">Comment</label><textarea id="comments" class="form-control" rows="4" cols="50" placeholder="Enter Comment" required></textarea></div>', // Add textarea to the alert
           }).then((result) => {
             if (result.isConfirmed) {
@@ -260,7 +263,8 @@ const ActionTab = (props) => {
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Yes!",
-            html: '<div class="flex flex-column text-left"><label htmlFor="application_report">Amount Received</label><input type="file"  accept=".pdf" id="application_report" name="application_report" class="form-control" required /><label htmlFor="comments">Comment</label><textarea id="comments" class="form-control" rows="4" cols="50" placeholder="Enter Comment" required></textarea></div>', // Add textarea to the alert
+            cancelButtonText: "No",
+            html: '<div class="flex flex-column text-left"><label htmlFor="application_report">Application Report</label><input type="file"  accept=".pdf" id="application_report" name="application_report" class="form-control" required /><label htmlFor="comments">Comment</label><textarea id="comments" class="form-control" rows="4" cols="50" placeholder="Enter Comment" required></textarea></div>', // Add textarea to the alert
           }).then((result) => {
             if (result.isConfirmed) {
               const application_report = document.getElementById('application_report').files[0]; // Get value from the textarea
@@ -286,6 +290,7 @@ const ActionTab = (props) => {
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Yes!",
+            cancelButtonText: "No",
             html: '<div class="flex flex-column text-left"><label htmlFor="comments">Comment</label><textarea id="comments" class="form-control" rows="4" cols="50" placeholder="Enter Comment" required></textarea></div>', // Add textarea to the alert
           }).then((result) => {
             if (result.isConfirmed) {
@@ -310,6 +315,7 @@ const ActionTab = (props) => {
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Yes!",
+            cancelButtonText: "No",
           }).then((result) => {
               if (result.isConfirmed) {
                 
@@ -448,7 +454,7 @@ const ActionTab = (props) => {
             </ModalFooter>
         </Modal>
        
-        <Modal isOpen={modalView} toggle={toggleView} size="lg">
+        <Modal isOpen={modalView} toggle={toggleView} size="xl">
             <ModalHeader toggle={toggleView} close={<button className="close" onClick={toggleView}><Icon name="cross" /></button>}>
                 View Institution Application 
             </ModalHeader>
@@ -473,27 +479,51 @@ const ActionTab = (props) => {
                         
                         <CardBody className="card-inner">
                             <CardTitle tag="h5">{ `Supporting Documents` }</CardTitle>
-                              <ul>
-                                  <li></li>
-                              </ul>
+
+                            <table className="table table-striped table-bordered table-hover">
+                              <thead>
+                                <tr>
+                                  <th scope="col">#</th>
+                                  <th scope="col">Name</th>
+                                  <th scope="col" className="width-30">Value</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {/* {$user_application} */}
+                                {institution?.required_documents && institution?.required_documents?.map((document, index) => (
+                                  <tr key={index}>
+                                    <th scope="row">{++index}</th>
+                                    <td>{document.description}</td>
+                                    <td>
+                                      {document.uploaded_file != null ? <>
+                                        <a className="btn btn-primary" href={document.file_path} target="_blank">View File </a>
+                                      </> : <>
+                                        {document.uploaded_field}
+                                      </>}
+                                    </td>
+                                  </tr>
+
+                                ))}
+                              </tbody>
+                            </table>
                         </CardBody>
                         
                         <CardBody className="card-inner">
                             <CardTitle tag="h5">{ `Payment Information` }</CardTitle>
                               <ul>
-                                  <li><span className="lead">Invoice Number :{`${institution?.payment_information.invoice_number}`} </span></li>
-                                  <li><span className="lead">Payment Reference :{`${institution?.payment_information.reference}`} </span></li>
-                                  <li><span className="lead">Date Of Payment :{`${institution?.payment_information.date_paid}`} </span></li>
-                                  <li><span className="lead">Amount Paid :{`${institution?.payment_details.total}`} </span></li>
-                                  <li><span className="lead">Concession Amount :{`${institution?.payment_details.concession_amount}`} </span></li>
+                                  <li><span className="lead">Invoice Number :{`${institution?.payment_information?.invoice_number}`} </span></li>
+                                  <li><span className="lead">Payment Reference :{`${institution?.payment_information?.reference}`} </span></li>
+                                  <li><span className="lead">Date Of Payment :{`${institution?.payment_information?.date_paid}`} </span></li>
+                                  <li><span className="lead">Amount Paid :{`${institution?.payment_details?.total}`} </span></li>
+                                  <li><span className="lead">Concession Amount :{`${institution?.payment_details?.concession_amount}`} </span></li>
                               </ul>
                         </CardBody>
-                        <CardBody className="card-inner">
+                        {/* <CardBody className="card-inner">
                             <CardTitle tag="h5">{ `Membership Reason` }</CardTitle>
                               <ul>
                                   <li></li>
                               </ul>
-                        </CardBody>
+                        </CardBody> */}
                         <CardBody className="card-inner">
                             <CardTitle tag="h5">{ `MBG Review` }</CardTitle>
                               <ul>
@@ -516,14 +546,14 @@ const ActionTab = (props) => {
                               </ul>
                         </CardBody>
                         {(aUser.is_admin_meg() && institution.internal.mbg_review_stage && !institution.internal.meg_review_stage ) && 
-                        <div className="gy-0">
+                          <div className="gy-0">
                                 <h5>Application Review</h5>
                                 <Button className="btn btn-primary mx-2"  onClick={() => askAction('declineApplicationReview')}>Reject Application</Button>
                                 <Button className="btn btn-success mx-2"  onClick={() => askAction('approveApplicationsReview')}> Upload Application</Button>
                           </div>
                       }
                         {(aUser.is_admin_meg2() && institution.internal.meg_review_stage && !institution.internal.meg2_review_stage) && 
-                        <div className="gy-0">
+                          <div className="gy-0">
                                 <h5>Application Review</h5>
                                 <Button className="btn btn-success mx-2"  onClick={() => askAction('approveMEGApplicationsReview')}> Approve Application</Button>
                           </div>
@@ -532,7 +562,7 @@ const ActionTab = (props) => {
                         {(aUser.is_admin_meg() && institution.internal.is_applicant_executed_membership_agreement ) && 
                         <div className="gy-0">
                                 <h5>Upload Signed Agreement</h5>
-                                <Button className="btn btn-primary mx-2"  >Download Signed Agreement</Button>
+                                <a className="btn btn-primary mx-2"  href={institution.internal.applicant_executed_membership_agreement} target="_blank">Download Signed Agreement</a>
                                 <Button className="btn btn-success mx-2"  onClick={toggleSignedAgreement}>Upload MEG Signed Agreement</Button>
                           </div>
                       }

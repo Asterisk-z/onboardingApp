@@ -10,7 +10,7 @@ import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, Dropd
 import { HeaderLogo } from "pages/components/HeaderLogo";
 import DatePicker from "react-datepicker";
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
-import { loadApplication, completeApplication } from "redux/stores/membership/applicationStore";
+import { loadApplication } from "redux/stores/membership/applicationStore";
 import { loadInvoiceDownload, UploadAgreement, uploadPaymentProof } from "redux/stores/membership/applicationProcessStore";
 import moment from 'moment';
 import Swal from "sweetalert2";
@@ -103,7 +103,7 @@ const ApplicantInformation = (props) => {
                             <td>{user_application_item.field.description}</td>      
                             <td>
                                 {user_application_item.uploaded_file != null ? <>
-                                  <a className="btn btn-primary" href={user_application_item.uploaded_file} target="_blank">View File </a>
+                                  <a className="btn btn-primary" href={user_application_item.file_path} target="_blank">View File </a>
                                 </> : <>
                                   { user_application_item.uploaded_field }
                                 </>}

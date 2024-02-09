@@ -11,11 +11,9 @@ class ApplicationProcessController extends Controller
 {
     public function all_institutions(Request $request)
     {
-        $data = Application::whereNotIn('status', [0]);
-
+        $data = Application::where('applications.institution_id', '!=', null);
         $data = Utility::applicationDetails($data);
         $data = $data->get();
-
         return successResponse("Here you go", ApplicationResource::collection($data));
     }
 }

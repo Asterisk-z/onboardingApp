@@ -3,7 +3,7 @@
 namespace App\Traits;
 
 use App\Models\Application;
-use App\Models\ApplicationField;
+use App\Models\ApplicationFieldUpload;
 use App\Models\Invoice;
 use App\Models\ProofOfPayment;
 
@@ -29,25 +29,28 @@ trait ApplicationTraits
     {
         $application = Application::find($application_id);
         $invoice = Invoice::find($application->invoice_id);
-        $invoiceContents = $invoice->contents;
 
         $concession = 0;
-        if ($con = $invoice->contents()->where('name', 'Concession')->first()) {
-            $concession = $con->value;
-        }
-
         $total = 0;
 
-        foreach ($invoiceContents as $invoiceContent) {
-            if ($invoiceContent->name == 'Concession') {
-                continue;
-            }
-            if ($invoiceContent->type == 'credit') {
-                $total -= $invoiceContent->value;
+        if ($invoice) {
+            $invoiceContents = $invoice->contents;
+
+            if ($con = $invoice->contents()->where('name', 'Concession')->first()) {
+                $concession = $con->value;
             }
 
-            if ($invoiceContent->type == 'debit') {
-                $total += $invoiceContent->value;
+            foreach ($invoiceContents as $invoiceContent) {
+                if ($invoiceContent->name == 'Concession') {
+                    continue;
+                }
+                if ($invoiceContent->type == 'credit') {
+                    $total -= $invoiceContent->value;
+                }
+
+                if ($invoiceContent->type == 'debit') {
+                    $total += $invoiceContent->value;
+                }
             }
         }
 
@@ -66,13 +69,12 @@ trait ApplicationTraits
 
     public function subRequiredDocuments($application_id)
     {
-        $application = Application::find($application_id);
 
-        $application_upload = ApplicationField::where('category', $application->membership_category_id)->where('type', 'file')->where('required', '1')->get();
+        $application_upload = ApplicationFieldUpload::where('application_id', $application_id)
+            ->join('application_fields', 'application_fields.id', '=', 'application_field_uploads.application_field_id')
+            ->where('application_fields.type', 'file')
+            ->get();
 
-        // dd($application_upload);
-
-        // return $application_upload;
-        return $application->membership_category_id;
+        return $application_upload;
     }
 }
