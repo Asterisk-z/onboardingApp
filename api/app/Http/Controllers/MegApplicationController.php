@@ -141,4 +141,27 @@ class MegApplicationController extends Controller
         return successResponse("Agreement uploaded successfully");
         
     }
+
+    public function completeCompanyApplication(Request $request){
+        $request->validate([
+            'application_id' => 'required|exists:applications,id'
+        ]);
+
+        $user = $request->user();
+        $application = Application::find($request->application_id);
+        $institution = $application->institution;
+        
+        $errorMsg = "Unable to complete your request at this point.";
+
+        if($application->completed_at){
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+        }
+
+        logAction($user->email, 'MEG completed Application', "MEG completed Application for {$institution}.", $request->ip());
+        Utility::applicationStatusHelper($application, Application::statuses['MAA'], Application::office['MEG'], Application::office['AP']);
+
+        FinalApplicationProcessingJob::dispatch($request->application_id, true);
+
+        return successResponse("You have successfully mark this application as completed");
+    }
 }

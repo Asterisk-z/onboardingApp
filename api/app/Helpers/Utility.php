@@ -383,7 +383,6 @@ class Utility
             Notification::send($HelpDesk, new InfoTableNotification(MailContents::helpdeskMailingMail(), MailContents::helpdeskMailingSubject($category->name), $data, $Meg));
         }
 
-        logger(json_encode($data));
         return true;
     }
 }
