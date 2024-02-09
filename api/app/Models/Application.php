@@ -41,7 +41,8 @@ class Application extends Model
         'MEM' => "MEMBERSHIP AGREEMENT EXECUTED BY MEG",
         'ARD' => "APPLICANT REUPLOADED DOCUMENT",
         'MAA' => "MEG APPROVE APPLICATION",
-        'RMA' => "REQUIRE MEG APPROVAL"
+        'RMA' => "REQUIRE MEG APPROVAL",
+        'AD' => "ADMIN"
     ];
 
     const office = [
@@ -73,6 +74,11 @@ class Application extends Model
     public function institution()
     {
         return $this->belongsTo(Institution::class, 'institution_id');
+    }
+
+    public function membershipCategory()
+    {
+        return $this->belongsTo(MembershipCategory::class, 'membership_category_id');
     }
 
     public function uploads()

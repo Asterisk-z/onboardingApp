@@ -191,7 +191,7 @@ class MembershipApplicationController extends Controller
         }
 
         //Get the first membership of an institution
-        $membershipCategory = $institution->membershipCategories->first();
+        $membershipCategory = $application->membershipCategory;
 
         if (!$membershipCategory) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
@@ -253,7 +253,7 @@ class MembershipApplicationController extends Controller
         }
 
         //Get the first membership of an institution
-        $membershipCategory = $institution->membershipCategories->first();
+        $membershipCategory = $application->membershipCategory;
 
         if (!$membershipCategory) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
