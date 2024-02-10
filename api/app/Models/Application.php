@@ -56,6 +56,13 @@ class Application extends Model
 
     protected $appends = ['status_description'];
 
+    public function toArray(){
+        return [
+            'id' => $this->id,
+            'membership_category' => $this->membershipCategory
+        ];
+    }
+
     public function status()
     {
         return $this->morphMany(Status::class, 'statusable');

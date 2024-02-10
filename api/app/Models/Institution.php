@@ -33,6 +33,6 @@ class Institution extends Model
     }
 
     public function application() {
-        return $this->hasOne(Application::class, 'institution_id', 'id');
+        return $this->hasMany(Application::class, 'institution_id', 'id');
     }
 }

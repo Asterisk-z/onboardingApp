@@ -31,7 +31,8 @@ class UserResource extends JsonResource
             'mandate_form' => $this->mandate_form ? config('app.url') .'/storage/'.$this->mandate_form : null,
             'institution' => $this->institution,
             'is_active' => $this->is_active,
-            'createdAt' => $this->created_at
+            'createdAt' => $this->created_at,
+            'application' => $this->application
         ];
     }
 }
