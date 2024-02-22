@@ -149,7 +149,12 @@ class MegApplicationController extends Controller
 
         $user = $request->user();
         $application = Application::find($request->application_id);
-        $institution = $application->institution;
+
+        $application_data = Application::where('applications.id', $request->application_id);
+        $application_data = Utility::applicationDetails($application_data);
+        $application_data = $application_data->first();
+
+        $application->institution()->update(['name' => $application_data->company_name]);
 
         $errorMsg = "Unable to complete your request at this point.";
 
@@ -157,7 +162,7 @@ class MegApplicationController extends Controller
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
-        logAction($user->email, 'MEG completed Application', "MEG completed Application for {$institution}.", $request->ip());
+        logAction($user->email, 'MEG completed Application', "MEG completed Application for {$application_data->company_name}.", $request->ip());
         Utility::applicationStatusHelper($application, Application::statuses['MAA'], Application::office['MEG'], Application::office['AP']);
 
         FinalApplicationProcessingJob::dispatch($request->application_id, true);

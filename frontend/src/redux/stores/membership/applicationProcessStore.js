@@ -4,10 +4,22 @@ import { errorHandler, successHandler } from "utils/Functions";
 import queryGenerator from "utils/QueryGenerator";
 const initialState = { all_institutions: null, all: null, list: null, latest_evidence: null, invoice_download: null, all_fields: null, list_extra: {}, status_list: null, transfer_list: null, user: null, total: null, error: "", loading: false };
 
+export const loadApplications = createAsyncThunk(
+  "applicationProcess/loadApplications",
+  async (values) => {
+    const query = queryGenerator(values);
+    try {
+      const { data } = await axios.get(`ar/applications?${query}`);
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
+    }
+  }
+);
+
 export const loadInstitutionApplications = createAsyncThunk(
   "applicationProcess/loadInstitutionApplications",
   async () => {
-    
     try {
       const { data } = await axios.get(`membership/application/all_institutions`);
       return successHandler(data);
@@ -17,6 +29,27 @@ export const loadInstitutionApplications = createAsyncThunk(
   }
 );
 
+
+export const UpdateDisclosure = createAsyncThunk(
+  "applicationProcess/UpdateDisclosure",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `membership/application/disclosure`,
+        data: values,
+      });
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
 
 export const loadInvoiceDownload = createAsyncThunk(
   "applicationProcess/loadInvoiceDownload",
@@ -129,6 +162,28 @@ export const uploadConcession = createAsyncThunk(
       return errorHandler(error, true);
     }
   }
+);
+
+
+export const completeApplication = createAsyncThunk(
+    "applicationProcess/completeApplication",
+    async (values) => {
+        try {
+            const { data } = await axios({
+                method: "post",
+                headers: {
+                    Accept: "application/json",
+                    // "Content-Type": "application/json;charset=UTF-8",
+                    "Content-Type": "multipart/form-data",
+                },
+                url: `membership/application/meg/complete-company-application`,
+                data: values,
+            });
+            return successHandler(data, data.message);
+        } catch (error) {
+            return errorHandler(error, true);
+        }
+    }
 );
 
 
@@ -421,6 +476,25 @@ const applicationProcess = createSlice({
   },
   extraReducers: (builder) => {
 
+    // ====== builders for loadApplications ======
+
+    builder.addCase(loadApplications.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(loadApplications.fulfilled, (state, action) => {
+      state.loading = false;
+      // state.list = action.payload?.data?.data?.categories;
+
+      state.application_list = JSON.stringify(action.payload?.data?.data?.application_list);
+
+    });
+
+    builder.addCase(loadApplications.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
     // ====== builders for loadInstitutionApplications ======
 
     builder.addCase(loadInstitutionApplications.pending, (state) => {
@@ -439,7 +513,22 @@ const applicationProcess = createSlice({
       state.loading = false;
       state.error = action.payload.message;
     });
-    
+
+    // ====== builders for UpdateDisclosure ======
+
+    builder.addCase(UpdateDisclosure.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(UpdateDisclosure.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(UpdateDisclosure.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
     // ====== builders for loadInvoiceDownload ======
 
     builder.addCase(loadInvoiceDownload.pending, (state) => {
@@ -559,6 +648,21 @@ const applicationProcess = createSlice({
     });
 
     builder.addCase(uploadConcession.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+      
+    // ====== builders for completeApplication ======
+
+    builder.addCase(completeApplication.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(completeApplication.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(completeApplication.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });

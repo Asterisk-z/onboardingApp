@@ -7,6 +7,8 @@ use App\Http\Controllers\SystemController;
 use App\Models\Application;
 use App\Models\User;
 use App\Notifications\InfoNotification;
+// use Dompdf\Dompdf;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,7 +42,28 @@ Route::get('sample/certificate/{event}/download', [EventController::class, 'cert
 Route::get('/letter', function () {
     $application = Application::where('id', 1)->first();
     $content = ESuccessLetter::generate($application);
-    // $content = (new ESuccessLetter())->generate($application);
+    // dd($content);
+    // $pdf = PDF::loadView('success.dmb-letter', $content);
+
+    // $pdfC = view('success.e-letter', compact('content'));
+
+    // $dompdf = new Dompdf();
+    // $dompdf->loadHTML($pdfC);
+    // $dompdf->render();
+    // $pdfdata = $dompdf->output();
+    // dd(base64_decode($application->e_success_letter));
+    $data["email"] = "testing@gmail.com";
+    $data["title"] = "From test.com";
+    $data["body"] = "This is Demo";
+    Mail::send('mails.test', $data, function ($message) use ($data, $application) {
+        $message->to($data["email"], $data["email"])
+            ->subject($data["title"])
+            ->attachData(base64_decode($application->e_success_letter), 'e-success.pdf', [
+                'as' => 'e-success.pdf',
+                'mime' => 'application/pdf',
+            ]);
+    });
+
     return view('success.e-letter', compact('content'));
 // return view('success.letter');
 // return view('success.letter');

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Application extends Model
 {
@@ -42,7 +43,7 @@ class Application extends Model
         'ARD' => "APPLICANT REUPLOADED DOCUMENT",
         'MAA' => "MEG APPROVE APPLICATION",
         'RMA' => "REQUIRE MEG APPROVAL",
-        'AD' => "ADMIN"
+        'AD' => "ADMIN",
     ];
 
     const office = [
@@ -54,12 +55,35 @@ class Application extends Model
         'BL' => 'BACKLOG',
     ];
 
+    const type = [
+        'APP' => 'application',
+        'CON' => 'conversion',
+        'ADD' => 'addition',
+    ];
+
+    const typeStatus = [
+        'ASP' => 'INPROGRESS',
+        'ASC' => 'COMPLETED',
+        'ASN' => 'CANCELED',
+    ];
+
     protected $appends = ['status_description'];
 
-    public function toArray(){
+    public function toArray()
+    {
         return [
             'id' => $this->id,
-            'membership_category' => $this->membershipCategory
+            'uuid' => $this->uuid,
+            'institution_id' => $this->institution_id,
+            'membership_category' => $this->membershipCategory,
+            'status_description' => $this->status_description,
+            'concession_stage' => $this->concession_stage,
+            'proof_of_payment' => $this->proof_of_payment,
+            'meg2_review_stage' => $this->meg2_review_stage,
+            'is_applicant_executed_membership_agreement' => $this->is_applicant_executed_membership_agreement,
+            'membership_agreement' => $this->membership_agreement,
+            'completed_at' => $this->completed_at,
+            'disclosure_stage' => $this->disclosure_stage,
         ];
     }
 
@@ -118,4 +142,19 @@ class Application extends Model
 
         return $status->status;
     }
+
+    public function createUuid()
+    {
+        $uuid = Str::uuid()->toString();
+        return $this->checkUuid($uuid);
+    }
+
+    public function checkUuid($uuid)
+    {
+        if (!Application::where('uuid', $uuid)->exists()) {
+            return $uuid;
+        }
+        $this->createUuid();
+    }
+
 }

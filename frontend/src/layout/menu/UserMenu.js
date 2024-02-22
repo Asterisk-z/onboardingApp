@@ -197,7 +197,7 @@ const UserMenu = ({ sidebarToggle, mobileView }) => {
   const [data, setMenuData] = useState(arApplication); 
 
   useEffect(() => {
-    if (authUser?.user_data?.institution?.application.completed_at) {
+    if (authUser?.user_data?.institution?.application[0].completed_at) {
       setMenuData(navData)
     } else {
       setMenuData(arApplication)

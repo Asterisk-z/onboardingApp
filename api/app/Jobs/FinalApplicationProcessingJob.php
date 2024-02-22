@@ -6,12 +6,12 @@ use App\Helpers\MailContents;
 use App\Helpers\Utility;
 use App\Models\Application;
 use App\Models\Institution;
+use App\Models\InstitutionMembership;
 use App\Models\Role;
 use App\Models\User;
 use App\Notifications\InfoNotification;
 use App\Notifications\InfoTableNotification;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -45,33 +45,28 @@ class FinalApplicationProcessingJob implements ShouldQueue
         $application = Application::find($this->applicationID);
         $applicant = User::find($application->submitted_by);
 
-        if(! $application->meg2_review_stage || ! $application->is_meg_executed_membership_agreement || ! $application->is_applicant_executed_membership_agreement || $application->completed_at)
+        if (!$application->meg2_review_stage || !$application->is_meg_executed_membership_agreement || !$application->is_applicant_executed_membership_agreement || $application->completed_at) {
             return;
+        }
 
         $data = Application::where('applications.id', $this->applicationID);
         $data = Utility::applicationDetails($data);
         $data = $data->first();
-        
+
         $categoryName = $data->category_name;
         $companyName = $data->company_name;
-        $companyEail = $data->company_email;
+        $companyEmail = $data->company_email;
+        $primaryContactEmail = $data->primary_contact_email;
 
-        //Generated E-success letter
-        if(! $application->e_success_letter){
-            //generate
-            $application->e_success_letter = '';
-            $application->save();
-        }
-
-        if($application->e_success_letter_send){                                                                                                                                                                                                                                                                                                                                                                                                               
+        if ($application->e_success_letter_send) {
             return;
         }
 
         //CHECK IF ALL ARS HAVE BEEN ADDED
-        if(! $this->force) {
-            if(! $application->all_ar_uploaded){
+        if (!$this->force) {
+            if (!$application->all_ar_uploaded) {
                 Utility::notifyApplicantAndContactArUpdate($application);
-                Utility::applicationStatusHelper($application, Application::statuses['RMA'], Application::office['AD'], Application::office['MEG']);
+                Utility::applicationStatusHelper($application, Application::statuses['RMA'], Application::office['AP'], Application::office['MEG']);
                 return;
             }
         }
@@ -82,18 +77,14 @@ class FinalApplicationProcessingJob implements ShouldQueue
         $emailData = [
             'name' => $companyName,
             'subject' => MailContents::SuccessfulApplicationSubject(),
-            'content' => MailContents::SuccessfulApplicationMail($categoryName)
+            'content' => MailContents::SuccessfulApplicationMail($categoryName),
         ];
 
         $attachment = [
             [
                 "name" => "{$companyName} Membership Agreement",
-                "saved_path" => config('app.url') .'/storage/'.$application->meg_executed_membership_agreement
+                "saved_path" => config('app.url') . '/storage/' . $application->meg_executed_membership_agreement,
             ],
-            [
-                "name" => "e-Success Letter",
-                "saved_path" => config('app.url') .'/storage/'.$application->meg_executed_membership_agreement
-            ]
         ];
 
         // CC email addresses
@@ -107,20 +98,48 @@ class FinalApplicationProcessingJob implements ShouldQueue
             $ccEmails = array_merge($ccEmails, $blg);
         }
 
+        // CONVERT INSTITUTION CATEGORY
+        if ($application->application_type == Application::type['CON']) {
+
+            $old_application = Application::where('old_membership_category_id', $application->old_membership_category_id)
+                ->where('institution_id', $application->institution_id)->first();
+            $old_application->application_type_status = Application::typeStatus['ASN'];
+            $old_application->save();
+
+            $institution = InstitutionMembership::where('institution_id', $application->institution_id)->where('membership_category_id', $application->old_membership_category_id)->first();
+            $institution->membership_category_id = $application->membership_category_id;
+            $institution->save();
+
+        }
+
+        if ($application->application_type == Application::type['ADD']) {
+
+            InstitutionMembership::updateOrCreate([
+                'institution_id' => $application->institution_id,
+                'membership_category_id' => $application->membership_category_id,
+            ], [
+                'institution_id' => $application->institution_id,
+                'membership_category_id' => $application->membership_category_id,
+            ]);
+        }
+
         $application->e_success_letter_send = 1;
         $application->completed_at = now();
+        $application->application_type_status = Application::typeStatus['ASC'];
         $application->save();
 
-        Utility::notifyApplicantAndContact($application->id, $applicant, $emailData, $ccEmails, $attachment);
+        $toEmails = [$applicant->email, $companyEmail, $primaryContactEmail];
 
-        //Send MSG CC MEG
+        Utility::notifyApplicantFinal($application->id, $emailData, $toEmails, $ccEmails, $attachment);
+
+        //Send MSG CC MEG'
         $Msg = Utility::getUsersByCategory(Role::MSG);
         $Meg = Utility::getUsersEmailByCategory(Role::MEG);
         $data = [
             "header" => ["Name", "Membership Category", "Company email address"],
             "body" => [
-                [$companyName, $categoryName, $companyEail]
-            ]
+                [$companyName, $categoryName, $companyEmail],
+            ],
         ];
 
         Notification::send($Msg, new InfoTableNotification(MailContents::msgProfilingMail($categoryName), MailContents::msgProfilingSubject($categoryName), $data, $Meg));

@@ -20,6 +20,10 @@ import PasswordSet from "main/auth/PasswordSet";
 import ApplicationDetail from "main/pages/application/Detail";
 import ApplicationPreview from "main/pages/application/Preview";
 import Application from "main/pages/application/Index";
+import Applications from "main/pages/application/Applications";
+import ApplicationDisclosure from "main/pages/application/ApplicationDisclosure";
+import Additions from "main/pages/application/Additions";
+import Conversions from "main/pages/application/Conversions";
 import Form from "main/forms/Form";
 import AdminBroadcast from "main/pages/Admin/AdminBroadcast" 
 import AdminListInstitutionAR from "main/pages/Admin/AdminListInstitutionAR" 
@@ -170,9 +174,13 @@ const Router = () => {
           <Route path="registered-events" element={<RegisteredEvent />}></Route>
           <Route path="approve-competency" element={<ApproveCompetency />}></Route>
           
-          <Route path="application" element={<Application />}></Route>
-          <Route path="application_preview" element={<ApplicationPreview />}></Route>
-          <Route path="application_detail" element={<ApplicationDetail />}></Route>
+          <Route path="membership-applications" element={<Applications />}></Route>
+          <Route path="membership-addictions" element={<Additions />}></Route>
+          <Route path="membership-conversions" element={<Conversions />}></Route>
+          <Route path="application/:application_uuid" element={<Application />}></Route>
+          <Route path="application_disclosure/:application_uuid" element={<ApplicationDisclosure />}></Route>
+          <Route path="application_preview/:application_uuid" element={<ApplicationPreview />}></Route>
+          <Route path="application_detail/:application_uuid" element={<ApplicationDetail />}></Route>
           
         </Route>
 

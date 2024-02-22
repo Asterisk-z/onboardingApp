@@ -144,7 +144,7 @@ const Register = ({ drawer }) => {
                 <div className="d-flex flex-row g-4" >
                     <div className="form-group w-100">
                         <div className="form-label">
-                            <label for="nationality">Nationality<span style={{color:'red'}}> *</span>:</label>
+                            <label htmlFor="nationality">Nationality<span style={{color:'red'}}> *</span>:</label>
                         </div>
                         <div className="form-control-wrap">
                             <div className="form-control-select">
@@ -165,7 +165,7 @@ const Register = ({ drawer }) => {
                 <div className="d-flex flex-row g-4" >
                     <div className="form-group w-50">
                         <div className="form-label">
-                            <label for="category">Membership Category<span style={{color:'red'}}> *</span>:</label>
+                            <label htmlFor="category">Membership Category<span style={{color:'red'}}> *</span>:</label>
                         </div>
                         <div className="form-control-wrap">
                             <div className="form-control-select">
@@ -183,7 +183,7 @@ const Register = ({ drawer }) => {
                     </div>
                     <div className="form-group w-50">
                         <div className="form-label">
-                            <label for="nationality">Position<span style={{color:'red'}}> *</span>:</label>
+                            <label htmlFor="nationality">Position<span style={{color:'red'}}> *</span>:</label>
                         </div>
                         <div className="form-control-wrap">
                             <div className="form-control-select">
@@ -192,6 +192,7 @@ const Register = ({ drawer }) => {
                                     {$positions && $positions?.map((position, index) => (
                                         <option key={index} value={position.id}>
                                             {position.name}
+                                            {position.is_compulsory == '1' && <span style={{ color: 'red' }}>*</span>}
                                         </option>
                                     ))}
                                 </select>

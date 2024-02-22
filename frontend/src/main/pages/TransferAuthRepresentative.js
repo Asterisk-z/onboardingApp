@@ -278,6 +278,7 @@ const TransferAuthRepresentative = ({ drawer }) => {
                                                                                     {$positions && $positions?.map((position, index) => (
                                                                                         <option key={index} value={position.id}>
                                                                                             {position.name}
+                                                                                            {position.is_compulsory == '1' && <span style={{ color: 'red' }}>*</span>}
                                                                                         </option>
                                                                                     ))}
                                                                                 </select>

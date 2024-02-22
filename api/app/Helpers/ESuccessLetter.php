@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Models\Application;
+use Dompdf\Dompdf;
 
 class ESuccessLetter
 {
@@ -20,13 +21,68 @@ class ESuccessLetter
                 $content = self::dmbWithoutSECLicenseLetterContent($application_data);
                 break;
 
+            case '1':
+                $content = self::dmbWithSECLicenseLetterContent($application_data);
+                break;
+
+            case '2':
+                $content = self::dmsLetterContent($application_data);
+                break;
+
+            case '5':
+                $content = self::amcLetterContent($application_data);
+                break;
+
+            case '4':
+                $content = self::amiLetterContent($application_data);
+                break;
+
+            case '3':
+                $content = self::ambLetterContent($application_data);
+                break;
+
+            case '8':
+                $content = self::rmmLetterContent($application_data);
+                break;
+
+            case '6':
+                $content = self::rmlLetterContent($application_data);
+                break;
+
+            case '7':
+                $content = self::rmqLetterContent($application_data);
+                break;
+
+            case '12':
+                $content = self::affLetterContent($application_data);
+                break;
+
+            case '10':
+                $content = self::afcLetterContent($application_data);
+                break;
+
+            case '9':
+                $content = self::afiLetterContent($application_data);
+                break;
+
             default:
                 // $content = [];
-                $content = self::dmbWithoutSECLicenseLetterContent($application_data);
+                // $content = self::dmbWithoutSECLicenseLetterContent($application_data);
                 break;
         }
 
-        return $content;
+        if ($content) {
+            $pdfC = view('success.e-letter', compact('content'));
+            $dompdf = new Dompdf();
+            $dompdf->loadHTML($pdfC);
+            $daata = $dompdf->render();
+            $pdfdata = $dompdf->output();
+
+            $application->e_success_letter = json_encode($content);
+            $application->save();
+            return $pdfdata;
+        }
+
     }
 
     protected static function dmbWithoutSECLicenseLetterContent($application)
@@ -622,21 +678,28 @@ class ESuccessLetter
     protected static function afcLetterContent($application)
     {
 
+        $date = now();
+        $designation = $application->applicationPrimaryContactName;
+        $address = $application->registeredOfficeAddress;
+        $companyName = $application->companyName;
+
+        $url = config("app.front_end_url");
+
         return [
-            'address' => "<p>'<i><b>Date</b></i>'</p>
-                            <p>'<i><b>Designation</b></i>'</p>
-                            <p>'<i><b>Address</b></i>'</p>",
+            'address' => "<p>'<i><b>$date</b></i>'</p>
+                            <p>'<i><b>$designation</b></i>'</p>
+                            <p>'<i><b>$address</b></i>'</p>",
             'title' => "<p><b>
                            APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED AFFILIATE MEMBER (STANDARD) CATEGORY
                         </b></p>",
             'body' => "<p  style='text-align: justify;text-justify: inter-word;'>
                            Having reviewed your application for the Affiliate Member (Standard) category of FMDQ Securities
                            Exchange Limited (“FMDQ Exchange”), we are pleased to inform you that your application is successful,
-                            and “Member’s full name” will now be profiled on the FMDQ e-Knowledge module of the e-Markets portal.
+                            and $companyName will now be profiled on the FMDQ e-Knowledge module of the e-Markets portal.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             To gain access to the e-knowledge on the e-Markets portal, kindly update the details of a
-                            maximum of four (4) Authorised Representatives of your institution on the MROIS portal(“link”).
+                            maximum of four (4) Authorised Representatives of your institution on the MROIS portal($url).
                              <br/> Details should include the following:
                         </p>
                         <ul>
@@ -652,7 +715,7 @@ class ESuccessLetter
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                            Attached for your records, is a copy of the executed FMDQ Exchange Membership
-                           Agreement between “MEMBER’S FULL NAME” and FMDQ SECURITIES EXCHANGE LIMITED for the above-mentioned membership category.
+                           Agreement between $companyName and FMDQ SECURITIES EXCHANGE LIMITED for the above-mentioned membership category.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             We thank you for your unwavering support and look forward to continuing a mutually beneficial relationship between our organisations.
@@ -675,17 +738,24 @@ class ESuccessLetter
     protected static function afiLetterContent($application)
     {
 
+        $date = now();
+        $designation = $application->applicationPrimaryContactName;
+        $address = $application->registeredOfficeAddress;
+        $companyName = $application->companyName;
+
+        $url = config("app.front_end_url");
+
         return [
-            'address' => "<p>'<i><b>Date</b></i>'</p>
-                            <p>'<i><b>Designation</b></i>'</p>
-                            <p>'<i><b>Address</b></i>'</p>",
+            'address' => "<p>'<i><b>$date</b></i>'</p>
+                            <p>'<i><b>$designation</b></i>'</p>
+                            <p>'<i><b>$address</b></i>'</p>",
             'title' => "<p><b>
                             APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED AFFILIATE MEMBER (STANDARD) CATEGORY
                         </b></p>",
             'body' => "<p  style='text-align: justify;text-justify: inter-word;'>
                           Having reviewed your application for the Affiliate Member (Standard) category of FMDQ Securities Exchange
                            Limited (“FMDQ Exchange”), we are pleased to inform you that your application is successful, and
-                           “Member’s full name” will now be profiled on the FMDQ e-Knowledge module of the e-Markets portal.
+                           $companyName will now be profiled on the FMDQ e-Knowledge module of the e-Markets portal.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             To gain access to the e-knowledge on the e-Markets portal,
@@ -703,7 +773,7 @@ class ESuccessLetter
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                            Attached for your records, is a copy of the executed FMDQ Exchange Membership
-                           Agreement between “MEMBER’S FULL NAME” and FMDQ SECURITIES EXCHANGE LIMITED for the above-mentioned membership category.
+                           Agreement between $companyName and FMDQ SECURITIES EXCHANGE LIMITED for the above-mentioned membership category.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                            We thank you for your unwavering support and look forward to continuing a mutually beneficial relationship between our organisations.

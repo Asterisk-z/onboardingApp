@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, forwardRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Head from "layout/head/Head";
 import Content from "layout/content/Content";
@@ -10,215 +10,13 @@ import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, Dropd
 import { HeaderLogo } from "pages/components/HeaderLogo";
 import DatePicker from "react-datepicker";
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
-import { loadApplication } from "redux/stores/membership/applicationStore";
+import { loadApplication, fetchApplication } from "redux/stores/membership/applicationStore";
 import { loadInvoiceDownload, UploadAgreement, uploadPaymentProof } from "redux/stores/membership/applicationProcessStore";
 import moment from 'moment';
 import Swal from "sweetalert2";
 
 
-const ApplicantInformation = (props) => {
 
-    const navigate = useNavigate();
-
-    const authUser = useUser();
-    const authUserUpdate = useUserUpdate();
-
-    const dispatch = useDispatch();
-
-    const [parentState, setParentState] = useState('Initial state');
-    const [loading, setLoading] = useState(false);
-    const [modalForm, setModalForm] = useState(false);
-    const [modalView, setModalView] = useState(false);
-    const [uploadAgreeView, setUploadAgreeView] = useState(false);
-    const [uploadView, setUploadView] = useState(false);
-    
-    const toggleView = () => setModalView(!modalView);
-    const toggleUploadAgreeView = () => setUploadAgreeView(!uploadAgreeView);
-    const toggleUploadView = () => setUploadView(!uploadView);
-    
-    const { reset, register, handleSubmit, formState: { errors }, setValue, clearErrors } = useForm();
-    const user_application = useSelector((state) => state?.application?.user_application) || null;
-    const invoice_download = useSelector((state) => state?.applicationProcess?.invoice_download) || null;
-
-    useEffect(() => {
-        dispatch(loadApplication());
-    }, [dispatch, parentState]);
-  
-  
-  
-
-    
-    const $user_application = user_application ? JSON.parse(user_application) : null;
-    const $invoice_download = invoice_download ? JSON.parse(invoice_download) : null;
-
-
-    useEffect(() => {
-        if ($user_application?.application?.concession_stage) {
-            dispatch(loadInvoiceDownload({ 'application_id': $user_application?.application?.id }));
-        }
-    }, [user_application]);
-    
-    
-    // console.log($user_application?.application?.concession_stage)
-
-  return (
-    <section>
-      
-      <Row className="gy-2">
-        <p>{ $user_application?.application?.status_description}</p>
-        <Col md='12'>
-          {$user_application?.application?.concession_stage == 1 && <>
-            
-              {!$user_application?.application?.proof_of_payment ? <>
-                <a className="btn btn-primary mx-1" href={$invoice_download} target="_blank"> Download Invoice </a>
-                <a className="btn btn-primary mx-1" href="#"  onClick={toggleView} >Make Payment </a>
-                      </> : <>
-                <a className="btn btn-success mx-1" href="#"  >Payment Sent</a>
-                      </>}
-             
-          </>}
-          
-          {($user_application?.application?.meg2_review_stage == 1 && $user_application?.application?.is_applicant_executed_membership_agreement == 0) && <>
-            
-                <a className="btn btn-primary mx-1" href={$user_application?.application?.membership_agreement} target="_blank"> Download Agreement </a>
-                <a className="btn btn-primary mx-1" href="#"  onClick={toggleUploadAgreeView} >Upload Signed Agreement </a>
-          </>}
-        </Col>
-        <Col md='12'>
-
-              
-            <table className="table table-striped table-bordered table-hover">  
-              <thead>    
-                  <tr>      
-                      <th scope="col">#</th>      
-                      <th scope="col">Name</th>      
-                      <th scope="col" className="width-30">Value</th>      
-                  </tr>  
-              </thead>  
-              <tbody>
-                {/* {$user_application} */}
-                    {$user_application?.application_requirements && $user_application?.application_requirements?.map((user_application_item, index) => (
-                        <tr key={index}>      
-                            <th scope="row">{++index}</th>      
-                            <td>{user_application_item.field.description}</td>      
-                            <td>
-                                {user_application_item.uploaded_file != null ? <>
-                                  <a className="btn btn-primary" href={user_application_item.file_path} target="_blank">View File </a>
-                                </> : <>
-                                  { user_application_item.uploaded_field }
-                                </>}
-                            </td>  
-                        </tr>
-                      
-                    ))}
-              </tbody>
-          </table>
-            
-          
-        </Col>
-        
-        
-              
-             
-      </Row>
-      
-        <Modal isOpen={modalView} toggle={toggleView} size="lg">
-            <ModalHeader toggle={toggleView} close={<button className="close" onClick={toggleView}><Icon name="cross" /></button>}>
-                Make Payment
-            </ModalHeader>
-            <ModalBody>
-                  {!uploadView ? <>
-                    <Row className="gy-5">
-                        <Col md='6'>
-                          <Card className="card-bordered">   
-                            <CardBody className="card-inner">
-                              <CardTitle tag="h5">Payment by Transfer</CardTitle>
-                              <CardText>
-                                Upload Prove Of Payment after transfer
-                              </CardText>
-                              <Button color="primary"  onClick={toggleUploadView}>Upload</Button>
-                            </CardBody>
-                          </Card>
-                        </Col>
-                        <Col md='6'>
-                          <Card className="card-bordered">   
-                            <CardBody className="card-inner">
-                              <CardTitle tag="h5">Online Payment</CardTitle>
-                              <CardText>
-                                Upload Prove Of Payment
-                              </CardText>
-                              <Button color="primary">Proceed to Payment</Button>
-                            </CardBody>
-                          </Card>
-                        </Col>
-                    </Row>                  
-                  </> : <>
-                    <Row className="gy-5">
-                        <Col md='12'>
-                          <Card className="card-bordered">   
-                            <CardBody className="card-inner">
-                              <CardTitle tag="h5">Payment by Transfer</CardTitle>
-                                {$user_application && <>
-                                    <PayWithTransfer tabItem={$user_application} updateParentParent={setParentState} closeModel={toggleView}  toggleMethod={toggleUploadView}/>
-                                </>}
-                              
-                              
-                            </CardBody>
-                          </Card>
-                        </Col>
-                    </Row>                  
-                  </>}
-
-                    
-
-                    {/* <Card className="card">   
-                        <CardBody className="card-inner">
-                            <CardTitle tag="h5">{ `${institution.firstName} ${institution.lastName} (${institution.email})` }</CardTitle>
-                          
-                              <ul>
-                                  <li><span className="lead">Phone : </span>{`${institution.phone}`}</li>
-                                  <li><span className="lead">Nationality : </span>{`${institution.nationality}`}</li>
-                                  <li><span className="lead">Role : </span>{`${institution.role.name}`}</li>
-                                  <li><span className="lead">Position : </span>{`${institution.position.name}`}</li>
-                                  <li><span className="lead">Status : </span>{`${institution.approval_status}`}</li>
-                                  <li><span className="lead">RegID : </span>{`${institution.regId}`}</li>
-                                  <li><span className="lead">Institution : </span>{`${institution.institution.name}`}</li>
-                              </ul>
-                        </CardBody>
-                    </Card> */}
-            </ModalBody>
-            <ModalFooter className="bg-light">
-                <span className="sub-text">View Institutions</span>
-            </ModalFooter>
-        </Modal>
-        <Modal isOpen={uploadAgreeView} toggle={toggleUploadAgreeView} size="lg">
-            <ModalHeader toggle={toggleUploadAgreeView} close={<button className="close" onClick={toggleUploadAgreeView}><Icon name="cross" /></button>}>
-                Upload Signed Agreement
-            </ModalHeader>
-            <ModalBody>
-
-                    <Row className="gy-5">
-                        <Col md='12'>
-                          <Card className="card-bordered">   
-                            <CardBody className="card-inner">
-                              {/* <CardTitle tag="h5">Upload Agreement</CardTitle> */}
-                                {$user_application && <>
-                                    <UploadAgreementModel tabItem={$user_application} updateParentParent={setParentState} closeModel={toggleView}/>
-                                </>}
-                              
-                              
-                            </CardBody>
-                          </Card>
-                        </Col>
-                    </Row>                  
-            </ModalBody>
-            <ModalFooter className="bg-light">
-                <span className="sub-text">View Institutions</span>
-            </ModalFooter>
-        </Modal>
-    </section>
-  );
-};
 
 const UploadAgreementModel = ({ updateParentParent, tabItem, positions, closeModel }) => {
     
@@ -379,62 +177,13 @@ const PayWithTransfer = ({ updateParentParent, tabItem, positions, closeModel, t
 };
  
 
-
-
 const Header = (props) => {
   return (
     <div className="steps clearfix">
-      <ul>
-        {/* <li className={props.current >= 1 ? "first done" : "first"}>
-          <a href="#wizard-01-h-0" onClick={(ev) => ev.preventDefault()}>
-            <span className="number">APPLICANT</span> <h5>Information</h5>
-          </a>
-        </li>
-        <li className={props.current >= 2 ? "done" : ""}>
-          <a href="#wizard-01-h-1" onClick={(ev) => ev.preventDefault()}>
-            <span className="number">TRADING</span> <h5>DETAILS</h5>
-          </a>
-        </li>
-        <li className={props.current >= 3 ? "done" : ""}>
-          <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="number">DISCIPLINARY</span> <h5>HISTORY</h5>
-          </a>
-        </li>
-        <li className={props.current >= 4 ? "done" : ""}>
-          <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="number">SUPPORTING</span> <h5>DOCUMENT</h5>
-          </a>
-        </li>
-        <li className={props.current >= 5 ? "done" : ""}>
-          <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="number">APPLICANT</span> <h5>DECLARATION</h5>
-          </a>
-        </li>
-        <li className={props.current >= 6 ? "done" : ""}>
-          <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="number">APPLICATION</span> <h5>COMPLETED</h5>
-          </a>
-        </li> */}
-        {/* <li className={props.current >= 7 ? "done" : ""}>
-          <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="number"></span> <h5>Step 7</h5>
-          </a>
-        </li>
-        <li className={props.current >= 8 ? "done" : ""}>
-          <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="number"></span> <h5>Step 8</h5>
-          </a>
-        </li>
-        <li className={props.current === 9 ? "last done" : "last"}>
-          <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="number"></span> <h5>Step 9</h5>
-          </a>
-        </li> */}
-      </ul>
+
     </div>
   );
 };
-
 
 
 const config = {
@@ -443,29 +192,220 @@ const config = {
 
 const Form = () => {
     
-    
+
+    const dispatch = useDispatch();
+    const { application_uuid } = useParams();
+    const application_details = useSelector((state) => state?.application?.application_details) || null;
+    useEffect(() => {
+      dispatch(fetchApplication({ "application_uuid": application_uuid }));
+    }, [dispatch]);
+
+    const $application_details = application_details ? JSON.parse(application_details) : null;
     const authUser = useUser();
     const authUserUpdate = useUserUpdate();
+    
+    const ApplicantInformation = (props) => {
 
-  const [loading, setLoading] = useState(false);
-  const [passState, setPassState] = useState(false);
-  const [errorVal, setError] = useState("");
-  const [modalSuccess, setModalSuccess] = useState(false);
-  const toggleSuccess = () => setModalSuccess(!modalSuccess);
-  const styles = {
-    color: {
-      marginBottom: "10px",
-    },
-    scroll: {
-      overFlow: "scroll",
-    },
-    card: {
-      backgroundColor: "#fff",
-      margin: "50px 30px",
-      padding: "20px"
+      const navigate = useNavigate();
+
+      const authUser = useUser();
+      const authUserUpdate = useUserUpdate();
+
+      const dispatch = useDispatch();
+
+      const [parentState, setParentState] = useState('Initial state');
+      const [loading, setLoading] = useState(false);
+      const [modalForm, setModalForm] = useState(false);
+      const [modalView, setModalView] = useState(false);
+      const [uploadAgreeView, setUploadAgreeView] = useState(false);
+      const [uploadView, setUploadView] = useState(false);
+
+      const toggleView = () => setModalView(!modalView);
+      const toggleUploadAgreeView = () => setUploadAgreeView(!uploadAgreeView);
+      const toggleUploadView = () => setUploadView(!uploadView);
+
+      const { reset, register, handleSubmit, formState: { errors }, setValue, clearErrors } = useForm();
+      const user_application = useSelector((state) => state?.application?.user_application) || null;
+      const invoice_download = useSelector((state) => state?.applicationProcess?.invoice_download) || null;
+
+      useEffect(() => {
+        if ($application_details) {
+          dispatch(loadApplication({ "application_uuid": $application_details.uuid }));
+        }
+      }, [dispatch, parentState, $application_details]);
+
+
+
+
+
+      const $user_application = user_application ? JSON.parse(user_application) : null;
+      const $invoice_download = invoice_download ? JSON.parse(invoice_download) : null;
+
+
+      useEffect(() => {
+        if ($user_application?.application?.concession_stage) {
+          dispatch(loadInvoiceDownload({ 'application_id': $user_application?.application?.id }));
+        }
+      }, [user_application]);
+
+
+      console.log($user_application)
+
+      return (
+        <section>
+
+          <Row className="gy-2">
+            <p>{$user_application?.application?.status_description}</p>
+            <Col md='12'>
+              {$user_application?.application?.concession_stage == 1 && <>
+
+                {!$user_application?.application?.proof_of_payment ? <>
+                  <a className="btn btn-primary mx-1" href={$invoice_download} target="_blank"> Download Invoice </a>
+                  <a className="btn btn-primary mx-1" href="#" onClick={toggleView} >Make Payment </a>
+                </> : <>
+                  <a className="btn btn-success mx-1" href="#"  >Payment Sent</a>
+                </>}
+
+              </>}
+
+              {($user_application?.application?.meg2_review_stage == 1 && $user_application?.application?.is_applicant_executed_membership_agreement == 0) && <>
+
+                <a className="btn btn-primary mx-1" href={$user_application?.application?.membership_agreement} target="_blank"> Download Agreement </a>
+                <a className="btn btn-primary mx-1" href="#" onClick={toggleUploadAgreeView} >Upload Signed Agreement </a>
+              </>}
+            </Col>
+            <Col md='12'>
+
+
+              <table className="table table-striped table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col" className="width-30">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {/* {$user_application} */}
+                  {$user_application?.application_requirements && $user_application?.application_requirements?.map((user_application_item, index) => (
+                    <tr key={index}>
+                      <th scope="row">{++index}</th>
+                      <td>{user_application_item.field.description}</td>
+                      <td>
+                        {user_application_item.uploaded_file != null ? <>
+                          <a className="btn btn-primary" href={user_application_item.file_path} target="_blank">View File </a>
+                        </> : <>
+                          {user_application_item.uploaded_field}
+                        </>}
+                      </td>
+                    </tr>
+
+                  ))}
+                </tbody>
+              </table>
+
+
+            </Col>
+
+
+
+
+          </Row>
+
+          <Modal isOpen={modalView} toggle={toggleView} size="lg">
+            <ModalHeader toggle={toggleView} close={<button className="close" onClick={toggleView}><Icon name="cross" /></button>}>
+              Make Payment
+            </ModalHeader>
+            <ModalBody>
+              {!uploadView ? <>
+                <Row className="gy-5">
+                  <Col md='6'>
+                    <Card className="card-bordered">
+                      <CardBody className="card-inner">
+                        <CardTitle tag="h5">Payment by Transfer</CardTitle>
+                        <CardText>
+                          Upload Prove Of Payment after transfer
+                        </CardText>
+                        <Button color="primary" onClick={toggleUploadView}>Upload</Button>
+                      </CardBody>
+                    </Card>
+                  </Col>
+                  <Col md='6'>
+                    <Card className="card-bordered">
+                      <CardBody className="card-inner">
+                        <CardTitle tag="h5">Online Payment</CardTitle>
+                        <CardText>
+                          Upload Prove Of Payment
+                        </CardText>
+                        <Button color="primary">Proceed to Payment</Button>
+                      </CardBody>
+                    </Card>
+                  </Col>
+                </Row>
+              </> : <>
+                <Row className="gy-5">
+                  <Col md='12'>
+                    <Card className="card-bordered">
+                      <CardBody className="card-inner">
+                        <CardTitle tag="h5">Payment by Transfer</CardTitle>
+                        {$user_application && <>
+                          <PayWithTransfer tabItem={$user_application} updateParentParent={setParentState} closeModel={toggleView} toggleMethod={toggleUploadView} />
+                        </>}
+
+
+                      </CardBody>
+                    </Card>
+                  </Col>
+                </Row>
+              </>}
+            </ModalBody>
+            <ModalFooter className="bg-light">
+              <span className="sub-text">View Institutions</span>
+            </ModalFooter>
+          </Modal>
+          <Modal isOpen={uploadAgreeView} toggle={toggleUploadAgreeView} size="lg">
+            <ModalHeader toggle={toggleUploadAgreeView} close={<button className="close" onClick={toggleUploadAgreeView}><Icon name="cross" /></button>}>
+              Upload Signed Agreement
+            </ModalHeader>
+            <ModalBody>
+
+              <Row className="gy-5">
+                <Col md='12'>
+                  <Card className="card-bordered">
+                    <CardBody className="card-inner">
+                      {/* <CardTitle tag="h5">Upload Agreement</CardTitle> */}
+                      {$user_application && <>
+                        <UploadAgreementModel tabItem={$user_application} updateParentParent={setParentState} closeModel={toggleView} />
+                      </>}
+
+
+                    </CardBody>
+                  </Card>
+                </Col>
+              </Row>
+            </ModalBody>
+            <ModalFooter className="bg-light">
+              <span className="sub-text">View Institutions</span>
+            </ModalFooter>
+          </Modal>
+        </section>
+      );
+    };
+
+    const styles = {
+      color: {
+        marginBottom: "10px",
+      },
+      scroll: {
+        overFlow: "scroll",
+      },
+      card: {
+        backgroundColor: "#fff",
+        margin: "50px 30px",
+        padding: "20px"
+      }
+
     }
-
-  }
 
 
   return <>
@@ -478,17 +418,12 @@ const Form = () => {
                     <div style={{ 'margin': '0px 10px !important' }}>
                       <div style={styles.card}>
                         <div style={styles.color}>
-                          <h2>{`${authUser.user_data.institution.category[0].name} Application Details`} </h2>
+                          {$application_details && <h3>{`${$application_details.membership_category.name} Application Detail`} </h3>}
                           {/* <p>Pending Approval</p> */}
                         </div>
                         <div className="nk-wizard nk-wizard-simple is-alter wizard clearfix">
                           <Steps config={config}>
                             <Step component={ApplicantInformation} />
-                            {/* <Step component={TradingDetail} />
-                            <Step component={DisciplinaryHistory} />
-                            <Step component={SupportingDocuments} />
-                            <Step component={ApplicationDeclaration} />
-                            <Step component={ApplicationCompleted} /> */}
                           </Steps>
                         </div>
                       </div>

@@ -176,6 +176,7 @@ const AdminCompetencyFramework = ({ drawer }) => {
                                         {$positions && $positions?.map((position) => (
                                             <option key={position.id} value={position.id}>
                                                 {position.name}
+                                                {position.is_compulsory == '1' && <span style={{ color: 'red' }}>*</span>}
                                             </option>
                                         ))}
                                         </select>

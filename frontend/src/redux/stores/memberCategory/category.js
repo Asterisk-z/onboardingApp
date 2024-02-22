@@ -2,14 +2,50 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { errorHandler, successHandler } from "../../../utils/Functions";
 
-const initialState = { list: null, all_list: null, error: "", loading: false};
-
+const initialState = { list: null, my_categories: null, my_application_categories: null, other_categories: null, all_list: null, error: "", loading: false};
 
 export const loadAllActiveCategories = createAsyncThunk(
   "category/loadAllActiveCategories",
   async (arg) => {
     try {
       const { data } = await axios.get(`categories`);
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
+    }
+  }
+);
+
+
+export const loadAllMyApplicationCategories = createAsyncThunk(
+  "category/loadAllMyApplicationCategories",
+  async (arg) => {
+    try {
+      const { data } = await axios.get(`ar/my-application-categories`);
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
+    }
+  }
+);
+
+export const loadAllMyActiveCategories = createAsyncThunk(
+  "category/loadAllMyActiveCategories",
+  async (arg) => {
+    try {
+      const { data } = await axios.get(`ar/my-categories`);
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
+    }
+  }
+);
+
+export const loadAllOtherActiveCategories = createAsyncThunk(
+  "category/loadAllOtherActiveCategories",
+  async (arg) => {
+    try {
+      const { data } = await axios.get(`ar/other-categories`);
       return successHandler(data);
     } catch (error) {
       return errorHandler(error);
@@ -144,6 +180,58 @@ const categoryStore = createSlice({
   },
   extraReducers: (builder) => {
 
+
+    // ====== builders for loadAllMyApplicationCategories ======
+
+    builder.addCase(loadAllMyApplicationCategories.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(loadAllMyApplicationCategories.fulfilled, (state, action) => {
+      state.loading = false;
+      // state.list = action.payload?.data?.data?.categories;
+      state.my_application_categories = JSON.stringify(action.payload?.data?.data?.categories);
+    });
+
+    builder.addCase(loadAllMyApplicationCategories.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+    
+    // ====== builders for loadAllMyActiveCategories ======
+
+    builder.addCase(loadAllMyActiveCategories.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(loadAllMyActiveCategories.fulfilled, (state, action) => {
+        state.loading = false;
+        // state.list = action.payload?.data?.data?.categories;
+        state.my_categories = JSON.stringify(action.payload?.data?.data?.categories);
+    });
+
+    builder.addCase(loadAllMyActiveCategories.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
+    // ====== builders for loadAllOtherActiveCategories ======
+
+    builder.addCase(loadAllOtherActiveCategories.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(loadAllOtherActiveCategories.fulfilled, (state, action) => {
+        state.loading = false;
+        // state.list = action.payload?.data?.data?.categories;
+        state.other_categories = JSON.stringify(action.payload?.data?.data?.categories);
+    });
+
+    builder.addCase(loadAllOtherActiveCategories.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
     // ====== builders for loadAllActiveCategories ======
 
     builder.addCase(loadAllActiveCategories.pending, (state) => {
@@ -151,9 +239,9 @@ const categoryStore = createSlice({
     });
 
     builder.addCase(loadAllActiveCategories.fulfilled, (state, action) => {
-        state.loading = false;
-        // state.list = action.payload?.data?.data?.categories;
-        state.list = JSON.stringify(action.payload?.data?.data?.categories);
+      state.loading = false;
+      // state.list = action.payload?.data?.data?.categories;
+      state.list = JSON.stringify(action.payload?.data?.data?.categories);
     });
 
     builder.addCase(loadAllActiveCategories.rejected, (state, action) => {

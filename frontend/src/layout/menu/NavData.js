@@ -143,11 +143,25 @@ const navData = [{
         text: "Dashboard",
         link: "/dashboard",
       },
-      // {
-      //   icon: "dashboard-fill",
-      //   text: "Application",
-      //   link: "/application",
-      // },
+      {
+        icon: "tile-thumb-fill",
+        text: "Membership",
+        active: false,
+        subMenu: [{
+          text: "Application",
+          link: "/membership-applications",
+        },
+          {
+            text: "Addition",
+            link: "/membership-addictions",
+          },
+          {
+            text: "Conversion",
+            link: "/membership-conversions",
+          },
+
+        ],
+      },
       {
         icon: "dashboard-fill",
         text: "Complaints",

@@ -15,6 +15,7 @@ class CreateApplicationFieldApplicationFieldUploadsTable extends Migration
     {
         Schema::create('application_field_application_field_uploads', function (Blueprint $table) {
             $table->id();
+            $table->integer('application_id');
             $table->integer('application_field_id');
             $table->integer('application_field_upload_id');
             $table->timestamps();

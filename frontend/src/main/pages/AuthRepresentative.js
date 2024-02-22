@@ -8,6 +8,7 @@ import { loadUserRoles } from "redux/stores/roles/roleStore";
 import { loadAllCategoryPositions } from "redux/stores/positions/positionStore";
 import { loadAllCountries } from "redux/stores/nationality/country";
 import { userLoadUserARs, userCreateUserAR, userSearchUserARs } from "redux/stores/authorize/representative";
+import { loadAllMyApplicationCategories } from "redux/stores/memberCategory/category"
 import { loadAllActiveAuthoriser } from "redux/stores/users/userStore";
 import { loadAllSettings } from "redux/stores/settings/config";
 import Content from "layout/content/Content";
@@ -19,12 +20,14 @@ import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 const AuthRepresentative = ({ drawer }) => {
         
     const authUser = useUser();
-    const authUserUpdate = useUserUpdate();
-    const categories = authUser.user_data.institution.category ? authUser.user_data.institution.category : [];
-    const [counter, setCounter] = useState(false);
+    const authUserUpdate = useUserUpdate(); 
+    
     const dispatch = useDispatch();
-    const [categoryIds, setCategoryIds] = useState(authUser.user_data.institution.category.map((cat) => cat.id));
     const navigate = useNavigate();
+
+    const categories = authUser.user_data.institution.category ? authUser.user_data.institution.category : [];
+    const [categoryIds, setCategoryIds] = useState(authUser.user_data.institution.category.map((cat) => cat.id));
+    const [myApplicationCategoryIds, setMyApplicationCategoryIds] = useState([])
     const [loading, setLoading] = useState(false);
     const [sm, updateSm] = useState(false);
     const [modalForm, setModalForm] = useState(false);
@@ -32,6 +35,7 @@ const AuthRepresentative = ({ drawer }) => {
     const [parentState, setParentState] = useState('Initial state');
 
     const roles = useSelector((state) => state?.role?.list) || null;
+    const myApplicationCategories = useSelector((state) => state?.category?.my_application_categories) || null;
     const positions = useSelector((state) => state?.position?.list) || null;
     const countries = useSelector((state) => state?.country?.list) || null;
     const authorizers = useSelector((state) => state?.user?.list) || null;
@@ -48,16 +52,31 @@ const AuthRepresentative = ({ drawer }) => {
      
     useEffect(() => {
       dispatch(userLoadUserARs({"approval_status" : "", "role_id": ""}));
+      dispatch(loadAllMyApplicationCategories());
       dispatch(loadUserRoles());
       dispatch(loadAllCountries());
       dispatch(loadAllActiveAuthoriser());
       dispatch(loadAllSettings({"config" : "mandate_form"}));
     }, [dispatch, parentState]);
-   
-    useEffect(() => {
-        dispatch(loadAllCategoryPositions({'category_ids' : categoryIds}));
-    }, [categoryIds]);
 
+    // useEffect(() => {
+    //     dispatch(loadAllCategoryPositions({ 'category_ids': categoryIds }));
+    // }, [categoryIds]);
+
+    useEffect(() => {
+        if (myApplicationCategoryIds.length > 0) {
+            const postValues = new Object();
+            postValues.category_ids = myApplicationCategoryIds;
+            dispatch(loadAllCategoryPositions(postValues));            
+        }
+    }, [myApplicationCategoryIds]);
+
+    useEffect(() => {
+        if ($myApplicationCategories) {
+            setMyApplicationCategoryIds($myApplicationCategories.map((cat) => cat.id))        
+        }
+    }, [myApplicationCategories]);
+    
     
     useEffect(() => {
         if ($ar_search_result) {
@@ -111,8 +130,8 @@ const AuthRepresentative = ({ drawer }) => {
 
     }; 
 
-
     const $countries = countries ? JSON.parse(countries) : null;
+    const $myApplicationCategories = myApplicationCategories ? JSON.parse(myApplicationCategories) : null;
     const $roles = roles ? JSON.parse(roles) : null;
     const $positions = positions ? JSON.parse(positions) : null;
     const $authorizers = authorizers ? JSON.parse(authorizers) : null;
@@ -124,28 +143,23 @@ const AuthRepresentative = ({ drawer }) => {
         setParentState(newState);
     };
     
-    const updatePosition = (event) => {
-        if (event.target.value) {
-            setCategoryIds([event.target.value])
+    const searchArFromFirstNameAndLastName = (event) => {
+        if (getValues('firstName') && getValues('lastName')) {
+            dispatch(userSearchUserARs({"first_name" : getValues('firstName'), "last_name": getValues('lastName')}));
         }
     }
     
-    const searchArFromFirstNameAndLastName = (event) => {
-        // console.log(getValues('firstName') , getValues('lastName'))
-        if (getValues('firstName') && getValues('lastName')) {
-            dispatch(userSearchUserARs({"first_name" : getValues('firstName'), "last_name": getValues('lastName')}));
-            // return
-        }
-    }
-    // if ($ar_search_result.length > 0) {
-    //     setModelForSearchAR(true);
-    // } 
     const handleDificalFileChange = (event) => {
 		  setDocument(event.target.files[0]);
     };
+    
     const handleSignaturewChange = (event) => {
 		  setSignatureMandate(event.target.files[0]);
     };
+
+    const updatePositionList = (event) => {
+        setMyApplicationCategoryIds([event.target.value]);
+    }
     
     return (
         <React.Fragment>
@@ -265,7 +279,6 @@ const AuthRepresentative = ({ drawer }) => {
                 <Modal isOpen={modalForm} toggle={toggleForm} size="lg">
                     <ModalHeader toggle={toggleForm} close={<button className="close" onClick={toggleForm}><Icon name="times" /></button>}>
                         Add Authorised Representative
-                        {/* {ar_search_result} */}
                     </ModalHeader>
                     <ModalBody>
                         <form onSubmit={handleSubmit(handleFormSubmit)} className="is-alter" encType="multipart/form-data">
@@ -365,9 +378,9 @@ const AuthRepresentative = ({ drawer }) => {
                                         </Label>
                                         <div className="form-control-wrap">
                                             <div className="form-control-select">
-                                                <select className="form-control form-select" {...register('category_type', { required: "Position is Required" })} >
+                                                <select className="form-control form-select" {...register('category_type', { required: "Position is Required" })} onChange={updatePositionList} >
                                                     <option value="">Select Category</option>
-                                                    {categories && categories?.map((category, index) => (
+                                                    {$myApplicationCategories && $myApplicationCategories?.map((category, index) => (
                                                         <option key={index} value={category.id}>
                                                             {category.name}
                                                         </option>
@@ -385,11 +398,12 @@ const AuthRepresentative = ({ drawer }) => {
                                         </Label>
                                         <div className="form-control-wrap">
                                             <div className="form-control-select">
-                                                <select className="form-control form-select" {...register('position_id', { required: "Position is Required" })}>
+                                                <select className="form-control form-select" {...register('position_id', { required: "Position is Required" })} >
                                                     <option value="">Select Position</option>
                                                     {$positions && $positions?.map((position, index) => (
                                                         <option key={index} value={position.id}>
                                                             {position.name}
+                                                            {position.is_compulsory == '1' && '*'}
                                                         </option>
                                                     ))}
                                                 </select>
@@ -480,7 +494,7 @@ const AuthRepresentative = ({ drawer }) => {
                                 </BlockHead>
 
                                 <PreviewCard>
-                                    {$authorize_reps && <AuthRepTable  updateParent={updateParentState} parentState={parentState} data={$authorize_reps} positions={$positions} countries={$countries} authorizers={$authorizers} roles={$roles}  expandableRows pagination actions />}
+                                    {$authorize_reps && <AuthRepTable updateParent={updateParentState} parentState={parentState} data={$authorize_reps} positions={$positions} countries={$countries} authorizers={$authorizers} categories={myApplicationCategories} roles={$roles}  expandableRows pagination actions />}
                                 </PreviewCard>
                             </Block>
 

@@ -21,9 +21,14 @@ class ApplicationResource extends JsonResource
         $application = Application::find($this->application_id);
         return [
             "internal" => [
+                "application_uuid" => $this->uuid,
+                'application_type' => $application->application_type,
+                'application_type_status' => $application->application_type_status,
+                "office_to_perform_next_action" => $this->office_to_perform_next_action,
                 "application_id" => $this->application_id,
                 "institution_id" => $this->institution_id,
                 "concession_stage" => $this->concession_stage,
+                "disclosure_stage" => $this->disclosure_stage,
                 "amount_received_by_fsd" => $this->amount_received_by_fsd,
                 "mbg_review_stage" => $this->mbg_review_stage,
                 "meg_review_stage" => $this->meg_review_stage,
@@ -32,11 +37,16 @@ class ApplicationResource extends JsonResource
                 "category_id" => $this->category_id,
                 "category_name" => $this->category_name,
                 "completed_at" => $this->completed_at,
+                "is_meg_executed_membership_agreement" => $application->is_meg_executed_membership_agreement,
                 "is_applicant_executed_membership_agreement" => $this->is_applicant_executed_membership_agreement,
-                "meg_executed_membership_agreement" => ($this->completed_at && $this->meg_executed_membership_agreement) ? config('app.url') . '/storage/' . $this->meg_executed_membership_agreement : null,
-                "applicant_executed_membership_agreement" => ($this->completed_at && $this->applicant_executed_membership_agreement) ? config('app.url') . '/storage/' . $this->applicant_executed_membership_agreement : null,
+                "meg_executed_membership_agreement" => ($application->meg_executed_membership_agreement) ? config('app.url') . '/storage/' . $application->meg_executed_membership_agreement : null,
+                "applicant_executed_membership_agreement" => ($application->applicant_executed_membership_agreement) ? config('app.url') . '/storage/' . $application->applicant_executed_membership_agreement : null,
                 "all_ar_uploaded" => $this->all_ar_uploaded,
                 "status" => $application->currentStatus(),
+                "status_description" => $this->status_description,
+                'createdAt' => $application->created_at,
+                'show_form' => $application->show_form,
+                'submitted_by' => $application->submitted_by,
             ],
 
             "basic_details" => [
@@ -172,6 +182,8 @@ class ApplicationResource extends JsonResource
             "executed_membership_agreement" => ($this->completed_at && $this->meg_executed_membership_agreement) ? config('app.url') . '/stroage/' . $this->meg_executed_membership_agreement : null,
 
             "e_success_letter" => ($this->completed_at && $this->e_success_letter) ? config('app.url') . '/storage/' . $this->e_success_letter : null,
+
+            "completed" => $this->completed_at ? true : false,
 
         ];
     }
