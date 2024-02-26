@@ -63,7 +63,12 @@ class MembershipApplicationController extends Controller
         $data = [];
         $application = Application::where(['uuid' => $request->application_uuid])->first();
 
-        $application = Application::where(['institution_id' => $application->institution_id, 'application_type_status' => Application::typeStatus['ASC']])->first();
+        if ($application->application_type == Application::type['CON']) {
+            $application = Application::where(['institution_id' => $application->institution_id, 'membership_category_id' => $application->old_membership_category_id, 'application_type_status' => Application::typeStatus['ASC']])->first();
+        } else {
+            $application = Application::where(['institution_id' => $application->institution_id, 'application_type_status' => Application::typeStatus['ASC']])->first();
+
+        }
         $application_requirements = ApplicationFieldUpload::where('application_id', $application->id)->with('field')->get();
 
         $data = [
@@ -126,6 +131,59 @@ class MembershipApplicationController extends Controller
         $data = $application_fields->orderBy('id', 'ASC')->get();
 
         return successResponse('Fields Fetched Successfully', $data);
+    }
+
+    public function retainField(Request $request)
+    {
+        $validated = $request->validate([
+            'category_id' => 'required',
+            'field_name' => 'required',
+            'field_value' => 'required',
+            'field_type' => 'required',
+            'application_id' => 'required',
+        ]);
+
+        $application = Application::find($request->application_id);
+
+        if (!ApplicationField::where('category', $request->category_id)
+            ->where('name', $request->field_name)
+            ->where('type', $request->field_type)->exists() || !$application) {
+            return;
+        }
+
+        $applicationField = ApplicationField::where('category', $request->category_id)
+            ->where('name', $request->field_name)
+            ->where('type', $request->field_type)->first();
+
+        $data = ['uploaded_field' => $request->field_value];
+
+        if ($application->status == Application::AWAITINGAPPROVAL) {
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, "Your application has already been submitted and it is currently under review.");
+        }
+
+        if ($request->field_type == 'file') {
+            $data['uploaded_field'] = null;
+            $data = ['uploaded_file' => $request->field_value];
+        }
+
+        $upload_action = ApplicationFieldUpload::updateOrCreate(
+            ['application_field_id' => $applicationField->id, 'application_id' => $application->id],
+            $data
+        );
+
+        ApplicationFieldApplicationFieldUpload::updateOrCreate(
+            [
+                'application_id' => $application->id,
+                'application_field_id' => $applicationField->id,
+                'application_field_upload_id' => $upload_action->id,
+            ],
+            [
+                'application_id' => $application->id,
+                'application_field_id' => $applicationField->id,
+                'application_field_upload_id' => $upload_action->id,
+            ]);
+
+        return successResponse('Fields Fetched Successfully', auth()->user()->institution->application);
     }
 
     public function uploadField(Request $request)
@@ -336,20 +394,16 @@ class MembershipApplicationController extends Controller
 
         $errorMsg = "Unable to complete your request at this point.";
 
-        if ($application->submitted_by != $user->id) {
+        if ($application->submitted_by != $user->id || $application->disclosure_stage) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
         $application->disclosure_stage = 1;
         $application->disclosure_status = $request->status == 'accept' ? 1 : 0;
 
-        if ($request->status == 'accept') {
-
-        }
-
         $application->save();
 
-        return successResponse("Your Application has been submitted and is under review. You will be notified any feedback soon");
+        return successResponse("Disclosure completed you can continue application");
 
     }
 

@@ -21,7 +21,7 @@ export const fetchApplication = createAsyncThunk(
 export const fetchInitialApplication = createAsyncThunk(
   "application/fetchInitialApplication",
   async (values) => {
-      console.log(values)
+    
     const query = queryGenerator(values);
     try {
       const { data } = await axios.get(`membership/application/initial?${query}`);
@@ -80,6 +80,27 @@ export const loadExtra = createAsyncThunk(
       return successHandler(data);
     } catch (error) {
       return errorHandler(error);
+    }
+  }
+);
+
+export const retainField = createAsyncThunk(
+  "application/retainField",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `membership/application/retain`,
+        data: values,
+      });
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error, true);
     }
   }
 );
@@ -313,6 +334,21 @@ const applicationStore = createSlice({
       state.error = action.payload.message;
     });
 
+
+    // ====== builders for retainField ======
+
+    builder.addCase(retainField.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(retainField.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(retainField.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
 
     // ====== builders for uploadField ======
 

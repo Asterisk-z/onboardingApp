@@ -10,7 +10,8 @@ import { Row, Col, Button, Input } from "reactstrap";
 import { HeaderLogo } from "pages/components/HeaderLogo";
 import DatePicker from "react-datepicker";
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
-import { loadPageFields, fetchApplication, completeApplication, fetchInitialApplication } from "redux/stores/membership/applicationStore";
+import { loadPageFields, fetchApplication, completeApplication, fetchInitialApplication, retainField } from "redux/stores/membership/applicationStore";
+import { UpdateDisclosure } from "redux/stores/membership/applicationProcessStore";
 import moment from 'moment';
 import Swal from "sweetalert2";
 
@@ -52,7 +53,10 @@ const Form = () => {
 
     }
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { application_uuid } = useParams();
+
+    const [parentState, setParentState] = useState('Initial state');
     const application_details = useSelector((state) => state?.application?.application_details) || null;
     const initial_application = useSelector((state) => state?.application?.initial_application) || null;
 
@@ -60,7 +64,7 @@ const Form = () => {
         if (application_uuid) {
             dispatch(fetchApplication({ "application_uuid": application_uuid }));
         }
-    }, [dispatch]);
+    }, [dispatch, parentState]);
 
     const $application_details = application_details ? JSON.parse(application_details) : null;
 
@@ -68,44 +72,58 @@ const Form = () => {
         if (!$application_details?.disclosure_stage) {
             dispatch(fetchInitialApplication({ "application_uuid": application_uuid }));
         }
-    }, [$application_details]);
+    }, []);
 
 
     const $initial_application = initial_application ? JSON.parse(initial_application) : null;
 
     const ApplicantInformation = (props) => {
 
-        const navigate = useNavigate();
 
         const authUser = useUser();
         const authUserUpdate = useUserUpdate();
 
         const dispatch = useDispatch();
 
-        const [parentState, setParentState] = useState('Initial state');
-        const [loading, setLoading] = useState(false);
-        const [modalForm, setModalForm] = useState(false);
-
-        const { reset, register, handleSubmit, formState: { errors }, setValue, clearErrors } = useForm();
-        const fields = useSelector((state) => state?.application?.all_fields) || null;
 
 
+        const onInputChange = async (event, values) => {
 
-        // useEffect(() => {
-        //     if ($application_details) {
-        //         dispatch(loadPageFields({ "page": "1", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
-        //     }
-        // }, [dispatch, parentState, $application_details]);
+            event.target.className = "btn btn-success";
+            event.target.innerHTML = "Moved";
+            
+            const postValues = new Object();
+            postValues.field_name = values.field_name;
+            postValues.field_value = values.field_value;
+            postValues.field_type = values.field_type;
+            postValues.application_id = $application_details?.id;
+            postValues.category_id = $application_details?.membership_category?.id;
 
+            try {
 
-        const onInputChange = () => {
+                const resp = await dispatch(retainField(postValues));
+
+                // if (resp.payload?.message == "success") {
+                //     console.log('getere')
+                //     setParentState(Math.random())
+                // } else {
+
+                // }
+
+            } catch (error) {
+
+            }
+        };
+
+        const onSubmit = () => {
 
             Swal.fire({
                 title: "Are you sure?",
-                text: "Do you want to submit application!",
+                text: "Do you want to continue application!",
                 icon: "warning",
                 showCancelButton: true,
-                confirmButtonText: "Yes, submit it!",
+                confirmButtonText: "Yes!",
+                cancelButtonText: "No",
             }).then((result) => {
 
                 if (result.isConfirmed) {
@@ -121,14 +139,18 @@ const Form = () => {
         const submitApplication = async () => {
             try {
 
-                const resp = await dispatch(completeApplication({ 'application_id': $application_details?.id }));
 
-                if (resp.payload?.message == "success") {
-                    setParentState(Math.random())
-                    navigate(`${process.env.PUBLIC_URL}/dashboard`)
-                } else {
-                    navigate(`${process.env.PUBLIC_URL}/dashboard`)
-                }
+                const postValues = new Object();
+                postValues.application_id = $application_details?.id;
+                postValues.status = 'accept';
+                const resp = dispatch(UpdateDisclosure(postValues));
+
+                // if (resp.payload?.message == "success") {
+
+                    navigate(`${process.env.PUBLIC_URL}/application/${$application_details?.uuid}`)
+                // } else {
+                //     navigate(`${process.env.PUBLIC_URL}/dashboard`)
+                // }
 
             } catch (error) {
 
@@ -169,7 +191,16 @@ const Form = () => {
                                     </>}
                                 </td>
                                 <td>
-                                    <Button className="btn btn-secondary" title="By clicking this button, you confirm acceptance of the existing document" onClick={(e) => onInputChange({ 'field_name': initial_application_item?.field?.name, "field_value": initial_application_item?.uploaded_field, "field_type": initial_application_item?.type })} >Move</Button>
+                                    <Button className="btn btn-secondary"
+                                        title="By clicking this button, you confirm acceptance of the existing document" 
+                                        onClick={(e) => onInputChange(event, {
+                                            'field_name': initial_application_item?.field?.name,
+                                            'application_id': $application_details?.id,
+                                            "category_id": $application_details?.membership_category?.id,
+                                            "field_value": (initial_application_item?.uploaded_field ? initial_application_item?.uploaded_field : initial_application_item?.uploaded_file),
+                                            "field_type": initial_application_item?.field?.type
+                                        })} >
+                                        Move</Button>
                                 </td>
                             </tr>
 
@@ -178,7 +209,7 @@ const Form = () => {
                 </table>
 
                     <div>
-                        <button className="btn btn-primary">Update Record</button>
+                        <button className="btn btn-primary" onClick={onSubmit}>Continue Application</button>
                     </div>
                 
                 </div>
@@ -188,7 +219,7 @@ const Form = () => {
 
 
     return <>
-        <Head title="Form" />
+        <Head title="Disclosure" />
         <HeaderLogo />
 
         <Content>
@@ -197,6 +228,9 @@ const Form = () => {
                     <div style={{ 'margin': '0px 10px !important' }}>
                         <div style={styles.card}>
                             <div style={styles.color}>
+                                <Button color="primary" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/application/${$application_details?.uuid}`)}>
+                                    <span>Back</span>
+                                </Button>
                                 {$application_details && <h3>{`${$application_details.membership_category.name} Application`} </h3>}
                                 <p>Move data to new membership category</p>
                             </div>

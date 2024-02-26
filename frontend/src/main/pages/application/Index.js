@@ -111,24 +111,17 @@ const Form = () => {
         }).then((result) => {
           if (result.isConfirmed) {
 
-            // const postValues = new Object();
-            // postValues.application_id = $application_details?.id;
-            // postValues.status = 'accept';
-            // const resp = dispatch(UpdateDisclosure(postValues));
-            // setParentState(Math.random());
-
             Swal.close()
             
             navigate(`${process.env.PUBLIC_URL}/application_disclosure/${$application_details.uuid}`)
 
-
           } else {
 
-            // const postValues = new Object();
-            // postValues.application_id = $application_details?.id;
-            // postValues.status = 'reject';
-            // const resp = dispatch(UpdateDisclosure(postValues));
-            // setParentState(Math.random());
+            const postValues = new Object();
+            postValues.application_id = $application_details?.id;
+            postValues.status = 'reject';
+            const resp = dispatch(UpdateDisclosure(postValues));
+            setParentState(Math.random());
           }
         });
 
