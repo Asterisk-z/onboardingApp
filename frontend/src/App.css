@@ -219,7 +219,7 @@ span.asc.__rdt_custom_sort_icon__ {
 .nk-wizard-simple .steps ul li {
     background-color: #1D326C !important;
     color: #fff !important;
-    padding-left: 3px;
+    padding: 8px !important;
 }
 
 
@@ -257,4 +257,11 @@ span.asc.__rdt_custom_sort_icon__ {
 
 .width-30 {
     width: 30% !important;
+}
+
+.redStar {
+    color: red;
+}
+.info-card table, .info-card td {
+    border: 1px solid #969698;
 }

@@ -92,7 +92,8 @@ const ActionTab = (props) => {
     const user_id = props.ar_user.id
     const ar_user = props.ar_user
     const [categoryIds, setCategoryIds] = useState(aUser.user_data.institution.category.map((cat) => cat.id));
-    const $positions = props.positions
+    
+    // const $positions = props.positions
     const $countries = props.countries
     const $roles = props.roles
     const $authorizers = props.authorizers
@@ -238,15 +239,23 @@ const ActionTab = (props) => {
 		  setDocument(event.target.files[0]);
     };
 
-    // const checkValue = (value) => {
-    //     console.log(parseInt(value.target.value))
-    //     // parseInt(value) ? setValue(parseInt(value)) : ""
-    //     if (!isNaN(parseInt(value.target.value))) {
-    //         value.target.value = parseInt(value.target.value)
-    //     }
-    // };
+    const [myApplicationCategoryIds, setMyApplicationCategoryIds] = useState([])
+    const positions = useSelector((state) => state?.position?.list) || null;
 
-    
+    useEffect(() => {
+        if (myApplicationCategoryIds.length > 0) {
+            const postValues = new Object();
+            postValues.category_ids = myApplicationCategoryIds;
+            dispatch(loadAllCategoryPositions(postValues));
+        }
+    }, [myApplicationCategoryIds]);
+
+    const $positions = positions ? JSON.parse(positions) : null;
+
+    const updatePositionList = (event) => {
+        setMyApplicationCategoryIds([event.target.value]);
+    }
+
   return (
     <>
         <div className="toggle-expand-content" style={{ display: "block" }}>
@@ -502,7 +511,7 @@ const ActionTab = (props) => {
                                 </Label>
                                 <div className="form-control-wrap">
                                     <div className="form-control-select">
-                                        <select className="form-control form-select" {...register('category_type', { required: "Category is Required" })} >
+                                        <select className="form-control form-select" {...register('category_type', { required: "Category is Required" })} onChange={updatePositionList} >
                                             <option value="">Select Category</option>
                                             {categories && categories?.map((category, index) => (
                                                 <option key={index} value={category.id}>
@@ -527,6 +536,7 @@ const ActionTab = (props) => {
                                             {$positions && $positions?.map((position, index) => (
                                                 <option key={index} value={position.id}>
                                                     {position.name}
+                                                    {position.is_compulsory == '1' && '*'}
                                                 </option>
                                             ))}
                                         </select>
@@ -603,11 +613,10 @@ const ActionTab = (props) => {
         </Modal>
     </>
 
-
   );
 };
 
-const AuthRepTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState, positions, countries, roles, authorizers, pending }) => {
+const AuthRepTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState, positions, categories, countries, roles, authorizers, pending }) => {
     const authRepColumn = [
     {
         name: "User ID",
@@ -638,6 +647,13 @@ const AuthRepTable = ({ data, pagination, actions, className, selectableRows, ex
         wrap: true
     },
     {
+        name: "Position",
+        selector: (row) => (`${row?.position?.name}`),
+        sortable: true,
+        width: "auto",
+        wrap: true
+    },
+    {
         name: "Role",
         selector: (row) => { return (<><Badge color="success">{`${row.role.name}`}</Badge></>) },
         sortable: true,
@@ -661,7 +677,7 @@ const AuthRepTable = ({ data, pagination, actions, className, selectableRows, ex
     {
         name: "Action",
         selector: (row) => (<>
-                        <ActionTab ar_user={row} positions={positions} countries={countries} roles={roles} authorizers={authorizers} updateParentParent={updateParent} pending={pending} />
+                        <ActionTab ar_user={row} positions={positions} countries={countries} roles={roles} authorizers={authorizers} updateParentParent={updateParent} pending={pending} categories={categories}/>
                     </>),
         width: "100px",
     },

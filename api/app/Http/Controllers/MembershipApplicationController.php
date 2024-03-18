@@ -6,9 +6,11 @@ use App\Events\ApplicationSubmissionEvent;
 use App\Helpers\MailContents;
 use App\Helpers\ResponseStatusCodes;
 use App\Helpers\Utility;
+use App\Http\Resources\ApplicationFieldResource;
 use App\Models\Application;
 use App\Models\ApplicationExtra;
 use App\Models\ApplicationField;
+use App\Models\ApplicationFieldApplicationFieldUpload;
 use App\Models\ApplicationFieldOption;
 use App\Models\ApplicationFieldUpload;
 use App\Models\Invoice;
@@ -20,6 +22,7 @@ use App\Services\FactoryService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use NumberFormatter;
 use Symfony\Component\HttpFoundation\Response;
@@ -44,7 +47,29 @@ class MembershipApplicationController extends Controller
     {
         $user = $request->user();
         $data = [];
-        $application = Application::where(['submitted_by' => $user->id])->first();
+        $application = Application::where(['uuid' => $request->application_uuid])->first();
+        $application_requirements = ApplicationFieldUpload::where('application_id', $application->id)->with('field')->get();
+
+        $data = [
+            'application' => $application,
+            'application_requirements' => $application_requirements,
+        ];
+
+        return successResponse("Here you go", $data ?? []);
+    }
+
+    public function getInitial(Request $request)
+    {
+        $user = $request->user();
+        $data = [];
+        $application = Application::where(['uuid' => $request->application_uuid])->first();
+
+        if ($application->application_type == Application::type['CON']) {
+            $application = Application::where(['institution_id' => $application->institution_id, 'membership_category_id' => $application->old_membership_category_id, 'application_type_status' => Application::typeStatus['ASC']])->first();
+        } else {
+            $application = Application::where(['institution_id' => $application->institution_id, 'application_type_status' => Application::typeStatus['ASC']])->first();
+
+        }
         $application_requirements = ApplicationFieldUpload::where('application_id', $application->id)->with('field')->get();
 
         $data = [
@@ -57,19 +82,26 @@ class MembershipApplicationController extends Controller
 
     public function getField(Request $request)
     {
-        $application_fields = ApplicationField::where('parent_id', null);
+        // $application = Application::find($request->application_id);
+        $application_fields = ApplicationField::where('application_fields.parent_id', null);
 
         if ($request->page) {
-            $application_fields->where('page', $request->page);
+            $application_fields->where('application_fields.page', $request->page);
         }
 
         if ($request->category) {
-            $application_fields->where('category', $request->category);
+            $application_fields->where('application_fields.category', $request->category);
         }
 
-        $data = $application_fields->orderBy('id', 'ASC')->get();
+        $application_fields->leftJoin('application_field_application_field_uploads', function ($join) use ($request) {
+            $join->on('application_field_application_field_uploads.application_field_id', '=', 'application_fields.id')
+                ->where('application_field_application_field_uploads.application_id', $request->application_id);
+        })->leftJoin('application_field_uploads', 'application_field_application_field_uploads.application_field_upload_id', '=', 'application_field_uploads.id')
+            ->select('application_fields.*', 'application_field_uploads.uploaded_file', 'application_field_uploads.uploaded_field', DB::raw('application_field_uploads.id as application_field_upload_id'));
 
-        return successResponse('Fields Fetched Successfully', $data);
+        $data = $application_fields->orderBy('application_fields.id', 'ASC')->get();
+
+        return successResponse('Fields Fetched Successfully', ApplicationFieldResource::collection($data));
     }
 
     public function getFieldExtra(Request $request)
@@ -102,18 +134,21 @@ class MembershipApplicationController extends Controller
         return successResponse('Fields Fetched Successfully', $data);
     }
 
-    public function uploadField(Request $request)
+    public function retainField(Request $request)
     {
         $validated = $request->validate([
             'category_id' => 'required',
             'field_name' => 'required',
             'field_value' => 'required',
             'field_type' => 'required',
+            'application_id' => 'required',
         ]);
+
+        $application = Application::find($request->application_id);
 
         if (!ApplicationField::where('category', $request->category_id)
             ->where('name', $request->field_name)
-            ->where('type', $request->field_type)->exists()) {
+            ->where('type', $request->field_type)->exists() || !$application) {
             return;
         }
 
@@ -123,7 +158,60 @@ class MembershipApplicationController extends Controller
 
         $data = ['uploaded_field' => $request->field_value];
 
-        if (auth()->user()->institution->application->status == Application::AWAITINGAPPROVAL) {
+        if ($application->status == Application::AWAITINGAPPROVAL) {
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, "Your application has already been submitted and it is currently under review.");
+        }
+
+        if ($request->field_type == 'file') {
+            $data['uploaded_field'] = null;
+            $data = ['uploaded_file' => $request->field_value];
+        }
+
+        $upload_action = ApplicationFieldUpload::updateOrCreate(
+            ['application_field_id' => $applicationField->id, 'application_id' => $application->id],
+            $data
+        );
+
+        ApplicationFieldApplicationFieldUpload::updateOrCreate(
+            [
+                'application_id' => $application->id,
+                'application_field_id' => $applicationField->id,
+                'application_field_upload_id' => $upload_action->id,
+            ],
+            [
+                'application_id' => $application->id,
+                'application_field_id' => $applicationField->id,
+                'application_field_upload_id' => $upload_action->id,
+            ]);
+
+        return successResponse('Fields Fetched Successfully', auth()->user()->institution->application);
+    }
+
+    public function uploadField(Request $request)
+    {
+        $validated = $request->validate([
+            'category_id' => 'required',
+            'field_name' => 'required',
+            'field_value' => 'required',
+            'field_type' => 'required',
+            'application_id' => 'required',
+        ]);
+
+        $application = Application::find($request->application_id);
+
+        if (!ApplicationField::where('category', $request->category_id)
+            ->where('name', $request->field_name)
+            ->where('type', $request->field_type)->exists() || !$application) {
+            return;
+        }
+
+        $applicationField = ApplicationField::where('category', $request->category_id)
+            ->where('name', $request->field_name)
+            ->where('type', $request->field_type)->first();
+
+        $data = ['uploaded_field' => $request->field_value];
+
+        if ($application->status == Application::AWAITINGAPPROVAL) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, "Your application has already been submitted and it is currently under review.");
         }
 
@@ -138,10 +226,22 @@ class MembershipApplicationController extends Controller
             $data = ['uploaded_file' => $attachment];
         }
 
-        ApplicationFieldUpload::updateOrCreate(
-            ['application_field_id' => $applicationField->id, 'application_id' => auth()->user()->institution->application->id],
+        $upload_action = ApplicationFieldUpload::updateOrCreate(
+            ['application_field_id' => $applicationField->id, 'application_id' => $application->id],
             $data
         );
+
+        ApplicationFieldApplicationFieldUpload::updateOrCreate(
+            [
+                'application_id' => $application->id,
+                'application_field_id' => $applicationField->id,
+                'application_field_upload_id' => $upload_action->id,
+            ],
+            [
+                'application_id' => $application->id,
+                'application_field_id' => $applicationField->id,
+                'application_field_upload_id' => $upload_action->id,
+            ]);
 
         return successResponse('Fields Fetched Successfully', auth()->user()->institution->application);
     }
@@ -275,13 +375,37 @@ class MembershipApplicationController extends Controller
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, "Submission failed. There are required fields you are yet to fill.");
         }
 
-        Utility::applicationStatusHelper($application, Application::statuses['ARD'], Application::office['MEG'], Application::office['AP']);
+        Utility::applicationStatusHelper($application, Application::statuses['ARD'], Application::office['AP'], Application::office['MEG']);
 
         logAction($user->email, 'Application re-uploaded', 'Membership application has been re-uploaded successfully.', $request->ip());
         $MEGs = Utility::getUsersByCategory(Role::MEG);
         Notification::send($MEGs, new InfoNotification(MailContents::documentReuploadMail($applicantName), MailContents::documentReuploadSubject()));
 
         return successResponse("Your Application has been submitted and is under review. You will be notified any feedback soon");
+    }
+
+    public function disclosure(Request $request)
+    {
+        $request->validate([
+            'status' => 'required',
+        ]);
+        $user = $request->user();
+
+        $application = Application::find($request->application_id);
+
+        $errorMsg = "Unable to complete your request at this point.";
+
+        if ($application->submitted_by != $user->id || $application->disclosure_stage) {
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+        }
+
+        $application->disclosure_stage = 1;
+        $application->disclosure_status = $request->status == 'accept' ? 1 : 0;
+
+        $application->save();
+
+        return successResponse("Disclosure completed you can continue application");
+
     }
 
     public function downloadInvoice(Request $request)

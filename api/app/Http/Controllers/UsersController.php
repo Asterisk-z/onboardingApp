@@ -102,16 +102,19 @@ class UsersController extends Controller
         ]);
 
         $status = new Status();
-        $status->office = Application::office['AD'];
+        $status->office = Application::office['AP'];
         $status->status = Application::statuses['PEN'];
         $status->save();
 
         $application = Application::create([
             'institution_id' => $institution->id,
+            'disclosure_stage' => 1,
             'submitted_by' => $user->id,
             'membership_category_id' => $request->input('category'),
             'status' => $status->id,
             'office_to_perform_next_action' => Application::office['AP'],
+            'application_type' => Application::type['APP'],
+            'application_type_status' => Application::typeStatus['ASP'],
         ]);
 
         $application->status()->save($status);

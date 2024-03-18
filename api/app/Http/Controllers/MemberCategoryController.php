@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use App\Helpers\Utility;
 use App\Http\Requests\CategoryRequest;
 use App\Http\Requests\Settings\AddCategoryRequest;
+use App\Models\Application;
+use App\Models\InstitutionMembership;
 use App\Models\MembershipCategory;
 use App\Models\MembershipCategoryPostition;
-use App\Models\Position;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -28,13 +29,55 @@ class MemberCategoryController extends Controller
         return successResponse('Membership Fetched Successfully', $data);
 
     }
+    public function myApplicationCategories(): JsonResponse
+    {
+        $membership_category_ids = Application::where('institution_id', auth()->user()->institution_id)
+            ->where('is_meg_executed_membership_agreement', true)
+            ->whereIn('application_type_status', [Application::typeStatus['ASC'], Application::typeStatus['ASP']])
+            ->pluck('membership_category_id');
+        $categories = MembershipCategory::whereIn('id', $membership_category_ids)->where('is_del', 0)->get(['id', 'name', 'code', 'is_del'])->toArray();
+        $converted_categories = Utility::arrayKeysToCamelCase($categories);
+        $data = [
+            'categories' => (array) $converted_categories,
+        ];
+        return successResponse('Membership Fetched Successfully', $data);
+    }
+
+    public function myCategories(): JsonResponse
+    {
+        $membership_category_ids = InstitutionMembership::where('institution_id', auth()->user()->institution_id)->pluck('membership_category_id');
+        $categories = MembershipCategory::whereIn('id', $membership_category_ids)->where('is_del', 0)->get(['id', 'name', 'code', 'is_del'])->toArray();
+        $converted_categories = Utility::arrayKeysToCamelCase($categories);
+        $data = [
+            'categories' => (array) $converted_categories,
+        ];
+        return successResponse('Membership Fetched Successfully', $data);
+
+    }
+    public function otherCategories(): JsonResponse
+    {
+        $membership_category_ids = InstitutionMembership::where('institution_id', auth()->user()->institution_id)->pluck('membership_category_id');
+        $categories = MembershipCategory::whereNotIn('id', $membership_category_ids)->where('is_del', 0)->get(['id', 'name', 'code', 'is_del'])->toArray();
+        $converted_categories = Utility::arrayKeysToCamelCase($categories);
+        $data = [
+            'categories' => (array) $converted_categories,
+        ];
+        return successResponse('Membership Fetched Successfully', $data);
+
+    }
 
     public function positions(CategoryRequest $request): JsonResponse
     {
-        $position_ids = MembershipCategoryPostition::whereIn('category_id', $request->category_ids)->pluck('position_id');
-        $positions = Position::whereIn('id', $position_ids)->get();
+        // $position_ids = MembershipCategoryPostition::whereIn('category_id', $request->category_ids)->pluck('position_id');
+        // $positions = Position::whereIn('positions.id', $position_ids)->get();
+// ->leftJoin('membership_category_postitions', 'positions.id', '=', 'membership_category_postitions.position_id')
 
-        return successResponse('Here you go', $positions);
+        $position_ids = MembershipCategoryPostition::whereIn('membership_category_postitions.category_id', $request->category_ids)
+            ->rightJoin('positions', 'positions.id', '=', 'membership_category_postitions.position_id')
+            ->select('positions.*', 'membership_category_postitions.is_compulsory')
+            ->orderBy('membership_category_postitions.is_compulsory')->get();
+
+        return successResponse('Here you go', $position_ids);
     }
     /**
      * Display a listing of the resource.

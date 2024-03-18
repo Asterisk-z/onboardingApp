@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Utility;
+use App\Http\Resources\ApplicationResource;
 use App\Models\Application;
 use App\Models\Complaint;
 use App\Models\Role;
@@ -31,18 +33,16 @@ class DashboardControler extends Controller
         $applications = Application::where('institution_id', auth()->user()->institution_id)->count();
         $ars = User::whereIn('role_id', [Role::ARINPUTTER, Role::ARAUTHORISER])->where('institution_id', auth()->user()->institution_id)->where('is_del', 0)->count();
 
-        $application = Application::where('submitted_by', auth()->user()->id)->first();
+        $application_list = Application::where('applications.submitted_by', auth()->user()->id);
 
-        $application_list = Application::where('submitted_by', auth()->user()->id)->get();
-        // $application_list = Conversion::where('submitted_by', auth()->user()->id)->get();
-        // $application_list = Addition::where('submitted_by', auth()->user()->id)->get();
+        $application_data = Utility::applicationData($application_list);
+        $application_data = $application_data->get();
 
         $data = [
             'complaints' => $complaints,
             'applications' => $applications,
-            'show_application' => $application->show_form,
             'ars' => $ars,
-            "application_list" => $application_list,
+            "application_list" => ApplicationResource::collection($application_data),
         ];
         return successResponse('Successfully', $data);
 

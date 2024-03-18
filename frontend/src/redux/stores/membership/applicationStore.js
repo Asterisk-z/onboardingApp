@@ -2,14 +2,42 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { errorHandler, successHandler } from "utils/Functions";
 import queryGenerator from "utils/QueryGenerator";
-const initialState = { all: null, list: null, user_application: null, all_fields: null, list_extra: {}, status_list: null, transfer_list: null, user: null, total: null, error: "", loading: false };
+const initialState = { all: null, list: null, user_application: null, application_details: null, initial_application: null, all_fields: null, list_extra: {}, status_list: null, transfer_list: null, user: null, total: null, error: "", loading: false };
+
+
+export const fetchApplication = createAsyncThunk(
+  "application/fetchApplication",
+  async (values) => {
+    
+    try {
+      const { data } = await axios.get(`membership/application/get_application/${values.application_uuid}`);
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
+    }
+  }
+);
+
+export const fetchInitialApplication = createAsyncThunk(
+  "application/fetchInitialApplication",
+  async (values) => {
+    
+    const query = queryGenerator(values);
+    try {
+      const { data } = await axios.get(`membership/application/initial?${query}`);
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
+    }
+  }
+);
 
 export const loadApplication = createAsyncThunk(
   "application/loadApplication",
-  async () => {
-    
+  async (values) => {
+    const query = queryGenerator(values);
     try {
-      const { data } = await axios.get(`membership/application/detail`);
+      const { data } = await axios.get(`membership/application/detail?${query}`);
       return successHandler(data);
     } catch (error) {
       return errorHandler(error);
@@ -56,6 +84,27 @@ export const loadExtra = createAsyncThunk(
   }
 );
 
+export const retainField = createAsyncThunk(
+  "application/retainField",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `membership/application/retain`,
+        data: values,
+      });
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
 export const uploadField = createAsyncThunk(
   "application/uploadField",
   async (values) => {
@@ -80,7 +129,7 @@ export const uploadField = createAsyncThunk(
 
 export const completeApplication = createAsyncThunk(
   "application/completeApplication",
-  async () => {
+  async (values) => {
     try {
       const { data } = await axios({
         method: "post",
@@ -90,7 +139,49 @@ export const completeApplication = createAsyncThunk(
           "Content-Type": "multipart/form-data",
         },
         url: `membership/application/complete`,
-        // data: values,
+        data: values,
+      });
+      return successHandler(data, data.message);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
+export const conversionRequest = createAsyncThunk(
+  "application/conversionRequest",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `membership/application/conversion-request`,
+        data: values,
+      });
+      return successHandler(data, data.message);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
+export const additionRequest = createAsyncThunk(
+  "application/additionRequest",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `membership/application/addition-request`,
+        data: values,
       });
       return successHandler(data, data.message);
     } catch (error) {
@@ -108,12 +199,45 @@ const applicationStore = createSlice({
     clearArUser: (state) => {
       state.customer = null;
       state.all_fields = null;
+      state.application_details = null;
     },
     clearAllFields: (state) => {
       state.all_fields = null;
     },
   },
   extraReducers: (builder) => {
+    
+    // ====== builders for fetchApplication ======
+
+    builder.addCase(fetchApplication.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(fetchApplication.fulfilled, (state, action) => {
+        state.loading = false;
+        state.application_details = JSON.stringify(action.payload?.data?.data);
+    });
+
+    builder.addCase(fetchApplication.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
+    // ====== builders for fetchInitialApplication ======
+
+    builder.addCase(fetchInitialApplication.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(fetchInitialApplication.fulfilled, (state, action) => {
+      state.loading = false;
+      state.initial_application = JSON.stringify(action.payload?.data?.data);
+    });
+
+    builder.addCase(fetchInitialApplication.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
 
     // ====== builders for loadApplication ======
 
@@ -211,6 +335,21 @@ const applicationStore = createSlice({
     });
 
 
+    // ====== builders for retainField ======
+
+    builder.addCase(retainField.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(retainField.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(retainField.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
     // ====== builders for uploadField ======
 
     builder.addCase(uploadField.pending, (state) => {
@@ -226,6 +365,37 @@ const applicationStore = createSlice({
       state.error = action.payload.message;
     });
   
+    
+    
+    // ====== builders for additionRequest ======
+
+    builder.addCase(additionRequest.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(additionRequest.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(additionRequest.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
+    // ====== builders for conversionRequest ======
+
+    builder.addCase(conversionRequest.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(conversionRequest.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(conversionRequest.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
 
     // ====== builders for completeApplication ======
 

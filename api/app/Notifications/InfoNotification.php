@@ -52,32 +52,32 @@ class InfoNotification extends Notification implements ShouldQueue
         $user = $notifiable;
         $info = $this->message;
         $subject = $this->subject ?? '';
-        $displayName = $user->first_name;
+        $displayName = $user->first_name ?? '';
 
-        if($subject == 'New Membership Signup' || $subject == 'Payment Rejected by MBG' || $subject == 'MROIS Document Upload' || $subject == 'Profiling Request:' || $subject == 'Profiling Request' || str_contains($subject, "Update of") || str_contains($subject, "Email Group Update for")){
+        if ($subject == 'New Membership Signup' || $subject == 'Payment Rejected by MBG' || $subject == 'MROIS Document Upload' || $subject == 'Profiling Request:' || $subject == 'Profiling Request' || str_contains($subject, "Update of") || str_contains($subject, "Email Group Update for")) {
             $displayName = "Team";
-        }else{
-            if($user->role_id == Role::MSG){
+        } else {
+            if ($user->role_id == Role::MSG) {
                 $displayName = "MSG";
             }
-            
-            if($user->role_id == Role::MEG){
+
+            if ($user->role_id == Role::MEG) {
                 $displayName = "MEG";
             }
-            
-            if($user->role_id == Role::FSD){
+
+            if ($user->role_id == Role::FSD) {
                 $displayName = "FSD";
             }
-            
-            if($user->role_id == Role::MBG){
+
+            if ($user->role_id == Role::MBG) {
                 $displayName = "MBG";
             }
-            
-            if($user->role_id == Role::BLG){
+
+            if ($user->role_id == Role::BLG) {
                 $displayName = "BLG";
             }
 
-            if($user->role_id == Role::HELPDESK){
+            if ($user->role_id == Role::HELPDESK) {
                 $displayName = "HELP DESK";
             }
         }

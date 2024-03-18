@@ -11,7 +11,7 @@ class MailContents
 
     public static function signupMail($email, $date, $signature): string
     {
-        $url = config("app.front_end_url")."/set/password?signature=".$signature."&email=".$email;
+        $url = config("app.front_end_url") . "/set/password?signature=" . $signature . "&email=" . $email;
         $date = formatDate($date);
         return "<p>Your account has been successfully created.</p>
         <p>Your login details are as follows:</p>
@@ -151,6 +151,29 @@ class MailContents
         return "<p>A new institution, {$companyName}, has been granted a concession.</p>";
     }
 
+    public static function megConversionRequestTitle(): string
+    {
+        return "New Membership Conversion Initiated";
+    }
+
+    public static function megConversionRequestMail($company_name, $membership_category): string
+    {
+        $url = config("app.front_end_url");
+
+        return "<p>Please be informed that {$company_name} a {$membership_category} has initiated a Membership Conversion.</p>";
+    }
+
+    public static function megAdditionRequestTitle(): string
+    {
+        return "New Membership Addition Initiated";
+    }
+
+    public static function megAdditionRequestMail($company_name): string
+    {
+        $url = config("app.front_end_url");
+
+        return "<p>Please be informed that {$company_name} has initiated Membership Addition</p>";
+    }
     public static function paymentSubject(): string
     {
         return "Payment Notification";
@@ -160,7 +183,7 @@ class MailContents
     {
         $url = config("app.front_end_url");
 
-        return "<p>Kindly log on to the <a href=$url>MROIS Portal</a> to 
+        return "<p>Kindly log on to the <a href=$url>MROIS Portal</a> to
         review the payment upload information for the Applicant, {$user->first_name} {$user->last_name}.</p>";
     }
 
@@ -202,7 +225,7 @@ class MailContents
     public static function mbgPaymentApprovedMail($companyName): string
     {
         $url = config("app.front_end_url");
-        return "<p>Please be informed that MBG has confirmed payment for 
+        return "<p>Please be informed that MBG has confirmed payment for
         {$companyName}. Kindly log on to <a href=$url>MROIS Portal</a> to review the application.</p>";
     }
 
@@ -214,7 +237,7 @@ class MailContents
     public static function megReportValidationMail($companyName): string
     {
         $url = config("app.front_end_url");
-        return "<p>Please be informed that MEG has uploaded the Application Report for 
+        return "<p>Please be informed that MEG has uploaded the Application Report for
         {$companyName}. Kindly log on to <a href=$url>MROIS Portal</a> to approve the application report.</p>";
     }
 
@@ -255,7 +278,6 @@ class MailContents
         <p>Kindly log on to the <a href=$url>MROIS Portal</a> to review and execute the Agreement.</p>";
     }
 
-    
     public static function ApplicantArUpdateSubject(): string
     {
         return "Update Authorised Representatives";
@@ -265,10 +287,10 @@ class MailContents
     {
         $url = config("app.front_end_url");
 
-        return "<p>Kindly log on to the <a href=$url>MROIS Portal</a> to update your Institution's 
+        return "<p>Kindly log on to the <a href=$url>MROIS Portal</a> to update your Institution's
         Authorised Representatives to complete the {$categoryName} application process.";
     }
-    
+
     public static function SuccessfulApplicationSubject(): string
     {
         return "Application Successful";
@@ -278,9 +300,9 @@ class MailContents
     {
         $url = config("app.front_end_url");
 
-        return "<p>We are pleased to inform you that your application for the {$categoryName} 
+        return "<p>We are pleased to inform you that your application for the {$categoryName}
         category of FMDQ Securities Exchange Limited is successful.</p>
-        
+
         <p>Kindly log on to the <a href=$url>MROIS Portal</a> to review application.</p>";
     }
 
@@ -291,7 +313,7 @@ class MailContents
 
     public static function msgProfilingMail($categoryName): string
     {
-        return "<p>Please be informed that the Institution outlined below has fulfilled the registration requirements to become 
+        return "<p>Please be informed that the Institution outlined below has fulfilled the registration requirements to become
                 an FMDQ Exchange {$categoryName} and is entitled to have access to the e-Markets portal:
                 Kindly profile the Institution and confirm upon completion.</p>";
     }

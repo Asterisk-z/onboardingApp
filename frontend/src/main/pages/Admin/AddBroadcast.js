@@ -305,6 +305,7 @@ const AdminBroadcast = ({ drawer }) => {
                                         <label className="" htmlFor={`fw-policy${position.id}`}>
                                             <span>
                                                 {position.name}
+                                                {position.is_compulsory == '1' && <span style={{ color: 'red' }}>*</span>}
                                             </span>
                                         </label>
                                     </article>

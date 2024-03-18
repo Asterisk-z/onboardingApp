@@ -9,7 +9,7 @@ import Icon from "components/icon/Icon";
 import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge,  Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, CardBody, CardTitle } from "reactstrap";
 import { DataTablePagination } from "components/Component";
 import moment from "moment";
-import {uploadConcession, FSDPaymentEvidence, FSDReviewSummary, MBGPaymentEvidence, MBGReview, MEGReview, MEG2Review, MEGUploadAgreement} from "redux/stores/membership/applicationProcessStore"
+import { uploadConcession, FSDPaymentEvidence, FSDReviewSummary, MBGPaymentEvidence, MBGReview, MEGReview, MEG2Review, MEGUploadAgreement, completeApplication } from "redux/stores/membership/applicationProcessStore"
 import { megProcessTransferUserAR } from "redux/stores/authorize/representative";
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 import Swal from "sweetalert2";
@@ -190,6 +190,7 @@ const ActionTab = (props) => {
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Yes!",
+            cancelButtonText: "No",
             html: '<div class="flex flex-column text-left"><label htmlFor="comments">Comment</label><textarea id="comments" class="form-control" rows="4" cols="50" placeholder="Enter Comment" required></textarea></div>', // Add textarea to the alert
           }).then((result) => {
             if (result.isConfirmed) {
@@ -213,6 +214,7 @@ const ActionTab = (props) => {
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Yes!",
+            cancelButtonText: "No",
             html: '<div class="flex flex-column text-left"><label htmlFor="comments">Comment</label><textarea id="comments" class="form-control" rows="4" cols="50" placeholder="Enter Comment" required></textarea></div>', // Add textarea to the alert
           }).then((result) => {
             if (result.isConfirmed) {
@@ -236,6 +238,7 @@ const ActionTab = (props) => {
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Yes!",
+            cancelButtonText: "No",
             html: '<div class="flex flex-column text-left"><label htmlFor="comments">Comment</label><textarea id="comments" class="form-control" rows="4" cols="50" placeholder="Enter Comment" required></textarea></div>', // Add textarea to the alert
           }).then((result) => {
             if (result.isConfirmed) {
@@ -260,7 +263,8 @@ const ActionTab = (props) => {
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Yes!",
-            html: '<div class="flex flex-column text-left"><label htmlFor="application_report">Amount Received</label><input type="file"  accept=".pdf" id="application_report" name="application_report" class="form-control" required /><label htmlFor="comments">Comment</label><textarea id="comments" class="form-control" rows="4" cols="50" placeholder="Enter Comment" required></textarea></div>', // Add textarea to the alert
+            cancelButtonText: "No",
+            html: '<div class="flex flex-column text-left"><label htmlFor="application_report">Application Report</label><input type="file"  accept=".pdf" id="application_report" name="application_report" class="form-control" required /><label htmlFor="comments">Comment</label><textarea id="comments" class="form-control" rows="4" cols="50" placeholder="Enter Comment" required></textarea></div>', // Add textarea to the alert
           }).then((result) => {
             if (result.isConfirmed) {
               const application_report = document.getElementById('application_report').files[0]; // Get value from the textarea
@@ -286,6 +290,7 @@ const ActionTab = (props) => {
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Yes!",
+            cancelButtonText: "No",
             html: '<div class="flex flex-column text-left"><label htmlFor="comments">Comment</label><textarea id="comments" class="form-control" rows="4" cols="50" placeholder="Enter Comment" required></textarea></div>', // Add textarea to the alert
           }).then((result) => {
             if (result.isConfirmed) {
@@ -310,12 +315,34 @@ const ActionTab = (props) => {
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Yes!",
+            cancelButtonText: "No",
           }).then((result) => {
               if (result.isConfirmed) {
                 
                 const formData = new FormData();
                 formData.append('application_id', institution.internal.application_id); 
                 dispatch(MEG2Review(formData));
+                props.updateParentParent(Math.random());
+              
+            }
+          });
+      }
+      
+      
+      if (action == 'completeApplication') {
+          Swal.fire({
+            title: "Are you sure?",
+            text: "Do you want to complete membership application!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes!",
+            cancelButtonText: "No",
+          }).then((result) => {
+              if (result.isConfirmed) {
+
+                const formData = new FormData();
+                formData.append('application_id', institution.internal.application_id); 
+                dispatch(completeApplication(formData));
                 props.updateParentParent(Math.random());
               
             }
@@ -448,7 +475,7 @@ const ActionTab = (props) => {
             </ModalFooter>
         </Modal>
        
-        <Modal isOpen={modalView} toggle={toggleView} size="lg">
+        <Modal isOpen={modalView} toggle={toggleView} size="xl">
             <ModalHeader toggle={toggleView} close={<button className="close" onClick={toggleView}><Icon name="cross" /></button>}>
                 View Institution Application 
             </ModalHeader>
@@ -456,7 +483,7 @@ const ActionTab = (props) => {
                     <Card className="card">   
                         <CardBody className="card-inner">
                             <CardTitle tag="h5">{ `Basic Information` }</CardTitle>
-                              <ul>
+                              {/* <ul>
                                   <li><span className="lead">Company name :{`${institution?.basic_details.companyName}`} </span></li>
                                   <li><span className="lead">RC Number :{`${institution?.basic_details.rcNumber}`} </span></li>
                                   <li><span className="lead">Registered Office Address :{`${institution?.basic_details.registeredOfficeAddress}`} </span></li>
@@ -468,72 +495,272 @@ const ActionTab = (props) => {
                                   <li><span className="lead">Company Secondary Telephone Number :{`${institution?.basic_details.companyTelephoneNumber}`} </span></li>
                                   <li><span className="lead">Company Email Address :{`${institution?.basic_details.companyEmailAddress}`} </span></li>
                                   <li><span className="lead">Company website address :{`${institution?.basic_details.corporateWebsiteAddress}`} </span></li>
-                              </ul>
+                              </ul> */}
+              <table className="table table-striped table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Company Name</td>
+                  <td>{`${institution?.basic_details.companyName}`}</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>RC Number</td>
+                  <td>{`${institution?.basic_details.rcNumber}`}</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>Registered Office Address</td>
+                  <td>{`${institution?.basic_details.registeredOfficeAddress}`}</td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>Town/City</td>
+                  <td>{`${institution?.basic_details.placeOfIncorporation}`}</td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>Date of Incorporation</td>
+                  <td>{`${institution?.basic_details.dateOfIncorporation}`}</td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td>Place of Incorporation</td>
+                  <td>{`${institution?.basic_details.placeOfIncorporation}`}</td>
+                </tr>
+                <tr>
+                  <td>7</td>
+                  <td>Nature of Business</td>
+                  <td>{`${institution?.basic_details.natureOfBusiness}`}</td>
+                </tr>
+                <tr>
+                  <td>8</td>
+                  <td>Company Primary Telephone Number</td>
+                  <td>{`${institution?.basic_details.companyTelephoneNumber}`}</td>
+                </tr>
+                <tr>
+                  <td>9</td>
+                  <td>Company Secondary Telephone Number</td>
+                  <td>{`${institution?.basic_details.companyTelephoneNumber}`}</td>
+                </tr>
+                <tr>
+                  <td>10</td>
+                  <td>Company Email Address</td>
+                  <td>{`${institution?.basic_details.companyEmailAddress}`}</td>
+                </tr>
+                <tr>
+                  <td>11</td>
+                  <td>Company Website Address</td>
+                  <td>{`${institution?.basic_details.corporateWebsiteAddress}`}</td>
+                </tr>
+                  
+                </tbody>
+                              </table>
                         </CardBody>
                         
                         <CardBody className="card-inner">
                             <CardTitle tag="h5">{ `Supporting Documents` }</CardTitle>
-                              <ul>
-                                  <li></li>
-                              </ul>
+
+                            <table className="table table-striped table-bordered table-hover">
+                              <thead>
+                                <tr>
+                                  <th scope="col">#</th>
+                                  <th scope="col">Name</th>
+                                  <th scope="col" className="width-30">Value</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {/* {$user_application} */}
+                                {institution?.required_documents && institution?.required_documents?.map((document, index) => (
+                                  <tr key={index}>
+                                    <th scope="row">{++index}</th>
+                                    <td>{document.description}</td>
+                                    <td>
+                                      {document.uploaded_file != null ? <>
+                                        <a className="btn btn-primary" href={document.file_path} target="_blank">View File </a>
+                                      </> : <>
+                                        {document.uploaded_field}
+                                      </>}
+                                    </td>
+                                  </tr>
+
+                                ))}
+                              </tbody>
+                            </table>
                         </CardBody>
                         
                         <CardBody className="card-inner">
                             <CardTitle tag="h5">{ `Payment Information` }</CardTitle>
-                              <ul>
-                                  <li><span className="lead">Invoice Number :{`${institution?.payment_information.invoice_number}`} </span></li>
-                                  <li><span className="lead">Payment Reference :{`${institution?.payment_information.reference}`} </span></li>
-                                  <li><span className="lead">Date Of Payment :{`${institution?.payment_information.date_paid}`} </span></li>
-                                  <li><span className="lead">Amount Paid :{`${institution?.payment_details.total}`} </span></li>
-                                  <li><span className="lead">Concession Amount :{`${institution?.payment_details.concession_amount}`} </span></li>
-                              </ul>
+                              {/* <ul>
+                                  <li><span className="lead">Invoice Number :{`${institution?.payment_information?.invoice_number}`} </span></li>
+                                  <li><span className="lead">Payment Reference :{`${institution?.payment_information?.reference}`} </span></li>
+                                  <li><span className="lead">Date Of Payment :{`${institution?.payment_information?.date_paid}`} </span></li>
+                                  <li><span className="lead">Amount Paid :{`${institution?.payment_details?.total}`} </span></li>
+                                  <li><span className="lead">Concession Amount :{`${institution?.payment_details?.concession_amount}`} </span></li>
+              </ul> */}
+              <table className="table table-striped table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>Invoice Number</td>
+                    <td>{`${institution?.payment_information?.invoice_number}`}</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>Payment Reference</td>
+                    <td>{`${institution?.payment_information?.reference}`}</td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>Date of Payment</td>
+                    <td>{`${institution?.payment_information?.date_paid}`}</td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td>Amount Paid</td>
+                    <td>{`${institution?.payment_details?.total}`}</td>
+                  </tr>
+                  <tr>
+                    <td>5</td>
+                    <td>Concession Amount</td>
+                    <td>:{`${institution?.payment_details?.concession_amount}`}</td>
+                  </tr>
+                </tbody>
+                </table>
                         </CardBody>
-                        <CardBody className="card-inner">
+                        {/* <CardBody className="card-inner">
                             <CardTitle tag="h5">{ `Membership Reason` }</CardTitle>
                               <ul>
                                   <li></li>
                               </ul>
-                        </CardBody>
+                        </CardBody> */}
                         <CardBody className="card-inner">
                             <CardTitle tag="h5">{ `MBG Review` }</CardTitle>
-                              <ul>
+                              {/* <ul>
                                   <li><span className="lead">Status :{`${institution?.mbg_review[institution?.mbg_review.length - 1]?.status ? institution?.mbg_review[institution?.mbg_review.length - 1]?.status : ""}`} </span></li>
                                   <li><span className="lead">Reason :{`${institution?.mbg_review[institution?.mbg_review.length - 1]?.comment ? institution?.mbg_review[institution?.mbg_review.length - 1]?.comment : ""}`} </span></li>
-                              </ul>
+              </ul> */}
+              <table className="table table-striped table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>Status</td>
+                    <td>{`${institution?.mbg_review[institution?.mbg_review.length - 1]?.status ? institution?.mbg_review[institution?.mbg_review.length - 1]?.status : ""}`}</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>Reason</td>
+                    <td>{`${institution?.mbg_review[institution?.mbg_review.length - 1]?.comment ? institution?.mbg_review[institution?.mbg_review.length - 1]?.comment : ""}`}</td>
+                  </tr>
+
+                </tbody>
+              </table>
                         </CardBody>
                         <CardBody className="card-inner">
                             <CardTitle tag="h5">{ `FSG Review` }</CardTitle>
-                              <ul>
+                              {/* <ul>
                                   <li><span className="lead">Status :{`${institution?.fsd_review[institution?.fsd_review.length - 1]?.status ? institution?.fsd_review[institution?.fsd_review.length - 1]?.status : ""}`} </span></li>
                                   <li><span className="lead">Reason :{`${institution?.fsd_review[institution?.fsd_review.length - 1]?.comment ? institution?.fsd_review[institution?.fsd_review.length - 1]?.comment : ""}`} </span></li>
-                              </ul>
+              </ul> */}
+              <table className="table table-striped table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>Status</td>
+                    <td>{`${institution?.fsd_review[institution?.fsd_review.length - 1]?.status ? institution?.fsd_review[institution?.fsd_review.length - 1]?.status : ""}`}</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>Reason</td>
+                    <td>{`${institution?.fsd_review[institution?.fsd_review.length - 1]?.comment ? institution?.fsd_review[institution?.fsd_review.length - 1]?.comment : ""}`}</td>
+                  </tr>
+
+                </tbody>
+              </table>
                         </CardBody>
                         <CardBody className="card-inner">
                             <CardTitle tag="h5">{ `MEG Review` }</CardTitle>
-                              <ul>
+                              {/* <ul>
                                   <li><span className="lead">Status :{`${institution?.meg_review[institution?.meg_review.length - 1]?.status ? institution?.meg_review[institution?.meg_review.length - 1]?.status : ""}`} </span></li>
                                   <li><span className="lead">Reason :{`${institution?.meg_review[institution?.meg_review.length - 1]?.comment ? institution?.meg_review[institution?.meg_review.length - 1]?.comment : ""}`} </span></li>
-                              </ul>
+              </ul> */}
+              <table className="table table-striped table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>Status</td>
+                    <td>{`${institution?.meg_review[institution?.meg_review.length - 1]?.status ? institution?.meg_review[institution?.meg_review.length - 1]?.status : ""}`}</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>Reason</td>
+                    <td>{`${institution?.meg_review[institution?.meg_review.length - 1]?.comment ? institution?.meg_review[institution?.meg_review.length - 1]?.comment : ""}`}</td>
+                  </tr>
+
+                </tbody>
+              </table>
                         </CardBody>
                         {(aUser.is_admin_meg() && institution.internal.mbg_review_stage && !institution.internal.meg_review_stage ) && 
-                        <div className="gy-0">
+                          <div className="gy-0">
                                 <h5>Application Review</h5>
                                 <Button className="btn btn-primary mx-2"  onClick={() => askAction('declineApplicationReview')}>Reject Application</Button>
                                 <Button className="btn btn-success mx-2"  onClick={() => askAction('approveApplicationsReview')}> Upload Application</Button>
                           </div>
                       }
                         {(aUser.is_admin_meg2() && institution.internal.meg_review_stage && !institution.internal.meg2_review_stage) && 
-                        <div className="gy-0">
+                          <div className="gy-0">
                                 <h5>Application Review</h5>
                                 <Button className="btn btn-success mx-2"  onClick={() => askAction('approveMEGApplicationsReview')}> Approve Application</Button>
                           </div>
                       }
                       
-                        {(aUser.is_admin_meg() && institution.internal.is_applicant_executed_membership_agreement ) && 
+                        {(aUser.is_admin_meg() && institution?.internal?.is_applicant_executed_membership_agreement && !institution?.internal?.is_meg_executed_membership_agreement ) && 
                         <div className="gy-0">
                                 <h5>Upload Signed Agreement</h5>
-                                <Button className="btn btn-primary mx-2"  >Download Signed Agreement</Button>
+                                <a className="btn btn-primary mx-2"  href={institution?.internal?.applicant_executed_membership_agreement} target="_blank">Download Signed Agreement</a>
                                 <Button className="btn btn-success mx-2"  onClick={toggleSignedAgreement}>Upload MEG Signed Agreement</Button>
+                          </div>
+                      }
+                        {(aUser.is_admin_meg() && institution?.internal?.is_applicant_executed_membership_agreement && institution?.internal?.is_meg_executed_membership_agreement ) && 
+                        <div className="gy-0">
+                                <h5>Final Review</h5>
+                                <a className="btn btn-primary mx-2"   onClick={(e) => navigate(`${process.env.PUBLIC_URL}/${institution?.internal?.institution_id}/list-ars`)} target="_blank">View Authorised Representatives</a>
+                                {!institution?.completed && <Button className="btn btn-success mx-2"   onClick={() => askAction('completeApplication')}>Complete Application</Button>}
                           </div>
                       }
                     </Card>
