@@ -330,4 +330,25 @@ class MailContents
         return "<p>Please be informed that {$apllicantName} has resubmitted documents on the MROIS portal.</p>
         <p>Kindly log on to the <a href=$url>MROIS Portal</a> to proceed with the application.</p>";
     }
+
+    public static function profileArSystemSubject($system): string
+    {
+        return "Authorised Representative Profiling on the {$system}";
+    }
+
+    public static function profileArSystemMail($name, $system): string
+    {
+        $url = config("app.front_end_url");
+        return "<p>Please be informed that $name has requested 
+        the creation of some ARs profile on the $system. 
+        Kindly log on to the <a href=$url>MROIS Portal</a> to approve or reject the request";
+    }
+
+    public static function mbgApproveProfileArSystemMail($system): string
+    {
+        $url = config("app.front_end_url");
+        return "<p>Please be informed that MBG has requested 
+        the creation of some ARs profile on the $system. 
+        Kindly log on to the <a href=$url>MROIS Portal</a> to approve or reject the request";
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\ArAddedEvent;
 use App\Helpers\ARMailContents;
+use App\Helpers\MailContents;
 use App\Helpers\ResponseStatusCodes;
 use App\Helpers\Utility;
 use App\Http\Requests\AR\AddARRequest;
@@ -16,6 +17,9 @@ use App\Http\Resources\AR\ARTransferRequestResource;
 use App\Http\Resources\UserResource;
 use App\Models\AR\ARDeactivationRequest;
 use App\Models\AR\ARTransferRequest;
+use App\Models\ArCreationRequest;
+use App\Models\ArsToBeCreatedOnSystem;
+use App\Models\FmdqSystems;
 use App\Models\Position;
 use App\Models\Role;
 use App\Models\User;
@@ -688,5 +692,45 @@ class ARController extends Controller
         }
 
         return successResponse('Successful', ARDeactivationRequestResource::make($record));
+    }
+
+    public function arCreationRequest(Request $request)
+    {
+        $request->validate([
+            'system_id' => 'required|exists:fmdq_systems,id',
+            'ars' => 'required|array',
+            'ars.*' => 'required|exists:users,id'
+        ]); 
+
+        $data = [];
+        $user = $request->user();
+
+        $system = FmdqSystems::find($request->system_id);
+
+        $creationRequest = ArCreationRequest::create([
+            'system_id' => $system->id,
+            'next_office' => 'MBG',
+            'submitted_by' => $user->id
+        ]);
+
+        foreach ($request->ars as $ar) {
+            $data[] = [
+                'ar_id' => $ar,
+                'ar_creation_request_id' => $creationRequest->id,
+                'created_at' => now(),
+                'updated_at' => now()
+            ];
+        }
+
+        ArsToBeCreatedOnSystem::insert($data);
+
+        $MBGs = Utility::getUsersByCategory(Role::MBG);
+        $MEGs = Utility::getUsersEmailByCategory(Role::MEG);
+        $MSGs = Utility::getUsersEmailByCategory(Role::MSG);
+        $CCs = array_merge($MSGs, $MEGs);
+        Notification::send($MBGs, new InfoNotification(MailContents::profileArSystemMail("{$user->first_name} {$user->last_name} $user->middle_name", $system->name), MailContents::profileArSystemSubject($system->name), $CCs));
+        logAction($user->email, 'AR created requested', "A meber requested that ARs be added on a system", $request->ip());
+
+        return successResponse('Request sent successfully');
     }
 }

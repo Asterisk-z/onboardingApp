@@ -15,6 +15,8 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    'payment_type' => env('PAYMENT_CHANNEL', 'QPAY'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment

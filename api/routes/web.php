@@ -3,6 +3,7 @@
 use App\Http\Controllers\ARController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\MembershipApplicationController;
+use App\Http\Controllers\QpayController;
 use App\Http\Controllers\SystemController;
 use App\Models\User;
 use App\Notifications\InfoNotification;
@@ -20,7 +21,7 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::get('/', function () {
-    return view('invoice');
+    return view('welcome');
 });
 
 Route::get('execute-commands', [SystemController::class, 'executeCommands'])->name('executeCommands');

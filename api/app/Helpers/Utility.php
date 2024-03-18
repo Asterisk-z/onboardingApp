@@ -3,6 +3,7 @@ namespace App\Helpers;
 
 use App\Mail\NotificationMail;
 use App\Models\Application;
+use App\Models\Invoice;
 use App\Models\MembershipCategoryPostition;
 use App\Models\Position;
 use App\Models\Role;
@@ -357,5 +358,24 @@ class Utility
         }
 
         return true;
+    }
+
+    public static function getTotalFromInvoice(Invoice $invoice)
+    {
+        $invoiceContents = $invoice->contents;
+        $total = 0;
+
+        foreach ($invoiceContents as $invoiceContent) {
+
+            if ($invoiceContent->type == 'credit') {
+                $total -= $invoiceContent->value;
+            }
+
+            if ($invoiceContent->type == 'debit') {
+                $total += $invoiceContent->value;
+            }
+        }
+
+        return $total;
     }
 }

@@ -28,5 +28,6 @@ class DatabaseSeeder extends Seeder
         $this->call(QuarterDiscountSeeder::class);
         $this->call(ReasonSeeder::class);
         $this->call(AccountDetailsSeeder::class);
+        $this->call(FmdqSystemSeeder::class);
     }
 }
