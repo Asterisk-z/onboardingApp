@@ -18,6 +18,7 @@ use App\Models\ProofOfPayment;
 use App\Models\Role;
 use App\Models\User;
 use App\Notifications\InfoNotification;
+use App\Services\FactoryService;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -508,6 +509,10 @@ class MembershipApplicationController extends Controller
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
+        if($invoice->is_paid){
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, "Payment has already been made for this application.");
+        }
+
         $proof = ProofOfPayment::create([
             'proof' => $request->file('proof_of_payment')->storePublicly('proof_of_payment', 'public'),
         ]);
@@ -518,10 +523,6 @@ class MembershipApplicationController extends Controller
 
         $application->proof_of_payment()->save($proof);
 
-        $invoice->date_paid = Carbon::now()->format('Y-m-d');
-        $invoice->is_paid = 1;
-        $invoice->save();
-
         logAction($user->email, 'Proof of payment uploaded', "Applicant successfully uploaded proof of payment.", $request->ip());
 
         $MBGs = Utility::getUsersEmailByCategory(Role::MBG);
@@ -531,6 +532,41 @@ class MembershipApplicationController extends Controller
         Notification::send($FSDs, new InfoNotification(MailContents::paymentMail($user), MailContents::paymentSubject(), $CCs));
 
         return successResponse("Your payment upload has been recieved and it is currently under review");
+    }
+
+    public function onlinePayment(Request $request){
+        $request->validate([
+            'application_id' => 'required|exists:applications,id'
+        ]);
+
+        $user = $request->user();
+        $application = Application::find($request->application_id);
+        $invoice = Invoice::find($application->invoice_id);
+
+        $errorMsg = "Unable to complete your request at this point.";
+
+        if ($application->submitted_by != $user->id) {
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+        }
+
+        if($invoice->is_paid){
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, "Payment has already been made for this application.");
+        }
+
+        $total = Utility::getTotalFromInvoice($invoice);
+
+        try {
+            $service = FactoryService::createService();
+            $response = $service->handle($user, $invoice->reference, $total);
+
+            if($response['statusCode'] == "00"){
+                return successResponse("Please proceed to payment", $response["data"]);
+            }else{
+                return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, "Unable to process your request");
+            }
+        } catch (\InvalidArgumentException $exception) {
+            logger($exception);
+        }
     }
 
     public function uploadMemberAgreement(Request $request)

@@ -12,6 +12,7 @@ use App\Http\Controllers\DashboardControler;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\FeesAndDuesController;
 use App\Http\Controllers\FsdApplicationController;
+use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\InstitutionController;
 use App\Http\Controllers\MbgApplicationController;
 use App\Http\Controllers\Meg2ApplicationController;
@@ -19,9 +20,11 @@ use App\Http\Controllers\MegApplicationController;
 use App\Http\Controllers\MemberCategoryController;
 use App\Http\Controllers\MemberGuidesController;
 use App\Http\Controllers\MembershipApplicationController;
+use App\Http\Controllers\MsgApplicationController;
 use App\Http\Controllers\NationalityController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\PositionController;
+use App\Http\Controllers\QpayController;
 use App\Http\Controllers\RegulatorsController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SanctionsController;
@@ -221,6 +224,12 @@ Route::middleware('auth')->group(function () {
     });
 
     //MSG ROUTES
+    Route::middleware('authRole:' . Role::MBG)->group(function () {
+        Route::group(['prefix' => 'msg/ar-creation/request'],  function () {
+            Route::get('/', [MsgApplicationController::class, 'arCreationRequest']);
+            Route::get('/review', [MsgApplicationController::class, 'reviewArSystemCreationRequest']);
+        });
+    });
 
     //FSD ROUTES
     Route::middleware('authRole:' . Role::FSD)->group( function () {
@@ -243,6 +252,12 @@ Route::middleware('auth')->group(function () {
             Route::post('/payment-details', [MbgApplicationController::class, 'paymentReviewDetails']);
             Route::post('/fsd-review-summary', [MbgApplicationController::class, 'fsdReviewSummary']);
             Route::post('/review', [MbgApplicationController::class, 'mbgReview']);
+        });
+
+
+        Route::group(['prefix' => 'mbg/ar-creation/request'],  function () {
+            Route::get('/', [MbgApplicationController::class, 'arCreationRequest']);
+            Route::get('/review', [MbgApplicationController::class, 'reviewArSystemCreationRequest']);
         });
     });
 
@@ -283,6 +298,8 @@ Route::middleware('auth')->group(function () {
 
             Route::post('/change-status/{ARUser}', [ARController::class, 'changeStatus']);
             Route::post('/process-change-status/{record}', [ARController::class, 'processChangeStatus']);
+
+            Route::post('/creation/request', [ARController::class, 'arCreationRequest']);
         });
         //
         Route::group(['prefix' => 'regulators'], function () {
@@ -306,6 +323,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/retain', [MembershipApplicationController::class, 'retainField']);
             Route::post('/invoice/download', [MembershipApplicationController::class, 'downloadInvoice']);
             Route::post('/upload-payment-proof', [MembershipApplicationController::class, 'uploadProofOfPayment']);
+            Route::post('/online-payment', [MembershipApplicationController::class, 'onlinePayment']);
             Route::post('/complete', [MembershipApplicationController::class, 'complete']);
             Route::post('/upload-membership-agreement', [MembershipApplicationController::class, 'uploadMemberAgreement']);
             Route::post('/conversion-request', [ApplicationProcessController::class, 'conversionRequest']);
@@ -362,3 +380,14 @@ Route::get('refresh-database', [SystemController::class, 'refreshDatabase'])->na
 
 Route::get('cert-sample/{event}', [EventController::class, 'certificateSample'])->name('clearModel');
 Route::get('cert-sample-download/{event}', [EventController::class, 'certificateSampleDownload'])->name('clearModel');
+
+Route::group(['prefix' => 'webhook'], function () {
+    Route::group(['prefix' => 'qpay/payment'], function () {
+        Route::post('/success', [QpayController::class, 'success']);
+        Route::post('/fail', [QpayController::class, 'fail']);
+    });
+});
+
+Route::group(['prefix' => 'general'], function () {
+    Route::get('/fmdq-systems', [GeneralController::class, 'fmdqSystems']);
+});

@@ -6,6 +6,7 @@ use App\Helpers\MailContents;
 use App\Helpers\Utility;
 use App\Http\Resources\ApplicationResource;
 use App\Models\Application;
+use App\Models\ArCreationRequest;
 use App\Models\Invoice;
 use App\Models\Role;
 use App\Models\SystemSetting;
@@ -265,5 +266,57 @@ class MbgApplicationController extends Controller
         }
 
         return successResponse("Application Updated Successfully");
+    }
+
+    public function arCreationRequest(Request $request)
+    {
+        return successResponse("Here you go", ArCreationRequest::all());
+    }
+
+    public function reviewArSystemCreationRequest(Request $request)
+    {
+        $request->validate([
+            'status' => 'required|in:approved,rejected',
+            'ar_request_id' => 'required|exists:ar_creation_requests,id',
+        ]); 
+
+        $ar_creation_request = ArCreationRequest::find($request->ar_request_id);
+
+        if($ar_creation_request->next_office != 'MBG' && $ar_creation_request->mbg_status != 'Pending'){
+            errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, "You are not permitted to perform this action at this time");
+        }
+
+        $system = $ar_creation_request->system;
+        $user = $request->user();
+
+        switch ($request->status) {
+            case 'approved':
+                $ar_creation_request->mbg_status = ucfirst($request->status);
+                $ar_creation_request->next_office = 'MSG';
+                $ar_creation_request->save();
+
+                $MSGs = Utility::getUsersByCategory(Role::MSG);
+                $MEGs = Utility::getUsersEmailByCategory(Role::MEG);
+                $MBGs = Utility::getUsersEmailByCategory(Role::MBG);
+                $CCs = array_merge($MBGs, $MEGs);
+                Notification::send($MSGs, new InfoNotification(MailContents::mbgApproveProfileArSystemMail($system->name), MailContents::profileArSystemSubject($system->name), $CCs));
+        
+                logAction($user->email, 'AR CREATION REQUEST', "AR creation request on FMDQ system was approved by MBG", $request->ip());
+                break;
+
+            case 'rejected':
+                $ar_creation_request->mbg_status = ucfirst($request->status);
+                $ar_creation_request->save();
+
+                logAction($user->email, 'AR CREATION REQUEST', "AR creation request on FMDQ system was rejected by MBG", $request->ip());
+
+                break;
+            
+            default:
+                # code...
+                break;
+        }
+
+        return successResponse("Request status updated successfully");
     }
 }

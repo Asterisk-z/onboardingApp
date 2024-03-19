@@ -3,7 +3,7 @@
 use App\Helpers\ResponseStatusCodes;
 use App\Models\Audit;
 use App\Models\FmdqBankAccount;
-use App\Models\Invoice;
+use Illuminate\Support\Str;
 use App\Models\InvoiceContent;
 use PHPOpenSourceSaver\JWTAuth\JWTGuard;
 use Symfony\Component\HttpFoundation\Response;
@@ -128,3 +128,15 @@ if (!function_exists('formatNumber')) {
         return number_format($amount, 2);
     }
 }
+
+if (!function_exists('generateReference')) {
+    function generateReference()
+    {
+        $dateTime = now();
+        $uniqueId = Str::random(8); // Using Laravel's Str::random for simplicity
+        $paymentReference = $dateTime->format('YmdHis') . $uniqueId;
+
+        return $paymentReference;
+    }
+}
+
