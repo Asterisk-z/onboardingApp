@@ -85,7 +85,7 @@ const Export = ({ data }) => {
 };
 
 const ActionTab = (props) => {
-        
+
     const aUser = useUser();
     const aUserUpdate = useUserUpdate();
     const categories = aUser.user_data.institution.category ? aUser.user_data.institution.category : [];
@@ -259,100 +259,103 @@ const ActionTab = (props) => {
   return (
     <>
         <div className="toggle-expand-content" style={{ display: "block" }}>
-            <ul className="nk-block-tools g-3">
-                 <li className="nk-block-tools-opt">
-                    <UncontrolledDropdown direction="right">
-                        <DropdownToggle className="dropdown-toggle btn btn-sm" color="secondary">Action</DropdownToggle>
+            {!props?.home && 
+                <ul className="nk-block-tools g-3">
+                    <li className="nk-block-tools-opt">
+                        <UncontrolledDropdown direction="right">
+                            <DropdownToggle className="dropdown-toggle btn btn-sm" color="secondary">Action</DropdownToggle>
 
-                        <DropdownMenu>
-                            <ul className="link-list-opt">
-                        
-                                    <li size="xs">
-                                        <DropdownItem tag="a"  onClick={toggleView} >
-                                            <Icon name="eye"></Icon>
-                                            <span>View AR</span>
-                                        </DropdownItem>
-                                    </li>
-                                    
-                                    {(ar_user.approval_status == 'approved') && <>
-                                        {(!props?.pending && !ar_user.update_payload && aUser.is_ar_inputter()) &&
-                                            <>
-                                                <li size="xs">
-                                                    <DropdownItem tag="a"  onClick={toggleForm} >
-                                                        <Icon name="eye"></Icon>
-                                                        <span>Update AR</span>
-                                                    </DropdownItem>
-                                                </li>
-                                            </>
-                                        }
-                                    
-                                        {(!props?.pending && ar_user.update_payload && aUser.is_ar_inputter()) &&
-                                    
-                                            <li size="xs">
-                                                <DropdownItem tag="a"  onClick={(e) => askAction('cancel')} >
-                                                    <Icon name="eye"></Icon>
-                                                    <span>Cancel Update</span>
-                                                </DropdownItem>
-                                            </li>
-                                        }
+                            <DropdownMenu>
+                                <ul className="link-list-opt">
+                            
+                                        <li size="xs">
+                                            <DropdownItem tag="a"  onClick={toggleView} >
+                                                <Icon name="eye"></Icon>
+                                                <span>View AR</span>
+                                            </DropdownItem>
+                                        </li>
                                         
-                                        {(ar_user.update_payload && props?.pending && aUser.is_ar_authorizer() ) &&
-                                            <>
-                                                <li size="xs">
-                                                    <DropdownItem tag="a"  onClick={toggleViewUpdate} >
-                                                        <Icon name="eye"></Icon>
-                                                        <span>View Update AR</span>
-                                                    </DropdownItem>
-                                                </li>
-                                                <li size="xs">
-                                                    <DropdownItem tag="a"  onClick={(e) => askAction('approve')} >
-                                                        <Icon name="eye"></Icon>
-                                                        <span>Approve</span>
-                                                    </DropdownItem>
-                                                </li>
-                                                <li size="xs">
-                                                    <DropdownItem tag="a"  onClick={(e) => askAction('decline')} >
-                                                        <Icon name="eye"></Icon>
-                                                        <span>Decline</span>
-                                                    </DropdownItem>
-                                                </li>
-                                            </>
-                                        }
+                                        {(ar_user.approval_status == 'approved') && <>
+                                            {(!props?.pending && !ar_user.update_payload && aUser.is_ar_inputter()) &&
+                                                <>
+                                                    <li size="xs">
+                                                        <DropdownItem tag="a"  onClick={toggleForm} >
+                                                            <Icon name="eye"></Icon>
+                                                            <span>Update AR</span>
+                                                        </DropdownItem>
+                                                    </li>
+                                                </>
+                                            }
                                         
-                                        {(!props?.pending && !ar_user.update_payload && aUser.is_ar_inputter()) &&
-                                            <>
-                                                <li size="xs" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/transfer-auth-representative/${user_id}`)} >
-                                                    <DropdownItem tag="a"  >
+                                            {(!props?.pending && ar_user.update_payload && aUser.is_ar_inputter()) &&
+                                        
+                                                <li size="xs">
+                                                    <DropdownItem tag="a"  onClick={(e) => askAction('cancel')} >
                                                         <Icon name="eye"></Icon>
-                                                        <span>Transfer AR</span>
+                                                        <span>Cancel Update</span>
                                                     </DropdownItem>
                                                 </li>
-                                                <li size="xs" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/change-auth-representative/${user_id}`)} >
-                                                    <DropdownItem tag="a"  >
-                                                        <Icon name="eye"></Icon>
-                                                        <span>Change AR Status</span>
-                                                    </DropdownItem>
-                                                </li>
-                                            </>
+                                            }
+                                            
+                                            {(ar_user.update_payload && props?.pending && aUser.is_ar_authorizer() ) &&
+                                                <>
+                                                    <li size="xs">
+                                                        <DropdownItem tag="a"  onClick={toggleViewUpdate} >
+                                                            <Icon name="eye"></Icon>
+                                                            <span>View Update AR</span>
+                                                        </DropdownItem>
+                                                    </li>
+                                                    <li size="xs">
+                                                        <DropdownItem tag="a"  onClick={(e) => askAction('approve')} >
+                                                            <Icon name="eye"></Icon>
+                                                            <span>Approve</span>
+                                                        </DropdownItem>
+                                                    </li>
+                                                    <li size="xs">
+                                                        <DropdownItem tag="a"  onClick={(e) => askAction('decline')} >
+                                                            <Icon name="eye"></Icon>
+                                                            <span>Decline</span>
+                                                        </DropdownItem>
+                                                    </li>
+                                                </>
+                                            }
+                                            
+                                            {(!props?.pending && !ar_user.update_payload && aUser.is_ar_inputter()) &&
+                                                <>
+                                                    <li size="xs" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/transfer-auth-representative/${user_id}`)} >
+                                                        <DropdownItem tag="a"  >
+                                                            <Icon name="eye"></Icon>
+                                                            <span>Transfer AR</span>
+                                                        </DropdownItem>
+                                                    </li>
+                                                    <li size="xs" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/change-auth-representative/${user_id}`)} >
+                                                        <DropdownItem tag="a"  >
+                                                            <Icon name="eye"></Icon>
+                                                            <span>Change AR Status</span>
+                                                        </DropdownItem>
+                                                    </li>
+                                                </>
+                                            }
+                                        </>
                                         }
-                                      </>
-                                    }
-                                
-                            </ul>
-                        </DropdownMenu>
-                    </UncontrolledDropdown>
-                </li>
-                
+                                    
+                                </ul>
+                            </DropdownMenu>
+                        </UncontrolledDropdown>
+                    </li>
+                    
 
-                    {ar_user.status == 'ONGOING' &&
-                        <li className="nk-block-tools-opt" >
-                            <Button color="primary" size="xs"  onClick={toggleModalCloseAsk}>
-                                <span>Closed Ticket</span>
-                            </Button>
-                        </li>
-                    }
+                        {ar_user.status == 'ONGOING' &&
+                            <li className="nk-block-tools-opt" >
+                                <Button color="primary" size="xs"  onClick={toggleModalCloseAsk}>
+                                    <span>Closed Ticket</span>
+                                </Button>
+                            </li>
+                        }
 
-            </ul>
+                </ul>
+            }
+
         </div>
        
         <Modal isOpen={modalViewUpdate} toggle={toggleViewUpdate} size="lg">
@@ -571,7 +574,7 @@ const ActionTab = (props) => {
                                     Digital Photo
                                 </Label>
                                 <div className="form-control-wrap">
-                                    <input type="file" accept=".gif,.jpg,.jpeg,.png,.pdf" className="form-control"  {...register('digitalPhone', {  required: false })} onChange={handleDificalFileChange}/>
+                                    <input type="file" accept="image/*" className="form-control"  {...register('digitalPhone', {  required: false })} onChange={handleDificalFileChange}/>
                                     {errors.digitalPhone && <p className="invalid">{`${errors.digitalPhone.message}`}</p>}
                                 </div>
                             </div>
@@ -616,7 +619,7 @@ const ActionTab = (props) => {
   );
 };
 
-const AuthRepTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState, positions, categories, countries, roles, authorizers, pending }) => {
+const AuthRepTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState, positions, categories, countries, roles, authorizers, pending, home }) => {
     const authRepColumn = [
     {
         name: "User ID",
@@ -677,7 +680,7 @@ const AuthRepTable = ({ data, pagination, actions, className, selectableRows, ex
     {
         name: "Action",
         selector: (row) => (<>
-                        <ActionTab ar_user={row} positions={positions} countries={countries} roles={roles} authorizers={authorizers} updateParentParent={updateParent} pending={pending} categories={categories}/>
+                        <ActionTab home={home} ar_user={row} positions={positions} countries={countries} roles={roles} authorizers={authorizers} updateParentParent={updateParent} pending={pending} categories={categories}/>
                     </>),
         width: "100px",
     },

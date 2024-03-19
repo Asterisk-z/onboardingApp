@@ -84,7 +84,7 @@ const ForgotPassword = () => {
                 </div>
                 <BlockTitle tag="h5">Reset password</BlockTitle>
                 <BlockDes>
-                  <p>If you forgot your password, well, then we’ll email you instructions to reset your password.</p>
+                  <p>If you forgot your password, well, then we'll email you instructions to reset your password.</p>
                 </BlockDes>
               </BlockContent>
             </BlockHead>
@@ -92,7 +92,7 @@ const ForgotPassword = () => {
               <div className="form-group">
                 <div className="form-label-group">
                   <label className="form-label">
-                    Email
+                    Email<span style={{color:'red'}}> *</span>
                   </label>
                 </div>
                 <input type="email"  {...register('email', { required: "This field is required" })} readOnly={mailSent} className="form-control form-control-lg" placeholder="Enter your email address" autoComplete="off" />
@@ -100,7 +100,7 @@ const ForgotPassword = () => {
               {mailSent && <div className="form-group">
                 <div className="form-label-group">
                   <label className="form-label">
-                    OTP
+                    OTP<span style={{color:'red'}}> *</span>
                   </label>
                 </div>
                 <input type="text"  {...register('otp', { required: "This field is required" })} className="form-control form-control-lg" placeholder="Enter OTP" autoComplete="off"/>

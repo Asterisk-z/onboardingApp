@@ -22,7 +22,13 @@ const PasswordUpdate = () => {
 
   const handleFormSubmit = async (formData) => {
       setLoading(true);
-    
+
+      if(getValues('new_password') != getValues('password')) {
+          setLoading(false);
+          setError("password", { type: "password",  message: "Password does not match"  }, { shouldFocus: false })
+          return
+      }
+      
       try {
         setLoading(true);
         
@@ -56,7 +62,7 @@ const PasswordUpdate = () => {
             setError("password", { type: "password",  message: "Uppercase, lowercase, numbers and 8 characters"  }, { shouldFocus: false })
             return
         }
-        if (getValues('new_password') !== getValues('password')) {
+        if (getValues('new_password') != getValues('password')) {
             setError("password", { type: "password",  message: "Password does not match"  }, { shouldFocus: false })
             setError("new_password", { type: "new_password",  message: "Password does not match"  }, { shouldFocus: false })
             return
@@ -109,7 +115,7 @@ const PasswordUpdate = () => {
                       <Icon name="eye" className="passcode-icon icon-show"></Icon>
                       <Icon name="eye-off" className="passcode-icon icon-hide"></Icon>
                     </a>
-                    <input type={passState ? "text" : "password"} id="password" onKeyUp={passwordPolicy} autocomplete="off" {...register('password', { required: "This field is required" })} placeholder="Enter your password" className={`form-control-lg form-control ${passState ? "is-hidden" : "is-shown"}`} />
+                    <input type={passState ? "text" : "password"} id="password" onKeyUp={passwordPolicy} autoComplete="off" {...register('password', { required: "This field is required" })} placeholder="Enter your password" className={`form-control-lg form-control ${passState ? "is-hidden" : "is-shown"}`} />
                     {errors.password && <span className="invalid">{errors.password.message}</span>}
                   </div>
               </div>
@@ -132,7 +138,7 @@ const PasswordUpdate = () => {
                     <Icon name="eye" className="passcode-icon icon-show"></Icon>
                     <Icon name="eye-off" className="passcode-icon icon-hide"></Icon>
                   </a>
-                  <input  type={passState ? "text" : "password"}  id="new_password" autocomplete="off"  {...register('new_password', { required: "This field is required" })}  onKeyUp={passwordPolicy}  placeholder="Confirm your password"  className={`form-control-lg form-control ${passState ? "is-hidden" : "is-shown"}`} />
+                  <input  type={passState ? "text" : "password"}  id="new_password" autoComplete="off"  {...register('new_password', { required: "This field is required" })}  onKeyUp={passwordPolicy}  placeholder="Confirm your password"  className={`form-control-lg form-control ${passState ? "is-hidden" : "is-shown"}`} />
                   {errors.passcode && <span className="invalid">{errors.new_password.message}</span>}
                 </div>
               </div>

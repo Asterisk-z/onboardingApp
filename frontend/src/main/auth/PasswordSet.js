@@ -24,6 +24,12 @@ const PasswordSet = () => {
   const handleFormSubmit = async (formData) => {
       setLoading(true);
     
+      if(getValues('new_password') != getValues('password')) {
+          setLoading(false);
+          setError("password", { type: "password",  message: "Password does not match"  }, { shouldFocus: false })
+          return
+      }
+      
       try {
           setLoading(true);
           
@@ -62,7 +68,7 @@ const PasswordSet = () => {
             setError("password", { type: "password",  message: "Uppercase, lowercase, numbers and 8 characters"  }, { shouldFocus: false })
             return
         }
-        if (getValues('new_password') !== getValues('password')) {
+        if (getValues('new_password') != getValues('password')) {
             setError("password", { type: "password",  message: "Password does not match"  }, { shouldFocus: false })
             setError("new_password", { type: "new_password",  message: "Password does not match"  }, { shouldFocus: false })
             return
@@ -94,7 +100,7 @@ const PasswordSet = () => {
               <div className="form-group">
                 <div className="form-label-group">
                   <label className="form-label">
-                    Email
+                    Email<span style={{ color: 'red' }}> *</span>
                   </label>
                 </div>
                 <div className="form-control-wrap">

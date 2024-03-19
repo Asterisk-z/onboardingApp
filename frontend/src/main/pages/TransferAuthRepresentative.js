@@ -353,7 +353,7 @@ const TransferAuthRepresentative = ({ drawer }) => {
                                                                             Photo
                                                                         </Label>
                                                                         <div className="form-control-wrap">
-                                                                            <input type="file" accept=".gif,.jpg,.jpeg,.png,.pdf" className="form-control"  {...register('digitalPhone', {  required: false })} onChange={handleDificalFileChange}/>
+                                                                    <input type="file" accept="image/*" className="form-control"  {...register('digitalPhone', {  required: false })} onChange={handleDificalFileChange}/>
                                                                             {errors.digitalPhone && <p className="invalid">{`${errors.digitalPhone.message}`}</p>}
                                                                         </div>
                                                                     </div>

@@ -41,7 +41,7 @@ const UpdateCompetency = ({ drawer }) => {
 
         try {
             setLoading(true);
-
+            
             const resp = await dispatch(sendCompetency(formData));
 
             if (resp.payload?.message == "success") {

@@ -22,6 +22,11 @@ const PasswordChange = () => {
   const handleFormSubmit = async (formData) => {
       setLoading(true);
     
+      if(getValues('new_password') != getValues('password')) {
+          setLoading(false);
+          setError("password", { type: "password",  message: "Password does not match"  }, { shouldFocus: false })
+          return
+      }
       try {
         setLoading(true);
         
@@ -91,6 +96,7 @@ const PasswordChange = () => {
                 <div className="form-label-group">
                   <label className="form-label">
                     Email
+                    <span style={{color:'red'}}> *</span>
                   </label>
                 </div>
                 <div className="form-control-wrap">

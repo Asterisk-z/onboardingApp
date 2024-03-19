@@ -438,7 +438,7 @@ const AuthRepresentative = ({ drawer }) => {
                                             Digital Photo<span style={{color:'red'}}> *</span>
                                         </Label>
                                         <div className="form-control-wrap">
-                                             <input type="file" accept=".gif,.jpg,.jpeg,.png,.pdf" className="form-control"  {...register('digitalPhone', {  required: "Digital Photo is Required" })} onChange={handleDificalFileChange}/>
+                                             <input type="file" accept="image/*" className="form-control"  {...register('digitalPhone', {  required: "Digital Photo is Required" })} onChange={handleDificalFileChange}/>
                                             {errors.digitalPhone && <p className="invalid">{`${errors.digitalPhone.message}`}</p>}
                                         </div>
                                     </div>
@@ -449,7 +449,7 @@ const AuthRepresentative = ({ drawer }) => {
                                             Signed Signature Mandate<span style={{color:'red'}}> *</span>
                                         </Label>
                                         <div className="form-control-wrap">
-                                             <input type="file" accept=".gif,.jpg,.jpeg,.png,.pdf" className="form-control"  {...register('signedMandate', {  required: "Signed Mandate is Required" })} onChange={handleSignaturewChange}/>
+                                             <input type="file" accept=".pdf" className="form-control"  {...register('signedMandate', {  required: "Signed Mandate is Required" })} onChange={handleSignaturewChange}/>
                                             {errors.signedMandate && <p className="invalid">{`${errors.signedMandate.message}`}</p>}
                                         </div>
                                     </div>
@@ -494,7 +494,7 @@ const AuthRepresentative = ({ drawer }) => {
                                 </BlockHead>
 
                                 <PreviewCard>
-                                    {$authorize_reps && <AuthRepTable updateParent={updateParentState} parentState={parentState} data={$authorize_reps} positions={$positions} countries={$countries} authorizers={$authorizers} categories={myApplicationCategories} roles={$roles}  expandableRows pagination actions />}
+                                    {$authorize_reps && <AuthRepTable home={false} updateParent={updateParentState} parentState={parentState} data={$authorize_reps} positions={$positions} countries={$countries} authorizers={$authorizers} categories={myApplicationCategories} roles={$roles}  expandableRows pagination actions />}
                                 </PreviewCard>
                             </Block>
 

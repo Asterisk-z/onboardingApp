@@ -18,6 +18,7 @@ import PasswordUpdate from "main/auth/PasswordUpdate";
 import PasswordReset from "main/auth/PasswordChange";
 import PasswordSet from "main/auth/PasswordSet";
 import ApplicationDetail from "main/pages/application/Detail";
+import ApplicationQPay from "main/pages/application/Payment";
 import ApplicationPreview from "main/pages/application/Preview";
 import Application from "main/pages/application/Index";
 import Applications from "main/pages/application/Applications";
@@ -181,6 +182,8 @@ const Router = () => {
           <Route path="application_disclosure/:application_uuid" element={<ApplicationDisclosure />}></Route>
           <Route path="application_preview/:application_uuid" element={<ApplicationPreview />}></Route>
           <Route path="application_detail/:application_uuid" element={<ApplicationDetail />}></Route>
+          <Route path="application_q_pay_success" element={<ApplicationQPay />}></Route>
+          <Route path="application_q_pay_error" element={<ApplicationQPay />}></Route>
           
         </Route>
 

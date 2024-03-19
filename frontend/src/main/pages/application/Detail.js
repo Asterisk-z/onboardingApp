@@ -248,9 +248,6 @@ const Form = () => {
         }
       }, [user_application]);
 
-
-      console.log($user_application)
-
       return (
         <section>
 
