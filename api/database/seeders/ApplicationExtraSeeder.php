@@ -20,37 +20,37 @@ class ApplicationExtraSeeder extends Seeder
                 "category" => '1',
                 "name" => 'applicantDeclaration',
                 "description" => '',
-                "file" => config('app.url') . "/applications/dmbDeclaration.pdf",
+                "file" => "applications/dmbDeclaration.pdf",
             ],
             [
                 "category" => '1',
                 "name" => 'invoice',
                 "description" => '',
-                "file" => config('app.url') . "/dmb/invoice",
+                "file" => "dmb/invoice",
             ],
             [
                 "category" => '2',
                 "name" => 'applicantDeclaration',
                 "description" => '',
-                "file" => config('app.url') . "/applications/dmbDeclaration.pdf",
+                "file" => "applications/dmbDeclaration.pdf",
             ],
             [
                 "category" => '2',
                 "name" => 'invoice',
                 "description" => '',
-                "file" => config('app.url') . "/dms/invoice",
+                "file" => "dms/invoice",
             ],
             [
                 "category" => '3',
                 "name" => 'applicantDeclaration',
                 "description" => '',
-                "file" => config('app.url') . "/applications/dmbDeclaration.pdf",
+                "file" => "applications/dmbDeclaration.pdf",
             ],
             [
                 "category" => '3',
                 "name" => 'invoice',
                 "description" => '',
-                "file" => config('app.url') . "/dms/invoice",
+                "file" => "dms/invoice",
             ],
         ];
 

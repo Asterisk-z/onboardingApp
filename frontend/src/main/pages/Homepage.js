@@ -287,7 +287,7 @@ const Homepage = () => {
                     <div className="data">
                       <div className="data-group">
                         <div className="amount">{ars}</div>
-                        <div><Button color="secondary">View</Button></div>
+                        <div><Button color="secondary" onClick={v => navigate(`${process.env.PUBLIC_URL}/auth-representatives`)}>View</Button></div>
                       </div>
                     </div>
                   </div>
@@ -306,7 +306,7 @@ const Homepage = () => {
                     <div className="data">
                       <div className="data-group">
                         <div className="amount">{complaints}</div>
-                        <div><Button color="secondary">View</Button></div>
+                        {/* <div><Button color="secondary">View</Button></div> */}
                       </div>
                     </div>
                   </div>
@@ -325,7 +325,7 @@ const Homepage = () => {
                     <div className="data">
                       <div className="data-group">
                         <div className="amount">{"0"}</div>
-                        <div><Button color="secondary">View</Button></div>
+                        {/* <div><Button color="secondary">View</Button></div> */}
                       </div>
                     </div>
                   </div>

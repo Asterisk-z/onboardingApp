@@ -9,4 +9,10 @@ class ApplicationExtra extends Model
 {
     use HasFactory;
     protected $guarded = [];
+    protected $appends = ['file_path'];
+
+    public function getFilePathAttribute()
+    {
+        return $this->file ? config('app.url') . '' . $this->file : null;
+    }
 }

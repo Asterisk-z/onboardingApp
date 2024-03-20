@@ -12,6 +12,7 @@ const PasswordChange = () => {
 
   const [loading, setLoading] = useState(false);
   const [passState, setPassState] = useState(false);
+  const [valid, setValid] = useState(false);
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -20,23 +21,23 @@ const PasswordChange = () => {
   
 
   const handleFormSubmit = async (formData) => {
+      passwordPolicy()
       setLoading(true);
-    
-      if(getValues('new_password') != getValues('password')) {
+      if(!valid) {
           setLoading(false);
-          setError("password", { type: "password",  message: "Password does not match"  }, { shouldFocus: false })
           return
       }
+      
       try {
         setLoading(true);
         
           const resp = await dispatch(passwordChange(formData));
           
           if (resp.payload?.message == "success") {
-            setTimeout(() => {
-              navigate(`${process.env.PUBLIC_URL}/login`);
-              setLoading(false);
-            }, 1000);
+              setTimeout(() => {
+                navigate(`${process.env.PUBLIC_URL}/login`);
+                setLoading(false);
+              }, 1000);
               setLoading(false);
           } else {
             setLoading(false);
@@ -58,15 +59,18 @@ const PasswordChange = () => {
         const isValidNewPassword = passwordRegex.test(getValues('new_password'));
         
         if (!isValidPassword && event.target.name == 'password') {
-            setError("password", { type: "password",  message: "Uppercase, lowercase, numbers and 8 characters"  }, { shouldFocus: false })
+            setValid(false)
+            setError("password", { type: "password",  message: "Password must contain a minimum of 8 characters, with an uppercase letter, a lowercase letter, a number and a special character."  }, { shouldFocus: false })
             return
         }
         
         if (!isValidNewPassword  && event.target.name == 'new_password') {
-            setError("new_password", { type: "password",  message: "Uppercase, lowercase, numbers and 8 characters"  }, { shouldFocus: false })
+            setValid(false)
+            setError("new_password", { type: "password",  message: "Password must contain a minimum of 8 characters, with an uppercase letter, a lowercase letter, a number and a special character."  }, { shouldFocus: false })
             return
         }
         
+        setValid(true)
         setValue('email', localStorage.getItem('reset-password-email'))
         clearErrors('password')
         clearErrors('new_password')
@@ -104,7 +108,7 @@ const PasswordChange = () => {
                   {errors.email && <p className="invalid">{errors.email.message}</p>}
                  </div>
               </div>
-             <div className="form-group">
+              <div className="form-group  mb-5">
                 <div className="form-label-group">
                   <label className="form-label">
                     Current Password
@@ -119,7 +123,7 @@ const PasswordChange = () => {
                     {errors.password && <span className="invalid">{errors.password.message}</span>}
                   </div>
               </div>
-              <div className="form-group">
+              <div className="form-group  mb-5">
                 <div className="form-label-group">
                   <label className="form-label">
                     New Password

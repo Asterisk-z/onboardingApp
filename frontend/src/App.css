@@ -265,3 +265,7 @@ span.asc.__rdt_custom_sort_icon__ {
 .info-card table, .info-card td {
     border: 1px solid #969698;
 }
+
+.form-control ~ .invalid {
+    position: absolute !important;
+}

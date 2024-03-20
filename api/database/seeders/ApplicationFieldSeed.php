@@ -186,7 +186,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '1',
                 "name" => 'MonthlyAverageValueOfTradesPerProductBonds',
-                "description" => 'Monthly Average Value Of Trades Per Product Bonds',
+                "description" => 'Monthly Average Value Of Trades Per Product Bonds (₦)',
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
@@ -195,7 +195,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '1',
                 "name" => 'MonthlyAverageValueOfTradesPerProductTreasuryBills',
-                "description" => 'Monthly Average Value Of Trades Per Product Treasury Bills',
+                "description" => 'Monthly Average Value Of Trades Per Product Treasury Bills (₦)',
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
@@ -204,7 +204,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '1',
                 "name" => 'MonthlyAverageValueOfTradesPerProductCommercialPaper',
-                "description" => 'Monthly Average Value Of Trades Per Product Commercial Paper',
+                "description" => 'Monthly Average Value Of Trades Per Product Commercial Paper (₦)',
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
@@ -258,7 +258,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '1',
                 "name" => 'AverageTradeSizePerTransactionTreasuryBills',
-                "description" => 'Average Trade Size Per Transaction Treasury Bills',
+                "description" => 'Average Trade Size Per Transaction Treasury Bills (₦)',
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
@@ -267,7 +267,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '1',
                 "name" => 'AverageTradeSizePerTransactionCommercialPaper',
-                "description" => 'Average Trade Size Per Transaction Commercial Paper',
+                "description" => 'Average Trade Size Per Transaction Commercial Paper (₦)',
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
@@ -1037,13 +1037,13 @@ class ApplicationFieldSeed extends Seeder
             ]);
         }
 
-        $product = ApplicationField::where('category', '1')->where('name', 'productOfInterest')->first();
+        $product = ApplicationField::where('category', '2')->where('name', 'productOfInterest')->first();
 
         $fields = [
             [
                 "category" => '2',
                 "name" => 'MonthlyAverageValueOfTradesPerProductBonds',
-                "description" => 'Monthly Average Value Of Trades Per Product Bonds',
+                "description" => 'Monthly Average Value Of Trades Per Product Bonds (₦)',
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
@@ -1052,7 +1052,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '2',
                 "name" => 'MonthlyAverageValueOfTradesPerProductTreasuryBills',
-                "description" => 'Monthly Average Value Of Trades Per Product Treasury Bills',
+                "description" => 'Monthly Average Value Of Trades Per Product Treasury Bills (₦)',
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
@@ -1079,7 +1079,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '2',
                 "name" => 'AverageTradeSizePerTransactionTreasuryBills',
-                "description" => 'Average Trade Size Per Transaction Treasury Bills',
+                "description" => 'Average Trade Size Per Transaction Treasury Bills (₦)',
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
@@ -1828,7 +1828,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '3',
                 "name" => 'MonthlyAverageValueOfTradesPerProductBonds',
-                "description" => 'Monthly Average Value Of Trades Per Product Bonds',
+                "description" => 'Monthly Average Value Of Trades Per Product Bonds (₦)',
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
@@ -1837,7 +1837,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '3',
                 "name" => 'MonthlyAverageValueOfTradesPerProductTreasuryBills',
-                "description" => 'Monthly Average Value Of Trades Per Product Treasury Bills',
+                "description" => 'Monthly Average Value Of Trades Per Product Treasury Bills (₦)',
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
@@ -1846,7 +1846,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '3',
                 "name" => 'MonthlyAverageValueOfTradesPerProductCommercialPaper',
-                "description" => 'Monthly Average Value Of Trades Per Product Commercial Paper',
+                "description" => 'Monthly Average Value Of Trades Per Product Commercial Paper (₦)',
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
@@ -1891,7 +1891,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '3',
                 "name" => 'AverageTradeSizePerTransactionTreasuryBills',
-                "description" => 'Average Trade Size Per Transaction Treasury Bills',
+                "description" => 'Average Trade Size Per Transaction Treasury Bills (₦)',
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
@@ -1900,7 +1900,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '3',
                 "name" => 'AverageTradeSizePerTransactionCommercialPaper',
-                "description" => 'Average Trade Size Per Transaction Commercial Paper',
+                "description" => 'Average Trade Size Per Transaction Commercial Paper (₦)',
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
@@ -2732,7 +2732,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '4',
                 "name" => 'MonthlyAverageValueOfTradesPerProductBonds',
-                "description" => 'Monthly Average Value Of Trades Per Product Bonds',
+                "description" => 'Monthly Average Value Of Trades Per Product Bonds (₦)',
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
@@ -2741,7 +2741,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '4',
                 "name" => 'MonthlyAverageValueOfTradesPerProductTreasuryBills',
-                "description" => 'Monthly Average Value Of Trades Per Product Treasury Bills',
+                "description" => 'Monthly Average Value Of Trades Per Product Treasury Bills (₦)',
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
@@ -2750,7 +2750,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '4',
                 "name" => 'MonthlyAverageValueOfTradesPerProductCommercialPaper',
-                "description" => 'Monthly Average Value Of Trades Per Product Commercial Paper',
+                "description" => 'Monthly Average Value Of Trades Per Product Commercial Paper (₦)',
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
@@ -2795,7 +2795,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '4',
                 "name" => 'AverageTradeSizePerTransactionTreasuryBills',
-                "description" => 'Average Trade Size Per Transaction Treasury Bills',
+                "description" => 'Average Trade Size Per Transaction Treasury Bills (₦)',
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
@@ -2804,7 +2804,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '4',
                 "name" => 'AverageTradeSizePerTransactionCommercialPaper',
-                "description" => 'Average Trade Size Per Transaction Commercial Paper',
+                "description" => 'Average Trade Size Per Transaction Commercial Paper (₦)',
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
@@ -3710,7 +3710,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '5',
                 "name" => 'MonthlyAverageValueOfTradesPerProductBonds',
-                "description" => 'Monthly Average Value Of Trades Per Product Bonds',
+                "description" => 'Monthly Average Value Of Trades Per Product Bonds (₦)',
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
@@ -3719,7 +3719,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '5',
                 "name" => 'MonthlyAverageValueOfTradesPerProductTreasuryBills',
-                "description" => 'Monthly Average Value Of Trades Per Product Treasury Bills',
+                "description" => 'Monthly Average Value Of Trades Per Product Treasury Bills (₦)',
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
@@ -3728,7 +3728,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '5',
                 "name" => 'MonthlyAverageValueOfTradesPerProductCommercialPaper',
-                "description" => 'Monthly Average Value Of Trades Per Product Commercial Paper',
+                "description" => 'Monthly Average Value Of Trades Per Product Commercial Paper (₦)',
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
@@ -3773,7 +3773,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '5',
                 "name" => 'AverageTradeSizePerTransactionTreasuryBills',
-                "description" => 'Average Trade Size Per Transaction Treasury Bills',
+                "description" => 'Average Trade Size Per Transaction Treasury Bills (₦)',
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
@@ -3782,7 +3782,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '5',
                 "name" => 'AverageTradeSizePerTransactionCommercialPaper',
-                "description" => 'Average Trade Size Per Transaction Commercial Paper',
+                "description" => 'Average Trade Size Per Transaction Commercial Paper (₦)',
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',

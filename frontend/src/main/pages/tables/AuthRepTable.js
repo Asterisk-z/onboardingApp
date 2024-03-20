@@ -112,7 +112,6 @@ const ActionTab = (props) => {
     const { register, handleSubmit, formState: { errors }, resetField, setValue } = useForm();
     const [loading, setLoading] = useState(false);
     const [document, setDocument] = useState([]);
-    const [signatureMandate, setSignatureMandate] = useState([]);
 
     const handleFormSubmit = async (values) => {
 

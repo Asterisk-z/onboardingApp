@@ -12,6 +12,7 @@ const PasswordSet = () => {
 
   const [searchParams, setSearchParams] = useSearchParams();
   const email = searchParams.get('email');
+  const [valid, setValid] = useState(false);
   const [loading, setLoading] = useState(false);
   const [passState, setPassState] = useState(false);
   const navigate = useNavigate();
@@ -22,11 +23,10 @@ const PasswordSet = () => {
   
 
   const handleFormSubmit = async (formData) => {
+      passwordPolicy()
       setLoading(true);
-    
-      if(getValues('new_password') != getValues('password')) {
+      if(!valid) {
           setLoading(false);
-          setError("password", { type: "password",  message: "Password does not match"  }, { shouldFocus: false })
           return
       }
       
@@ -59,21 +59,24 @@ const PasswordSet = () => {
       }
   };
 
-      const passwordPolicy = (event) => {
+      const passwordPolicy = () => {
       
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
         const isValidPassword = passwordRegex.test(getValues('password'));
         
         if (!isValidPassword) {
-            setError("password", { type: "password",  message: "Uppercase, lowercase, numbers and 8 characters"  }, { shouldFocus: false })
+            setValid(false)
+            setError("password", { type: "password",  message: "Password must contain a minimum of 8 characters, with an uppercase letter, a lowercase letter, a number and a special character."  }, { shouldFocus: false })
             return
         }
         if (getValues('new_password') != getValues('password')) {
-            setError("password", { type: "password",  message: "Password does not match"  }, { shouldFocus: false })
-            setError("new_password", { type: "new_password",  message: "Password does not match"  }, { shouldFocus: false })
+            setValid(false)
+            setError("password", { type: "password",  message: "The two passwords that you entered do not match!"  }, { shouldFocus: false })
+            setError("new_password", { type: "new_password",  message: "The two passwords that you entered do not match!"  }, { shouldFocus: false })
             return
         }
-        
+
+        setValid(true)
         clearErrors('password')
         clearErrors('new_password')
     }
@@ -107,7 +110,7 @@ const PasswordSet = () => {
                 <input type="email"  value={email} readOnly className="form-control form-control-lg" placeholder="Enter your email address"/>
                  </div>
               </div>
-             <div className="form-group">
+             <div className="form-group mb-5">
                 <div className="form-label-group">
                   <label className="form-label">
                     Password
@@ -122,7 +125,7 @@ const PasswordSet = () => {
                     {errors.password && <span className="invalid">{errors.password.message}</span>}
                   </div>
             </div>
-              <div className="form-group">
+              <div className="form-group  mb-5">
                 <div className="form-label-group">
                   <label className="form-label">
                     Confirm Password
@@ -142,7 +145,7 @@ const PasswordSet = () => {
                     <Icon name="eye-off" className="passcode-icon icon-hide"></Icon>
                   </a>
                   <input  type={passState ? "text" : "password"}  id="new_password"  {...register('new_password', { required: "This field is required" })}  onKeyUp={passwordPolicy} autoComplete="off" placeholder="Confirm your password"  className={`form-control-lg form-control ${passState ? "is-hidden" : "is-shown"}`} />
-                  {errors.passcode && <span className="invalid">{errors.new_password.message}</span>}
+                  {errors.new_password && <span className="invalid">{errors.new_password.message}</span>}
                 </div>
               </div>
               <div className="form-group">

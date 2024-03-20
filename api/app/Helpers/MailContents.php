@@ -74,7 +74,7 @@ class MailContents
 
     public static function newMembershipSignupMail($name, $category): string
     {
-        return "<p>A new applicant, $name, has successfully signed up on the MROIS portal</p>";
+        return "<p>A new applicant, $name, has successfully signed up on the FMDQx MROIS portal</p>";
     }
 
     public static function newBroadcastMessageSubject(): string
@@ -361,16 +361,16 @@ class MailContents
     public static function profileArSystemMail($name, $system): string
     {
         $url = config("app.front_end_url");
-        return "<p>Please be informed that $name has requested 
-        the creation of some ARs profile on the $system. 
+        return "<p>Please be informed that $name has requested
+        the creation of some ARs profile on the $system.
         Kindly log on to the <a href=$url>MROIS Portal</a> to approve or reject the request";
     }
 
     public static function mbgApproveProfileArSystemMail($system): string
     {
         $url = config("app.front_end_url");
-        return "<p>Please be informed that MBG has requested 
-        the creation of some ARs profile on the $system. 
+        return "<p>Please be informed that MBG has requested
+        the creation of some ARs profile on the $system.
         Kindly log on to the <a href=$url>MROIS Portal</a> to approve or reject the request";
     }
 }

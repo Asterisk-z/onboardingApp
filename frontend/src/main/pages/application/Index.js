@@ -272,7 +272,7 @@ const Form = () => {
 
                               <div className="form-control-select" >
                                 <select className="form-control form-select" type="select" name={field.name} id={field.name} {...register(field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field}>
-                                  <option>Select Option</option>
+                                  <option value=''>Select Option</option>
                                   {field.field_options && field.field_options.map((option, index) => (
                                     <option key={`${option.option_value}${index}`} value={option.option_value}>{option.option_name}</option>
                                   ))}
@@ -435,7 +435,7 @@ const Form = () => {
 
                           <div className="form-control-select" >
                             <select className="form-control form-select" type="select" name={field.name} id={field.name} {...register(field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field}>
-                              <option>Select Option</option>
+                              <option value=''>Select Option</option>
                               {field.field_options && field.field_options.map((option, index) => (
                                 <option key={`${option.option_value}${index}`} value={option.option_value}>{option.option_name}</option>
                               ))}
@@ -487,7 +487,7 @@ const Form = () => {
                               return (
                                 <Col md="6" key={`${child_field.name}${index}`}>
                                   <div className="form-group">
-                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
+                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
                                     <div className="form-control-wrap">
                                       <input type="number" id={child_field.name} className="form-control" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} {...register(child_field.name, { required: 'This field is required' })} onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                       {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
@@ -502,7 +502,7 @@ const Form = () => {
                               return (
                                 <Col md="6" key={`${child_field.name}${index}`}>
                                   <div className="form-group">
-                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
+                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
                                     <div className="form-control-wrap">
                                       <input type="number" id={child_field.name} className="form-control" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} {...register(child_field.name, { required: 'This field is required' })} onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                       {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
@@ -517,7 +517,7 @@ const Form = () => {
                               return (
                                 <Col md="6" key={`${child_field.name}${index}`}>
                                   <div className="form-group">
-                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
+                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
                                     <div className="form-control-wrap">
                                       <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                       {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
@@ -532,7 +532,7 @@ const Form = () => {
                               return (
                                 <Col md="6" key={`${child_field.name}${index}`}>
                                   <div className="form-group">
-                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
+                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
                                     <div className="form-control-wrap">
                                       <input type="number" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                       {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
@@ -547,7 +547,7 @@ const Form = () => {
                               return (
                                 <Col md="6" key={`${child_field.name}${index}`}>
                                   <div className="form-group">
-                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
+                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
                                     <div className="form-control-wrap">
                                       <input type="number" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                       {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
@@ -562,7 +562,7 @@ const Form = () => {
                               return (
                                 <Col md="6" key={`${child_field.name}${index}`}>
                                   <div className="form-group">
-                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
+                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
                                     <div className="form-control-wrap">
                                       <input type="number" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                       {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
@@ -577,7 +577,7 @@ const Form = () => {
                               return (
                                 <Col md="6" key={`${child_field.name}${index}`}>
                                   <div className="form-group">
-                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
+                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
                                     <div className="form-control-wrap">
                                       <input type="number" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                       {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
@@ -592,7 +592,7 @@ const Form = () => {
                               return (
                                 <Col md="6" key={`${child_field.name}${index}`}>
                                   <div className="form-group">
-                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
+                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
                                     <div className="form-control-wrap">
                                       <input type="number" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                       {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
@@ -607,7 +607,7 @@ const Form = () => {
                               return (
                                 <Col md="6" key={`${child_field.name}${index}`}>
                                   <div className="form-group">
-                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
+                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
                                     <div className="form-control-wrap">
                                       <input type="number" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                       {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
@@ -622,7 +622,7 @@ const Form = () => {
                               return (
                                 <Col md="6" key={`${child_field.name}${index}`}>
                                   <div className="form-group">
-                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
+                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
                                     <div className="form-control-wrap">
                                       <input type="number" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                       {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
@@ -637,7 +637,7 @@ const Form = () => {
                               return (
                                 <Col md="6" key={`${child_field.name}${index}`}>
                                   <div className="form-group">
-                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
+                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
                                     <div className="form-control-wrap">
                                       <input type="number" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                       {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
@@ -652,7 +652,7 @@ const Form = () => {
                               return (
                                 <Col md="6" key={`${child_field.name}${index}`}>
                                   <div className="form-group">
-                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
+                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
                                     <div className="form-control-wrap">
                                       <input type="number" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                       {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
@@ -667,7 +667,7 @@ const Form = () => {
                               return (
                                 <Col md="6" key={`${child_field.name}${index}`}>
                                   <div className="form-group">
-                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
+                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
                                     <div className="form-control-wrap">
                                       <input type="number" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                       {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
@@ -682,7 +682,7 @@ const Form = () => {
                               return (
                                 <Col md="6" key={`${child_field.name}${index}`}>
                                   <div className="form-group">
-                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description} (N)`}</label>
+                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
                                     <div className="form-control-wrap">
                                       <input type="number" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                       {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
@@ -822,7 +822,7 @@ const Form = () => {
 
                                   <div className="form-control-select" >
                                     <select className="form-control form-select" type="select" name={child_field.name} id={child_field.name} {...register(child_field.name, { required: 'This field is required' })} onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field}>
-                                      <option>Select Option</option>
+                                      <option value=''>Select Option</option>
                                       {child_field.field_options && child_field.field_options.map((option, index) => (
                                         <option key={`${option.option_value}${index}`} value={option.option_value}>{option.option_name}</option>
                                       ))}
@@ -1072,7 +1072,7 @@ const Form = () => {
             <p>By submitting this application to become a member of FMDQ Securities Exchange Limited and signing this form in the manner below:</p>
             <ul>
               <li>
-                {extra?.applicantDeclaration && <a href={extra?.applicantDeclaration.file} target="_blank" className="btn btn-primary">Download Applicant Declaration</a>}
+                {extra?.applicantDeclaration && <a href={extra?.applicantDeclaration.file_path} target="_blank" className="btn btn-primary">Download Applicant Declaration</a>}
               </li>
             </ul>
             <Row className="gy-4">

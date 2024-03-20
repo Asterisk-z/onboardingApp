@@ -17,6 +17,11 @@ export function stringShorter(str, length) {
 }
 
 export function errorHandler(error, toastStatus, messageType = "Error") {
+
+  if (error.response.status == 401) {
+    return;
+  }
+  
   const errors = error.response?.data?.errors ? error.response?.data?.errors : null;
   const errorMessage = (typeof errors === 'object') ? Object.values(errors)[0][0] : "";
   // console.log(error)

@@ -27,10 +27,14 @@ axios.interceptors.response.use(function (config) {
     // Do something before request is sent
     return config;
   }, function (error) {
-    
-    if (error.response.data?.message) {
-        toast.success(error.response?.data?.message);
-    }
+      if (error.response.status != 401) {
+        if (error.response.data?.message) {
+          toast.success(error.response?.data?.message);
+        }
+      } else {
+        window.location.href = `${process.env.PUBLIC_URL}/logout`
+      }
+
     
      if(error.response.data.statusCode == '666') {
         toast.success(error.response.statusText);
@@ -38,7 +42,7 @@ axios.interceptors.response.use(function (config) {
       }
     // console.log(error.response.data)
       if(error.response.data.statusCode == '999') {
-        toast.success(error.response.statusText);
+        // toast.success(error.response.statusText);
         window.location.href = `${process.env.PUBLIC_URL}/logout`
       }
     return Promise.reject(error);

@@ -12,6 +12,7 @@ const PasswordUpdate = () => {
 
   const [loading, setLoading] = useState(false);
   const [mailSent, setMailSent] = useState(true);
+  const [valid, setValid] = useState(false);
   const [passState, setPassState] = useState(false);
   const navigate = useNavigate();
 
@@ -21,11 +22,10 @@ const PasswordUpdate = () => {
   
 
   const handleFormSubmit = async (formData) => {
+      passwordPolicy()
       setLoading(true);
-
-      if(getValues('new_password') != getValues('password')) {
+      if(!valid) {
           setLoading(false);
-          setError("password", { type: "password",  message: "Password does not match"  }, { shouldFocus: false })
           return
       }
       
@@ -59,14 +59,17 @@ const PasswordUpdate = () => {
         const isValidPassword = passwordRegex.test(getValues('password'));
         
         if (!isValidPassword) {
-            setError("password", { type: "password",  message: "Uppercase, lowercase, numbers and 8 characters"  }, { shouldFocus: false })
+            setValid(false)
+            setError("password", { type: "password",  message: "Password must contain a minimum of 8 characters, with an uppercase letter, a lowercase letter, a number and a special character."  }, { shouldFocus: false })
             return
         }
         if (getValues('new_password') != getValues('password')) {
-            setError("password", { type: "password",  message: "Password does not match"  }, { shouldFocus: false })
-            setError("new_password", { type: "new_password",  message: "Password does not match"  }, { shouldFocus: false })
+            setValid(false)
+            setError("password", { type: "password",  message: "The two passwords that you entered do not match!"  }, { shouldFocus: false })
+            setError("new_password", { type: "new_password",  message: "The two passwords that you entered do not match!"  }, { shouldFocus: false })
             return
         }
+        setValid(true)
         setValue('email', localStorage.getItem('reset-password-email'))
         clearErrors('password')
         clearErrors('new_password')
@@ -104,7 +107,7 @@ const PasswordUpdate = () => {
                   {errors.email && <p className="invalid">{errors.email.message}</p>}
                  </div>
               </div>
-             <div className="form-group">
+             <div className="form-group  mb-5">
                 <div className="form-label-group">
                   <label className="form-label">
                     Password
@@ -119,7 +122,7 @@ const PasswordUpdate = () => {
                     {errors.password && <span className="invalid">{errors.password.message}</span>}
                   </div>
               </div>
-              <div className="form-group">
+              <div className="form-group  mb-5">
                 <div className="form-label-group">
                   <label className="form-label">
                     Confirm Password
@@ -139,7 +142,7 @@ const PasswordUpdate = () => {
                     <Icon name="eye-off" className="passcode-icon icon-hide"></Icon>
                   </a>
                   <input  type={passState ? "text" : "password"}  id="new_password" autoComplete="off"  {...register('new_password', { required: "This field is required" })}  onKeyUp={passwordPolicy}  placeholder="Confirm your password"  className={`form-control-lg form-control ${passState ? "is-hidden" : "is-shown"}`} />
-                  {errors.passcode && <span className="invalid">{errors.new_password.message}</span>}
+                  {errors.new_password && <span className="invalid">{errors.new_password.message}</span>}
                 </div>
               </div>
               <div className="form-group">
