@@ -11,7 +11,7 @@ import { HeaderLogo } from "pages/components/HeaderLogo";
 import DatePicker from "react-datepicker";
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 import { loadApplication, fetchApplication } from "redux/stores/membership/applicationStore";
-import { loadInvoiceDownload, UploadAgreement, uploadPaymentProof } from "redux/stores/membership/applicationProcessStore";
+import { loadInvoiceDownload, UploadAgreement, uploadPaymentProof, onlinePayment } from "redux/stores/membership/applicationProcessStore";
 import moment from 'moment';
 import Swal from "sweetalert2";
 
@@ -109,7 +109,7 @@ const PayWithTransfer = ({ updateParentParent, tabItem, positions, closeModel, t
     const dispatch = useDispatch();
     
     const { handleSubmit, register, watch, formState: { errors } } = useForm();
-
+    
     const submitForm = async (data) => {
             
             const postValues = new Object();
@@ -248,6 +248,19 @@ const Form = () => {
         }
       }, [user_application]);
 
+      const [processing, setProcessing] = useState(false);
+      const qPay = async () => {
+
+        try {
+          setProcessing(true);
+          const resp = await dispatch(onlinePayment({ application_id: $user_application?.application?.id }));
+          setProcessing(false);
+
+        } catch (error) {
+          setProcessing(false);
+        }
+      }
+
       return (
         <section>
 
@@ -332,9 +345,9 @@ const Form = () => {
                       <CardBody className="card-inner">
                         <CardTitle tag="h5">Online Payment</CardTitle>
                         <CardText>
-                          Upload Prove Of Payment
+                          Pay via QPay
                         </CardText>
-                        <Button color="primary">Proceed to Payment</Button>
+                        <Button color="primary" onClick={qPay}>Proceed to Payment</Button>
                       </CardBody>
                     </Card>
                   </Col>

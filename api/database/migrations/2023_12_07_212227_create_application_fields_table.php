@@ -18,7 +18,7 @@ class CreateApplicationFieldsTable extends Migration
             $table->foreignId('category')->constrained('membership_categories')->onDelete('cascade');
             $table->string('name'); //cac_certificate
             $table->text('description'); //CAC Certification
-            $table->string('type')->comment('text, file, number, amount, date, email, phone', 'select', 'checkbox');
+            $table->string('type')->comment('text, file, number, amount, date, email, phone', 'select', 'checkbox', 'url');
             $table->tinyInteger('required')->default(0);
             $table->string('page');
             $table->integer('parent_id')->nullable();

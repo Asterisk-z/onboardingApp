@@ -14,7 +14,7 @@ class ApplicationFieldUpload extends Model
 
     public function getFilePathAttribute()
     {
-        return $this->uploaded_file ? config('app.url') . 'storage/app/public/' . $this->uploaded_file : null;
+        return $this->uploaded_file ? config('app.url') . '/storage/app/public/' . $this->uploaded_file : null;
     }
     public function field()
     {

@@ -15,29 +15,33 @@ class QpayService
             "ln" => $user->last_name,
             "am" => $amount,
             "pn" => $user->phone,
-            "scode" => config("qpay.scode").$reference
+            "scode" => config("qpay.scode"),
+            // "scode" => config("qpay.scode") . 'NGN' . $reference,
         ];
-
+        logger($payload);
         return $this->generatePaymentToken($payload);
     }
-    
+
     public function generatePaymentToken($payload)
     {
-        try{
-            $response = Http::withoutVerifying()->get(config('qpay.url')."/edrum/".json_encode($payload));
+        try {
+            $response = Http::withoutVerifying()->get(config('qpay.url') . "/edrum/" . json_encode($payload));
 
-            if(! $response->ok())
+            if (!$response->ok()) {
                 $response->throw();
-                
-            $response = $response->json();
+            }
 
-            if(! isset($response['ResponseCode']) || ! isset($response['ResponseEncrypted'])){
+            $response = $response->json();
+            logger($response);
+            $response = $response['EncryptedValue'][0];
+
+            if (!isset($response['ResponseCode']) || !isset($response['ResponseEncrypted'])) {
                 return [
-                    "statusCode" => "01",
+                    "statusCode" => "001",
                 ];
             }
 
-            if($response['ResponseCode'] != "00"){
+            if ($response['ResponseCode'] != "00") {
                 return [
                     "statusCode" => "01",
                 ];
@@ -46,15 +50,15 @@ class QpayService
             return [
                 "statusCode" => "00",
                 "data" => [
-                    "url" => config('qpay.url')."/odrum/".$response['ResponseEncrypted']
-                ]
+                    "url" => config('qpay.url') . "/odrum/" . $response['ResponseEncrypted'],
+                ],
             ];
-            
-        }catch(Throwable $th){
+
+        } catch (Throwable $th) {
             logger($th);
             return [
                 "statusCode" => "01",
             ];
         }
-    }    
+    }
 }

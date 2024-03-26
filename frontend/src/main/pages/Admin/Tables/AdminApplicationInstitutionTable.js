@@ -353,7 +353,7 @@ const ActionTab = (props) => {
       
 
     };
-
+    console.log(institution)
     // console.log(institution.fsd_review[institution.fsd_review.length-1].comment)
   
   return (
@@ -403,7 +403,7 @@ const ActionTab = (props) => {
                   {(institution.internal.concession_stage != '1') ? <>
                         <Button onClick={toggleConcession} >Upload Concession</Button>
                     </> : 
-                    (institution?.payment_information?.is_paid == '1') ? <>
+                    (institution?.latest_evidence?.proof) ? <>
                         <ul>
                             <li><span className="lead">Invoice Number : </span>{`${institution?.payment_information?.invoice_number}`}</li>
                             <li><span className="lead">Date of Payment : </span>{`${institution?.payment_information?.date_paid}`}</li>

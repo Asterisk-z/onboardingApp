@@ -74,7 +74,7 @@ class MailContents
 
     public static function newMembershipSignupMail($name, $category): string
     {
-        return "<p>A new applicant, $name, has successfully signed up on the FMDQx MROIS portal</p>";
+        return "<p>A new applicant, $name, has successfully signed up on the FMDQX MROIS portal</p>";
     }
 
     public static function newBroadcastMessageSubject(): string

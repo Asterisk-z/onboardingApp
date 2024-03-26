@@ -287,7 +287,7 @@ const Homepage = () => {
                     <div className="data">
                       <div className="data-group">
                         <div className="amount">{ars}</div>
-                        <div><Button color="secondary" onClick={v => navigate(`${process.env.PUBLIC_URL}/auth-representatives`)}>View</Button></div>
+                        {/* <div><Button color="secondary" onClick={v => navigate(`${process.env.PUBLIC_URL}/auth-representatives`)}>View</Button></div> */}
                       </div>
                     </div>
                   </div>

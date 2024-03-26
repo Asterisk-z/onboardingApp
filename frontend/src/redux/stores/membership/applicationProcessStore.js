@@ -29,6 +29,26 @@ export const loadInstitutionApplications = createAsyncThunk(
   }
 );
 
+export const onlinePayment = createAsyncThunk(
+  "applicationProcess/onlinePayment",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `membership/application/online-payment`,
+        data: values,
+      });
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
 
 export const UpdateDisclosure = createAsyncThunk(
   "applicationProcess/UpdateDisclosure",
@@ -510,6 +530,25 @@ const applicationProcess = createSlice({
     });
 
     builder.addCase(loadInstitutionApplications.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
+    // ====== builders for onlinePayment ======
+
+    builder.addCase(onlinePayment.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(onlinePayment.fulfilled, (state, action) => {
+      state.loading = false;
+      
+      if (action.payload.data.data.url) {
+        window.location.href = action.payload.data.data.url
+      }
+    });
+
+    builder.addCase(onlinePayment.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });

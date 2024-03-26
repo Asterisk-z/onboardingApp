@@ -17,6 +17,7 @@ const Register = ({ drawer }) => {
     const dispatch = useDispatch();
     const [passState, setPassState] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [formStatus, setFormStatus] = useState(true);
     const [digitalPhoto, setDigitalPhoto] = useState([]);
     const { register, handleSubmit, formState: { errors }, getValues, setError, clearErrors } = useForm();
     const navigate = useNavigate();
@@ -27,7 +28,9 @@ const Register = ({ drawer }) => {
     const positions = useSelector((state) => state?.position?.list) || null;
       
     const handleFormSubmit = async (values) => {
-    
+      validateEmail()
+      if (!formStatus) return
+
       try {
         setLoading(true);
         const formData = new FormData();
@@ -89,6 +92,26 @@ const Register = ({ drawer }) => {
         clearErrors('password')
         clearErrors('confirm_password')
         
+    }
+    
+    function validateEmail(event) {
+      const email = getValues('email');
+      const re = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+      
+      if (!re.test(String(email).toLowerCase())) {
+          setError("email", { type: "email", message: "invalid Email" }, { shouldFocus: false })
+          setFormStatus(false)
+          return
+      }
+
+      if (['@gmail.com', '@yahoo.com', '@outlook.com'].some(char => email.endsWith(char))) {
+          setError("email", { type: "email", message: "Email Address unaccepted" }, { shouldFocus: false })
+          setFormStatus(false)
+          return
+      }
+      setFormStatus(true)
+      clearErrors('email')
+
     }
     
     const handleFileChange = (event) => {
@@ -211,8 +234,8 @@ const Register = ({ drawer }) => {
                     </label>
                   </div>
                   <div className="form-control-wrap">
-                    <input type="email" bssize="lg"  {...register('email', { required: true })} className="form-control-lg form-control" placeholder="Enter your email address" autoComplete="off" />
-                    {errors.email && <p className="invalid">Email field is required</p>}
+                    <input onKeyUp={validateEmail} type="email" bssize="lg"  {...register('email', { required: "Email field is required" })} className="form-control-lg form-control" placeholder="Enter your email address" autoComplete="off" />
+                    {errors.email && <p className="invalid">{`${errors.email.message}`}</p>}
                   </div>
                 </div>
                 <div className="form-group w-50">

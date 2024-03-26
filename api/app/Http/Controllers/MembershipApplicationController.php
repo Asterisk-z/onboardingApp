@@ -19,7 +19,6 @@ use App\Models\Role;
 use App\Models\User;
 use App\Notifications\InfoNotification;
 use App\Services\FactoryService;
-use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -509,7 +508,7 @@ class MembershipApplicationController extends Controller
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
-        if($invoice->is_paid){
+        if ($invoice->is_paid) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, "Payment has already been made for this application.");
         }
 
@@ -534,9 +533,10 @@ class MembershipApplicationController extends Controller
         return successResponse("Your payment upload has been recieved and it is currently under review");
     }
 
-    public function onlinePayment(Request $request){
+    public function onlinePayment(Request $request)
+    {
         $request->validate([
-            'application_id' => 'required|exists:applications,id'
+            'application_id' => 'required|exists:applications,id',
         ]);
 
         $user = $request->user();
@@ -549,7 +549,7 @@ class MembershipApplicationController extends Controller
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
-        if($invoice->is_paid){
+        if ($invoice->is_paid) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, "Payment has already been made for this application.");
         }
 
@@ -559,9 +559,9 @@ class MembershipApplicationController extends Controller
             $service = FactoryService::createService();
             $response = $service->handle($user, $invoice->reference, $total);
 
-            if($response['statusCode'] == "00"){
+            if ($response['statusCode'] == "00") {
                 return successResponse("Please proceed to payment", $response["data"]);
-            }else{
+            } else {
                 return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, "Unable to process your request");
             }
         } catch (\InvalidArgumentException $exception) {

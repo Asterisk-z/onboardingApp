@@ -36,6 +36,7 @@ class SystemController extends Controller
         Artisan::call('optimize:clear');
         Artisan::call('view:clear');
         Artisan::call('config:cache');
+        Artisan::call('storage:link');
 
         return response()->json(['message' => 'Commands executed successfully']);
     }
@@ -62,6 +63,17 @@ class SystemController extends Controller
         Artisan::call('db:seed');
         Artisan::call('optimize:clear');
         Artisan::call('config:cache');
+
+        return response()->json(['message' => 'Commands executed successfully']);
+
+    }
+
+    public function linkStorage()
+    {
+
+        Artisan::call('optimize:clear');
+        Artisan::call('config:cache');
+        Artisan::call('storage:link');
 
         return response()->json(['message' => 'Commands executed successfully']);
 
