@@ -22,7 +22,6 @@ const AdminProcessInstitutions = ({ drawer }) => {
 
     const updateParentState = (newState) => {
         setParentState(newState);
-        console.log(newState)
     };
 
     const all_institutions = useSelector((state) => state?.applicationProcess?.all_institutions) || null;
@@ -85,7 +84,7 @@ const AdminProcessInstitutions = ({ drawer }) => {
                         </BlockHead>
 
                         <PreviewCard>
-                            {$all_institutions && <AdminApplicationInstitutionTable  updateParent={updateParentState} parentState={parentState} data={$all_institutions} expandableRows pagination actions />}
+                            {$all_institutions && <AdminApplicationInstitutionTable  updateParent={updateParentState} parentState={parentState} data={$all_institutions} allApplications={false} expandableRows pagination actions />}
                         </PreviewCard>
                     </Block>
 

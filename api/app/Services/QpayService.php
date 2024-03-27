@@ -9,14 +9,14 @@ class QpayService
 {
     public function handle($user, $reference, $amount)
     {
+        $countryCode = "01";
         $payload = [
             "em" => $user->email,
             "fn" => $user->first_name,
             "ln" => $user->last_name,
             "am" => $amount,
             "pn" => $user->phone,
-            "scode" => config("qpay.scode"),
-            // "scode" => config("qpay.scode") . 'NGN' . $reference,
+            "scode" => config("qpay.scode") . $countryCode . $reference,
         ];
         logger($payload);
         return $this->generatePaymentToken($payload);

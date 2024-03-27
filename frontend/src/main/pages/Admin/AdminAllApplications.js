@@ -74,7 +74,7 @@ const AdminProcessInstitutions = ({ drawer }) => {
                         </BlockHead>
 
                         <PreviewCard>
-                            {$all_institutions && <AdminApplicationInstitutionTable  updateParent={updateParentState} parentState={parentState} data={$all_institutions} expandableRows pagination actions />}
+                            {$all_institutions && <AdminApplicationInstitutionTable  updateParent={updateParentState} parentState={parentState} data={$all_institutions} allApplications={true} expandableRows pagination actions />}
                         </PreviewCard>
                     </Block>
 

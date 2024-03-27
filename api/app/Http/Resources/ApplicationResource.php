@@ -185,6 +185,8 @@ class ApplicationResource extends JsonResource
 
             "completed" => $this->completed_at ? true : false,
 
+            "createdAt" => $application->created_at,
+
         ];
     }
 }

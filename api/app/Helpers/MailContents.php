@@ -148,7 +148,7 @@ class MailContents
 
     public static function concessionMail($companyName): string
     {
-        return "<p>A new institution, {$companyName}, has been granted a concession.</p>";
+        return "<p>A new applicant, {$companyName}, has been granted a concession.</p>";
     }
 
     public static function megConversionRequestTitle(): string

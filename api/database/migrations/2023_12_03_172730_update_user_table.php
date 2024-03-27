@@ -14,8 +14,12 @@ class UpdateUserTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('created_by');
-            $table->dropColumn('approval_status_by');
+            if (Schema::hasColumn('users', 'created_by')) {
+                $table->dropColumn('created_by');
+            }
+            if (Schema::hasColumn('users', 'approval_status_by')) {
+                $table->dropColumn('approval_status_by');
+            }
         });
     }
 

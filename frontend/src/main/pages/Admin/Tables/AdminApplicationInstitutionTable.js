@@ -353,12 +353,13 @@ const ActionTab = (props) => {
       
 
     };
-    console.log(institution)
+    // console.log(institution)
     // console.log(institution.fsd_review[institution.fsd_review.length-1].comment)
   
   return (
     <>
         <div className="toggle-expand-content" style={{ display: "block" }}>
+          
             <ul className="nk-block-tools g-3">
                  <li className="nk-block-tools-opt">
                     <UncontrolledDropdown direction="right">
@@ -989,7 +990,7 @@ const UploadConcession = ({ updateParentParent, tabItem, positions, closeModel }
 };
 
 
-const AdminInstitutionTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState }) => {
+const AdminInstitutionTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState, allApplications }) => {
     const complainColumn = [
       {
           name: "ID",
@@ -1033,14 +1034,17 @@ const AdminInstitutionTable = ({ data, pagination, actions, className, selectabl
           width: "auto",
           wrap: true
       },
-      {
-        name: "Action",
-        selector: (row) => (<>
-                        <ActionTab institution={row}  updateParentParent={updateParent} />
-                    </>),
-        width: "100px",
-      },
-    ];
+  ];
+
+  if (!allApplications) {
+    complainColumn.push({
+      name: "Action",
+      selector: (row) => (<>
+        <ActionTab institution={row} updateParentParent={updateParent} />
+      </>),
+      width: "100px",
+    })
+  }
   const [tableData, setTableData] = useState(data);
   const [searchText, setSearchText] = useState("");
   const [rowsPerPageS, setRowsPerPage] = useState(10);

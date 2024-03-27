@@ -182,6 +182,7 @@ const Router = () => {
           <Route path="application_disclosure/:application_uuid" element={<ApplicationDisclosure />}></Route>
           <Route path="application_preview/:application_uuid" element={<ApplicationPreview />}></Route>
           <Route path="application_detail/:application_uuid" element={<ApplicationDetail />}></Route>
+          <Route path="qpay_check" element={<ApplicationQPay />}></Route>
           <Route path="application_q_pay_success" element={<ApplicationQPay />}></Route>
           <Route path="application_q_pay_error" element={<ApplicationQPay />}></Route>
           

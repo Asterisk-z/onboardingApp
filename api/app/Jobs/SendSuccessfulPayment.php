@@ -16,9 +16,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Notification;
 
 class SendSuccessfulPayment implements ShouldQueue
 {
@@ -60,16 +59,16 @@ class SendSuccessfulPayment implements ShouldQueue
             return;
         }
 
-        if($invoice->is_paid){
+        if ($invoice->is_paid) {
             logger("Unable to complete your request at this point: Invoice already paid for.");
             return;
         }
 
-        //Generate proof of payment 
+        //Generate proof of payment
 
         $date = Carbon::now()->format('YmdHis');
 
-        $fileName = "online_proof_of_payment_". $invoice->id . $date . ".pdf";
+        $fileName = "online_proof_of_payment_" . $invoice->id . $date . ".pdf";
         $path = storage_path("app/public/proof_of_payment/online");
         if (!file_exists($path)) {
             mkdir($path, 0777, true);
@@ -94,14 +93,15 @@ class SendSuccessfulPayment implements ShouldQueue
             'date' => $dateTime->format('M. j, Y'),
             'reference' => $invoice->reference,
             'download_link' => $publicPath,
-            'name' => $name
+            'name' => $name,
         ];
 
         $pdf = App::make('dompdf.wrapper');
+
         $isDownload = true;
 
         $pdf->loadView('mails.payment-proof', compact('data', 'isDownload'))->setPaper($this->paperSize);
-        
+
         $pdf->save($filepath);
 
         Utility::applicationStatusHelper($application, Application::statuses['PPU'], Application::office['AP'], Application::office['FSD']);

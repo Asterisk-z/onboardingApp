@@ -385,6 +385,7 @@ Route::group(['prefix' => 'webhook'], function () {
     Route::group(['prefix' => 'qpay/payment'], function () {
         Route::post('/success', [QpayController::class, 'success']);
         Route::post('/fail', [QpayController::class, 'fail']);
+        Route::post('/careless', [QpayController::class, 'careless']);
     });
 });
 

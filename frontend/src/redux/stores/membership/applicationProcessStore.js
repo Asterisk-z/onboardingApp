@@ -482,6 +482,8 @@ export const MEGUploadAgreement = createAsyncThunk(
 
 
 
+
+
 const applicationProcess = createSlice({
   name: "applicationProcess",
   initialState,
