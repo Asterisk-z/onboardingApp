@@ -177,6 +177,8 @@ const ActionTab = (props) => {
                 formData.append('amount_received', amount);
                 dispatch(FSDReviewSummary(formData));
                 props.updateParentParent(Math.random());
+              } else {
+                Swal.fire("Comment and Amount is required!");
               }
 
             }
@@ -185,7 +187,7 @@ const ActionTab = (props) => {
       
       if(action == 'declinePaymentReview') {
           Swal.fire({
-            title: "Are you sure?",
+            title: "Are youv sure?",
             text: "Do you want to decline payment!",
             icon: "warning",
             showCancelButton: true,
@@ -202,6 +204,8 @@ const ActionTab = (props) => {
                 formData.append('comment', comments); 
                 dispatch(FSDReviewSummary(formData));
                 props.updateParentParent(Math.random());
+              } else {
+                Swal.fire("Comment is required!");
               }
             }
           });
@@ -226,6 +230,8 @@ const ActionTab = (props) => {
                 formData.append('comment', comments); 
                 dispatch(MBGReview(formData));
                 props.updateParentParent(Math.random());
+              } else {
+                Swal.fire("Comment is required!");
               }
             }
           });
@@ -250,6 +256,8 @@ const ActionTab = (props) => {
                 formData.append('comment', comments); 
                 dispatch(MBGReview(formData));
                 props.updateParentParent(Math.random());
+              } else {
+                Swal.fire("Comment is required!");
               }
             }
           });
@@ -278,6 +286,8 @@ const ActionTab = (props) => {
                 formData.append('application_report', application_report); 
                 dispatch(MEGReview(formData));
                 props.updateParentParent(Math.random());
+              } else {
+                Swal.fire("Comment and Report is required!");
               }
             }
           });
@@ -302,6 +312,8 @@ const ActionTab = (props) => {
                 formData.append('comment', comments); 
                 dispatch(MEGReview(formData));
                 props.updateParentParent(Math.random());
+              } else {
+                Swal.fire("Comment is required!");
               }
             }
           });

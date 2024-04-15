@@ -313,6 +313,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/', [MembershipApplicationController::class, 'application']);
             Route::get('/get_application/{application_uuid}', [ApplicationProcessController::class, 'get_application']);
             Route::get('/fields', [MembershipApplicationController::class, 'getField']);
+            Route::get('/preview', [MembershipApplicationController::class, 'getPreview']);
             Route::get('/detail', [MembershipApplicationController::class, 'getDetail']);
             Route::get('/initial', [MembershipApplicationController::class, 'getInitial']);
             Route::get('/field/option', [MembershipApplicationController::class, 'getFieldOption']);

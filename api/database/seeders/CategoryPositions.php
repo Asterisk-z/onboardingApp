@@ -353,5 +353,331 @@ class CategoryPositions extends Seeder
 
         }
 
+        $membership_category = 'Registration Member (Listings & Quotations)';
+
+        $rows = [
+            ["name" => "Managing Director/CEO", "is_compulsory" => true, "email" => "RMLRMQCEOs@fmdqgroup.com"],
+            ["name" => "Treasurer/Chief Financial Officer", "is_compulsory" => true],
+            ["name" => "Chief Compliance Officer", "is_compulsory" => true, "email" => "RMLRMQCompliance@fmdqgroup.com"],
+            ["name" => "Primary Contact(s)", "is_compulsory" => true, "email" => "RMLRMQPrimaryContacts@fmdqgroup.com"],
+        ];
+
+        $checkMemberCategory = MembershipCategory::where('name', $membership_category)->first();
+
+        if ($checkMemberCategory) {
+            foreach ($rows as $position) {
+                $checkPosition = Position::where('name', $position['name'])->first();
+
+                $email = null;
+                $is_compulsory = '0';
+
+                if (isset($position['email'])) {
+                    $email = GroupMail::where('email', $position['email'])->first();
+                }
+
+                if (isset($position['is_compulsory'])) {
+                    $is_compulsory = '1';
+                }
+
+                if ($checkPosition) {
+
+                    MembershipCategoryPostition::updateOrCreate([
+                        "category_id" => $checkMemberCategory->id,
+                        "position_id" => $checkPosition->id,
+                        "group_mail_id" => $email ? $email->id : null,
+                        "is_compulsory" => $is_compulsory,
+                    ]);
+
+                }
+
+            }
+
+        }
+        $membership_category = 'Affiliate Member (Standard) - (Individual)';
+
+        $rows = [
+            ["name" => "Managing Director/CEO", "is_compulsory" => true],
+            ["name" => "Treasurer/Chief Financial Officer", "is_compulsory" => true],
+            ["name" => "Chief Compliance Officer", "is_compulsory" => true],
+            ["name" => "Primary Contact(s)", "is_compulsory" => true],
+        ];
+
+        $checkMemberCategory = MembershipCategory::where('name', $membership_category)->first();
+
+        if ($checkMemberCategory) {
+            foreach ($rows as $position) {
+                $checkPosition = Position::where('name', $position['name'])->first();
+
+                $email = null;
+                $is_compulsory = '0';
+
+                if (isset($position['email'])) {
+                    $email = GroupMail::where('email', $position['email'])->first();
+                }
+
+                if (isset($position['is_compulsory'])) {
+                    $is_compulsory = '1';
+                }
+
+                if ($checkPosition) {
+
+                    MembershipCategoryPostition::updateOrCreate([
+                        "category_id" => $checkMemberCategory->id,
+                        "position_id" => $checkPosition->id,
+                        "group_mail_id" => $email ? $email->id : null,
+                        "is_compulsory" => $is_compulsory,
+                    ]);
+
+                }
+
+            }
+
+        }
+
+        $membership_category = 'Affiliate Member (Standard) - (Corporate)';
+
+        $rows = [
+            ["name" => "Managing Director/CEO", "is_compulsory" => true],
+            ["name" => "Treasurer/Chief Financial Officer", "is_compulsory" => true],
+            ["name" => "Chief Compliance Officer", "is_compulsory" => true],
+            ["name" => "Primary Contact(s)", "is_compulsory" => true],
+        ];
+
+        $checkMemberCategory = MembershipCategory::where('name', $membership_category)->first();
+
+        if ($checkMemberCategory) {
+            foreach ($rows as $position) {
+                $checkPosition = Position::where('name', $position['name'])->first();
+
+                $email = null;
+                $is_compulsory = '0';
+
+                if (isset($position['email'])) {
+                    $email = GroupMail::where('email', $position['email'])->first();
+                }
+
+                if (isset($position['is_compulsory'])) {
+                    $is_compulsory = '1';
+                }
+
+                if ($checkPosition) {
+
+                    MembershipCategoryPostition::updateOrCreate([
+                        "category_id" => $checkMemberCategory->id,
+                        "position_id" => $checkPosition->id,
+                        "group_mail_id" => $email ? $email->id : null,
+                        "is_compulsory" => $is_compulsory,
+                    ]);
+
+                }
+
+            }
+
+        }
+
+        $membership_category = 'Affiliate Member (Foreign Exchange Trading)';
+
+        $rows = [
+            ["name" => "Managing Director/CEO", "is_compulsory" => true],
+            ["name" => "Treasurer/Chief Financial Officer", "is_compulsory" => true],
+            ["name" => "Chief Compliance Officer", "is_compulsory" => true],
+            ["name" => "Primary Contact(s)", "is_compulsory" => true],
+        ];
+
+        $checkMemberCategory = MembershipCategory::where('name', $membership_category)->first();
+
+        if ($checkMemberCategory) {
+            foreach ($rows as $position) {
+                $checkPosition = Position::where('name', $position['name'])->first();
+
+                $email = null;
+                $is_compulsory = '0';
+
+                if (isset($position['email'])) {
+                    $email = GroupMail::where('email', $position['email'])->first();
+                }
+
+                if (isset($position['is_compulsory'])) {
+                    $is_compulsory = '1';
+                }
+
+                if ($checkPosition) {
+
+                    MembershipCategoryPostition::updateOrCreate([
+                        "category_id" => $checkMemberCategory->id,
+                        "position_id" => $checkPosition->id,
+                        "group_mail_id" => $email ? $email->id : null,
+                        "is_compulsory" => $is_compulsory,
+                    ]);
+
+                }
+
+            }
+
+        }
+
+        $membership_category = 'Affiliate Member (Fixed Income)';
+
+        $rows = [
+            ["name" => "Managing Director/CEO", "is_compulsory" => true],
+            ["name" => "Treasurer/Chief Financial Officer", "is_compulsory" => true],
+            ["name" => "Chief Compliance Officer", "is_compulsory" => true],
+            ["name" => "Primary Contact(s)", "is_compulsory" => true],
+        ];
+
+        $checkMemberCategory = MembershipCategory::where('name', $membership_category)->first();
+
+        if ($checkMemberCategory) {
+            foreach ($rows as $position) {
+                $checkPosition = Position::where('name', $position['name'])->first();
+
+                $email = null;
+                $is_compulsory = '0';
+
+                if (isset($position['email'])) {
+                    $email = GroupMail::where('email', $position['email'])->first();
+                }
+
+                if (isset($position['is_compulsory'])) {
+                    $is_compulsory = '1';
+                }
+
+                if ($checkPosition) {
+
+                    MembershipCategoryPostition::updateOrCreate([
+                        "category_id" => $checkMemberCategory->id,
+                        "position_id" => $checkPosition->id,
+                        "group_mail_id" => $email ? $email->id : null,
+                        "is_compulsory" => $is_compulsory,
+                    ]);
+
+                }
+
+            }
+
+        }
+
+        $membership_category = 'Affiliate Member (Regulator)';
+
+        $rows = [
+            ["name" => "Managing Director/CEO", "is_compulsory" => true],
+            ["name" => "Treasurer/Chief Financial Officer", "is_compulsory" => true],
+            ["name" => "Chief Compliance Officer", "is_compulsory" => true],
+            ["name" => "Primary Contact(s)", "is_compulsory" => true],
+        ];
+
+        $checkMemberCategory = MembershipCategory::where('name', $membership_category)->first();
+
+        if ($checkMemberCategory) {
+            foreach ($rows as $position) {
+                $checkPosition = Position::where('name', $position['name'])->first();
+
+                $email = null;
+                $is_compulsory = '0';
+
+                if (isset($position['email'])) {
+                    $email = GroupMail::where('email', $position['email'])->first();
+                }
+
+                if (isset($position['is_compulsory'])) {
+                    $is_compulsory = '1';
+                }
+
+                if ($checkPosition) {
+
+                    MembershipCategoryPostition::updateOrCreate([
+                        "category_id" => $checkMemberCategory->id,
+                        "position_id" => $checkPosition->id,
+                        "group_mail_id" => $email ? $email->id : null,
+                        "is_compulsory" => $is_compulsory,
+                    ]);
+
+                }
+
+            }
+
+        }
+        $membership_category = 'Affiliate Exchange (Corporates)';
+
+        $rows = [
+            ["name" => "Managing Director/CEO", "is_compulsory" => true],
+            ["name" => "Treasurer/Chief Financial Officer", "is_compulsory" => true],
+            ["name" => "Chief Compliance Officer", "is_compulsory" => true],
+            ["name" => "Primary Contact(s)", "is_compulsory" => true],
+        ];
+
+        $checkMemberCategory = MembershipCategory::where('name', $membership_category)->first();
+
+        if ($checkMemberCategory) {
+            foreach ($rows as $position) {
+                $checkPosition = Position::where('name', $position['name'])->first();
+
+                $email = null;
+                $is_compulsory = '0';
+
+                if (isset($position['email'])) {
+                    $email = GroupMail::where('email', $position['email'])->first();
+                }
+
+                if (isset($position['is_compulsory'])) {
+                    $is_compulsory = '1';
+                }
+
+                if ($checkPosition) {
+
+                    MembershipCategoryPostition::updateOrCreate([
+                        "category_id" => $checkMemberCategory->id,
+                        "position_id" => $checkPosition->id,
+                        "group_mail_id" => $email ? $email->id : null,
+                        "is_compulsory" => $is_compulsory,
+                    ]);
+
+                }
+
+            }
+
+        }
+
+        $membership_category = 'Dealing Member (Non-Bank Financial Institutions)';
+
+        $rows = [
+            ["name" => "Managing Director/CEO", "is_compulsory" => true],
+            ["name" => "Treasurer/Chief Financial Officer", "is_compulsory" => true],
+            ["name" => "Chief Compliance Officer", "is_compulsory" => true],
+            ["name" => "Primary Contact(s)", "is_compulsory" => true],
+        ];
+
+        $checkMemberCategory = MembershipCategory::where('name', $membership_category)->first();
+
+        if ($checkMemberCategory) {
+            foreach ($rows as $position) {
+                $checkPosition = Position::where('name', $position['name'])->first();
+
+                $email = null;
+                $is_compulsory = '0';
+
+                if (isset($position['email'])) {
+                    $email = GroupMail::where('email', $position['email'])->first();
+                }
+
+                if (isset($position['is_compulsory'])) {
+                    $is_compulsory = '1';
+                }
+
+                if ($checkPosition) {
+
+                    MembershipCategoryPostition::updateOrCreate([
+                        "category_id" => $checkMemberCategory->id,
+                        "position_id" => $checkPosition->id,
+                        "group_mail_id" => $email ? $email->id : null,
+                        "is_compulsory" => $is_compulsory,
+                    ]);
+
+                }
+
+            }
+
+        }
+
     }
 }

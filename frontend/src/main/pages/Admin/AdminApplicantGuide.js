@@ -71,7 +71,7 @@ const UpdateGuideComponent = ({ applicantGuide, updateParent }) => {
                     Upload Document
                 </label>
                 <div className="form-control-wrap">
-                    <input type="file" id="file" className="form-control" {...register('file', { required: "This Field is required" })} />
+                    <input type="file"  id="file" className="form-control" {...register('file', { required: "This Field is required" })} />
                     {errors.file && <span className="invalid">{errors.file.message}</span>}
                 </div>
             </div>

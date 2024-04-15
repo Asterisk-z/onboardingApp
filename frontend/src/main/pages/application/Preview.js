@@ -10,7 +10,7 @@ import { Row, Col, Button, Input } from "reactstrap";
 import { HeaderLogo } from "pages/components/HeaderLogo";
 import DatePicker from "react-datepicker";
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
-import { loadPageFields, fetchApplication, completeApplication } from "redux/stores/membership/applicationStore";
+import { loadPageFields, loadPreview, fetchApplication, completeApplication } from "redux/stores/membership/applicationStore";
 import moment from 'moment';
 import Swal from "sweetalert2";
 
@@ -89,6 +89,8 @@ const Form = () => {
     useEffect(() => {
 
       if ($application_details) {
+        // dispatch(loadPreview({ "application_id": $application_details?.id }));
+
         dispatch(loadPageFields({ "page": "1", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
       }
     }, [dispatch, parentState, $application_details]);
@@ -143,7 +145,6 @@ const Form = () => {
         <Row className="gy-4">
           {fields && fields.map((field, index) => {
 
-            if (field.type == 'text') {
               return (
                 <Col md="6" key={index}>
                   <div className="form-group">
@@ -155,67 +156,6 @@ const Form = () => {
                   </div>
                 </Col>
               )
-            } else if (field.type == 'date') {
-
-              return (
-                <Col md="6" key={index}>
-                  <div className="form-group">
-                    <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
-                    <div className="form-control-wrap">
-
-                      <input type="hidden" {...register(field.name, { required: 'This field is required' })} value={field?.field_value?.uploaded_field} />
-                      <DatePicker selected={field?.field_value?.uploaded_field ? new Date(field?.field_value?.uploaded_field) : new Date()} id={field.name} disabled className="form-control date-picker" />
-                      {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
-                    </div>
-                  </div>
-                </Col>
-              )
-            } else if (field.type == 'email') {
-              return (
-                <Col md="6" key={index}>
-                  <div className="form-group">
-                    <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
-                    <div className="form-control-wrap">
-                      <input type="text" id={field.name} className="form-control" {...register(field.name, { required: 'This field is required', pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: "Invalid email address" }, })} disabled defaultValue={field?.field_value?.uploaded_field} />
-                      {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
-                    </div>
-                  </div>
-                </Col>
-              )
-            } else if (field.type == 'number') {
-              return (
-                <Col md="6" key={index}>
-                  <div className="form-group">
-                    <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
-                    <div className="form-control-wrap">
-                      <input type="number" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={field.name} className="form-control" {...register(field.name, { required: 'This field is required' })} disabled defaultValue={field?.field_value?.uploaded_field} />
-                      {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
-                    </div>
-                  </div>
-                </Col>
-              )
-            } else if (field.type == 'select') {
-              return (
-                <Col md="6" key={index}>
-                  <div className="form-group">
-                    <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
-                    <div className="form-control-wrap">
-
-                      <div className="form-control-select" >
-                        <select className="form-control form-select" type="select" name={field.name} id={field.name} {...register(field.name, { required: 'This field is required' })} disabled defaultValue={field?.field_value?.uploaded_field}>
-                          <option>Select Option</option>
-                          {field.field_options && field.field_options.map((option, index) => (
-                            <option key={index} value={option.option_value}>{option.option_name}</option>
-                          ))}
-                        </select>
-                      </div>
-                      {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
-                    </div>
-                  </div>
-                </Col>
-              )
-            }
-
           })}
 
         </Row>

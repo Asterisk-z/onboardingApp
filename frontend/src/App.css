@@ -243,6 +243,10 @@ span.asc.__rdt_custom_sort_icon__ {
     background-color: #1D326C !important;
 }
 
+.Toastify__toast--error {
+    background-color: #1D326C !important;
+}
+
 .Toastify__toast-container .Toastify__toast-body {
     color: #fff !important;
 }
@@ -269,3 +273,4 @@ span.asc.__rdt_custom_sort_icon__ {
 .form-control ~ .invalid {
     position: absolute !important;
 }
+

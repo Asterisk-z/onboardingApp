@@ -143,8 +143,6 @@ const AdminFees = ({ drawer }) => {
         setParentState(newState);
     };
 
-    
-
     return (
         <React.Fragment>
             <Head title="Fees and Dues Framework"></Head>
@@ -161,7 +159,7 @@ const AdminFees = ({ drawer }) => {
                                 <div className="toggle-expand-content" >
                                     <ul className="nk-block-tools g-3">
                                         <li className="nk-block-tools-opt">
-                                            {!fees && <Button color="primary">
+                                            {!$fees && <Button color="primary">
                                                 <span onClick={toggleForm}>Create Fees Framework</span>
                                             </Button>}
                                         </li>

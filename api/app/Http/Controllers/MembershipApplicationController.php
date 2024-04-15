@@ -7,6 +7,7 @@ use App\Helpers\MailContents;
 use App\Helpers\ResponseStatusCodes;
 use App\Helpers\Utility;
 use App\Http\Resources\ApplicationFieldResource;
+use App\Http\Resources\ApplicationResource;
 use App\Models\Application;
 use App\Models\ApplicationExtra;
 use App\Models\ApplicationField;
@@ -77,6 +78,40 @@ class MembershipApplicationController extends Controller
         ];
 
         return successResponse("Here you go", $data ?? []);
+    }
+
+    public function getPreview(Request $request)
+    {
+        // $application = Application::find($request->application_id);
+
+        $data = Application::where([
+            'applications.id' => $request->application_id,
+        ]);
+
+        $data = Utility::applicationDetails($data);
+        $data = $data->get();
+
+        return successResponse("Here you go", ApplicationResource::collection($data));
+
+        $application_fields = ApplicationField::where('application_fields.parent_id', null);
+
+        if ($request->page) {
+            $application_fields->where('application_fields.page', $request->page);
+        }
+
+        if ($request->category) {
+            $application_fields->where('application_fields.category', $request->category);
+        }
+
+        $application_fields->leftJoin('application_field_application_field_uploads', function ($join) use ($request) {
+            $join->on('application_field_application_field_uploads.application_field_id', '=', 'application_fields.id')
+                ->where('application_field_application_field_uploads.application_id', $request->application_id);
+        })->leftJoin('application_field_uploads', 'application_field_application_field_uploads.application_field_upload_id', '=', 'application_field_uploads.id')
+            ->select('application_fields.*', 'application_field_uploads.uploaded_file', 'application_field_uploads.uploaded_field', DB::raw('application_field_uploads.id as application_field_upload_id'));
+
+        $data = $application_fields->orderBy('application_fields.id', 'ASC')->get();
+
+        return successResponse('Fields Fetched Successfully', ApplicationFieldResource::collection($data));
     }
 
     public function getField(Request $request)

@@ -281,7 +281,7 @@ const AdminEvents = ({ drawer }) => {
                                                         Event Picture
                                                     </label>
                                                     <div className="form-control-wrap">
-                                                        <input type="file" id="file" className="form-control" {...register('img', { required: "This Field is required" })} />
+                                                        <input type="file" id="file" accept="image/*" className="form-control" {...register('img', { required: "This Field is required" })} />
                                                         {errors.img && <span className="invalid">{errors.img.message}</span>}
                                                     </div>
                                                 </div>

@@ -3,8 +3,8 @@
 use App\Helpers\ResponseStatusCodes;
 use App\Models\Audit;
 use App\Models\FmdqBankAccount;
-use Illuminate\Support\Str;
 use App\Models\InvoiceContent;
+use Illuminate\Support\Str;
 use PHPOpenSourceSaver\JWTAuth\JWTGuard;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -45,7 +45,7 @@ if (!function_exists('successResponse')) {
             "status" => true,
             "statusCode" => ResponseStatusCodes::OK,
             "message" => $message,
-            "data" => $data
+            "data" => $data,
         ], Response::HTTP_OK);
     }
 }
@@ -57,7 +57,7 @@ if (!function_exists('errorResponse')) {
             "status" => false,
             "statusCode" => $statusCode,
             "message" => $message,
-            "data" => $data
+            "data" => $data,
         ], $code);
     }
 }
@@ -73,7 +73,6 @@ if (!function_exists('logAction')) {
         ]);
     }
 }
-
 
 if (!function_exists('prettifyJson')) {
     function prettifyJson(array $data)
@@ -139,4 +138,3 @@ if (!function_exists('generateReference')) {
         return $paymentReference;
     }
 }
-

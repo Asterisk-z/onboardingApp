@@ -378,7 +378,7 @@ const AuthRepresentative = ({ drawer }) => {
                                         </Label>
                                         <div className="form-control-wrap">
                                             <div className="form-control-select">
-                                                <select className="form-control form-select" {...register('category_type', { required: "Position is Required" })} onChange={updatePositionList} >
+                                                <select className="form-control form-select" {...register('category_type', { required: "Category is Required" })} onChange={updatePositionList} >
                                                     <option value="">Select Category</option>
                                                     {$myApplicationCategories && $myApplicationCategories?.map((category, index) => (
                                                         <option key={index} value={category.id}>

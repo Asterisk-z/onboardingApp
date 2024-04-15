@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { errorHandler, successHandler } from "utils/Functions";
 import queryGenerator from "utils/QueryGenerator";
-const initialState = { all: null, list: null, user_application: null, application_details: null, initial_application: null, all_fields: null, list_extra: {}, status_list: null, transfer_list: null, user: null, total: null, error: "", loading: false };
+const initialState = { all: null, list: null, user_application: null, application_details: null, initial_application: null, all_fields: null, preview: [], list_extra: {}, status_list: null, transfer_list: null, user: null, total: null, error: "", loading: false };
 
 
 export const fetchApplication = createAsyncThunk(
@@ -38,6 +38,19 @@ export const loadApplication = createAsyncThunk(
     const query = queryGenerator(values);
     try {
       const { data } = await axios.get(`membership/application/detail?${query}`);
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
+    }
+  }
+);
+
+export const loadPreview = createAsyncThunk(
+  "application/loadPreview",
+  async (values) => {
+    const query = queryGenerator(values);
+    try {
+      const { data } = await axios.get(`membership/application/preview?${query}`);
       return successHandler(data);
     } catch (error) {
       return errorHandler(error);
@@ -306,6 +319,33 @@ const applicationStore = createSlice({
       state.error = action.payload.message;
     });
 
+
+    // ====== builders for loadPreview ======
+
+    builder.addCase(loadPreview.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(loadPreview.fulfilled, (state, action) => {
+      state.loading = false;
+      // state.list = action.payload?.data?.data?.categories;
+      // state.list = JSON.stringify(action.payload?.data?.data);
+
+      // if (!Array.isArray(state.all_fields)) {
+      state.preview = [];
+      // }
+
+      // const all_fields = [...state.all_fields];
+      const preview = [];
+      // console.log(new Date())
+      preview.push(...action.payload?.data.data);
+      state.preview = preview;
+    });
+
+    builder.addCase(loadPreview.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
     
     // ====== builders for loadPageFields ======
 

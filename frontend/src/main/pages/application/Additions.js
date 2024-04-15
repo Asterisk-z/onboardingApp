@@ -23,6 +23,7 @@ import AuthRepTable from '../Tables/AuthRepTable'
 import ApplicationTable from '../Tables/ApplicationTable'
 
 import { loadArDashboard } from "redux/stores/dashboard/dashboardStore";
+import { additionRequest, conversionRequest } from "redux/stores/membership/applicationStore";
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 
 
@@ -37,7 +38,6 @@ const AddMemberForm = ({ other_categories, updateParent }) => {
 
     const handleFormSubmit = async (values) => {
 
-
         const postValues = {};
         postValues.new_category = values.category;
         postValues.institution = authUser?.user_data?.institution?.id;
@@ -47,6 +47,7 @@ const AddMemberForm = ({ other_categories, updateParent }) => {
             setLoading(true);
 
 
+            console.log(postValues)
             const resp = await dispatch(additionRequest(postValues));
 
             // console.log(values, postValues, loading, resp.payload)
