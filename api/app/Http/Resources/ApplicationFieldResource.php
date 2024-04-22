@@ -32,8 +32,8 @@ class ApplicationFieldResource extends JsonResource
                 'file_path' => $this->uploaded_file ? config('app.url') . 'storage/app/public/' . $this->uploaded_file : null,
                 'uploaded_field' => $this->uploaded_field,
             ],
-            'child_fields' => $this->child_fields,
-            'terere' => 'ferferf',
+            'child_fields' => ApplicationChildFieldResource::collection($this->child_fields),
+            // 'child_fields' => $this->child_fields,
         ];
 
     }

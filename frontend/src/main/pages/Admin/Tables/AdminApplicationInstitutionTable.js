@@ -163,7 +163,8 @@ const ActionTab = (props) => {
             text: "Do you want to approve payment!",
             icon: "warning",
             showCancelButton: true,
-            confirmButtonText: "Approve!",
+            confirmButtonText: "Confirm!",
+            cancelButtonText: "Decline",
             html: '<div class="flex flex-column text-left"><label htmlFor="amount">Amount Received</label><input type="number" id="amount" name="amount" class="form-control" required /><label htmlFor="comments">Comment</label><textarea id="comments" class="form-control" rows="4" cols="50" placeholder="Enter Comment" required></textarea></div>', // Add textarea to the alert
           }).then((result) => {
             if (result.isConfirmed) {
@@ -187,7 +188,7 @@ const ActionTab = (props) => {
       
       if(action == 'declinePaymentReview') {
           Swal.fire({
-            title: "Are youv sure?",
+            title: "Are you sure?",
             text: "Do you want to decline payment!",
             icon: "warning",
             showCancelButton: true,

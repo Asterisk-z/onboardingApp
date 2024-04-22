@@ -274,3 +274,7 @@ span.asc.__rdt_custom_sort_icon__ {
     position: absolute !important;
 }
 
+.invalid.text-red {
+    color: red !important;
+}
+

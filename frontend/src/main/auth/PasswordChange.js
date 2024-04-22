@@ -55,12 +55,12 @@ const PasswordChange = () => {
       const passwordPolicy = (event) => {
         
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
-        const isValidPassword = passwordRegex.test(getValues('password'));
+        // const isValidPassword = passwordRegex.test(getValues('password'));
         const isValidNewPassword = passwordRegex.test(getValues('new_password'));
         
-        if (!isValidPassword && event.target.name == 'password') {
+        if (event.target.name == 'password') {
             setValid(false)
-            setError("password", { type: "password",  message: "Password must contain a minimum of 8 characters, with an uppercase letter, a lowercase letter, a number and a special character."  }, { shouldFocus: false })
+            // setError("password", { type: "password",  message: "Password must contain a minimum of 8 characters, with an uppercase letter, a lowercase letter, a number and a special character."  }, { shouldFocus: false })
             return
         }
         
@@ -87,7 +87,7 @@ const PasswordChange = () => {
               <BlockContent>
                 <div className="logo-div">
                   <img className="logo" src={Logo} alt="fmdq logo"/>
-                  <h4>Members Registration Oversight Information System (MROIS)</h4>
+                  <h4>Member Regulation and Oversight Information System (MROIS)</h4>
                 </div>
                 <BlockTitle tag="h5">Reset password</BlockTitle>
                 <BlockDes>
@@ -119,7 +119,7 @@ const PasswordChange = () => {
                       <Icon name="eye" className="passcode-icon icon-show"></Icon>
                       <Icon name="eye-off" className="passcode-icon icon-hide"></Icon>
                     </a>
-                    <input type={passState ? "text" : "password"} id="password" onKeyUp={passwordPolicy} {...register('password', { required: "This field is required" })} placeholder="Enter your password" className={`form-control-lg form-control ${passState ? "is-hidden" : "is-shown"}`} autoComplete="off" />
+                    <input type={passState ? "text" : "password"} id="password" {...register('password', { required: "This field is required" })} placeholder="Enter your password" className={`form-control-lg form-control ${passState ? "is-hidden" : "is-shown"}`} autoComplete="off" />
                     {errors.password && <span className="invalid">{errors.password.message}</span>}
                   </div>
               </div>

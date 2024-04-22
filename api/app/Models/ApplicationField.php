@@ -10,12 +10,28 @@ class ApplicationField extends Model
     use HasFactory;
     protected $guarded = [];
 
-    protected $with = ['child_fields'];
-    protected $appends = ['field_options', 'field_value'];
+    // protected $with = ['child_fields'];
+    protected $appends = ['field_options', 'field_value', 'child_fields'];
 
-    public function child_fields()
+    // public function child_fields()
+    // {
+    //     $childFields = ApplicationField::where('parent_id', $this->id)->get();
+    //     return $childFields;
+    //     // return $this->hasMany(ApplicationField::class, 'parent_id', 'id');
+    // }
+
+    public function getChildFieldsAttribute()
     {
-        return $this->hasMany(ApplicationField::class, 'parent_id', 'id');
+        // $request = request()->all();
+        // logger($request);
+        $childFields = ApplicationField::where('parent_id', $this->id);
+        return $childFields->get();
+        // return $childFields->leftJoin('application_field_application_field_uploads', function ($join) use ($request) {
+        //     $join->on('application_field_application_field_uploads.application_field_id', '=', 'application_fields.id')
+        //         ->where('application_field_application_field_uploads.application_id', $request['application_id']);
+        // })->leftJoin('application_field_uploads', 'application_field_application_field_uploads.application_field_upload_id', '=', 'application_field_uploads.id')
+        //     ->select('application_fields.*', 'application_field_uploads.uploaded_field', DB::raw('application_field_uploads.id as application_field_upload_id'));
+
     }
 
     public function getFieldOptionsAttribute()

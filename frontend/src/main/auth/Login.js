@@ -70,7 +70,7 @@ const Login = () => {
             <BlockContent>
               <div className="logo-div">
                 <img className="logo" src={Logo} alt="fmdq logo"/>
-                <h4>Members Registration Oversight Information System (MROIS)</h4>
+                <h4>Member Regulation and Oversight Information System (MROIS)</h4>
               </div>
               <BlockTitle tag="h4">Log In</BlockTitle>
             </BlockContent>
@@ -161,7 +161,7 @@ const Login = () => {
       <ModalFooter className="bg-light">
         <div className="text-center w-100">
           <p>
-            Members Registration Oversight Information System (MROIS)
+            Member Regulation and Oversight Information System (MROIS)
           </p>
         </div>
       </ModalFooter>

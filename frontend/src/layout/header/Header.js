@@ -34,7 +34,7 @@ const Header = ({ fixed, className, ...props }) => {
             <Logo />
           </div>
           <div className="nk-header-search ms-3 ms-xl-0">
-            <div className="moving-text">Members Registration Oversight Information System (MROIS)</div>
+            <div className="moving-text">Member Regulation and Oversight Information System (MROIS)</div>
           </div>
           <div className="nk-header-tools">
             <ul className="nk-quick-nav">

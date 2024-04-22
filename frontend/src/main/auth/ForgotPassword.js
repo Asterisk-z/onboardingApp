@@ -80,7 +80,7 @@ const ForgotPassword = () => {
               <BlockContent>
                 <div className="logo-div">
                   <img className="logo" src={Logo} alt="fmdq logo"/>
-                  <h4>Members Registration Oversight Information System (MROIS)</h4>
+                  <h4>Member Regulation and Oversight Information System (MROIS)</h4>
                 </div>
                 <BlockTitle tag="h5">Reset password</BlockTitle>
                 <BlockDes>

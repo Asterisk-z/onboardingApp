@@ -833,6 +833,7 @@ const Form = () => {
                                 <div className="form-control-wrap">
 
                                   <div className="form-control-select" >
+                                    {child_field?.field_value?.uploaded_field}
                                     <select className="form-control form-select" type="select" name={child_field.name} id={child_field.name} {...register(child_field.name, { required: 'This field is required' })} onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field}>
                                       <option value=''>Select Option</option>
                                       {child_field.field_options && child_field.field_options.map((option, index) => (
@@ -1142,7 +1143,7 @@ const Form = () => {
           <div className="flex flex-col justify-content-center align-items-center p-3">
             <div>
               <BlockTitle tag="h2" className="text-center">
-                Thank you for completing membership application form
+                Thank you for completing the Membership Application Form.
               </BlockTitle>
               <BlockContent className="text-center">
                 <Button color="primary" onClick={(ev) => navigate(`${process.env.PUBLIC_URL}/application_preview/${$application_details.uuid}`)}>

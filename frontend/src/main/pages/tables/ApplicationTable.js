@@ -96,8 +96,16 @@ const ActionTab = (props) => {
 
     
   return (
-    <>
-        <div className="toggle-expand-content" style={{ display: "block" }}>
+      <>
+          {aUser?.user_data?.id == tabItem.internal?.submitted_by && <>
+              {tabItem.internal?.show_form == 1 ? <>
+                    <button className="btn btn-sm btn-secondary" color="secondary" onClick={(ev) => navigate(`${process.env.PUBLIC_URL}/application/${tabItem.internal?.application_uuid}`)}>Continue Application</button>
+              </> : <>
+                    <button className="btn btn-sm btn-secondary" color="secondary" onClick={(ev) => navigate(`${process.env.PUBLIC_URL}/application_detail/${tabItem.internal?.application_uuid}`)} >Application Detail</button>
+              </>}
+          </>}
+
+        {/* <div className="toggle-expand-content" style={{ display: "block" }}>
             <ul className="nk-block-tools g-3">
                  <li className="nk-block-tools-opt">
                     <UncontrolledDropdown direction="right">
@@ -129,7 +137,7 @@ const ActionTab = (props) => {
                     </UncontrolledDropdown>
                 </li>
             </ul>
-        </div>
+        </div> */}
 
     </>
 
@@ -199,7 +207,7 @@ const AuthRepTable = ({ data, pagination, actions, className, selectableRows, ex
         selector: (row) => (<>
                         <ActionTab tabItem={row} updateParent4={updateParent}/>
                     </>),
-        width: "100px",
+        width: "auto",
     },
     ];
   const [tableData, setTableData] = useState(data);

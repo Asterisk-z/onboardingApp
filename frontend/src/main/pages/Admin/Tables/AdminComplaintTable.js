@@ -303,7 +303,7 @@ const SendFeedback = ({ updateParentParent, complaint}) => {
               <ModalFooter className="bg-light">
                   <div className="text-center w-100">
                       <p>
-                          Members Registration Oversight Information System (MROIS)
+                          Member Regulation and Oversight Information System (MROIS)
                       </p>
                   </div>
               </ModalFooter>

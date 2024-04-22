@@ -34,7 +34,7 @@ const Landing = ({ ...props }) => {
                 <BlockHead size="lg" wide="xs" className="mx-auto">
                   <BlockHeadContent className="text-center">
                     <img src={Logo} alt="fmdq logo" className="image" />
-                    <h4 className="mrois-title">Members Registration Oversight Information System (MROIS)</h4>
+                    <h4 className="mrois-title">Member Regulation and Oversight Information System (MROIS)</h4>
                   </BlockHeadContent>
                 </BlockHead>
                 <div className="entry">
@@ -70,7 +70,7 @@ const Landing = ({ ...props }) => {
                   <h4 className="title">Available Remedies in the Event of Violation and Timeframe for Remedy</h4>
                   <p>You have a right to withdraw consent for processing your personal information in cases where consent has previously been given, and the right to rectify inaccurate and incomplete information at any time, and the Exchange shall upon receipt of such request, ensure same is rectified without delay and at least within one month. You also have the right to request from the Exchange, access and the ability to rectify your personal information, restriction of the processing of your personal information, request for deletion of your personal information or to object to the processing as well the right to data portability.</p>
                   <p>The Member can also contact the Exchange's Data Protection Officer:</p>
-                  Contact Name: Babajide Bayode
+                  Contact Name: Dipo Omotoso 
                   <br />
                   Email: privacypolicy@fmdqgroup.com
 

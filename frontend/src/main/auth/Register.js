@@ -140,7 +140,7 @@ const Register = ({ drawer }) => {
             <BlockHead>
             <div className="logo-div">
               <img className="logo" src={Logo} alt="fmdq logo" />
-                <h4>Members Registration Oversight Information System (MROIS) Sign Up Form</h4>
+                <h4>Member Regulation and Oversight Information System (MROIS) Sign Up Form</h4>
             </div>
             </BlockHead>
             <form  className="is-alter" onSubmit={handleSubmit(handleFormSubmit)} encType="multipart/form-data">
