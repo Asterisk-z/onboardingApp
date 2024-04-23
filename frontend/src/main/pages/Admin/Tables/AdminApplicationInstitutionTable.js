@@ -414,7 +414,7 @@ const ActionTab = (props) => {
                 Payment View
             </ModalHeader>
             <ModalBody>
-                  {(institution.internal.concession_stage != '1') ? <>
+                  {(institution.internal.concession_stage != '1' && !showConcession) ? <>
                         <Button onClick={toggleConcession} >Upload Concession</Button>
                     </> : 
                     (institution?.latest_evidence?.proof) ? <>

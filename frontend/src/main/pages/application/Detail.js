@@ -285,7 +285,7 @@ const Form = () => {
               {$user_application?.application?.concession_stage == 1 && <>
 
                 {!$user_application?.application?.proof_of_payment ? <>
-                  <a className="btn btn-primary mx-1" href={$invoice_download} target="_blank"> Download Invoice </a>
+                  <a className="btn btn-primary mx-1" href={$invoice_download} target="_blank"> View Invoice </a>
                   <a className="btn btn-primary mx-1" href="#" onClick={toggleView} >Make Payment </a>
                 </> : <>
                   <a className="btn btn-success mx-1" href="#"  >Payment Sent</a>
@@ -351,7 +351,7 @@ const Form = () => {
                       <CardBody className="card-inner">
                         <CardTitle tag="h5">Payment by Transfer</CardTitle>
                         <CardText>
-                          Upload Proof Of Payment after transfer
+                          Upload proof of payment after transfer
                         </CardText>
                         <Button color="primary" onClick={toggleUploadView}>Upload</Button>
                       </CardBody>
@@ -362,7 +362,7 @@ const Form = () => {
                       <CardBody className="card-inner">
                         <CardTitle tag="h5">Online Payment</CardTitle>
                         <CardText>
-                          Pay via QPay
+                          Pay via Q-Pay
                         </CardText>
                         <Button color="primary" onClick={qPay}>Proceed to Payment</Button>
                       </CardBody>

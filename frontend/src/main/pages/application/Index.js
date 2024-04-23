@@ -956,7 +956,7 @@ const Form = () => {
 
                             <div className="input-group-append">
                               <input type="hidden" {...register(field.name, { required: 'This field is required' })} value={field.field_value?.file_path ? field.field_value?.file_path : ''} />
-                              {field.field_value?.file_path && <a href={field.field_value.file_path} target="_blank" className="btn btn-primary" > Check File</a>}
+                              {field.field_value?.file_path && <a href={field.field_value.file_path} target="_blank" className="btn btn-primary" > View File</a>}
                             </div>
                           </div>
                           {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
@@ -1102,7 +1102,7 @@ const Form = () => {
 
                             <div className="input-group-append">
                               <input type="hidden" {...register(field.name, { required: 'This field is required' })} value={field.field_value?.file_path ? field.field_value?.file_path : ''} />
-                              {field.field_value?.file_path && <a href={field.field_value.file_path} target="_blank" className="btn btn-primary" > Check File</a>}
+                              {field.field_value?.file_path && <a href={field.field_value.file_path} target="_blank" className="btn btn-primary" > View File</a>}
                             </div>
                           </div>
                           {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
@@ -1117,7 +1117,24 @@ const Form = () => {
 
               })}
 
+              {/* <Col md="12" key={`${field.name}${index}`}>
+                <div className="form-group">
+                  <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
+                  <div className="form-control-wrap">
+                    <div className="input-group">
+                      <input type="file" accept=".jpg,.jpeg,.png,.pdf" id={field.name} className="form-control" onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.files[0], "field_type": field.type })} />
 
+                      <div className="input-group-append">
+                        <input type="hidden" {...register(field.name, { required: 'This field is required' })} value={field.field_value?.file_path ? field.field_value?.file_path : ''} />
+                        {field.field_value?.file_path && <a href={field.field_value.file_path} target="_blank" className="btn btn-primary" > View File</a>}
+                      </div>
+                    </div>
+                    {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
+                  </div>
+                </div>
+
+              </Col> */}
+              
             </Row>
             <div className="actions clearfix">
               <ul>

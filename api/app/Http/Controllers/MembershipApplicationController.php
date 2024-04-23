@@ -351,7 +351,7 @@ class MembershipApplicationController extends Controller
 
         logAction($user->email, 'Application submitted', 'Membership application has been submitted successfully.', $request->ip());
         event(new ApplicationSubmissionEvent($user, $application, $institution, $membershipCategory));
-        return successResponse("Your Application has been submitted and is under review. You will be notified any feedback soon");
+        return successResponse("Your Application has been submitted and is under review. You will be notified of any feedback soon");
     }
 
     protected function processReupload(Request $request)
@@ -415,7 +415,7 @@ class MembershipApplicationController extends Controller
         $MEGs = Utility::getUsersByCategory(Role::MEG);
         Notification::send($MEGs, new InfoNotification(MailContents::documentReuploadMail($applicantName), MailContents::documentReuploadSubject()));
 
-        return successResponse("Your Application has been submitted and is under review. You will be notified any feedback soon");
+        return successResponse("Your Application has been submitted and is under review. You will be notified of any feedback soon");
     }
 
     public function disclosure(Request $request)
@@ -464,7 +464,7 @@ class MembershipApplicationController extends Controller
         // set_time_limit(300);
 
         $application = Application::where('invoiceToken', $invoiceToken)->first();
-        if(! $application) {
+        if (!$application) {
             abort(404, "Unable to fulfil your request");
         }
         $applicant = $application->applicant;
