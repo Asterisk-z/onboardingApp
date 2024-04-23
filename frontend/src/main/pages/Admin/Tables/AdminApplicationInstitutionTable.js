@@ -420,7 +420,7 @@ const ActionTab = (props) => {
                     (institution?.latest_evidence?.proof) ? <>
                         <ul>
                             <li><span className="lead">Invoice Number : </span>{`${institution?.payment_information?.invoice_number}`}</li>
-                            <li><span className="lead">Date of Payment : </span>{`${institution?.payment_information?.date_paid}`}</li>
+                            <li><span className="lead">Date of Payment : </span>{`${institution?.payment_information?.date_paid ? institution?.payment_information?.date_paid : ''}`}</li>
                             <li><span className="lead">Reference : </span>{`${institution?.payment_information?.reference}`}</li>
                             {(aUser.is_admin_mbg() && $latest_evidence) && <>
                             <li><span className="lead">Amount received by FSD : </span>{`${institution?.internal?.amount_received_by_fsd}`}</li>
@@ -574,6 +574,16 @@ const ActionTab = (props) => {
                   <td>Company Website Address</td>
                   <td>{`${institution?.basic_details.corporateWebsiteAddress}`}</td>
                 </tr>
+                <tr>
+                  <td>12</td>
+                  <td>Authorised Share Capital</td>
+                  <td>{`${institution?.basic_details.authorisedShareCapital}`}</td>
+                </tr>
+                <tr>
+                  <td>13</td>
+                  <td>Authorised Share Capital Currency</td>
+                    <td>{`${institution?.basic_details.authorisedShareCapitalCurrency}`}</td>
+                </tr>
                   
                 </tbody>
                               </table>
@@ -651,7 +661,7 @@ const ActionTab = (props) => {
                   <tr>
                     <td>5</td>
                     <td>Concession Amount</td>
-                    <td>:{`${institution?.payment_details?.concession_amount}`}</td>
+                    <td>{`${institution?.payment_details?.concession_amount}`}</td>
                   </tr>
                 </tbody>
                 </table>
@@ -763,14 +773,17 @@ const ActionTab = (props) => {
                           </div>
                       }
                       
-                        {(aUser.is_admin_meg() && institution?.internal?.is_applicant_executed_membership_agreement && !institution?.internal?.is_meg_executed_membership_agreement ) && 
-                        <div className="gy-0">
+                        {(aUser.is_admin_meg() && institution?.internal?.is_applicant_executed_membership_agreement == 1 && institution?.internal?.is_meg_executed_membership_agreement == 0 ) && <>
+                        {/* {(aUser.is_admin_meg() && institution?.internal?.is_applicant_executed_membership_agreement && !institution?.internal?.is_meg_executed_membership_agreement ) && <> */}
+                          <div className="gy-0">
                                 <h5>Upload Signed Agreement</h5>
                                 <a className="btn btn-primary mx-2"  href={institution?.internal?.applicant_executed_membership_agreement} target="_blank">Download Signed Agreement</a>
                                 <Button className="btn btn-success mx-2"  onClick={toggleSignedAgreement}>Upload MEG Signed Agreement</Button>
                           </div>
+                        </>
+                        
                       }
-                        {(aUser.is_admin_meg() && institution?.internal?.is_applicant_executed_membership_agreement && institution?.internal?.is_meg_executed_membership_agreement ) && 
+                        {(aUser.is_admin_meg() && institution?.internal?.is_applicant_executed_membership_agreement == 1 && institution?.internal?.is_meg_executed_membership_agreement == 1 ) && 
                         <div className="gy-0">
                                 <h5>Final Review</h5>
                                 <a className="btn btn-primary mx-2"   onClick={(e) => navigate(`${process.env.PUBLIC_URL}/${institution?.internal?.institution_id}/list-ars`)} target="_blank">View Authorised Representatives</a>
