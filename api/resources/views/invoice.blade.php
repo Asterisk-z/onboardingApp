@@ -54,7 +54,7 @@
             <div class="receipt-container">
                 <div class="address-info">
                     <div class="address">
-                        <p>Exchange Place, 35, Idowu Taylor Street, Victoria Island, Lagos</p>
+                        <p>Exchange Place, 35 Idowu Taylor Street, Victoria Island, Lagos</p>
                         <p>Email: info@fmdqgroup.com</p>
                         <p>Website: www.fmdqgroup.com</p>
                     </div>
@@ -90,7 +90,7 @@
                 </tr>
                 <tr>
                     <td>Tel:</td>
-                    <td>+234 -1-2778771</td>
+                    <td>+234 20-1-700-8555</td>
                 </tr>
             </table>
         </section>
@@ -234,8 +234,8 @@
                 @endforeach
                 @endif
             </table>
-            <p>▪ In the case of online bank transfers, kindly specify payment reference by indicating the invoice number</p>
-            <p>▪ All cheques payable to 'FMDQ Holdings PLC'</p>
+            <p style="font-size: 13px;">▪ In the case of online bank transfers, kindly specify payment reference by indicating the invoice number</p>
+            <p style="font-size: 13px;">▪ All cheques payable to 'FMDQ Holdings PLC</p>
         </section>
         <div class="footer">
             <p class="tax-id-no">Tax Identification Number: 11426626 - 0001</p>

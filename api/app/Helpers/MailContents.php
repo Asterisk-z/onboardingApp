@@ -138,7 +138,7 @@ class MailContents
         $url = config("app.front_end_url");
 
         return "<p>Kindly log on to the <a href=$url>MROIS Portal</a> to view your invoice,
-        make payment and upload evidence of payment to complete your registration.</p>";
+        make payment and upload evidence of payment (if applicable) to complete your registration.</p>";
     }
 
     public static function concessionSubject(): string
@@ -176,7 +176,7 @@ class MailContents
     }
     public static function paymentSubject(): string
     {
-        return "Payment Notification";
+        return "Membership Application Payment Notification";
     }
 
     public static function paymentMail($user): string
