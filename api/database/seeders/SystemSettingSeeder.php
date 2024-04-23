@@ -41,7 +41,7 @@ class SystemSettingSeeder extends Seeder
             ],
             [
                 "name" => "contact_phone",
-                "value" => "+234 -1-2778771"
+                "value" => "+234 20-1-700-8555"
             ],
             [
                 "name" => "tin",

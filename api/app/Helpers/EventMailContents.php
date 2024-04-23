@@ -37,7 +37,7 @@ class EventMailContents
             </p>
 
             <p>
-                Kindly contact Uju Iwuamadi +234 -1-2778771
+                Kindly contact Uju Iwuamadi +234 20-1-700-8555
             </p>";
 
         return $message;

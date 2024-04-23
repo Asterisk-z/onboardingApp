@@ -464,6 +464,9 @@ class MembershipApplicationController extends Controller
         // set_time_limit(300);
 
         $application = Application::where('invoiceToken', $invoiceToken)->first();
+        if(! $application) {
+            abort(404, "Unable to fulfil your request");
+        }
         $applicant = $application->applicant;
         $invoice = Invoice::find($application->invoice_id);
         $invoiceContents = $invoice->contents;
