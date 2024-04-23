@@ -568,7 +568,7 @@ class MembershipApplicationController extends Controller
         $CCs = array_merge($MBGs, $MEGs);
         Notification::send($FSDs, new InfoNotification(MailContents::paymentMail($user), MailContents::paymentSubject(), $CCs));
 
-        return successResponse("Your payment upload has been recieved and it is currently under review");
+        return successResponse("Payment has been processed and under review");
     }
 
     public function onlinePayment(Request $request)

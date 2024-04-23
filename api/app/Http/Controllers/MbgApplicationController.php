@@ -217,39 +217,59 @@ class MbgApplicationController extends Controller
         $data = $data->first();
 
         if ($request->status == 'decline') {
-            if (str_contains(strtolower("Incomplete Payment"), strtolower($request->comment))) {
+            $categoryName = $membershipCategory->name;
+            $emailData = [
+                'name' => $name,
+                'subject' => 'Membership Application Payment Declined',
+                'content' => "Please be informed that your payment as a {$categoryName} was declined.
+                        <p>Reason: {$request->comment}</p>
+                        <p>For further clarification, kindly contact Membership & Subscriptions Group on +234 20-1-700-8555</p>",
+            ];
 
-                $categoryName = $membershipCategory->name;
+            // CC email addresses
+            $Meg = Utility::getUsersEmailByCategory(Role::MEG);
+            $Mbg = Utility::getUsersEmailByCategory(Role::MBG);
+            $fsd = Utility::getUsersEmailByCategory(Role::FSD);
+            $ccEmails = array_merge($Meg, $Mbg, $fsd);
 
-                $emailData = [
-                    'name' => $name,
-                    'subject' => 'Membership Application Payment Declined',
-                    'content' => "Please be informed that your payment as a {$categoryName} was declined.
-                            <p>Reason: {$request->comment}</p>
-                            <p>For further clarification, kindly contact Membership & Subscriptions Group on +234 -1-2778771</p>",
-                ];
+            Utility::notifyApplicantAndContact($request->application_id, $applicant, $emailData, $ccEmails);
 
-                // CC email addresses
-                $Meg = Utility::getUsersEmailByCategory(Role::MEG);
-                $Mbg = Utility::getUsersEmailByCategory(Role::MBG);
-                $fsd = Utility::getUsersEmailByCategory(Role::FSD);
-                $ccEmails = array_merge($Meg, $Mbg, $fsd);
+            Utility::applicationStatusHelper($application, Application::statuses['MDP'], Application::office['MBG'], Application::office['AP'], $request->comment);
+            logAction($user->email, 'MBG Declined', "MBG Declined FSD review of applicant payment due to incomplete payment", $request->ip());
+            
+            // if (str_contains(strtolower("Incomplete Payment"), strtolower($request->comment))) {
 
-                Utility::notifyApplicantAndContact($request->application_id, $applicant, $emailData, $ccEmails);
+            //     $categoryName = $membershipCategory->name;
 
-                Utility::applicationStatusHelper($application, Application::statuses['MDP'], Application::office['MBG'], Application::office['AP'], $request->comment);
-                logAction($user->email, 'MBG Declined', "MBG Declined FSD review of applicant payment due to incomplete payment", $request->ip());
-            } else {
-                Utility::applicationStatusHelper($application, Application::statuses['MDFR'], Application::office['MBG'], Application::office['FSD'], $request->comment);
-                $application = $application->refresh();
+            //     $emailData = [
+            //         'name' => $name,
+            //         'subject' => 'Membership Application Payment Declined',
+            //         'content' => "Please be informed that your payment as a {$categoryName} was declined.
+            //                 <p>Reason: {$request->comment}</p>
+            //                 <p>For further clarification, kindly contact Membership & Subscriptions Group on +234 20-1-700-8555</p>",
+            //     ];
 
-                $MBGs = Utility::getUsersEmailByCategory(Role::MBG);
-                $MEGs = Utility::getUsersEmailByCategory(Role::MEG);
-                $FSDs = Utility::getUsersByCategory(Role::FSD);
-                $CCs = array_merge($MBGs, $MEGs);
-                Notification::send($FSDs, new InfoNotification(MailContents::mbgPaymentRejectedMail($data->company_name, $request->comment), MailContents::mbgPaymentRejectedSubject(), $CCs));
-                logAction($user->email, 'MBG Declined', "MBG Declined FSD review of applicant payment", $request->ip());
-            }
+            //     // CC email addresses
+            //     $Meg = Utility::getUsersEmailByCategory(Role::MEG);
+            //     $Mbg = Utility::getUsersEmailByCategory(Role::MBG);
+            //     $fsd = Utility::getUsersEmailByCategory(Role::FSD);
+            //     $ccEmails = array_merge($Meg, $Mbg, $fsd);
+
+            //     Utility::notifyApplicantAndContact($request->application_id, $applicant, $emailData, $ccEmails);
+
+            //     Utility::applicationStatusHelper($application, Application::statuses['MDP'], Application::office['MBG'], Application::office['AP'], $request->comment);
+            //     logAction($user->email, 'MBG Declined', "MBG Declined FSD review of applicant payment due to incomplete payment", $request->ip());
+            // } else {
+            //     Utility::applicationStatusHelper($application, Application::statuses['MDFR'], Application::office['MBG'], Application::office['FSD'], $request->comment);
+            //     $application = $application->refresh();
+
+            //     $MBGs = Utility::getUsersEmailByCategory(Role::MBG);
+            //     $MEGs = Utility::getUsersEmailByCategory(Role::MEG);
+            //     $FSDs = Utility::getUsersByCategory(Role::FSD);
+            //     $CCs = array_merge($MBGs, $MEGs);
+            //     Notification::send($FSDs, new InfoNotification(MailContents::mbgPaymentRejectedMail($data->company_name, $request->comment), MailContents::mbgPaymentRejectedSubject(), $CCs));
+            //     logAction($user->email, 'MBG Declined', "MBG Declined FSD review of applicant payment", $request->ip());
+            // }
         }
 
         if ($request->status == 'approve') {

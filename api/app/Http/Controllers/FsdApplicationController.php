@@ -113,7 +113,7 @@ class FsdApplicationController extends Controller
                 'subject' => 'Membership Application Payment Declined',
                 'content' => "Please be informed that your payment for application as a {$categoryName} was declined.
                         <p>Reason: {$request->comment}</p>
-                        <p>For further clarification, kindly contact Membership & Subscriptions Group on +234 -1-2778771</p>",
+                        <p>For further clarification, kindly contact Membership & Subscriptions Group on +234 20-1-700-8555</p>",
             ];
 
             // Recipient email addresses
