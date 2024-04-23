@@ -219,7 +219,7 @@ class MailContents
 
     public static function mbgPaymentApprovedSubject(): string
     {
-        return "Payment Verified by MBG";
+        return "Membership Application Payment Verified by MBG";
     }
 
     public static function mbgPaymentApprovedMail($companyName): string
