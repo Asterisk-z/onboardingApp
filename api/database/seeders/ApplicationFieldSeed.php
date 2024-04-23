@@ -19,7 +19,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '1',
                 "name" => 'companyName',
-                "description" => 'company Name',
+                "description" => 'Company Name',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '1',
@@ -883,7 +883,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '2',
                 "name" => 'companyName',
-                "description" => 'company Name',
+                "description" => 'Company Name',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '1',
@@ -1670,7 +1670,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '3',
                 "name" => 'companyName',
-                "description" => 'company Name',
+                "description" => 'Company Name',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '1',
@@ -2574,7 +2574,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '4',
                 "name" => 'companyName',
-                "description" => 'company Name',
+                "description" => 'Company Name',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '1',
@@ -3552,7 +3552,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '5',
                 "name" => 'companyName',
-                "description" => 'company Name',
+                "description" => 'Company Name',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '1',
@@ -4496,7 +4496,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '6',
                 "name" => 'companyName',
-                "description" => 'company Name',
+                "description" => 'Company Name',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '1',
