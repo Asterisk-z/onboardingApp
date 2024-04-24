@@ -147,10 +147,11 @@ const navData = [{
         icon: "tile-thumb-fill",
         text: "Membership",
         active: false,
-        subMenu: [{
-          text: "Application",
-          link: "/membership-applications",
-        },
+        subMenu: [
+          {
+            text: "Application",
+            link: "/membership-applications",
+          },
           {
             text: "Addition",
             link: "/membership-addictions",
@@ -174,8 +175,19 @@ const navData = [{
       },
       {
         icon: "tile-thumb-fill",
-        text: "Update Authorised Representatives",
-        link: "/auth-representatives",
+        text: "Authorised Representatives",
+        active: false,
+        subMenu: [
+          {
+            text: "Pending Authorised Representatives",
+            link: "/pending-auth-representatives",
+          },
+          {
+            text: "View Authorised Representatives",
+            link: "/auth-representatives",
+          },
+
+        ],
       },
       {
         icon: "tile-thumb-fill",

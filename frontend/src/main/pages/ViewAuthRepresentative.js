@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, Input} from "reactstrap";
+import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, Input } from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
 import { loadUserRoles } from "redux/stores/roles/roleStore";
 import { loadAllActivePositions } from "redux/stores/positions/positionStore";
@@ -14,8 +14,8 @@ import Head from "layout/head/Head";
 import AuthRepTable from './Tables/AuthRepTable'
 
 
-const PendingAuthRepresentative = ({ drawer }) => {
-        
+const ViewAuthRepresentative = ({ drawer }) => {
+
     const [counter, setCounter] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -33,7 +33,7 @@ const PendingAuthRepresentative = ({ drawer }) => {
     const { register, handleSubmit, formState: { errors }, resetField } = useForm();
 
     const toggleForm = () => setModalForm(!modalForm);
-    
+
     const updateParentState = (newState) => {
         setParentState(newState);
     };
@@ -43,48 +43,9 @@ const PendingAuthRepresentative = ({ drawer }) => {
         dispatch(loadAllActivePositions());
         dispatch(loadAllCountries());
         dispatch(loadAllActiveAuthoriser());
-        dispatch(userLoadUserARs({"approval_status" : "pending", 'role_id' : ""}));
+        dispatch(userLoadUserARs({ "approval_status": "approved", 'role_id': "" }));
     }, [dispatch, parentState]);
-      
-    const handleFormSubmit = async (values) => {
 
-        const formData = new FormData();
-        formData.append('first_name', values.firstName)
-        formData.append('last_name', values.lastName)
-        formData.append('position_id', values.position_id)
-        formData.append('nationality', values.nationality)
-        formData.append('role_id', values.role)
-        formData.append('email', values.email)
-        formData.append('phone', values.phone)
-        
-        try {
-            setLoading(true);
-            
-            const resp = await dispatch(userCreateUserAR(formData));
-
-            if (resp.payload?.message == "success") {
-                setTimeout(() => {
-                  setLoading(false);
-                  setModalForm(!modalForm)
-                  resetField('firstName')
-                  resetField('lastName')
-                  resetField('position_id')
-                  resetField('nationality')
-                  resetField('role')
-                  resetField('email')
-                  resetField('phone')
-                  setParentState(Math.random())
-                }, 1000);
-            
-            } else {
-              setLoading(false);
-            }
-            
-      } catch (error) {
-        setLoading(false);
-      }
-
-    }; 
 
 
     const $countries = countries ? JSON.parse(countries) : null;
@@ -92,23 +53,23 @@ const PendingAuthRepresentative = ({ drawer }) => {
     const $positions = positions ? JSON.parse(positions) : null;
     const $authorizers = authorizers ? JSON.parse(authorizers) : null;
     const $authorize_reps = authorize_reps ? JSON.parse(authorize_reps) : null;
-  
+
 
 
 
     return (
         <React.Fragment>
-            <Head title="Pending Authorised Representative"></Head>
+            <Head title="View Authorised Representative"></Head>
             <Content>
                 <BlockHead size="sm">
                     <BlockBetween>
                         <BlockHeadContent>
                             <BlockTitle page tag="h3">
-                                Pending Authorised Representatives
+                                View Authorised Representatives
                             </BlockTitle>
                         </BlockHeadContent>
                         <BlockHeadContent>
-                            
+
                         </BlockHeadContent>
                     </BlockBetween>
                 </BlockHead>
@@ -138,7 +99,7 @@ const PendingAuthRepresentative = ({ drawer }) => {
                                 </BlockHead>
 
                                 <PreviewCard>
-                                    {$authorize_reps && <AuthRepTable updateParent={updateParentState} parentState={parentState} data={$authorize_reps} positions={$positions} countries={$countries} authorizers={$authorizers} roles={$roles} pending={true}  expandableRows pagination actions />}
+                                    {$authorize_reps && <AuthRepTable updateParent={updateParentState} parentState={parentState} data={$authorize_reps} positions={$positions} countries={$countries} authorizers={$authorizers} roles={$roles} pending={true} expandableRows pagination actions />}
                                 </PreviewCard>
                             </Block>
 
@@ -150,4 +111,4 @@ const PendingAuthRepresentative = ({ drawer }) => {
         </React.Fragment>
     );
 };
-export default PendingAuthRepresentative;
+export default ViewAuthRepresentative;

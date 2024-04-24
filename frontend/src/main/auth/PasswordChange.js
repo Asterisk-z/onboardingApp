@@ -58,11 +58,11 @@ const PasswordChange = () => {
         // const isValidPassword = passwordRegex.test(getValues('password'));
         const isValidNewPassword = passwordRegex.test(getValues('new_password'));
         
-        if (event.target.name == 'password') {
-            setValid(false)
-            // setError("password", { type: "password",  message: "Password must contain a minimum of 8 characters, with an uppercase letter, a lowercase letter, a number and a special character."  }, { shouldFocus: false })
-            return
-        }
+        // if (event.target.name == 'password') {
+        //     // setValid(false)
+        //     // setError("password", { type: "password",  message: "Password must contain a minimum of 8 characters, with an uppercase letter, a lowercase letter, a number and a special character."  }, { shouldFocus: false })
+        //     return
+        // }
         
         if (!isValidNewPassword  && event.target.name == 'new_password') {
             setValid(false)
