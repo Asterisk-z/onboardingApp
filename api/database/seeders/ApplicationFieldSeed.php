@@ -125,7 +125,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '1',
                 "name" => 'applicationPrimaryContactName',
-                "description" => 'Application Primary Contact Name',
+                "description" => "Applicant's Primary Contact Name",
                 "type" => 'text',
                 "required" => 1,
                 "page" => '1',
@@ -133,7 +133,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '1',
                 "name" => 'applicationPrimaryContactTelephone',
-                "description" => 'Application Primary Contact Telephone',
+                "description" => "Applicant's Primary Contact Telephone",
                 "type" => 'number',
                 "required" => 1,
                 "page" => '1',
@@ -141,7 +141,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '1',
                 "name" => 'applicationPrimaryContactEmailAddress',
-                "description" => 'Application Primary Contact Email Address',
+                "description" => "Applicant's Primary Contact Email Address",
                 "type" => 'email',
                 "required" => 1,
                 "page" => '1',
@@ -1776,7 +1776,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '3',
                 "name" => 'applicationPrimaryContactName',
-                "description" => 'Application Primary Contact Name',
+                "description" => "Applicant's Primary Contact Name",
                 "type" => 'text',
                 "required" => 1,
                 "page" => '1',
@@ -1784,7 +1784,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '3',
                 "name" => 'applicationPrimaryContactTelephone',
-                "description" => 'Application Primary Contact Telephone',
+                "description" => "Applicant's Primary Contact Telephone",
                 "type" => 'number',
                 "required" => 1,
                 "page" => '1',
@@ -1792,7 +1792,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '3',
                 "name" => 'applicationPrimaryContactEmailAddress',
-                "description" => 'Application Primary Contact Email Address',
+                "description" => "Applicant's Primary Contact Email Address",
                 "type" => 'email',
                 "required" => 1,
                 "page" => '1',
@@ -2680,7 +2680,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '4',
                 "name" => 'applicationPrimaryContactName',
-                "description" => 'Application Primary Contact Name',
+                "description" => "Applicant's Primary Contact Name",
                 "type" => 'text',
                 "required" => 1,
                 "page" => '1',
@@ -2688,7 +2688,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '4',
                 "name" => 'applicationPrimaryContactTelephone',
-                "description" => 'Application Primary Contact Telephone',
+                "description" => "Applicant's Primary Contact Telephone",
                 "type" => 'number',
                 "required" => 1,
                 "page" => '1',
@@ -2696,7 +2696,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '4',
                 "name" => 'applicationPrimaryContactEmailAddress',
-                "description" => 'Application Primary Contact Email Address',
+                "description" => "Applicant's Primary Contact Email Address",
                 "type" => 'email',
                 "required" => 1,
                 "page" => '1',
@@ -3658,7 +3658,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '5',
                 "name" => 'applicationPrimaryContactName',
-                "description" => 'Application Primary Contact Name',
+                "description" => "Applicant's Primary Contact Name",
                 "type" => 'text',
                 "required" => 1,
                 "page" => '1',
@@ -3666,7 +3666,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '5',
                 "name" => 'applicationPrimaryContactTelephone',
-                "description" => 'Application Primary Contact Telephone',
+                "description" => "Applicant's Primary Contact Telephone",
                 "type" => 'number',
                 "required" => 1,
                 "page" => '1',
@@ -3674,7 +3674,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '5',
                 "name" => 'applicationPrimaryContactEmailAddress',
-                "description" => 'Application Primary Contact Email Address',
+                "description" => "Applicant's Primary Contact Email Address",
                 "type" => 'email',
                 "required" => 1,
                 "page" => '1',
@@ -4602,7 +4602,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '6',
                 "name" => 'applicationPrimaryContactName',
-                "description" => 'Application Primary Contact Name',
+                "description" => "Applicant's Primary Contact Name",
                 "type" => 'text',
                 "required" => 1,
                 "page" => '1',
@@ -4610,7 +4610,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '6',
                 "name" => 'applicationPrimaryContactTelephone',
-                "description" => 'Application Primary Contact Telephone',
+                "description" => "Applicant's Primary Contact Telephone",
                 "type" => 'number',
                 "required" => 1,
                 "page" => '1',
@@ -4618,7 +4618,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '6',
                 "name" => 'applicationPrimaryContactEmailAddress',
-                "description" => 'Application Primary Contact Email Address',
+                "description" => "Applicant's Primary Contact Email Address",
                 "type" => 'email',
                 "required" => 1,
                 "page" => '1',

@@ -349,6 +349,8 @@ class MembershipApplicationController extends Controller
 
         Utility::applicationStatusHelper($application, Application::statuses['AS'], Application::office['AP'], Application::office['MBG']);
 
+        $this->updateInstitution($request);
+
         logAction($user->email, 'Application submitted', 'Membership application has been submitted successfully.', $request->ip());
         event(new ApplicationSubmissionEvent($user, $application, $institution, $membershipCategory));
         return successResponse("Your Application has been submitted and is under review. You will be notified of any feedback soon");
@@ -411,11 +413,36 @@ class MembershipApplicationController extends Controller
 
         Utility::applicationStatusHelper($application, Application::statuses['ARD'], Application::office['AP'], Application::office['MEG']);
 
+        $this->updateInstitution($request);
+
         logAction($user->email, 'Application re-uploaded', 'Membership application has been re-uploaded successfully.', $request->ip());
         $MEGs = Utility::getUsersByCategory(Role::MEG);
         Notification::send($MEGs, new InfoNotification(MailContents::documentReuploadMail($applicantName), MailContents::documentReuploadSubject()));
 
         return successResponse("Your Application has been submitted and is under review. You will be notified of any feedback soon");
+    }
+
+    protected function updateInstitution(Request $request)
+    {
+        $user = auth()->user();
+
+        $application_id = $request->application_id;
+
+        //Get the application model
+        $application = Application::find($application_id);
+
+        $data = Application::where('applications.id', $application->id);
+        $data = Utility::applicationDetails($data);
+        $data = $data->first();
+
+        $companyName = $data->company_name;
+
+        $institution = $application->institution;
+
+        $institution->name = $companyName;
+        $institution->save();
+
+        return true;
     }
 
     public function disclosure(Request $request)

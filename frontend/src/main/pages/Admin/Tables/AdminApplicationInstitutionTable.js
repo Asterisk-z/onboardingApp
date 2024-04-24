@@ -177,6 +177,13 @@ const ActionTab = (props) => {
                 formData.append('comment', comments); 
                 formData.append('amount_received', amount);
                 dispatch(FSDReviewSummary(formData));
+                setModalForm(false)
+                setModalView(false)
+                setSignedAgreement(false)
+                setModalReviewView(false)
+                setShowConcession(false)
+                setModalPaymentView(false)
+                setModalViewUpdate(false)
                 props.updateParentParent(Math.random());
               } else {
                 Swal.fire("Comment and Amount is required!");
@@ -204,6 +211,13 @@ const ActionTab = (props) => {
                 formData.append('status', 'decline');
                 formData.append('comment', comments); 
                 dispatch(FSDReviewSummary(formData));
+                setModalForm(false)
+                setModalView(false)
+                setSignedAgreement(false)
+                setModalReviewView(false)
+                setShowConcession(false)
+                setModalPaymentView(false)
+                setModalViewUpdate(false)
                 props.updateParentParent(Math.random());
               } else {
                 Swal.fire("Comment is required!");
@@ -230,6 +244,13 @@ const ActionTab = (props) => {
                 formData.append('status', 'approve');
                 formData.append('comment', comments); 
                 dispatch(MBGReview(formData));
+                setModalForm(false)
+                setModalView(false)
+                setSignedAgreement(false)
+                setModalReviewView(false)
+                setShowConcession(false)
+                setModalPaymentView(false)
+                setModalViewUpdate(false)
                 props.updateParentParent(Math.random());
               } else {
                 Swal.fire("Comment is required!");
@@ -256,6 +277,13 @@ const ActionTab = (props) => {
                 formData.append('status', 'decline');
                 formData.append('comment', comments); 
                 dispatch(MBGReview(formData));
+                setModalForm(false)
+                setModalView(false)
+                setSignedAgreement(false)
+                setModalReviewView(false)
+                setShowConcession(false)
+                setModalPaymentView(false)
+                setModalViewUpdate(false)
                 props.updateParentParent(Math.random());
               } else {
                 Swal.fire("Comment is required!");
@@ -286,6 +314,13 @@ const ActionTab = (props) => {
                 formData.append('comment', comments); 
                 formData.append('application_report', application_report); 
                 dispatch(MEGReview(formData));
+                setModalForm(false)
+                setModalView(false)
+                setSignedAgreement(false)
+                setModalReviewView(false)
+                setShowConcession(false)
+                setModalPaymentView(false)
+                setModalViewUpdate(false)
                 props.updateParentParent(Math.random());
               } else {
                 Swal.fire("Comment and Report is required!");
@@ -312,6 +347,13 @@ const ActionTab = (props) => {
                 formData.append('status', 'decline');
                 formData.append('comment', comments); 
                 dispatch(MEGReview(formData));
+                setModalForm(false)
+                setModalView(false)
+                setSignedAgreement(false)
+                setModalReviewView(false)
+                setShowConcession(false)
+                setModalPaymentView(false)
+                setModalViewUpdate(false)
                 props.updateParentParent(Math.random());
               } else {
                 Swal.fire("Comment is required!");
@@ -335,6 +377,13 @@ const ActionTab = (props) => {
                 const formData = new FormData();
                 formData.append('application_id', institution.internal.application_id); 
                 dispatch(MEG2Review(formData));
+                setModalForm(false)
+                setModalView(false)
+                setSignedAgreement(false)
+                setModalReviewView(false)
+                setShowConcession(false)
+                setModalPaymentView(false)
+                setModalViewUpdate(false)
                 props.updateParentParent(Math.random());
               
             }
@@ -356,6 +405,13 @@ const ActionTab = (props) => {
                 const formData = new FormData();
                 formData.append('application_id', institution.internal.application_id); 
                 dispatch(completeApplication(formData));
+                setModalForm(false)
+                setModalView(false)
+                setSignedAgreement(false)
+                setModalReviewView(false)
+                setShowConcession(false)
+                setModalPaymentView(false)
+                setModalViewUpdate(false)
                 props.updateParentParent(Math.random());
               
             }
@@ -414,13 +470,15 @@ const ActionTab = (props) => {
                 Payment View
             </ModalHeader>
             <ModalBody>
-                  {(institution.internal.concession_stage != '1' && !showConcession) ? <>
-                        <Button onClick={toggleConcession} >Upload Concession</Button>
+                  {(institution.internal.concession_stage != '1' ) ? <>
+                            {!showConcession &&  <>
+                              <Button onClick={toggleConcession} >Upload Concession</Button>
+                            </>}
                     </> : 
                     (institution?.latest_evidence?.proof) ? <>
                         <ul>
                             <li><span className="lead">Invoice Number : </span>{`${institution?.payment_information?.invoice_number}`}</li>
-                            <li><span className="lead">Date of Payment : </span>{`${institution?.payment_information?.date_paid ? institution?.payment_information?.date_paid : ''}`}</li>
+                            <li><span className="lead">Date of Payment : </span>{`${institution?.latest_evidence?.dateUpload ? institution?.latest_evidence?.dateUpload : ''}`}</li>
                             <li><span className="lead">Reference : </span>{`${institution?.payment_information?.reference}`}</li>
                             {(aUser.is_admin_mbg() && $latest_evidence) && <>
                             <li><span className="lead">Amount received by FSD : </span>{`${institution?.internal?.amount_received_by_fsd}`}</li>
@@ -497,19 +555,401 @@ const ActionTab = (props) => {
                     <Card className="card">   
                         <CardBody className="card-inner">
                             <CardTitle tag="h5">{ `Basic Information` }</CardTitle>
-                              {/* <ul>
-                                  <li><span className="lead">Company name :{`${institution?.basic_details.companyName}`} </span></li>
-                                  <li><span className="lead">RC Number :{`${institution?.basic_details.rcNumber}`} </span></li>
-                                  <li><span className="lead">Registered Office Address :{`${institution?.basic_details.registeredOfficeAddress}`} </span></li>
-                                  <li><span className="lead">Town/City :{`${institution?.basic_details.placeOfIncorporation}`} </span></li>
-                                  <li><span className="lead">Date of Incorporation :{`${institution?.basic_details.dateOfIncorporation}`} </span></li>
-                                  <li><span className="lead">Place of Incorporation :{`${institution?.basic_details.placeOfIncorporation}`} </span></li>
-                                  <li><span className="lead">Nature of Business :{`${institution?.basic_details.natureOfBusiness}`} </span></li>
-                                  <li><span className="lead">Company Primary Telephone Number :{`${institution?.basic_details.companyTelephoneNumber}`} </span></li>
-                                  <li><span className="lead">Company Secondary Telephone Number :{`${institution?.basic_details.companyTelephoneNumber}`} </span></li>
-                                  <li><span className="lead">Company Email Address :{`${institution?.basic_details.companyEmailAddress}`} </span></li>
-                                  <li><span className="lead">Company website address :{`${institution?.basic_details.corporateWebsiteAddress}`} </span></li>
-                              </ul> */}
+                            
+                            <table className="table table-striped table-bordered table-hover">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Value</th>
+                                  </tr>
+                                </thead>
+                                  <tbody>
+                                      <tr>
+                                        <td>1</td>
+                                        <td>Company Name</td>
+                                        <td>{`${institution?.basic_details.companyName}`}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>2</td>
+                                        <td>RC Number</td>
+                                        <td>{`${institution?.basic_details.rcNumber}`}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>3</td>
+                                        <td>Registered Office Address</td>
+                                        <td>{`${institution?.basic_details.registeredOfficeAddress}`}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>4</td>
+                                        <td>Town/City</td>
+                                        <td>{`${institution?.basic_details.placeOfIncorporation}`}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>5</td>
+                                        <td>Date of Incorporation</td>
+                                        <td>{`${institution?.basic_details.dateOfIncorporation}`}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>6</td>
+                                        <td>Place of Incorporation</td>
+                                        <td>{`${institution?.basic_details.placeOfIncorporation}`}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>7</td>
+                                        <td>Nature of Business</td>
+                                        <td>{`${institution?.basic_details.natureOfBusiness}`}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>8</td>
+                                        <td>Company Primary Telephone Number</td>
+                                        <td>{`${institution?.basic_details.companyTelephoneNumber}`}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>9</td>
+                                        <td>Company Secondary Telephone Number</td>
+                                        <td>{`${institution?.basic_details.companyTelephoneNumber}`}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>10</td>
+                                        <td>Company Email Address</td>
+                                        <td>{`${institution?.basic_details.companyEmailAddress}`}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>11</td>
+                                        <td>Company Website Address</td>
+                                        <td>{`${institution?.basic_details.corporateWebsiteAddress}`}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>12</td>
+                                        <td>Authorised Share Capital</td>
+                                        <td>{`${institution?.basic_details.authorisedShareCapital}`}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>13</td>
+                                        <td>Authorised Share Capital Currency</td>
+                                          <td>{`${institution?.basic_details.authorisedShareCapitalCurrency}`}</td>
+                                      </tr>
+                                    
+                                  </tbody>
+                              </table>
+                        </CardBody> 
+                        <CardBody className="card-inner">
+                            <CardTitle tag="h5">{ `Bank Details` }</CardTitle>
+                            
+                            <table className="table table-striped table-bordered table-hover">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Value</th>
+                                  </tr>
+                                </thead>
+                                  <tbody>
+                                    {institution?.bank_details?.bankDetailName && <>
+                                      <tr>
+                                        <td>1</td>
+                                        <td>Bank Detail</td>
+                                        <td>{`${institution?.bank_details?.bankDetailName}`}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>2</td>
+                                        <td>Bank Address</td>
+                                        <td>{`${institution?.bank_details?.bankDetailAddress}`}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>3</td>
+                                        <td>Bank Telephone</td>
+                                        <td>{`${institution?.bank_details?.bankDetailTelephone}`}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>4</td>
+                                        <td>Type Of Account</td>
+                                        <td>{`${institution?.bank_details?.bankDetailTypeOfAccount}`}</td>
+                                    </tr>
+                                    </>}
+                                    {institution?.bank_details?.bankDetailNameOne && <>
+
+                                      <tr>
+                                        <td>1</td>
+                                        <td>Bank Detail</td>
+                                        <td>{`${institution?.bank_details?.bankDetailNameOne}`}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>2</td>
+                                        <td>Bank Address</td>
+                                        <td>{`${institution?.bank_details?.bankDetailAddressOne}`}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>3</td>
+                                        <td>Bank Telephone</td>
+                                        <td>{`${institution?.bank_details?.bankDetailTelephoneOne}`}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>4</td>
+                                        <td>Type Of Account</td>
+                                        <td>{`${institution?.bank_details?.bankDetailTypeOfAccountOne}`}</td>
+                                      </tr>
+                                    </>}
+
+                                    {institution?.bank_details?.bankDetailNameTwo && <>
+
+                                      <tr>
+                                        <td>1</td>
+                                        <td>Bank Detail</td>
+                                        <td>{`${institution?.bank_details?.bankDetailNameTwo}`}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>2</td>
+                                        <td>Bank Address</td>
+                                        <td>{`${institution?.bank_details?.bankDetailAddressTwo}`}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>3</td>
+                                        <td>Bank Telephone</td>
+                                        <td>{`${institution?.bank_details?.bankDetailTelephoneTwo}`}</td>
+                                      </tr>
+                                      <tr>
+                                        <td>4</td>
+                                        <td>Type Of Account</td>
+                                        <td>{`${institution?.bank_details?.bankDetailTypeOfAccountTwo}`}</td>
+                                      </tr>
+                                    </>}
+                                    
+                                  </tbody>
+                              </table>
+                        </CardBody>
+                          {institution?.bank_license_details?.bankingLicense && <>
+
+                        <CardBody className="card-inner">
+                            <CardTitle tag="h5">{ `Type of Bank License` }</CardTitle>
+                            
+                            <table className="table table-striped table-bordered table-hover">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Value</th>
+                                  </tr>
+                                </thead>
+                                  <tbody>
+                                      <tr>
+                                        <td>1</td>
+                                        <td>Banking License</td>
+                                        <td>{`${institution?.bank_license_details?.bankingLicense}`}</td>
+                                      </tr>
+                                    
+
+                                  </tbody>
+                              </table>
+                        </CardBody>
+                        </>}
+                          
+
+                        <CardBody className="card-inner">
+                            <CardTitle tag="h5">{ `Disciplinary History ` }</CardTitle>
+                            
+                            <table className="table table-striped table-bordered table-hover">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Value</th>
+                                  </tr>
+                                </thead>
+                                  <tbody>
+                                    {institution?.disciplinary_details?.chiefComplianceOfficerDisciplinary && <>
+                                      <tr>
+                                        <td>-</td>
+                                        <td>chiefComplianceOfficerDisciplinary</td>
+                                        <td>{`${institution?.disciplinary_details?.chiefComplianceOfficerDisciplinary}`}</td>
+                                      </tr>
+                  </>}
+                  {institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryFive && <>
+                    <tr>
+                      <td>-</td>
+                      <td>Ever been the subject of any disciplinary or criminal proceedings or been the subject of any investigation by any Authority which may lead to such proceedings?</td>
+                      <td>{`${institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryFive}`}</td>
+                    </tr>
+                  </>}
+                  {institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryFour && <>
+                    <tr>
+                      <td>-</td>
+                      <td>Ever been declared bankrupt or entered into any compromise arrangement with creditors related to bankruptcy or insolvency?</td>
+                      <td>{`${institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryFour}`}</td>
+                    </tr>
+                  </>}
+                  {institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryOne && <>
+                    <tr>
+                      <td>-</td>
+                      <td>Ever been convicted of any criminal offence? </td>
+                      <td>{`${institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryOne}`}</td>
+                    </tr>
+                  </>}
+                  {institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryThree && <>
+                    <tr>
+                      <td>-</td>
+                      <td>Ever been concerned in the management of a business which has gone into insolvency, liquidation, administration or the equivalent proceedings within or outside of the Nigerian jurisdiction while connected with such organisation within one (1) year of that connection?</td>
+                      <td>{`${institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryThree}`}</td>
+                    </tr>
+                  </>}
+                  {institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryTwo && <>
+                    <tr>
+                      <td>-</td>
+                      <td>Ever been the subject of an adverse finding by, or settlement with, any government agency, court, securities exchange, SRO, tribunal or other regulatory authority?</td>
+                      <td>{`${institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryTwo}`}</td>
+                    </tr>
+                  </>}
+                  {institution?.disciplinary_details?.companyDisciplinary && <>
+                    <tr>
+                      <td>-</td>
+                      <td>companyDisciplinary</td>
+                      <td>{`${institution?.disciplinary_details?.companyDisciplinary}`}</td>
+                    </tr>
+                  </>}
+                  {institution?.disciplinary_details?.companyDisciplinaryFour && <>
+                    <tr>
+                      <td>-</td>
+                      <td>Has your company, or any of its affiliates, been subject to any winding up order/receivership arrangement? </td>
+                      <td>{`${institution?.disciplinary_details?.companyDisciplinaryFour}`}</td>
+                    </tr>
+                  </>}
+                  {institution?.disciplinary_details?.companyDisciplinaryOne && <>
+                    <tr>
+                      <td>-</td>
+                      <td>Has the company or any of its affiliates , been denied registration or expelled from membership of any securities exchange, self-regulatory organisation (SRO) or associations?</td>
+                      <td>{`${institution?.disciplinary_details?.companyDisciplinaryOne}`}</td>
+                    </tr>
+                  </>}
+                  {institution?.disciplinary_details?.companyDisciplinaryThree && <>
+                    <tr>
+                      <td>-</td>
+                      <td>Has your company, or any of its affiliates, ever been refused any Fidelity Bond?</td>
+                      <td>{`${institution?.disciplinary_details?.companyDisciplinaryThree}`}</td>
+                    </tr>
+                  </>}
+                  {institution?.disciplinary_details?.companyDisciplinaryTwo && <>
+                    <tr>
+                      <td>-</td>
+                      <td>Has your membership, or that of any affiliates, in any of the institutions/associations mentioned above at any time been revoked, suspended or withdrawn?</td>
+                      <td>{`${institution?.disciplinary_details?.companyDisciplinaryTwo}`}</td>
+                    </tr>
+                  </>}
+                  {institution?.disciplinary_details?.mdceoDisciplinary && <>
+                    <tr>
+                      <td>-</td>
+                      <td>mdceoDisciplinary</td>
+                      <td>{`${institution?.disciplinary_details?.mdceoDisciplinary}`}</td>
+                    </tr>
+                  </>}
+                  {institution?.disciplinary_details?.mdceoDisciplinaryEight && <>
+                    <tr>
+                      <td>-</td>
+                      <td>Ever been disqualified from acting as a Director?</td>
+                      <td>{`${institution?.disciplinary_details?.mdceoDisciplinaryEight}`}</td>
+                    </tr>
+                  </>}
+                  {institution?.disciplinary_details?.mdceoDisciplinaryFive && <>
+                    <tr>
+                      <td>-</td>
+                      <td>Ever been the subject of any disciplinary or criminal proceedings or been the subject of any investigation by any authority which may lead to such proceedings?</td>
+                      <td>{`${institution?.disciplinary_details?.mdceoDisciplinaryFive}`}</td>
+                    </tr>
+                  </>}
+                  {institution?.disciplinary_details?.mdceoDisciplinaryFour && <>
+                    <tr>
+                      <td>-</td>
+                      <td>Ever been declared bankrupt or entered into any compromise arrangement with creditors related to bankruptcy or insolvency?</td>
+                      <td>{`${institution?.disciplinary_details?.mdceoDisciplinaryFour}`}</td>
+                    </tr>
+                  </>}
+                  {institution?.disciplinary_details?.mdceoDisciplinaryOne && <>
+                    <tr>
+                      <td>-</td>
+                      <td>Ever been convicted of any criminal offence?</td>
+                      <td>{`${institution?.disciplinary_details?.mdceoDisciplinaryOne}`}</td>
+                    </tr>
+                  </>}
+                  {institution?.disciplinary_details?.mdceoDisciplinarySeven && <>
+                    <tr>
+                      <td>-</td>
+                      <td>Ever had such authorisation, membership or licence (referred to above) revoked or terminated?</td>
+                      <td>{`${institution?.disciplinary_details?.mdceoDisciplinarySeven}`}</td>
+                    </tr>
+                  </>}
+                  {institution?.disciplinary_details?.mdceoDisciplinarySix && <>
+                    <tr>
+                      <td>-</td>
+                      <td>Ever been refused authorisation or licence to carry on a trade, business or profession or to be a member of a securities exchange?</td>
+                      <td>{`${institution?.disciplinary_details?.mdceoDisciplinarySix}`}</td>
+                    </tr>
+                  </>}
+                  {institution?.disciplinary_details?.mdceoDisciplinaryThree && <>
+                    <tr>
+                      <td>-</td>
+                      <td>Ever been a Director, partner or otherwise concerned in the management of a business which has gone into insolvency, liquidation, administration or the similar proceedings within or outside of the Nigerian jurisdiction while connected with such organisation within one (1) year of that connection?</td>
+                      <td>{`${institution?.disciplinary_details?.mdceoDisciplinaryThree}`}</td>
+                    </tr>
+                  </>}
+                  {institution?.disciplinary_details?.mdceoDisciplinaryTwo && <>
+                    <tr>
+                      <td>-</td>
+                      <td>Ever been the subject of an adverse finding by, or settlement with, any government agency, court, securities exchange, SRO, tribunal or other regulatory authority?</td>
+                      <td>{`${institution?.disciplinary_details?.mdceoDisciplinaryTwo}`}</td>
+                    </tr>
+                  </>}
+                  {institution?.disciplinary_details?.treasureDisciplinary && <>
+                    <tr>
+                      <td>-</td>
+                      <td>treasureDisciplinary</td>
+                      <td>{`${institution?.disciplinary_details?.treasureDisciplinary}`}</td>
+                    </tr>
+                  </>}
+                  {institution?.disciplinary_details?.treasureDisciplinaryFive && <>
+                    <tr>
+                      <td>-</td>
+                      <td>Ever been the subject of any disciplinary or criminal proceedings or been the subject of any investigation by any authority which may lead to such proceedings?</td>
+                      <td>{`${institution?.disciplinary_details?.treasureDisciplinaryFive}`}</td>
+                    </tr>
+                  </>}
+                  {institution?.disciplinary_details?.treasureDisciplinaryFour && <>
+                    <tr>
+                      <td>-</td>
+                      <td>'Ever been declared bankrupt or entered into any compromise arrangement with creditors related to bankruptcy or insolvency?</td>
+                      <td>{`${institution?.disciplinary_details?.treasureDisciplinaryFour}`}</td>
+                    </tr>
+                  </>}
+                  {institution?.disciplinary_details?.treasureDisciplinaryOne && <>
+                    <tr>
+                      <td>-</td>
+                      <td>Ever been convicted of any criminal offence?</td>
+                      <td>{`${institution?.disciplinary_details?.treasureDisciplinaryOne}`}</td>
+                    </tr>
+                  </>}
+                  {institution?.disciplinary_details?.treasureDisciplinaryThree && <>
+                    <tr>
+                      <td>-</td>
+                      <td>Ever been concerned in the management of a business which has gone into insolvency, liquidation, administration or the similar proceedings within or outside of the Nigerian jurisdiction while connected with such organisation within one (1) year of that connection?</td>
+                      <td>{`${institution?.disciplinary_details?.treasureDisciplinaryThree}`}</td>
+                    </tr>
+                  </>}
+                  {institution?.disciplinary_details?.treasureDisciplinaryTwo && <>
+                    <tr>
+                      <td>-</td>
+                      <td>Ever been the subject of an adverse finding by, or settlement with, any government agency, court, securities exchange, SRO, tribunal or other regulatory authority?</td>
+                      <td>{`${institution?.disciplinary_details?.treasureDisciplinaryTwo}`}</td>
+                    </tr>
+                  </>}
+                                    
+
+                                  </tbody>
+                              </table>
+                        </CardBody>
+
+            {institution?.custodian_details?.custodianInformationName && <>
+            <CardBody className="card-inner">
+              <CardTitle tag="h5">{`Custodian Information`}</CardTitle>
+
               <table className="table table-striped table-bordered table-hover">
                 <thead>
                   <tr>
@@ -519,76 +959,33 @@ const ActionTab = (props) => {
                   </tr>
                 </thead>
                 <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Company Name</td>
-                  <td>{`${institution?.basic_details.companyName}`}</td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>RC Number</td>
-                  <td>{`${institution?.basic_details.rcNumber}`}</td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>Registered Office Address</td>
-                  <td>{`${institution?.basic_details.registeredOfficeAddress}`}</td>
-                </tr>
-                <tr>
-                  <td>4</td>
-                  <td>Town/City</td>
-                  <td>{`${institution?.basic_details.placeOfIncorporation}`}</td>
-                </tr>
-                <tr>
-                  <td>5</td>
-                  <td>Date of Incorporation</td>
-                  <td>{`${institution?.basic_details.dateOfIncorporation}`}</td>
-                </tr>
-                <tr>
-                  <td>6</td>
-                  <td>Place of Incorporation</td>
-                  <td>{`${institution?.basic_details.placeOfIncorporation}`}</td>
-                </tr>
-                <tr>
-                  <td>7</td>
-                  <td>Nature of Business</td>
-                  <td>{`${institution?.basic_details.natureOfBusiness}`}</td>
-                </tr>
-                <tr>
-                  <td>8</td>
-                  <td>Company Primary Telephone Number</td>
-                  <td>{`${institution?.basic_details.companyTelephoneNumber}`}</td>
-                </tr>
-                <tr>
-                  <td>9</td>
-                  <td>Company Secondary Telephone Number</td>
-                  <td>{`${institution?.basic_details.companyTelephoneNumber}`}</td>
-                </tr>
-                <tr>
-                  <td>10</td>
-                  <td>Company Email Address</td>
-                  <td>{`${institution?.basic_details.companyEmailAddress}`}</td>
-                </tr>
-                <tr>
-                  <td>11</td>
-                  <td>Company Website Address</td>
-                  <td>{`${institution?.basic_details.corporateWebsiteAddress}`}</td>
-                </tr>
-                <tr>
-                  <td>12</td>
-                  <td>Authorised Share Capital</td>
-                  <td>{`${institution?.basic_details.authorisedShareCapital}`}</td>
-                </tr>
-                <tr>
-                  <td>13</td>
-                  <td>Authorised Share Capital Currency</td>
-                    <td>{`${institution?.basic_details.authorisedShareCapitalCurrency}`}</td>
-                </tr>
-                  
+
+
+                    <tr>
+                      <td>1</td>
+                      <td>Name</td>
+                      <td>{`${institution?.custodian_details?.custodianInformationName}`}</td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td> Address</td>
+                      <td>{`${institution?.custodian_details?.custodianInformationAddress}`}</td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td>Mobile Contact</td>
+                      <td>{`${institution?.custodian_details?.custodianInformationMobileNumberOfContact}`}</td>
+                    </tr>
+                    <tr>
+                      <td>4</td>
+                      <td>Telephone</td>
+                      <td>{`${institution?.custodian_details?.custodianInformationTelephone}`}</td>
+                    </tr>
                 </tbody>
-                              </table>
-                        </CardBody>
-                        
+              </table>
+            </CardBody>
+                  </>}
+
                         <CardBody className="card-inner">
                             <CardTitle tag="h5">{ `Supporting Documents` }</CardTitle>
 
@@ -621,57 +1018,45 @@ const ActionTab = (props) => {
                         </CardBody>
                         
                         <CardBody className="card-inner">
-                            <CardTitle tag="h5">{ `Payment Information` }</CardTitle>
-                              {/* <ul>
-                                  <li><span className="lead">Invoice Number :{`${institution?.payment_information?.invoice_number}`} </span></li>
-                                  <li><span className="lead">Payment Reference :{`${institution?.payment_information?.reference}`} </span></li>
-                                  <li><span className="lead">Date Of Payment :{`${institution?.payment_information?.date_paid}`} </span></li>
-                                  <li><span className="lead">Amount Paid :{`${institution?.payment_details?.total}`} </span></li>
-                                  <li><span className="lead">Concession Amount :{`${institution?.payment_details?.concession_amount}`} </span></li>
-              </ul> */}
-              <table className="table table-striped table-bordered table-hover">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Value</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>Invoice Number</td>
-                    <td>{`${institution?.payment_information?.invoice_number}`}</td>
-                  </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>Payment Reference</td>
-                    <td>{`${institution?.payment_information?.reference}`}</td>
-                  </tr>
-                  <tr>
-                    <td>3</td>
-                    <td>Date of Payment</td>
-                    <td>{`${institution?.payment_information?.date_paid}`}</td>
-                  </tr>
-                  <tr>
-                    <td>4</td>
-                    <td>Amount Paid</td>
-                    <td>{`${institution?.payment_details?.total}`}</td>
-                  </tr>
-                  <tr>
-                    <td>5</td>
-                    <td>Concession Amount</td>
-                    <td>{`${institution?.payment_details?.concession_amount}`}</td>
-                  </tr>
-                </tbody>
-                </table>
+                            <CardTitle tag="h5">{`Payment Information`}</CardTitle>
+                          
+                            <table className="table table-striped table-bordered table-hover">
+                            <thead>
+                              <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Value</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>1</td>
+                                <td>Invoice Number</td>
+                                <td>{`${institution?.payment_information?.invoice_number}`}</td>
+                              </tr>
+                              <tr>
+                                <td>2</td>
+                                <td>Payment Reference</td>
+                                <td>{`${institution?.payment_information?.reference}`}</td>
+                              </tr>
+                              <tr>
+                                <td>3</td>
+                                <td>Date of Payment</td>
+                                <td>{`${institution?.payment_information?.date_paid}`}</td>
+                              </tr>
+                              <tr>
+                                <td>4</td>
+                                <td>Amount Paid</td>
+                                <td>{`${institution?.payment_details?.total}`}</td>
+                              </tr>
+                              <tr>
+                                <td>5</td>
+                                <td>Concession Amount</td>
+                                <td>{`${institution?.payment_details?.concession_amount}`}</td>
+                              </tr>
+                            </tbody>
+                            </table>
                         </CardBody>
-                        {/* <CardBody className="card-inner">
-                            <CardTitle tag="h5">{ `Membership Reason` }</CardTitle>
-                              <ul>
-                                  <li></li>
-                              </ul>
-                        </CardBody> */}
                         <CardBody className="card-inner">
                             <CardTitle tag="h5">{ `MBG Review` }</CardTitle>
                               {/* <ul>
@@ -763,13 +1148,13 @@ const ActionTab = (props) => {
                           <div className="gy-0">
                                 <h5>Application Review</h5>
                                 <Button className="btn btn-primary mx-2"  onClick={() => askAction('declineApplicationReview')}>Reject Application</Button>
-                                <Button className="btn btn-success mx-2"  onClick={() => askAction('approveApplicationsReview')}> Upload Application</Button>
+                                <Button className="btn btn-success mx-2"  onClick={() => askAction('approveApplicationsReview')}> Upload Application Report</Button>
                           </div>
                       }
                         {(aUser.is_admin_meg2() && institution.internal.meg_review_stage && !institution.internal.meg2_review_stage) && 
                           <div className="gy-0">
-                                <h5>Application Review</h5>
-                                <Button className="btn btn-success mx-2"  onClick={() => askAction('approveMEGApplicationsReview')}> Approve Application</Button>
+                                {/* <h5>Application Review</h5> */}
+                                <Button className="btn btn-success mx-2"  onClick={() => askAction('approveMEGApplicationsReview')}> Application Review</Button>
                           </div>
                       }
                       

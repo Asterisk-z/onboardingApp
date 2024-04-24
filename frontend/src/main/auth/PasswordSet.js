@@ -150,7 +150,7 @@ const PasswordSet = () => {
               </div>
               <div className="form-group">
                 <Button color="primary" size="lg" type="submit" className="btn-block" >
-                  {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Set Password"}
+                  {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Submit"}
                 </Button>
               </div>
             </form>

@@ -284,11 +284,13 @@ const Form = () => {
             <Col md='12'>
               {$user_application?.application?.concession_stage == 1 && <>
 
-                {!$user_application?.application?.proof_of_payment ? <>
+                {!$user_application?.application?.proof_of_payment || $user_application?.application?.status_description == 'FSD DECLINED PAYMENT' || $user_application?.application?.status_description == 'MBG DECLINED PAYMENT' ? <>
                   <a className="btn btn-primary mx-1" href={$invoice_download} target="_blank"> View Invoice </a>
                   <a className="btn btn-primary mx-1" href="#" onClick={toggleView} >Make Payment </a>
                 </> : <>
-                  <a className="btn btn-success mx-1" href="#"  >Payment Sent</a>
+                    {/* { ?
+                      <><a className="btn btn-primary mx-1" href="#" onClick={toggleView} >Make Payment </a></> : */}
+                      <a className="btn btn-success mx-1" href="#">Payment Sent</a>
                 </>}
 
               </>}
@@ -315,7 +317,7 @@ const Form = () => {
                   {$user_application?.application_requirements && $user_application?.application_requirements?.map((user_application_item, index) => (
                     <tr key={index}>
                       <th scope="row">{++index}</th>
-                      <td>{user_application_item.field.description}</td>
+                      <td className="text-capitalize">{user_application_item.field.description}</td>
                       <td>
                         {user_application_item.uploaded_file != null ? <>
                           <a className="btn btn-primary" href={user_application_item.file_path} target="_blank">View File </a>

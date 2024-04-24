@@ -6,12 +6,10 @@ use App\Helpers\MailContents;
 use App\Helpers\Utility;
 use App\Http\Resources\ApplicationResource;
 use App\Models\Application;
-use App\Models\Invoice;
 use App\Models\Role;
 use App\Models\User;
 use App\Notifications\InfoNotification;
 use App\Traits\ApplicationTraits;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use Symfony\Component\HttpFoundation\Response;
@@ -81,7 +79,6 @@ class FsdApplicationController extends Controller
 
         $user = $request->user();
         $application = Application::find($request->application_id);
-        $invoice = Invoice::find($application->invoice_id);
 
         $errorMsg = "Unable to complete your request at this point.";
         if ($application->office_to_perform_next_action != Application::office['FSD']) {
@@ -137,10 +134,6 @@ class FsdApplicationController extends Controller
             $application->amount_received_by_fsd = $request->amount_received;
             $application->fsd_review_stage = 1;
             $application->save();
-
-            $invoice->date_paid = Carbon::now()->format('Y-m-d');
-            $invoice->is_paid = 1;
-            $invoice->save();
 
             $MBGs = Utility::getUsersByCategory(Role::MBG);
             $MEGs = Utility::getUsersEmailByCategory(Role::MEG);
