@@ -300,7 +300,7 @@ const Register = ({ drawer }) => {
               
               <div className="form-group">
                 <Button type="submit" color="primary" size="lg" className="btn-block">
-                {loading ? ( <span><Spinner size="sm" color="light" /> Processing...</span>) : "Register"}
+                {loading ? ( <span><Spinner size="sm" color="light" /> Processing...</span>) : "Create Account"}
                 </Button>
               </div>
             </form>

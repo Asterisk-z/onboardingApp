@@ -13,6 +13,6 @@ class ApplicationExtra extends Model
 
     public function getFilePathAttribute()
     {
-        return $this->file ? config('app.url') . '' . $this->file : null;
+        return $this->file ? config('app.url') . '/' . $this->file : null;
     }
 }

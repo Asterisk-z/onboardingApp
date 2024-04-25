@@ -13,6 +13,7 @@ use App\Models\SystemSetting;
 use App\Models\User;
 use App\Notifications\InfoNotification;
 use App\Traits\ApplicationTraits;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
@@ -216,6 +217,8 @@ class MbgApplicationController extends Controller
         $data = Utility::applicationDetails($data);
         $data = $data->first();
 
+        $invoice = Invoice::find($application->invoice_id);
+
         if ($request->status == 'decline') {
             $categoryName = $membershipCategory->name;
             $emailData = [
@@ -236,7 +239,7 @@ class MbgApplicationController extends Controller
 
             Utility::applicationStatusHelper($application, Application::statuses['MDP'], Application::office['MBG'], Application::office['AP'], $request->comment);
             logAction($user->email, 'MBG Declined', "MBG Declined FSD review of applicant payment due to incomplete payment", $request->ip());
-            
+
             // if (str_contains(strtolower("Incomplete Payment"), strtolower($request->comment))) {
 
             //     $categoryName = $membershipCategory->name;
@@ -278,6 +281,11 @@ class MbgApplicationController extends Controller
             $application->mbg_review_stage = 1;
             $application->save();
 
+
+            $invoice->date_paid = Carbon::now()->format('Y-m-d');
+            $invoice->is_paid = 1;
+            $invoice->save();
+
             $MBGs = Utility::getUsersEmailByCategory(Role::MBG);
             $MEGs = Utility::getUsersByCategory(Role::MEG);
             $CCs = $MBGs;
@@ -298,7 +306,7 @@ class MbgApplicationController extends Controller
         $request->validate([
             'status' => 'required|in:approved,rejected',
             'ar_request_id' => 'required|exists:ar_creation_requests,id',
-        ]); 
+        ]);
 
         $ar_creation_request = ArCreationRequest::find($request->ar_request_id);
 
@@ -320,7 +328,7 @@ class MbgApplicationController extends Controller
                 $MBGs = Utility::getUsersEmailByCategory(Role::MBG);
                 $CCs = array_merge($MBGs, $MEGs);
                 Notification::send($MSGs, new InfoNotification(MailContents::mbgApproveProfileArSystemMail($system->name), MailContents::profileArSystemSubject($system->name), $CCs));
-        
+
                 logAction($user->email, 'AR CREATION REQUEST', "AR creation request on FMDQ system was approved by MBG", $request->ip());
                 break;
 
@@ -331,7 +339,7 @@ class MbgApplicationController extends Controller
                 logAction($user->email, 'AR CREATION REQUEST', "AR creation request on FMDQ system was rejected by MBG", $request->ip());
 
                 break;
-            
+
             default:
                 # code...
                 break;

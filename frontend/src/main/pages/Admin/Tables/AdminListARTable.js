@@ -200,7 +200,68 @@ const ActionTab = (props) => {
             <CardBody className="card-inner">
               <CardTitle tag="h5">{`${ar_user.firstName} ${ar_user.lastName} (${ar_user.email})`}</CardTitle>
               {/* <CardText> */}
-              <ul className="gy-3">
+              <table className="table table-striped table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Phone</td>
+                    <td>{`${ar_user.phone}`}</td>
+                  </tr>
+                  <tr>
+                    <td>Nationality</td>
+                    <td>{`${ar_user.nationality}`}</td>
+                  </tr>
+                  <tr>
+                    <td>Role</td>
+                    <td>{`${ar_user.role.name.toLowerCase() }`}</td>
+                  </tr>
+                  <tr>
+                    <td>Position</td>
+                    <td>{`${ar_user.position.name.toLowerCase() }`}</td>
+                  </tr>
+                  <tr>
+                    <td>Status</td>
+                    <td>{`${ar_user.approval_status.toLowerCase() }`}</td>
+                  </tr>
+                  <tr>
+                    <td>RegID</td>
+                    <td>{`${ar_user.regId}`}</td>
+                  </tr>
+                  <tr>
+                    <td>Institution</td>
+                    <td>{`${ar_user.institution?.name?.toLowerCase() }`}</td>
+                  </tr>
+                  <tr>
+                    <td>Profile Photo</td>
+                    <td>{ar_user.img ? (
+                      <a size="lg" href={ar_user.img} target="_blank">
+                        <Button color="primary">
+                          <span >{"View Image"}</span>
+                        </Button>
+                      </a>
+
+
+                    ) : `Not Uploaded`}</td>
+                  </tr>
+                  <tr>
+                    <td>Signature Mandate</td>
+                    <td>{ar_user.mandate_form ? (
+                      <a size="lg" href={ar_user.mandate_form} target="_blank" className="btn-primary">
+                        <Button color="primary">
+                          <span >{"View Mandate"}</span>
+                        </Button>
+                      </a>
+                    ) : `Not Uploaded`}</td>
+                  </tr>
+
+                </tbody>
+              </table>
+              {/* <ul className="gy-3">
                 <li className="text-capitalize"><span className="lead">Phone : </span>{`${ar_user.phone}`}</li>
                 <li className="text-capitalize"><span className="lead">Nationality : </span>{`${ar_user.nationality}`}</li>
                 <li className="text-capitalize"><span className="lead">Role : </span><span className="text-capitalize">{`${ar_user.role.name.toLowerCase()}`}</span></li>
@@ -224,7 +285,7 @@ const ActionTab = (props) => {
                     </Button>
                   </a>
                 ) : `Not Uploaded`}</li>
-              </ul>
+              </ul> */}
 
               {(aUser.is_admin_meg() && ar_user.approval_status == 'pending') &&
                 <>

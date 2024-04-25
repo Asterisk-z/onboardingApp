@@ -39,8 +39,8 @@ class ApplicationResource extends JsonResource
                 "completed_at" => $this->completed_at,
                 "is_meg_executed_membership_agreement" => $application->is_meg_executed_membership_agreement,
                 "is_applicant_executed_membership_agreement" => $this->is_applicant_executed_membership_agreement,
-                "meg_executed_membership_agreement" => ($application->meg_executed_membership_agreement) ? config('app.url') . '/storage/' . $application->meg_executed_membership_agreement : null,
-                "applicant_executed_membership_agreement" => ($application->applicant_executed_membership_agreement) ? config('app.url') . '/storage/' . $application->applicant_executed_membership_agreement : null,
+                "meg_executed_membership_agreement" => ($application->meg_executed_membership_agreement) ? config('app.url') . '/storage/app/public/' . $application->meg_executed_membership_agreement : null,
+                "applicant_executed_membership_agreement" => ($application->applicant_executed_membership_agreement) ? config('app.url') . '/storage/app/public/' . $application->applicant_executed_membership_agreement : null,
                 "all_ar_uploaded" => $this->all_ar_uploaded,
                 "status" => $application->currentStatus(),
                 "status_description" => $this->status_description,
@@ -179,9 +179,9 @@ class ApplicationResource extends JsonResource
 
             "ars" => UserResource::collection(User::where('institution_id', $this->institution_id)->get()),
 
-            "executed_membership_agreement" => ($this->completed_at && $this->meg_executed_membership_agreement) ? config('app.url') . '/stroage/' . $this->meg_executed_membership_agreement : null,
+            "executed_membership_agreement" => ($this->completed_at && $this->meg_executed_membership_agreement) ? config('app.url') . '/stroage/app/public/' . $this->meg_executed_membership_agreement : null,
 
-            "e_success_letter" => ($this->completed_at && $this->e_success_letter) ? config('app.url') . '/storage/' . $this->e_success_letter : null,
+            "e_success_letter" => ($this->completed_at && $this->e_success_letter) ? config('app.url') . '/storage/app/public/' . $this->e_success_letter : null,
 
             "completed" => $this->completed_at ? true : false,
 

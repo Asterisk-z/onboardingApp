@@ -153,7 +153,7 @@ const PayWithTransfer = ({ updateParentParent, tabItem, positions, closeModel, t
                 
                 <div className="form-group">
                     <label className="form-label" htmlFor="proveOfPayment">
-                        Prove of Payment
+                        Proof of Payment
                     </label>
                     <div className="form-control-wrap">
                         <input type="file" accept=".pdf" id="proveOfPayment" className="form-control" {...register('proveOfPayment', { required: "This Field is required" })} onChange={handleFileChange}/>
@@ -162,7 +162,7 @@ const PayWithTransfer = ({ updateParentParent, tabItem, positions, closeModel, t
                 </div>
                 <div className="form-group">
                     <Button color="primary" type="submit"  size="md">
-                        {loading ? ( <span><Spinner size="sm" color="light" /> Processing...</span>) : "Upload Prove"}
+                        {loading ? ( <span><Spinner size="sm" color="light" /> Processing...</span>) : "Upload Proof"}
                     </Button>
 
                     <Button color="primary" size='md' className="mx-3" onClick={toggleMethod}>Cancel</Button>
@@ -261,6 +261,21 @@ const Form = () => {
         }
       }
 
+      const checkValue = (str) => {
+        try {
+          // JSON.parse(str);
+          if (str?.field?.name == "productOfInterest") {
+            return JSON.parse(str.uploaded_field) ? Object.keys(JSON.parse(str.uploaded_field)).join(',')  : '';
+          } else {
+            return str.uploaded_field;
+          }
+          // console.log(JSON.parse(str))
+          
+        } catch (e) {
+          return false;
+        }
+      }
+
       return (
         <section>
 
@@ -269,11 +284,13 @@ const Form = () => {
             <Col md='12'>
               {$user_application?.application?.concession_stage == 1 && <>
 
-                {!$user_application?.application?.proof_of_payment ? <>
-                  <a className="btn btn-primary mx-1" href={$invoice_download} target="_blank"> Download Invoice </a>
+                {!$user_application?.application?.proof_of_payment || $user_application?.application?.status_description == 'FSD DECLINED PAYMENT' || $user_application?.application?.status_description == 'MBG DECLINED PAYMENT' ? <>
+                  <a className="btn btn-primary mx-1" href={$invoice_download} target="_blank"> View Invoice </a>
                   <a className="btn btn-primary mx-1" href="#" onClick={toggleView} >Make Payment </a>
                 </> : <>
-                  <a className="btn btn-success mx-1" href="#"  >Payment Sent</a>
+                    {/* { ?
+                      <><a className="btn btn-primary mx-1" href="#" onClick={toggleView} >Make Payment </a></> : */}
+                      <a className="btn btn-success mx-1" href="#">Payment Sent</a>
                 </>}
 
               </>}
@@ -300,12 +317,14 @@ const Form = () => {
                   {$user_application?.application_requirements && $user_application?.application_requirements?.map((user_application_item, index) => (
                     <tr key={index}>
                       <th scope="row">{++index}</th>
-                      <td>{user_application_item.field.description}</td>
+                      <td className="text-capitalize">{user_application_item.field.description}</td>
                       <td>
                         {user_application_item.uploaded_file != null ? <>
                           <a className="btn btn-primary" href={user_application_item.file_path} target="_blank">View File </a>
                         </> : <>
-                          {user_application_item.uploaded_field}
+                            {/* {user_application_item.uploaded_field} */}
+                            {checkValue(user_application_item)}
+                            {/* {isJSON(user_application_item.uploaded_field) ? "Object" : user_application_item.uploaded_field} */}
                         </>}
                       </td>
                     </tr>
@@ -334,7 +353,7 @@ const Form = () => {
                       <CardBody className="card-inner">
                         <CardTitle tag="h5">Payment by Transfer</CardTitle>
                         <CardText>
-                          Upload Prove Of Payment after transfer
+                          Upload proof of payment after transfer
                         </CardText>
                         <Button color="primary" onClick={toggleUploadView}>Upload</Button>
                       </CardBody>
@@ -345,7 +364,7 @@ const Form = () => {
                       <CardBody className="card-inner">
                         <CardTitle tag="h5">Online Payment</CardTitle>
                         <CardText>
-                          Pay via QPay
+                          Pay via Q-Pay
                         </CardText>
                         <Button color="primary" onClick={qPay}>Proceed to Payment</Button>
                       </CardBody>

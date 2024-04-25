@@ -58,7 +58,7 @@ class QpayController extends Controller
         return redirect(config('app.front_end_url') . '/qpay_check?status=success');
 
         // return response()->json([
-        //     "message" => "Your payment has been recieved and it is currently being processed.",
+        //     "message" => "Payment has been processed and under review",
         // ]);
 
     }
