@@ -25,7 +25,7 @@ const ViewAuthRepresentative = ({ drawer }) => {
     const [parentState, setParentState] = useState('Initial state');
 
     const roles = useSelector((state) => state?.role?.list) || null;
-    const positions = useSelector((state) => state?.position?.list) || null;
+    const all_positions = useSelector((state) => state?.position?.all_list) || null;
     const countries = useSelector((state) => state?.country?.list) || null;
     const authorizers = useSelector((state) => state?.user?.list) || null;
     const authorize_reps = useSelector((state) => state?.arUsers?.list) || null;
@@ -50,7 +50,7 @@ const ViewAuthRepresentative = ({ drawer }) => {
 
     const $countries = countries ? JSON.parse(countries) : null;
     const $roles = roles ? JSON.parse(roles) : null;
-    const $positions = positions ? JSON.parse(positions) : null;
+    const $all_positions = all_positions ? JSON.parse(all_positions) : null;
     const $authorizers = authorizers ? JSON.parse(authorizers) : null;
     const $authorize_reps = authorize_reps ? JSON.parse(authorize_reps) : null;
 
@@ -99,7 +99,7 @@ const ViewAuthRepresentative = ({ drawer }) => {
                                 </BlockHead>
 
                                 <PreviewCard>
-                                    {$authorize_reps && <AuthRepTable updateParent={updateParentState} parentState={parentState} data={$authorize_reps} positions={$positions} countries={$countries} authorizers={$authorizers} roles={$roles} pending={true} expandableRows pagination actions />}
+                                    {$authorize_reps && <AuthRepTable updateParent={updateParentState} parentState={parentState} data={$authorize_reps} positions={$all_positions} countries={$countries} authorizers={$authorizers} roles={$roles} pending={false} expandableRows pagination actions />}
                                 </PreviewCard>
                             </Block>
 

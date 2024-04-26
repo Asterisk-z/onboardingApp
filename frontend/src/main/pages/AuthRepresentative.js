@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, Input, Badge, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
 import { loadUserRoles } from "redux/stores/roles/roleStore";
-import { loadAllCategoryPositions } from "redux/stores/positions/positionStore";
+import { loadAllCategoryPositions, loadAllActivePositions } from "redux/stores/positions/positionStore";
 import { loadAllCountries } from "redux/stores/nationality/country";
 import { userLoadUserARs, userCreateUserAR, userSearchUserARs } from "redux/stores/authorize/representative";
 import { loadAllMyApplicationCategories } from "redux/stores/memberCategory/category"
@@ -37,6 +37,8 @@ const AuthRepresentative = ({ drawer }) => {
     const roles = useSelector((state) => state?.role?.list) || null;
     const myApplicationCategories = useSelector((state) => state?.category?.my_application_categories) || null;
     const positions = useSelector((state) => state?.position?.list) || null;
+    const all_positions = useSelector((state) => state?.position?.all_list) || null;
+    
     const countries = useSelector((state) => state?.country?.list) || null;
     const authorizers = useSelector((state) => state?.user?.list) || null;
     const authorize_reps = useSelector((state) => state?.arUsers?.list) || null;
@@ -56,6 +58,7 @@ const AuthRepresentative = ({ drawer }) => {
       dispatch(loadUserRoles());
       dispatch(loadAllCountries());
       dispatch(loadAllActiveAuthoriser());
+      dispatch(loadAllActivePositions())
       dispatch(loadAllSettings({"config" : "mandate_form"}));
     }, [dispatch, parentState]);
 
@@ -110,14 +113,19 @@ const AuthRepresentative = ({ drawer }) => {
                 setTimeout(() => {
                   setLoading(false);
                   setModalForm(!modalForm)
-                  resetField('firstName')
-                  resetField('lastName')
-                  resetField('position_id')
-                  resetField('nationality')
-                  resetField('role')
-                  resetField('email')
-                  resetField('phone')
-                  setParentState(Math.random())
+                    resetField('firstName')
+                    resetField('lastName')
+                    resetField('middleName')
+                    resetField('position_id')
+                    resetField('nationality')
+                    resetField('category_type')
+                    resetField('group_email')
+                    resetField('role')
+                    resetField('digitalPhone')  
+                    resetField('signedMandate')
+                    resetField('email')
+                    resetField('phone')
+                    setParentState(Math.random())
                 }, 1000);
             
             } else {
@@ -134,6 +142,7 @@ const AuthRepresentative = ({ drawer }) => {
     const $myApplicationCategories = myApplicationCategories ? JSON.parse(myApplicationCategories) : null;
     const $roles = roles ? JSON.parse(roles) : null;
     const $positions = positions ? JSON.parse(positions) : null;
+    const $all_positions = all_positions ? JSON.parse(all_positions) : null;
     const $authorizers = authorizers ? JSON.parse(authorizers) : null;
     const $authorize_reps = authorize_reps ? JSON.parse(authorize_reps) : null;
     const $ar_search_result = ar_search_result ? JSON.parse(ar_search_result) : null;
@@ -195,7 +204,7 @@ const AuthRepresentative = ({ drawer }) => {
                                                 </Button>
                                             </li>
                                             <li className="nk-block-tools-opt">
-                                                <Button color="primary" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/auth-representatives-pending`)}>
+                                                <Button color="primary" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/auth-representatives-pending-update`)}>
                                                     <span>Pending AR</span>
                                                 </Button>
                                             </li>
@@ -494,7 +503,7 @@ const AuthRepresentative = ({ drawer }) => {
                                 </BlockHead>
 
                                 <PreviewCard>
-                                    {$authorize_reps && <AuthRepTable home={false} updateParent={updateParentState} parentState={parentState} data={$authorize_reps} positions={$positions} countries={$countries} authorizers={$authorizers} categories={myApplicationCategories} roles={$roles}  expandableRows pagination actions />}
+                                    {$authorize_reps && <AuthRepTable home={false} updateParent={updateParentState} parentState={parentState} data={$authorize_reps} positions={$all_positions} countries={$countries} authorizers={$authorizers} categories={myApplicationCategories} roles={$roles}  expandableRows pagination actions />}
                                 </PreviewCard>
                             </Block>
 

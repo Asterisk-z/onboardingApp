@@ -38,7 +38,7 @@ class UpdateARRequest extends FormRequest
                     } else if ($user->approval_status != User::APPROVED) {
                         $fail('Unapproved authoriser user');
                     }
-                }
+                },
             ],
 
             'first_name' => 'sometimes|string',
@@ -50,12 +50,13 @@ class UpdateARRequest extends FormRequest
             'email' => [
                 'sometimes',
                 'email',
-                new EmailValidation
+                new EmailValidation,
             ],
             "img" => "nullable|mimes:jpeg,png,jpg|max:5048",
+            'group_email' => 'sometimes|string',
             'phone' => [
                 'sometimes',
-                'regex:/^(070|080|091|090|081|071)\d{8}$/',
+                // 'regex:/^(070|080|091|090|081|071)\d{8}$/',
             ],
         ];
     }

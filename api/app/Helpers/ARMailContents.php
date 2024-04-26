@@ -12,7 +12,7 @@ class ARMailContents
 
     public static function approvedARBody(User $ARUser, string $password): string
     {
-        $link = config("app.front_end_url")."/auth-password-reset";
+        $link = config("app.front_end_url") . "/auth-password-reset";
 
         $company = $ARUser->institution->name ?? "undefined";
         $regID = $ARUser->getRegID();
@@ -20,18 +20,18 @@ class ARMailContents
         return "<p>
                 Please be informed that you have been selected as an Authorised Representative for the $company.
                 </p>
-            
+
             <p>
                 Your FMDQ unique identification number is <b>$regID</b> and your login details for the MROIS portal is given below:
                 <br>
                 Username: $ARUser->email <br>
-                Password: $password 
+                Password: $password
             </p>
 
             <p>
-                Click the link to <a href=".$link.">reset</a> the password
+                Click the link to <a href=" . $link . ">reset</a> the password
             </p>
-            
+
             <p>
                 Please note that your ID would be required in future correspondence with FMDQ. We advise that you keep it safely.
             </p>";
@@ -51,7 +51,7 @@ class ARMailContents
                 </p>
                 <br>
                 <p>
-                    Kindly login to the <a href='".$link."'>MROIS Portal</a> to approve or reject
+                    Kindly login to the <a href='" . $link . "'>MROIS Portal</a> to approve or reject
                 </p>";
 
         return $message;
@@ -97,7 +97,6 @@ class ARMailContents
         ";
     }
 
-
     public static function updatedMEGSubject(): string
     {
         return "Authorised Representative Update";
@@ -113,18 +112,104 @@ class ARMailContents
         </p>
 
         <p>
-            Old record: <br>
-            $basicDataStr
-        </p>
+            Old record: <br>        </p>
+
+                          <table className='table table-striped table-bordered table-hover'>
+                              <thead>
+                                  <tr>
+                                      <th scope='col'></th>
+                                      <th scope='col'></th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <tr>
+                                      <td>First Name</td>
+                                      <td className='text-capitalize'>" . $basicData['firstName'] . "</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Last Name</td>
+                                      <td className='text-capitalize'>" . $basicData['lastName'] . "</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Middle Name</td>
+                                      <td className='text-capitalize'>" . $basicData['middleName'] . "</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Email</td>
+                                      <td className='text-capitalize'>" . $basicData['email'] . "</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Phone</td>
+                                      <td className='text-capitalize'>" . $basicData['phone'] . "</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Role</td>
+                                      <td className='text-capitalize'>" . $basicData['role'] . "</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Nationality</td>
+                                      <td className='text-capitalize'>" . $basicData['nationality'] . "</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Reg ID</td>
+                                      <td className='text-capitalize'>" . $basicData['regId'] . "</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Institution</td>
+                                      <td className='text-capitalize'>" . $basicData['institution'] . "</td>
+                                  </tr>
+                              </tbody>
+                          </table>
+
 
         <p>
-                Updated Fields: <br>
-                $updateFieldsStr
-        </p>
+                Updated Fields: <br>        </p>
+
+
+                          <table className='table table-striped table-bordered table-hover'>
+                              <thead>
+                                  <tr>
+                                      <th scope='col'></th>
+                                      <th scope='col'></th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <tr>
+                                      <td>First Name</td>
+                                      <td className='text-capitalize'>" . $updateFields['first_name'] . "</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Last Name</td>
+                                      <td className='text-capitalize'>" . $updateFields['last_name'] . "</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Middle Name</td>
+                                      <td className='text-capitalize'>" . $updateFields['middle_name'] . "</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Email</td>
+                                      <td className='text-capitalize'>" . $updateFields['email'] . "</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Phone</td>
+                                      <td className='text-capitalize'>" . $updateFields['phone'] . "</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Role</td>
+                                      <td className='text-capitalize'>" . $updateFields['role']['name'] . "</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Nationality</td>
+                                      <td className='text-capitalize'>" . $updateFields['nationality'] . "</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Position</td>
+                                      <td className='text-capitalize'>" . $updateFields['position']['name'] . "</td>
+                                  </tr>
+                              </tbody>
+                          </table>
         ";
     }
-
-
 
     public static function deactivationMEGSubject(): string
     {
@@ -140,7 +225,7 @@ class ARMailContents
         $message = "<p>
                 Please be informed that an Authorised Representative for $company has been deactivated.
             </p>
-            
+
             <p>
                 The AR details is given below:
                 <br>
@@ -168,7 +253,7 @@ class ARMailContents
         $message = "<p>
                 Please be informed that an Authorised Representative for $company has been re-activated.
             </p>
-            
+
             <p>
                 The AR details is given below:
                 <br>
@@ -194,14 +279,13 @@ class ARMailContents
         $message = "<p>
                 Please be informed that the transfer of AR $regID was declined.
             </p>
-            
+
             <p>
                 Reason: $reason
             </p>";
 
         return $message;
     }
-
 
     public static function transferApprovedMEGSubject(): string
     {

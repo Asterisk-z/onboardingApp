@@ -38,7 +38,7 @@ class TransferARRequest extends FormRequest
                     } else if ($user->approval_status != User::APPROVED) {
                         $fail('Unapproved authoriser user');
                     }
-                }
+                },
             ],
             'position_id' => 'sometimes|exists:positions,id',
             'nationality' => 'sometimes|exists:nationalities,code',
@@ -46,11 +46,11 @@ class TransferARRequest extends FormRequest
             'email' => [
                 'sometimes',
                 'email',
-                new EmailValidation
+                new EmailValidation,
             ],
             'phone' => [
                 'sometimes',
-                'regex:/^(070|080|091|090|081|071)\d{8}$/',
+                // 'regex:/^(070|080|091|090|081|071)\d{8}$/',
             ],
             'reason' => 'nullable|string|max:120',
 

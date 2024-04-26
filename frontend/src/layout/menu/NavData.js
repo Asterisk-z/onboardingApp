@@ -178,13 +178,18 @@ const navData = [{
         text: "Authorised Representatives",
         active: false,
         subMenu: [
+
+          {
+            text: "Update Authorised Representatives",
+            link: "/auth-representatives",
+          },
           {
             text: "Pending Authorised Representatives",
-            link: "/pending-auth-representatives",
+            link: "/auth-representatives-pending",
           },
           {
             text: "View Authorised Representatives",
-            link: "/auth-representatives",
+            link: "/auth-representatives-view",
           },
 
         ],

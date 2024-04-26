@@ -4,9 +4,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, Input} from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
-import { loadUserRoles } from "redux/stores/roles/roleStore";
-import { loadAllActivePositions } from "redux/stores/positions/positionStore";
-import { loadAllCountries } from "redux/stores/nationality/country";
+// import { loadUserRoles } from "redux/stores/roles/roleStore";
+// import { loadAllActivePositions } from "redux/stores/positions/positionStore";
+// import { loadAllCountries } from "redux/stores/nationality/country";
 import { userStatusChangeUserAR, userViewUserAR } from "redux/stores/authorize/representative";
 import { loadAllActiveAuthoriser } from "redux/stores/users/userStore";
 import Content from "layout/content/Content";
@@ -25,9 +25,9 @@ const TransferAuthRepresentative = ({ drawer }) => {
     const [parentState, setParentState] = useState('Initial state');
 
     const user = useSelector((state) => state?.arUsers?.single_ar) || null;
-    const roles = useSelector((state) => state?.role?.list) || null;
-    const positions = useSelector((state) => state?.position?.list) || null;
-    const countries = useSelector((state) => state?.country?.list) || null;
+    // const roles = useSelector((state) => state?.role?.list) || null;
+    // const positions = useSelector((state) => state?.position?.list) || null;
+    // const countries = useSelector((state) => state?.country?.list) || null;
     const authorizers = useSelector((state) => state?.user?.list) || null;
 
     const { register, handleSubmit, formState: { errors }, resetField } = useForm();
@@ -36,26 +36,26 @@ const TransferAuthRepresentative = ({ drawer }) => {
 
     useEffect(() => {
         dispatch(userViewUserAR({"user_id" : ar_user_id}));
-        dispatch(loadUserRoles());
-        dispatch(loadAllActivePositions());
-        dispatch(loadAllCountries());
+        // dispatch(loadUserRoles());
+        // dispatch(loadAllActivePositions());
+        // dispatch(loadAllCountries());
         dispatch(loadAllActiveAuthoriser());
     }, [dispatch, parentState]);
       
-    const $countries = countries ? JSON.parse(countries) : null;
-    const $roles = roles ? JSON.parse(roles) : null;
-    const $positions = positions ? JSON.parse(positions) : null;
+    // const $countries = countries ? JSON.parse(countries) : null;
+    // const $roles = roles ? JSON.parse(roles) : null;
+    // const $positions = positions ? JSON.parse(positions) : null;
     const $authorizers = authorizers ? JSON.parse(authorizers) : null;
     const $user = user ? JSON.parse(user) : null;
 
     
-        const [initValues, setInitValues] = useState({
-        email: $user?.email,
-        phone: $user?.phone,
-        nationality: $user?.nationality,
-        position: $user?.position,
-        role_id: $user?.role.id,
-        });    
+        // const [initValues, setInitValues] = useState({
+        // email: $user?.email,
+        // phone: $user?.phone,
+        // nationality: $user?.nationality,
+        // position: $user?.position,
+        // role_id: $user?.role.id,
+        // });    
     
 
 

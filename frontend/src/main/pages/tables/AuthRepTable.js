@@ -6,9 +6,9 @@ import CopyToClipboard from "react-copy-to-clipboard";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge,  Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, CardBody, CardTitle } from "reactstrap";
-import { DataTablePagination } from "components/Component";
+import { DataTablePagination, UserAvatar } from "components/Component";
 import { userUpdateUserAR, userCancelUpdateUserAR, userProcessUpdateUserAR, userTransferUserAR } from "redux/stores/authorize/representative";
-import { loadAllCategoryPositions } from "redux/stores/positions/positionStore";
+import { loadAllCategoryPositions, clearPosition } from "redux/stores/positions/positionStore";
 import moment from "moment";
 import Icon from "components/icon/Icon";
 import Swal from "sweetalert2";
@@ -91,10 +91,12 @@ const ActionTab = (props) => {
     const categories = aUser.user_data.institution.category ? aUser.user_data.institution.category : [];
     const user_id = props.ar_user.id
     const ar_user = props.ar_user
-    const [categoryIds, setCategoryIds] = useState(aUser.user_data.institution.category.map((cat) => cat.id));
-    
+    const [categoryIds, setCategoryIds] = useState([]);
+    // const [categoryIds, setCategoryIds] = useState(aUser.user_data.institution.category.map((cat) => cat.id));
+
     // const $positions = props.positions
     const $countries = props.countries
+    const $all_positions = props.positions
     const $roles = props.roles
     const $authorizers = props.authorizers
     
@@ -109,7 +111,7 @@ const ActionTab = (props) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     
-    const { register, handleSubmit, formState: { errors }, resetField, setValue } = useForm();
+    const { register, handleSubmit, formState: { errors }, resetField, setValue, getValues } = useForm();
     const [loading, setLoading] = useState(false);
     const [document, setDocument] = useState([]);
 
@@ -165,11 +167,15 @@ const ActionTab = (props) => {
       firstName: ar_user.firstName,
       lastName: ar_user.lastName,
       email: ar_user.email,
-      phone: ar_user.phone,
-      nationality: ar_user.nationality,
-      position: ar_user.position,
+        phone: ar_user.phone,
+        middleName: ar_user.middleName,
+        nationality: ar_user.nationality_code,
+        group_email: ar_user.group_email,
+      position: ar_user.position.id,
       role_id: ar_user.role.id,
+        img: ar_user.img
     });
+
         
     const askAction = async (action) => {
         if(action == 'approve') {
@@ -238,21 +244,27 @@ const ActionTab = (props) => {
 		  setDocument(event.target.files[0]);
     };
 
-    const [myApplicationCategoryIds, setMyApplicationCategoryIds] = useState([])
+    const [myApplicationCategoryIds, setMyApplicationCategoryIds] = useState(categoryIds)
     const positions = useSelector((state) => state?.position?.list) || null;
-
+    // $all_positions
     useEffect(() => {
         if (myApplicationCategoryIds.length > 0) {
             const postValues = new Object();
             postValues.category_ids = myApplicationCategoryIds;
             dispatch(loadAllCategoryPositions(postValues));
-        }
+        } 
+        
     }, [myApplicationCategoryIds]);
 
-    const $positions = positions ? JSON.parse(positions) : null;
+    const $positions = myApplicationCategoryIds.length > 0  ? (positions ? JSON.parse(positions) : null) : ($all_positions ? $all_positions?.filter(item => item.id == ar_user.position.id) : null);
 
     const updatePositionList = (event) => {
         setMyApplicationCategoryIds([event.target.value]);
+    }
+
+    const checkValue = (value) => {
+        // setMyApplicationCategoryIds([event.target.value]);
+        console.log((JSON.parse(value)).phone)
     }
 
   return (
@@ -266,7 +278,7 @@ const ActionTab = (props) => {
 
                             <DropdownMenu>
                                 <ul className="link-list-opt">
-                            
+                                        
                                         <li size="xs">
                                             <DropdownItem tag="a"  onClick={toggleView} >
                                                 <Icon name="eye"></Icon>
@@ -280,7 +292,7 @@ const ActionTab = (props) => {
                                                     <li size="xs">
                                                         <DropdownItem tag="a"  onClick={toggleForm} >
                                                             <Icon name="eye"></Icon>
-                                                            <span>Update AR</span>
+                                                            <span>Edit</span>
                                                         </DropdownItem>
                                                     </li>
                                                 </>
@@ -304,18 +316,18 @@ const ActionTab = (props) => {
                                                             <span>View Update AR</span>
                                                         </DropdownItem>
                                                     </li>
-                                                    <li size="xs">
-                                                        <DropdownItem tag="a"  onClick={(e) => askAction('approve')} >
+                                                    {/* <li size="xs">
+                                                        <DropdownItem tag="a" >
                                                             <Icon name="eye"></Icon>
                                                             <span>Approve</span>
                                                         </DropdownItem>
                                                     </li>
                                                     <li size="xs">
-                                                        <DropdownItem tag="a"  onClick={(e) => askAction('decline')} >
+                                                        <DropdownItem tag="a">
                                                             <Icon name="eye"></Icon>
                                                             <span>Decline</span>
                                                         </DropdownItem>
-                                                    </li>
+                                                    </li> */}
                                                 </>
                                             }
                                             
@@ -342,15 +354,6 @@ const ActionTab = (props) => {
                             </DropdownMenu>
                         </UncontrolledDropdown>
                     </li>
-                    
-
-                        {ar_user.status == 'ONGOING' &&
-                            <li className="nk-block-tools-opt" >
-                                <Button color="primary" size="xs"  onClick={toggleModalCloseAsk}>
-                                    <span>Closed Ticket</span>
-                                </Button>
-                            </li>
-                        }
 
                 </ul>
             }
@@ -361,21 +364,116 @@ const ActionTab = (props) => {
             <ModalHeader toggle={toggleViewUpdate} close={<button className="close" onClick={toggleViewUpdate}><Icon name="cross" /></button>}>
                 View Update AR
             </ModalHeader>
-            <ModalBody>
+              <ModalBody>
+                  <Card className="card">
+                      <CardBody className="card-inner">
+                          <CardTitle tag="h5">{`Initial AR Information`}</CardTitle>
+
+                          <table className="table table-striped table-bordered table-hover">
+                              <thead>
+                                  <tr>
+                                      <th scope="col"></th>
+                                      <th scope="col"></th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <tr>
+                                      <td>First Name</td>
+                                      <td className="text-capitalize">{`${ar_user.firstName}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Last Name</td>
+                                      <td className="text-capitalize">{`${ar_user.lastName}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Email</td>
+                                      <td className="text-capitalize">{`${ar_user.email}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Phone</td>
+                                      <td className="text-capitalize">{`${ar_user.phone}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Nationality</td>
+                                      <td className="text-capitalize">{`${ar_user.nationality.toLowerCase()}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Role</td>
+                                      <td className="text-capitalize">{`${ar_user.role.name.toLowerCase()}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Position</td>
+                                      <td className="text-capitalize">{`${ar_user.position.name.toLowerCase()}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Status</td>
+                                      <td className="text-capitalize">{`${ar_user.approval_status.toLowerCase()}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>RegID</td>
+                                      <td className="text-capitalize">{`${ar_user.regId}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Institution</td>
+                                      <td className="text-capitalize">{`${ar_user.institution?.name?.toLowerCase()}`}</td>
+                                  </tr>
+
+                              </tbody>
+                          </table>
+                          {/* </CardText> */}
+                      </CardBody>
+                  </Card>
                     <Card className="card">   
                         <CardBody className="card-inner">
-                            <CardTitle tag="h5">{ `${ar_user.firstName} ${ar_user.lastName} (${ar_user.email})` }</CardTitle>
+                          <CardTitle tag="h5">{`Update AR Information` }</CardTitle>
                             {/* <CardText> */}
-                                <ul>
-                                    <li><span className="lead">Phone : </span>{`${ar_user.phone}`}</li>
-                                    <li><span className="lead">Nationality : </span>{`${ar_user.nationality}`}</li>
-                                    <li><span className="lead">Role : </span>{`${ar_user.role.name}`}</li>
-                                    <li><span className="lead">Position : </span>{`${ar_user.position.name}`}</li>
-                                    <li><span className="lead">Status : </span>{`${ar_user.approval_status}`}</li>
-                                    <li><span className="lead">RegID : </span>{`${ar_user.regId}`}</li>
-                                    <li><span className="lead">Institution : </span>{`${ar_user.institution.name}`}</li>
-                                </ul>
-                            {/* </CardText> */}
+                          <table className="table table-striped table-bordered table-hover">
+                              <thead>
+                                  <tr>
+                                      <th scope="col"></th>
+                                      <th scope="col"></th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <tr>
+                                      <td>First Name</td>
+                                      <td className="text-capitalize">{`${(JSON.parse(ar_user.update_payload))?.first_name}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Last Name</td>
+                                      <td className="text-capitalize">{`${(JSON.parse(ar_user.update_payload))?.last_name}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Middle Name</td>
+                                      <td className="text-capitalize">{`${(JSON.parse(ar_user.update_payload))?.middle_name}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Email</td>
+                                      <td className="text-capitalize">{`${(JSON.parse(ar_user.update_payload))?.email}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Phone</td>
+                                      <td className="text-capitalize">{`${(JSON.parse(ar_user.update_payload))?.phone}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Role</td>
+                                      <td className="text-capitalize">{`${(JSON.parse(ar_user.update_payload))?.role?.name?.toLowerCase()}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Position</td>
+                                      <td className="text-capitalize">{`${(JSON.parse(ar_user.update_payload))?.position?.name?.toLowerCase()}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Institution</td>
+                                      <td className="text-capitalize">{`${ar_user.institution?.name?.toLowerCase()}`}</td>
+                                  </tr>
+
+                              </tbody>
+                          </table>
+                          <div className="float-end">
+                              <button className="btn  btn-primary float-end m-2"  onClick={(e) => askAction('approve')}>Approve</button>
+                              <button className="btn  btn-secondary float-end m-2"  onClick={(e) => askAction('decline')} >Decline</button>
+                          </div>
                         </CardBody>
                     </Card>
             </ModalBody>
@@ -391,16 +489,68 @@ const ActionTab = (props) => {
                     <Card className="card">   
                         <CardBody className="card-inner">
                             <CardTitle tag="h5">{ `${ar_user.firstName} ${ar_user.lastName} (${ar_user.email})` }</CardTitle>
-                            {/* <CardText> */}
-                                <ul className="gy-3">
-                                    <li  className="text-capitalize"><span className="lead">Phone : </span>{`${ar_user.phone}`}</li>
-                                    <li  className="text-capitalize"><span className="lead">Nationality : </span>{`${ar_user.nationality.toLowerCase()}`}</li>
-                                    <li  className="text-capitalize"><span className="lead">Role : </span>{`${ar_user.role.name.toLowerCase()}`}</li>
-                                    <li  className="text-capitalize"><span className="lead">Position : </span>{`${ar_user.position.name.toLowerCase()}`}</li>
-                                    <li  className="text-capitalize"><span className="lead">Status : </span>{`${ar_user.approval_status.toLowerCase()}`}</li>
-                                    <li  className="text-capitalize"><span className="lead">RegID : </span>{`${ar_user.regId}`}</li>
-                                    <li  className="text-capitalize"><span className="lead">Institution : </span>{`${ar_user?.institution?.name}`}</li>
-                                </ul>
+
+                          <table className="table table-striped table-bordered table-hover">
+                              <thead>
+                                  <tr>
+                                      <th scope="col"></th>
+                                      <th scope="col"></th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <tr>
+                                      <td>Phone</td>
+                                      <td className="text-capitalize">{`${ar_user.phone}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Nationality</td>
+                                      <td className="text-capitalize">{`${ar_user.nationality.toLowerCase() }`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Role</td>
+                                      <td className="text-capitalize">{`${ar_user.role.name.toLowerCase()}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Position</td>
+                                      <td className="text-capitalize">{`${ar_user.position.name.toLowerCase()}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Status</td>
+                                      <td className="text-capitalize">{`${ar_user.approval_status.toLowerCase()}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>RegID</td>
+                                      <td className="text-capitalize">{`${ar_user.regId}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Institution</td>
+                                      <td className="text-capitalize">{`${ar_user.institution?.name?.toLowerCase()}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Profile Photo</td>
+                                      <td>{ar_user.img ? (
+                                          <a size="lg" href={ar_user.img} target="_blank">
+                                              <Button color="primary">
+                                                  <span >{"View Image"}</span>
+                                              </Button>
+                                          </a>
+
+
+                                      ) : `Not Uploaded`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Signature Mandate</td>
+                                      <td>{ar_user.mandate_form ? (
+                                          <a size="lg" href={ar_user.mandate_form} target="_blank" className="btn-primary">
+                                              <Button color="primary">
+                                                  <span >{"View Mandate"}</span>
+                                              </Button>
+                                          </a>
+                                      ) : `Not Uploaded`}</td>
+                                  </tr>
+
+                              </tbody>
+                          </table>
                             {/* </CardText> */}
                         </CardBody>
                     </Card>
@@ -489,7 +639,8 @@ const ActionTab = (props) => {
                                   </Label>
                                   
                                 <div className="form-control-wrap">
-                                    <input className="form-control"  type="text" id="phone" placeholder="Enter Last Name" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""}  {...register('phone', { required: "Phone is Required" })}  defaultValue={parseInt(initValues.phone) ? parseInt(initValues.phone) : 0}/>
+                                    {/* onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""}  */}
+                                    <input className="form-control"  type="text" id="phone" placeholder="Enter phone number"  {...register('phone', { required: "Phone is Required" })}  defaultValue={parseInt(initValues.phone) ? parseInt(initValues.phone) : 0}/>
                                     {errors.phone && <p className="invalid">{`${errors.phone.message}`}</p>}
                                 </div>
                             </div>
@@ -554,7 +705,7 @@ const ActionTab = (props) => {
                                 </Label>
                                 <div className="form-control-wrap">
                                     <div className="form-control-select">
-                                        <select className="form-control form-select" {...register('role', { required: "Roles is Required" })}  defaultValue={initValues.role}>
+                                          <select className="form-control form-select" {...register('role', { required: "Roles is Required" })} defaultValue={initValues.role_id}>
                                             <option value="">Select Role</option>
                                             {$roles && $roles?.map((role, index) => (
                                                 <option key={index} value={role.id}>
@@ -573,8 +724,17 @@ const ActionTab = (props) => {
                                     Digital Photo
                                 </Label>
                                 <div className="form-control-wrap">
-                                    <input type="file" accept="image/*" className="form-control"  {...register('digitalPhone', {  required: false })} onChange={handleDificalFileChange}/>
-                                    {errors.digitalPhone && <p className="invalid">{`${errors.digitalPhone.message}`}</p>}
+
+                                      <div className="input-group">
+                                          <input type="file" accept="image/*" className="form-control"  {...register('digitalPhone', { required: false })} onChange={handleDificalFileChange} />
+                                          <div className="input-group-append">
+                                              <div className="user-avatar">
+                                                  <img src={initValues.img} className="" style={{ height: '40px' }} />
+                                              </div>
+                                              
+                                          </div>
+                                      </div>
+                                      {errors.digitalPhone && <p className="invalid">{`${errors.digitalPhone.message}`}</p>}
                                 </div>
                             </div>
                         </Col>
@@ -587,7 +747,7 @@ const ActionTab = (props) => {
                                     <div className="form-control-select">
                                         <select className="form-control form-select" {...register('ar_authoriser_id', { required: "Authoriser is Required" })}>
                                             <option value="">Select Authoriser</option>
-                                            {$authorizers && $authorizers?.map((authorizer, index) => user_id != authorizer.id ? (
+                                              {$authorizers && $authorizers?.map((authorizer, index) => user_id != authorizer.id && authorizer.approval_status == 'approved' ? (
                                                 <option key={index} value={authorizer.id}>
                                                 {`${authorizer.first_name} ${authorizer.last_name} ( ${authorizer.email} )`}
                                                 </option>
