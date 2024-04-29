@@ -41,17 +41,17 @@ class FinalApplicationMail extends Mailable
 
         $mail = $this->view('mails.info', compact('user', 'info', 'displayName'))->subject($subject);
 
-        $content = ESuccessLetter::generate($this->application);
+        //$content = ESuccessLetter::generate($this->application);
         if ($this->attachment) {
             foreach ($this->attachment as $attachment) {
-                $mail->attach($attachment['saved_path'], ['as' => $attachment['name']]);
+                $mail->attach($attachment['saved_path'], ['as' => $attachment['name'], 'mime' => 'application/pdf']);
             }
         }
 
-        $mail->attachData($content, 'e-success.pdf', [
-            'as' => 'e-success.pdf',
-            'mime' => 'application/pdf',
-        ]);
+        // $mail->attachData($content, 'e-success.pdf', [
+        //     'as' => 'e-success.pdf',
+        //     'mime' => 'application/pdf',
+        // ]);
 
         return $mail;
 

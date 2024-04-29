@@ -234,6 +234,18 @@ class MailContents
         return "MEG Report Validation";
     }
 
+    public static function meg2EsuccessSubject(): string
+    {
+        return "E-success letter generated successfully";
+    }
+
+    public static function meg2EsuccessMail($companyName): string
+    {
+        $url = config("app.front_end_url");
+        return "<p>Please be informed E-Success letter has been generated for
+        {$companyName}. Kindly log on to <a href=$url>MROIS Portal</a> to approve the application report.</p>";
+    }
+
     public static function megReportValidationMail($companyName): string
     {
         $url = config("app.front_end_url");

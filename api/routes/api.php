@@ -265,8 +265,15 @@ Route::middleware('auth')->group(function () {
         Route::group(['prefix' => 'membership/application/meg'], function () {
             Route::get('/institutions', [MegApplicationController::class, 'institutions']);
             Route::post('/review', [MegApplicationController::class, 'megReview']);
+            //NEW API
+            Route::post('/send-membership-agreement', [MegApplicationController::class, 'sendMembershipAgreement']);
             Route::post('/upload-membership-agreement', [MegApplicationController::class, 'uploadMemberAgreement']);
             Route::post('/complete-company-application', [MegApplicationController::class, 'completeCompanyApplication']);
+        });
+
+        Route::group(['prefix' => 'doh'], function () {
+            Route::get('/signature', [MegApplicationController::class, 'getSignature']);
+            Route::post('/signature', [MegApplicationController::class, 'createSignature']);
         });
     });
 
@@ -275,6 +282,7 @@ Route::middleware('auth')->group(function () {
         Route::group(['prefix' => 'membership/application/meg2'], function () {
             Route::get('/institutions', [Meg2ApplicationController::class, 'institutions']);
             Route::post('/review', [Meg2ApplicationController::class, 'meg2Approval']);
+            Route::post('/esuccess/approve', [Meg2ApplicationController::class, 'approveEsuccessLetter']);
         });
     });
 

@@ -2,18 +2,18 @@
 
 namespace App\Console\Commands;
 
-use App\Helpers\Utility;
+use App\Helpers\ESuccessLetter;
 use App\Models\Application;
 use Illuminate\Console\Command;
 
-class NotifyApplicantForARUpload extends Command
+class TestSuccess extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'applicant:notify';
+    protected $signature = 'success';
 
     /**
      * The console command description.
@@ -38,13 +38,7 @@ class NotifyApplicantForARUpload extends Command
      */
     public function handle()
     {
-        Application::where('all_ar_uploaded', 0)
-            ->where('is_applicant_executed_membership_agreement', 1)
-            ->orderBy('id')
-            ->chunkById(200, function ($applications) {
-                foreach ($applications as $application) {
-                    Utility::notifyApplicantAndContactArUpdate($application);
-                }
-            });
+        $application = Application::find(19);
+        (new ESuccessLetter)->generate($application);
     }
 }

@@ -18,7 +18,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Notification;
 
-class FinalApplicationProcessingJob implements ShouldQueue
+class GenerateSuccessLetterJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -62,6 +62,17 @@ class FinalApplicationProcessingJob implements ShouldQueue
             return;
         }
 
+        //CHECK IF ALL ARS HAVE BEEN ADDED
+        if (!$this->force) {
+            if (!$application->all_ar_uploaded) {
+                Utility::notifyApplicantAndContactArUpdate($application);
+                Utility::applicationStatusHelper($application, Application::statuses['RMA'], Application::office['AP'], Application::office['MEG']);
+                return;
+            }
+        }
+
+        Utility::applicationStatusHelper($application, Application::statuses['MPC'], Application::office['MEG'], Application::office['AP']);
+
         //SEND APPLICANT MAIL
         $emailData = [
             'name' => $companyName,
@@ -74,10 +85,6 @@ class FinalApplicationProcessingJob implements ShouldQueue
                 "name" => "{$companyName} Membership Agreement",
                 "saved_path" => config('app.url') . '/storage/' . $application->meg_executed_membership_agreement,
             ],
-            [
-                "name" => "{$companyName} E-Success Letter",
-                "saved_path" => config('app.url') . '/storage/' . $application->e_success_letter,
-            ]
         ];
 
         // CC email addresses
@@ -116,8 +123,6 @@ class FinalApplicationProcessingJob implements ShouldQueue
             ]);
         }
 
-        Utility::applicationStatusHelper($application, Application::statuses['MPC'], Application::office['MEG2'], Application::office['AP']);
-
         $application->e_success_letter_send = 1;
         $application->completed_at = now();
         $application->application_type_status = Application::typeStatus['ASC'];
@@ -145,6 +150,7 @@ class FinalApplicationProcessingJob implements ShouldQueue
         Notification::send($HelpDesk, new InfoNotification(MailContents::helpdeskupdateMail($companyName, $categoryName), MailContents::helpdeskupdateSubject($categoryName), $Meg));
 
         //TODO::SEND SECOND MAIL TO HELPDESK
+
         $institution = Institution::find($application->institution_id);
         $membershipCategory = $application->membershipCategory;
         $compulsoryPositions = $membershipCategory->positions()->where('is_compulsory', 1)->pluck('position_id')->toArray();

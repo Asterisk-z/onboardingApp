@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Helpers;
 
 use App\Models\User;
@@ -12,7 +13,7 @@ class ARMailContents
 
     public static function approvedARBody(User $ARUser, string $password): string
     {
-        $link = config("app.front_end_url")."/auth-password-reset";
+        $link = config("app.front_end_url") . "/auth-password-reset";
 
         $company = $ARUser->institution->name ?? "undefined";
         $regID = $ARUser->getRegID();
@@ -29,7 +30,7 @@ class ARMailContents
             </p>
 
             <p>
-                Click the link to <a href=".$link.">reset</a> the password
+                Click the link to <a href=" . $link . ">reset</a> the password
             </p>
             
             <p>
@@ -51,7 +52,7 @@ class ARMailContents
                 </p>
                 <br>
                 <p>
-                    Kindly login to the <a href='".$link."'>MROIS Portal</a> to approve or reject
+                    Kindly login to the <a href='" . $link . "'>MROIS Portal</a> to approve or reject
                 </p>";
 
         return $message;
@@ -118,13 +119,11 @@ class ARMailContents
         </p>
 
         <p>
-                Updated Fields: <br>
-                $updateFieldsStr
+            Updated Fields: <br>
+            $updateFieldsStr
         </p>
         ";
     }
-
-
 
     public static function deactivationMEGSubject(): string
     {
@@ -133,7 +132,6 @@ class ARMailContents
 
     public static function deactivationMEGBody(User $ARUser): string
     {
-
         $company = $ARUser->institution->name ?? "a company";
         $regID = $ARUser->getRegID();
 
@@ -165,10 +163,7 @@ class ARMailContents
         $company = $ARUser->institution->name ?? "a company";
         $regID = $ARUser->getRegID();
 
-        $message = "<p>
-                Please be informed that an Authorised Representative for $company has been re-activated.
-            </p>
-            
+        $message = "<p>Please be informed that an Authorised Representative for $company has been re-activated.</p>
             <p>
                 The AR details is given below:
                 <br>

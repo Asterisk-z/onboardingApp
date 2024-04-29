@@ -3,89 +3,101 @@
 namespace App\Helpers;
 
 use App\Models\Application;
-use Dompdf\Dompdf;
+use App\Models\DohSignature;
+use PDF;
+use Illuminate\Support\Facades\Storage;
 
 class ESuccessLetter
 {
-    public static function generate(Application $application)
+    protected $name = null;
+    protected $grade = null;
+    protected $division = null;
+    protected $signature = null;
+    protected $regId = null;
+
+    public function generate(Application $application)
     {
         $content = null;
         $category = $application->membership_category_id;
+        $applicant = $application->applicant;
+        $this->regId = $applicant->reg_id;
 
         $data = Application::where('applications.id', $application->id);
         $application_data = Utility::applicationDetails($data);
         $application_data = $application_data->first();
 
+        if ($dohData = DohSignature::latest()->first()) {
+            $this->name = $dohData->name;
+            $this->grade = $dohData->grade;
+            $this->division = $dohData->division;
+            $this->signature = $dohData->signature ? config('app.url') . '/storage/app/public/' . $this->signature : null;
+        }
+
         switch ($category) {
             case '1':
-                $content = self::dmbWithoutSECLicenseLetterContent($application_data);
+                $content = $this->dmbWithoutSECLicenseLetterContent($application_data);
                 break;
 
             case '1':
-                $content = self::dmbWithSECLicenseLetterContent($application_data);
+                $content = $this->dmbWithSECLicenseLetterContent($application_data);
                 break;
 
             case '2':
-                $content = self::dmsLetterContent($application_data);
+                $content = $this->dmsLetterContent($application_data);
                 break;
 
             case '5':
-                $content = self::amcLetterContent($application_data);
+                $content = $this->amcLetterContent($application_data);
                 break;
 
             case '4':
-                $content = self::amiLetterContent($application_data);
+                $content = $this->amiLetterContent($application_data);
                 break;
 
             case '3':
-                $content = self::ambLetterContent($application_data);
+                $content = $this->ambLetterContent($application_data);
                 break;
 
             case '8':
-                $content = self::rmmLetterContent($application_data);
+                $content = $this->rmmLetterContent($application_data);
                 break;
 
             case '6':
-                $content = self::rmlLetterContent($application_data);
+                $content = $this->rmlLetterContent($application_data);
                 break;
 
             case '7':
-                $content = self::rmqLetterContent($application_data);
+                $content = $this->rmqLetterContent($application_data);
                 break;
 
             case '12':
-                $content = self::affLetterContent($application_data);
+                $content = $this->affLetterContent($application_data);
                 break;
 
             case '10':
-                $content = self::afcLetterContent($application_data);
+                $content = $this->afcLetterContent($application_data);
                 break;
 
             case '9':
-                $content = self::afiLetterContent($application_data);
+                $content = $this->afiLetterContent($application_data);
                 break;
 
             default:
                 // $content = [];
-                // $content = self::dmbWithoutSECLicenseLetterContent($application_data);
+                // $content = $this->dmbWithoutSECLicenseLetterContent($application_data);
                 break;
         }
 
         if ($content) {
-            $pdfC = view('success.e-letter', compact('content'));
-            $dompdf = new Dompdf();
-            $dompdf->loadHTML($pdfC);
-            $daata = $dompdf->render();
-            $pdfdata = $dompdf->output();
-
-            $application->e_success_letter = json_encode($content);
+            $pdf = PDF::loadView('success.e-letter', compact('content'));
+            Storage::put('public/esuccess/e_success_letter_' . $application->id . '.pdf', $pdf->output());
+            $application->e_success_letter = 'esuccess/e_success_letter_' . $application->id . '.pdf';
             $application->save();
-            return $pdfdata;
+            return true;
         }
-
     }
 
-    protected static function dmbWithoutSECLicenseLetterContent($application)
+    protected function dmbWithoutSECLicenseLetterContent($application)
     {
         $date = now();
         $designation = $application->applicationPrimaryContactName;
@@ -95,12 +107,12 @@ class ESuccessLetter
         $url = config("app.front_end_url");
 
         return [
-            'address' => "<p>'<i><b>$date</b></i>'</p>
-                            <p>'<i><b>$designation</b></i>'</p>
-                            <p>'<i><b>$address</b></i>'</p>",
+            'address' => "<p><i><b>$date</b></i></p>
+                            <p><i><b>$designation({$this->regId})</b></i></p>
+                            <p><i><b>$address</b></i></p>",
             'title' => "<p><b>APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED DEALING MEMBER (BANKS) CATEGORY</b></p>",
             'body' => "<p  style='text-align: justify;text-justify: inter-word;'>
-                            Having reviewed your application for the Dealing Member (Bank) ('DMB')
+                            Having reviewed your application for the Dealing Member (Bank) (DMB)
                             category of FMDQ Securities Exchange Limited (“FMDQ Exchange”),
                             we are pleased to inform you that your application is successful, and
                             $companyName ($companyName) will now be profiled on the applicable modules on the
@@ -108,7 +120,7 @@ class ESuccessLetter
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             Kindly update the details of a maximum of five (5) Authorised Representatives
-                            of your institution on the MROIS portal($url).
+                            of your institution on the MROIS  <a href=$url>portal</a>.
                             Authorised Representatives will be profiled within one (1) business day after receipt of the relevant details,
                             after which you will receive an email containing your login details.
                             <br/>Details should include the following:
@@ -135,21 +147,24 @@ class ESuccessLetter
                             We congratulate you on this milestone and welcome you on board the FMDQ Exchange platform.
                         </p>
 
-                        <p style='margin: 30px 0'>
+                        <p style='margin-top: 10px;'>
                             Yours faithfully, <br />
                             <b>FMDQ Securities Exchange Limited</b>
                         </p>
+                        <p style='width: 100px; height: 30px; position: relative;'>
+                            <img stye='width: 100%; height: 100%; position: absolute; top: 0; left: 0;' src='" . $this->signature . "' alt='Signature Image'>
+                        </p>
                         <p >
-                            '<i><b>Name of DH, MOD</b></i>'
+                            <i><b>{$this->name}</b></i> <br />
+<i><b>{$this->grade}</b></i> <br />
+                            <i><b>{$this->division}</b></i>
                         </p>
-                        <p>
-                            '<i><b>Grade</b></i>' <br />
-                            '<i><b>Division</b></i>'
-                        </p>
-                    "];
+
+                    "
+        ];
     }
 
-    protected static function dmbWithSECLicenseLetterContent($application)
+    protected function dmbWithSECLicenseLetterContent($application)
     {
 
         $date = now();
@@ -160,17 +175,17 @@ class ESuccessLetter
         $url = config("app.front_end_url");
 
         return [
-            'address' => "<p>'<i><b>$date</b></i>'</p>
-                            <p>'<i><b>$designation</b></i>'</p>
-                            <p>'<i><b>$address</b></i>'</p>",
+            'address' => "<p><i><b>$date</b></i></p>
+                            <p><i><b>$designation({$this->regId})</b></i></p>
+                            <p><i><b>$address</b></i></p>",
             'title' => "<p><b>APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED DEALING MEMBER (BANKS) CATEGORY</b></p>",
             'body' => "<p  style='text-align: justify;text-justify: inter-word;'>
-                            Having reviewed your application for the Dealing Member (Bank) ('DMB') category of FMDQ Securities Exchange Limited ('FMDQ Exchange'),
+                            Having reviewed your application for the Dealing Member (Bank) (DMB) category of FMDQ Securities Exchange Limited ('FMDQ Exchange'),
                             we are pleased to inform you that your application is successful, and $companyName ($companyName)
                             will now be profiled on the applicable modules on the 'FMDQ e-Markets portal' and e-Fixings (Real Time) sub-module, under the e-Benchmarks module.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
-                            Kindly update the details of a maximum of five (5) Authorised Representatives of your institution on the MROIS portal($url).
+                            Kindly update the details of a maximum of five (5) Authorised Representatives of your institution on the MROIS  <a href=$url>portal</a>.
                             Authorised Representatives will be profiled within one (1) business day after receipt of the relevant details,
                             after which you will receive an email containing your login details. <br/> Details should include the following:
                         </p>
@@ -191,21 +206,24 @@ class ESuccessLetter
                             We congratulate you on this milestone and welcome you on board the FMDQ Exchange platform.
                         </p>
 
-                        <p style='margin: 30px 0'>
+                        <p style='margin-top: 10px;'>
                             Yours faithfully, <br />
                             <b>FMDQ Securities Exchange Limited</b>
                         </p>
+                        <p style=width: 100px; height: 30px; position: relative;'>
+                            <img stye='width: 100%; height: 100%; position: absolute; top: 0; left: 0;' src='" . $this->signature . "' alt='Signature Image'>
+                        </p>
                         <p >
-                            '<i><b>Name of DH, MOD</b></i>'
+                            <i><b>{$this->name}</b></i> <br />
+<i><b>{$this->grade}</b></i> <br />
+                            <i><b>{$this->division}</b></i>
                         </p>
-                        <p>
-                            '<i><b>Grade</b></i>' <br />
-                            '<i><b>Division</b></i>'
-                        </p>
-                    "];
+
+                    "
+        ];
     }
 
-    protected static function dmsLetterContent($application)
+    protected function dmsLetterContent($application)
     {
 
         $date = now();
@@ -216,9 +234,9 @@ class ESuccessLetter
         $url = config("app.front_end_url");
 
         return [
-            'address' => "<p>'<i><b>$date</b></i>'</p>
-                            <p>'<i><b>$designation</b></i>'</p>
-                            <p>'<i><b>$address</b></i>'</p>",
+            'address' => "<p><i><b>$date</b></i></p>
+                            <p><i><b>$designation({$this->regId})</b></i></p>
+                            <p><i><b>$address</b></i></p>",
             'title' => "<p><b>
                             APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED DEALING MEMBER (SPECIALISTS) CATEGORY
                         </b></p>",
@@ -228,7 +246,7 @@ class ESuccessLetter
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             To gain access to e-Knowledge on the e-Markets portal, kindly update the details of a maximum of four (4)
-                            Authorised Representatives of your institution on the MROIS portal($url). <br/> Details should include the following:
+                            Authorised Representatives of your institution on the MROIS  <a href=$url>portal</a>. <br/> Details should include the following:
                         </p>
                         <ul>
                             <li>Name of Authorised Representative</li>
@@ -249,21 +267,24 @@ class ESuccessLetter
                             We thank you for your unwavering support and look forward to continuing a mutually beneficial relationship between our organisations.
                         </p>
 
-                        <p style='margin: 30px 0'>
+                        <p style='margin-top: 10px;'>
                             Yours faithfully, <br />
                             <b>FMDQ Securities Exchange Limited</b>
                         </p>
+                        <p style=width: 100px; height: 30px; position: relative;'>
+                            <img stye='width: 100%; height: 100%; position: absolute; top: 0; left: 0;' src='" . $this->signature . "' alt='Signature Image'>
+                        </p>
                         <p >
-                            '<i><b>Name of DH, MOD</b></i>'
+                            <i><b>{$this->name}</b></i> <br />
+<i><b>{$this->grade}</b></i> <br />
+                            <i><b>{$this->division}</b></i>
                         </p>
-                        <p>
-                            '<i><b>Grade</b></i>' <br />
-                            '<i><b>Division</b></i>'
-                        </p>
-                    "];
+
+                    "
+        ];
     }
 
-    protected static function amcLetterContent($application)
+    protected function amcLetterContent($application)
     {
 
         $date = now();
@@ -274,9 +295,9 @@ class ESuccessLetter
         $url = config("app.front_end_url");
 
         return [
-            'address' => "<p>'<i><b>$date</b></i>'</p>
-                            <p>'<i><b>$designation</b></i>'</p>
-                            <p>'<i><b>$address</b></i>'</p>",
+            'address' => "<p><i><b>$date</b></i></p>
+                            <p><i><b>$designation({$this->regId})</b></i></p>
+                            <p><i><b>$address</b></i></p>",
             'title' => "<p><b>
                             APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED ASSOCIATE MEMBER (CLIENTS) CATEGORY
                         </b></p>",
@@ -286,7 +307,7 @@ class ESuccessLetter
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             To gain access to the applicable modules on the FMDQ e-Markets portal, kindly update the details of a maximum of two (2)
-                            Authorised Representatives of your institution on the MROIS portal($url). <br/> Details should include the following:
+                            Authorised Representatives of your institution on the MROIS  <a href=$url>portal</a>. <br/> Details should include the following:
                         </p>
                         <ul>
                             <li>Name of Authorised Representative</li>
@@ -307,21 +328,24 @@ class ESuccessLetter
                             We thank you for your unwavering support and look forward to continuing a mutually beneficial relationship between our organisations.
                         </p>
 
-                        <p style='margin: 30px 0'>
+                        <p style='margin-top: 10px;'>
                             Yours faithfully, <br />
                             <b>FMDQ Securities Exchange Limited</b>
                         </p>
-                        <p>
-                            '<i><b>Name of DH, MOD</b></i>'
+                        <p style=width: 100px; height: 30px; position: relative;'>
+                            <img stye='width: 100%; height: 100%; position: absolute; top: 0; left: 0;' src='" . $this->signature . "' alt='Signature Image'>
                         </p>
-                        <p>
-                            '<i><b>Grade</b></i>' <br />
-                            '<i><b>Division</b></i>'
+                        <p >
+                            <i><b>{$this->name}</b></i> <br />
+<i><b>{$this->grade}</b></i> <br />
+                            <i><b>{$this->division}</b></i>
                         </p>
-                    "];
+
+                    "
+        ];
     }
 
-    protected static function amiLetterContent($application)
+    protected function amiLetterContent($application)
     {
 
         $date = now();
@@ -332,9 +356,9 @@ class ESuccessLetter
         $url = config("app.front_end_url");
 
         return [
-            'address' => "<p>'<i><b>$date</b></i>'</p>
-                            <p>'<i><b>$designation</b></i>'</p>
-                            <p>'<i><b>$address</b></i>'</p>",
+            'address' => "<p><i><b>$date</b></i></p>
+                            <p><i><b>$designation({$this->regId})</b></i></p>
+                            <p><i><b>$address</b></i></p>",
             'title' => "<p><b>
                            APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED ASSOCIATE MEMBER (INTER-DEALER BROKERS) CATEGORY
                         </b></p>",
@@ -345,7 +369,7 @@ class ESuccessLetter
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                            To gain access to the applicable modules on the FMDQ e-Markets portal, kindly update the details of a maximum of two (2)
-                           Authorised Representatives of your institution on the MROIS portal($url). <br/> Details should include the following:
+                           Authorised Representatives of your institution on the MROIS  <a href=$url>portal</a>. <br/> Details should include the following:
                         </p>
                         <ul>
                             <li>Name of Authorised Representative</li>
@@ -366,21 +390,24 @@ class ESuccessLetter
                             We thank you for your unwavering support and look forward to continuing a mutually beneficial relationship between our organisations.
                         </p>
 
-                        <p style='margin: 30px 0'>
+                        <p style='margin-top: 10px;'>
                             Yours faithfully, <br />
                             <b>FMDQ Securities Exchange Limited</b>
                         </p>
+                        <p style=width: 100px; height: 30px; position: relative;'>
+                            <img stye='width: 100%; height: 100%; position: absolute; top: 0; left: 0;' src='" . $this->signature . "' alt='Signature Image'>
+                        </p>
                         <p >
-                            '<i><b>Name of DH, MOD</b></i>'
+                            <i><b>{$this->name}</b></i> <br />
+<i><b>{$this->grade}</b></i> <br />
+                            <i><b>{$this->division}</b></i>
                         </p>
-                        <p>
-                            '<i><b>Grade</b></i>' <br />
-                            '<i><b>Division</b></i>'
-                        </p>
-                    "];
+
+                    "
+        ];
     }
 
-    protected static function ambLetterContent($application)
+    protected function ambLetterContent($application)
     {
 
         $date = now();
@@ -391,9 +418,9 @@ class ESuccessLetter
         $url = config("app.front_end_url");
 
         return [
-            'address' => "<p>'<i><b>$date</b></i>'</p>
-                            <p>'<i><b>$designation</b></i>'</p>
-                            <p>'<i><b>$address</b></i>'</p>",
+            'address' => "<p><i><b>$date</b></i></p>
+                            <p><i><b>$designation({$this->regId})</b></i></p>
+                            <p><i><b>$address</b></i></p>",
             'title' => "<p><b>
                            APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED ASSOCIATE MEMBER (BROKERS) CATEGORY
                         </b></p>",
@@ -404,7 +431,7 @@ class ESuccessLetter
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             To gain access to the applicable modules on the FMDQ e-Markets portal, kindly update the details of
-                            a maximum of two (2) Authorised Representatives of your institution on the MROIS portal($url). <br/> Details should include the following:
+                            a maximum of two (2) Authorised Representatives of your institution on the MROIS  <a href=$url>portal</a>. <br/> Details should include the following:
                         </p>
                         <ul>
                             <li>Name of Authorised Representative</li>
@@ -425,21 +452,24 @@ class ESuccessLetter
                             We thank you for your unwavering support and look forward to continuing a mutually beneficial relationship between our organisations.
                         </p>
 
-                        <p style='margin: 30px 0'>
+                        <p style='margin-top: 10px;'>
                             Yours faithfully, <br />
                             <b>FMDQ Securities Exchange Limited</b>
                         </p>
+                        <p style=width: 100px; height: 30px; position: relative;'>
+                            <img stye='width: 100%; height: 100%; position: absolute; top: 0; left: 0;' src='" . $this->signature . "' alt='Signature Image'>
+                        </p>
                         <p >
-                            '<i><b>Name of DH, MOD</b></i>'
+                            <i><b>{$this->name}</b></i> <br />
+<i><b>{$this->grade}</b></i> <br />
+                            <i><b>{$this->division}</b></i>
                         </p>
-                        <p>
-                            '<i><b>Grade</b></i>' <br />
-                            '<i><b>Division</b></i>'
-                        </p>
-                    "];
+
+                    "
+        ];
     }
 
-    protected static function rmmLetterContent($application)
+    protected function rmmLetterContent($application)
     {
 
         $date = now();
@@ -449,9 +479,9 @@ class ESuccessLetter
 
         $url = config("app.front_end_url");
         return [
-            'address' => "<p>'<i><b>$date</b></i>'</p>
-                            <p>'<i><b>$designation</b></i>'</p>
-                            <p>'<i><b>$address</b></i>'</p>",
+            'address' => "<p><i><b>$date</b></i></p>
+                            <p><i><b>$designation({$this->regId})</b></i></p>
+                            <p><i><b>$address</b></i></p>",
             'title' => "<p><b>
                            APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED REGISTRATION MEMBER (LISTINGS & QUOTATIONS) CATEGORIES
                         </b></p>",
@@ -464,7 +494,7 @@ class ESuccessLetter
                         <p style='text-align: justify;text-justify: inter-word;'>
                             To gain access to the FMDQ e-Markets portal, kindly update the details of a maximum of
                             two (2) Authorised Representatives of your institution for each of the Registration Member (Listings) & Registration Member (Quotations)
-                            category on the MROIS portal($url). <br/> Details should include the following:
+                            category on the MROIS  <a href=$url>portal</a>. <br/> Details should include the following:
                         </p>
                         <ul>
                             <li>Name of Authorised Representative</li>
@@ -485,21 +515,24 @@ class ESuccessLetter
                             We thank you for your unwavering support and look forward to continuing a mutually beneficial relationship between our organisations.
                         </p>
 
-                        <p style='margin: 30px 0'>
+                        <p style='margin-top: 10px;'>
                             Yours faithfully, <br />
                             <b>FMDQ Securities Exchange Limited</b>
                         </p>
+                        <p style=width: 100px; height: 30px; position: relative;'>
+                            <img stye='width: 100%; height: 100%; position: absolute; top: 0; left: 0;' src='" . $this->signature . "' alt='Signature Image'>
+                        </p>
                         <p >
-                            '<i><b>Name of DH, MOD</b></i>'
+                            <i><b>{$this->name}</b></i> <br />
+<i><b>{$this->grade}</b></i> <br />
+                            <i><b>{$this->division}</b></i>
                         </p>
-                        <p>
-                            '<i><b>Grade</b></i>' <br />
-                            '<i><b>Division</b></i>'
-                        </p>
-                    "];
+
+                    "
+        ];
     }
 
-    protected static function rmlLetterContent($application)
+    protected function rmlLetterContent($application)
     {
         $date = now();
         $designation = $application->applicationPrimaryContactName;
@@ -509,9 +542,9 @@ class ESuccessLetter
         $url = config("app.front_end_url");
 
         return [
-            'address' => "<p>'<i><b>$date</b></i>'</p>
-                            <p>'<i><b>$designation</b></i>'</p>
-                            <p>'<i><b>$address</b></i>'</p>",
+            'address' => "<p><i><b>$date</b></i></p>
+                            <p><i><b>$designation({$this->regId})</b></i></p>
+                            <p><i><b>$address</b></i></p>",
             'title' => "<p><b>
                            APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED REGISTRATION MEMBER (LISTINGS) CATEGORY
                         </b></p>",
@@ -522,7 +555,7 @@ class ESuccessLetter
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             To gain access to the FMDQ e-Markets portal, kindly update the details of a
-                             maximum of two (2) Authorised Representatives of your institution on the MROIS portal($url). <br/> Details should include the following:
+                             maximum of two (2) Authorised Representatives of your institution on the MROIS  <a href=$url>portal</a>. <br/> Details should include the following:
                         </p>
                         <ul>
                             <li>Name of Authorised Representative</li>
@@ -543,21 +576,24 @@ class ESuccessLetter
                             We thank you for your unwavering support and look forward to continuing a mutually beneficial relationship between our organisations.
                         </p>
 
-                        <p style='margin: 30px 0'>
+                        <p style='margin-top: 10px;'>
                             Yours faithfully, <br />
                             <b>FMDQ Securities Exchange Limited</b>
                         </p>
+                        <p style=width: 100px; height: 30px; position: relative;'>
+                            <img stye='width: 100%; height: 100%; position: absolute; top: 0; left: 0;' src='" . $this->signature . "' alt='Signature Image'>
+                        </p>
                         <p >
-                            '<i><b>Name of DH, MOD</b></i>'
+                            <i><b>{$this->name}</b></i> <br />
+<i><b>{$this->grade}</b></i> <br />
+                            <i><b>{$this->division}</b></i>
                         </p>
-                        <p>
-                            '<i><b>Grade</b></i>' <br />
-                            '<i><b>Division</b></i>'
-                        </p>
-                    "];
+
+                    "
+        ];
     }
 
-    protected static function rmqLetterContent($application)
+    protected function rmqLetterContent($application)
     {
         $date = now();
         $designation = $application->applicationPrimaryContactName;
@@ -567,9 +603,9 @@ class ESuccessLetter
         $url = config("app.front_end_url");
 
         return [
-            'address' => "<p>'<i><b>$date</b></i>'</p>
-                            <p>'<i><b>$designation</b></i>'</p>
-                            <p>'<i><b>$address</b></i>'</p>",
+            'address' => "<p><i><b>$date</b></i></p>
+                            <p><i><b>$designation({$this->regId})</b></i></p>
+                            <p><i><b>$address</b></i></p>",
             'title' => "<p><b>
                            APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED REGISTRATION MEMBER (QUOTATIONS) CATEGORY
                         </b></p>",
@@ -580,7 +616,7 @@ class ESuccessLetter
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             To gain access to the FMDQ e-Markets portal, kindly update the details of a maximum of two (2)
-                            Authorised Representatives of your institution on the MROIS portal($url).
+                            Authorised Representatives of your institution on the MROIS  <a href=$url>portal</a>.
                              <br/> Details should include the following:
                         </p>
                         <ul>
@@ -602,21 +638,24 @@ class ESuccessLetter
                             We thank you for your unwavering support and look forward to continuing a mutually beneficial relationship between our organisations.
                         </p>
 
-                        <p style='margin: 30px 0'>
+                        <p style='margin-top: 10px;'>
                             Yours faithfully, <br />
                             <b>FMDQ Securities Exchange Limited</b>
                         </p>
+                        <p style=width: 100px; height: 30px; position: relative;'>
+                            <img stye='width: 100%; height: 100%; position: absolute; top: 0; left: 0;' src='" . $this->signature . "' alt='Signature Image'>
+                        </p>
                         <p >
-                            '<i><b>Name of DH, MOD</b></i>'
+                            <i><b>{$this->name}</b></i> <br />
+<i><b>{$this->grade}</b></i> <br />
+                            <i><b>{$this->division}</b></i>
                         </p>
-                        <p>
-                            '<i><b>Grade</b></i>' <br />
-                            '<i><b>Division</b></i>'
-                        </p>
-                    "];
+
+                    "
+        ];
     }
 
-    protected static function affLetterContent($application)
+    protected function affLetterContent($application)
     {
         $date = now();
         $designation = $application->applicationPrimaryContactName;
@@ -626,9 +665,9 @@ class ESuccessLetter
         $url = config("app.front_end_url");
 
         return [
-            'address' => "<p>'<i><b>$date</b></i>'</p>
-                            <p>'<i><b>$designation</b></i>'</p>
-                            <p>'<i><b>$address</b></i>'</p>",
+            'address' => "<p><i><b>$date</b></i></p>
+                            <p><i><b>$designation({$this->regId})</b></i></p>
+                            <p><i><b>$address</b></i></p>",
             'title' => "<p><b>
                            APPLICATION FOR THE FMDQ SECURITIES EXCHANGE AFFILIATE MEMBER (FIXED INCOME) CATEGORY
                         </b></p>",
@@ -639,7 +678,7 @@ class ESuccessLetter
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             To gain access to the e-knowledge on the e-Markets portal, kindly update the details
-                            of a maximum of four (4) Authorised Representatives of your institution on the MROIS portal($url).
+                            of a maximum of four (4) Authorised Representatives of your institution on the MROIS  <a href=$url>portal</a>.
                              <br/> Details should include the following:
                         </p>
                         <ul>
@@ -661,21 +700,24 @@ class ESuccessLetter
                            We thank you for your unwavering support and look forward to continuing a mutually beneficial relationship between our organisations
                         </p>
 
-                        <p style='margin: 30px 0'>
+                        <p style='margin-top: 10px;'>
                             Yours faithfully, <br />
                             <b>FMDQ Securities Exchange Limited</b>
                         </p>
+                        <p style=width: 100px; height: 30px; position: relative;'>
+                            <img stye='width: 100%; height: 100%; position: absolute; top: 0; left: 0;' src='" . $this->signature . "' alt='Signature Image'>
+                        </p>
                         <p >
-                            '<i><b>Name of DH, MOD</b></i>'
+                            <i><b>{$this->name}</b></i> <br />
+<i><b>{$this->grade}</b></i> <br />
+                            <i><b>{$this->division}</b></i>
                         </p>
-                        <p>
-                            '<i><b>Grade</b></i>' <br />
-                            '<i><b>Division</b></i>'
-                        </p>
-                    "];
+
+                    "
+        ];
     }
 
-    protected static function afcLetterContent($application)
+    protected function afcLetterContent($application)
     {
 
         $date = now();
@@ -686,9 +728,9 @@ class ESuccessLetter
         $url = config("app.front_end_url");
 
         return [
-            'address' => "<p>'<i><b>$date</b></i>'</p>
-                            <p>'<i><b>$designation</b></i>'</p>
-                            <p>'<i><b>$address</b></i>'</p>",
+            'address' => "<p><i><b>$date</b></i></p>
+                            <p><i><b>$designation({$this->regId})</b></i></p>
+                            <p><i><b>$address</b></i></p>",
             'title' => "<p><b>
                            APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED AFFILIATE MEMBER (STANDARD) CATEGORY
                         </b></p>",
@@ -699,7 +741,7 @@ class ESuccessLetter
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             To gain access to the e-knowledge on the e-Markets portal, kindly update the details of a
-                            maximum of four (4) Authorised Representatives of your institution on the MROIS portal($url).
+                            maximum of four (4) Authorised Representatives of your institution on the MROIS  <a href=$url>portal</a>.
                              <br/> Details should include the following:
                         </p>
                         <ul>
@@ -721,21 +763,24 @@ class ESuccessLetter
                             We thank you for your unwavering support and look forward to continuing a mutually beneficial relationship between our organisations.
                         </p>
 
-                        <p style='margin: 30px 0'>
+                        <p style='margin-top: 10px;'>
                             Yours faithfully, <br />
                             <b>FMDQ Securities Exchange Limited</b>
                         </p>
+                        <p style=width: 100px; height: 30px; position: relative;'>
+                            <img stye='width: 100%; height: 100%; position: absolute; top: 0; left: 0;' src='" . $this->signature . "' alt='Signature Image'>
+                        </p>
                         <p >
-                            '<i><b>Name of DH, MOD</b></i>'
+                            <i><b>{$this->name}</b></i> <br />
+<i><b>{$this->grade}</b></i> <br />
+                            <i><b>{$this->division}</b></i>
                         </p>
-                        <p>
-                            '<i><b>Grade</b></i>' <br />
-                            '<i><b>Division</b></i>'
-                        </p>
-                    "];
+
+                    "
+        ];
     }
 
-    protected static function afiLetterContent($application)
+    protected function afiLetterContent($application)
     {
 
         $date = now();
@@ -746,9 +791,9 @@ class ESuccessLetter
         $url = config("app.front_end_url");
 
         return [
-            'address' => "<p>'<i><b>$date</b></i>'</p>
-                            <p>'<i><b>$designation</b></i>'</p>
-                            <p>'<i><b>$address</b></i>'</p>",
+            'address' => "<p><i><b>$date</b></i></p>
+                            <p><i><b>$designation({$this->regId})</b></i></p>
+                            <p><i><b>$address</b></i></p>",
             'title' => "<p><b>
                             APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED AFFILIATE MEMBER (STANDARD) CATEGORY
                         </b></p>",
@@ -779,18 +824,20 @@ class ESuccessLetter
                            We thank you for your unwavering support and look forward to continuing a mutually beneficial relationship between our organisations.
                         </p>
 
-                        <p style='margin: 30px 0'>
+                        <p style='margin-top: 10px;'>
                             Yours faithfully, <br />
                             <b>FMDQ Securities Exchange Limited</b>
                         </p>
+                        <p style=width: 100px; height: 30px; position: relative;'>
+                            <img stye='width: 100%; height: 100%; position: absolute; top: 0; left: 0;' src='" . $this->signature . "' alt='Signature Image'>
+                        </p>
                         <p >
-                            '<i><b>Name of DH, MOD</b></i>'
+                            <i><b>{$this->name}</b></i> <br />
+<i><b>{$this->grade}</b></i> <br />
+                            <i><b>{$this->division}</b></i>
                         </p>
-                        <p>
-                            '<i><b>Grade</b></i>' <br />
-                            '<i><b>Division</b></i>'
-                        </p>
-                    "];
-    }
 
+                    "
+        ];
+    }
 }
