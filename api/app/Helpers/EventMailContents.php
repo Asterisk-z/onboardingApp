@@ -4,7 +4,6 @@ namespace App\Helpers;
 class EventMailContents
 {
 
-
     public static function certificateARSubject(string $eventName): string
     {
         return "$eventName Certificate";
@@ -19,7 +18,6 @@ class EventMailContents
 
         return $message;
     }
-
 
     public static function paymentDeclinedARSubject(string $eventName): string
     {
@@ -43,7 +41,6 @@ class EventMailContents
         return $message;
     }
 
-
     public static function paymentApprovedARSubject(string $eventName): string
     {
         return "$eventName Payment Confirmation";
@@ -58,7 +55,6 @@ class EventMailContents
 
         return $message;
     }
-
 
     public static function eventDeletedSubject(string $eventName): string
     {
@@ -75,7 +71,6 @@ class EventMailContents
         return $message;
     }
 
-
     public static function eventUpdatedSubject(string $eventName): string
     {
         return "$eventName Has Been Updated";
@@ -85,7 +80,7 @@ class EventMailContents
     {
         $url = config('app.front_end_url');
         $message = "<p>
-                Please be informed that the event: $eventName has been updated. Kindly login to the <a href='{$url}'>MROIS portal</a> to view the new details.
+                Please be informed that the event: $eventName has been updated. Kindly login to the <a href='{$url}'>MROIS Portal</a> to view the new details.
             </p>";
 
         return $message;
@@ -121,7 +116,6 @@ class EventMailContents
         return $message;
     }
 
-
     public static function reminderSubject(string $eventName): string
     {
         return "$eventName Reminder";
@@ -131,7 +125,7 @@ class EventMailContents
     {
 
         $message = "<p>
-                Trust this mail meets you well. 
+                Trust this mail meets you well.
             </p>
             <p>
             We wish to remind you of the {$event->name} event scheduled {$event->date} {$event->time}.

@@ -108,7 +108,7 @@ class ESuccessLetter
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             Kindly update the details of a maximum of five (5) Authorised Representatives
-                            of your institution on the MROIS portal($url).
+                            of your institution on the MROIS Portal($url).
                             Authorised Representatives will be profiled within one (1) business day after receipt of the relevant details,
                             after which you will receive an email containing your login details.
                             <br/>Details should include the following:
@@ -170,7 +170,7 @@ class ESuccessLetter
                             will now be profiled on the applicable modules on the 'FMDQ e-Markets portal' and e-Fixings (Real Time) sub-module, under the e-Benchmarks module.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
-                            Kindly update the details of a maximum of five (5) Authorised Representatives of your institution on the MROIS portal($url).
+                            Kindly update the details of a maximum of five (5) Authorised Representatives of your institution on the MROIS Portal($url).
                             Authorised Representatives will be profiled within one (1) business day after receipt of the relevant details,
                             after which you will receive an email containing your login details. <br/> Details should include the following:
                         </p>
@@ -228,7 +228,7 @@ class ESuccessLetter
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             To gain access to e-Knowledge on the e-Markets portal, kindly update the details of a maximum of four (4)
-                            Authorised Representatives of your institution on the MROIS portal($url). <br/> Details should include the following:
+                            Authorised Representatives of your institution on the MROIS Portal($url). <br/> Details should include the following:
                         </p>
                         <ul>
                             <li>Name of Authorised Representative</li>
@@ -286,7 +286,7 @@ class ESuccessLetter
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             To gain access to the applicable modules on the FMDQ e-Markets portal, kindly update the details of a maximum of two (2)
-                            Authorised Representatives of your institution on the MROIS portal($url). <br/> Details should include the following:
+                            Authorised Representatives of your institution on the MROIS Portal($url). <br/> Details should include the following:
                         </p>
                         <ul>
                             <li>Name of Authorised Representative</li>
@@ -345,7 +345,7 @@ class ESuccessLetter
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                            To gain access to the applicable modules on the FMDQ e-Markets portal, kindly update the details of a maximum of two (2)
-                           Authorised Representatives of your institution on the MROIS portal($url). <br/> Details should include the following:
+                           Authorised Representatives of your institution on the MROIS Portal($url). <br/> Details should include the following:
                         </p>
                         <ul>
                             <li>Name of Authorised Representative</li>
@@ -404,7 +404,7 @@ class ESuccessLetter
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             To gain access to the applicable modules on the FMDQ e-Markets portal, kindly update the details of
-                            a maximum of two (2) Authorised Representatives of your institution on the MROIS portal($url). <br/> Details should include the following:
+                            a maximum of two (2) Authorised Representatives of your institution on the MROIS Portal($url). <br/> Details should include the following:
                         </p>
                         <ul>
                             <li>Name of Authorised Representative</li>
@@ -464,7 +464,7 @@ class ESuccessLetter
                         <p style='text-align: justify;text-justify: inter-word;'>
                             To gain access to the FMDQ e-Markets portal, kindly update the details of a maximum of
                             two (2) Authorised Representatives of your institution for each of the Registration Member (Listings) & Registration Member (Quotations)
-                            category on the MROIS portal($url). <br/> Details should include the following:
+                            category on the MROIS Portal($url). <br/> Details should include the following:
                         </p>
                         <ul>
                             <li>Name of Authorised Representative</li>
@@ -522,7 +522,7 @@ class ESuccessLetter
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             To gain access to the FMDQ e-Markets portal, kindly update the details of a
-                             maximum of two (2) Authorised Representatives of your institution on the MROIS portal($url). <br/> Details should include the following:
+                             maximum of two (2) Authorised Representatives of your institution on the MROIS Portal($url). <br/> Details should include the following:
                         </p>
                         <ul>
                             <li>Name of Authorised Representative</li>
@@ -580,7 +580,7 @@ class ESuccessLetter
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             To gain access to the FMDQ e-Markets portal, kindly update the details of a maximum of two (2)
-                            Authorised Representatives of your institution on the MROIS portal($url).
+                            Authorised Representatives of your institution on the MROIS Portal($url).
                              <br/> Details should include the following:
                         </p>
                         <ul>
@@ -639,7 +639,7 @@ class ESuccessLetter
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             To gain access to the e-knowledge on the e-Markets portal, kindly update the details
-                            of a maximum of four (4) Authorised Representatives of your institution on the MROIS portal($url).
+                            of a maximum of four (4) Authorised Representatives of your institution on the MROIS Portal($url).
                              <br/> Details should include the following:
                         </p>
                         <ul>
@@ -699,7 +699,7 @@ class ESuccessLetter
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             To gain access to the e-knowledge on the e-Markets portal, kindly update the details of a
-                            maximum of four (4) Authorised Representatives of your institution on the MROIS portal($url).
+                            maximum of four (4) Authorised Representatives of your institution on the MROIS Portal($url).
                              <br/> Details should include the following:
                         </p>
                         <ul>
@@ -759,7 +759,7 @@ class ESuccessLetter
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             To gain access to the e-knowledge on the e-Markets portal,
-                            kindly update your details on the MROIS portal(“link”).
+                            kindly update your details on the MROIS Portal(“link”).
                              <br/> Details should include the following:
                         </p>
                         <ul>

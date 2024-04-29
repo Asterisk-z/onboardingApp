@@ -22,7 +22,7 @@ class ARMailContents
                 </p>
 
             <p>
-                Your FMDQ unique identification number is <b>$regID</b> and your login details for the MROIS portal is given below:
+                Your FMDQ unique identification number is <b>$regID</b> and your login details for the MROIS Portal is given below:
                 <br>
                 Username: $ARUser->email <br>
                 Password: $password
@@ -66,7 +66,7 @@ class ARMailContents
     {
         $regID = $ARUser->getRegID();
         return "<p>
-            Kindly login to the “MROIS portal” to approve the transfer of <b>$regID</b>
+            Kindly login to the “MROIS Portal” to approve the transfer of <b>$regID</b>
         </p>";
     }
 
@@ -79,7 +79,7 @@ class ARMailContents
     {
         $regID = $ARUser->getRegID();
         return "<p>
-            Kindly login to the “MROIS portal” to approve/reject the <b>$action</b> of <b>$regID</b>
+            Kindly login to the “MROIS Portal” to approve/reject the <b>$action</b> of <b>$regID</b>
         </p>";
     }
 
@@ -92,7 +92,7 @@ class ARMailContents
     {
         $regID = $ARUser->getRegID();
         return "<p>
-            Kindly login to the “MROIS portal” to approve/reject the <bUpdate</b> of <b>$regID</b>
+            Kindly login to the “MROIS Portal” to approve/reject the <bUpdate</b> of <b>$regID</b>
         </p>
         ";
     }
@@ -297,7 +297,7 @@ class ARMailContents
         $regID = $ARUser->getRegID();
 
         $message = "<p>
-                Kindly login to the “MROIS portal” to approve a transferred Authorised Representative with AR ID $regID
+                Kindly login to the “MROIS Portal” to approve a transferred Authorised Representative with AR ID $regID
             </p>";
 
         return $message;

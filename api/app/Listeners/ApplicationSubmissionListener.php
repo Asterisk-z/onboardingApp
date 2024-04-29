@@ -13,7 +13,6 @@ use App\Models\Role;
 use App\Models\SystemSetting;
 use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class ApplicationSubmissionListener implements ShouldQueue
 {
@@ -45,28 +44,28 @@ class ApplicationSubmissionListener implements ShouldQueue
 
         //SEND FIRST BATCH OF EMAIL
         $data = ApplicationField::where('name', 'companyEmailAddress')
-        ->join('application_field_uploads', function ($join) use($application) {
-            $join->on('application_fields.id', '=', 'application_field_uploads.application_field_id')
-                ->where('application_field_uploads.application_id', '=', $application->id);
-        })
-        ->select('application_field_uploads.*')
-        ->first();
+            ->join('application_field_uploads', function ($join) use ($application) {
+                $join->on('application_fields.id', '=', 'application_field_uploads.application_field_id')
+                    ->where('application_field_uploads.application_id', '=', $application->id);
+            })
+            ->select('application_field_uploads.*')
+            ->first();
 
         $companyEmail = $data->uploaded_field ? $data->uploaded_field : $data->uploaded_file;
         $companyEmail = filter_var($companyEmail, FILTER_VALIDATE_EMAIL) ? $companyEmail : '';
 
         $data = ApplicationField::where('name', 'applicationPrimaryContactEmailAddress')
-        ->join('application_field_uploads', function ($join) use($application) {
-            $join->on('application_fields.id', '=', 'application_field_uploads.application_field_id')
-                ->where('application_field_uploads.application_id', '=', $application->id);
-        })
-        ->select('application_field_uploads.*')
-        ->first();
+            ->join('application_field_uploads', function ($join) use ($application) {
+                $join->on('application_fields.id', '=', 'application_field_uploads.application_field_id')
+                    ->where('application_field_uploads.application_id', '=', $application->id);
+            })
+            ->select('application_field_uploads.*')
+            ->first();
 
         $contactEmail = $data->uploaded_field ? $data->uploaded_field : $data->uploaded_file;
         $contactEmail = filter_var($contactEmail, FILTER_VALIDATE_EMAIL) ? $contactEmail : '';
 
-        $name = $user->first_name.' '.$user->last_name;
+        $name = $user->first_name . ' ' . $user->last_name;
         $categoryName = $membershipCategory->name;
 
         $emailData = [
@@ -76,10 +75,10 @@ class ApplicationSubmissionListener implements ShouldQueue
                         We are currently reviewing your application and will provide feedback within three (3) business
                         days",
         ];
-        
+
         // Recipient email addresses
         $toEmails = [$user->email, $companyEmail, $contactEmail];
-        
+
         // CC email addresses
         $Meg = Utility::getUsersEmailByCategory(Role::MEG);
         $ccEmails = $Meg;
@@ -95,21 +94,21 @@ class ApplicationSubmissionListener implements ShouldQueue
         $emailD = [
             'name' => 'Team',
             'subject' => 'New Membership Application',
-            'content' => "A new applicant, $name, has successfully submitted 
-                            an application on the MROIS portal as a $categoryName",
+            'content' => "A new applicant, $name, has successfully submitted
+                            an application on the MROIS Portal as a $categoryName",
         ];
 
         Utility::emailHelper($emailD, $tos);
 
         //SEND EMAIL TO MBG cc MEG and MBG for concession
         $to = $Mbg;
-        $ccs  = array_merge($Meg, $fsd);
+        $ccs = array_merge($Meg, $fsd);
 
         $emailC = [
             'name' => 'Team',
             'subject' => 'New Membership Application: Concession Confirmation',
-            'content' => "A new applicant, $name, has successfully submitted an application as a 
-            $categoryName on the MROIS portal. Kindly grant a concession (where applicable)",
+            'content' => "A new applicant, $name, has successfully submitted an application as a
+            $categoryName on the MROIS Portal. Kindly grant a concession (where applicable)",
         ];
 
         Utility::emailHelper($emailC, $to, $ccs);
@@ -124,14 +123,14 @@ class ApplicationSubmissionListener implements ShouldQueue
         $membership_dues = $membershipCategory->membership_dues;
 
         $application_month = Carbon::now()->format('m');
-        if($discounted = MonthlyDiscount::where('month', $application_month)->first()){
+        if ($discounted = MonthlyDiscount::where('month', $application_month)->first()) {
             $discounted_percent = $discounted->discounted_percent ?? 0;
             $discounted_amount = 0.01 * $discounted_percent * $membership_dues;
         }
 
         $total = $application_fee + $membership_dues - $discounted_amount;
 
-        if($tax = SystemSetting::where('name', 'tax')->first()){
+        if ($tax = SystemSetting::where('name', 'tax')->first()) {
             $tax_val = $tax->value ?? 0;
             $vat = (0.01 * $tax_val) * $total;
         }
@@ -139,53 +138,53 @@ class ApplicationSubmissionListener implements ShouldQueue
         //Create Invoice
         $invoice = Invoice::create([
             'invoice_number' => InvoiceGenerator::generateInvoiceNumber(),
-            'reference' => InvoiceGenerator::generateInvoiceReference()
+            'reference' => InvoiceGenerator::generateInvoiceReference(),
         ]);
 
         //Create Invoice content
-        if($application_fee){
+        if ($application_fee) {
             InvoiceContent::create([
                 "invoice_id" => $invoice->id,
                 "name" => "{$membershipCategory->name} - Commercial (National) - Application Fee (Non-Refundable)",
                 "value" => $application_fee,
                 "is_discount" => 0,
                 "parent_id" => null,
-                "type" => "debit"
+                "type" => "debit",
             ]);
         }
 
         $due = null;
 
-        if($membership_dues){
+        if ($membership_dues) {
             $due = InvoiceContent::create([
                 "invoice_id" => $invoice->id,
                 "name" => "{$membershipCategory->name} - {$year} Membership Dues",
                 "value" => $membership_dues,
                 "is_discount" => 0,
                 "parent_id" => null,
-                "type" => "debit"
+                "type" => "debit",
             ]);
         }
-        
-        if($discounted_amount && $due){
+
+        if ($discounted_amount && $due) {
             InvoiceContent::create([
                 "invoice_id" => $invoice->id,
                 "name" => "{$discounted_percent}% Discount on {$year} Membership Dues",
                 "value" => $discounted_amount,
                 "is_discount" => 1,
                 "parent_id" => $due->id,
-                "type" => "credit"
+                "type" => "credit",
             ]);
         }
 
-        if($vat){
+        if ($vat) {
             InvoiceContent::create([
                 "invoice_id" => $invoice->id,
                 "name" => "VAT",
                 "value" => $vat,
                 "is_discount" => 0,
                 "parent_id" => null,
-                "type" => "debit"
+                "type" => "debit",
             ]);
         }
 

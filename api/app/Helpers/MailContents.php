@@ -74,7 +74,7 @@ class MailContents
 
     public static function newMembershipSignupMail($name, $category): string
     {
-        return "<p>A new applicant, $name, has successfully signed up on the FMDQX MROIS portal</p>";
+        return "<p>A new applicant, $name, has successfully signed up on the FMDQX MROIS Portal</p>";
     }
 
     public static function newBroadcastMessageSubject(): string
@@ -84,7 +84,7 @@ class MailContents
 
     public static function newBroadcastMessage($title, $content, $file = null): string
     {
-        return "<p>There is a new message from the MROIS portal:</p>
+        return "<p>There is a new message from the MROIS Portal:</p>
 
         <ul>
             <li><strong>Title:</strong> {$title}</li>
@@ -99,7 +99,7 @@ class MailContents
 
     public static function newSanctionMessage($ar_name, $ar_summary, $sanction_summary): string
     {
-        return "<p>There is a new message from the MROIS portal:</p>
+        return "<p>There is a new message from the MROIS Portal:</p>
 
         <ul>
             <li><strong>AR:</strong> {$ar_name}</li>
@@ -349,7 +349,7 @@ class MailContents
     public static function documentReuploadMail($apllicantName): string
     {
         $url = config("app.front_end_url");
-        return "<p>Please be informed that {$apllicantName} has resubmitted documents on the MROIS portal.</p>
+        return "<p>Please be informed that {$apllicantName} has resubmitted documents on the MROIS Portal.</p>
         <p>Kindly log on to the <a href=$url>MROIS Portal</a> to proceed with the application.</p>";
     }
 
