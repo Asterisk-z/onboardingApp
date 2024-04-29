@@ -45,7 +45,9 @@ import ListTransferAuthRepresentative from "main/pages/ListTransferAuthRepresent
 import ChangeAuthRepresentatives from "main/pages/ListChangeAuthRepresentative" 
 import ChangeAuthRepresentative from "main/pages/ChangeAuthRepresentative" 
 import TransferAuthRepresentative from "main/pages/TransferAuthRepresentative" 
-import PendingAuthRepresentative from "main/pages/PendingAuthRepresentative" 
+import PendingUpdateAuthRepresentative from "main/pages/PendingUpdateAuthRepresentative"
+import PendingAuthRepresentative from "main/pages/PendingAuthRepresentative"
+import ViewAuthRepresentative from "main/pages/ViewAuthRepresentative"
 import FeesFramework from "main/pages/FeesFramework"
 import Regulators from "main/pages/Regulators"
 import Sanction from "main/pages/Sanction"
@@ -160,6 +162,8 @@ const Router = () => {
           <Route path="complaint" element={<Complaint />}></Route>
           <Route path="audit-log" element={<AuditLog />}></Route>
           <Route path="auth-representatives-pending" element={<PendingAuthRepresentative />}></Route>
+          <Route path="auth-representatives-pending-update" element={<PendingUpdateAuthRepresentative />}></Route>
+          <Route path="auth-representatives-view" element={<ViewAuthRepresentative />}></Route>
           <Route path="transfer-auth-representatives" element={<ListTransferAuthRepresentative />}></Route>
           <Route path="change-auth-representative/:ar_user_id" element={<ChangeAuthRepresentative />}></Route>
           <Route path="change-auth-representatives" element={<ChangeAuthRepresentatives />}></Route>

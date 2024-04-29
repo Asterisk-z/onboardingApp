@@ -159,6 +159,7 @@ const positionStore = createSlice({
   initialState,
   reducers: {
     clearPosition: (state) => {
+      console.log('deded')
       state.list = null;
     },
   },
@@ -173,7 +174,7 @@ const positionStore = createSlice({
     builder.addCase(loadAllActivePositions.fulfilled, (state, action) => {
       state.loading = false;
         // state.list = action.payload?.data?.data?.positions;
-        state.list = JSON.stringify(action.payload?.data?.data?.positions);
+        state.all_list = JSON.stringify(action.payload?.data?.data?.positions);
     });
 
     builder.addCase(loadAllActivePositions.rejected, (state, action) => {

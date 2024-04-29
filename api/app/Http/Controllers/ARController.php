@@ -15,10 +15,10 @@ use App\Http\Requests\AR\UpdateARRequest;
 use App\Http\Resources\AR\ARDeactivationRequestResource;
 use App\Http\Resources\AR\ARTransferRequestResource;
 use App\Http\Resources\UserResource;
-use App\Models\AR\ARDeactivationRequest;
-use App\Models\AR\ARTransferRequest;
 use App\Models\ArCreationRequest;
 use App\Models\ArsToBeCreatedOnSystem;
+use App\Models\AR\ARDeactivationRequest;
+use App\Models\AR\ARTransferRequest;
 use App\Models\FmdqSystems;
 use App\Models\Position;
 use App\Models\Role;
@@ -63,7 +63,9 @@ class ARController extends Controller
             $query = $query->where('role_id', $request->role_id);
         }
 
-        // $query = $query->whereNotNull('update_payload');
+        if ($request->update_payload) {
+            $query = $query->whereNotNull('update_payload');
+        }
 
         $users = $query->latest()->get();
 
@@ -699,8 +701,8 @@ class ARController extends Controller
         $request->validate([
             'system_id' => 'required|exists:fmdq_systems,id',
             'ars' => 'required|array',
-            'ars.*' => 'required|exists:users,id'
-        ]); 
+            'ars.*' => 'required|exists:users,id',
+        ]);
 
         $data = [];
         $user = $request->user();
@@ -710,7 +712,7 @@ class ARController extends Controller
         $creationRequest = ArCreationRequest::create([
             'system_id' => $system->id,
             'next_office' => 'MBG',
-            'submitted_by' => $user->id
+            'submitted_by' => $user->id,
         ]);
 
         foreach ($request->ars as $ar) {
@@ -718,7 +720,7 @@ class ARController extends Controller
                 'ar_id' => $ar,
                 'ar_creation_request_id' => $creationRequest->id,
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ];
         }
 

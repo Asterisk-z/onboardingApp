@@ -41,8 +41,9 @@ class AddARRequest extends FormRequest
                         $fail('The email has been taken.');
                     }
                 },
-                new EmailValidation
+                new EmailValidation,
             ],
+            'group_email' => 'required|string',
             "img" => "nullable|mimes:jpeg,png,jpg|max:5048",
             "mandate_form" => "required|mimes:jpeg,png,jpg,pdf|max:5048",
             'phone' => [
@@ -52,7 +53,7 @@ class AddARRequest extends FormRequest
                     if (User::where('phone', $value)->where('is_del', false)->exists()) {
                         $fail('The phone has been taken.');
                     }
-                }
+                },
             ],
         ];
     }

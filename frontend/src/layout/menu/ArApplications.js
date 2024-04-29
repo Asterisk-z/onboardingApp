@@ -27,8 +27,23 @@ const arApplication = [
       },
       {
         icon: "tile-thumb-fill",
-        text: "Update Authorised Representatives",
-        link: "/auth-representatives",
+        text: "Authorised Representatives",
+        active: false,
+        subMenu: [
+          {
+            text: "Update Authorised Representatives",
+            link: "/auth-representatives",
+          },
+          {
+            text: "Pending Authorised Representatives",
+            link: "/auth-representatives-pending",
+          },
+          {
+            text: "View Authorised Representatives",
+            link: "/auth-representatives-view",
+          },
+
+        ],
       }
     ]
   }

@@ -21,7 +21,7 @@ const AdminCategory = ({ drawer }) => {
     const [modalForm, setModalForm] = useState(false);
     
     const categories = useSelector((state) => state?.category?.all_list) || null;
-    const positions = useSelector((state) => state?.position?.list) || null;
+    const positions = useSelector((state) => state?.position?.all_list) || null;
 
     useEffect(() => {
         dispatch(loadAllActivePositions());

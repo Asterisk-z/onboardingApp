@@ -23,7 +23,7 @@ const AdminCompetencyFramework = ({ drawer }) => {
     const [modalForm, setModalForm] = useState(false);
     
     const categories = useSelector((state) => state?.category?.list) || null;
-    const positions = useSelector((state) => state?.position?.list) || null;
+    const positions = useSelector((state) => state?.position?.all_list) || null;
     const competencies = useSelector((state) => state?.competency?.list) || null;
 
     useEffect(() => {
