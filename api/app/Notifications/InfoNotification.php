@@ -74,7 +74,7 @@ class InfoNotification extends Notification implements ShouldQueue
             }
 
             if ($user->role_id == Role::BLG) {
-                $displayName = "BLG";
+                $displayName = "RLG";
             }
 
             if ($user->role_id == Role::HELPDESK) {

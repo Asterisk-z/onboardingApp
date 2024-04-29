@@ -643,8 +643,6 @@ class MembershipApplicationController extends Controller
 
         $user = $request->user();
         $application = Application::find($request->application_id);
-        $applicant = User::find($application->submitted_by);
-        $name = $applicant->first_name . ' ' . $applicant->last_name;
 
         $errorMsg = "Unable to complete your request at this point.";
 
@@ -652,7 +650,7 @@ class MembershipApplicationController extends Controller
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
-        if ($application->currentStatus() != Application::statuses['M2AMR']) {
+        if ($application->currentStatus() != Application::statuses['MSMA']) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
@@ -669,10 +667,7 @@ class MembershipApplicationController extends Controller
         $application->save();
 
         logAction($user->email, 'Membership agreement uploaded by applicant', "Executed membership agreement uploaded by applicant.", $request->ip());
-        Utility::applicationStatusHelper($application, Application::statuses['AEM'], Application::office['AP'], Application::office['MEG']);
-
-        $MEGs = Utility::getUsersByCategory(Role::MEG);
-        Notification::send($MEGs, new InfoNotification(MailContents::applicantUploadAgreementMail($name), MailContents::applicantUploadAgreementSubject()));
+        Utility::applicationStatusHelper($application, Application::statuses['AEM'], Application::office['AP'], Application::office['AP']);
 
         return successResponse("Agreement uploaded successfully");
     }

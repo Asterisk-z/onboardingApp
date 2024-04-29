@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\MailContents;
 use App\Helpers\Utility;
 use App\Http\Resources\ApplicationResource;
+use App\Jobs\FinalApplicationProcessingJob;
 use App\Models\Application;
 use App\Models\Role;
 use App\Models\User;
@@ -71,23 +72,23 @@ class Meg2ApplicationController extends Controller
         $application->save();
         
         // CC email addresses
-        $Meg = Utility::getUsersEmailByCategory(Role::MEG);
+        // $Meg = Utility::getUsersEmailByCategory(Role::MEG);
 
         //NOTIFY APPLICANT AND SEND MEMBERSHIP AGREEMENT
-        $emailData = [
-            'name' => $name,
-            'subject' => MailContents::memberAgreementSubject(),
-            'content' => MailContents::memberAgreementMail()
-        ];
+        // $emailData = [
+        //     'name' => $name,
+        //     'subject' => MailContents::memberAgreementSubject(),
+        //     'content' => MailContents::memberAgreementMail()
+        // ];
         
-        $attachment = [
-            [
-                "name" => "{$membershipCategory->name} Membership Agreement",
-                "saved_path" => $membershipCategory->membership_agreement 
-            ]
-        ];
+        // $attachment = [
+        //     [
+        //         "name" => "{$membershipCategory->name} Membership Agreement",
+        //         "saved_path" => $membershipCategory->membership_agreement 
+        //     ]
+        // ];
 
-        Utility::notifyApplicantAndContact($request->application_id, $applicant, $emailData, $Meg, $attachment);
+        // Utility::notifyApplicantAndContact($request->application_id, $applicant, $emailData, $Meg, $attachment);
         
         $MEGs = Utility::getUsersByCategory(Role::MEG);
         $MEG2s = Utility::getUsersEmailByCategory(Role::MEG2);
@@ -99,10 +100,43 @@ class Meg2ApplicationController extends Controller
         $application->membership_agreement = $membershipCategory->membership_agreement;
         $application->save();
 
-        Utility::applicationStatusHelper($application, Application::statuses['M2AMR'], Application::office['MEG2'], Application::office['AP']);
+        Utility::applicationStatusHelper($application, Application::statuses['M2AMR'], Application::office['MEG2'], Application::office['MEG']);
         
         logAction($user->email, 'MEG2 Approval', "MEG2 Approved MEG Review", $request->ip());
 
         return successResponse("Application Review has been submitted");        
+    }
+
+    public function approveEsuccessLetter(Request $request)
+    {
+        $request->validate([
+            'application_id' => 'required|exists:applications,id'
+        ]);
+
+        $user = $request->user();
+        $application = Application::find($request->application_id);
+        $membershipCategory = $application->membershipCategory;
+
+        $errorMsg = "Unable to complete your request at this point.";
+
+        if($application->office_to_perform_next_action != Application::office['MEG2']){
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+        }
+
+        if($application->currentStatus() != Application::statuses['MEM']){
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+        }
+
+        if(! $application->e_success_letter || $application->e_success_letter_send) {
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+        }
+
+        Utility::applicationStatusHelper($application, Application::statuses['M2AEL'], Application::office['MEG2'], Application::office['AP']);
+        logAction($user->email, 'MEG2 Approval Of e-SUCCESS', "MEG2 Approved e-SUCCESS letter for sending", $request->ip());
+
+        FinalApplicationProcessingJob::dispatch($request->application_id, true);
+
+        return successResponse("E-success letter approved successfully");
+
     }
 }

@@ -88,12 +88,12 @@ class SendEventRemindersByFrequency extends Command
 
 
 
-        $this->log([
-            'events_count' => count($events),
-            'registered_frequency' => $event->registered_remainder_frequency,
-            'unregistered_frequency' => $event->unregistered_remainder_frequency,
-            'message' => $this->message,
-        ]);
+        // $this->log([
+        //     'events_count' => count($events),
+        //     'registered_frequency' => $event->registered_remainder_frequency,
+        //     'unregistered_frequency' => $event->unregistered_remainder_frequency,
+        //     'message' => $this->message,
+        // ]);
 
 
         return 0;

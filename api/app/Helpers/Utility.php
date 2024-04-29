@@ -133,7 +133,7 @@ class Utility
 
     public static function notifyApplicantFinal($application_id, $emailData, $toEmails = [], $ccs = [], $attachment = [])
     {
-        $application = Application::where('applications.id', $application_id)->first();
+        $application = Application::find($application_id);
 
         $mail = Mail::to($toEmails);
 

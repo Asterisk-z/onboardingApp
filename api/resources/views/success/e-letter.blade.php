@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="description" content="Emulating an invoice in web documents (using HTML and CSS)" />
-    <title>Invoice</title>
+    <title>E-Success Letter</title>
     <style>
         .header {
             /* border: 2px solid red; */
@@ -143,30 +143,33 @@
     <div class="page">
         <div style="padding: 30px">
             <div style="width: 100%; padding: 10px 20px; font-size: 14px">
-                <div style=" display: flex; align-items: center; justify-content: space-between; ">
-                    <div style="color: #969698">
+                <div style="display: flex; align-items: center; justify-content: space-between; ">
+                    <div style="color: #969698; float: left;">
                         <i>
-                            <h3>
-                                FMDQ SECURITIES EXCHANGE LIMITED <br /><span style="margin-left: 225px; font-size: 13px">RC:1617162</span>
+                            <h3 style="margin: 0;">
+                                FMDQ SECURITIES EXCHANGE LIMITED <br>
+                                <span style="font-size: 13px; float: right;">RC:1617162</span>
                             </h3>
                         </i>
                     </div>
-                    <div>
-                        <img style="width: 250px" src="{{ asset('assets/invoice/img/fmdqlogo-blurred.svg') }}" alt="fmdq logo" />
+                    <div style="float: right;">
+                        <img style="width: 250px;" src="{{ public_path('assets/invoice/img/e_success_logo.png') }}" alt="fmdq logo">
                     </div>
                 </div>
+                <br><br>
                 <div style="padding: 20px 20px">
                     {!! $content['address'] !!}
                     <p style="margin-top: 12px">Dear Sir/Madam,</p>
 
                     {!! $content['title'] !!}
                     {!! $content['body'] !!}
+                    
                 </div>
             </div>
         </div>
-        <div style=" border-top: 2px solid #969698; margin-top: 40px; text-align: center; padding: 10px 30px; ">
-            <div style="font-size: 12px;">
-                <i style="font-size: 11px;">
+        <div style=" border-top: 2px solid #969698; text-align: center;">
+            <div style="font-size: 11px;">
+                <i style="font-size: 10px;">
                     <b>A Securities and Exchange Commission Registered Securities Exchange and Self-Regulatory Organisation (Member of FMDQ Group)</b></i> <br>
                 <i><span style="color: #1D326D;"><b>Exchange Place</b></span>, 35 Idowu Taylor Street, Victoria Island, Lagos, Nigeria. W: www.fmdqgroup.com T: +234-1- 7008555, 2778771, 2771719</i>
                 <b style="padding: 0 20px;"><i>Chairman: Mr. Emeka Onwuka, OON; Vice Chairman: Mr. Kayode
