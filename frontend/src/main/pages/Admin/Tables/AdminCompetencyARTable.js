@@ -32,7 +32,7 @@ const Export = ({ data }) => {
             "Role": item.role.name,
             "Position": item.position.name,
             "Reg No": item.reg_Id,
-            "Date Created": moment(item.createdAt).format('MMM. DD, YYYY HH:mm')
+            "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
         })
     });
   
@@ -154,7 +154,7 @@ const AdminCompetencyARTable = ({ data, pagination, actions, className, selectab
       },
       {
           name: "Date Created",
-          selector: (row) => moment(row.created_at).format('MMM. DD, YYYY HH:mm'),
+          selector: (row) => moment(row.created_at).format('MMM. D, YYYY HH:mm'),
           sortable: true,
           width: "auto",
           wrap: true

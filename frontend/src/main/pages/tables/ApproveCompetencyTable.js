@@ -27,7 +27,7 @@ const Export = ({ data }) => {
       "AR Detail": item.ar.email,
       "Response": item.is_competent ? 'YES' : 'NO',
       "Evidence": item.evidence_file,
-      "Date Created": moment(item.createdAt).format('MMM. DD, YYYY HH:mm')
+      "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
     })
   });
 
@@ -250,7 +250,7 @@ const ApproveCompetencyTable = ({ data, pagination, actions, className, selectab
     },
     {
       name: "Date Created",
-      selector: (row) => moment(row.createdAt).format('MMM. DD, YYYY HH:mm'),
+      selector: (row) => moment(row.createdAt).format('MMM. D, YYYY HH:mm'),
       sortable: true,
       width: "150px",
     },

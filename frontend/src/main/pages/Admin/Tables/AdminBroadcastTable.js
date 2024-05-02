@@ -22,7 +22,7 @@ const Export = ({ data }) => {
             "Content": item.content,
             "Categories": item.category_obj.map((cat) => cat.name).toString(),
             "Positions": item.position_obj.map((pos) => pos.name).toString(),
-            "Date Created": moment(item.createdAt).format('MMM. DD, YYYY HH:mm')
+            "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
         })
     });
 
@@ -113,7 +113,7 @@ const AdminBroadcastTable = ({ data, pagination, actions, className, selectableR
       },
       {
           name: "Date Created",
-          selector: (row) => moment(row.createdAt).format('MMM. DD, YYYY HH:mm'),
+          selector: (row) => moment(row.createdAt).format('MMM. D, YYYY HH:mm'),
           sortable: true,
           width: "auto",
           wrap: true

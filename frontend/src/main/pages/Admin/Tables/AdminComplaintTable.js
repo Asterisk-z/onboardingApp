@@ -26,7 +26,7 @@ const Export = ({ data }) => {
             "Description": `${item.body}`,
             "Status": item.status,
             "Comment(s)": item.comment.length,
-            "Date Created": moment(item.createdAt).format('MMM. DD, YYYY HH:mm')
+            "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
         })
     });
 
@@ -297,7 +297,7 @@ const SendFeedback = ({ updateParentParent, complaint}) => {
                       
                         
                         {complaint.comment.length > 0 && <><h6 className="title">Comments:</h6></> }
-                        {complaint.comment.length > 0 && complaint.comment?.map((comment, index) => (<p key={index}>{comment.comment}<br />{ comment.commenter.first_name } <br />{ moment(comment.createdAt).format('MMM. DD, YYYY HH:mm') }</p>))}
+                        {complaint.comment.length > 0 && complaint.comment?.map((comment, index) => (<p key={index}>{comment.comment}<br />{ comment.commenter.first_name } <br />{ moment(comment.createdAt).format('MMM. D, YYYY HH:mm') }</p>))}
                   </div>
               </ModalBody>
               <ModalFooter className="bg-light">
@@ -346,7 +346,7 @@ const ComplaintTableUser = ({ data, pagination, actions, className, selectableRo
     },
     {
         name: "Date Created",
-        selector: (row) => moment(row.createdAt).format('MMM. DD, YYYY HH:mm'),
+        selector: (row) => moment(row.createdAt).format('MMM. D, YYYY HH:mm'),
         sortable: true,
         width: "auto",
         wrap: true

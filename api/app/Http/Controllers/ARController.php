@@ -435,8 +435,10 @@ class ARController extends Controller
         $logMessage = "Requested AR transfer of $ARUser->email ($regID)";
         logAction($request->user()->email, 'Request AR Transfer', $logMessage, $request->ip());
 
+        $MEGs = Utility::getUsersEmailByCategory(Role::MEG);
+
         $authoriserUser = User::find($authoriserID);
-        $authoriserUser->notify(new InfoNotification(ARMailContents::transferAuthoriserBody($ARUser), ARMailContents::transferAuthoriserSubject()));
+        $authoriserUser->notify(new InfoNotification(ARMailContents::transferAuthoriserBody($ARUser), ARMailContents::transferAuthoriserSubject(), $MEGs));
 
         $record->refresh();
 
@@ -472,9 +474,10 @@ class ARController extends Controller
             logAction($request->user()->email, $logTitle, $logMessage, $request->ip());
 
             // send mail
+            $MEGs = Utility::getUsersEmailByCategory(Role::MEG);
 
             $ARRequester = $record->requester;
-            $ARRequester->notify(new InfoNotification(ARMailContents::transferDeclineRequesterBody($ARUser, $request->reason), ARMailContents::transferDeclineRequesterSubject(), [$request->user()->email]));
+            $ARRequester->notify(new InfoNotification(ARMailContents::transferDeclineRequesterBody($ARUser, $request->reason), ARMailContents::transferDeclineRequesterSubject(), [ ...$MEGs, $request->user()->email]));
 
             return successResponse('Successful', ARTransferRequestResource::make($record));
         } else {
@@ -571,7 +574,7 @@ class ARController extends Controller
                 }
             }
 
-            $data['institution_id'] = $request->new_institution_id;
+            $data['institution_id'] = $record->new_institution_id;
             $ARUser->update($data);
 
             $record->mbg_approval_status = ARTransferRequest::APPROVED;

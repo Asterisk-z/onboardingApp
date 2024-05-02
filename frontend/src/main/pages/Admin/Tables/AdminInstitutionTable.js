@@ -30,7 +30,7 @@ const Export = ({ data }) => {
             "Categories": item.category.map((cat) => cat.name).toString(),
             "Total ARs": item.ars.length,
             "Status": `Pending Registration`,
-            "Date Created": moment(item.createdAt).format('MMM. DD, YYYY HH:mm')
+            "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
         })
     });
 
@@ -271,7 +271,7 @@ const AdminInstitutionTable = ({ data, pagination, actions, className, selectabl
       },
       {
           name: "Date Created",
-          selector: (row) => moment(row.createdAt).format('MMM. DD, YYYY HH:mm'),
+          selector: (row) => moment(row.createdAt).format('MMM. D, YYYY HH:mm'),
           sortable: true,
           width: "auto",
           wrap: true

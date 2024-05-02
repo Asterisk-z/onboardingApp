@@ -30,7 +30,7 @@ const Export = ({ data }) => {
       "Annual": item.is_annual,
       "Registration Fee": (item.fee < 1) ? 'Free' : `${item.fee}`,
       "Interests": item.registrations_count,
-      "Date Created": moment(item.createdAt).format('MMM. DD, YYYY HH:mm')
+      "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
     })
   });
 
@@ -277,7 +277,7 @@ const AdminEventRegistrationTable = ({ data, pagination, actions, className, sel
     },
     {
     name: "Date Created",
-    selector: (row) => moment(row.createdAt).format('MMM. DD, YYYY HH:mm'),
+    selector: (row) => moment(row.createdAt).format('MMM. D, YYYY HH:mm'),
     sortable: true,
     width: "150px",
     },

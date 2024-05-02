@@ -159,8 +159,8 @@ const TransferAuthRepresentative = ({ drawer }) => {
                                                                 <div className="form-control-select">
                                                                     <select className="form-control form-select" {...register('request_type', { required: "Roles is Required" })} >
                                                                         <option value="">Select Status</option>
-                                                                        <option value="activate">Activate</option>
-                                                                        <option value="deactivate">Deactivate</option>
+                                                                        {$user?.is_active == '0' && <option value="activate">Activate</option>}
+                                                                        {$user?.is_active == '1' && <option value="deactivate">Deactivate</option>}
                                                                         
                                                                     </select>
                                                                     {errors.request_type && <p className="invalid">{`${errors.request_type.message}`}</p>}

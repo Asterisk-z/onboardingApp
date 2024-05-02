@@ -30,7 +30,7 @@ const Export = ({ data }) => {
       "Annual": item.is_annual,
       "Registration Fee": (item.fee < 1) ? 'Free' : `${item.fee}`,
       "Interests": item.registrations_count,
-      "Date Created": moment(item.createdAt).format('MMM. DD, YYYY HH:mm')
+      "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
     })
   });
 

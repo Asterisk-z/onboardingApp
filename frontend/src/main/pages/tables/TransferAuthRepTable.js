@@ -5,12 +5,13 @@ import exportFromJSON from "export-from-json";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge,  Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label } from "reactstrap";
+import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge, Modal, ModalHeader, ModalBody, ModalFooter, Card, CardBody, CardTitle, Spinner, Label } from "reactstrap";
 import { DataTablePagination } from "components/Component";
 import { sendComplaintFeedback, updateComplaintStatus } from "redux/stores/complaints/complaint";
 import { userUpdateUserAR, userCancelUpdateUserAR, userProcessUpdateUserAR, userProcessTransferUserAR } from "redux/stores/authorize/representative";
 import moment from "moment";
 import Icon from "components/icon/Icon";
+import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 import Swal from "sweetalert2";
 
 const Export = ({ data }) => {
@@ -29,7 +30,7 @@ const Export = ({ data }) => {
             "Email": item.ar.email,
             "Status": item.approval_status,
             "Role": item.ar.role.name,
-            "Date Created": moment(item.createdAt).format('MMM. DD, YYYY HH:mm')
+            "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
         })
     });
 
@@ -83,11 +84,54 @@ const Export = ({ data }) => {
 
 
 const ActionTab = (props) => {
-    const ar_user = props.ar_user
     
+
+  const aUser = useUser();
+  const aUserUpdate = useUserUpdate();
+    const record = props.data
+
+    const ar_user = record.ar
+    const requester = record.requester
+    const approver = record.approver
+    const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [modalViewUpdate, setModalViewUpdate] = useState(false);
+    const toggleViewUpdate = () => setModalViewUpdate(!modalViewUpdate);
+    const [modalReason, setModalReason] = useState(false);
+    const toggleReason = () => setModalReason(!modalReason);
 
+    const { register, handleSubmit, formState: { errors }, resetField, setValue, getValues } = useForm();
+
+    const handleMainFormSubmit = async (values) => {
+
+        setLoading(true);
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, Reject it!",
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                const formData = new FormData();
+                formData.append('user_id', record.id);
+                formData.append('action', 'decline');
+                formData.append('reason', values.reason);
+                const resp = dispatch(userProcessTransferUserAR(formData));
+
+                props.updateParentParent(Math.random())
+                setModalViewUpdate(false)
+                setModalReason(false)
+                setLoading(false);
+
+            }
+        });
+
+        // setLoading(false);
+    };  
+    
   const askAction = async (action) => {
     if(action == 'approve') {
         Swal.fire({
@@ -100,92 +144,171 @@ const ActionTab = (props) => {
             if (result.isConfirmed) {
                 
                 const formData = new FormData();
-                formData.append('user_id', ar_user.id);
+                formData.append('user_id', record.id);
                 formData.append('action', 'approve');
                 dispatch(userProcessTransferUserAR(formData));
 
                 props.updateParentParent(Math.random())
+                setModalViewUpdate(false)
                     
             }
         });
     }
-    
-    if(action == 'decline') {
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes, decline it!",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                
-                const formData = new FormData();
-                formData.append('user_id', ar_user.id);
-                formData.append('action', 'decline');
-                const resp = dispatch(userProcessTransferUserAR(formData));
-
-              
-                props.updateParentParent(Math.random())
-
-            }
-        });
-    }
-    
-
   };
   
   return (
     <>
-        <div className="toggle-expand-content" style={{ display: "block" }}>
-            <ul className="nk-block-tools g-3">
-                 <li className="nk-block-tools-opt">
-                    <UncontrolledDropdown direction="right">
-                        <DropdownToggle className="dropdown-toggle btn btn-sm" color="secondary">Action</DropdownToggle>
+    
+                          <button className="btn btn-sm btn-secondary" color="secondary" onClick={toggleViewUpdate}>Review</button>
 
-                        <DropdownMenu>
-                            <ul className="link-list-opt">
-                        
-                                    {/* <li size="xs">
-                                        <DropdownItem tag="a" href="#links" onClick={toggleForm} >
-                                            <Icon name="eye"></Icon>
-                                            <span>View AR</span>
-                                        </DropdownItem>
-                                    </li>
-                                    
-                                
-                                    <li size="xs">
-                                        <DropdownItem tag="a" href="#links" onClick={toggleForm} >
-                                            <Icon name="eye"></Icon>
-                                            <span>View Update AR</span>
-                                        </DropdownItem>
-                                    </li> */}
-                                    <li size="xs">
-                                        <DropdownItem tag="a" href="#links" onClick={(e) => askAction('approve')} >
-                                            <Icon name="eye"></Icon>
-                                            <span>Approve</span>
-                                        </DropdownItem>
-                                    </li>
-                                    <li size="xs">
-                                        <DropdownItem tag="a" href="#links" onClick={(e) => askAction('decline')} >
-                                            <Icon name="eye"></Icon>
-                                            <span>Decline</span>
-                                        </DropdownItem>
-                                    </li>
-                                        
-                                    
-                                    
-                                    
-                                
-                            </ul>
-                        </DropdownMenu>
-                    </UncontrolledDropdown>
-                </li>
-                
 
-            </ul>
-        </div>
-       
+
+          <Modal isOpen={modalReason} toggle={toggleReason} size="lg">
+              <ModalHeader toggle={toggleReason} close={<button className="close" onClick={toggleReason}><Icon name="cross" /></button>}>
+                  
+              </ModalHeader>
+              <ModalBody>
+
+                  <Card className="card">
+                      <CardBody className="card-inner">
+
+
+                          <form onSubmit={handleSubmit(handleMainFormSubmit)} className="is-alter" encType="multipart/form-data">
+
+                              <Row className="gy-4">
+
+                                  <Col sm="12">
+                                      <div className="form-group">
+                                          <Label htmlFor="nationality" className="form-label">
+                                              Reason
+                                          </Label>
+                                          <div className="form-control-wrap">
+                                              <textarea type="text" className="form-control" {...register('reason', { required: "Reason is Required" })}></textarea>
+                                              {errors.reason && <p className="invalid">{`${errors.reason.message}`}</p>}
+                                          </div>
+                                      </div>
+                                  </Col>
+                                  <Col sm="12">
+                                      <div className="form-group">
+                                          <Button color="primary" type="submit" size="sm">
+                                              {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Reject"}
+                                          </Button>
+                                      </div>
+                                  </Col>
+                              </Row>
+
+                          </form>
+                      </CardBody>
+                  </Card>
+              </ModalBody>
+              <ModalFooter className="bg-light">
+                  
+              </ModalFooter>
+          </Modal>
+
+          <Modal isOpen={modalViewUpdate} toggle={toggleViewUpdate} size="lg">
+              <ModalHeader toggle={toggleViewUpdate} close={<button className="close" onClick={toggleViewUpdate}><Icon name="cross" /></button>}>
+                  Transfer Review
+              </ModalHeader>
+              <ModalBody>
+
+                  <Card className="card">
+                      <CardBody className="card-inner">
+                          {/* <CardTitle tag="h5">{`View User`}</CardTitle> */}
+                          {/* <CardText> */}
+
+                          <CardTitle tag="h5" className="text-center">
+                              <img src={ar_user.img} className="rounded-xl" style={{ height: '200px', width: '200px', borderRadius: '100%' }} />
+                          </CardTitle>
+
+                          <table className="table table-striped table-bordered table-hover">
+                              <thead>
+                                  <tr>
+                                      <th scope="col"></th>
+                                      <th scope="col"></th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <tr>
+                                      <td>First Name</td>
+                                      <td className="text-capitalize">{`${ar_user.firstName}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Last Name</td>
+                                      <td className="text-capitalize">{`${ar_user.lastName}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Email</td>
+                                      <td className="text-capitalize">{`${ar_user.email}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Phone</td>
+                                      <td className="text-capitalize">{`${ar_user.phone}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Nationality</td>
+                                      <td className="text-capitalize">{`${ar_user.nationality?.toLowerCase()}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Role</td>
+                                      <td className="text-capitalize">{`${ar_user.role?.name?.toLowerCase()}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Position</td>
+                                      <td className="text-capitalize">{`${ar_user.position?.name?.toLowerCase()}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Status</td>
+                                      <td className="text-capitalize">{`${ar_user.approval_status?.toLowerCase()}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>RegID</td>
+                                      <td className="text-capitalize">{`${ar_user.regId}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Institution</td>
+                                      <td className="text-capitalize">{`${ar_user.institution?.name?.toLowerCase()}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Signature Mandate</td>
+                                      <td>{ar_user.mandate_form ? (
+                                          <a size="lg" href={ar_user.mandate_form} target="_blank" className="btn-primary">
+                                              <Button color="primary">
+                                                  <span >{"View Mandate"}</span>
+                                              </Button>
+                                          </a>
+                                      ) : `Not Uploaded`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Requester</td>
+                                      <td className="text-capitalize">{`${requester.firstName} ${requester.lastName} (${requester.email})`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Approver</td>
+                                      <td className="text-capitalize">{`${approver.firstName} ${approver.lastName} (${approver.email})`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Authoriser Transfer Status</td>
+                                      <td className="text-capitalize">{`${record.approval_status}`}</td>
+                                  </tr>
+
+                              </tbody>
+                          </table>
+                          {(aUser.is_ar_authorizer() && record?.approval_status == 'pending') &&
+                              <>
+                                  <div className="float-end">
+                                      <button className="btn  btn-primary  m-2" onClick={(e) => askAction('approve')}>Approve</button>
+                                      <button className="btn  btn-secondary  m-2" onClick={(e) => setModalReason(true)} >Reject</button>
+                                  </div>
+                              </>
+                          }
+                      </CardBody>
+                  </Card>
+              </ModalBody>
+              <ModalFooter className="bg-light">
+                  <span className="sub-text">View Institutions</span>
+              </ModalFooter>
+          </Modal>
     </>
 
 
@@ -231,7 +354,7 @@ const TransferAuthRepTable = ({ data, pagination, actions, className, selectable
         },
         {
             name: "Date Created",
-            selector: (row) => moment(row.createdAt).format('MMM. DD, YYYY HH:mm'),
+            selector: (row) => moment(row.createdAt).format('MMM. D, YYYY HH:mm'),
             sortable: true,
             width: "auto",
             wrap: true,
@@ -239,7 +362,7 @@ const TransferAuthRepTable = ({ data, pagination, actions, className, selectable
         {
             name: "Action",
             selector: (row) => (<>
-                            <ActionTab ar_user={row} updateParentParent={updateParent} />
+                            <ActionTab data={row} updateParentParent={updateParent} />
                         </>),
             width: "18%",
         },

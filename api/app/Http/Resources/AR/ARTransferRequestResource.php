@@ -25,13 +25,14 @@ class ARTransferRequestResource extends JsonResource
             'new_institution_id' => $this->new_institution_id,
             'request_reason' => $this->request_reason,
             'approval_reason' => $this->approval_reason,
+            'mbg_approval_status' => $this->mbg_approval_status,
 
             'ar' => UserResource::make($this->ar),
             'requester' => UserResource::make($this->requester),
             'approver' => UserResource::make($this->approver),
             'new_institution' => $this->newInstitution,
 
-            'createdAt' => $this->created_at
+            'createdAt' => $this->created_at,
         ];
     }
 }

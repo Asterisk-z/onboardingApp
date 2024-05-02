@@ -22,7 +22,7 @@ const Export = ({ data }) => {
             "UID ID": ++index,
             "Description": item.description,
             "IP Address": item.ip_address,
-            "Date Created": moment(item.createdAt).format('MMM. DD, YYYY HH:mm')
+            "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
         })
     });
 
@@ -114,7 +114,7 @@ const tableColumn = [
       },
       {
         name: "Date Created",
-        selector: (row) => moment(row.created_at).format('MMM. DD, YYYY HH:mm'),
+        selector: (row) => moment(row.created_at).format('MMM. D, YYYY HH:mm'),
         sortable: true,
         width: "auto",
         wrap: true,

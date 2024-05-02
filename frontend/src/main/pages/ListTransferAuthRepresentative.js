@@ -25,6 +25,7 @@ const ListTransferAuthRepresentative = ({ drawer }) => {
     
     const updateParentState = (newState) => {
         setParentState(newState);
+        console.log(newState)
     };
 
     useEffect(() => {
@@ -40,7 +41,7 @@ const ListTransferAuthRepresentative = ({ drawer }) => {
 
     return (
         <React.Fragment>
-            <Head title="Pending Authorised Representative"></Head>
+            <Head title="Pending Transfer Authorised Representative"></Head>
             <Content>
                 <BlockHead size="sm">
                     <BlockBetween>

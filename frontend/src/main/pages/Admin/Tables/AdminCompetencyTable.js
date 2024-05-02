@@ -29,7 +29,7 @@ const Export = ({ data }) => {
             "Description": item.description,
             "Category": item.category_obj.name,
             "Position": item.position_obj.name,
-            "Date Created": moment(item.createdAt).format('MMM. DD, YYYY HH:mm')
+            "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
         })
     });
 
@@ -363,7 +363,7 @@ const AdminCompetencyTable = ({ data, pagination, actions, className, selectable
     },
     {
         name: "Date Created",
-        selector: (row) => moment(row.createdAt).format('MMM. DD, YYYY HH:mm'),
+        selector: (row) => moment(row.createdAt).format('MMM. D, YYYY HH:mm'),
         sortable: true,
         width: "auto",
         wrap: true

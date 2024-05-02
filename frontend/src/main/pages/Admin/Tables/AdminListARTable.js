@@ -32,7 +32,7 @@ const Export = ({ data }) => {
       "Role": item.role.name,
       "Position": item.position.name,
       "Reg No": item.regId,
-      "Date Created": moment(item.createdAt).format('MMM. DD, YYYY HH:mm')
+      "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
     })
   });
 
@@ -452,7 +452,7 @@ const AdminListARTable = ({ data, pagination, actions, className, selectableRows
     },
     {
       name: "Date Created",
-      selector: (row) => moment(row.createdAt).format('MMM. DD, YYYY HH:mm'),
+      selector: (row) => moment(row.createdAt).format('MMM. D, YYYY HH:mm'),
       sortable: true,
       width: "auto",
       wrap: true

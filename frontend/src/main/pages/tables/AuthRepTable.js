@@ -32,7 +32,7 @@ const Export = ({ data }) => {
             "Phone": item.phone,
             "Role": item.role.name,
             "Status": item.approval_status,
-            "Date Created": moment(item.createdAt).format('MMM. DD, YYYY HH:mm')
+            "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
         })
     });
 
@@ -824,16 +824,23 @@ const AuthRepTable = ({ data, pagination, actions, className, selectableRows, ex
         width: "auto",
         wrap: true
     },
+    // {
+    //     name: "Phone",
+    //     selector: (row) => (`${row.phone}`),
+    //     sortable: true,
+    //     width: "auto",
+    //     wrap: true
+    // },
     {
-        name: "Phone",
-        selector: (row) => (`${row.phone}`),
+        name: "Position",
+        selector: (row) => (`${row?.position?.name}`),
         sortable: true,
         width: "auto",
         wrap: true
     },
     {
-        name: "Position",
-        selector: (row) => (`${row?.position?.name}`),
+        name: "AR Status",
+        selector: (row) => { return (<><Badge color="success" className="text-uppercase">{`${row.is_active ? 'Active' : 'Deactivated'}`}</Badge></>) },
         sortable: true,
         width: "auto",
         wrap: true
@@ -856,7 +863,7 @@ const AuthRepTable = ({ data, pagination, actions, className, selectableRows, ex
         name: "Date Created",
         selector: (row) => {
             console.log("ferere")
-            return (moment(row.createdAt).format('MMM. DD, YYYY HH:mm'))
+            return (moment(row.createdAt).format('MMM. D, YYYY HH:mm'))
         },
         sortable: true,
         width: "auto",

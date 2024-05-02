@@ -17,6 +17,7 @@ const AdminBroadcast = ({ drawer }) => {
 
     const updateParentState = (newState) => {
         setParentState(newState);
+        console.log(newState)
     };
 
     const ar_users = useSelector((state) => state?.arUsers?.transfer_list) || null;

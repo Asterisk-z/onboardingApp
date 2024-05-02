@@ -61,7 +61,7 @@ const TransferAuthRepresentative = ({ drawer }) => {
     const $authorizers = authorizers ? JSON.parse(authorizers) : null;
     const $user = user ? JSON.parse(user) : null;
 
-    const [initValues, setInitValues] = useState({
+    let initValues = {
         lastName: $user?.lastName,
         firstName: $user?.firstName,
         middleName: $user?.middleName,
@@ -69,22 +69,24 @@ const TransferAuthRepresentative = ({ drawer }) => {
         email: $user?.email,
         phone: $user?.phone,
         nationality: $user?.nationality,
-        position: $user?.position,
-        role_id: $user?.role.id,
-    }); 
+        position: $user?.position?.id,
+        role_id: $user?.role?.id,
+    }; 
 
     useEffect(() => {
-        setInitValues({
-            lastName: $user?.lastName,
-            firstName: $user?.firstName,
-            middleName: $user?.middleName,
-            groupEmail: $user?.group_email,
-            email: $user?.email,
-            phone: $user?.phone,
-            nationality: $user?.nationality,
-            position: $user?.position,
-            role_id: $user?.role.id,
-        });
+        if ($user) {
+            initValues = {
+                lastName: $user?.lastName,
+                firstName: $user?.firstName,
+                middleName: $user?.middleName,
+                groupEmail: $user?.group_email,
+                email: $user?.email,
+                phone: $user?.phone,
+                nationality: $user?.nationality,
+                position: $user?.position?.id,
+                role_id: $user?.role?.id,
+            }; 
+        }
     }, [$user]);
 
     const handleFormSubmit = async (values) => {
@@ -132,13 +134,13 @@ const TransferAuthRepresentative = ({ drawer }) => {
             if (resp.payload?.message == "success") {
                 setTimeout(() => {
                 setLoading(false);
-                setInitValues({
-                    email: $user?.email,
-                    phone: $user?.phone,
-                    nationality: $user?.nationality,
-                    position: $user?.position,
-                    role_id: $user?.role.id,
-                });
+                // setInitValues({
+                //     email: $user?.email,
+                //     phone: $user?.phone,
+                //     nationality: $user?.nationality,
+                //     position: $user?.position,
+                //     role_id: $user?.role.id,
+                // });
                 
                 }, 1000);
                 
@@ -380,7 +382,7 @@ const TransferAuthRepresentative = ({ drawer }) => {
                                                                                     {$positions && $positions?.map((position, index) => (
                                                                                         <option key={index} value={position.id}>
                                                                                             {position.name}
-                                                                                            {position.is_compulsory == '1' && <span style={{ color: 'red' }}>*</span>}
+                                                                                            {position.is_compulsory == '1' && <>*</>}
                                                                                         </option>
                                                                                     ))}
                                                                                 </select>
@@ -409,10 +411,21 @@ const TransferAuthRepresentative = ({ drawer }) => {
                                                                         </div>
                                                                     </div>
                                                                 </Col>
+                                                                <Col sm="12">
+                                                                    <div className="form-group">
+                                                                        {/* {settings} */}
+                                                                        {($settings && $settings.name == 'mandate_form') && <>
+                                                                            <a  size="lg" href={$settings.value}  download="mandate_form.pdf" target="_blank" className="active btn btn-primary">
+                                                                                {"Download Signature Mandate"}
+                                                                            </a>
+                                                                        </>}
+                                                                        
+                                                                    </div>
+                                                                </Col>
                                                                 <Col sm="6">
                                                                     <div className="form-group">
                                                                         <Label htmlFor="nationality" className="form-label">
-                                                                            Photo
+                                                                            Upload Digital Photo
                                                                         </Label>
                                                                         <div className="form-control-wrap">
                                                                     <input type="file" accept="image/*" className="form-control"  {...register('digitalPhone', {  required: false })} onChange={handleDificalFileChange}/>
@@ -431,17 +444,6 @@ const TransferAuthRepresentative = ({ drawer }) => {
                                                                         </div>
                                                                     </div>
                                                                 </Col>
-                                                                <Col sm="12">
-                                                                    <div className="form-group">
-                                                                        {/* {settings} */}
-                                                                        {($settings && $settings.name == 'mandate_form') && <>
-                                                                            <a  size="lg" href={$settings.value}  download="mandate_form.pdf" target="_blank" className="active btn btn-primary">
-                                                                                {"Download Signature Mandate"}
-                                                                            </a>
-                                                                        </>}
-                                                                        
-                                                                    </div>
-                                                                </Col>
                                                                 <Col sm="6">
                                                                     <div className="form-group">
                                                                         <Label htmlFor="nationality" className="form-label">
@@ -449,7 +451,7 @@ const TransferAuthRepresentative = ({ drawer }) => {
                                                                         </Label>
                                                                         <div className="form-control-wrap">
                                                                             <div className="form-control-select">
-                                                                                <select className="form-control form-select" {...register('role', { required: "Roles is Required" })} defaultValue={initValues.role}>
+                                                                                <select className="form-control form-select" {...register('role', { required: "Roles is Required" })} defaultValue={initValues.role_id}>
                                                                                     <option value="">Select Role</option>
                                                                                     {$roles && $roles?.map((role, index) => (
                                                                                         <option key={index} value={role.id}>
@@ -488,7 +490,7 @@ const TransferAuthRepresentative = ({ drawer }) => {
                                                                             Reason
                                                                         </Label>
                                                                         <div className="form-control-wrap">
-                                                                            <textarea type="text" className="form-control" {...register('reason', { required: "reason is Required" })}></textarea>
+                                                                            <textarea type="text" className="form-control" {...register('reason', { required: "Reason is Required" })}></textarea>
                                                                             {errors.reason && <p className="invalid">{`${errors.reason.message}`}</p>}
                                                                         </div>
                                                                     </div>

@@ -25,7 +25,7 @@ const Export = ({ data }) => {
             "CDID": ++index,
             "Name": `${item.name}`,
             "Status": item.active,
-            "Date Created": moment(item.createdAt).format('MMM. DD, YYYY HH:mm')
+            "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
         })
     });
 
@@ -274,7 +274,7 @@ const AdminCategoryTable = ({ data, pagination, actions, className, selectableRo
     },
     {
         name: "Date Created",
-        selector: (row) => moment(row.createdAt).format('MMM. DD, YYYY HH:mm'),
+        selector: (row) => moment(row.createdAt).format('MMM. D, YYYY HH:mm'),
         sortable: true,
         width: "auto",
         wrap: true

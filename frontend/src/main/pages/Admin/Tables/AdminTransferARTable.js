@@ -1,10 +1,21 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import DataTable from "react-data-table-component";
 import exportFromJSON from "export-from-json";
 import CopyToClipboard from "react-copy-to-clipboard";
-import { Col, Row, Button,  Modal, ModalBody, Badge } from "reactstrap";
+import Icon from "components/icon/Icon";
+import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge, Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, CardBody, CardTitle } from "reactstrap";
 import { DataTablePagination } from "components/Component";
 import moment from "moment";
+import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
+import { megProcessTransferUserAR } from "redux/stores/authorize/representative";
+import Swal from "sweetalert2";
+
+
+
+
+
 
 const Export = ({ data }) => {
     const [modal, setModal] = useState(false);
@@ -22,7 +33,7 @@ const Export = ({ data }) => {
             "Email": item.ar.email,
             "Status": item.approval_status,
             "Role": item.ar.role.name,
-            "Date Created": moment(item.createdAt).format('MMM. DD, YYYY HH:mm')
+            "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
         })
     });
 
@@ -74,6 +85,228 @@ const Export = ({ data }) => {
     );
 };
 
+const ActionTab = (props) => {
+
+  const aUser = useUser();
+  const aUserUpdate = useUserUpdate();
+
+  const record = props.data
+  const institution = record.new_institution
+  const ar_user = record.ar
+  const requester = record.requester
+  const approver = record.approver
+  const navigate = useNavigate();
+  const [modalForm, setModalForm] = useState(false);
+  const [modalView, setModalView] = useState(false);
+  const [modalViewUpdate, setModalViewUpdate] = useState(false);
+
+  const toggleForm = () => setModalForm(!modalForm);
+  const toggleView = () => setModalView(!modalView);
+  const toggleViewUpdate = () => setModalViewUpdate(!modalViewUpdate);
+
+  const dispatch = useDispatch();
+
+
+  const askAction = async (action) => {
+    if (action == 'approve') {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, approve it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+
+          const formData = new FormData();
+          formData.append('user_id', record.id);
+          formData.append('action', 'approve');
+          const resp = dispatch(megProcessTransferUserAR(formData));
+
+          // if (resp.payload?.message == "success") {
+            setTimeout(() => {
+              props.updateParentParent(Math.random())
+              setModalViewUpdate(false)
+            }, 1000);
+
+          // }
+        }
+      });
+    }
+
+    if (action == 'decline') {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, reject it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+
+          const formData = new FormData();
+          formData.append('user_id', record.id);
+          formData.append('action', 'decline');
+          const resp = dispatch(megProcessTransferUserAR(formData));
+
+          // if (resp.payload?.message == "success") {
+            setTimeout(() => {
+              props.updateParentParent(Math.random())
+              setModalViewUpdate(false)
+            }, 1000);
+
+          // }
+        }
+      });
+    }
+
+
+  };
+
+  return (
+    <>
+      <div className="toggle-expand-content" style={{ display: "block" }}>
+        <ul className="nk-block-tools g-3">
+                  {(aUser.is_admin_meg() ) &&
+                    <>
+          <li className="nk-block-tools-opt">
+            <UncontrolledDropdown direction="right">
+              <DropdownToggle className="dropdown-toggle btn btn-md" color="secondary">MEG Review</DropdownToggle>
+
+              <DropdownMenu>
+                <ul className="link-list-opt">
+
+
+
+                      <li size="xs">
+                        <DropdownItem tag="a" onClick={toggleViewUpdate} >
+                          <Icon name="eye"></Icon>
+                          <span>Authorised Representative Review</span>
+                        </DropdownItem>
+                      </li>
+
+
+                </ul>
+              </DropdownMenu>
+            </UncontrolledDropdown>
+          </li>
+
+
+                    </>
+                  }
+        </ul>
+      </div>
+
+      
+      <Modal isOpen={modalViewUpdate} toggle={toggleViewUpdate} size="lg">
+        <ModalHeader toggle={toggleViewUpdate} close={<button className="close" onClick={toggleViewUpdate}><Icon name="cross" /></button>}>
+          Transfer Review
+        </ModalHeader>
+        <ModalBody>
+
+          <Card className="card">
+            <CardBody className="card-inner">
+              {/* <CardTitle tag="h5">{`View User`}</CardTitle> */}
+              {/* <CardText> */}
+
+              <CardTitle tag="h5" className="text-center">
+                <img src={ar_user.img} className="rounded-xl" style={{ height: '200px', width: '200px', borderRadius: '100%' }} />
+              </CardTitle>
+
+              <table className="table table-striped table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>First Name</td>
+                    <td className="text-capitalize">{`${ar_user.firstName}`}</td>
+                  </tr>
+                  <tr>
+                    <td>Last Name</td>
+                    <td className="text-capitalize">{`${ar_user.lastName}`}</td>
+                  </tr>
+                  <tr>
+                    <td>Email</td>
+                    <td className="text-capitalize">{`${ar_user.email}`}</td>
+                  </tr>
+                  <tr>
+                    <td>Phone</td>
+                    <td className="text-capitalize">{`${ar_user.phone}`}</td>
+                  </tr>
+                  <tr>
+                    <td>Nationality</td>
+                    <td className="text-capitalize">{`${ar_user.nationality.toLowerCase()}`}</td>
+                  </tr>
+                  <tr>
+                    <td>Role</td>
+                    <td className="text-capitalize">{`${ar_user.role.name.toLowerCase()}`}</td>
+                  </tr>
+                  <tr>
+                    <td>Position</td>
+                    <td className="text-capitalize">{`${ar_user.position.name.toLowerCase()}`}</td>
+                  </tr>
+                  <tr>
+                    <td>Status</td>
+                    <td className="text-capitalize">{`${ar_user.approval_status.toLowerCase()}`}</td>
+                  </tr>
+                  <tr>
+                    <td>RegID</td>
+                    <td className="text-capitalize">{`${ar_user.regId}`}</td>
+                  </tr>
+                  <tr>
+                    <td>Institution</td>
+                    <td className="text-capitalize">{`${ar_user.institution?.name?.toLowerCase()}`}</td>
+                  </tr>
+                  <tr>
+                    <td>Signature Mandate</td>
+                    <td>{ar_user.mandate_form ? (
+                      <a size="lg" href={ar_user.mandate_form} target="_blank" className="btn-primary">
+                        <Button color="primary">
+                          <span >{"View Mandate"}</span>
+                        </Button>
+                      </a>
+                    ) : `Not Uploaded`}</td>
+                  </tr>
+                  <tr>
+                    <td>Requester</td>
+                    <td className="text-capitalize">{`${requester.firstName} ${requester.lastName} (${requester.email})`}</td>
+                  </tr>
+                  <tr>
+                    <td>Approver</td>
+                    <td className="text-capitalize">{`${approver.firstName} ${approver.lastName} (${approver.email})`}</td>
+                  </tr>
+                  <tr>
+                    <td>Authoriser Transfer Status</td>
+                    <td className="text-capitalize">{`${record.approval_status}`}</td>
+                  </tr>
+
+                </tbody>
+              </table>
+              {(aUser.is_admin_meg() && record?.approval_status == 'approved' && record?.mbg_approval_status == 'pending') &&
+                <>
+                  <div className="float-end">
+                    <button className="btn  btn-primary  m-2" onClick={(e) => askAction('approve')}>Approve</button>
+                    <button className="btn  btn-secondary  m-2" onClick={(e) => askAction('decline')} >Reject</button>
+                  </div>
+                </>
+              }
+            </CardBody>
+          </Card>
+        </ModalBody>
+        <ModalFooter className="bg-light">
+          <span className="sub-text">View Institutions</span>
+        </ModalFooter>
+      </Modal>
+    </>
+
+
+  );
+};
+
 const AdminListARTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState }) => {
     const complainColumn = [
     {
@@ -99,7 +332,14 @@ const AdminListARTable = ({ data, pagination, actions, className, selectableRows
     },
     {
         name: "Status",
-        selector: (row) => { return (<><Badge color="success">{`${row.approval_status}`}</Badge></>) },
+        selector: (row) => { return (<><Badge color="success" className="text-uppercase">{`${row.approval_status}`}</Badge></>) },
+        sortable: true,
+        width: "auto",
+        wrap: true,
+    },
+    {
+        name: "MEG Status",
+        selector: (row) => { return (<><Badge color="success" className="text-uppercase">{`${row.mbg_approval_status}`}</Badge></>) },
         sortable: true,
         width: "auto",
         wrap: true,
@@ -113,18 +353,18 @@ const AdminListARTable = ({ data, pagination, actions, className, selectableRows
     },
     {
         name: "Date Created",
-        selector: (row) => moment(row.createdAt).format('MMM. DD, YYYY HH:mm'),
+        selector: (row) => moment(row.createdAt).format('MMM. D, YYYY HH:mm'),
         sortable: true,
         width: "auto",
         wrap: true,
     },
-    // {
-    //     name: "Action",
-    //     selector: (row) => (<>
-    //                     <ActionTab ar_user={row} updateParentParent={updateParent} />
-    //                 </>),
-    //     width: "18%",
-    // },
+    {
+        name: "Action",
+        selector: (row) => (<>
+                        <ActionTab data={row} updateParentParent={updateParent} />
+                    </>),
+        width: "18%",
+    },
     ];
   const [tableData, setTableData] = useState(data);
   const [searchText, setSearchText] = useState("");

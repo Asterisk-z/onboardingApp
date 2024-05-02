@@ -29,7 +29,7 @@ const Export = ({ data }) => {
             "Email": `${item.ar.firstName} ${item.ar.lastName} ${item.ar.email}`,
             "Institution": item.ar.institution.category[0].name,
             "Status": item.approval_status,
-            "Date Created": moment(item.createdAt).format('MMM. DD, YYYY HH:mm')
+            "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
         })
     });
 
@@ -230,7 +230,7 @@ const ChangeStatusAuthRepTable = ({ data, pagination, actions, className, select
     },
     {
         name: "Date Created",
-        selector: (row) => moment(row.createdAt).format('MMM. DD, YYYY HH:mm'),
+        selector: (row) => moment(row.createdAt).format('MMM. D, YYYY HH:mm'),
         sortable: true,
         width: "auto",
         wrap: true,

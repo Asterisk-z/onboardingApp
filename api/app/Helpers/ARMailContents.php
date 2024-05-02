@@ -55,7 +55,6 @@ class ARMailContents
                 <br>
                 <p>
                     Kindly login to the <a href='" . $link . "'>MROIS Portal</a> to approve or reject
-                    Kindly login to the <a href='" . $link . "'>MROIS Portal</a> to approve or reject
                 </p>";
 
         return $message;
@@ -69,8 +68,10 @@ class ARMailContents
     public static function transferAuthoriserBody(User $ARUser): string
     {
         $regID = $ARUser->getRegID();
+        $lastName = $ARUser->last_name;
+        $firstName = $ARUser->first_name;
         return "<p>
-            Kindly login to the “MROIS Portal” to approve the transfer of <b>$regID</b>
+            Kindly login to the “MROIS Portal” to approve the transfer of <b>$lastName $firstName</b>  With AR ID <b>$regID</b>
         </p>";
     }
 

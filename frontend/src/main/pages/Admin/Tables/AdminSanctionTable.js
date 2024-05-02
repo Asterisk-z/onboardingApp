@@ -24,7 +24,7 @@ const Export = ({ data }) => {
             "AR Summary": item.ar_summary,
             "CCO": item.sanctioner.full_name,
             "AR": item.sanctionee.full_name_with_mail,
-            "Date Created": moment(item.created_at).format('MMM. DD, YYYY HH:mm')
+            "Date Created": moment(item.created_at).format('MMM. D, YYYY HH:mm')
         })
     });
 
@@ -123,7 +123,7 @@ const DropdownTrans = (props) => {
                         </>}
                       
                         {complaint.comment.length > 0 && <><h6 className="title">Comment(s):</h6></> }
-                        {complaint.comment.length > 0 && complaint.comment?.map((comment, index) => (<p key={index}>{comment.comment}<br />{ comment.commenter.first_name } <br />{ moment(comment.createdAt).format('MMM. DD, YYYY HH:mm') }</p>))}
+                        {complaint.comment.length > 0 && complaint.comment?.map((comment, index) => (<p key={index}>{comment.comment}<br />{ comment.commenter.first_name } <br />{ moment(comment.createdAt).format('MMM. D, YYYY HH:mm') }</p>))}
                 </div>
             </ModalBody>
             <ModalFooter className="bg-light">
@@ -188,7 +188,7 @@ const sanctionColumn = [
   },
   {
     name: "Date Created",
-    selector: (row) => moment(row.created_at).format('MMM. DD, YYYY HH:mm'),
+    selector: (row) => moment(row.created_at).format('MMM. D, YYYY HH:mm'),
     sortable: true,
     width: "150px",
   },
