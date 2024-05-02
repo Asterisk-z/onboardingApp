@@ -51,7 +51,7 @@ class BroadcastMessageController extends Controller
             "category" => "required|array",
             "category.*" => "required|exists:membership_categories,id",
             "position" => "required|array",
-            "position.*" => "required|exists:positions,id"
+            "position.*" => "required|exists:positions,id",
         ]);
 
         $user = auth()->user();
@@ -76,7 +76,11 @@ class BroadcastMessageController extends Controller
 
         $MEGs = Utility::getUsersEmailByCategory(Role::MEG);
         //
-        Notification::send($ars, new InfoNotification(MailContents::newBroadcastMessage($request->input('title'), $request->input('content')), MailContents::newBroadcastMessageSubject(), $MEGs, $attachment));
+        // logger($MEGs);
+        // logger($ars);
+        // logger(MailContents::newBroadcastMessage($request->input('title'), $request->input('content')));
+        // logger(MailContents::newBroadcastMessageSubject());
+        Notification::send($ars, new InfoNotification(MailContents::newBroadcastMessage($request->input('title'), $request->input('content')), MailContents::newBroadcastMessageSubject(), $MEGs));
 
         $logMessage = $user->email . ' created a broadcast message named : ' . $request->title;
         logAction($user->email, 'Broadcast Message Created', $logMessage, $request->ip());

@@ -412,6 +412,9 @@ const Homepage = () => {
             <BlockHead>
               <BlockHeadContent>
                 <BlockTitle tag="h4">Authorised Representatives</BlockTitle>
+                <Button color="primary">
+                  <span onClick={() => navigate(`${process.env.PUBLIC_URL}/auth-representatives`) }>Update Authorised Representative</span>
+                </Button>
               </BlockHeadContent>
             </BlockHead>
             

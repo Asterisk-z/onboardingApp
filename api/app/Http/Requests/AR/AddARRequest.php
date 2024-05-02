@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\AR;
 
+use App\Models\Position;
 use App\Models\Role;
 use App\Models\User;
 use App\Rules\EmailValidation;
@@ -32,7 +33,16 @@ class AddARRequest extends FormRequest
             'middle_name' => 'nullable|string',
             'position_id' => 'required|exists:positions,id',
             'nationality' => 'required|exists:nationalities,code',
-            'role_id' => 'required|in:' . Role::ARAUTHORISER . ',' . Role::ARINPUTTER,
+            'role_id' => [
+                'required',
+                'in:' . Role::ARAUTHORISER . ',' . Role::ARINPUTTER,
+                function ($attribute, $value, $fail) {
+                    if (Role::ARAUTHORISER == $value) {
+                        if (!Position::where('id', request('position_id'))->where('can_be_authorizer', true)->where('is_del', false)->exists()) {
+                            $fail('Position can not be authoriser.');
+                        }
+                    }
+                }],
             'email' => [
                 'email',
                 'required',

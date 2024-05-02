@@ -192,7 +192,7 @@ const ActionTab = (props) => {
                     formData.append('user_id', ar_user.id);
                     formData.append('action', 'approve');
                     const resp = dispatch(userProcessUpdateUserAR(formData));
-
+                    setModalViewUpdate(false)
                             props.updateParentParent(Math.random())
                 }
             });
@@ -212,6 +212,7 @@ const ActionTab = (props) => {
                     formData.append('user_id', ar_user.id);
                     formData.append('action', 'decline');
                     const resp = dispatch(userProcessUpdateUserAR(formData));
+                    setModalViewUpdate(false)
 
                             props.updateParentParent(Math.random())
                 }
@@ -231,6 +232,7 @@ const ActionTab = (props) => {
                     const formData = new FormData();
                     formData.append('user_id', ar_user.id);
                     const resp = dispatch(userCancelUpdateUserAR(formData));
+                    setModalViewUpdate(false)
 
                             props.updateParentParent(Math.random())
                 }
@@ -342,7 +344,7 @@ const ActionTab = (props) => {
                                                     <li size="xs" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/change-auth-representative/${user_id}`)} >
                                                         <DropdownItem tag="a"  >
                                                             <Icon name="eye"></Icon>
-                                                            <span>Change AR Status</span>
+                                                            <span>Deactivate/Activate AR</span>
                                                         </DropdownItem>
                                                     </li>
                                                 </>
@@ -367,6 +369,9 @@ const ActionTab = (props) => {
               <ModalBody>
                   <Card className="card">
                       <CardBody className="card-inner">
+                          <CardTitle tag="h5" className="text-center">
+                              <img src={ar_user.img} className="rounded-xl" style={{ height: '200px', width: '200px', borderRadius: '100%' }} />
+                          </CardTitle>
                           <CardTitle tag="h5">{`Initial AR Information`}</CardTitle>
 
                           <table className="table table-striped table-bordered table-hover">
@@ -426,8 +431,10 @@ const ActionTab = (props) => {
                     <Card className="card">   
                         <CardBody className="card-inner">
                           <CardTitle tag="h5">{`Update AR Information` }</CardTitle>
-                            {/* <CardText> */}
+                          {/* <CardText> */}
+
                           <table className="table table-striped table-bordered table-hover">
+                            
                               <thead>
                                   <tr>
                                       <th scope="col"></th>
@@ -488,7 +495,10 @@ const ActionTab = (props) => {
             <ModalBody>
                     <Card className="card">   
                         <CardBody className="card-inner">
-                            <CardTitle tag="h5">{ `${ar_user.firstName} ${ar_user.lastName} (${ar_user.email})` }</CardTitle>
+                            
+                            <CardTitle tag="h5" className="text-center">
+                              <img src={ar_user.img} className="rounded-xl" style={{ height: '200px', width: '200px', borderRadius: '100%' }} />
+                          </CardTitle>
 
                           <table className="table table-striped table-bordered table-hover">
                               <thead>
@@ -498,6 +508,18 @@ const ActionTab = (props) => {
                                   </tr>
                               </thead>
                               <tbody>
+                                  <tr>
+                                      <td>First Name</td>
+                                      <td className="text-capitalize">{`${ar_user.firstName}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Last Name</td>
+                                      <td className="text-capitalize">{`${ar_user.lastName}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Email</td>
+                                      <td className="text-capitalize">{`${ar_user.email}`}</td>
+                                  </tr>
                                   <tr>
                                       <td>Phone</td>
                                       <td className="text-capitalize">{`${ar_user.phone}`}</td>
@@ -526,7 +548,7 @@ const ActionTab = (props) => {
                                       <td>Institution</td>
                                       <td className="text-capitalize">{`${ar_user.institution?.name?.toLowerCase()}`}</td>
                                   </tr>
-                                  <tr>
+                                  {/* <tr>
                                       <td>Profile Photo</td>
                                       <td>{ar_user.img ? (
                                           <a size="lg" href={ar_user.img} target="_blank">
@@ -537,7 +559,7 @@ const ActionTab = (props) => {
 
 
                                       ) : `Not Uploaded`}</td>
-                                  </tr>
+                                  </tr> */}
                                   <tr>
                                       <td>Signature Mandate</td>
                                       <td>{ar_user.mandate_form ? (
@@ -568,6 +590,14 @@ const ActionTab = (props) => {
                 <form onSubmit={handleSubmit(handleFormSubmit)} className="is-alter" encType="multipart/form-data">
                                     
                     <Row className="gy-4">
+                        <Col sm="12" className="text-center">
+
+                              {/* <div className="user-avatar size-xl" size='xl'> */}
+                              <img src={initValues.img} className="rounded-xl" style={{ height: '200px', width: '200px', borderRadius: '100%' }} />
+                              {/* <img src={'http://127.0.0.1:8000/storage/users/GGKTInKkMZs3bbIpA76UgeqfUOnLXfQuarSRvgIz.png'} className="rounded-lg" style={{ height: '200px', width: '200px', borderRadius: '100%' }} /> */}
+
+                              {/* </div> */}
+                        </Col>
                         <Col sm="6">
                             <div className="form-group">
                                 <Label htmlFor="lastName" className="form-label">
@@ -721,19 +751,12 @@ const ActionTab = (props) => {
                         <Col sm="6">
                             <div className="form-group">
                                 <Label htmlFor="nationality" className="form-label">
-                                    Digital Photo
+                                    Upload Digital Photo
                                 </Label>
                                 <div className="form-control-wrap">
 
-                                      <div className="input-group">
                                           <input type="file" accept="image/*" className="form-control"  {...register('digitalPhone', { required: false })} onChange={handleDificalFileChange} />
-                                          <div className="input-group-append">
-                                              <div className="user-avatar">
-                                                  <img src={initValues.img} className="" style={{ height: '40px' }} />
-                                              </div>
-                                              
-                                          </div>
-                                      </div>
+                                          
                                       {errors.digitalPhone && <p className="invalid">{`${errors.digitalPhone.message}`}</p>}
                                 </div>
                             </div>

@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\MembershipApplicationController;
-use App\Http\Controllers\QpayController;
 use App\Http\Controllers\SystemController;
 use App\Models\User;
 use App\Notifications\InfoNotification;
@@ -27,7 +26,7 @@ Route::get('/', function () {
 Route::get('execute-commands', [SystemController::class, 'executeCommands'])->name('executeCommands');
 
 Route::get('test-job', function () {
-    $user = User::where('email', 'damilare.oluwole@fmdqgroup.com')->first();
+    $user = User::where('email', 'daniel.olang@fmdqgroup.com')->first();
     $user->notify(new InfoNotification('Just testing notification.', "my subject"));
     return response()->json(['message' => "Email sent. Did you receive?"]);
 });

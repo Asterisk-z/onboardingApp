@@ -114,6 +114,7 @@ class Utility
             "name" => $filename,
             "path" => $path,
             "saved_path" => config('app.url') . '/storage/' . $path,
+            // "saved_path" => config('app.url') . '/storage/app/public/' . $path,
         ];
     }
 

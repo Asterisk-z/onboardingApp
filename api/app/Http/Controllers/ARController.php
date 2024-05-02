@@ -282,7 +282,7 @@ class ARController extends Controller
                 unset($data['role']);
             }
 
-            $oldRecord = $ARUser;
+            $oldRecord = $ARUser->replicate();
 
             $ARUser->update($data);
 
@@ -679,11 +679,11 @@ class ARController extends Controller
 
             // Notify MEG
             if ($record->request_type == ARDeactivationRequest::REQUEST_TYPE_ACTIVATE) {
-                $mailSubject = ARMailContents::deactivationMEGSubject();
-                $mailBody = ARMailContents::deactivationMEGBody($ARUser);
-            } else {
                 $mailSubject = ARMailContents::activationMEGSubject();
                 $mailBody = ARMailContents::activationMEGBody($ARUser);
+            } else {
+                $mailSubject = ARMailContents::deactivationMEGSubject();
+                $mailBody = ARMailContents::deactivationMEGBody($ARUser);
             }
 
             $MEGs = Utility::getUsersByCategory(Role::MEG);

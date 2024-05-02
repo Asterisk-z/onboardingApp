@@ -9,6 +9,7 @@ import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, Dropd
 import { DataTablePagination } from "components/Component";
 import { userUpdateUserAR, userCancelUpdateUserAR, userProcessUpdateUserAR, userTransferUserAR } from "redux/stores/authorize/representative";
 import { loadAllCategoryPositions } from "redux/stores/positions/positionStore";
+import { megProcessAddUserAR } from "redux/stores/authorize/representative";
 import moment from "moment";
 import Icon from "components/icon/Icon";
 import Swal from "sweetalert2";
@@ -88,14 +89,10 @@ const ActionTab = (props) => {
         
     const aUser = useUser();
     const aUserUpdate = useUserUpdate();
-    const categories = aUser.user_data.institution.category ? aUser.user_data.institution.category : [];
+
     const user_id = props.ar_user.id
     const ar_user = props.ar_user
-    const [categoryIds, setCategoryIds] = useState(aUser.user_data.institution.category.map((cat) => cat.id));
-    const $positions = props.positions
-    const $countries = props.countries
-    const $roles = props.roles
-    const $authorizers = props.authorizers
+
     
     const [modalForm, setModalForm] = useState(false);
     const [modalView, setModalView] = useState(false);
@@ -112,66 +109,13 @@ const ActionTab = (props) => {
     const [loading, setLoading] = useState(false);
     const [document, setDocument] = useState([]);
 
-    const handleFormSubmit = async (values) => {
-
-        const formData = new FormData();
-        formData.append('user_id', user_id)
-        formData.append('first_name', values.firstName)
-        formData.append('middle_name', values.middleName)
-        formData.append('last_name', values.lastName)
-        formData.append('position_id', values.position_id)
-        formData.append('nationality', values.nationality)
-        formData.append('role_id', values.role)
-        formData.append('email', values.email)
-        formData.append('ar_authoriser_id', values.ar_authoriser_id)
-        formData.append('phone', values.phone)
-        if (document) {
-            formData.append('img', document)
-        }
-        try {
-            setLoading(true);
-            
-            const resp = await dispatch(userUpdateUserAR(formData));
-
-            if (resp.payload?.message == "success") {
-                setTimeout(() => {
-                  setLoading(false);
-                  setModalForm(!modalForm)
-                  setInitValues({
-                    firstName: ar_user.firstName,
-                    lastName: ar_user.lastName,
-                    email: ar_user.email,
-                    phone: ar_user.phone,
-                    nationality: ar_user.nationality,
-                    position: ar_user.position,
-                    role_id: ar_user.role.id,
-                  });
-                  
-                }, 1000);
-                
-                props.updateParentParent(Math.random())
-            
-            } else {
-              setLoading(false);
-            }
-            
-      } catch (error) {
-        setLoading(false);
-      }
-    }; 
+   
  
-    const [initValues, setInitValues] = useState({
-      firstName: ar_user.firstName,
-      lastName: ar_user.lastName,
-      email: ar_user.email,
-      phone: ar_user.phone,
-      nationality: ar_user.nationality,
-      position: ar_user.position,
-      role_id: ar_user.role.id,
-    });
+    
         
     const askAction = async (action) => {
-        if(action == 'approve') {
+
+        if (action == 'approve') {
             Swal.fire({
                 title: "Are you sure?",
                 text: "You won't be able to revert this!",
@@ -180,18 +124,21 @@ const ActionTab = (props) => {
                 confirmButtonText: "Yes, approve it!",
             }).then((result) => {
                 if (result.isConfirmed) {
-                    
+
                     const formData = new FormData();
                     formData.append('user_id', ar_user.id);
                     formData.append('action', 'approve');
-                    const resp = dispatch(userProcessUpdateUserAR(formData));
+                    const resp = dispatch(megProcessAddUserAR(formData));
 
-                            props.updateParentParent(Math.random())
+                    props.updateParentParent(Math.random())
+                    setModalViewUpdate(false)
+                    setModalView(false)
+
                 }
             });
         }
-        
-        if(action == 'decline') {
+
+        if (action == 'decline') {
             Swal.fire({
                 title: "Are you sure?",
                 text: "You won't be able to revert this!",
@@ -200,32 +147,15 @@ const ActionTab = (props) => {
                 confirmButtonText: "Yes, decline it!",
             }).then((result) => {
                 if (result.isConfirmed) {
-                    
+
                     const formData = new FormData();
                     formData.append('user_id', ar_user.id);
                     formData.append('action', 'decline');
-                    const resp = dispatch(userProcessUpdateUserAR(formData));
+                    const resp = dispatch(megProcessAddUserAR(formData));
 
-                            props.updateParentParent(Math.random())
-                }
-            });
-        }
-        
-        if(action == 'cancel') {
-            Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Yes, Cancel it!",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    
-                    const formData = new FormData();
-                    formData.append('user_id', ar_user.id);
-                    const resp = dispatch(userCancelUpdateUserAR(formData));
-
-                            props.updateParentParent(Math.random())
+                    props.updateParentParent(Math.random())
+                    setModalViewUpdate(false)
+                    setModalView(false)
                 }
             });
         }
@@ -233,9 +163,6 @@ const ActionTab = (props) => {
     };
   
     
-    const handleDificalFileChange = (event) => {
-		  setDocument(event.target.files[0]);
-    };
 
     // const checkValue = (value) => {
     //     console.log(parseInt(value.target.value))
@@ -251,126 +178,46 @@ const ActionTab = (props) => {
         <div className="toggle-expand-content" style={{ display: "block" }}>
             <ul className="nk-block-tools g-3">
                  <li className="nk-block-tools-opt">
-                    <UncontrolledDropdown direction="right">
-                        <DropdownToggle className="dropdown-toggle btn btn-sm" color="secondary">Action</DropdownToggle>
+                    {(aUser.is_admin_meg() && ar_user.approval_status == 'pending') &&
+                        <>
+                            <UncontrolledDropdown direction="right">
+                                <DropdownToggle className="dropdown-toggle btn btn-sm" color="secondary">MEG Review</DropdownToggle>
 
-                        <DropdownMenu>
-                            <ul className="link-list-opt">
-                        
-                                    <li size="xs">
-                                        <DropdownItem tag="a"  onClick={toggleView} >
-                                            <Icon name="eye"></Icon>
-                                            <span>View AR</span>
-                                        </DropdownItem>
-                                    </li>
-                                    
-                                    {(ar_user.approval_status == 'approved') && <>
-                                        {(!props?.pending && !ar_user.update_payload && aUser.is_ar_inputter()) &&
-                                            <>
-                                                <li size="xs">
-                                                    <DropdownItem tag="a"  onClick={toggleForm} >
-                                                        <Icon name="eye"></Icon>
-                                                        <span>Update AR</span>
-                                                    </DropdownItem>
-                                                </li>
-                                            </>
-                                        }
-                                    
-                                        {(!props?.pending && ar_user.update_payload && aUser.is_ar_inputter()) &&
-                                    
+                                <DropdownMenu>
+                                    <ul className="link-list-opt">
+                                
                                             <li size="xs">
-                                                <DropdownItem tag="a"  onClick={(e) => askAction('cancel')} >
+                                                <DropdownItem tag="a"  onClick={toggleView} >
                                                     <Icon name="eye"></Icon>
-                                                    <span>Cancel Update</span>
+                                                    <span>AR Details</span>
                                                 </DropdownItem>
                                             </li>
-                                        }
-                                        
-                                        {(ar_user.update_payload && props?.pending && aUser.is_ar_authorizer() ) &&
-                                            <>
+
                                                 <li size="xs">
-                                                    <DropdownItem tag="a"  onClick={toggleViewUpdate} >
-                                                        <Icon name="eye"></Icon>
-                                                        <span>View Update AR</span>
-                                                    </DropdownItem>
-                                                </li>
-                                                <li size="xs">
-                                                    <DropdownItem tag="a"  onClick={(e) => askAction('approve')} >
+                                                    <DropdownItem tag="a" onClick={(e) => askAction('approve')} >
                                                         <Icon name="eye"></Icon>
                                                         <span>Approve</span>
                                                     </DropdownItem>
                                                 </li>
                                                 <li size="xs">
-                                                    <DropdownItem tag="a"  onClick={(e) => askAction('decline')} >
+                                                    <DropdownItem tag="a" onClick={(e) => askAction('decline')} >
                                                         <Icon name="eye"></Icon>
                                                         <span>Decline</span>
                                                     </DropdownItem>
                                                 </li>
-                                            </>
-                                        }
                                         
-                                        {(!props?.pending && !ar_user.update_payload && aUser.is_ar_inputter()) &&
-                                            <>
-                                                <li size="xs" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/transfer-auth-representative/${user_id}`)} >
-                                                    <DropdownItem tag="a"  >
-                                                        <Icon name="eye"></Icon>
-                                                        <span>Transfer AR</span>
-                                                    </DropdownItem>
-                                                </li>
-                                                <li size="xs" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/change-auth-representative/${user_id}`)} >
-                                                    <DropdownItem tag="a"  >
-                                                        <Icon name="eye"></Icon>
-                                                        <span>Change AR Status</span>
-                                                    </DropdownItem>
-                                                </li>
-                                            </>
-                                        }
-                                      </>
-                                    }
-                                
-                            </ul>
-                        </DropdownMenu>
-                    </UncontrolledDropdown>
+                                    </ul>
+                                </DropdownMenu>
+                            </UncontrolledDropdown>
+                        </>
+                    }
                 </li>
                 
 
-                    {ar_user.status == 'ONGOING' &&
-                        <li className="nk-block-tools-opt" >
-                            <Button color="primary" size="xs"  onClick={toggleModalCloseAsk}>
-                                <span>Closed Ticket</span>
-                            </Button>
-                        </li>
-                    }
 
             </ul>
         </div>
        
-        <Modal isOpen={modalViewUpdate} toggle={toggleViewUpdate} size="lg">
-            <ModalHeader toggle={toggleViewUpdate} close={<button className="close" onClick={toggleViewUpdate}><Icon name="cross" /></button>}>
-                View Update AR
-            </ModalHeader>
-            <ModalBody>
-                    <Card className="card">   
-                        <CardBody className="card-inner">
-                            <CardTitle tag="h5">{ `${ar_user.firstName} ${ar_user.lastName} (${ar_user.email})` }</CardTitle>
-                            {/* <CardText> */}
-                                <ul>
-                                    <li><span className="lead">Phone : </span>{`${ar_user.phone}`}</li>
-                                    <li><span className="lead">Nationality : </span>{`${ar_user.nationality}`}</li>
-                                    <li><span className="lead">Role : </span>{`${ar_user.role.name}`}</li>
-                                    <li><span className="lead">Position : </span>{`${ar_user.position.name}`}</li>
-                                    <li><span className="lead">Status : </span>{`${ar_user.approval_status}`}</li>
-                                    <li><span className="lead">RegID : </span>{`${ar_user.regId}`}</li>
-                                    <li><span className="lead">Institution : </span>{`${ar_user.institution.name}`}</li>
-                                </ul>
-                            {/* </CardText> */}
-                        </CardBody>
-                    </Card>
-            </ModalBody>
-            <ModalFooter className="bg-light">
-                <span className="sub-text">View Authorised Representative</span>
-            </ModalFooter>
-        </Modal>
         <Modal isOpen={modalView} toggle={toggleView} size="lg">
             <ModalHeader toggle={toggleView} close={<button className="close" onClick={toggleView}><Icon name="cross" /></button>}>
                 View AR
@@ -378,18 +225,97 @@ const ActionTab = (props) => {
             <ModalBody>
                     <Card className="card">   
                         <CardBody className="card-inner">
-                            <CardTitle tag="h5">{ `${ar_user.firstName} ${ar_user.lastName} (${ar_user.email})` }</CardTitle>
-                            {/* <CardText> */}
-                                <ul className="gy-3">
-                                    <li  className="text-capitalize"><span className="lead">Phone : </span>{`${ar_user.phone}`}</li>
-                                    <li  className="text-capitalize"><span className="lead">Nationality : </span>{`${ar_user.nationality.toLowerCase()}`}</li>
-                                    <li  className="text-capitalize"><span className="lead">Role : </span>{`${ar_user.role.name.toLowerCase()}`}</li>
-                                    <li  className="text-capitalize"><span className="lead">Position : </span>{`${ar_user.position.name.toLowerCase()}`}</li>
-                                    <li  className="text-capitalize"><span className="lead">Status : </span>{`${ar_user.approval_status.toLowerCase()}`}</li>
-                                    <li  className="text-capitalize"><span className="lead">RegID : </span>{`${ar_user.regId}`}</li>
-                                    <li  className="text-capitalize"><span className="lead">Institution : </span>{`${ar_user?.institution?.name}`}</li>
-                                </ul>
-                            {/* </CardText> */}
+
+                          <CardTitle tag="h5" className="text-center">
+                              <img src={ar_user.img} className="rounded-xl" style={{ height: '200px', width: '200px', borderRadius: '100%' }} />
+                          </CardTitle>
+
+                          <table className="table table-striped table-bordered table-hover">
+                              <thead>
+                                  <tr>
+                                      <th scope="col"></th>
+                                      <th scope="col"></th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <tr>
+                                      <td>First Name</td>
+                                      <td className="text-capitalize">{`${ar_user.firstName}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Last Name</td>
+                                      <td className="text-capitalize">{`${ar_user.lastName}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Email</td>
+                                      <td className="text-capitalize">{`${ar_user.email}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Phone</td>
+                                      <td className="text-capitalize">{`${ar_user.phone}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Nationality</td>
+                                      <td className="text-capitalize">{`${ar_user.nationality.toLowerCase()}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Role</td>
+                                      <td className="text-capitalize">{`${ar_user.role.name.toLowerCase()}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Position</td>
+                                      <td className="text-capitalize">{`${ar_user.position.name.toLowerCase()}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Status</td>
+                                      <td className="text-capitalize">{`${ar_user.approval_status.toLowerCase()}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>RegID</td>
+                                      <td className="text-capitalize">{`${ar_user.regId}`}</td>
+                                  </tr>
+                                  <tr>
+                                      <td>Institution</td>
+                                      <td className="text-capitalize">{`${ar_user.institution?.name?.toLowerCase()}`}</td>
+                                  </tr>
+                                  {/* <tr>
+                                      <td>Profile Photo</td>
+                                      <td>{ar_user.img ? (
+                                          <a size="lg" href={ar_user.img} target="_blank">
+                                              <Button color="primary">
+                                                  <span >{"View Image"}</span>
+                                              </Button>
+                                          </a>
+
+
+                                      ) : `Not Uploaded`}</td>
+                                  </tr> */}
+                                  <tr>
+                                      <td>Signature Mandate</td>
+                                      <td>{ar_user.mandate_form ? (
+                                          <a size="lg" href={ar_user.mandate_form} target="_blank" className="btn-primary">
+                                              <Button color="primary">
+                                                  <span >{"View Mandate"}</span>
+                                              </Button>
+                                          </a>
+                                      ) : `Not Uploaded`}</td>
+                                  </tr>
+
+                              </tbody>
+                          </table>
+                          {(aUser.is_admin_meg() && ar_user.approval_status == 'pending') &&
+                              <>
+                                  <ul className="g-4 center">
+                                      <li className="btn-group">
+                                          <Button color="primary" size="md" onClick={(e) => askAction('approve')} ><span>Approve</span></Button>
+                                      </li>
+                                      <li className="btn-group">
+                                          <Button className="decline" size="md" onClick={(e) => askAction('decline')} >Decline</Button>
+                                      </li>
+                                  </ul>
+                              </>
+                          }
+                          
                         </CardBody>
                     </Card>
             </ModalBody>
@@ -398,209 +324,6 @@ const ActionTab = (props) => {
             </ModalFooter>
         </Modal>
         
-        <Modal isOpen={modalForm} toggle={toggleForm} size="lg">
-            <ModalHeader toggle={toggleForm} close={<button className="close" onClick={toggleForm}><Icon name="cross" /></button>}>
-                Update AR
-            </ModalHeader>
-            <ModalBody>
-                <form onSubmit={handleSubmit(handleFormSubmit)} className="is-alter" encType="multipart/form-data">
-                                    
-                    <Row className="gy-4">
-                        <Col sm="6">
-                            <div className="form-group">
-                                <Label htmlFor="lastName" className="form-label">
-                                    Surname
-                                </Label>
-                                <div className="form-control-wrap">
-                                    <input className="form-control" type="text" id="lastName" placeholder="Enter Last Name"  {...register('lastName', { required: "Surname is Required" })}  defaultValue={initValues.lastName}/>
-                                    {errors.lastName && <p className="invalid">{`${errors.lastName.message}`}</p>}
-                                </div>
-                            </div>
-                        </Col>
-                        <Col sm="6">
-                            <div className="form-group">
-                                <Label htmlFor="firstName" className="form-label">
-                                    First Name
-                                </Label>
-                                <div className="form-control-wrap">
-                                    <input className="form-control" type="text" id="firstName" placeholder="Enter First Name" {...register('firstName', { required: "First Name is Required" })} defaultValue={initValues.firstName}/>
-                                    {errors.firstName && <p className="invalid">{`${errors.firstName.message}`}</p>}
-                                </div>
-                            </div>
-                        </Col>
-                        <Col sm="6">
-                            <div className="form-group">
-                                <Label htmlFor="middleName" className="form-label">
-                                    Middle Name
-                                </Label>
-                                <div className="form-control-wrap">
-                                    <input className="form-control" type="text" id="middleName" placeholder="Enter First Name" {...register('middleName', { required: false })} defaultValue={initValues.middleName}/>
-                                    {errors.middleName && <p className="invalid">{`${errors.middleName.message}`}</p>}
-                                </div>
-                            </div>
-                        </Col>
-                        <Col sm="6">
-                            <div className="form-group">
-                                <Label htmlFor="nationality" className="form-label">
-                                    Nationality
-                                </Label>
-                                <div className="form-control-wrap">
-                                    <div className="form-control-select">
-                                        <select className="form-control form-select" {...register('nationality', { required: "Nationality is Required" })}  defaultValue={initValues.nationality}>
-                                            <option value="">Select Nationality</option>
-                                            {$countries && $countries?.map((country, index) => (
-                                                <option key={index} value={country.code}>
-                                                    {country.name}
-                                                </option>
-                                            ))}
-                                        </select>
-                                        {errors.nationality && <p className="invalid">{`${errors.nationality.message}`}</p>}
-                                    </div>
-                                </div>
-                            </div>
-                        </Col>
-                        <Col sm="6">
-                            <div className="form-group">
-                                <Label htmlFor="email" className="form-label">
-                                    Email Address
-                                </Label>
-                                <div className="form-control-wrap">
-                                    <input className="form-control" type="email" id="email" placeholder="Enter Email Address" {...register('email', { required: "Email Address is Required" })}  defaultValue={initValues.email}/>
-                                    {errors.email && <p className="invalid">{`${errors.email.message}`}</p>}
-                                </div>
-                            </div>
-                        </Col>
-                        <Col sm="6">
-                            <div className="form-group">
-                                <Label htmlFor="phone" className="form-label">
-                                    Phone Number
-                                  </Label>
-                                  
-                                <div className="form-control-wrap">
-                                    <input className="form-control"  type="text" id="phone" placeholder="Enter Last Name" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""}  {...register('phone', { required: "Phone is Required" })}  defaultValue={parseInt(initValues.phone) ? parseInt(initValues.phone) : 0}/>
-                                    {errors.phone && <p className="invalid">{`${errors.phone.message}`}</p>}
-                                </div>
-                            </div>
-                        </Col>
-                        <Col sm="6">
-                            <div className="form-group">
-                                <Label htmlFor="email" className="form-label">
-                                    Group Email Address
-                                </Label>
-                                <div className="form-control-wrap">
-                                    <input className="form-control" type="email" id="group_email" placeholder="Enter Group Email Address" {...register('group_email', { required: "Group Email Address is Required" })}  defaultValue={initValues.group_email}/>
-                                    {errors.group_email && <p className="invalid">{`${errors.group_email.message}`}</p>}
-                                </div>
-                            </div>
-                        </Col>
-                        <Col sm="6">
-                            {/* Not Required */}
-                            <div className="form-group">
-                                <Label htmlFor="position_id" className="form-label">
-                                    Category
-                                </Label>
-                                <div className="form-control-wrap">
-                                    <div className="form-control-select">
-                                        <select className="form-control form-select" {...register('category_type', { required: "Category is Required" })} >
-                                            <option value="">Select Category</option>
-                                            {categories && categories?.map((category, index) => (
-                                                <option key={index} value={category.id}>
-                                                    {category.name}
-                                                </option>
-                                            ))}
-                                        </select>
-                                        {errors.category_type && <p className="invalid">{`${errors.category_type.message}`}</p>}
-                                    </div>
-                                </div>
-                            </div>
-                        </Col>
-                        <Col sm="6">
-                            <div className="form-group">
-                                <Label htmlFor="position_id" className="form-label">
-                                    Position
-                                </Label>
-                                <div className="form-control-wrap">
-                                    <div className="form-control-select">
-                                        <select className="form-control form-select" {...register('position_id', { required: "Position is Required" })}  defaultValue={initValues.position}>
-                                            <option value="">Select Position</option>
-                                            {$positions && $positions?.map((position, index) => (
-                                                <option key={index} value={position.id}>
-                                                    {position.name}
-                                                    {position.is_compulsory == '1' && <span style={{ color: 'red' }}>*</span>}
-                                                </option>
-                                            ))}
-                                        </select>
-                                        {errors.position_id && <p className="invalid">{`${errors.position_id.message}`}</p>}
-                                    </div>
-                                </div>
-                            </div>
-                        </Col>
-                        <Col sm="6">
-                            <div className="form-group">
-                                <Label htmlFor="nationality" className="form-label">
-                                    Role
-                                </Label>
-                                <div className="form-control-wrap">
-                                    <div className="form-control-select">
-                                        <select className="form-control form-select" {...register('role', { required: "Roles is Required" })}  defaultValue={initValues.role}>
-                                            <option value="">Select Role</option>
-                                            {$roles && $roles?.map((role, index) => (
-                                                <option key={index} value={role.id}>
-                                                {role.name}
-                                                </option>
-                                            ))}
-                                        </select>
-                                        {errors.role && <p className="invalid">{`${errors.role.message}`}</p>}
-                                    </div>
-                                </div>
-                            </div>
-                        </Col>
-                        <Col sm="6">
-                            <div className="form-group">
-                                <Label htmlFor="nationality" className="form-label">
-                                    Digital Photo
-                                </Label>
-                                <div className="form-control-wrap">
-                                    <input type="file" accept="image/*" className="form-control"  {...register('digitalPhone', {  required: false })} onChange={handleDificalFileChange}/>
-                                    {errors.digitalPhone && <p className="invalid">{`${errors.digitalPhone.message}`}</p>}
-                                </div>
-                            </div>
-                        </Col>
-                        <Col sm="6">
-                            <div className="form-group">
-                                <Label htmlFor="nationality" className="form-label">
-                                    Authoriser
-                                </Label>
-                                <div className="form-control-wrap">
-                                    <div className="form-control-select">
-                                        <select className="form-control form-select" {...register('ar_authoriser_id', { required: "Authoriser is Required" })}>
-                                            <option value="">Select Authoriser</option>
-                                            {$authorizers && $authorizers?.map((authorizer, index) => user_id != authorizer.id ? (
-                                                <option key={index} value={authorizer.id}>
-                                                {`${authorizer.first_name} ${authorizer.last_name} ( ${authorizer.email} )`}
-                                                </option>
-                                            ): "")}
-                                        </select>
-                                        {errors.ar_authoriser_id && <p className="invalid">{`${errors.ar_authoriser_id.message}`}</p>}
-                                    </div>
-                                </div>
-                            </div>
-                        </Col>
-                        <Col sm="12">
-                            <div className="form-group">
-                                <Button color="primary" type="submit"  size="lg">
-                                    {loading ? ( <span><Spinner size="sm" color="light" /> Processing...</span>) : "Update"}
-                                </Button>
-                            </div>
-                        </Col>
-                    </Row>
-                    
-                </form>
-            </ModalBody>
-            <ModalFooter className="bg-light">
-                <span className="sub-text">Update Authorised Representative</span>
-            </ModalFooter>
-        </Modal>
     </>
 
 
@@ -658,13 +381,13 @@ const DashARTable = ({ data, pagination, actions, className, selectableRows, exp
         width: "auto",
         wrap: true
     },
-    // {
-    //     name: "Action",
-    //     selector: (row) => (<>
-    //                     {/* <ActionTab ar_user={row} positions={positions} countries={countries} roles={roles} authorizers={authorizers} updateParentParent={updateParent} pending={pending} /> */}
-    //                 </>),
-    //     width: "100px",
-    // },
+    {
+        name: "Action",
+        selector: (row) => (<>
+                        <ActionTab ar_user={row} updateParentParent={updateParent} pending={pending} />
+                    </>),
+        width: "150px",
+    },
     ];
   const [tableData, setTableData] = useState(data);
   const [searchText, setSearchText] = useState("");

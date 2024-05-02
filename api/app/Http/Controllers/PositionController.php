@@ -17,7 +17,7 @@ class PositionController extends Controller
      */
     public function index()
     {
-        $positions = Position::where('is_del', 0)->get(['id', 'name', 'is_del'])->toArray();
+        $positions = Position::where('is_del', 0)->get(['id', 'name', 'is_del', 'can_be_authorizer'])->toArray();
         $converted_positions = Utility::arrayKeysToCamelCase($positions);
 
         $data = [
@@ -33,7 +33,7 @@ class PositionController extends Controller
      */
     public function listAll(): JsonResponse
     {
-        $positions = Position::orderBy('created_at', 'DESC')->with('categories')->get(['id', 'name', 'is_del']);
+        $positions = Position::orderBy('created_at', 'DESC')->with('categories')->get(['id', 'name', 'is_del', 'can_be_authorizer']);
         $converted_positions = Utility::arrayKeysToCamelCase($positions);
         $data = [
             'positions' => (array) $converted_positions,

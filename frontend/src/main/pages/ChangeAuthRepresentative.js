@@ -111,7 +111,7 @@ const TransferAuthRepresentative = ({ drawer }) => {
                     <BlockBetween>
                         <BlockHeadContent>
                             <BlockTitle page tag="h3">
-                                Change Status Authorised Representative
+                                Deactivate/Activate Authorised Representative
                             </BlockTitle>
                         </BlockHeadContent>
                         <BlockHeadContent>
@@ -177,7 +177,7 @@ const TransferAuthRepresentative = ({ drawer }) => {
                                                                 <div className="form-control-select">
                                                                     <select className="form-control form-select" {...register('ar_authoriser_id', { required: "Authoriser is Required" })}>
                                                                         <option value="">Select Authoriser</option>
-                                                                        {$authorizers && $authorizers?.map((authorizer, index) => ar_user_id != authorizer.id ? (
+                                                                        {$authorizers && $authorizers?.map((authorizer, index) => ar_user_id != authorizer.id && authorizer.approval_status == 'approved' ? (
                                                                             <option key={index} value={authorizer.id}>
                                                                                 {`${authorizer.first_name} ${authorizer.last_name} ( ${authorizer.email} )`}
                                                                             </option>

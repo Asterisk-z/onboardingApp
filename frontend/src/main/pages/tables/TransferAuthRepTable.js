@@ -202,7 +202,7 @@ const TransferAuthRepTable = ({ data, pagination, actions, className, selectable
             wrap: true,
         },
         {
-            name: "Institution",
+            name: "Category",
             selector: (row) => (`${row.new_institution.category[0].name}`),
             sortable: true,
             width: "auto",

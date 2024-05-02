@@ -46,7 +46,7 @@ const ListTransferAuthRepresentative = ({ drawer }) => {
                     <BlockBetween>
                         <BlockHeadContent>
                             <BlockTitle page tag="h3">
-                                Change Authorised Representatives Status
+                                 Deactivate/Activate  Authorised Representatives
                             </BlockTitle>
                         </BlockHeadContent>
                         <BlockHeadContent>

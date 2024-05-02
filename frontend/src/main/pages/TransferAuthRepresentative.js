@@ -11,7 +11,9 @@ import {  userTransferUserAR, userViewUserAR } from "redux/stores/authorize/repr
 import { loadAllActiveAuthoriser } from "redux/stores/users/userStore";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
+import { loadAllSettings } from "redux/stores/settings/config";
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
+import Swal from "sweetalert2";
 
 
 const TransferAuthRepresentative = ({ drawer }) => {
@@ -28,6 +30,7 @@ const TransferAuthRepresentative = ({ drawer }) => {
     const [sm, updateSm] = useState(false);
     const [parentState, setParentState] = useState('Initial state');
     const [document, setDocument] = useState([]);
+    const [signatureMandate, setSignatureMandate] = useState([]);
 
     const user = useSelector((state) => state?.arUsers?.single_ar) || null;
     const roles = useSelector((state) => state?.role?.list) || null;
@@ -37,6 +40,7 @@ const TransferAuthRepresentative = ({ drawer }) => {
 
     const { register, handleSubmit, formState: { errors }, resetField } = useForm();
 
+    const settings = useSelector((state) => state?.settings?.list) || null;
 
 
     useEffect(() => {
@@ -44,6 +48,7 @@ const TransferAuthRepresentative = ({ drawer }) => {
         dispatch(loadUserRoles());
         dispatch(loadAllCountries());
         dispatch(loadAllActiveAuthoriser());
+        dispatch(loadAllSettings({ "config": "mandate_form" }));
     }, [dispatch, parentState]);
 
     useEffect(() => {
@@ -57,22 +62,53 @@ const TransferAuthRepresentative = ({ drawer }) => {
     const $user = user ? JSON.parse(user) : null;
 
     const [initValues, setInitValues] = useState({
+        lastName: $user?.lastName,
+        firstName: $user?.firstName,
+        middleName: $user?.middleName,
+        groupEmail: $user?.group_email,
         email: $user?.email,
         phone: $user?.phone,
         nationality: $user?.nationality,
         position: $user?.position,
         role_id: $user?.role.id,
-    });    
-    
+    }); 
 
+    useEffect(() => {
+        setInitValues({
+            lastName: $user?.lastName,
+            firstName: $user?.firstName,
+            middleName: $user?.middleName,
+            groupEmail: $user?.group_email,
+            email: $user?.email,
+            phone: $user?.phone,
+            nationality: $user?.nationality,
+            position: $user?.position,
+            role_id: $user?.role.id,
+        });
+    }, [$user]);
 
     const handleFormSubmit = async (values) => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes!",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                handleMainFormSubmit(values)
+            }
+        });
+    
+    }
+
+    const handleMainFormSubmit = async (values) => {
 
         const formData = new FormData();
         formData.append('user_id', ar_user_id)
-        // formData.append('first_name', values.firstName)
-        // formData.append('middle_name', values.middleName)
-        // formData.append('last_name', values.lastName)
+        formData.append('first_name', values.firstName)
+        formData.append('middle_name', values.middleName)
+        formData.append('last_name', values.lastName)
         formData.append('position_id', values.position_id)
         formData.append('nationality', values.nationality)
         formData.append('role_id', values.role)
@@ -80,8 +116,12 @@ const TransferAuthRepresentative = ({ drawer }) => {
         formData.append('ar_authoriser_id', values.ar_authoriser_id)
         formData.append('phone', values.phone)
         formData.append('reason', values.reason)
+        
         if (document) {
             formData.append('img', document)
+        }
+        if (signatureMandate) {
+            formData.append('mandate_form', signatureMandate)
         }
 
         try {
@@ -117,11 +157,16 @@ const TransferAuthRepresentative = ({ drawer }) => {
     };    
 
   
+    const $settings = settings ? JSON.parse(settings) : null;
      
 
     
     const handleDificalFileChange = (event) => {
 		  setDocument(event.target.files[0]);
+    };
+
+    const handleSignaturewChange = (event) => {
+        setSignatureMandate(event.target.files[0]);
     };
 
 
@@ -157,7 +202,7 @@ const TransferAuthRepresentative = ({ drawer }) => {
                                                 <ul className="nk-block-tools g-3">
                                                     <li className="nk-block-tools-opt">
                                                         <Button color="primary">
-                                                            <span onClick={(ev) => navigate(`${process.env.PUBLIC_URL}/auth-representatives`)}>Back</span>
+                                                            <span onClick={(ev) => navigate(`${process.env.PUBLIC_URL}/auth-representatives`)}>Cancel</span>
                                                         </Button>
                                                     </li>
                                                 </ul>
@@ -174,11 +219,11 @@ const TransferAuthRepresentative = ({ drawer }) => {
                                             
                                             {$user && <>
                                             
-                                                 <Card className="card-bordered">   
+                                                 <Card className="card-borderless">   
                                                     <CardBody className="card-inner">
-                                                        <CardTitle tag="h5">{ `${$user.firstName} ${$user.lastName} (${$user.email})` }</CardTitle>
+                                                        {/* <CardTitle tag="h5">{ `${$user.firstName} ${$user.lastName} (${$user.email})` }</CardTitle> */}
                                                         {/* <CardText> */}
-                                                            <ul>
+                                                            {/* <ul>
                                                                 <li><span className="lead">Phone : </span>{`${$user.phone}`}</li>
                                                                 <li><span className="lead">Nationality : </span>{`${$user.nationality}`}</li>
                                                                 <li><span className="lead">Role : </span>{`${$user.role.name}`}</li>
@@ -186,9 +231,66 @@ const TransferAuthRepresentative = ({ drawer }) => {
                                                                 <li><span className="lead">Status : </span>{`${$user.approval_status}`}</li>
                                                                 <li><span className="lead">RegID : </span>{`${$user.regId}`}</li>
                                                                 <li><span className="lead">Institution : </span>{`${$user.institution.name}`}</li>
-                                                            </ul>
+                                                            </ul> */}
                                                         {/* </CardText> */}
+
+                                                        <CardTitle tag="h5" className="text-center">
+                                                            <img src={$user.img} className="rounded-xl" style={{ height: '200px', width: '200px', borderRadius: '100%' }} />
+                                                        </CardTitle>
+
+                                                        <table className="table table-striped table-bordered table-hover">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col"></th>
+                                                                    <th scope="col"></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>First Name</td>
+                                                                    <td className="text-capitalize">{`${$user.firstName}`}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Last Name</td>
+                                                                    <td className="text-capitalize">{`${$user.lastName}`}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Email</td>
+                                                                    <td className="text-capitalize">{`${$user.email}`}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Phone</td>
+                                                                    <td className="text-capitalize">{`${$user.phone}`}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Nationality</td>
+                                                                    <td className="text-capitalize">{`${$user.nationality.toLowerCase()}`}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Role</td>
+                                                                    <td className="text-capitalize">{`${$user.role.name.toLowerCase()}`}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Position</td>
+                                                                    <td className="text-capitalize">{`${$user.position.name.toLowerCase()}`}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Status</td>
+                                                                    <td className="text-capitalize">{`${$user.approval_status.toLowerCase()}`}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>RegID</td>
+                                                                    <td className="text-capitalize">{`${$user.regId}`}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Institution</td>
+                                                                    <td className="text-capitalize">{`${$user.institution?.name?.toLowerCase()}`}</td>
+                                                                </tr>
+
+                                                            </tbody>
+                                                        </table>
                                                     </CardBody>
+                                                    
                                                 </Card>
                                             
                                             </>}
@@ -200,7 +302,7 @@ const TransferAuthRepresentative = ({ drawer }) => {
                                                         <form onSubmit={handleSubmit(handleFormSubmit)} className="is-alter" encType="multipart/form-data">
                                                                         
                                                             <Row className="gy-4">
-                                                                {/* <Col sm="6">
+                                                                <Col sm="6">
                                                                     <div className="form-group">
                                                                         <Label htmlFor="lastName" className="form-label">
                                                                             Surname
@@ -232,7 +334,7 @@ const TransferAuthRepresentative = ({ drawer }) => {
                                                                             {errors.middleName && <p className="invalid">{`${errors.middleName.message}`}</p>}
                                                                         </div>
                                                                     </div>
-                                                                </Col> */}
+                                                                </Col>
                                                                 <Col sm="6">
                                                                     <div className="form-group">
                                                                         <Label htmlFor="email" className="form-label">
@@ -250,7 +352,7 @@ const TransferAuthRepresentative = ({ drawer }) => {
                                                                             Group Email Address
                                                                         </Label>
                                                                         <div className="form-control-wrap">
-                                                                            <input className="form-control" type="email" id="group_email" placeholder="Enter Group Email Address" {...register('group_email', { required: "Group Email Address is Required" })}  defaultValue={initValues.group_email}/>
+                                                                            <input className="form-control" type="email" id="group_email" placeholder="Enter Group Email Address" {...register('group_email', { required: "Group Email Address is Required" })}  defaultValue={initValues.groupEmail}/>
                                                                             {errors.group_email && <p className="invalid">{`${errors.group_email.message}`}</p>}
                                                                         </div>
                                                                     </div>
@@ -261,7 +363,7 @@ const TransferAuthRepresentative = ({ drawer }) => {
                                                                             Phone Number
                                                                         </Label>
                                                                         <div className="form-control-wrap">
-                                                                            <input className="form-control" type="text" id="phone" placeholder="Enter Last Name"  {...register('phone', { required: "Phone is Required" })} defaultValue={initValues.phone} />
+                                                                            <input className="form-control" type="text" id="phone" placeholder="Enter Phone Name"  {...register('phone', { required: "Phone is Required" })} defaultValue={initValues.phone} />
                                                                             {errors.phone && <p className="invalid">{`${errors.phone.message}`}</p>}
                                                                         </div>
                                                                     </div>
@@ -310,6 +412,39 @@ const TransferAuthRepresentative = ({ drawer }) => {
                                                                 <Col sm="6">
                                                                     <div className="form-group">
                                                                         <Label htmlFor="nationality" className="form-label">
+                                                                            Photo
+                                                                        </Label>
+                                                                        <div className="form-control-wrap">
+                                                                    <input type="file" accept="image/*" className="form-control"  {...register('digitalPhone', {  required: false })} onChange={handleDificalFileChange}/>
+                                                                            {errors.digitalPhone && <p className="invalid">{`${errors.digitalPhone.message}`}</p>}
+                                                                        </div>
+                                                                    </div>
+                                                                </Col>
+                                                                <Col sm="6">
+                                                                    <div className="form-group">
+                                                                        <Label htmlFor="Signature" className="form-label">
+                                                                            Signed Signature Mandate<span style={{color:'red'}}> *</span>
+                                                                        </Label>
+                                                                        <div className="form-control-wrap">
+                                                                            <input type="file" accept=".pdf" className="form-control"  {...register('signedMandate', {  required: "Signed Mandate is Required" })} onChange={handleSignaturewChange}/>
+                                                                            {errors.signedMandate && <p className="invalid">{`${errors.signedMandate.message}`}</p>}
+                                                                        </div>
+                                                                    </div>
+                                                                </Col>
+                                                                <Col sm="12">
+                                                                    <div className="form-group">
+                                                                        {/* {settings} */}
+                                                                        {($settings && $settings.name == 'mandate_form') && <>
+                                                                            <a  size="lg" href={$settings.value}  download="mandate_form.pdf" target="_blank" className="active btn btn-primary">
+                                                                                {"Download Signature Mandate"}
+                                                                            </a>
+                                                                        </>}
+                                                                        
+                                                                    </div>
+                                                                </Col>
+                                                                <Col sm="6">
+                                                                    <div className="form-group">
+                                                                        <Label htmlFor="nationality" className="form-label">
                                                                             Role
                                                                         </Label>
                                                                         <div className="form-control-wrap">
@@ -336,7 +471,7 @@ const TransferAuthRepresentative = ({ drawer }) => {
                                                                             <div className="form-control-select">
                                                                                 <select className="form-control form-select" {...register('ar_authoriser_id', { required: "Authoriser is Required" })}>
                                                                                     <option value="">Select Authoriser</option>
-                                                                                    {$authorizers && $authorizers?.map((authorizer, index) => ar_user_id != authorizer.id ? (
+                                                                                    {$authorizers && $authorizers?.map((authorizer, index) => ar_user_id != authorizer.id  && authorizer.approval_status == 'approved' ? (
                                                                                         <option key={index} value={authorizer.id}>
                                                                                             {`${authorizer.first_name} ${authorizer.last_name} ( ${authorizer.email} )`}
                                                                                         </option>
@@ -344,17 +479,6 @@ const TransferAuthRepresentative = ({ drawer }) => {
                                                                                 </select>
                                                                                 {errors.ar_authoriser_id && <p className="invalid">{`${errors.ar_authoriser_id.message}`}</p>}
                                                                             </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </Col>
-                                                                <Col sm="6">
-                                                                    <div className="form-group">
-                                                                        <Label htmlFor="nationality" className="form-label">
-                                                                            Photo
-                                                                        </Label>
-                                                                        <div className="form-control-wrap">
-                                                                    <input type="file" accept="image/*" className="form-control"  {...register('digitalPhone', {  required: false })} onChange={handleDificalFileChange}/>
-                                                                            {errors.digitalPhone && <p className="invalid">{`${errors.digitalPhone.message}`}</p>}
                                                                         </div>
                                                                     </div>
                                                                 </Col>

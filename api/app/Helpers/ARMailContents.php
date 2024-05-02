@@ -108,6 +108,7 @@ class ARMailContents
 
     public static function updatedMEGBody(User $oldUserDetails, array $updateFields): string
     {
+
         $basicData = $oldUserDetails->getBasicData(true);
         $basicDataStr = prettifyJson($basicData);
         $updateFieldsStr = prettifyJson($updateFields);
@@ -116,99 +117,46 @@ class ARMailContents
         </p>
 
         <p>
-            Old record: <br>        </p>
+            Record: <br>        </p>
 
-                          <table className='table table-striped table-bordered table-hover'>
+                          <table className='table table-striped table-bordered table-hover' style='padding: 10px; text-align: left;'>
                               <thead>
                                   <tr>
                                       <th scope='col'></th>
-                                      <th scope='col'></th>
+                                      <th scope='col'>Old Record</th>
+                                      <th scope='col'>Updated Record</th>
                                   </tr>
                               </thead>
                               <tbody>
                                   <tr>
-                                      <td>First Name</td>
-                                      <td className='text-capitalize'>" . $basicData['firstName'] . "</td>
+                                      <td  style='padding: 5px;'>First Name</td>
+                                      <td  style='padding: 5px;' className='text-capitalize'>" . $basicData['firstName'] . "</td>
+                                      <td  style='padding: 5px;' className='text-capitalize'>" . $updateFields['first_name'] . "</td>
                                   </tr>
                                   <tr>
-                                      <td>Last Name</td>
-                                      <td className='text-capitalize'>" . $basicData['lastName'] . "</td>
+                                      <td  style='padding: 5px;'>Last Name</td>
+                                      <td  style='padding: 5px;' className='text-capitalize'>" . $basicData['lastName'] . "</td>
+                                      <td  style='padding: 5px;' className='text-capitalize'>" . $updateFields['last_name'] . "</td>
                                   </tr>
                                   <tr>
-                                      <td>Middle Name</td>
-                                      <td className='text-capitalize'>" . $basicData['middleName'] . "</td>
+                                      <td  style='padding: 5px;'>Middle Name</td>
+                                      <td  style='padding: 5px;' className='text-capitalize'>" . $basicData['middleName'] . "</td>
+                                      <td  style='padding: 5px;' className='text-capitalize'>" . $updateFields['middle_name'] . "</td>
                                   </tr>
                                   <tr>
-                                      <td>Email</td>
-                                      <td className='text-capitalize'>" . $basicData['email'] . "</td>
+                                      <td  style='padding: 5px;'>Email</td>
+                                      <td  style='padding: 5px;' className='text-capitalize'>" . $basicData['email'] . "</td>
+                                      <td  style='padding: 5px;' className='text-capitalize'>" . $updateFields['email'] . "</td>
                                   </tr>
                                   <tr>
-                                      <td>Phone</td>
-                                      <td className='text-capitalize'>" . $basicData['phone'] . "</td>
+                                      <td  style='padding: 5px;'>Phone</td>
+                                      <td  style='padding: 5px;' className='text-capitalize'>" . $basicData['phone'] . "</td>
+                                      <td  style='padding: 5px;' className='text-capitalize'>" . $updateFields['phone'] . "</td>
                                   </tr>
                                   <tr>
-                                      <td>Role</td>
-                                      <td className='text-capitalize'>" . $basicData['role'] . "</td>
-                                  </tr>
-                                  <tr>
-                                      <td>Nationality</td>
-                                      <td className='text-capitalize'>" . $basicData['nationality'] . "</td>
-                                  </tr>
-                                  <tr>
-                                      <td>Reg ID</td>
-                                      <td className='text-capitalize'>" . $basicData['regId'] . "</td>
-                                  </tr>
-                                  <tr>
-                                      <td>Institution</td>
-                                      <td className='text-capitalize'>" . $basicData['institution'] . "</td>
-                                  </tr>
-                              </tbody>
-                          </table>
-
-
-        <p>
-                Updated Fields: <br>        </p>
-
-
-                          <table className='table table-striped table-bordered table-hover'>
-                              <thead>
-                                  <tr>
-                                      <th scope='col'></th>
-                                      <th scope='col'></th>
-                                  </tr>
-                              </thead>
-                              <tbody>
-                                  <tr>
-                                      <td>First Name</td>
-                                      <td className='text-capitalize'>" . $updateFields['first_name'] . "</td>
-                                  </tr>
-                                  <tr>
-                                      <td>Last Name</td>
-                                      <td className='text-capitalize'>" . $updateFields['last_name'] . "</td>
-                                  </tr>
-                                  <tr>
-                                      <td>Middle Name</td>
-                                      <td className='text-capitalize'>" . $updateFields['middle_name'] . "</td>
-                                  </tr>
-                                  <tr>
-                                      <td>Email</td>
-                                      <td className='text-capitalize'>" . $updateFields['email'] . "</td>
-                                  </tr>
-                                  <tr>
-                                      <td>Phone</td>
-                                      <td className='text-capitalize'>" . $updateFields['phone'] . "</td>
-                                  </tr>
-                                  <tr>
-                                      <td>Role</td>
-                                      <td className='text-capitalize'>" . $updateFields['role']['name'] . "</td>
-                                  </tr>
-                                  <tr>
-                                      <td>Nationality</td>
-                                      <td className='text-capitalize'>" . $updateFields['nationality'] . "</td>
-                                  </tr>
-                                  <tr>
-                                      <td>Position</td>
-                                      <td className='text-capitalize'>" . $updateFields['position']['name'] . "</td>
+                                      <td  style='padding: 5px;'>Role</td>
+                                      <td  style='padding: 5px;' className='text-capitalize'>" . $basicData['role'] . "</td>
+                                      <td  style='padding: 5px;' className='text-capitalize'>" . $updateFields['role']['name'] . "</td>
                                   </tr>
                               </tbody>
                           </table>

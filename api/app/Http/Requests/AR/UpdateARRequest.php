@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\AR;
 
+use App\Models\Position;
 use App\Models\Role;
 use App\Models\User;
 use App\Rules\EmailValidation;
@@ -46,7 +47,16 @@ class UpdateARRequest extends FormRequest
             'middle_name' => 'sometimes|string',
             'position_id' => 'sometimes|exists:positions,id',
             'nationality' => 'sometimes|exists:nationalities,code',
-            'role_id' => 'sometimes|in:' . Role::ARAUTHORISER . ',' . Role::ARINPUTTER,
+            'role_id' => [
+                'sometimes',
+                'in:' . Role::ARAUTHORISER . ',' . Role::ARINPUTTER,
+                function ($attribute, $value, $fail) {
+                    if (Role::ARAUTHORISER == $value) {
+                        if (!Position::where('id', request('position_id'))->where('can_be_authorizer', true)->where('is_del', false)->exists()) {
+                            $fail('Position can not be authoriser.');
+                        }
+                    }
+                }],
             'email' => [
                 'sometimes',
                 'email',

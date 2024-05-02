@@ -55,7 +55,6 @@ export const userViewUserAR = createAsyncThunk(
     }
   }
 );
-
 export const userCreateUserAR = createAsyncThunk(
   "arUsers/userCreateUserAR",
   async (values) => {
@@ -74,6 +73,28 @@ export const userCreateUserAR = createAsyncThunk(
     } catch (error) {
       return errorHandler(error, true);
     }
+  }
+);
+
+export const cancelMailNotication = createAsyncThunk(
+  "arUsers/cancelMailNotication",
+  async (values) => {
+  //   try {
+  //     const { data } = await axios({
+  //       method: "post",
+  //       headers: {
+  //         Accept: "application/json",
+  //         // "Content-Type": "application/json;charset=UTF-8",
+  //         "Content-Type": "multipart/form-data",
+  //       },
+  //       url: `ar/add`,
+  //       data: values,
+  //     });
+      return successHandler([], "Update Canceled");
+      // return successHandler(data, data.message);
+  //   } catch (error) {
+  //     return errorHandler(error, true);
+  //   }
   }
 );
 
@@ -314,6 +335,7 @@ const arUsersStore = createSlice({
   reducers: {
     clearArUser: (state) => {
       state.customer = null;
+      state.search_list = null
     },
   },
   extraReducers: (builder) => {
@@ -356,6 +378,7 @@ const arUsersStore = createSlice({
 
     builder.addCase(userSearchUserARs.pending, (state) => {
       state.loading = true;
+      state.search_list = null
     });
 
     builder.addCase(userSearchUserARs.fulfilled, (state, action) => {
@@ -367,6 +390,7 @@ const arUsersStore = createSlice({
     builder.addCase(userSearchUserARs.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
+      state.search_list = null
     });
 
     // ====== builders for userViewUserAR ======
@@ -385,7 +409,22 @@ const arUsersStore = createSlice({
       state.loading = false;
       state.error = action.payload.message;
     });
-  
+
+    // ====== builders for cancelMailNotication ======
+
+    builder.addCase(cancelMailNotication.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(cancelMailNotication.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(cancelMailNotication.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
     // ====== builders for userCreateUserAR ======
 
     builder.addCase(userCreateUserAR.pending, (state) => {

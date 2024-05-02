@@ -16,7 +16,7 @@ class Position extends Model
     const CCO = "Chief Compliance Officer";
 
     // protected $with = ['categories'];
-    protected $appends = ['active'];
+    protected $appends = ['active', 'authoriser'];
 
     public function categories()
     {
@@ -26,6 +26,10 @@ class Position extends Model
     public function getActiveAttribute()
     {
         return !$this->is_del ? true : false;
+    }
+    public function getAuthoriserAttribute()
+    {
+        return !$this->can_be_authorizer ? true : false;
     }
 
 }

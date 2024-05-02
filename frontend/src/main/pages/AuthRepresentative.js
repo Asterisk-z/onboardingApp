@@ -15,6 +15,8 @@ import Content from "layout/content/Content";
 import Head from "layout/head/Head";
 import AuthRepTable from './Tables/AuthRepTable'
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
+import { cancelMailNotication } from "redux/stores/authorize/representative";
+import Swal from "sweetalert2";
 
 
 const AuthRepresentative = ({ drawer }) => {
@@ -53,13 +55,16 @@ const AuthRepresentative = ({ drawer }) => {
     const toggleModelForSearch = () => setModelForSearchAR(!modelForSearchAR);
      
     useEffect(() => {
+      dispatch(userSearchUserARs({ "first_name": '-', "last_name": '-' }));
       dispatch(userLoadUserARs({"approval_status" : "", "role_id": ""}));
       dispatch(loadAllMyApplicationCategories());
       dispatch(loadUserRoles());
       dispatch(loadAllCountries());
       dispatch(loadAllActiveAuthoriser());
       dispatch(loadAllActivePositions())
-      dispatch(loadAllSettings({"config" : "mandate_form"}));
+        dispatch(loadAllSettings({ "config": "mandate_form" }));
+        
+
     }, [dispatch, parentState]);
 
     // useEffect(() => {
@@ -85,7 +90,11 @@ const AuthRepresentative = ({ drawer }) => {
         if ($ar_search_result) {
             if ($ar_search_result.length > 0) {
                 setModelForSearchAR(true);
-            } 
+            } else {
+                setModelForSearchAR(false);
+            }
+        } else {
+            setModelForSearchAR(false);
         }
     }, [ar_search_result]);
    
@@ -169,6 +178,33 @@ const AuthRepresentative = ({ drawer }) => {
     const updatePositionList = (event) => {
         setMyApplicationCategoryIds([event.target.value]);
     }
+
+    const cancelUpdate = (event) => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "By selecting 'No Update,' you are indicating that there are no new changes to report.With this selection, you will not receive further reminders regarding updates until your next interaction or update submission. Please click 'Confirm' to proceed or 'Cancel' to return to the previous screen.!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Confirm!",
+            cancelButtonText: "Cancel!",
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                const formData = new FormData();
+                // formData.append('user_id', ar_user.id);
+                // formData.append('action', 'decline');
+                const resp = dispatch(cancelMailNotication(formData));
+
+                // props.updateParentParent(Math.random())
+                setModalViewUpdate(false)
+            }
+        });
+    }
+
+    const gotoRoute = (value) => {
+        setModelForSearchAR(false)
+        navigate(value)
+    }
     
     return (
         <React.Fragment>
@@ -185,13 +221,18 @@ const AuthRepresentative = ({ drawer }) => {
                             <div className="toggle-wrap nk-block-tools-toggle">
                                 <div className="toggle-expand-content" style={{ display: sm ? "block" : "none" }}>
                                     <ul className="nk-block-tools g-3">
-                                        {authUser.is_ar_inputter() && <>
-                                             <li className="nk-block-tools-opt">
+                                        {/* {authUser.is_ar_inputter() && <> */}
+                                            <li className="nk-block-tools-opt">
                                                 <Button color="primary">
                                                     <span onClick={toggleForm}>Add New AR</span>
                                                 </Button>
                                             </li>
-                                        </>}
+                                            <li className="nk-block-tools-opt">
+                                                <Button color="primary">
+                                                    <span onClick={cancelUpdate}>No Update</span>
+                                                </Button>
+                                            </li>
+                                        {/* </>} */}
                                         {authUser.is_ar_authorizer() && <>
                                             <li className="nk-block-tools-opt">
                                                 <Button color="primary" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/transfer-auth-representatives`)}>
@@ -200,7 +241,7 @@ const AuthRepresentative = ({ drawer }) => {
                                             </li>
                                             <li className="nk-block-tools-opt">
                                                 <Button color="primary" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/change-auth-representatives`)}>
-                                                    <span>Status AR</span>
+                                                    <span>Deactivate/Activate AR</span>
                                                 </Button>
                                             </li>
                                             <li className="nk-block-tools-opt">
@@ -229,6 +270,9 @@ const AuthRepresentative = ({ drawer }) => {
                                         <span className="tb-odr-id">UID</span>
                                     </th>
                                     <th className="tb-odr-amount">
+                                        <span className="tb-odr-total">Photo</span>
+                                    </th>
+                                    <th className="tb-odr-amount">
                                         <span className="tb-odr-total">Full Name</span>
                                     </th>
                                     <th className="tb-odr-amount">
@@ -254,6 +298,11 @@ const AuthRepresentative = ({ drawer }) => {
                                             <span className="tb-odr-id">{item.id}</span>
                                         </td>
                                         <td className="tb-odr-amount">
+                                            <span className="tb-odr-total">
+                                                <img src={item.img} className="rounded-xl" style={{ height: '70px', width: '70px', borderRadius: '100%' }} />
+                                            </span>
+                                        </td>
+                                        <td className="tb-odr-amount">
                                             <span className="tb-odr-total">{`${item.firstName} ${item.lastName}`}</span>
                                         </td>
                                         <td className="tb-odr-amount">
@@ -270,7 +319,7 @@ const AuthRepresentative = ({ drawer }) => {
                                         </td>
                                         <td className="tb-odr-action">
                                             <div className="tb-odr-btns d-none d-md-inline">
-                                                <Button color="primary" className="btn-sm" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/transfer-auth-representative/${item.id}`)}>
+                                                <Button color="primary" className="btn-sm" onClick={(e) => gotoRoute(`${process.env.PUBLIC_URL}/transfer-auth-representative/${item.id}`)}>
                                                     Transfer
                                                 </Button>
                                             </div>
@@ -364,7 +413,7 @@ const AuthRepresentative = ({ drawer }) => {
                                         </Label>
                                          
                                         <div className="form-control-wrap">
-                                            <input className="form-control" type="number" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""}  id="phone" placeholder="Enter Phone Number"  {...register('phone', { required: "Phone is Required", setValueAs: (value) => parseInt(value) })} />  
+                                            <input className="form-control" type="number"  id="phone" placeholder="Enter Phone Number"  {...register('phone', { required: "Phone is Required", setValueAs: (value) => parseInt(value) })} />  
                                             {errors.phone && <p className="invalid">{`${errors.phone.message}`}</p>}
                                         </div>
                                     </div>
@@ -444,7 +493,7 @@ const AuthRepresentative = ({ drawer }) => {
                                 <Col sm="6">
                                     <div className="form-group">
                                         <Label htmlFor="nationality" className="form-label">
-                                            Digital Photo<span style={{color:'red'}}> *</span>
+                                           Upload Digital Photo<span style={{color:'red'}}> *</span>
                                         </Label>
                                         <div className="form-control-wrap">
                                              <input type="file" accept="image/*" className="form-control"  {...register('digitalPhone', {  required: "Digital Photo is Required" })} onChange={handleDificalFileChange}/>

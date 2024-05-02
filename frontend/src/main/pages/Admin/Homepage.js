@@ -30,11 +30,16 @@ const Homepage = () => {
   const applications = useSelector((state) => state?.dashboard?.applications) || 0;
   const ars = useSelector((state) => state?.dashboard?.ars) || 0;
 
+  const [parentState, setParentState] = useState('Initial state');
+
+  const updateParentState = (newState) => {
+    setParentState(newState);
+  };
 
   useEffect(() => {
     dispatch(adminLoadUserARs({ "approval_status": "", "institution_id": "", "role_id": "" }));
     dispatch(loadAdminDashboard());
-  }, [dispatch]);
+  }, [dispatch, parentState]);
 
 
   const $arUsers = arUsers ? JSON.parse(arUsers) : null;
@@ -144,7 +149,7 @@ const Homepage = () => {
             </BlockHead>
 
             <PreviewCard>
-              {$arUsers && <DashARTable data={$arUsers} expandableRows pagination actions />}
+              {$arUsers && <DashARTable data={$arUsers} updateParent={updateParentState} parentState={parentState} expandableRows pagination actions />}
             </PreviewCard>
           </Block>
 

@@ -16,10 +16,10 @@ class Positions extends Seeder
     {
         $positions = [
             ["name" => "Group Managing Director"],
-            ["name" => "Managing Director/CEO"],
+            ["name" => "Managing Director/CEO", "can_be_authorizer" => true],
             ["name" => "Supervising Director"],
             ["name" => "Treasurer"],
-            ["name" => "Chief Dealer"],
+            ["name" => "Chief Dealer", "can_be_authorizer" => true],
             ["name" => "Senior Dealer "],
             ["name" => "T.bills Dealer 1"],
             ["name" => "T.bills Dealer 2"],
@@ -46,7 +46,7 @@ class Positions extends Seeder
             ["name" => "Treasury Operations Officer 1 "],
             ["name" => "Treasury Operations Officer 2"],
             ["name" => "Treasury Operations Officer 3"],
-            ["name" => "Chief Compliance Officer"],
+            ["name" => "Chief Compliance Officer", "can_be_authorizer" => true],
             ["name" => "Compliance Officer 1"],
             ["name" => "Compliance Officer 2"],
             ["name" => "Compliance Officer 3"],
@@ -74,7 +74,7 @@ class Positions extends Seeder
             ["name" => "Head of Investments"],
             ["name" => "Dealer(s)"],
             ["name" => "Primary Contact(s)"],
-            ["name" => "Treasurer/Chief Financial Officer"],
+            ["name" => "Treasurer/Chief Financial Officer", "can_be_authorizer" => true],
         ];
 
         foreach ($positions as $position) {
