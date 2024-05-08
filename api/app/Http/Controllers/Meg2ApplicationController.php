@@ -23,17 +23,16 @@ class Meg2ApplicationController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
-    */
+     */
     public function institutions(Request $request)
     {
         $data = Application::where([
-            'concession_stage'  => true,
-            'office_to_perform_next_action' => Application::office['MEG2']
+            'concession_stage' => true,
+            'office_to_perform_next_action' => Application::office['MEG2'],
         ]);
 
         $data = Utility::applicationDetails($data);
         $data = $data->get();
-
 
         return successResponse("Here you go", ApplicationResource::collection($data));
     }
@@ -41,7 +40,7 @@ class Meg2ApplicationController extends Controller
     public function meg2Approval(Request $request)
     {
         $request->validate([
-            'application_id' => 'required|exists:applications,id'
+            'application_id' => 'required|exists:applications,id',
         ]);
 
         $user = $request->user();
@@ -50,27 +49,27 @@ class Meg2ApplicationController extends Controller
 
         $errorMsg = "Unable to complete your request at this point.";
 
-        if($application->office_to_perform_next_action != Application::office['MEG2']){
+        if ($application->office_to_perform_next_action != Application::office['MEG2']) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
-        if($application->currentStatus() != Application::statuses['MAMR']){
+        if ($application->currentStatus() != Application::statuses['MAMR']) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
         $applicant = User::find($application->submitted_by);
-        $name = $applicant->first_name.' '.$applicant->last_name;
+        $name = $applicant->first_name . ' ' . $applicant->last_name;
 
         $data = Application::where('applications.id', $request->application_id);
         $data = Utility::applicationDetails($data);
         $data = $data->first();
 
-        $companyName = $data->company_name; 
-        
+        $companyName = $data->company_name;
+
         $application = $application->refresh();
         $application->meg2_review_stage = 1;
         $application->save();
-        
+
         // CC email addresses
         // $Meg = Utility::getUsersEmailByCategory(Role::MEG);
 
@@ -80,16 +79,16 @@ class Meg2ApplicationController extends Controller
         //     'subject' => MailContents::memberAgreementSubject(),
         //     'content' => MailContents::memberAgreementMail()
         // ];
-        
+
         // $attachment = [
         //     [
         //         "name" => "{$membershipCategory->name} Membership Agreement",
-        //         "saved_path" => $membershipCategory->membership_agreement 
+        //         "saved_path" => $membershipCategory->membership_agreement
         //     ]
         // ];
 
         // Utility::notifyApplicantAndContact($request->application_id, $applicant, $emailData, $Meg, $attachment);
-        
+
         $MEGs = Utility::getUsersByCategory(Role::MEG);
         $MEG2s = Utility::getUsersEmailByCategory(Role::MEG2);
         $CCs = $MEG2s;
@@ -101,16 +100,16 @@ class Meg2ApplicationController extends Controller
         $application->save();
 
         Utility::applicationStatusHelper($application, Application::statuses['M2AMR'], Application::office['MEG2'], Application::office['MEG']);
-        
+
         logAction($user->email, 'MEG2 Approval', "MEG2 Approved MEG Review", $request->ip());
 
-        return successResponse("Application Review has been submitted");        
+        return successResponse("Application Review has been submitted");
     }
 
     public function approveEsuccessLetter(Request $request)
     {
         $request->validate([
-            'application_id' => 'required|exists:applications,id'
+            'application_id' => 'required|exists:applications,id',
         ]);
 
         $user = $request->user();
@@ -119,16 +118,16 @@ class Meg2ApplicationController extends Controller
 
         $errorMsg = "Unable to complete your request at this point.";
 
-        if($application->office_to_perform_next_action != Application::office['MEG2']){
-            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+        if ($application->office_to_perform_next_action != Application::office['MEG2']) {
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg . "1");
         }
 
-        if($application->currentStatus() != Application::statuses['MEM']){
-            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
-        }
+        // if ($application->currentStatus() != Application::statuses['MEM']) {
+        //     return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg . "2");
+        // }
 
-        if(! $application->e_success_letter || $application->e_success_letter_send) {
-            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+        if (!$application->e_success_letter || $application->e_success_letter_send) {
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg . "3");
         }
 
         Utility::applicationStatusHelper($application, Application::statuses['M2AEL'], Application::office['MEG2'], Application::office['AP']);

@@ -479,6 +479,46 @@ export const MEGUploadAgreement = createAsyncThunk(
     }
   }
 );
+export const MEGSendMembershipAgreement = createAsyncThunk(
+  "applicationProcess/MEGSendMembershipAgreement",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `membership/application/meg/send-membership-agreement`,
+        data: values,
+      });
+      return successHandler(data, data.message);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+export const MEG2SendESuccess = createAsyncThunk(
+  "applicationProcess/MEG2SendESuccess",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `membership/application/meg2/esuccess/approve`,
+        data: values,
+      });
+      return successHandler(data, data.message);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
 
 
 
@@ -889,6 +929,35 @@ const applicationProcess = createSlice({
     });
 
     builder.addCase(MEGUploadAgreement.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+    // ====== builders for MEGSendMembershipAgreement ======
+
+    builder.addCase(MEGSendMembershipAgreement.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(MEGSendMembershipAgreement.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(MEGSendMembershipAgreement.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
+    // ====== builders for MEG2SendESuccess ======
+
+    builder.addCase(MEG2SendESuccess.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(MEG2SendESuccess.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(MEG2SendESuccess.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });

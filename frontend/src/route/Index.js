@@ -37,6 +37,7 @@ import AdminComplaint from "main/pages/Admin/AdminComplaint"
 import AdminRegulators from "main/pages/Admin/AdminRegulators"
 import AdminSanctions from "main/pages/Admin/AdminSanctions"
 import AdminFeesFramework from "main/pages/Admin/AdminFeesFramework"
+import AdminDoh from "main/pages/Admin/AdminDoh"
 
 import Complaint from "main/pages/Complaint" 
 import AuditLog from "main/pages/AuditLog" 
@@ -212,6 +213,7 @@ const Router = () => {
           <Route path="admin-fees-framework" element={<AdminFeesFramework/>}></Route>
           <Route path="admin-applicant-guide" element={<AdminApplicantGuide/>}></Route>
           <Route path="admin-members-guide" element={<AdminMembersGuide/>}></Route>
+          <Route path="admin-doh" element={<AdminDoh/>}></Route>
           <Route path="admin-competency-framework" element={<AdminCompetencyFramework/>}></Route>
           <Route path="admin-competency-done/:competency_id" element={<AdminCompetencyDone/>}></Route>
           <Route path="admin-competency-undone/:competency_id" element={<AdminCompetencyUndone/>}></Route>

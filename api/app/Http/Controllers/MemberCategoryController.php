@@ -32,7 +32,7 @@ class MemberCategoryController extends Controller
     public function myApplicationCategories(): JsonResponse
     {
         $membership_category_ids = Application::where('institution_id', auth()->user()->institution_id)
-            ->where('is_meg_executed_membership_agreement', true)
+            ->where('is_applicant_executed_membership_agreement', true)
             ->whereIn('application_type_status', [Application::typeStatus['ASC'], Application::typeStatus['ASP']])
             ->pluck('membership_category_id');
         $categories = MembershipCategory::whereIn('id', $membership_category_ids)->where('is_del', 0)->get(['id', 'name', 'code', 'is_del'])->toArray();

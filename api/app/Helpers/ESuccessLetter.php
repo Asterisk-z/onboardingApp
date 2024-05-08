@@ -30,7 +30,9 @@ class ESuccessLetter
             $this->name = $dohData->name;
             $this->grade = $dohData->grade;
             $this->division = $dohData->division;
-            $this->signature = $dohData->signature ? config('app.url') . '/storage/app/public/' . $this->signature : null;
+            // $this->signature = "https://adgtest.fmdqgroup.com/newmroisdev/frontend/static/media/FMDQ-Logo.e1becb58179845481667.png";
+            $this->signature = $dohData->signature ? config('app.url') . '/storage/app/public/' . $dohData->signature : null;
+
         }
 
         switch ($category) {
@@ -89,6 +91,7 @@ class ESuccessLetter
         }
 
         if ($content) {
+
             $pdf = PDF::loadView('success.e-letter', compact('content'));
             Storage::put('public/esuccess/e_success_letter_' . $application->id . '.pdf', $pdf->output());
             $application->e_success_letter = 'esuccess/e_success_letter_' . $application->id . '.pdf';

@@ -17,41 +17,41 @@ class SystemSettingSeeder extends Seeder
         $configs = [
             [
                 "name" => "mandate_form",
-                "value" => config('app.url')."/mandate_form.pdf"
+                "value" => config('app.url') . "/mandate_form.pdf",
             ],
             [
                 "name" => "tax",
-                "value" => 7.5
+                "value" => 7.5,
             ],
             [
                 "name" => "email",
-                "value" => "info@fmdqgroup.com"
+                "value" => "info@fmdqgroup.com",
             ],
             [
                 "name" => "website",
-                "value" => "www.fmdqgroup.com"
+                "value" => "www.fmdqgroup.com",
             ],
             [
                 "name" => "address",
-                "value" => "Exchange Place, 35, Idowu Taylor Street, Victoria Island, Lagos"
+                "value" => "Exchange Place, 35, Idowu Taylor Street, Victoria Island, Lagos",
             ],
             [
                 "name" => "contact_name",
-                "value" => "Uju Iwuamadi"
+                "value" => "Uju Iwuamadi",
             ],
             [
                 "name" => "contact_phone",
-                "value" => "+234 20-1-700-8555"
+                "value" => "+234 20-1-700-8555",
             ],
             [
                 "name" => "tin",
-                "value" => "11426626 - 0001"
-            ]
+                "value" => "11426626 - 0001",
+            ],
         ];
 
-        foreach($configs as $config){
+        foreach ($configs as $config) {
             SystemSetting::updateOrCreate(['name' => $config['name']], [
-                "value" => $config['value']
+                "value" => $config['value'],
             ]);
         }
     }

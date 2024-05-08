@@ -157,7 +157,12 @@ class Utility
         $contactEmail = $data->primary_contact_email;
 
         // Recipient email addresses
-        $toEmails = [$applicant->email, $companyEmail, $contactEmail];
+        $toEmails = [$applicant->email, $companyEmail];
+
+        if ($contactEmail) {
+            array_push($toEmails, $companyEmail);
+        }
+
         return self::emailHelper($emailData, $toEmails, $ccs, $attachment);
     }
 

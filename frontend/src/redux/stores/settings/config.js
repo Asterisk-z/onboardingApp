@@ -5,6 +5,7 @@ import { errorHandler, successHandler } from "../../../utils/Functions";
 import queryGenerator from "../../../utils/QueryGenerator";
 const initialState = {
                     list: null,
+                    doh_list: null,
                     error: "",
                     loading: false,
 };
@@ -19,6 +20,40 @@ export const loadAllSettings = createAsyncThunk(
       return successHandler(data);
     } catch (error) {
       return errorHandler(error);
+    }
+  }
+);
+export const loadGetSignature = createAsyncThunk(
+  "settings/loadGetSignature",
+  async () => {
+    
+    try {
+      const { data } = await axios.get(`doh/signature`);
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
+    }
+  }
+);
+
+export const postSignature = createAsyncThunk(
+  "settings/postSignature",
+  async (values) => {
+    
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `doh/signature`,
+        data: values,
+      });
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error, true);
     }
   }
 );
@@ -41,11 +76,43 @@ const settingStore = createSlice({
 
     builder.addCase(loadAllSettings.fulfilled, (state, action) => {
       state.loading = false;
-        // state.list = action.payload?.data?.data?.countries;  
-        state.list = JSON.stringify(action.payload?.data?.data);
+      // state.list = action.payload?.data?.data?.countries;  
+      state.list = JSON.stringify(action.payload?.data?.data);
     });
 
     builder.addCase(loadAllSettings.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
+    // ====== builders for loadGetSignature ======
+
+    builder.addCase(loadGetSignature.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(loadGetSignature.fulfilled, (state, action) => {
+      state.loading = false;
+      // state.list = action.payload?.data?.data?.countries;  
+      state.doh_list = JSON.stringify(action.payload?.data?.data);
+    });
+
+    builder.addCase(loadGetSignature.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
+    // ====== builders for postSignature ======
+
+    builder.addCase(postSignature.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(postSignature.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(postSignature.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });

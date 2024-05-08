@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import Head from "layout/head/Head";
 import Content from "layout/content/Content";
 import { BlockContent, BlockTitle, Icon, OverlineTitle } from "components/Component";
-import { Steps, Step } from "react-step-builder";
+import { Steps, Step, StepsProvider, useSteps } from "react-step-builder";
 import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge, Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, CardBody, CardTitle } from "reactstrap";
 import { HeaderLogo } from "pages/components/HeaderLogo";
 import DatePicker from "react-datepicker";
@@ -15,65 +15,6 @@ import { UpdateDisclosure } from "redux/stores/membership/applicationProcessStor
 import moment from 'moment';
 import Swal from "sweetalert2";
 
-
-const Header = (props) => {
-  return (
-    <div className="steps clearfix">
-      <ul>
-        <li className={props.current >= 1 ? "first done" : "first"}>
-          <a href="#wizard-01-h-0" onClick={(ev) => ev.preventDefault()}>
-            <span className="number">APPLICANT</span> <h5>Information</h5>
-          </a>
-        </li>
-        <li className={props.current >= 2 ? "done" : ""}>
-          <a href="#wizard-01-h-1" onClick={(ev) => ev.preventDefault()}>
-            <span className="number">TRADING</span> <h5>DETAILS</h5>
-          </a>
-        </li>
-        <li className={props.current >= 3 ? "done" : ""}>
-          <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="number">DISCIPLINARY</span> <h5>HISTORY</h5>
-          </a>
-        </li>
-        <li className={props.current >= 4 ? "done" : ""}>
-          <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="number">SUPPORTING</span> <h5>DOCUMENT</h5>
-          </a>
-        </li>
-        <li className={props.current >= 5 ? "done" : ""}>
-          <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="number">APPLICANT</span> <h5>DECLARATION</h5>
-          </a>
-        </li>
-        <li className={props.current >= 6 ? "done" : ""}>
-          <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="number">APPLICATION</span> <h5>COMPLETED</h5>
-          </a>
-        </li>
-        {/* <li className={props.current >= 7 ? "done" : ""}>
-          <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="number"></span> <h5>Step 7</h5>
-          </a>
-        </li>
-        <li className={props.current >= 8 ? "done" : ""}>
-          <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="number"></span> <h5>Step 8</h5>
-          </a>
-        </li>
-        <li className={props.current === 9 ? "last done" : "last"}>
-          <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
-            <span className="number"></span> <h5>Step 9</h5>
-          </a>
-        </li> */}
-      </ul>
-    </div>
-  );
-};
-
-
-const config = {
-  before: Header,
-};
 
 
 
@@ -88,8 +29,7 @@ const Form = () => {
     const navigate = useNavigate();
     const [parentState, setParentState] = useState('0')
     const [showDisclosureModal, setShowDisclosureModal] = useState(false);
-    
-    const toggleDisclosureModel = () => setShowDisclosureModal(false)
+
 
     const application_details = useSelector((state) => state?.application?.application_details) || null;
     useEffect(() => {
@@ -126,10 +66,7 @@ const Form = () => {
         });
 
     } 
-    
-    const updateParent = () => {
-      setParentState(Math.random())
-    }
+
 
     const styles = {
       color: {
@@ -192,8 +129,8 @@ const Form = () => {
 
           }
         };
-
-
+        //
+        // console.log(props)
         const submitForm = (data) => {
           // initialValues = []
           props.next()
@@ -269,7 +206,7 @@ const Form = () => {
                           <div className="form-group">
                             <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
                             <div className="form-control-wrap">
-                              <input type="number" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={field.name} className="form-control" {...register(field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field} />
+                              <input type="number"  id={field.name} className="form-control" {...register(field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field} />
                               {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
                             </div>
                           </div>
@@ -318,15 +255,18 @@ const Form = () => {
                   })}
 
                 </Row>
-                <div className="actions clearfix">
-                  <ul>
-                    <li>
-                      <Button color="primary" type="submit" onClick={nextProcess}>
-                        Next
-                      </Button>
-                    </li>
-                  </ul>
-                </div>
+                {fields?.length > 0 && <>
+                  <div className="actions clearfix">
+                    <ul>
+                      <li>
+                        <Button color="primary" type="submit" onClick={nextProcess}>
+                          Next
+                        </Button>
+                      </li>
+                    </ul>
+                  </div>                
+                </>}
+
               </form>        
             </>}
             
@@ -451,7 +391,7 @@ const Form = () => {
                         <div className="form-group">
                           <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
                           <div className="form-control-wrap">
-                            <input type="number" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={field.name} className="form-control" {...register(field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field ? field?.field_value?.uploaded_field : 0} />
+                            <input type="text"  id={field.name} className="form-control" {...register(field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field ? field?.field_value?.uploaded_field : 0} />
                             {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
                           </div>
                         </div>
@@ -520,7 +460,7 @@ const Form = () => {
                                     <div className="form-group">
                                       <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
                                       <div className="form-control-wrap">
-                                        <input type="number" id={child_field.name} className="form-control" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} {...register(child_field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                        <input type="number" id={child_field.name} className="form-control"  {...register(child_field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                       </div>
                                     </div>
@@ -535,7 +475,7 @@ const Form = () => {
                                     <div className="form-group">
                                       <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
                                       <div className="form-control-wrap">
-                                        <input type="number" id={child_field.name} className="form-control" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} {...register(child_field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                        <input type="number" id={child_field.name} className="form-control"  {...register(child_field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                       </div>
                                     </div>
@@ -565,7 +505,7 @@ const Form = () => {
                                     <div className="form-group">
                                       <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
                                       <div className="form-control-wrap">
-                                        <input type="number" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                        <input type="number"  id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                       </div>
                                     </div>
@@ -580,7 +520,7 @@ const Form = () => {
                                     <div className="form-group">
                                       <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
                                       <div className="form-control-wrap">
-                                        <input type="number" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                        <input type="number"  id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                       </div>
                                     </div>
@@ -595,7 +535,7 @@ const Form = () => {
                                     <div className="form-group">
                                       <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
                                       <div className="form-control-wrap">
-                                        <input type="number" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                        <input type="number"  id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                       </div>
                                     </div>
@@ -610,7 +550,7 @@ const Form = () => {
                                     <div className="form-group">
                                       <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
                                       <div className="form-control-wrap">
-                                        <input type="number" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                        <input type="number"  id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                       </div>
                                     </div>
@@ -625,7 +565,7 @@ const Form = () => {
                                     <div className="form-group">
                                       <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
                                       <div className="form-control-wrap">
-                                        <input type="number" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                        <input type="number"  id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                       </div>
                                     </div>
@@ -640,7 +580,7 @@ const Form = () => {
                                     <div className="form-group">
                                       <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
                                       <div className="form-control-wrap">
-                                        <input type="number" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                        <input type="number"  id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                       </div>
                                     </div>
@@ -655,7 +595,7 @@ const Form = () => {
                                     <div className="form-group">
                                       <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
                                       <div className="form-control-wrap">
-                                        <input type="number" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                        <input type="number"  id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                       </div>
                                     </div>
@@ -670,7 +610,7 @@ const Form = () => {
                                     <div className="form-group">
                                       <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
                                       <div className="form-control-wrap">
-                                        <input type="number" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                        <input type="number"  id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                       </div>
                                     </div>
@@ -685,7 +625,7 @@ const Form = () => {
                                     <div className="form-group">
                                       <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
                                       <div className="form-control-wrap">
-                                        <input type="number" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                        <input type="number"  id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                       </div>
                                     </div>
@@ -700,7 +640,7 @@ const Form = () => {
                                     <div className="form-group">
                                       <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
                                       <div className="form-control-wrap">
-                                        <input type="number" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                        <input type="number"  id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                       </div>
                                     </div>
@@ -715,7 +655,7 @@ const Form = () => {
                                     <div className="form-group">
                                       <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
                                       <div className="form-control-wrap">
-                                        <input type="number" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                        <input type="number"  id={child_field.name} className="form-control" {...register(child_field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                       </div>
                                     </div>
@@ -738,20 +678,23 @@ const Form = () => {
 
 
               </Row>
-              <div className="actions clearfix">
-                <ul>
-                  <li>
-                    <Button color="primary" type="submit" onClick={nextProcess}>
-                      Next
-                    </Button>
-                  </li>
-                  <li>
-                    <Button color="primary" onClick={props.prev}>
-                      Previous
-                    </Button>
-                  </li>
-                </ul>
-              </div>
+
+              {fields?.length > 0 && <>
+                <div className="actions clearfix">
+                  <ul>
+                    <li>
+                      <Button color="primary" type="submit" onClick={nextProcess}>
+                        Next
+                      </Button>
+                    </li>
+                    <li>
+                      <Button color="primary" onClick={props.prev}>
+                        Previous
+                      </Button>
+                    </li>
+                  </ul>
+                </div>
+              </>}
             </>}
           </form>
         );
@@ -883,20 +826,23 @@ const Form = () => {
 
 
               </Row>
-              <div className="actions clearfix">
-                <ul>
-                  <li>
-                    <Button color="primary" type="submit" onClick={nextProcess}>
-                      Next
-                    </Button>
-                  </li>
-                  <li>
-                    <Button color="primary" onClick={props.prev}>
-                      Previous
-                    </Button>
-                  </li>
-                </ul>
-              </div>
+
+              {fields?.length > 0 && <>
+                <div className="actions clearfix">
+                  <ul>
+                    <li>
+                      <Button color="primary" type="submit" onClick={nextProcess}>
+                        Next
+                      </Button>
+                    </li>
+                    <li>
+                      <Button color="primary" onClick={props.prev}>
+                        Previous
+                      </Button>
+                    </li>
+                  </ul>
+                </div>
+              </>}
             </>}
           </form>
         );
@@ -963,7 +909,7 @@ const Form = () => {
 
         return (
           <form className="content clearfix" onSubmit={handleSubmit(submitForm)} encType="multipart/form-data">
-            {fields && <>
+            {fields?.length > 0 && <>
               <h3>Supporting Documents</h3>
 
               <Row className="gy-4">
@@ -1079,7 +1025,7 @@ const Form = () => {
 
         return (
           <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
-            {fields && <>
+            {fields?.length > 0 && <>
               <h3>Applicant Declaration</h3>
               <p>By submitting this application to become a member of FMDQ Securities Exchange Limited and signing this form in the manner below:</p>
               <ul>
@@ -1189,7 +1135,59 @@ const Form = () => {
           </div>
         );
       };
-  
+
+  const Header = (props) => {
+    useEffect(() => {
+      if ($application_details) {
+        console.log($application_details)
+        props.jump($application_details?.step)
+      }
+    }, [])
+    
+    console.log(props)
+    return (
+      <div className="steps clearfix">
+        <ul>
+          <li className={props.current >= 1 ? "first done" : "first"}>
+            <a href="#wizard-01-h-0" onClick={(ev) => ev.preventDefault()}>
+              <span className="number">APPLICANT</span> <h5>Information</h5>
+            </a>
+          </li>
+          <li className={props.current >= 2 ? "done" : ""}>
+            <a href="#wizard-01-h-1" onClick={(ev) => ev.preventDefault()}>
+              <span className="number">TRADING</span> <h5>DETAILS</h5>
+            </a>
+          </li>
+          <li className={props.current >= 3 ? "done" : ""}>
+            <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
+              <span className="number">DISCIPLINARY</span> <h5>HISTORY</h5>
+            </a>
+          </li>
+          <li className={props.current >= 4 ? "done" : ""}>
+            <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
+              <span className="number">SUPPORTING</span> <h5>DOCUMENT</h5>
+            </a>
+          </li>
+          <li className={props.current >= 5 ? "done" : ""}>
+            <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
+              <span className="number">APPLICANT</span> <h5>DECLARATION</h5>
+            </a>
+          </li>
+          <li className={props.current >= 6 ? "done" : ""}>
+            <a href="#wizard-01-h-2" onClick={(ev) => ev.preventDefault()}>
+              <span className="number">APPLICATION</span> <h5>COMPLETED</h5>
+            </a>
+          </li>
+        </ul>
+      </div>
+    );
+  };
+
+
+  const config = {
+    before: Header
+  };
+
   return <>
           <Head title="Form" />
           <HeaderLogo />
@@ -1205,7 +1203,7 @@ const Form = () => {
                       <p>Please fill forms to complete your application</p>
                     </div>
                     <div className="nk-wizard nk-wizard-simple is-alter wizard clearfix">
-                      <Steps config={config}>
+                      <Steps config={config} >
                         <Step component={ApplicantInformation} />
                         <Step component={TradingDetail} />
                         <Step component={DisciplinaryHistory} />

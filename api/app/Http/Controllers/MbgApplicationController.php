@@ -234,7 +234,7 @@ class MbgApplicationController extends Controller
             $Mbg = Utility::getUsersEmailByCategory(Role::MBG);
             $fsd = Utility::getUsersEmailByCategory(Role::FSD);
             $ccEmails = array_merge($Meg, $Mbg, $fsd);
-
+            // logger($applicant);
             Utility::notifyApplicantAndContact($request->application_id, $applicant, $emailData, $ccEmails);
 
             Utility::applicationStatusHelper($application, Application::statuses['MDP'], Application::office['MBG'], Application::office['AP'], $request->comment);
@@ -281,7 +281,6 @@ class MbgApplicationController extends Controller
             $application->mbg_review_stage = 1;
             $application->save();
 
-
             $invoice->date_paid = Carbon::now()->format('Y-m-d');
             $invoice->is_paid = 1;
             $invoice->save();
@@ -310,7 +309,7 @@ class MbgApplicationController extends Controller
 
         $ar_creation_request = ArCreationRequest::find($request->ar_request_id);
 
-        if($ar_creation_request->next_office != 'MBG' && $ar_creation_request->mbg_status != 'Pending'){
+        if ($ar_creation_request->next_office != 'MBG' && $ar_creation_request->mbg_status != 'Pending') {
             errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, "You are not permitted to perform this action at this time");
         }
 

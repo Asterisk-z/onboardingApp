@@ -72,12 +72,12 @@ class FinalApplicationProcessingJob implements ShouldQueue
         $attachment = [
             [
                 "name" => "{$companyName} Membership Agreement",
-                "saved_path" => config('app.url') . '/storage/' . $application->meg_executed_membership_agreement,
+                "saved_path" => config('app.url') . '/storage/app/public/' . $application->meg_executed_membership_agreement,
             ],
             [
                 "name" => "{$companyName} E-Success Letter",
-                "saved_path" => config('app.url') . '/storage/' . $application->e_success_letter,
-            ]
+                "saved_path" => config('app.url') . '/storage/app/public/' . $application->e_success_letter,
+            ],
         ];
 
         // CC email addresses
@@ -123,7 +123,11 @@ class FinalApplicationProcessingJob implements ShouldQueue
         $application->application_type_status = Application::typeStatus['ASC'];
         $application->save();
 
-        $toEmails = [$applicant->email, $companyEmail, $primaryContactEmail];
+        $toEmails = [$applicant->email, $companyEmail];
+
+        if ($primaryContactEmail) {
+            array_push($toEmails, $primaryContactEmail);
+        }
 
         Utility::notifyApplicantFinal($application->id, $emailData, $toEmails, $ccEmails, $attachment);
 

@@ -114,7 +114,11 @@ class FsdApplicationController extends Controller
             ];
 
             // Recipient email addresses
-            $toEmails = [$applicant->email, $companyEmail, $contactEmail];
+            $toEmails = [$applicant->email, $companyEmail];
+
+            if ($contactEmail) {
+                array_push($toEmails, $companyEmail);
+            }
 
             // CC email addresses
             $Meg = Utility::getUsersEmailByCategory(Role::MEG);

@@ -9,7 +9,7 @@ import Icon from "components/icon/Icon";
 import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge,  Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, CardBody, CardTitle } from "reactstrap";
 import { DataTablePagination } from "components/Component";
 import moment from "moment";
-import { uploadConcession, FSDPaymentEvidence, FSDReviewSummary, MBGPaymentEvidence, MBGReview, MEGReview, MEG2Review, MEGUploadAgreement, completeApplication } from "redux/stores/membership/applicationProcessStore"
+import { uploadConcession, FSDPaymentEvidence, FSDReviewSummary, MBGPaymentEvidence, MBGReview, MEGReview, MEG2Review, MEGUploadAgreement, completeApplication, MEGSendMembershipAgreement, MEG2SendESuccess } from "redux/stores/membership/applicationProcessStore"
 import { megProcessTransferUserAR } from "redux/stores/authorize/representative";
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 import Swal from "sweetalert2";
@@ -369,8 +369,8 @@ const ActionTab = (props) => {
             text: "Do you want to approve review!",
             icon: "warning",
             showCancelButton: true,
-            confirmButtonText: "Yes!",
-            cancelButtonText: "No",
+            confirmButtonText: "Approve",
+            cancelButtonText: "Decline",
           }).then((result) => {
               if (result.isConfirmed) {
                 
@@ -417,7 +417,61 @@ const ActionTab = (props) => {
             }
           });
       }
-      
+
+      if (action == 'sendAgreement') {
+        Swal.fire({
+          title: "Are you sure?",
+          text: "",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Yes!",
+          cancelButtonText: "No",
+        }).then((result) => {
+          if (result.isConfirmed) {
+
+            const formData = new FormData();
+            formData.append('application_id', institution.internal.application_id);
+            dispatch(MEGSendMembershipAgreement(formData));
+            setModalForm(false)
+            setModalView(false)
+            setSignedAgreement(false)
+            setModalReviewView(false)
+            setShowConcession(false)
+            setModalPaymentView(false)
+            setModalViewUpdate(false)
+            props.updateParentParent(Math.random());
+
+          }
+        });
+      }
+
+
+      if (action == 'sendESuccessLetter') {
+        Swal.fire({
+          title: "Are you sure?",
+          text: "",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Yes!",
+          cancelButtonText: "No",
+        }).then((result) => {
+          if (result.isConfirmed) {
+
+            const formData = new FormData();
+            formData.append('application_id', institution.internal.application_id);
+            dispatch(MEG2SendESuccess(formData));
+            setModalForm(false)
+            setModalView(false)
+            setSignedAgreement(false)
+            setModalReviewView(false)
+            setShowConcession(false)
+            setModalPaymentView(false)
+            setModalViewUpdate(false)
+            props.updateParentParent(Math.random());
+
+          }
+        });
+      }
 
       
 
@@ -568,67 +622,67 @@ const ActionTab = (props) => {
                                       <tr>
                                         <td>1</td>
                                         <td>Company Name</td>
-                                        <td>{`${institution?.basic_details.companyName}`}</td>
+                                        <td className="text-capitalize">{`${institution?.basic_details?.companyName  ?? ''}`}</td>
                                       </tr>
                                       <tr>
                                         <td>2</td>
                                         <td>RC Number</td>
-                                        <td>{`${institution?.basic_details.rcNumber}`}</td>
+                                        <td className="text-capitalize">{`${institution?.basic_details?.rcNumber  ?? ''}`}</td>
                                       </tr>
                                       <tr>
                                         <td>3</td>
                                         <td>Registered Office Address</td>
-                                        <td>{`${institution?.basic_details.registeredOfficeAddress}`}</td>
+                                        <td className="text-capitalize">{`${institution?.basic_details?.registeredOfficeAddress  ?? ''}`}</td>
                                       </tr>
                                       <tr>
                                         <td>4</td>
                                         <td>Town/City</td>
-                                        <td>{`${institution?.basic_details.placeOfIncorporation}`}</td>
+                                        <td className="text-capitalize">{`${institution?.basic_details?.placeOfIncorporation  ?? ''}`}</td>
                                       </tr>
                                       <tr>
                                         <td>5</td>
                                         <td>Date of Incorporation</td>
-                                        <td>{`${institution?.basic_details.dateOfIncorporation}`}</td>
+                                        <td className="text-capitalize">{`${institution?.basic_details?.dateOfIncorporation  ?? ''}`}</td>
                                       </tr>
                                       <tr>
                                         <td>6</td>
                                         <td>Place of Incorporation</td>
-                                        <td>{`${institution?.basic_details.placeOfIncorporation}`}</td>
+                                        <td className="text-capitalize">{`${institution?.basic_details?.placeOfIncorporation  ?? ''}`}</td>
                                       </tr>
                                       <tr>
                                         <td>7</td>
                                         <td>Nature of Business</td>
-                                        <td>{`${institution?.basic_details.natureOfBusiness}`}</td>
+                                        <td className="text-capitalize">{`${institution?.basic_details?.natureOfBusiness  ?? ''}`}</td>
                                       </tr>
                                       <tr>
                                         <td>8</td>
                                         <td>Company Primary Telephone Number</td>
-                                        <td>{`${institution?.basic_details.companyTelephoneNumber}`}</td>
+                                        <td className="text-capitalize">{`${institution?.basic_details?.companyTelephoneNumber  ?? ''}`}</td>
                                       </tr>
                                       <tr>
                                         <td>9</td>
                                         <td>Company Secondary Telephone Number</td>
-                                        <td>{`${institution?.basic_details.companyTelephoneNumber}`}</td>
+                                        <td className="text-capitalize">{`${institution?.basic_details?.companyTelephoneNumber  ?? ''}`}</td>
                                       </tr>
                                       <tr>
                                         <td>10</td>
                                         <td>Company Email Address</td>
-                                        <td>{`${institution?.basic_details.companyEmailAddress}`}</td>
+                                        <td className="text-capitalize">{`${institution?.basic_details?.companyEmailAddress  ?? ''}`}</td>
                                       </tr>
                                       <tr>
                                         <td>11</td>
                                         <td>Company Website Address</td>
-                                        <td>{`${institution?.basic_details.corporateWebsiteAddress}`}</td>
+                                        <td className="text-capitalize">{`${institution?.basic_details?.corporateWebsiteAddress  ?? ''}`}</td>
                                       </tr>
                                       <tr>
                                         <td>12</td>
                                         <td>Authorised Share Capital</td>
-                                        <td>{`${institution?.basic_details.authorisedShareCapital}`}</td>
+                                        <td className="text-capitalize">{`${institution?.basic_details?.authorisedShareCapital ?? ''}`}</td>
                                       </tr>
                                       <tr>
                                         <td>13</td>
                                         <td>Authorised Share Capital Currency</td>
-                                          <td>{`${institution?.basic_details.authorisedShareCapitalCurrency}`}</td>
+                                          <td className="text-capitalize">{`${institution?.basic_details?.authorisedShareCapitalCurrency ?? ''}`}</td>
                                       </tr>
                                     
                                   </tbody>
@@ -650,22 +704,22 @@ const ActionTab = (props) => {
                                       <tr>
                                         <td>1</td>
                                         <td>Bank Detail</td>
-                                        <td>{`${institution?.bank_details?.bankDetailName}`}</td>
+                                        <td className="text-capitalize">{`${institution?.bank_details?.bankDetailName}`}</td>
                                       </tr>
                                       <tr>
                                         <td>2</td>
                                         <td>Bank Address</td>
-                                        <td>{`${institution?.bank_details?.bankDetailAddress}`}</td>
+                                        <td className="text-capitalize">{`${institution?.bank_details?.bankDetailAddress}`}</td>
                                       </tr>
                                       <tr>
                                         <td>3</td>
                                         <td>Bank Telephone</td>
-                                        <td>{`${institution?.bank_details?.bankDetailTelephone}`}</td>
+                                        <td className="text-capitalize">{`${institution?.bank_details?.bankDetailTelephone}`}</td>
                                       </tr>
                                       <tr>
                                         <td>4</td>
                                         <td>Type Of Account</td>
-                                        <td>{`${institution?.bank_details?.bankDetailTypeOfAccount}`}</td>
+                                        <td className="text-capitalize">{`${institution?.bank_details?.bankDetailTypeOfAccount}`}</td>
                                     </tr>
                                     </>}
                                     {institution?.bank_details?.bankDetailNameOne && <>
@@ -673,22 +727,22 @@ const ActionTab = (props) => {
                                       <tr>
                                         <td>1</td>
                                         <td>Bank Detail</td>
-                                        <td>{`${institution?.bank_details?.bankDetailNameOne}`}</td>
+                                        <td className="text-capitalize">{`${institution?.bank_details?.bankDetailNameOne}`}</td>
                                       </tr>
                                       <tr>
                                         <td>2</td>
                                         <td>Bank Address</td>
-                                        <td>{`${institution?.bank_details?.bankDetailAddressOne}`}</td>
+                                        <td className="text-capitalize">{`${institution?.bank_details?.bankDetailAddressOne}`}</td>
                                       </tr>
                                       <tr>
                                         <td>3</td>
                                         <td>Bank Telephone</td>
-                                        <td>{`${institution?.bank_details?.bankDetailTelephoneOne}`}</td>
+                                        <td className="text-capitalize">{`${institution?.bank_details?.bankDetailTelephoneOne}`}</td>
                                       </tr>
                                       <tr>
                                         <td>4</td>
                                         <td>Type Of Account</td>
-                                        <td>{`${institution?.bank_details?.bankDetailTypeOfAccountOne}`}</td>
+                                        <td className="text-capitalize">{`${institution?.bank_details?.bankDetailTypeOfAccountOne}`}</td>
                                       </tr>
                                     </>}
 
@@ -697,22 +751,22 @@ const ActionTab = (props) => {
                                       <tr>
                                         <td>1</td>
                                         <td>Bank Detail</td>
-                                        <td>{`${institution?.bank_details?.bankDetailNameTwo}`}</td>
+                                        <td className="text-capitalize">{`${institution?.bank_details?.bankDetailNameTwo}`}</td>
                                       </tr>
                                       <tr>
                                         <td>2</td>
                                         <td>Bank Address</td>
-                                        <td>{`${institution?.bank_details?.bankDetailAddressTwo}`}</td>
+                                        <td className="text-capitalize">{`${institution?.bank_details?.bankDetailAddressTwo}`}</td>
                                       </tr>
                                       <tr>
                                         <td>3</td>
                                         <td>Bank Telephone</td>
-                                        <td>{`${institution?.bank_details?.bankDetailTelephoneTwo}`}</td>
+                                        <td className="text-capitalize">{`${institution?.bank_details?.bankDetailTelephoneTwo}`}</td>
                                       </tr>
                                       <tr>
                                         <td>4</td>
                                         <td>Type Of Account</td>
-                                        <td>{`${institution?.bank_details?.bankDetailTypeOfAccountTwo}`}</td>
+                                        <td className="text-capitalize">{`${institution?.bank_details?.bankDetailTypeOfAccountTwo}`}</td>
                                       </tr>
                                     </>}
                                     
@@ -736,7 +790,7 @@ const ActionTab = (props) => {
                                       <tr>
                                         <td>1</td>
                                         <td>Banking License</td>
-                                        <td>{`${institution?.bank_license_details?.bankingLicense}`}</td>
+                                        <td className="text-capitalize">{`${institution?.bank_license_details?.bankingLicense}`}</td>
                                       </tr>
                                     
 
@@ -762,182 +816,182 @@ const ActionTab = (props) => {
                                       <tr>
                                         <td>-</td>
                                         <td>chiefComplianceOfficerDisciplinary</td>
-                                        <td>{`${institution?.disciplinary_details?.chiefComplianceOfficerDisciplinary}`}</td>
+                                        <td className="text-capitalize">{`${institution?.disciplinary_details?.chiefComplianceOfficerDisciplinary}`}</td>
                                       </tr>
                   </>}
                   {institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryFive && <>
                     <tr>
                       <td>-</td>
                       <td>Ever been the subject of any disciplinary or criminal proceedings or been the subject of any investigation by any Authority which may lead to such proceedings?</td>
-                      <td>{`${institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryFive}`}</td>
+                      <td className="text-capitalize">{`${institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryFive}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryFour && <>
                     <tr>
                       <td>-</td>
                       <td>Ever been declared bankrupt or entered into any compromise arrangement with creditors related to bankruptcy or insolvency?</td>
-                      <td>{`${institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryFour}`}</td>
+                      <td className="text-capitalize">{`${institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryFour}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryOne && <>
                     <tr>
                       <td>-</td>
                       <td>Ever been convicted of any criminal offence? </td>
-                      <td>{`${institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryOne}`}</td>
+                      <td className="text-capitalize">{`${institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryOne}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryThree && <>
                     <tr>
                       <td>-</td>
                       <td>Ever been concerned in the management of a business which has gone into insolvency, liquidation, administration or the equivalent proceedings within or outside of the Nigerian jurisdiction while connected with such organisation within one (1) year of that connection?</td>
-                      <td>{`${institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryThree}`}</td>
+                      <td className="text-capitalize">{`${institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryThree}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryTwo && <>
                     <tr>
                       <td>-</td>
                       <td>Ever been the subject of an adverse finding by, or settlement with, any government agency, court, securities exchange, SRO, tribunal or other regulatory authority?</td>
-                      <td>{`${institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryTwo}`}</td>
+                      <td className="text-capitalize">{`${institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryTwo}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.companyDisciplinary && <>
                     <tr>
                       <td>-</td>
                       <td>companyDisciplinary</td>
-                      <td>{`${institution?.disciplinary_details?.companyDisciplinary}`}</td>
+                      <td className="text-capitalize">{`${institution?.disciplinary_details?.companyDisciplinary}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.companyDisciplinaryFour && <>
                     <tr>
                       <td>-</td>
                       <td>Has your company, or any of its affiliates, been subject to any winding up order/receivership arrangement? </td>
-                      <td>{`${institution?.disciplinary_details?.companyDisciplinaryFour}`}</td>
+                      <td className="text-capitalize">{`${institution?.disciplinary_details?.companyDisciplinaryFour}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.companyDisciplinaryOne && <>
                     <tr>
                       <td>-</td>
                       <td>Has the company or any of its affiliates , been denied registration or expelled from membership of any securities exchange, self-regulatory organisation (SRO) or associations?</td>
-                      <td>{`${institution?.disciplinary_details?.companyDisciplinaryOne}`}</td>
+                      <td className="text-capitalize">{`${institution?.disciplinary_details?.companyDisciplinaryOne}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.companyDisciplinaryThree && <>
                     <tr>
                       <td>-</td>
                       <td>Has your company, or any of its affiliates, ever been refused any Fidelity Bond?</td>
-                      <td>{`${institution?.disciplinary_details?.companyDisciplinaryThree}`}</td>
+                      <td className="text-capitalize">{`${institution?.disciplinary_details?.companyDisciplinaryThree}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.companyDisciplinaryTwo && <>
                     <tr>
                       <td>-</td>
                       <td>Has your membership, or that of any affiliates, in any of the institutions/associations mentioned above at any time been revoked, suspended or withdrawn?</td>
-                      <td>{`${institution?.disciplinary_details?.companyDisciplinaryTwo}`}</td>
+                      <td className="text-capitalize">{`${institution?.disciplinary_details?.companyDisciplinaryTwo}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.mdceoDisciplinary && <>
                     <tr>
                       <td>-</td>
                       <td>mdceoDisciplinary</td>
-                      <td>{`${institution?.disciplinary_details?.mdceoDisciplinary}`}</td>
+                      <td className="text-capitalize">{`${institution?.disciplinary_details?.mdceoDisciplinary}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.mdceoDisciplinaryEight && <>
                     <tr>
                       <td>-</td>
                       <td>Ever been disqualified from acting as a Director?</td>
-                      <td>{`${institution?.disciplinary_details?.mdceoDisciplinaryEight}`}</td>
+                      <td className="text-capitalize">{`${institution?.disciplinary_details?.mdceoDisciplinaryEight}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.mdceoDisciplinaryFive && <>
                     <tr>
                       <td>-</td>
                       <td>Ever been the subject of any disciplinary or criminal proceedings or been the subject of any investigation by any authority which may lead to such proceedings?</td>
-                      <td>{`${institution?.disciplinary_details?.mdceoDisciplinaryFive}`}</td>
+                      <td className="text-capitalize">{`${institution?.disciplinary_details?.mdceoDisciplinaryFive}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.mdceoDisciplinaryFour && <>
                     <tr>
                       <td>-</td>
                       <td>Ever been declared bankrupt or entered into any compromise arrangement with creditors related to bankruptcy or insolvency?</td>
-                      <td>{`${institution?.disciplinary_details?.mdceoDisciplinaryFour}`}</td>
+                      <td className="text-capitalize">{`${institution?.disciplinary_details?.mdceoDisciplinaryFour}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.mdceoDisciplinaryOne && <>
                     <tr>
                       <td>-</td>
                       <td>Ever been convicted of any criminal offence?</td>
-                      <td>{`${institution?.disciplinary_details?.mdceoDisciplinaryOne}`}</td>
+                      <td className="text-capitalize">{`${institution?.disciplinary_details?.mdceoDisciplinaryOne}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.mdceoDisciplinarySeven && <>
                     <tr>
                       <td>-</td>
                       <td>Ever had such authorisation, membership or licence (referred to above) revoked or terminated?</td>
-                      <td>{`${institution?.disciplinary_details?.mdceoDisciplinarySeven}`}</td>
+                      <td className="text-capitalize">{`${institution?.disciplinary_details?.mdceoDisciplinarySeven}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.mdceoDisciplinarySix && <>
                     <tr>
                       <td>-</td>
                       <td>Ever been refused authorisation or licence to carry on a trade, business or profession or to be a member of a securities exchange?</td>
-                      <td>{`${institution?.disciplinary_details?.mdceoDisciplinarySix}`}</td>
+                      <td className="text-capitalize">{`${institution?.disciplinary_details?.mdceoDisciplinarySix}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.mdceoDisciplinaryThree && <>
                     <tr>
                       <td>-</td>
                       <td>Ever been a Director, partner or otherwise concerned in the management of a business which has gone into insolvency, liquidation, administration or the similar proceedings within or outside of the Nigerian jurisdiction while connected with such organisation within one (1) year of that connection?</td>
-                      <td>{`${institution?.disciplinary_details?.mdceoDisciplinaryThree}`}</td>
+                      <td className="text-capitalize">{`${institution?.disciplinary_details?.mdceoDisciplinaryThree}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.mdceoDisciplinaryTwo && <>
                     <tr>
                       <td>-</td>
                       <td>Ever been the subject of an adverse finding by, or settlement with, any government agency, court, securities exchange, SRO, tribunal or other regulatory authority?</td>
-                      <td>{`${institution?.disciplinary_details?.mdceoDisciplinaryTwo}`}</td>
+                      <td className="text-capitalize">{`${institution?.disciplinary_details?.mdceoDisciplinaryTwo}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.treasureDisciplinary && <>
                     <tr>
                       <td>-</td>
                       <td>treasureDisciplinary</td>
-                      <td>{`${institution?.disciplinary_details?.treasureDisciplinary}`}</td>
+                      <td className="text-capitalize">{`${institution?.disciplinary_details?.treasureDisciplinary}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.treasureDisciplinaryFive && <>
                     <tr>
                       <td>-</td>
                       <td>Ever been the subject of any disciplinary or criminal proceedings or been the subject of any investigation by any authority which may lead to such proceedings?</td>
-                      <td>{`${institution?.disciplinary_details?.treasureDisciplinaryFive}`}</td>
+                      <td className="text-capitalize">{`${institution?.disciplinary_details?.treasureDisciplinaryFive}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.treasureDisciplinaryFour && <>
                     <tr>
                       <td>-</td>
                       <td>'Ever been declared bankrupt or entered into any compromise arrangement with creditors related to bankruptcy or insolvency?</td>
-                      <td>{`${institution?.disciplinary_details?.treasureDisciplinaryFour}`}</td>
+                      <td className="text-capitalize">{`${institution?.disciplinary_details?.treasureDisciplinaryFour}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.treasureDisciplinaryOne && <>
                     <tr>
                       <td>-</td>
                       <td>Ever been convicted of any criminal offence?</td>
-                      <td>{`${institution?.disciplinary_details?.treasureDisciplinaryOne}`}</td>
+                      <td className="text-capitalize">{`${institution?.disciplinary_details?.treasureDisciplinaryOne}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.treasureDisciplinaryThree && <>
                     <tr>
                       <td>-</td>
                       <td>Ever been concerned in the management of a business which has gone into insolvency, liquidation, administration or the similar proceedings within or outside of the Nigerian jurisdiction while connected with such organisation within one (1) year of that connection?</td>
-                      <td>{`${institution?.disciplinary_details?.treasureDisciplinaryThree}`}</td>
+                      <td className="text-capitalize">{`${institution?.disciplinary_details?.treasureDisciplinaryThree}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.treasureDisciplinaryTwo && <>
                     <tr>
                       <td>-</td>
                       <td>Ever been the subject of an adverse finding by, or settlement with, any government agency, court, securities exchange, SRO, tribunal or other regulatory authority?</td>
-                      <td>{`${institution?.disciplinary_details?.treasureDisciplinaryTwo}`}</td>
+                      <td className="text-capitalize">{`${institution?.disciplinary_details?.treasureDisciplinaryTwo}`}</td>
                     </tr>
                   </>}
                                     
@@ -964,22 +1018,22 @@ const ActionTab = (props) => {
                     <tr>
                       <td>1</td>
                       <td>Name</td>
-                      <td>{`${institution?.custodian_details?.custodianInformationName}`}</td>
+                      <td className="text-capitalize">{`${institution?.custodian_details?.custodianInformationName}`}</td>
                     </tr>
                     <tr>
                       <td>2</td>
                       <td> Address</td>
-                      <td>{`${institution?.custodian_details?.custodianInformationAddress}`}</td>
+                      <td className="text-capitalize">{`${institution?.custodian_details?.custodianInformationAddress}`}</td>
                     </tr>
                     <tr>
                       <td>3</td>
                       <td>Mobile Contact</td>
-                      <td>{`${institution?.custodian_details?.custodianInformationMobileNumberOfContact}`}</td>
+                      <td className="text-capitalize">{`${institution?.custodian_details?.custodianInformationMobileNumberOfContact}`}</td>
                     </tr>
                     <tr>
                       <td>4</td>
                       <td>Telephone</td>
-                      <td>{`${institution?.custodian_details?.custodianInformationTelephone}`}</td>
+                      <td className="text-capitalize">{`${institution?.custodian_details?.custodianInformationTelephone}`}</td>
                     </tr>
                 </tbody>
               </table>
@@ -1032,27 +1086,27 @@ const ActionTab = (props) => {
                               <tr>
                                 <td>1</td>
                                 <td>Invoice Number</td>
-                                <td>{`${institution?.payment_information?.invoice_number}`}</td>
+                                <td className="text-capitalize">{`${institution?.payment_information?.invoice_number}`}</td>
                               </tr>
                               <tr>
                                 <td>2</td>
                                 <td>Payment Reference</td>
-                                <td>{`${institution?.payment_information?.reference}`}</td>
+                                <td className="text-capitalize">{`${institution?.payment_information?.reference}`}</td>
                               </tr>
                               <tr>
                                 <td>3</td>
                                 <td>Date of Payment</td>
-                                <td>{`${institution?.payment_information?.date_paid}`}</td>
+                                <td className="text-capitalize">{`${institution?.payment_information?.date_paid}`}</td>
                               </tr>
                               <tr>
                                 <td>4</td>
                                 <td>Amount Paid</td>
-                                <td>{`${institution?.payment_details?.total}`}</td>
+                                <td className="text-capitalize">{`${institution?.payment_details?.total}`}</td>
                               </tr>
                               <tr>
                                 <td>5</td>
                                 <td>Concession Amount</td>
-                                <td>{`${institution?.payment_details?.concession_amount}`}</td>
+                                <td className="text-capitalize">{`${institution?.payment_details?.concession_amount}`}</td>
                               </tr>
                             </tbody>
                             </table>
@@ -1075,12 +1129,12 @@ const ActionTab = (props) => {
                   <tr>
                     <td>1</td>
                     <td>Status</td>
-                    <td>{`${institution?.mbg_review[institution?.mbg_review.length - 1]?.status ? institution?.mbg_review[institution?.mbg_review.length - 1]?.status : ""}`}</td>
+                    <td className="text-capitalize">{`${institution?.mbg_review[institution?.mbg_review.length - 1]?.status ? institution?.mbg_review[institution?.mbg_review.length - 1]?.status : ""}`}</td>
                   </tr>
                   <tr>
                     <td>2</td>
                     <td>Reason</td>
-                    <td>{`${institution?.mbg_review[institution?.mbg_review.length - 1]?.comment ? institution?.mbg_review[institution?.mbg_review.length - 1]?.comment : ""}`}</td>
+                    <td className="text-capitalize">{`${institution?.mbg_review[institution?.mbg_review.length - 1]?.comment ? institution?.mbg_review[institution?.mbg_review.length - 1]?.comment : ""}`}</td>
                   </tr>
 
                 </tbody>
@@ -1104,12 +1158,12 @@ const ActionTab = (props) => {
                   <tr>
                     <td>1</td>
                     <td>Status</td>
-                    <td>{`${institution?.fsd_review[institution?.fsd_review.length - 1]?.status ? institution?.fsd_review[institution?.fsd_review.length - 1]?.status : ""}`}</td>
+                    <td className="text-capitalize">{`${institution?.fsd_review[institution?.fsd_review.length - 1]?.status ? institution?.fsd_review[institution?.fsd_review.length - 1]?.status : ""}`}</td>
                   </tr>
                   <tr>
                     <td>2</td>
                     <td>Reason</td>
-                    <td>{`${institution?.fsd_review[institution?.fsd_review.length - 1]?.comment ? institution?.fsd_review[institution?.fsd_review.length - 1]?.comment : ""}`}</td>
+                    <td className="text-capitalize">{`${institution?.fsd_review[institution?.fsd_review.length - 1]?.comment ? institution?.fsd_review[institution?.fsd_review.length - 1]?.comment : ""}`}</td>
                   </tr>
 
                 </tbody>
@@ -1133,12 +1187,12 @@ const ActionTab = (props) => {
                   <tr>
                     <td>1</td>
                     <td>Status</td>
-                    <td>{`${institution?.meg_review[institution?.meg_review.length - 1]?.status ? institution?.meg_review[institution?.meg_review.length - 1]?.status : ""}`}</td>
+                    <td className="text-capitalize">{`${institution?.meg_review[institution?.meg_review.length - 1]?.status ? institution?.meg_review[institution?.meg_review.length - 1]?.status : ""}`}</td>
                   </tr>
                   <tr>
                     <td>2</td>
                     <td>Reason</td>
-                    <td>{`${institution?.meg_review[institution?.meg_review.length - 1]?.comment ? institution?.meg_review[institution?.meg_review.length - 1]?.comment : ""}`}</td>
+                    <td className="text-capitalize">{`${institution?.meg_review[institution?.meg_review.length - 1]?.comment ? institution?.meg_review[institution?.meg_review.length - 1]?.comment : ""}`}</td>
                   </tr>
 
                 </tbody>
@@ -1162,17 +1216,35 @@ const ActionTab = (props) => {
                         {/* {(aUser.is_admin_meg() && institution?.internal?.is_applicant_executed_membership_agreement && !institution?.internal?.is_meg_executed_membership_agreement ) && <> */}
                           <div className="gy-0">
                                 <h5>Upload Signed Agreement</h5>
-                                <a className="btn btn-primary mx-2"  href={institution?.internal?.applicant_executed_membership_agreement} target="_blank">Download Signed Agreement</a>
-                                <Button className="btn btn-success mx-2"  onClick={toggleSignedAgreement}>Upload MEG Signed Agreement</Button>
+                                <a className="btn btn-primary mx-2"  href={institution?.internal?.membership_agreement} target="_blank">View Executed Agreement</a>
+                                <Button className="btn btn-success mx-2"  onClick={toggleSignedAgreement}>Upload Executed Agreement</Button>
                           </div>
                         </>
                         
                       }
-                        {(aUser.is_admin_meg() && institution?.internal?.is_applicant_executed_membership_agreement == 1 && institution?.internal?.is_meg_executed_membership_agreement == 1 ) && 
+                        {/* {(aUser.is_admin_meg() && institution?.internal?.is_applicant_executed_membership_agreement == 1 && institution?.internal?.is_meg_executed_membership_agreement == 1 ) && 
                         <div className="gy-0">
                                 <h5>Final Review</h5>
                                 <a className="btn btn-primary mx-2"   onClick={(e) => navigate(`${process.env.PUBLIC_URL}/${institution?.internal?.institution_id}/list-ars`)} target="_blank">View Authorised Representatives</a>
                                 {!institution?.completed && <Button className="btn btn-success mx-2"   onClick={() => askAction('completeApplication')}>Complete Application</Button>}
+                          </div>
+                      } */}
+                        {(aUser.is_admin_meg() && institution?.internal?.meg2_review_stage == 1 && institution?.internal?.meg_review_stage == 1  && institution?.internal?.is_applicant_executed_membership_agreement == 0 ) && 
+                          <div className="gy-0">
+                                <h5>Membership Agreement</h5>
+                                <a className="btn btn-primary mx-2"  href={institution?.internal?.membership_agreement} target="_blank">Preview Agreement</a>
+                                <Button className="btn btn-success mx-2"  onClick={() => askAction('sendAgreement')}> Send Agreement</Button>
+                          </div>
+                      }
+                        {(aUser.is_admin_meg2() 
+                        && institution.internal.meg2_review_stage  == 1
+                        && institution.internal.meg_review_stage == 1 
+                        && institution?.internal?.is_applicant_executed_membership_agreement == 1 
+                        && institution?.internal?.is_meg_executed_membership_agreement == 1 ) && 
+                          <div className="gy-0">
+                                <h5>Send E-Success Letter</h5>
+                                <a className="btn btn-primary mx-2"  href={institution?.e_success_letter} target="_blank">Preview E-Success Letter</a>
+                                <Button className="btn btn-success mx-2"  onClick={() => askAction('sendESuccessLetter')}> Send E-Success Letter</Button>
                           </div>
                       }
                     </Card>

@@ -412,9 +412,13 @@ const Homepage = () => {
             <BlockHead>
               <BlockHeadContent>
                 <BlockTitle tag="h4">Authorised Representatives</BlockTitle>
-                <Button color="primary">
-                  <span onClick={() => navigate(`${process.env.PUBLIC_URL}/auth-representatives`) }>Update Authorised Representative</span>
-                </Button>
+                {application_list && <>
+                  {application_list[0]?.internal?.is_applicant_executed_membership_agreement == '1' && <>
+                    <Button color="primary">
+                      <span onClick={() => navigate(`${process.env.PUBLIC_URL}/auth-representatives`)}>Update Authorised Representative </span>
+                    </Button>
+                  </>}      
+                </>}
               </BlockHeadContent>
             </BlockHead>
             

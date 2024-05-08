@@ -277,6 +277,8 @@ class MembershipApplicationController extends Controller
                 'application_field_upload_id' => $upload_action->id,
             ]);
 
+        $application->step = $applicationField->page;
+        $application->save();
         return successResponse('Fields Fetched Successfully', auth()->user()->institution->application);
     }
 
@@ -441,7 +443,6 @@ class MembershipApplicationController extends Controller
 
         $institution->name = $companyName;
         $institution->save();
-
         return true;
     }
 

@@ -128,7 +128,11 @@ class GenerateSuccessLetterJob implements ShouldQueue
         $application->application_type_status = Application::typeStatus['ASC'];
         $application->save();
 
-        $toEmails = [$applicant->email, $companyEmail, $primaryContactEmail];
+        $toEmails = [$applicant->email, $companyEmail];
+
+        if ($primaryContactEmail) {
+            array_push($toEmails, $primaryContactEmail);
+        }
 
         Utility::notifyApplicantFinal($application->id, $emailData, $toEmails, $ccEmails, $attachment);
 

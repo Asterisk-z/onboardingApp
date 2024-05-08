@@ -127,6 +127,10 @@ const navData = [{
             text: "Members Guide",
             link: "/admin-members-guide",
           },
+          {
+            text: "DOH ",
+            link: "/admin-doh",
+          },
         ],
       },
     ],

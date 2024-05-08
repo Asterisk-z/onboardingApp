@@ -149,7 +149,7 @@ class CategoryPositions extends Seeder
             }
 
         }
-        $membership_category = 'Associate Members (Brokers)';
+        $membership_category = 'Associate Member (Brokers)';
 
         $rows = [
             ["name" => "Managing Director/CEO", "is_compulsory" => true, "email" => "AMBCEOS@fmdqgroup.com"],
@@ -189,7 +189,7 @@ class CategoryPositions extends Seeder
             }
 
         }
-        $membership_category = 'Associate Members (Inter-Dealer Broker)';
+        $membership_category = 'Associate Member (Inter-Dealer Broker)';
 
         $rows = [
             ["name" => "Managing Director/CEO", "is_compulsory" => true, "email" => "AMICEOS@fmdqgroup.com"],
@@ -229,7 +229,7 @@ class CategoryPositions extends Seeder
             }
 
         }
-        $membership_category = 'Associate Members (Clients)';
+        $membership_category = 'Associate Member (Clients)';
 
         $rows = [
             ["name" => "Managing Director/CEO", "is_compulsory" => true, "email" => "AMCCEOS@fmdqgroup.com"],
@@ -393,7 +393,7 @@ class CategoryPositions extends Seeder
             }
 
         }
-        $membership_category = 'Affiliate Member (Standard) - (Individual)';
+        $membership_category = 'Affiliate Member - Standard (Individual)';
 
         $rows = [
             ["name" => "Managing Director/CEO", "is_compulsory" => true],
@@ -434,7 +434,7 @@ class CategoryPositions extends Seeder
 
         }
 
-        $membership_category = 'Affiliate Member (Standard) - (Corporate)';
+        $membership_category = 'Affiliate Member - Standard (Corporate)';
 
         $rows = [
             ["name" => "Managing Director/CEO", "is_compulsory" => true],
@@ -597,7 +597,7 @@ class CategoryPositions extends Seeder
             }
 
         }
-        $membership_category = 'Affiliate Exchange (Corporates)';
+        $membership_category = 'Foreign Exchange (Corporates)';
 
         $rows = [
             ["name" => "Managing Director/CEO", "is_compulsory" => true],

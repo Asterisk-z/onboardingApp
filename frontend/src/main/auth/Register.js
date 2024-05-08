@@ -245,7 +245,7 @@ const Register = ({ drawer }) => {
                     </label>
                   </div>
                   <div className="form-control-wrap">
-                    <input type="number" autoComplete="off" bssize="lg" {...register('phone', { required: true, minLength: 11, valueAsNumber: true })} onKeyUp={(value) => parseInt(value.target.value) ? value.target.value = parseInt(value.target.value) : value.target.value = parseInt(value.target.value) } className="form-control-lg form-control" placeholder="Enter your phone number" />
+                    <input type="number" autoComplete="off" bssize="lg" {...register('phone', { required: true, minLength: 11, valueAsNumber: true })} className="form-control-lg form-control" placeholder="Enter your phone number" />
                     {errors.phone && <p className="invalid">{`This field is required`}</p>}
                   </div>
                 </div>

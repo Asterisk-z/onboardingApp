@@ -7,7 +7,6 @@ use App\Helpers\MailContents;
 use App\Helpers\Utility;
 use App\Http\Resources\ApplicationResource;
 use App\Jobs\FinalApplicationProcessingJob;
-use App\Jobs\GenerateSuccessLetterJob;
 use App\Models\Application;
 use App\Models\DohSignature;
 use App\Models\Role;
@@ -84,6 +83,7 @@ class MegApplicationController extends Controller
 
             $application->reupload = true;
             $application->show_form = 1;
+            $application->step = 1;
             $application->save();
 
             return successResponse("Application updated successfully");
@@ -114,7 +114,7 @@ class MegApplicationController extends Controller
     public function sendMembershipAgreement(Request $request)
     {
         $request->validate([
-            'application_id' => 'required|exists:applications,id'
+            'application_id' => 'required|exists:applications,id',
         ]);
 
         $user = $request->user();
@@ -123,23 +123,23 @@ class MegApplicationController extends Controller
 
         $errorMsg = "Unable to complete your request at this point.";
 
-        if($application->office_to_perform_next_action != Application::office['MEG']){
+        if ($application->office_to_perform_next_action != Application::office['MEG']) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
-        if($application->currentStatus() != Application::statuses['M2AMR']){
+        if ($application->currentStatus() != Application::statuses['M2AMR']) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
         $applicant = User::find($application->submitted_by);
-        $name = $applicant->first_name.' '.$applicant->last_name;
+        $name = $applicant->first_name . ' ' . $applicant->last_name;
 
         $data = Application::where('applications.id', $request->application_id);
         $data = Utility::applicationDetails($data);
         $data = $data->first();
-        
+
         $application = $application->refresh();
-        
+
         // CC email addresses
         $Meg = Utility::getUsersEmailByCategory(Role::MEG);
 
@@ -147,23 +147,23 @@ class MegApplicationController extends Controller
         $emailData = [
             'name' => $name,
             'subject' => MailContents::memberAgreementSubject(),
-            'content' => MailContents::memberAgreementMail()
+            'content' => MailContents::memberAgreementMail(),
         ];
-        
+
         $attachment = [
             [
                 "name" => "{$membershipCategory->name} Membership Agreement",
-                "saved_path" => $membershipCategory->membership_agreement 
-            ]
+                "saved_path" => $membershipCategory->membership_agreement,
+            ],
         ];
 
         Utility::notifyApplicantAndContact($request->application_id, $applicant, $emailData, $Meg, $attachment);
-    
+
         Utility::applicationStatusHelper($application, Application::statuses['MSMA'], Application::office['MEG'], Application::office['AP']);
-        
+
         logAction($user->email, 'MEG Sent Agreement', "MEG Send membership agreement to applicant", $request->ip());
 
-        return successResponse("Membership agrrement has been sent successfully.");        
+        return successResponse("Membership agreement has been sent successfully.");
     }
 
     public function uploadMemberAgreement(Request $request)
@@ -192,26 +192,26 @@ class MegApplicationController extends Controller
         $application->meg_executed_membership_agreement = $request->hasFile('executed_member_agreement') ? $request->file('executed_member_agreement')->storePublicly('meg_executed_member_agreement', 'public') : null;
         $application->is_meg_executed_membership_agreement = 1;
         $application->save();
-
+        // logger('test1');
         logAction($user->email, 'Membership agreement uploaded by MEG', "Executed membership agreement uploaded by MEG.", $request->ip());
         Utility::applicationStatusHelper($application, Application::statuses['MEM'], Application::office['MEG'], Application::office['MEG2']);
 
         (new ESuccessLetter)->generate($application);
-
+        // logger('test2');
         //Notify MEG2 THAT E-SUCCESS IS AVALIABLLE
         $MEGs = Utility::getUsersEmailByCategory(Role::MEG);
         $MEG2s = Utility::getUsersByCategory(Role::MEG2);
         $CCs = $MEGs;
-
+        // logger('test3');
         Notification::send($MEG2s, new InfoNotification(MailContents::meg2EsuccessMail($data->company_name), MailContents::meg2EsuccessSubject(), $CCs));
-
+        logger('test4');
         return successResponse("Agreement uploaded successfully");
 
     }
 
     public function completeCompanyApplication(Request $request)
     {
-        return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, "API has been decommissioned"); 
+        return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, "API has been decommissioned");
         $request->validate([
             'application_id' => 'required|exists:applications,id',
         ]);
@@ -239,17 +239,19 @@ class MegApplicationController extends Controller
         return successResponse("You have successfully mark this application as completed");
     }
 
-    public function getSignature(Request $request) {
+    public function getSignature(Request $request)
+    {
         $data = DohSignature::latest()->first();
         return successResponse("Here you go", $data);
     }
 
-    public function createSignature(Request $request) {
+    public function createSignature(Request $request)
+    {
         $request->validate([
             'name' => 'required|string',
             'grade' => 'required|string',
             'division' => 'required|string',
-            'signature' => 'required|mimes:jpeg,png,jpg|max:2048'
+            'signature' => 'required|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $user = $request->user();

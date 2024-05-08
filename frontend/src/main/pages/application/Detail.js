@@ -323,7 +323,7 @@ const Form = () => {
                           <a className="btn btn-primary" href={user_application_item.file_path} target="_blank">View File </a>
                         </> : <>
                             {/* {user_application_item.uploaded_field} */}
-                            {checkValue(user_application_item)}
+                            <span className="text-capitalize">{checkValue(user_application_item)}</span>
                             {/* {isJSON(user_application_item.uploaded_field) ? "Object" : user_application_item.uploaded_field} */}
                         </>}
                       </td>

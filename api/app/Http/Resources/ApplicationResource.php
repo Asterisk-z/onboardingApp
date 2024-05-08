@@ -181,9 +181,9 @@ class ApplicationResource extends JsonResource
 
             "ars" => UserResource::collection(User::where('institution_id', $this->institution_id)->get()),
 
-            "executed_membership_agreement" => ($this->completed_at && $this->meg_executed_membership_agreement) ? config('app.url') . '/stroage/app/public/' . $this->meg_executed_membership_agreement : null,
+            "executed_membership_agreement" => ($this->meg_executed_membership_agreement) ? config('app.url') . '/storage/app/public/' . $this->meg_executed_membership_agreement : null,
 
-            "e_success_letter" => ($this->completed_at && $this->e_success_letter) ? config('app.url') . '/storage/app/public/' . $this->e_success_letter : null,
+            "e_success_letter" => ($this->e_success_letter) ? config('app.url') . '/storage/app/public/' . $this->e_success_letter : null,
 
             "completed" => $this->completed_at ? true : false,
 

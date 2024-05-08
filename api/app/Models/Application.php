@@ -87,6 +87,7 @@ class Application extends Model
             'membership_agreement' => $this->membership_agreement,
             'completed_at' => $this->completed_at,
             'disclosure_stage' => $this->disclosure_stage,
+            'step' => $this->step,
         ];
     }
 
