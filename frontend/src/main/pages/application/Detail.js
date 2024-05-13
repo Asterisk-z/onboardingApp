@@ -295,7 +295,7 @@ const Form = () => {
 
               </>}
 
-              {($user_application?.application?.meg2_review_stage == 1 && $user_application?.application?.is_applicant_executed_membership_agreement == 0) && <>
+              {($user_application?.application?.meg2_review_stage == 1 && $user_application?.application?.membership_agreement && $user_application?.application?.is_applicant_executed_membership_agreement == 0) && <>
 
                 <a className="btn btn-primary mx-1" href={$user_application?.application?.membership_agreement} target="_blank"> Download Agreement </a>
                 <a className="btn btn-primary mx-1" href="#" onClick={toggleUploadAgreeView} >Upload Signed Agreement </a>
@@ -436,6 +436,7 @@ const Form = () => {
 
     }
 
+  console.log($application_details)
 
   return <>
     <Head title="Form" />
@@ -449,6 +450,106 @@ const Form = () => {
                         <div style={styles.color}>
                           {$application_details && <h3>{`${$application_details.membership_category.name} Application Detail`} </h3>}
                           {/* <p>Pending Approval</p> */}
+
+                {$application_details?.completed_at && <>
+                  <table className="table table-striped table-bordered table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Name</th>
+                        <th scope="col" className="width-30">Value</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {/* {$user_application} */}
+                      {/* {$user_application?.application_requirements && $user_application?.application_requirements?.map((user_application_item, index) => (
+                        <tr key={index}>
+                          <th scope="row">{++index}</th>
+                          <td className="text-capitalize">{user_application_item.field.description}</td>
+                          <td>
+                            {user_application_item.uploaded_file != null ? <>
+                              <a className="btn btn-primary" href={user_application_item.file_path} target="_blank">View File </a>
+                            </> : <>
+                              {user_application_item.uploaded_field}
+                            </>}
+                          </td>
+                        </tr>
+
+                      ))} */}
+                      <tr>
+                        <th scope="row"></th>
+                        <td className="text-capitalize">Membership category</td>
+                        <td>
+                          {`${$application_details?.membership_category?.name}`}
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <th scope="row"></th>
+                        <td className="text-capitalize">Identification Number</td>
+                        <td>
+                          {`${$application_details?.reg_id}`}
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <th scope="row"></th>
+                        <td className="text-capitalize">Sign-up Email Address</td>
+                        <td>
+                          {`${$application_details?.applicant_email}`}
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <th scope="row"></th>
+                        <td className="text-capitalize">Sign-on Date</td>
+                        <td>
+                          {`${$application_details?.created_at ? moment($application_details?.created_at).format('YYYY-MM-DD') : ''}`}
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <th scope="row"></th>
+                        <td className="text-capitalize"> Status of application</td>
+                        <td>
+                          {`${$application_details?.status_description}`}
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <th scope="row"></th>
+                        <td className="text-capitalize"> Membership Agreement</td>
+                        <td>
+                          {$application_details.executed_membership_agreement != null && <>
+                            <a className="btn btn-primary" href={$application_details.executed_membership_agreement} target="_blank">Download </a>
+                          </>}
+                        </td>
+                      </tr>
+                      <tr>
+                        <th scope="row"></th>
+                        <td className="text-capitalize"> E-Success Letter</td>
+                        <td>
+                          {$application_details.e_success_letter != null && <>
+                            <a className="btn btn-primary" href={$application_details.e_success_letter} target="_blank">Download </a>
+                          </>}
+                        </td>
+                      </tr>
+                      {/* <tr>
+                        <th scope="row"></th>
+                        <td className="text-capitalize">Membership category</td>
+                        <td>
+                          {$application_details.uploaded_file != null ? <>
+                            <a className="btn btn-primary" href={user_application_item.file_path} target="_blank">View File </a>
+                          </> : <>
+                            {user_application_item.uploaded_field}
+                          </>}
+                        </td>
+                      </tr> */}
+                    </tbody>
+                  </table>          
+                </>}
+
+
                         </div>
                         <div className="nk-wizard nk-wizard-simple is-alter wizard clearfix">
                           <Steps config={config}>

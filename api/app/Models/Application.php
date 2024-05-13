@@ -70,7 +70,7 @@ class Application extends Model
         'ASN' => 'CANCELED',
     ];
 
-    protected $appends = ['status_description'];
+    protected $appends = ['status_description', 'reg_id'];
 
     public function toArray()
     {
@@ -85,9 +85,15 @@ class Application extends Model
             'meg2_review_stage' => $this->meg2_review_stage,
             'is_applicant_executed_membership_agreement' => $this->is_applicant_executed_membership_agreement,
             'membership_agreement' => $this->membership_agreement,
+            "executed_membership_agreement" => ($this->meg_executed_membership_agreement) ? config('app.url') . '/storage/app/public/' . $this->meg_executed_membership_agreement : null,
+            'e_success_letter' => ($this->e_success_letter) ? config('app.url') . '/storage/app/public/' . $this->e_success_letter : null,
             'completed_at' => $this->completed_at,
             'disclosure_stage' => $this->disclosure_stage,
             'step' => $this->step,
+            'all_ar_uploaded' => $this->all_ar_uploaded,
+            'created_at' => $this->created_at,
+            'reg_id' => $this->reg_id,
+            'applicant_email' => $this->applicant->email,
         ];
     }
 
@@ -145,6 +151,13 @@ class Application extends Model
         $status = Status::find($this->status);
 
         return $status->status;
+    }
+
+    public function getRegIdAttribute()
+    {
+
+        return 'FMDQX/APR-' . str_pad($this->id, 4, "0", STR_PAD_LEFT) . date("Ymd", strtotime($this->created_at));
+
     }
 
     public function createUuid()

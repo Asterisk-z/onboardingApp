@@ -38,8 +38,9 @@ const Form = () => {
   
     const $application_details = application_details ? JSON.parse(application_details) : null;
     
-    if ($application_details && !$application_details?.disclosure_stage && !showDisclosureModal) {
-      
+    useEffect(() => {
+      if ($application_details && !$application_details?.disclosure_stage && !showDisclosureModal) {
+
         Swal.fire({
           title: "Declaration of prior disclosure?",
           text: "You won't be able to revert this!",
@@ -52,7 +53,7 @@ const Form = () => {
           if (result.isConfirmed) {
 
             Swal.close()
-            
+
             navigate(`${process.env.PUBLIC_URL}/application_disclosure/${$application_details.uuid}`)
 
           } else {
@@ -65,7 +66,9 @@ const Form = () => {
           }
         });
 
-    } 
+      } 
+    }, [$application_details]);
+
 
 
     const styles = {
@@ -182,7 +185,8 @@ const Form = () => {
                             <div className="form-control-wrap">
 
                               <input type="hidden" {...register(field.name, { required: 'This field is required' })} value={field?.field_value?.uploaded_field} />
-                              <DatePicker selected={field?.field_value?.uploaded_field ? new Date(field?.field_value?.uploaded_field) : ""} id={field.name} onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": moment(e).format('YYYY-MM-DD'), "field_type": field.type })} className="form-control date-picker" />
+                              <DatePicker selected={field?.field_value?.uploaded_field ? new Date(field?.field_value?.uploaded_field) : ""} id={field.name} onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": e, "field_type": field.type })} className="form-control date-picker" />
+                              {/* <DatePicker selected={field?.field_value?.uploaded_field ? new Date(field?.field_value?.uploaded_field) : ""} id={field.name} onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": moment(e).format('YYYY-MM-DD'), "field_type": field.type })} className="form-control date-picker" /> */}
                               {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
                             </div>
                           </div>
@@ -367,7 +371,8 @@ const Form = () => {
                         <div className="form-group">
                           <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
                           <div className="form-control-wrap">
-                            <DatePicker selected={field?.field_value?.uploaded_field ? new Date(field?.field_value?.uploaded_field) : new Date()}  {...register(field.name, { required: 'This field is required' })} id={field.name} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": moment(e).format('YYYY-MM-DD'), "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field} className="form-control date-picker" />
+                            <DatePicker selected={field?.field_value?.uploaded_field ? new Date(field?.field_value?.uploaded_field) : new Date()}  {...register(field.name, { required: 'This field is required' })} id={field.name} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e, "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field} className="form-control date-picker" />
+                            {/* <DatePicker selected={field?.field_value?.uploaded_field ? new Date(field?.field_value?.uploaded_field) : new Date()}  {...register(field.name, { required: 'This field is required' })} id={field.name} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": moment(e).format('YYYY-MM-DD'), "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field} className="form-control date-picker" /> */}
                             {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
                           </div>
                         </div>

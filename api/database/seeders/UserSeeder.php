@@ -46,5 +46,99 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('password'),
             ]);
         }
+
+        // $roles = ['imisioluwa.bonnie@fmdqgroup.com', 'samuel.oladeinde@fmdqgroup.com', 'olamide.ige@fmdqgroup.com', 'momohemi.williams@fmdqgroup.com', ' kenneth.ichenwo@fmdqgroup.com', 'qag@fmdqgroup.com'];
+        // $roleId = ['2', '3', '4', '7', '8', '10'];
+
+        // foreach ($roles as $index => $role) {
+
+        //     $email = $role;
+        //     $phone = '08166443' . $index;
+
+        //     if (User::where('email', $email)->orWhere('phone', $phone)->exists()) {
+        //         continue;
+        //     }
+
+        //     $user = User::create([
+        //         'first_name' => "Admin",
+        //         'last_name' => "Admin",
+        //         'nationality' => 'NG',
+        //         'email' => $email,
+        //         'phone' => $phone,
+        //         'password' => Hash::make('password'),
+        //         'approval_status' => 'approved',
+        //         'role_id' => $roleId[$index],
+        //         'institution_id' => null,
+        //         'position_id' => null,
+        //         'verified_at' => now(),
+        //     ]);
+
+        //     $user->passwords()->create([
+        //         'password' => Hash::make('password'),
+        //     ]);
+        // }
+
+        // $roles = ['ped@fmdqgroup.com'];
+        // $roleId = ['2'];
+
+        // foreach ($roles as $index => $role) {
+
+        //     $email = $role;
+        //     $phone = '0813434343' . $index;
+
+        //     if (User::where('email', $email)->orWhere('phone', $phone)->exists()) {
+        //         continue;
+        //     }
+
+        //     $user = User::create([
+        //         'first_name' => "Admin",
+        //         'last_name' => "Admin",
+        //         'nationality' => 'NG',
+        //         'email' => $email,
+        //         'phone' => $phone,
+        //         'password' => Hash::make('password'),
+        //         'approval_status' => 'approved',
+        //         'role_id' => $roleId[$index],
+        //         'institution_id' => null,
+        //         'position_id' => null,
+        //         'verified_at' => now(),
+        //     ]);
+
+        //     $user->passwords()->create([
+        //         'password' => Hash::make('password'),
+        //     ]);
+        // }
+
+        // $roles = ['olangdan12@gmail.com'];
+        // $roleId = ['2'];
+
+        // foreach ($roles as $index => $role) {
+
+        //     $email = $role;
+        //     $phone = '3453453434' . $index;
+
+        //     if (User::where('email', $email)->orWhere('phone', $phone)->exists()) {
+        //         continue;
+        //     }
+
+        //     $user = User::create([
+        //         'first_name' => "Admin",
+        //         'last_name' => "Admin",
+        //         'nationality' => 'NG',
+        //         'email' => $email,
+        //         'phone' => $phone,
+        //         'password' => Hash::make('password'),
+        //         'approval_status' => 'approved',
+        //         'role_id' => $roleId[$index],
+        //         'institution_id' => null,
+        //         'position_id' => null,
+        //         'verified_at' => now(),
+        //     ]);
+
+        //     $user->passwords()->create([
+        //         'password' => Hash::make('password'),
+        //     ]);
+        // }
+
     }
 }

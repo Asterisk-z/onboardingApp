@@ -82,7 +82,7 @@ class GenerateSuccessLetterJob implements ShouldQueue
 
         $attachment = [
             [
-                "name" => "{$companyName} Membership Agreement",
+                "name" => Utility::getFileName("{$companyName} Membership Agreement", $application->meg_executed_membership_agreement),
                 "saved_path" => config('app.url') . '/storage/' . $application->meg_executed_membership_agreement,
             ],
         ];
@@ -101,7 +101,7 @@ class GenerateSuccessLetterJob implements ShouldQueue
         // CONVERT INSTITUTION CATEGORY
         if ($application->application_type == Application::type['CON']) {
 
-            $old_application = Application::where('old_membership_category_id', $application->old_membership_category_id)
+            $old_application = Application::where('membership_category_id', $application->old_membership_category_id)
                 ->where('institution_id', $application->institution_id)->first();
             $old_application->application_type_status = Application::typeStatus['ASN'];
             $old_application->save();

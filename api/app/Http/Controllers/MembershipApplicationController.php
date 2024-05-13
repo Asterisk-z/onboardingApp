@@ -450,20 +450,73 @@ class MembershipApplicationController extends Controller
     {
         $request->validate([
             'status' => 'required',
+            'fields' => 'nullable|array',
+            // 'fields.*' => 'nullable|array',
         ]);
         $user = $request->user();
 
+        $fields = request('fields');
+
+        if ($fields) {
+            foreach ($fields as $field) {
+                $application = Application::find($field['application_id']);
+
+                    if ($application->status == Application::AWAITINGAPPROVAL) {
+                        return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, "Your application has already been submitted and it is currently under review.");
+                    }
+                if (ApplicationField::where('category', $field['category_id'])
+                    ->where('name', $field['field_name'])
+                    ->where('type', $field['field_type'])->exists() && $application) {
+
+                    $applicationField = ApplicationField::where('category', $field['category_id'])
+                        ->where('name', $field['field_name'])
+                        ->where('type', $field['field_type'])->first();
+
+                    $data = ['uploaded_field' => $field['field_value']];
+
+
+                    if ($field['field_type'] == 'file') {
+                        $data['uploaded_field'] = null;
+                        $data = ['uploaded_file' => $field['field_value']];
+                    }
+
+                    $upload_action = ApplicationFieldUpload::updateOrCreate(
+                        ['application_field_id' => $applicationField->id, 'application_id' => $application->id],
+                        $data
+                    );
+
+                    ApplicationFieldApplicationFieldUpload::updateOrCreate(
+                        [
+                            'application_id' => $application->id,
+                            'application_field_id' => $applicationField->id,
+                            'application_field_upload_id' => $upload_action->id,
+                        ],
+                        [
+                            'application_id' => $application->id,
+                            'application_field_id' => $applicationField->id,
+                            'application_field_upload_id' => $upload_action->id,
+                        ]);
+
+                }
+
+                logger('here1');
+            }
+
+        }
+        logger('here2');
         $application = Application::find($request->application_id);
 
         $errorMsg = "Unable to complete your request at this point.";
 
         if ($application->submitted_by != $user->id || $application->disclosure_stage) {
+            logger('here222');
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
         $application->disclosure_stage = 1;
         $application->disclosure_status = $request->status == 'accept' ? 1 : 0;
 
+        logger('here333');
         $application->save();
 
         return successResponse("Disclosure completed you can continue application");

@@ -278,3 +278,7 @@ span.asc.__rdt_custom_sort_icon__ {
     color: red !important;
 }
 
+        input.checkingBox {
+                width: 25px;
+                height: 25px;
+            }

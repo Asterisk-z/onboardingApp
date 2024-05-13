@@ -514,8 +514,9 @@ class Utility
                 'category_id' => $category->id,
                 'position_id' => $position->id,
             ])->first();
+            $group_mail = $mailgroup->groupMail ? $mailgroup->groupMail->email : '';
 
-            $body[] = [$category->name, $position->name, $mailgroup->groupMail->email, $firstname, $lastname, $fullname, $user->email];
+            $body[] = [$category->name, $position->name, $group_mail, $firstname, $lastname, $fullname, $user->email];
 
         }
 
@@ -551,5 +552,9 @@ class Utility
         }
 
         return $total;
+    }
+    public static function getFileName($name, $path)
+    {
+        return Str::of(Str::slug($name, '-'))->upper() . "." . pathinfo($path, PATHINFO_EXTENSION);
     }
 }

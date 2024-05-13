@@ -32,7 +32,7 @@ const Export = ({ data }) => {
             "Phone": item.phone,
             "Role": item.role,
             "Status": item.approval_status,
-            "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
+            "Date Created": moment(item?.createdAt).format('MMM. D, YYYY HH:mm')
         })
     });
 
@@ -193,7 +193,6 @@ const AuthRepTable = ({ data, pagination, actions, className, selectableRows, ex
         selector: (row) => { return (<><Badge color="success" className="text-uppercase">{`${row?.internal?.status_description}`}</Badge></>) },
         sortable: true,
         width: "auto",
-        wrap: true
     },
     {
         name: "Date Created",

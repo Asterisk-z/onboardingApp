@@ -86,36 +86,47 @@ const Form = () => {
         const dispatch = useDispatch();
 
 
+        const [table, setTable] = useState([]);
 
         const onInputChange = async (event, values) => {
 
-            event.target.className = "btn btn-success";
-            event.target.innerHTML = "Moved";
-            
+
             const postValues = new Object();
             postValues.field_name = values.field_name;
             postValues.field_value = values.field_value;
             postValues.field_type = values.field_type;
             postValues.application_id = $application_details?.id;
             postValues.category_id = $application_details?.membership_category?.id;
+            let list = table.filter((item) => item.field_name != postValues.field_name)
 
-            try {
 
-                const resp = await dispatch(retainField(postValues));
-
-                // if (resp.payload?.message == "success") {
-                //     console.log('getere')
-                //     setParentState(Math.random())
-                // } else {
-
-                // }
-
-            } catch (error) {
-
+            if (event.target.checked) {
+                setTable([...list, postValues])
+            } else {
+                setTable([...list])
             }
+
+
+
+            // console.log(table)
+            // try {
+
+            //     const resp = await dispatch(retainField(postValues));
+
+            //     // if (resp.payload?.message == "success") {
+            //     //     console.log('getere')
+            //     //     setParentState(Math.random())
+            //     // } else {
+
+            //     // }
+
+            // } catch (error) {
+
+            // }
         };
 
         const onSubmit = () => {
+
 
             Swal.fire({
                 title: "Are you sure?",
@@ -143,6 +154,7 @@ const Form = () => {
                 const postValues = new Object();
                 postValues.application_id = $application_details?.id;
                 postValues.status = 'accept';
+                postValues.fields = table;
                 const resp = dispatch(UpdateDisclosure(postValues));
 
                 // if (resp.payload?.message == "success") {
@@ -163,11 +175,41 @@ const Form = () => {
 
         // console.log(authUser.user_data.institution);
 
+        const inputRef = useRef([]);
+        // const handleClick = () => {
+        //     inputRef.current.focus();
+        // };
+        const checkAll = () => {
+            // setTable([])
+            let list = [];
+            inputRef.current?.forEach((item) => {
+                item.box.checked = true
+
+                const postValues = new Object();
+                postValues.field_name = item.values.field_name;
+                postValues.field_value = item.values.field_value;
+                postValues.field_type = item.values.field_type;
+                postValues.application_id = $application_details?.id;
+                postValues.category_id = $application_details?.membership_category?.id;
+
+                list.push(postValues)
+                setTable([...list, postValues])
+
+            })
+
+
+        };
+
         return (
 
                 <div>
 
 
+                {table.length >= 0 &&
+                    <div className="float-end">
+                        <button className="btn btn-primary" onClick={checkAll}>Check All</button>
+                    </div>
+                }
                 <table className="table table-striped table-bordered table-hover">
                     <thead>
                         <tr>
@@ -191,26 +233,32 @@ const Form = () => {
                                     </>}
                                 </td>
                                 <td>
-                                    <Button className="btn btn-secondary"
-                                        title="By clicking this button, you confirm acceptance of the existing document" 
-                                        onClick={(e) => onInputChange(event, {
+                                    <input type="checkbox" onChange={(e) => onInputChange(event, {
+                                        'field_name': initial_application_item?.field?.name,
+                                        'application_id': $application_details?.id,
+                                        "category_id": $application_details?.membership_category?.id,
+                                        "field_value": (initial_application_item?.uploaded_field ? initial_application_item?.uploaded_field : initial_application_item?.uploaded_file),
+                                        "field_type": initial_application_item?.field?.type
+                                    })} className="checkingBox" ref={(el) => inputRef.current[index] = {
+                                        'box': el, 'values': {
                                             'field_name': initial_application_item?.field?.name,
                                             'application_id': $application_details?.id,
                                             "category_id": $application_details?.membership_category?.id,
                                             "field_value": (initial_application_item?.uploaded_field ? initial_application_item?.uploaded_field : initial_application_item?.uploaded_file),
                                             "field_type": initial_application_item?.field?.type
-                                        })} >
-                                        Move</Button>
+                                        }, }}title="By clicking this button, you confirm acceptance of the existing document" />
                                 </td>
                             </tr>
 
                         ))}
                     </tbody>
                 </table>
+                        {table.length > 0 && 
+                            <div className="float-end">
+                                <button className="btn btn-primary" onClick={onSubmit}>Continue Application</button>
+                            </div>                        
+                        }
 
-                    <div>
-                        <button className="btn btn-primary" onClick={onSubmit}>Continue Application</button>
-                    </div>
                 
                 </div>
 
@@ -249,4 +297,5 @@ const Form = () => {
 };
 // type="submit"
 export default Form;
+
 

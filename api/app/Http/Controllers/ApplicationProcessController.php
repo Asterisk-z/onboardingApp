@@ -63,7 +63,7 @@ class ApplicationProcessController extends Controller
         $errorMsg = "Unable to complete your request at this point.";
 
         if (Application::where('membership_category_id', request('old_category'))->where('institution_id', auth()->user()->institution_id)->where('completed_at', null)->exists() ||
-            Application::where('membership_category_id', request('new_category'))->where('institution_id', auth()->user()->institution_id)->exists()) {
+            Application::where('membership_category_id', request('new_category'))->where('institution_id', auth()->user()->institution_id)->whereIn('application_type_status', [Application::typeStatus['ASP'], Application::typeStatus['ASC']])->exists()) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
         $institution = Institution::find(auth()->user()->institution_id);
@@ -106,7 +106,7 @@ class ApplicationProcessController extends Controller
 
         $errorMsg = "Unable to complete your request at this point.";
 
-        if (Application::where('membership_category_id', request('new_category'))->where('institution_id', auth()->user()->institution_id)->exists()) {
+        if (Application::where('membership_category_id', request('new_category'))->where('institution_id', auth()->user()->institution_id)->whereIn('application_type_status', [Application::typeStatus['ASP'], Application::typeStatus['ASC']])->exists()) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
         $institution = Institution::find(auth()->user()->institution_id);
