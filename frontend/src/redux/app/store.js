@@ -22,6 +22,7 @@ import competencyStore from "redux/stores/competency/competencyStore";
 import eventStore from "redux/stores/education/eventStore";
 import dashboardStore from "redux/stores/dashboard/dashboardStore";
 import applicationProcessStore from "redux/stores/membership/applicationProcessStore"
+import arCreationStore from "redux/stores/authorize/arCreation"
 
 const store = configureStore({
   reducer: {
@@ -48,6 +49,7 @@ const store = configureStore({
     dashboard: dashboardStore,
     educationEvent: eventStore,
     applicationProcess: applicationProcessStore,
+    arCreation: arCreationStore,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -76,13 +76,27 @@ const navData = [{
         text: "Authorised Representative",
         active: false,
         subMenu: [{
-            text: "All ARs",
-            link: "/admin-list-ar",
-          },
-          {
-            text: "Transfer AR",
-            link: "/admin-transfer-ar",
-          },
+          text: "All ARs",
+          link: "/admin-list-ar",
+        },
+        {
+          text: "Transfer AR",
+          link: "/admin-transfer-ar",
+        },
+        ],
+      },
+      {
+        icon: "tile-thumb-fill",
+        text: "Report",
+        active: false,
+        subMenu: [{
+          text: "Membership Application",
+          link: "/admin-application-report",
+        },
+        // {
+        //   text: "Transfer AR",
+        //   link: "/admin-transfer-ar",
+        // },
         ],
       },
       {
@@ -247,6 +261,11 @@ const navData = [{
         icon: "tile-thumb-fill",
         text: "Education And Learning",
         link: "/education-and-learning",
+      },
+      {
+        icon: "tile-thumb-fill",
+        text: "AR Creation Request",
+        link: "/ar-creation-request",
       },
       // {
       //   icon: "tile-thumb-fill",

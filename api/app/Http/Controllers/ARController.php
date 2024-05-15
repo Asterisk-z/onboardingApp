@@ -699,6 +699,11 @@ class ARController extends Controller
         return successResponse('Successful', ARDeactivationRequestResource::make($record));
     }
 
+    public function getArCreationRequest(Request $request)
+    {
+        return successResponse("Here you go", ArCreationRequest::where('submitted_by', auth()->user()->id)->get());
+    }
+
     public function arCreationRequest(Request $request)
     {
         $request->validate([
@@ -718,7 +723,10 @@ class ARController extends Controller
             'submitted_by' => $user->id,
         ]);
 
-        foreach ($request->ars as $ar) {
+        $ars = $request->ars;
+
+        foreach ($ars as $key => $ar) {
+
             $data[] = [
                 'ar_id' => $ar,
                 'ar_creation_request_id' => $creationRequest->id,
@@ -734,7 +742,7 @@ class ARController extends Controller
         $MSGs = Utility::getUsersEmailByCategory(Role::MSG);
         $CCs = array_merge($MSGs, $MEGs);
         Notification::send($MBGs, new InfoNotification(MailContents::profileArSystemMail("{$user->first_name} {$user->last_name} $user->middle_name", $system->name), MailContents::profileArSystemSubject($system->name), $CCs));
-        logAction($user->email, 'AR created requested', "A meber requested that ARs be added on a system", $request->ip());
+        logAction($user->email, 'AR created requested', "A member requested that ARs be added on a system", $request->ip());
 
         return successResponse('Request sent successfully');
     }

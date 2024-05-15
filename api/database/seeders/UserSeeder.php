@@ -142,3 +142,5 @@ class UserSeeder extends Seeder
 
     }
 }
+
+// https://adgtest.fmdqgroup.com/newmrois/api/assets/membership_agreement/dmb.pdf

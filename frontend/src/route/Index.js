@@ -33,13 +33,15 @@ import AdminTransferAR from "main/pages/Admin/AdminTransferAR"
 import AdminCategories from "main/pages/Admin/AdminCategories" 
 import AdminComplaintType from "main/pages/Admin/AdminComplaintType" 
 import AdminPositions from "main/pages/Admin/AdminPositions" 
-import AdminComplaint from "main/pages/Admin/AdminComplaint" 
+import AdminCreationRequest from "main/pages/Admin/AdminCreationRequest"
+import AdminComplaint from "main/pages/Admin/AdminComplaint"
 import AdminRegulators from "main/pages/Admin/AdminRegulators"
 import AdminSanctions from "main/pages/Admin/AdminSanctions"
 import AdminFeesFramework from "main/pages/Admin/AdminFeesFramework"
 import AdminDoh from "main/pages/Admin/AdminDoh"
 
-import Complaint from "main/pages/Complaint" 
+import Complaint from "main/pages/Complaint"
+import ARCreationRequest from "main/pages/ARCreationRequest"
 import AuditLog from "main/pages/AuditLog" 
 import AuthRepresentative from "main/pages/AuthRepresentative" 
 import ListTransferAuthRepresentative from "main/pages/ListTransferAuthRepresentative" 
@@ -74,6 +76,7 @@ import AdminMembersGuide from "main/pages/Admin/AdminMembersGuide"
 import AdminAddEvents from "main/pages/Admin/AdminAddEvents"
 import AdminEvents from "main/pages/Admin/AdminEvents"
 import AdminEventRegistrations from "main/pages/Admin/AdminEventRegistrations"
+import AdminApplicationReport from "main/pages/Admin/AdminApplicationReport"
 import AdminApplications from "main/pages/Admin/AdminApplications"
 import AdminAllApplications from "main/pages/Admin/AdminAllApplications"
 import AdminEditEvents from "main/pages/Admin/AdminEditEvents"
@@ -161,6 +164,7 @@ const Router = () => {
           
           <Route path="dashboard" element={<UserHomepage />}></Route>
           <Route path="complaint" element={<Complaint />}></Route>
+          <Route path="ar-creation-request" element={<ARCreationRequest />}></Route>
           <Route path="audit-log" element={<AuditLog />}></Route>
           <Route path="auth-representatives-pending" element={<PendingAuthRepresentative />}></Route>
           <Route path="auth-representatives-pending-update" element={<PendingUpdateAuthRepresentative />}></Route>
@@ -223,8 +227,10 @@ const Router = () => {
           <Route path="admin-edit-event/:event_id" element={<AdminEditEvents/>}></Route>
           <Route path="admin-events" element={<AdminEvents/>}></Route>
           <Route path="admin-event-registration/:event_id" element={<AdminEventRegistrations/>}></Route>
+          <Route path="admin-application-report" element={<AdminApplicationReport/>}></Route>
           <Route path="admin-applications" element={<AdminApplications/>}></Route>
           <Route path="admin-all-applications" element={<AdminAllApplications/>}></Route>
+          <Route path="admin-creation-request" element={<AdminCreationRequest/>}></Route>
           <Route path="wizard" element={<WizardTest />}></Route>
         
         </Route>

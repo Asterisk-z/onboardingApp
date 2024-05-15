@@ -18,6 +18,11 @@ const adminApplication = [{
         text: "Applications",
         link: "/admin-applications",
       },
+      {
+        icon: "dashboard-fill",
+        text: "AR Creation Request",
+        link: "/admin-creation-request",
+      },
     ],
   },
 ];

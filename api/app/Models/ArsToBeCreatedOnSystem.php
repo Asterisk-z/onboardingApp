@@ -10,4 +10,11 @@ class ArsToBeCreatedOnSystem extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
+
+    protected $with = ['ar'];
+
+    public function ar()
+    {
+        return $this->hasOne(User::class, 'id', 'ar_id');
+    }
 }

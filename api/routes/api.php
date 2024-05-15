@@ -224,10 +224,10 @@ Route::middleware('auth')->group(function () {
     });
 
     //MSG ROUTES
-    Route::middleware('authRole:' . Role::MBG)->group(function () {
+    Route::middleware('authRole:' . Role::MSG)->group(function () {
         Route::group(['prefix' => 'msg/ar-creation/request'], function () {
             Route::get('/', [MsgApplicationController::class, 'arCreationRequest']);
-            Route::get('/review', [MsgApplicationController::class, 'reviewArSystemCreationRequest']);
+            Route::post('/review', [MsgApplicationController::class, 'reviewArSystemCreationRequest']);
         });
     });
 
@@ -256,7 +256,7 @@ Route::middleware('auth')->group(function () {
 
         Route::group(['prefix' => 'mbg/ar-creation/request'], function () {
             Route::get('/', [MbgApplicationController::class, 'arCreationRequest']);
-            Route::get('/review', [MbgApplicationController::class, 'reviewArSystemCreationRequest']);
+            Route::post('/review', [MbgApplicationController::class, 'reviewArSystemCreationRequest']);
         });
     });
 
@@ -306,6 +306,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/change-status/{ARUser}', [ARController::class, 'changeStatus']);
             Route::post('/process-change-status/{record}', [ARController::class, 'processChangeStatus']);
 
+            Route::get('/creation/request', [ARController::class, 'getArCreationRequest']);
             Route::post('/creation/request', [ARController::class, 'arCreationRequest']);
         });
         //

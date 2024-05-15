@@ -6,6 +6,7 @@ import queryGenerator from "../../../utils/QueryGenerator";
 const initialState = {
                     list: null,
                     doh_list: null,
+                    systems: null,
                     error: "",
                     loading: false,
 };
@@ -54,6 +55,19 @@ export const postSignature = createAsyncThunk(
       return successHandler(data);
     } catch (error) {
       return errorHandler(error, true);
+    }
+  }
+);
+
+export const loadFmdqSystems = createAsyncThunk(
+  "settings/loadFmdqSystems",
+  async () => {
+
+    try {
+      const { data } = await axios.get(`general/fmdq-systems`);
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
     }
   }
 );
@@ -117,6 +131,22 @@ const settingStore = createSlice({
       state.error = action.payload.message;
     });
 
+    // ====== builders for loadFmdqSystems ======
+
+    builder.addCase(loadFmdqSystems.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(loadFmdqSystems.fulfilled, (state, action) => {
+      state.loading = false;
+      // state.list = action.payload?.data?.data?.countries;  
+      state.systems = JSON.stringify(action.payload?.data?.data);
+    });
+
+    builder.addCase(loadFmdqSystems.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
   },
 });
 
