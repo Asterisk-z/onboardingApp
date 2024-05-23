@@ -79,22 +79,22 @@ export const userCreateUserAR = createAsyncThunk(
 export const cancelMailNotication = createAsyncThunk(
   "arUsers/cancelMailNotication",
   async (values) => {
-  //   try {
-  //     const { data } = await axios({
-  //       method: "post",
-  //       headers: {
-  //         Accept: "application/json",
-  //         // "Content-Type": "application/json;charset=UTF-8",
-  //         "Content-Type": "multipart/form-data",
-  //       },
-  //       url: `ar/add`,
-  //       data: values,
-  //     });
-      return successHandler([], "Update Canceled");
-      // return successHandler(data, data.message);
-  //   } catch (error) {
-  //     return errorHandler(error, true);
-  //   }
+    //   try {
+    //     const { data } = await axios({
+    //       method: "post",
+    //       headers: {
+    //         Accept: "application/json",
+    //         // "Content-Type": "application/json;charset=UTF-8",
+    //         "Content-Type": "multipart/form-data",
+    //       },
+    //       url: `ar/add`,
+    //       data: values,
+    //     });
+    return successHandler([], "Update Canceled");
+    // return successHandler(data, data.message);
+    //   } catch (error) {
+    //     return errorHandler(error, true);
+    //   }
   }
 );
 
@@ -208,7 +208,7 @@ export const userTransferUserAR = createAsyncThunk(
         method: "post",
         headers: {
           Accept: "application/json",
-        //   "Content-Type": "application/json;charset=UTF-8",
+          //   "Content-Type": "application/json;charset=UTF-8",
           "Content-Type": "multipart/form-data",
         },
         url: `ar/transfer/${id}`,
@@ -245,7 +245,7 @@ export const megProcessTransferUserAR = createAsyncThunk(
 
 export const megProcessAddUserAR = createAsyncThunk(
   "arUsers/megProcessAddUserAR",
-    async (values) => {
+  async (values) => {
     const id = values.get('user_id')
     try {
       const { data } = await axios({
@@ -255,6 +255,28 @@ export const megProcessAddUserAR = createAsyncThunk(
           "Content-Type": "application/json;charset=UTF-8",
         },
         url: `meg/ar/process-add/${id}`,
+        data: values,
+      });
+      return successHandler(data, data.message);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
+
+export const megProcessMemberStatus = createAsyncThunk(
+  "arUsers/megProcessMemberStatus",
+  async (values) => {
+    const id = values.get('user_id')
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+        url: `meg/ar/process-member-status/${id}`,
         data: values,
       });
       return successHandler(data, data.message);
@@ -347,16 +369,16 @@ const arUsersStore = createSlice({
     });
 
     builder.addCase(userLoadUserARs.fulfilled, (state, action) => {
-        state.loading = false;
-        // state.list = action.payload?.data?.data?.categories;
-        state.list = JSON.stringify(action.payload?.data?.data);
+      state.loading = false;
+      // state.list = action.payload?.data?.data?.categories;
+      state.list = JSON.stringify(action.payload?.data?.data);
     });
 
     builder.addCase(userLoadUserARs.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });
-    
+
     // ====== builders for adminLoadUserARs ======
 
     builder.addCase(adminLoadUserARs.pending, (state) => {
@@ -364,9 +386,9 @@ const arUsersStore = createSlice({
     });
 
     builder.addCase(adminLoadUserARs.fulfilled, (state, action) => {
-        state.loading = false;
-        // state.list = action.payload?.data?.data?.categories;
-        state.list = JSON.stringify(action.payload?.data?.data);
+      state.loading = false;
+      // state.list = action.payload?.data?.data?.categories;
+      state.list = JSON.stringify(action.payload?.data?.data);
     });
 
     builder.addCase(adminLoadUserARs.rejected, (state, action) => {
@@ -382,9 +404,9 @@ const arUsersStore = createSlice({
     });
 
     builder.addCase(userSearchUserARs.fulfilled, (state, action) => {
-        state.loading = false;
-        // state.list = action.payload?.data?.data?.categories;
-        state.search_list = JSON.stringify(action.payload?.data?.data);
+      state.loading = false;
+      // state.list = action.payload?.data?.data?.categories;
+      state.search_list = JSON.stringify(action.payload?.data?.data);
     });
 
     builder.addCase(userSearchUserARs.rejected, (state, action) => {
@@ -400,9 +422,9 @@ const arUsersStore = createSlice({
     });
 
     builder.addCase(userViewUserAR.fulfilled, (state, action) => {
-        state.loading = false;
-        // state.list = action.payload?.data?.data?.categories;
-        state.single_ar = JSON.stringify(action.payload?.data?.data);
+      state.loading = false;
+      // state.list = action.payload?.data?.data?.categories;
+      state.single_ar = JSON.stringify(action.payload?.data?.data);
     });
 
     builder.addCase(userViewUserAR.rejected, (state, action) => {
@@ -439,7 +461,7 @@ const arUsersStore = createSlice({
       state.loading = false;
       state.error = action.payload.message;
     });
-  
+
     // ====== builders for userUpdateUserAR ======
 
     builder.addCase(userUpdateUserAR.pending, (state) => {
@@ -454,7 +476,7 @@ const arUsersStore = createSlice({
       state.loading = false;
       state.error = action.payload.message;
     });
-  
+
     // ====== builders for userCancelUpdateUserAR ======
 
     builder.addCase(userCancelUpdateUserAR.pending, (state) => {
@@ -469,7 +491,7 @@ const arUsersStore = createSlice({
       state.loading = false;
       state.error = action.payload.message;
     });
-  
+
     // ====== builders for userProcessUpdateUserAR ======
 
     builder.addCase(userProcessUpdateUserAR.pending, (state) => {
@@ -522,9 +544,9 @@ const arUsersStore = createSlice({
     });
 
     builder.addCase(userLoadTransferUserAR.fulfilled, (state, action) => {
-        state.loading = false;
-        // state.list = action.payload?.data?.data?.categories;
-        state.transfer_list = JSON.stringify(action.payload?.data?.data);
+      state.loading = false;
+      // state.list = action.payload?.data?.data?.categories;
+      state.transfer_list = JSON.stringify(action.payload?.data?.data);
     });
 
     builder.addCase(userLoadTransferUserAR.rejected, (state, action) => {
@@ -540,9 +562,9 @@ const arUsersStore = createSlice({
     });
 
     builder.addCase(megLoadTransferUserAR.fulfilled, (state, action) => {
-        state.loading = false;
-        // state.list = action.payload?.data?.data?.categories;
-        state.transfer_list = JSON.stringify(action.payload?.data?.data);
+      state.loading = false;
+      // state.list = action.payload?.data?.data?.categories;
+      state.transfer_list = JSON.stringify(action.payload?.data?.data);
     });
 
     builder.addCase(megLoadTransferUserAR.rejected, (state, action) => {
@@ -557,9 +579,9 @@ const arUsersStore = createSlice({
     });
 
     builder.addCase(userLoadStatusChangeUserAR.fulfilled, (state, action) => {
-        state.loading = false;
-        // state.list = action.payload?.data?.data?.categories;
-        state.status_list = JSON.stringify(action.payload?.data?.data);
+      state.loading = false;
+      // state.list = action.payload?.data?.data?.categories;
+      state.status_list = JSON.stringify(action.payload?.data?.data);
     });
 
     builder.addCase(userLoadStatusChangeUserAR.rejected, (state, action) => {
@@ -575,14 +597,14 @@ const arUsersStore = createSlice({
     });
 
     builder.addCase(userTransferUserAR.fulfilled, (state, action) => {
-        state.loading = false;
+      state.loading = false;
     });
 
     builder.addCase(userTransferUserAR.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });
-    
+
     // ====== builders for megProcessTransferUserAR ======
 
     builder.addCase(megProcessTransferUserAR.pending, (state) => {
@@ -590,14 +612,29 @@ const arUsersStore = createSlice({
     });
 
     builder.addCase(megProcessTransferUserAR.fulfilled, (state, action) => {
-        state.loading = false;
+      state.loading = false;
     });
 
     builder.addCase(megProcessTransferUserAR.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });
-    
+
+    // ====== builders for megProcessMemberStatus ======
+
+    builder.addCase(megProcessMemberStatus.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(megProcessMemberStatus.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(megProcessMemberStatus.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
     // ====== builders for megProcessAddUserAR ======
 
     builder.addCase(megProcessAddUserAR.pending, (state) => {
@@ -605,7 +642,7 @@ const arUsersStore = createSlice({
     });
 
     builder.addCase(megProcessAddUserAR.fulfilled, (state, action) => {
-        state.loading = false;
+      state.loading = false;
     });
 
     builder.addCase(megProcessAddUserAR.rejected, (state, action) => {
@@ -621,14 +658,14 @@ const arUsersStore = createSlice({
     });
 
     builder.addCase(userStatusChangeUserAR.fulfilled, (state, action) => {
-        state.loading = false;
+      state.loading = false;
     });
 
     builder.addCase(userStatusChangeUserAR.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });
-    
+
   },
 });
 

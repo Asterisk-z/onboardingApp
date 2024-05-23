@@ -4,18 +4,21 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner } from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
+import { adminLoadUserARs } from "redux/stores/authorize/representative"
 import { loadInstitutionApplications } from "redux/stores/membership/applicationProcessStore"
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
+import { loadAllActivePositions } from 'redux/stores/positions/positionStore'
+import { loadAllActiveInstitutions } from 'redux/stores/institution/institutionStore'
 import { loadAllActiveCategories } from 'redux/stores/memberCategory/category'
-import AdminApplicationReportTable from './Tables/AdminApplicationReportTable'
+import AdminRepresentativeReportTable from './Tables/AdminRepresentativeReportTable'
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 import DatePicker from "react-datepicker";
 import moment from 'moment';
 
 
 
-const AdminApplicationReport = ({ drawer }) => {
+const AdminRepresentativeReport = ({ drawer }) => {
 
     const authUser = useUser();
     const authUserUpdate = useUserUpdate();
@@ -27,18 +30,26 @@ const AdminApplicationReport = ({ drawer }) => {
         setParentState(newState);
     };
 
-    const all_institutions = useSelector((state) => state?.applicationProcess?.all_institutions) || null;
+
     const active_categories = useSelector((state) => state?.category?.list) || null;
+    const institutions = useSelector((state) => state?.institutions?.list) || null;
+    const active_positions = useSelector((state) => state?.position?.all_list) || null;
+
+    const ar_users = useSelector((state) => state?.arUsers?.list) || null;
     useEffect(() => {
+        dispatch(loadAllActiveInstitutions());
+        dispatch(loadAllActivePositions());
         dispatch(loadAllActiveCategories());
-        dispatch(loadInstitutionApplications());
+        dispatch(adminLoadUserARs({ "approval_status": "", "institution_id": "", "role_id": "" }));
     }, [dispatch, parentState]);
 
-    const $all_institutions = all_institutions ? JSON.parse(all_institutions) : null;
+    const $ar_users = ar_users ? JSON.parse(ar_users) : null;
     const $active_categories = active_categories ? JSON.parse(active_categories) : null;
+    const $institutions = institutions ? JSON.parse(institutions) : null;
+    const $active_positions = active_positions ? JSON.parse(active_positions) : null;
 
 
-    let filteredApplication = $all_institutions;
+    let filteredApplication = $ar_users;
 
 
 
@@ -46,9 +57,11 @@ const AdminApplicationReport = ({ drawer }) => {
     const [loading, setLoading] = useState(false);
     const [startDate, setStartDate] = useState(false);
     const [endDate, setEndDate] = useState(false);
-    const [tableData, setTableData] = useState($all_institutions);
+    const [tableData, setTableData] = useState($ar_users);
+
 
     const handleFormSubmit = async (values) => {
+
 
         if (values?.start_date) {
             filteredApplication = filteredApplication.filter((item) => item.created_at > values?.start_date)
@@ -56,12 +69,13 @@ const AdminApplicationReport = ({ drawer }) => {
         if (values?.end_date) {
             filteredApplication = filteredApplication.filter((item) => item.created_at < values?.end_date)
         }
-        if (values?.status) {
-            filteredApplication = filteredApplication.filter((item) => item.internal.application_type_status == values?.status)
+        if (values?.institution) {
+            filteredApplication = filteredApplication.filter((item) => item.institution.id == values?.institution)
         }
-        if (values?.category) {
-            filteredApplication = filteredApplication.filter((item) => item.internal.category_id == values?.category)
+        if (values?.position) {
+            filteredApplication = filteredApplication.filter((item) => item.position.id == values?.position)
         }
+
         setTableData(filteredApplication)
 
     };
@@ -79,13 +93,13 @@ const AdminApplicationReport = ({ drawer }) => {
 
     return (
         <React.Fragment>
-            <Head title="Application Report"></Head>
+            <Head title="Authorised Representatives Reports"></Head>
             <Content>
                 <BlockHead size="sm">
                     <BlockBetween>
                         <BlockHeadContent>
                             <BlockTitle page tag="h3">
-                                Application Report
+                                Authorised Representatives Reports
                             </BlockTitle>
                             {/* {categories} */}
                         </BlockHeadContent>
@@ -102,7 +116,7 @@ const AdminApplicationReport = ({ drawer }) => {
                             <Block size="xl">
                                 <BlockHead>
                                     <BlockHeadContent>
-                                        <BlockTitle tag="h4">Application Report Filter</BlockTitle>
+                                        <BlockTitle tag="h4">Authorised Representatives Report Filter</BlockTitle>
                                     </BlockHeadContent>
                                 </BlockHead>
 
@@ -142,17 +156,19 @@ const AdminApplicationReport = ({ drawer }) => {
                                                     </div>
                                                 </div>
                                             </Col>
+
                                             <Col md={'3'}>
                                                 <div className="form-group">
-                                                    <label className="form-label" htmlFor="full-name">
-                                                        Status
+                                                    <label className="form-label" htmlFor="institution">
+                                                        Institution
                                                     </label>
                                                     <div className="form-control-wrap">
                                                         <div className="form-control-select">
-                                                            <select className="form-control form-select" {...register('status')}>
-                                                                <option value="">Select Status</option>
-                                                                <option value="Pending">Ongoing</option>
-                                                                <option value="CLOSED">Closed</option>
+                                                            <select className="form-control form-select" {...register('institution')}>
+                                                                <option value=''>All</option>
+                                                                {$institutions && $institutions.map((institution, index) =>
+                                                                    <option key={`activeInstitution${index}`} value={institution.id}>{institution.name}</option>
+                                                                )}
                                                             </select>
                                                         </div>
                                                     </div>
@@ -161,15 +177,15 @@ const AdminApplicationReport = ({ drawer }) => {
                                             <Col md={'3'}>
 
                                                 <div className="form-group">
-                                                    <label className="form-label" htmlFor="category">
-                                                        Category
+                                                    <label className="form-label" htmlFor="position">
+                                                        Position
                                                     </label>
                                                     <div className="form-control-wrap">
                                                         <div className="form-control-select">
-                                                            <select className="form-control form-select" {...register('category')}>
+                                                            <select className="form-control form-select" {...register('position')}>
                                                                 <option value=''>All</option>
-                                                                {$active_categories && $active_categories.map((active_category, index) =>
-                                                                    <option key={`activeCategory${index}`} value={active_category.id}>{active_category.name}</option>
+                                                                {$active_positions && $active_positions.map((active_position, index) =>
+                                                                    <option key={`activePosition${index}`} value={active_position.id}>{active_position.name}</option>
                                                                 )}
                                                             </select>
                                                         </div>
@@ -197,12 +213,12 @@ const AdminApplicationReport = ({ drawer }) => {
                             <Block size="xl">
                                 <BlockHead>
                                     <BlockHeadContent>
-                                        <BlockTitle tag="h4">Application Report</BlockTitle>
+                                        <BlockTitle tag="h4">Authorised Representatives Reports</BlockTitle>
                                     </BlockHeadContent>
                                 </BlockHead>
 
                                 <PreviewCard>
-                                    {$all_institutions && <AdminApplicationReportTable updateParent={updateParentState} data={tableData || $all_institutions} expandableRows pagination actions />}
+                                    {$ar_users && <AdminRepresentativeReportTable updateParent={updateParentState} parentState={parentState} data={tableData || $ar_users} expandableRows pagination actions />}
                                 </PreviewCard>
                             </Block>
 
@@ -214,4 +230,4 @@ const AdminApplicationReport = ({ drawer }) => {
         </React.Fragment>
     );
 };
-export default AdminApplicationReport;
+export default AdminRepresentativeReport;

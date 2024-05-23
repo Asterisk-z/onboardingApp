@@ -10,8 +10,12 @@ class MemberGuide extends Model
     use HasFactory;
     protected $table = 'member_guides';
     protected $guarded = [];
-    protected $appends = ['active'];
+    protected $appends = ['active', 'file_path'];
 
+    public function getFilePathAttribute()
+    {
+        return $this->file ? config('app.url') . '/storage/app/public/' . $this->file : null;
+    }
     public function getActiveAttribute()
     {
         return !$this->is_del ? true : false;

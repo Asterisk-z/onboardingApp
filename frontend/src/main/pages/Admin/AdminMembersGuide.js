@@ -239,7 +239,7 @@ const AdminMembersGuide = ({ drawer }) => {
                                                 <CardText>
                                                     {/* {$applicantGuide.url} */}
                                                 </CardText>
-                                                <a style={{marginRight:'10px'}} href={$membersGuide.file} target="_blank" className="btn btn-primary" rel="noreferrer">View Document</a>
+                                                <a style={{ marginRight: '10px' }} href={$membersGuide.file_path} target="_blank" className="btn btn-primary" rel="noreferrer">View Document</a>
                                                 <Button color="primary" onClick={toggleUpdateForm}>Edit</Button>
                                             </CardBody>
                                             {/* <CardFooter className="border-top">{moment($applicantGuide.created_at).format('ll')}</CardFooter> */}

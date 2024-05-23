@@ -21,7 +21,7 @@ const Homepage = () => {
 
   return (
     <React.Fragment>
-      <Head title="Fees Framework"></Head>
+      <Head title="Applicant Guide"></Head>
       <Content>
         <BlockHead size="sm">
           <BlockBetween>
@@ -39,7 +39,7 @@ const Homepage = () => {
                 <Card className="card-bordered gold">
                   <CardBody className="card-inner">
                     <CardTitle tag="h5">{$applicantGuide.name}</CardTitle>
-                    <CardLink href={$applicantGuide.file} target="_blank" className="btn btn-primary" color="primary">View Document</CardLink>
+                    <CardLink href={$applicantGuide.file_path} target="_blank" className="btn btn-primary" color="primary">View Document</CardLink>
                   </CardBody>
                 </Card>
               </Col>}

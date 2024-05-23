@@ -16,7 +16,7 @@ const Export = ({ data }) => {
 
     useEffect(() => {
         if (modal === true) {
-        setTimeout(() => setModal(false), 2000);
+            setTimeout(() => setModal(false), 2000);
         }
     }, [modal]);
 
@@ -50,30 +50,30 @@ const Export = ({ data }) => {
 
     return (
         <React.Fragment>
-        <div className="dt-export-buttons d-flex align-center">
-            <div className="dt-export-title d-none d-md-inline-block">Export</div>
-            <div className="dt-buttons btn-group flex-wrap">
-            <CopyToClipboard text={JSON.stringify(newData)}>
-                <Button className="buttons-copy buttons-html5" onClick={() => copyToClipboard()}>
-                <span>Copy</span>
-                </Button>
-            </CopyToClipboard>{" "}
-            <button className="btn btn-secondary buttons-csv buttons-html5" type="button" onClick={() => exportCSV()}>
-                <span>CSV</span>
-            </button>{" "}
-            <button className="btn btn-secondary buttons-excel buttons-html5" type="button" onClick={() => exportExcel()}>
-                <span>Excel</span>
-            </button>{" "}
+            <div className="dt-export-buttons d-flex align-center">
+                <div className="dt-export-title d-none d-md-inline-block">Export</div>
+                <div className="dt-buttons btn-group flex-wrap">
+                    <CopyToClipboard text={JSON.stringify(newData)}>
+                        <Button className="buttons-copy buttons-html5" onClick={() => copyToClipboard()}>
+                            <span>Copy</span>
+                        </Button>
+                    </CopyToClipboard>{" "}
+                    <button className="btn btn-secondary buttons-csv buttons-html5" type="button" onClick={() => exportCSV()}>
+                        <span>CSV</span>
+                    </button>{" "}
+                    <button className="btn btn-secondary buttons-excel buttons-html5" type="button" onClick={() => exportExcel()}>
+                        <span>Excel</span>
+                    </button>{" "}
+                </div>
             </div>
-        </div>
-        <Modal isOpen={modal} className="modal-dialog-centered text-center" size="sm">
-            <ModalBody className="text-center m-2">
-                <h5>Copied to clipboard</h5>
-            </ModalBody>
-            <div className="p-3 bg-light">
-                <div className="text-center">Copied {newData.length} rows to clipboard</div>
-            </div>
-        </Modal>
+            <Modal isOpen={modal} className="modal-dialog-centered text-center" size="sm">
+                <ModalBody className="text-center m-2">
+                    <h5>Copied to clipboard</h5>
+                </ModalBody>
+                <div className="p-3 bg-light">
+                    <div className="text-center">Copied {newData.length} rows to clipboard</div>
+                </div>
+            </Modal>
         </React.Fragment>
     );
 };
@@ -93,12 +93,14 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
 
     const [formData, setFormData] = useState({
         name: tabItem.name,
+        brief: tabItem.brief,
         url: tabItem.url,
     });
     const handleFormSubmit = async (values) => {
         const formData = new FormData();
         formData.append('id', tabItem_id)
         formData.append('name', values.name)
+        formData.append('brief', values.brief)
         formData.append('url', values.url)
         // console.log("ded")
         try {
@@ -111,6 +113,7 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
                     setModalForm(!modalForm)
                     resetField('name')
                     resetField('url')
+                    resetField('brief')
                     updateParentParent(Math.random())
                 }, 1000);
 
@@ -122,7 +125,7 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
             setLoading(false);
         }
         // 
-          try {
+        try {
             setLoading(true);
             const resp = await dispatch(updateRegulatorStatus(formData));
 
@@ -147,31 +150,31 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
     }
 
 
-  const askAction = async (status) => {
-    const actionText = tabItem.active ? 'Activate' : 'Deactivate';
-    const oppositeStatus = tabItem.active ? '1' : '0';
+    const askAction = async (status) => {
+        const actionText = tabItem.active ? 'Activate' : 'Deactivate';
+        const oppositeStatus = tabItem.active ? '1' : '0';
 
-    const confirmationText = tabItem.active ? 'Do you want to activate this regulator?' : 'Do you want to deactivate this regulator?';
+        const confirmationText = tabItem.active ? 'Do you want to activate this regulator?' : 'Do you want to deactivate this regulator?';
 
-    const confirmationButtonText = tabItem.active ? 'Yes, activate it!' : 'Yes, deactivate it!';
+        const confirmationButtonText = tabItem.active ? 'Yes, activate it!' : 'Yes, deactivate it!';
 
-    Swal.fire({
-        title: 'Are you sure?',
-        text: confirmationText,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: confirmationButtonText,
-    }).then((result) => {
-        if (result.isConfirmed) {
-            const formData = new FormData();
-            formData.append('id', tabItem_id);
-            formData.append('status', oppositeStatus);
-            const resp = dispatch(updateRegulatorStatus(formData));
-            updateParentParent(Math.random());
-        }
-    });
+        Swal.fire({
+            title: 'Are you sure?',
+            text: confirmationText,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: confirmationButtonText,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const formData = new FormData();
+                formData.append('id', tabItem_id);
+                formData.append('status', oppositeStatus);
+                const resp = dispatch(updateRegulatorStatus(formData));
+                updateParentParent(Math.random());
+            }
+        });
     };
-    
+
     return (
         <>
 
@@ -189,7 +192,7 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
                                             <span>Edit</span>
                                         </DropdownItem>
                                     </li>
-                                 {!tabItem.active ? (
+                                    {!tabItem.active ? (
                                         <>
                                             <li size="xs">
                                                 <DropdownItem tag="a" onClick={() => askAction('1')}>
@@ -203,7 +206,7 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
                                             <li size="xs">
                                                 <DropdownItem tag="a" onClick={() => askAction('0')}>
                                                     <Icon name="eye"></Icon>
-                                                  <span>Deactivate</span>
+                                                    <span>Deactivate</span>
                                                 </DropdownItem>
                                             </li>
                                         </>
@@ -231,13 +234,22 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
                                 {errors.name && <span className="invalid">{errors.name.message}</span>}
                             </div>
                         </div>
-                         <div className="form-group">
+                        <div className="form-group">
                             <label className="form-label" htmlFor="full-name">
                                 Website
                             </label>
                             <div className="form-control-wrap">
                                 <input type="url" id="url" className="form-control" {...register('url', { required: "This field is required" })} defaultValue={formData.url} />
                                 {errors.url && <span className="invalid">{errors.url.message}</span>}
+                            </div>
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label" htmlFor="brief-name">
+                                Brief Note
+                            </label>
+                            <div className="form-control-wrap">
+                                <input type="text" id="brief" className="form-control" {...register('brief', { required: "This Field is required" })} defaultValue={formData.brief} />
+                                {errors.brief && <span className="invalid">{errors.brief.message}</span>}
                             </div>
                         </div>
                         <div className="form-group">
@@ -269,6 +281,13 @@ const AdminRegulatorTable = ({ data, pagination, actions, className, selectableR
         {
             name: "Name",
             selector: (row) => row.name,
+            sortable: true,
+            width: "auto",
+            wrap: true
+        },
+        {
+            name: "Brief Note",
+            selector: (row) => row.brief,
             sortable: true,
             width: "auto",
             wrap: true

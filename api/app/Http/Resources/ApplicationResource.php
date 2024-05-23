@@ -190,6 +190,10 @@ class ApplicationResource extends JsonResource
 
             "createdAt" => $application->created_at,
 
+            "reg_id" => $application->reg_id,
+
+            "ars" => $this->institutionUsers($application->institution_id),
+
         ];
     }
 }

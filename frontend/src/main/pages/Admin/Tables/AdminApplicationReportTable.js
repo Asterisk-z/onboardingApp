@@ -6,818 +6,426 @@ import { useForm } from "react-hook-form";
 import exportFromJSON from "export-from-json";
 import CopyToClipboard from "react-copy-to-clipboard";
 import Icon from "components/icon/Icon";
-import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge,  Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, CardBody, CardTitle } from "reactstrap";
+import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge, Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, CardBody, CardTitle } from "reactstrap";
 import { DataTablePagination } from "components/Component";
 import moment from "moment";
 import { uploadConcession, FSDPaymentEvidence, FSDReviewSummary, MBGPaymentEvidence, MBGReview, MEGReview, MEG2Review, MEGUploadAgreement, completeApplication, MEGSendMembershipAgreement, MEG2SendESuccess } from "redux/stores/membership/applicationProcessStore"
-import { megProcessTransferUserAR } from "redux/stores/authorize/representative";
+import { megProcessMemberStatus } from "redux/stores/authorize/representative";
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 import Swal from "sweetalert2";
 
 
 const Export = ({ data }) => {
-    const [modal, setModal] = useState(false);
+  const [modal, setModal] = useState(false);
 
-    useEffect(() => {
-        if (modal === true) {
-        setTimeout(() => setModal(false), 2000);
-        }
-    }, [modal]);
+  useEffect(() => {
+    if (modal === true) {
+      setTimeout(() => setModal(false), 2000);
+    }
+  }, [modal]);
 
-    const newData = data.map((item, index) => {
-        return ({
-            "IID": ++index,
-            "Name": `${item.name}`,
-            "Categories": item.category,
-            "Total ARs": item.ars,
-            "Status": `Pending Registration`,
-            "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
-        })
-    });
+  const newData = data.map((item, index) => {
+    return ({
+      "IID": ++index,
+      "Name": `${item.name}`,
+      "Categories": item.category,
+      "Total ARs": item.ars,
+      "Status": `Pending Registration`,
+      "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
+    })
+  });
 
-    const fileName = "data";
+  const fileName = "data";
 
-    const exportCSV = () => {
-        const exportType = exportFromJSON.types.csv;
-        exportFromJSON({ data: newData, fileName: fileName, exportType: exportType });
+  const exportCSV = () => {
+    const exportType = exportFromJSON.types.csv;
+    exportFromJSON({ data: newData, fileName: fileName, exportType: exportType });
 
-    };
+  };
 
-    const exportExcel = () => {
-        const exportType = exportFromJSON.types.xls;
-        exportFromJSON({ data: newData, fileName: fileName, exportType: exportType });
+  const exportExcel = () => {
+    const exportType = exportFromJSON.types.xls;
+    exportFromJSON({ data: newData, fileName: fileName, exportType: exportType });
 
-    };
+  };
 
-    const copyToClipboard = () => {
-        setModal(true);
-    };
+  const copyToClipboard = () => {
+    setModal(true);
+  };
 
-    return (
-        <React.Fragment>
-        <div className="dt-export-buttons d-flex align-center">
-            <div className="dt-export-title d-none d-md-inline-block">Export</div>
-            <div className="dt-buttons btn-group flex-wrap">
-            <CopyToClipboard text={JSON.stringify(newData)}>
-                <Button className="buttons-copy buttons-html5" onClick={() => copyToClipboard()}>
-                <span>Copy</span>
-                </Button>
-            </CopyToClipboard>{" "}
-            <button className="btn btn-secondary buttons-csv buttons-html5" type="button" onClick={() => exportCSV()}>
-                <span>CSV</span>
-            </button>{" "}
-            <button className="btn btn-secondary buttons-excel buttons-html5" type="button" onClick={() => exportExcel()}>
-                <span>Excel</span>
-            </button>{" "}
-            </div>
+  return (
+    <React.Fragment>
+      <div className="dt-export-buttons d-flex align-center">
+        <div className="dt-export-title d-none d-md-inline-block">Export</div>
+        <div className="dt-buttons btn-group flex-wrap">
+          <CopyToClipboard text={JSON.stringify(newData)}>
+            <Button className="buttons-copy buttons-html5" onClick={() => copyToClipboard()}>
+              <span>Copy</span>
+            </Button>
+          </CopyToClipboard>{" "}
+          <button className="btn btn-secondary buttons-csv buttons-html5" type="button" onClick={() => exportCSV()}>
+            <span>CSV</span>
+          </button>{" "}
+          <button className="btn btn-secondary buttons-excel buttons-html5" type="button" onClick={() => exportExcel()}>
+            <span>Excel</span>
+          </button>{" "}
         </div>
-        <Modal isOpen={modal} className="modal-dialog-centered text-center" size="sm">
-            <ModalBody className="text-center m-2">
-                <h5>Copied to clipboard</h5>
-            </ModalBody>
-            <div className="p-3 bg-light">
-                <div className="text-center">Copied {newData.length} rows to clipboard</div>
-            </div>
-        </Modal>
-        </React.Fragment>
-    );
+      </div>
+      <Modal isOpen={modal} className="modal-dialog-centered text-center" size="sm">
+        <ModalBody className="text-center m-2">
+          <h5>Copied to clipboard</h5>
+        </ModalBody>
+        <div className="p-3 bg-light">
+          <div className="text-center">Copied {newData.length} rows to clipboard</div>
+        </div>
+      </Modal>
+    </React.Fragment>
+  );
 };
 
 
 const ActionTab = (props) => {
 
-    const aUser = useUser();
-    const aUserUpdate = useUserUpdate();
-    
-    const institution = props.institution
-    const navigate = useNavigate();
-    const [modalForm, setModalForm] = useState(false);
-    const [modalView, setModalView] = useState(false);
-    const [signedAgreement, setSignedAgreement] = useState(false);
-    const [modalReviewView, setModalReviewView] = useState(false);
-    const [showConcession, setShowConcession] = useState(false);
-    const [modalPaymentView, setModalPaymentView] = useState(false);
-    const [modalViewUpdate, setModalViewUpdate] = useState(false);
+  const aUser = useUser();
+  const aUserUpdate = useUserUpdate();
 
-    const toggleForm = () => setModalForm(!modalForm);
-    const toggleReviewView = () => setModalReviewView(!modalReviewView);
-    const toggleView = () => setModalView(!modalView);
-    const toggleSignedAgreement = () => setSignedAgreement(!signedAgreement);
-    const togglePaymentView = () => setModalPaymentView(!modalPaymentView);
-    
-    const toggleConcession = () => {
-        if (!showConcession) {
-              Swal.fire({
-                title: "Do you want to add concession?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                cancelButtonText: "No",
-                allowOutsideClick: false
-            }).then((result) => {
-                if (result.isConfirmed) {
+  const institution = props.institution
+  const navigate = useNavigate();
+  const [modalView, setModalView] = useState(false);
 
-                    setShowConcession(!showConcession)
+  const toggleView = () => setModalView(!modalView);
 
-                } else {
 
-                    const postValues = new Object();
-                    postValues.application_id = institution.internal.application_id;
-                    const resp = dispatch(uploadConcession(postValues));
-                    props.updateParentParent(Math.random());
+  const dispatch = useDispatch();
 
-                }
-            });
-            
-        } 
 
+  useEffect(() => {
+
+    if (aUser.is_admin_fsd()) {
+      dispatch(FSDPaymentEvidence({ 'application_id': institution.internal.application_id }));
     }
-    const toggleViewUpdate = () => setModalViewUpdate(!modalViewUpdate);
 
-    const dispatch = useDispatch();
-  
-  
-    const latest_evidence = useSelector((state) => state?.applicationProcess?.latest_evidence) || null;
-  
-      useEffect(() => {
+    if (aUser.is_admin_mbg()) {
+      dispatch(MBGPaymentEvidence({ 'application_id': institution.internal.application_id }));
+    }
 
-        if (aUser.is_admin_fsd()) {
-          dispatch(FSDPaymentEvidence({'application_id' : institution.internal.application_id}));
+
+  }, [dispatch]);
+
+
+
+  const askAction = (action, ar) => {
+
+    if (action == 'memberStatus') {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+      }).then((result) => {
+        if (result.isConfirmed) {
+
+          const formData = new FormData();
+          formData.append('user_id', ar.id);
+          formData.append('action', ar.member_status == 'active' ? 'suspend' : 'active');
+          dispatch(megProcessMemberStatus(formData));
+          setModalView(false)
+          props.updateParentParent(Math.random());
+
         }
-        
-        if (aUser.is_admin_mbg()) {
-          dispatch(MBGPaymentEvidence({'application_id' : institution.internal.application_id}));
-        }
-
-        
-      }, [dispatch]);
-  
-      
-    const $latest_evidence = latest_evidence ? JSON.parse(latest_evidence) : null;
-    
-    const askAction = (action) => {
-      if(action == 'approvePaymentReview') {
-          Swal.fire({
-            title: "Kindly confirm payment",
-            text: "Do you want to approve payment!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Confirm!",
-            cancelButtonText: "Decline",
-            html: '<div class="flex flex-column text-left"><label htmlFor="amount">Amount Received</label><input type="number" id="amount" name="amount" class="form-control" required /><label htmlFor="comments">Comment</label><textarea id="comments" class="form-control" rows="4" cols="50" placeholder="Enter Comment" required></textarea></div>', // Add textarea to the alert
-          }).then((result) => {
-            if (result.isConfirmed) {
-              const comments = document.getElementById('comments').value; // Get value from the textarea
-              const amount = document.getElementById('amount').value; // Get value from the textarea
-              if (comments && amount) {
-                const formData = new FormData();
-                formData.append('application_id', institution.internal.application_id);
-                formData.append('status', 'approve');
-                formData.append('comment', comments); 
-                formData.append('amount_received', amount);
-                dispatch(FSDReviewSummary(formData));
-                setModalForm(false)
-                setModalView(false)
-                setSignedAgreement(false)
-                setModalReviewView(false)
-                setShowConcession(false)
-                setModalPaymentView(false)
-                setModalViewUpdate(false)
-                props.updateParentParent(Math.random());
-              } else {
-                Swal.fire("Comment and Amount is required!");
-              }
-
-            }
-          });
-      }
-      
-      if(action == 'declinePaymentReview') {
-          Swal.fire({
-            title: "Are you sure?",
-            text: "Do you want to decline payment!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes!",
-            cancelButtonText: "No",
-            html: '<div class="flex flex-column text-left"><label htmlFor="comments">Comment</label><textarea id="comments" class="form-control" rows="4" cols="50" placeholder="Enter Comment" required></textarea></div>', // Add textarea to the alert
-          }).then((result) => {
-            if (result.isConfirmed) {
-              const comments = document.getElementById('comments').value; // Get value from the textarea
-              if (comments) {
-                const formData = new FormData();
-                formData.append('application_id', institution.internal.application_id);
-                formData.append('status', 'decline');
-                formData.append('comment', comments); 
-                dispatch(FSDReviewSummary(formData));
-                setModalForm(false)
-                setModalView(false)
-                setSignedAgreement(false)
-                setModalReviewView(false)
-                setShowConcession(false)
-                setModalPaymentView(false)
-                setModalViewUpdate(false)
-                props.updateParentParent(Math.random());
-              } else {
-                Swal.fire("Comment is required!");
-              }
-            }
-          });
-      }
-      
-      if(action == 'approveFSDReview') {
-          Swal.fire({
-            title: "Are you sure?",
-            text: "Do you want to approve review!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes!",
-            cancelButtonText: "No",
-            html: '<div class="flex flex-column text-left"><label htmlFor="comments">Comment</label><textarea id="comments" class="form-control" rows="4" cols="50" placeholder="Enter Comment" required></textarea></div>', // Add textarea to the alert
-          }).then((result) => {
-            if (result.isConfirmed) {
-              const comments = document.getElementById('comments').value; // Get value from the textarea
-              if (comments) {
-                const formData = new FormData();
-                formData.append('application_id', institution.internal.application_id);
-                formData.append('status', 'approve');
-                formData.append('comment', comments); 
-                dispatch(MBGReview(formData));
-                setModalForm(false)
-                setModalView(false)
-                setSignedAgreement(false)
-                setModalReviewView(false)
-                setShowConcession(false)
-                setModalPaymentView(false)
-                setModalViewUpdate(false)
-                props.updateParentParent(Math.random());
-              } else {
-                Swal.fire("Comment is required!");
-              }
-            }
-          });
-      }
-      
-      if(action == 'declineFSDReview') {
-          Swal.fire({
-            title: "Are you sure?",
-            text: "Do you want to approve review!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes!",
-            cancelButtonText: "No",
-            html: '<div class="flex flex-column text-left"><label htmlFor="comments">Comment</label><textarea id="comments" class="form-control" rows="4" cols="50" placeholder="Enter Comment" required></textarea></div>', // Add textarea to the alert
-          }).then((result) => {
-            if (result.isConfirmed) {
-              const comments = document.getElementById('comments').value; // Get value from the textarea
-              if (comments) {
-                const formData = new FormData();
-                formData.append('application_id', institution.internal.application_id);
-                formData.append('status', 'decline');
-                formData.append('comment', comments); 
-                dispatch(MBGReview(formData));
-                setModalForm(false)
-                setModalView(false)
-                setSignedAgreement(false)
-                setModalReviewView(false)
-                setShowConcession(false)
-                setModalPaymentView(false)
-                setModalViewUpdate(false)
-                props.updateParentParent(Math.random());
-              } else {
-                Swal.fire("Comment is required!");
-              }
-            }
-          });
-      }
-      
-      
-      if(action == 'approveApplicationsReview') {
-          Swal.fire({
-            title: "Are you sure?",
-            text: "Do you want to approve review!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes!",
-            cancelButtonText: "No",
-            html: '<div class="flex flex-column text-left"><label htmlFor="application_report">Application Report</label><input type="file"  accept=".pdf" id="application_report" name="application_report" class="form-control" required /><label htmlFor="comments">Comment</label><textarea id="comments" class="form-control" rows="4" cols="50" placeholder="Enter Comment" required></textarea></div>', // Add textarea to the alert
-          }).then((result) => {
-            if (result.isConfirmed) {
-              const application_report = document.getElementById('application_report').files[0]; // Get value from the textarea
-              const comments = document.getElementById('comments').value; // Get value from the textarea
-            
-              if (comments && application_report) {
-                const formData = new FormData();
-                formData.append('application_id', institution.internal.application_id);
-                formData.append('status', 'approve');
-                formData.append('comment', comments); 
-                formData.append('application_report', application_report); 
-                dispatch(MEGReview(formData));
-                setModalForm(false)
-                setModalView(false)
-                setSignedAgreement(false)
-                setModalReviewView(false)
-                setShowConcession(false)
-                setModalPaymentView(false)
-                setModalViewUpdate(false)
-                props.updateParentParent(Math.random());
-              } else {
-                Swal.fire("Comment and Report is required!");
-              }
-            }
-          });
-      }
-      
-      if(action == 'declineApplicationReview') {
-          Swal.fire({
-            title: "Are you sure?",
-            text: "Do you want to approve review!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes!",
-            cancelButtonText: "No",
-            html: '<div class="flex flex-column text-left"><label htmlFor="comments">Comment</label><textarea id="comments" class="form-control" rows="4" cols="50" placeholder="Enter Comment" required></textarea></div>', // Add textarea to the alert
-          }).then((result) => {
-            if (result.isConfirmed) {
-              const comments = document.getElementById('comments').value; // Get value from the textarea
-              if (comments) {
-                const formData = new FormData();
-                formData.append('application_id', institution.internal.application_id);
-                formData.append('status', 'decline');
-                formData.append('comment', comments); 
-                dispatch(MEGReview(formData));
-                setModalForm(false)
-                setModalView(false)
-                setSignedAgreement(false)
-                setModalReviewView(false)
-                setShowConcession(false)
-                setModalPaymentView(false)
-                setModalViewUpdate(false)
-                props.updateParentParent(Math.random());
-              } else {
-                Swal.fire("Comment is required!");
-              }
-            }
-          });
-      }
-      
-      
-      if(action == 'approveMEGApplicationsReview') {
-          Swal.fire({
-            title: "Are you sure?",
-            text: "Do you want to approve review!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Approve",
-            cancelButtonText: "Decline",
-          }).then((result) => {
-              if (result.isConfirmed) {
-                
-                const formData = new FormData();
-                formData.append('application_id', institution.internal.application_id); 
-                dispatch(MEG2Review(formData));
-                setModalForm(false)
-                setModalView(false)
-                setSignedAgreement(false)
-                setModalReviewView(false)
-                setShowConcession(false)
-                setModalPaymentView(false)
-                setModalViewUpdate(false)
-                props.updateParentParent(Math.random());
-              
-            }
-          });
-      }
-      
-      
-      if (action == 'completeApplication') {
-          Swal.fire({
-            title: "Are you sure?",
-            text: "Do you want to complete membership application!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes!",
-            cancelButtonText: "No",
-          }).then((result) => {
-              if (result.isConfirmed) {
-
-                const formData = new FormData();
-                formData.append('application_id', institution.internal.application_id); 
-                dispatch(completeApplication(formData));
-                setModalForm(false)
-                setModalView(false)
-                setSignedAgreement(false)
-                setModalReviewView(false)
-                setShowConcession(false)
-                setModalPaymentView(false)
-                setModalViewUpdate(false)
-                props.updateParentParent(Math.random());
-              
-            }
-          });
-      }
-
-      if (action == 'sendAgreement') {
-        Swal.fire({
-          title: "Are you sure?",
-          text: "",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonText: "Yes!",
-          cancelButtonText: "No",
-        }).then((result) => {
-          if (result.isConfirmed) {
-
-            const formData = new FormData();
-            formData.append('application_id', institution.internal.application_id);
-            dispatch(MEGSendMembershipAgreement(formData));
-            setModalForm(false)
-            setModalView(false)
-            setSignedAgreement(false)
-            setModalReviewView(false)
-            setShowConcession(false)
-            setModalPaymentView(false)
-            setModalViewUpdate(false)
-            props.updateParentParent(Math.random());
-
-          }
-        });
-      }
+      });
+    }
 
 
-      if (action == 'sendESuccessLetter') {
-        Swal.fire({
-          title: "Are you sure?",
-          text: "",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonText: "Yes!",
-          cancelButtonText: "No",
-        }).then((result) => {
-          if (result.isConfirmed) {
 
-            const formData = new FormData();
-            formData.append('application_id', institution.internal.application_id);
-            dispatch(MEG2SendESuccess(formData));
-            setModalForm(false)
-            setModalView(false)
-            setSignedAgreement(false)
-            setModalReviewView(false)
-            setShowConcession(false)
-            setModalPaymentView(false)
-            setModalViewUpdate(false)
-            props.updateParentParent(Math.random());
+  };
 
-          }
-        });
-      }
-
-      
-
-    };
-    // console.log(institution)
-    // console.log(institution.fsd_review[institution.fsd_review.length-1].comment)
-  
   return (
     <>
-        <div className="toggle-expand-content" style={{ display: "block" }}>
-          
-            <ul className="nk-block-tools g-3">
-                 <li className="nk-block-tools-opt">
-                    <UncontrolledDropdown direction="right">
-                        <DropdownToggle className="dropdown-toggle btn btn-md" color="secondary">Action</DropdownToggle>
+      <button className="btn btn-primary btn-md" onClick={toggleView} >Details</button>
 
-                        <DropdownMenu>
-                            <ul className="link-list-opt">
-                        
-                                    <li size="xs">
-                                        <DropdownItem tag="a"  onClick={toggleView} >
-                                            <Icon name="eye"></Icon>
-                                            <span>View Application</span>
-                                        </DropdownItem>
-                                    </li>
-                                    {(aUser.is_admin_mbg() || aUser.is_admin_fsd()) &&
-                                        <>
-                                            <li size="xs">
-                                                <DropdownItem tag="a"  onClick={togglePaymentView} >
-                                                    <Icon name="eye"></Icon>
-                                                    <span>Payment Information</span>
-                                                </DropdownItem>
-                                            </li>
-                                        </>
-                                    }
+      <Modal isOpen={modalView} toggle={toggleView} size="xl">
+        <ModalHeader toggle={toggleView} close={<button className="close" onClick={toggleView}><Icon name="cross" /></button>}>
+          View Institution Application
+        </ModalHeader>
+        <ModalBody>
+          <Card className="card">
+            <CardBody className="card-inner">
+              <CardTitle tag="h5">{`Basic Information`}</CardTitle>
+
+              <table className="table table-striped table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>Company Name</td>
+                    <td className="text-capitalize">{`${institution?.basic_details?.companyName ?? ''}`}</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>RC Number</td>
+                    <td className="text-capitalize">{`${institution?.basic_details?.rcNumber ?? ''}`}</td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>Registered Office Address</td>
+                    <td className="text-capitalize">{`${institution?.basic_details?.registeredOfficeAddress ?? ''}`}</td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td>Town/City</td>
+                    <td className="text-capitalize">{`${institution?.basic_details?.placeOfIncorporation ?? ''}`}</td>
+                  </tr>
+                  <tr>
+                    <td>5</td>
+                    <td>Date of Incorporation</td>
+                    <td className="text-capitalize">{`${institution?.basic_details?.dateOfIncorporation ?? ''}`}</td>
+                  </tr>
+                  <tr>
+                    <td>6</td>
+                    <td>Place of Incorporation</td>
+                    <td className="text-capitalize">{`${institution?.basic_details?.placeOfIncorporation ?? ''}`}</td>
+                  </tr>
+                  <tr>
+                    <td>7</td>
+                    <td>Nature of Business</td>
+                    <td className="text-capitalize">{`${institution?.basic_details?.natureOfBusiness ?? ''}`}</td>
+                  </tr>
+                  <tr>
+                    <td>8</td>
+                    <td>Company Primary Telephone Number</td>
+                    <td className="text-capitalize">{`${institution?.basic_details?.companyTelephoneNumber ?? ''}`}</td>
+                  </tr>
+                  <tr>
+                    <td>9</td>
+                    <td>Company Secondary Telephone Number</td>
+                    <td className="text-capitalize">{`${institution?.basic_details?.companyTelephoneNumber ?? ''}`}</td>
+                  </tr>
+                  <tr>
+                    <td>10</td>
+                    <td>Company Email Address</td>
+                    <td className="text-capitalize">{`${institution?.basic_details?.companyEmailAddress ?? ''}`}</td>
+                  </tr>
+                  <tr>
+                    <td>11</td>
+                    <td>Company Website Address</td>
+                    <td className="text-capitalize">{`${institution?.basic_details?.corporateWebsiteAddress ?? ''}`}</td>
+                  </tr>
+                  <tr>
+                    <td>12</td>
+                    <td>Authorised Share Capital</td>
+                    <td className="text-capitalize">{`${institution?.basic_details?.authorisedShareCapital ?? ''}`}</td>
+                  </tr>
+                  <tr>
+                    <td>13</td>
+                    <td>Authorised Share Capital Currency</td>
+                    <td className="text-capitalize">{`${institution?.basic_details?.authorisedShareCapitalCurrency ?? ''}`}</td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </CardBody>
+
+            {institution?.primary_contact_details?.applicationPrimaryContactName && <>
+
+              <CardBody className="card-inner">
+                <CardTitle tag="h5">{`Primary Contact Details`}</CardTitle>
+
+                <table className="table table-striped table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>-</td>
+                      <td>Primary Contact Name</td>
+                      <td className="text-capitalize">{`${institution?.primary_contact_details?.applicationPrimaryContactName}`}</td>
+                    </tr>
+                    <tr>
+                      <td>-</td>
+                      <td>Primary Contact Email Address</td>
+                      <td className="text-capitalize">{`${institution?.primary_contact_details?.applicationPrimaryContactEmailAddress}`}</td>
+                    </tr>
+                    <tr>
+                      <td>-</td>
+                      <td>Primary Contact Telephone</td>
+                      <td className="text-capitalize">{`${institution?.primary_contact_details?.applicationPrimaryContactTelephone}`}</td>
+                    </tr>
 
 
-                                
-                            </ul>
-                        </DropdownMenu>
-                    </UncontrolledDropdown>
-                </li>
-                
+                  </tbody>
+                </table>
+              </CardBody>
+            </>}
+            <CardBody className="card-inner">
+              <CardTitle tag="h5">{`Bank Details`}</CardTitle>
 
-            </ul>
-        </div>
-       
-        <Modal isOpen={modalPaymentView} toggle={togglePaymentView} size="lg">
-            <ModalHeader toggle={togglePaymentView} close={<button className="close" onClick={togglePaymentView}><Icon name="cross" /></button>}>
-                Payment View
-            </ModalHeader>
-            <ModalBody>
-                  {(institution.internal.concession_stage != '1' ) ? <>
-                            {!showConcession &&  <>
-                              <Button onClick={toggleConcession} >Upload Concession</Button>
-                            </>}
-                    </> : 
-                    (institution?.latest_evidence?.proof) ? <>
-                        <ul>
-                            <li><span className="lead">Invoice Number : </span>{`${institution?.payment_information?.invoice_number}`}</li>
-                            <li><span className="lead">Date of Payment : </span>{`${institution?.latest_evidence?.dateUpload ? institution?.latest_evidence?.dateUpload : ''}`}</li>
-                            <li><span className="lead">Reference : </span>{`${institution?.payment_information?.reference}`}</li>
-                            {(aUser.is_admin_mbg() && $latest_evidence) && <>
-                            <li><span className="lead">Amount received by FSD : </span>{`${institution?.internal?.amount_received_by_fsd}`}</li>
-                            <li><span className="lead">Comment : </span>{`${institution.fsd_review[institution.fsd_review.length-1].comment}`}</li>
-                            </>}
-                        </ul>
-                        <div className="my-4">
-                            <a className="btn btn-primary mx-2" href={institution?.payment_details?.invoice_url} target="_blank">View Invoice</a>
-                            {(aUser.is_admin_fsd() && $latest_evidence) && <>
-                            
-                                <a className="btn btn-primary mx-2" href={$latest_evidence.proof} target="_blank">Latest evidence of payment</a>
-                                <Button color="primary" className="mx-2"  onClick={toggleReviewView}>Payment Review</Button>
-                            
-                            </>}
-                            {(aUser.is_admin_mbg() && $latest_evidence) && <>
-                            
-                            <a className="btn btn-primary mx-2" href={$latest_evidence.proof} target="_blank">Latest evidence of payment</a>
-                            {/* <Button color="primary" className="mx-2"  onClick={toggleReviewView}>Payment Review</Button> */}
-                                <div className="my-4">
-                                    <h6>Are you satisfied with FSD Review?</h6>
-                                    <Button color="primary" className="mx-2" onClick={() => askAction('approveFSDReview')}>Approve</Button>
-                                    <Button color="primary" className="mx-2" onClick={() => askAction('declineFSDReview')}>Decline</Button>
-                                </div>
-                            
-                            </>}
-                        </div>
-                      </> : <>
-                          <h5>Not Paid</h5>
-                      </>}
-                  
-                  {showConcession && <>
-                    <UploadConcession tabItem={institution} updateParentParent={props.updateParentParent} closeModel={togglePaymentView}/>
+              <table className="table table-striped table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {institution?.bank_details?.bankDetailName && <>
+                    <tr>
+                      <td>1</td>
+                      <td>Bank Detail</td>
+                      <td className="text-capitalize">{`${institution?.bank_details?.bankDetailName}`}</td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>Bank Address</td>
+                      <td className="text-capitalize">{`${institution?.bank_details?.bankDetailAddress}`}</td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td>Bank Telephone</td>
+                      <td className="text-capitalize">{`${institution?.bank_details?.bankDetailTelephone}`}</td>
+                    </tr>
+                    <tr>
+                      <td>4</td>
+                      <td>Type Of Account</td>
+                      <td className="text-capitalize">{`${institution?.bank_details?.bankDetailTypeOfAccount}`}</td>
+                    </tr>
                   </>}
-                  
-            </ModalBody>
-            <ModalFooter className="bg-light">
-                <span className="sub-text">View Institutions</span>
-            </ModalFooter>
-        </Modal>
-        
-             
-        <Modal isOpen={modalReviewView} toggle={toggleReviewView} size="sm">
-            <ModalHeader toggle={toggleReviewView} close={<button className="close" onClick={toggleReviewView}><Icon name="cross" /></button>}>
-                Payment Review
-            </ModalHeader>
-            <ModalBody>
-                        <ul>
-                            <li><span className="lead">Concession Amount : </span>{institution?.payment_details?.concession_amount ? `${institution?.payment_details?.concession_amount?.toLocaleString("en-US")}` : ``}</li>
-                            <li><span className="lead">Total Fee : </span>{institution?.payment_details?.total ? `${institution?.payment_details?.total?.toLocaleString("en-US")}` : ``}</li>
-                        </ul>
-                        <div className="my-4">
-                          
-                            {(aUser.is_admin_fsd()) && <>
-                            
-                                <a className="btn btn-primary mx-2" href={institution?.payment_details?.concession_file} target="_blank">View Concession Document </a>
-                                    
-                                <div className="my-4">
-                                    <Button color="primary" className="mx-2" onClick={() => askAction('approvePaymentReview')}>Approve</Button>
-                                    <Button color="primary" className="mx-2" onClick={() => askAction('declinePaymentReview')}>Decline</Button>
-                                </div>
-                            </>}
-                        </div>
-            </ModalBody>
-            <ModalFooter className="bg-light">
-                <span className="sub-text">View Institutions</span>
-            </ModalFooter>
-        </Modal>
-       
-        <Modal isOpen={modalView} toggle={toggleView} size="xl">
-            <ModalHeader toggle={toggleView} close={<button className="close" onClick={toggleView}><Icon name="cross" /></button>}>
-                View Institution Application 
-            </ModalHeader>
-            <ModalBody>
-                    <Card className="card">   
-                        <CardBody className="card-inner">
-                            <CardTitle tag="h5">{ `Basic Information` }</CardTitle>
-                            
-                            <table className="table table-striped table-bordered table-hover">
-                                <thead>
-                                  <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Value</th>
-                                  </tr>
-                                </thead>
-                                  <tbody>
-                                      <tr>
-                                        <td>1</td>
-                                        <td>Company Name</td>
-                                        <td className="text-capitalize">{`${institution?.basic_details?.companyName  ?? ''}`}</td>
-                                      </tr>
-                                      <tr>
-                                        <td>2</td>
-                                        <td>RC Number</td>
-                                        <td className="text-capitalize">{`${institution?.basic_details?.rcNumber  ?? ''}`}</td>
-                                      </tr>
-                                      <tr>
-                                        <td>3</td>
-                                        <td>Registered Office Address</td>
-                                        <td className="text-capitalize">{`${institution?.basic_details?.registeredOfficeAddress  ?? ''}`}</td>
-                                      </tr>
-                                      <tr>
-                                        <td>4</td>
-                                        <td>Town/City</td>
-                                        <td className="text-capitalize">{`${institution?.basic_details?.placeOfIncorporation  ?? ''}`}</td>
-                                      </tr>
-                                      <tr>
-                                        <td>5</td>
-                                        <td>Date of Incorporation</td>
-                                        <td className="text-capitalize">{`${institution?.basic_details?.dateOfIncorporation  ?? ''}`}</td>
-                                      </tr>
-                                      <tr>
-                                        <td>6</td>
-                                        <td>Place of Incorporation</td>
-                                        <td className="text-capitalize">{`${institution?.basic_details?.placeOfIncorporation  ?? ''}`}</td>
-                                      </tr>
-                                      <tr>
-                                        <td>7</td>
-                                        <td>Nature of Business</td>
-                                        <td className="text-capitalize">{`${institution?.basic_details?.natureOfBusiness  ?? ''}`}</td>
-                                      </tr>
-                                      <tr>
-                                        <td>8</td>
-                                        <td>Company Primary Telephone Number</td>
-                                        <td className="text-capitalize">{`${institution?.basic_details?.companyTelephoneNumber  ?? ''}`}</td>
-                                      </tr>
-                                      <tr>
-                                        <td>9</td>
-                                        <td>Company Secondary Telephone Number</td>
-                                        <td className="text-capitalize">{`${institution?.basic_details?.companyTelephoneNumber  ?? ''}`}</td>
-                                      </tr>
-                                      <tr>
-                                        <td>10</td>
-                                        <td>Company Email Address</td>
-                                        <td className="text-capitalize">{`${institution?.basic_details?.companyEmailAddress  ?? ''}`}</td>
-                                      </tr>
-                                      <tr>
-                                        <td>11</td>
-                                        <td>Company Website Address</td>
-                                        <td className="text-capitalize">{`${institution?.basic_details?.corporateWebsiteAddress  ?? ''}`}</td>
-                                      </tr>
-                                      <tr>
-                                        <td>12</td>
-                                        <td>Authorised Share Capital</td>
-                                        <td className="text-capitalize">{`${institution?.basic_details?.authorisedShareCapital ?? ''}`}</td>
-                                      </tr>
-                                      <tr>
-                                        <td>13</td>
-                                        <td>Authorised Share Capital Currency</td>
-                                          <td className="text-capitalize">{`${institution?.basic_details?.authorisedShareCapitalCurrency ?? ''}`}</td>
-                                      </tr>
-                                    
-                                  </tbody>
-                              </table>
-                        </CardBody> 
-                        <CardBody className="card-inner">
-                            <CardTitle tag="h5">{ `Bank Details` }</CardTitle>
-                            
-                            <table className="table table-striped table-bordered table-hover">
-                                <thead>
-                                  <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Value</th>
-                                  </tr>
-                                </thead>
-                                  <tbody>
-                                    {institution?.bank_details?.bankDetailName && <>
-                                      <tr>
-                                        <td>1</td>
-                                        <td>Bank Detail</td>
-                                        <td className="text-capitalize">{`${institution?.bank_details?.bankDetailName}`}</td>
-                                      </tr>
-                                      <tr>
-                                        <td>2</td>
-                                        <td>Bank Address</td>
-                                        <td className="text-capitalize">{`${institution?.bank_details?.bankDetailAddress}`}</td>
-                                      </tr>
-                                      <tr>
-                                        <td>3</td>
-                                        <td>Bank Telephone</td>
-                                        <td className="text-capitalize">{`${institution?.bank_details?.bankDetailTelephone}`}</td>
-                                      </tr>
-                                      <tr>
-                                        <td>4</td>
-                                        <td>Type Of Account</td>
-                                        <td className="text-capitalize">{`${institution?.bank_details?.bankDetailTypeOfAccount}`}</td>
-                                    </tr>
-                                    </>}
-                                    {institution?.bank_details?.bankDetailNameOne && <>
+                  {institution?.bank_details?.bankDetailNameOne && <>
 
-                                      <tr>
-                                        <td>1</td>
-                                        <td>Bank Detail</td>
-                                        <td className="text-capitalize">{`${institution?.bank_details?.bankDetailNameOne}`}</td>
-                                      </tr>
-                                      <tr>
-                                        <td>2</td>
-                                        <td>Bank Address</td>
-                                        <td className="text-capitalize">{`${institution?.bank_details?.bankDetailAddressOne}`}</td>
-                                      </tr>
-                                      <tr>
-                                        <td>3</td>
-                                        <td>Bank Telephone</td>
-                                        <td className="text-capitalize">{`${institution?.bank_details?.bankDetailTelephoneOne}`}</td>
-                                      </tr>
-                                      <tr>
-                                        <td>4</td>
-                                        <td>Type Of Account</td>
-                                        <td className="text-capitalize">{`${institution?.bank_details?.bankDetailTypeOfAccountOne}`}</td>
-                                      </tr>
-                                    </>}
+                    <tr>
+                      <td>1</td>
+                      <td>Bank Detail</td>
+                      <td className="text-capitalize">{`${institution?.bank_details?.bankDetailNameOne}`}</td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>Bank Address</td>
+                      <td className="text-capitalize">{`${institution?.bank_details?.bankDetailAddressOne}`}</td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td>Bank Telephone</td>
+                      <td className="text-capitalize">{`${institution?.bank_details?.bankDetailTelephoneOne}`}</td>
+                    </tr>
+                    <tr>
+                      <td>4</td>
+                      <td>Type Of Account</td>
+                      <td className="text-capitalize">{`${institution?.bank_details?.bankDetailTypeOfAccountOne}`}</td>
+                    </tr>
+                  </>}
 
-                                    {institution?.bank_details?.bankDetailNameTwo && <>
+                  {institution?.bank_details?.bankDetailNameTwo && <>
 
-                                      <tr>
-                                        <td>1</td>
-                                        <td>Bank Detail</td>
-                                        <td className="text-capitalize">{`${institution?.bank_details?.bankDetailNameTwo}`}</td>
-                                      </tr>
-                                      <tr>
-                                        <td>2</td>
-                                        <td>Bank Address</td>
-                                        <td className="text-capitalize">{`${institution?.bank_details?.bankDetailAddressTwo}`}</td>
-                                      </tr>
-                                      <tr>
-                                        <td>3</td>
-                                        <td>Bank Telephone</td>
-                                        <td className="text-capitalize">{`${institution?.bank_details?.bankDetailTelephoneTwo}`}</td>
-                                      </tr>
-                                      <tr>
-                                        <td>4</td>
-                                        <td>Type Of Account</td>
-                                        <td className="text-capitalize">{`${institution?.bank_details?.bankDetailTypeOfAccountTwo}`}</td>
-                                      </tr>
-                                    </>}
-                                    
-                                  </tbody>
-                              </table>
-                        </CardBody>
-                          {institution?.bank_license_details?.bankingLicense && <>
+                    <tr>
+                      <td>1</td>
+                      <td>Bank Detail</td>
+                      <td className="text-capitalize">{`${institution?.bank_details?.bankDetailNameTwo}`}</td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>Bank Address</td>
+                      <td className="text-capitalize">{`${institution?.bank_details?.bankDetailAddressTwo}`}</td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td>Bank Telephone</td>
+                      <td className="text-capitalize">{`${institution?.bank_details?.bankDetailTelephoneTwo}`}</td>
+                    </tr>
+                    <tr>
+                      <td>4</td>
+                      <td>Type Of Account</td>
+                      <td className="text-capitalize">{`${institution?.bank_details?.bankDetailTypeOfAccountTwo}`}</td>
+                    </tr>
+                  </>}
 
-                        <CardBody className="card-inner">
-                            <CardTitle tag="h5">{ `Type of Bank License` }</CardTitle>
-                            
-                            <table className="table table-striped table-bordered table-hover">
-                                <thead>
-                                  <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Value</th>
-                                  </tr>
-                                </thead>
-                                  <tbody>
-                                      <tr>
-                                        <td>1</td>
-                                        <td>Banking License</td>
-                                        <td className="text-capitalize">{`${institution?.bank_license_details?.bankingLicense}`}</td>
-                                      </tr>
-                                    
+                </tbody>
+              </table>
+            </CardBody>
+            {institution?.bank_license_details?.bankingLicense && <>
 
-                                  </tbody>
-                              </table>
-                        </CardBody>
-                        </>}
-                          
+              <CardBody className="card-inner">
+                <CardTitle tag="h5">{`Bank License`}</CardTitle>
 
-                        <CardBody className="card-inner">
-                            <CardTitle tag="h5">{ `Disciplinary History ` }</CardTitle>
-                            
-                            <table className="table table-striped table-bordered table-hover">
-                                <thead>
-                                  <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Value</th>
-                                  </tr>
-                                </thead>
-                                  <tbody>
-                                    {institution?.disciplinary_details?.chiefComplianceOfficerDisciplinary && <>
-                                      <tr>
-                                        <td>-</td>
-                                        <td>chiefComplianceOfficerDisciplinary</td>
-                                        <td className="text-capitalize">{`${institution?.disciplinary_details?.chiefComplianceOfficerDisciplinary}`}</td>
-                                      </tr>
+                <table className="table table-striped table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>Banking License</td>
+                      <td className="text-capitalize">{`${institution?.bank_license_details?.bankingLicense}`}</td>
+                    </tr>
+
+
+                  </tbody>
+                </table>
+              </CardBody>
+            </>}
+
+            {institution?.bank_license_details?.bankingLicense && <>
+
+              <CardBody className="card-inner">
+                <CardTitle tag="h5">{`Estimated Value Of Trade`}</CardTitle>
+
+                <table className="table table-striped table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {/* <tr>
+                      <td>1</td>
+                      <td>Banking License</td>
+                      <td className="text-capitalize">{`${institution?.bank_license_details?.bankingLicense}`}</td>
+                    </tr> */}
+
+
+                  </tbody>
+                </table>
+              </CardBody>
+            </>}
+
+
+
+            <CardBody className="card-inner">
+              <CardTitle tag="h5">{`Disciplinary History `}</CardTitle>
+
+              <table className="table table-striped table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {institution?.disciplinary_details?.chiefComplianceOfficerDisciplinary && <>
+                    <tr>
+                      <td>-</td>
+                      <td>chiefComplianceOfficerDisciplinary</td>
+                      <td className="text-capitalize">{`${institution?.disciplinary_details?.chiefComplianceOfficerDisciplinary}`}</td>
+                    </tr>
                   </>}
                   {institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryFive && <>
                     <tr>
@@ -994,26 +602,25 @@ const ActionTab = (props) => {
                       <td className="text-capitalize">{`${institution?.disciplinary_details?.treasureDisciplinaryTwo}`}</td>
                     </tr>
                   </>}
-                                    
 
-                                  </tbody>
-                              </table>
-                        </CardBody>
+
+                </tbody>
+              </table>
+            </CardBody>
 
             {institution?.custodian_details?.custodianInformationName && <>
-            <CardBody className="card-inner">
-              <CardTitle tag="h5">{`Custodian Information`}</CardTitle>
+              <CardBody className="card-inner">
+                <CardTitle tag="h5">{`Custodian Information`}</CardTitle>
 
-              <table className="table table-striped table-bordered table-hover">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Value</th>
-                  </tr>
-                </thead>
-                <tbody>
-
+                <table className="table table-striped table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
 
                     <tr>
                       <td>1</td>
@@ -1035,88 +642,78 @@ const ActionTab = (props) => {
                       <td>Telephone</td>
                       <td className="text-capitalize">{`${institution?.custodian_details?.custodianInformationTelephone}`}</td>
                     </tr>
+                  </tbody>
+                </table>
+              </CardBody>
+            </>}
+
+            <CardBody className="card-inner">
+              <CardTitle tag="h5">{`Key Officers`}</CardTitle>
+
+              <table className="table table-striped table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Full Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Reg ID</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {/* {$user_application} */}
+                  {institution?.ars && institution?.ars?.map((ar, index) => (
+                    <tr key={index}>
+                      <th scope="row">{++index}</th>
+                      <td>{ar.full_name}</td>
+                      <td>{ar.email}</td>
+                      <td>{ar.reg_id}</td>
+                      <td>{ar.member_status == 'active' ? 'Active' : 'Suspended'}</td>
+                      <td>
+                        <button className="btn btn-primary btn-sm" onClick={() => askAction('memberStatus', ar)}>{ar.member_status == 'active' ? 'Suspend' : 'Reactivate'}</button>
+                      </td>
+                    </tr>
+
+                  ))}
                 </tbody>
               </table>
             </CardBody>
-                  </>}
 
-                        <CardBody className="card-inner">
-                            <CardTitle tag="h5">{ `Supporting Documents` }</CardTitle>
+            <CardBody className="card-inner">
+              <CardTitle tag="h5">{`Supporting Documents`}</CardTitle>
 
-                            <table className="table table-striped table-bordered table-hover">
-                              <thead>
-                                <tr>
-                                  <th scope="col">#</th>
-                                  <th scope="col">Name</th>
-                                  <th scope="col" className="width-30">Value</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {/* {$user_application} */}
-                                {institution?.required_documents && institution?.required_documents?.map((document, index) => (
-                                  <tr key={index}>
-                                    <th scope="row">{++index}</th>
-                                    <td>{document.description}</td>
-                                    <td>
-                                      {document.uploaded_file != null ? <>
-                                        <a className="btn btn-primary" href={document.file_path} target="_blank">View File </a>
-                                      </> : <>
-                                        {document.uploaded_field}
-                                      </>}
-                                    </td>
-                                  </tr>
+              <table className="table table-striped table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col" className="width-30">Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {/* {$user_application} */}
+                  {institution?.required_documents && institution?.required_documents?.map((document, index) => (
+                    <tr key={index}>
+                      <th scope="row">{++index}</th>
+                      <td>{document.description}</td>
+                      <td>
+                        {document.uploaded_file != null ? <>
+                          <a className="btn btn-primary" href={document.file_path} target="_blank">View File </a>
+                        </> : <>
+                          {document.uploaded_field}
+                        </>}
+                      </td>
+                    </tr>
 
-                                ))}
-                              </tbody>
-                            </table>
-                        </CardBody>
-                        
-                        <CardBody className="card-inner">
-                            <CardTitle tag="h5">{`Payment Information`}</CardTitle>
-                          
-                            <table className="table table-striped table-bordered table-hover">
-                            <thead>
-                              <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Value</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr>
-                                <td>1</td>
-                                <td>Invoice Number</td>
-                                <td className="text-capitalize">{`${institution?.payment_information?.invoice_number}`}</td>
-                              </tr>
-                              <tr>
-                                <td>2</td>
-                                <td>Payment Reference</td>
-                                <td className="text-capitalize">{`${institution?.payment_information?.reference}`}</td>
-                              </tr>
-                              <tr>
-                                <td>3</td>
-                                <td>Date of Payment</td>
-                                <td className="text-capitalize">{`${institution?.payment_information?.date_paid}`}</td>
-                              </tr>
-                              <tr>
-                                <td>4</td>
-                                <td>Amount Paid</td>
-                                <td className="text-capitalize">{`${institution?.payment_details?.total}`}</td>
-                              </tr>
-                              <tr>
-                                <td>5</td>
-                                <td>Concession Amount</td>
-                                <td className="text-capitalize">{`${institution?.payment_details?.concession_amount}`}</td>
-                              </tr>
-                            </tbody>
-                            </table>
-                        </CardBody>
-                        <CardBody className="card-inner">
-                            <CardTitle tag="h5">{ `MBG Review` }</CardTitle>
-                              {/* <ul>
-                                  <li><span className="lead">Status :{`${institution?.mbg_review[institution?.mbg_review.length - 1]?.status ? institution?.mbg_review[institution?.mbg_review.length - 1]?.status : ""}`} </span></li>
-                                  <li><span className="lead">Reason :{`${institution?.mbg_review[institution?.mbg_review.length - 1]?.comment ? institution?.mbg_review[institution?.mbg_review.length - 1]?.comment : ""}`} </span></li>
-              </ul> */}
+                  ))}
+                </tbody>
+              </table>
+            </CardBody>
+
+            <CardBody className="card-inner">
+              <CardTitle tag="h5">{`Payment Information`}</CardTitle>
+
               <table className="table table-striped table-bordered table-hover">
                 <thead>
                   <tr>
@@ -1128,409 +725,110 @@ const ActionTab = (props) => {
                 <tbody>
                   <tr>
                     <td>1</td>
-                    <td>Status</td>
-                    <td className="text-capitalize">{`${institution?.mbg_review[institution?.mbg_review.length - 1]?.status ? institution?.mbg_review[institution?.mbg_review.length - 1]?.status : ""}`}</td>
+                    <td>Invoice Number</td>
+                    <td className="text-capitalize">{`${institution?.payment_information?.invoice_number}`}</td>
                   </tr>
                   <tr>
                     <td>2</td>
-                    <td>Reason</td>
-                    <td className="text-capitalize">{`${institution?.mbg_review[institution?.mbg_review.length - 1]?.comment ? institution?.mbg_review[institution?.mbg_review.length - 1]?.comment : ""}`}</td>
+                    <td>Payment Reference</td>
+                    <td className="text-capitalize">{`${institution?.payment_information?.reference}`}</td>
                   </tr>
-
+                  <tr>
+                    <td>3</td>
+                    <td>Date of Payment</td>
+                    <td className="text-capitalize">{`${institution?.payment_information?.date_paid}`}</td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td>Amount Paid</td>
+                    <td className="text-capitalize">{`${institution?.payment_details?.total}`}</td>
+                  </tr>
+                  <tr>
+                    <td>5</td>
+                    <td>Concession Amount</td>
+                    <td className="text-capitalize">{`${institution?.payment_details?.concession_amount}`}</td>
+                  </tr>
                 </tbody>
               </table>
-                        </CardBody>
-                        <CardBody className="card-inner">
-                            <CardTitle tag="h5">{ `FSG Review` }</CardTitle>
-                              {/* <ul>
-                                  <li><span className="lead">Status :{`${institution?.fsd_review[institution?.fsd_review.length - 1]?.status ? institution?.fsd_review[institution?.fsd_review.length - 1]?.status : ""}`} </span></li>
-                                  <li><span className="lead">Reason :{`${institution?.fsd_review[institution?.fsd_review.length - 1]?.comment ? institution?.fsd_review[institution?.fsd_review.length - 1]?.comment : ""}`} </span></li>
-              </ul> */}
-              <table className="table table-striped table-bordered table-hover">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Value</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>Status</td>
-                    <td className="text-capitalize">{`${institution?.fsd_review[institution?.fsd_review.length - 1]?.status ? institution?.fsd_review[institution?.fsd_review.length - 1]?.status : ""}`}</td>
-                  </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>Reason</td>
-                    <td className="text-capitalize">{`${institution?.fsd_review[institution?.fsd_review.length - 1]?.comment ? institution?.fsd_review[institution?.fsd_review.length - 1]?.comment : ""}`}</td>
-                  </tr>
+            </CardBody>
 
-                </tbody>
-              </table>
-                        </CardBody>
-                        <CardBody className="card-inner">
-                            <CardTitle tag="h5">{ `MEG Review` }</CardTitle>
-                              {/* <ul>
-                                  <li><span className="lead">Status :{`${institution?.meg_review[institution?.meg_review.length - 1]?.status ? institution?.meg_review[institution?.meg_review.length - 1]?.status : ""}`} </span></li>
-                                  <li><span className="lead">Reason :{`${institution?.meg_review[institution?.meg_review.length - 1]?.comment ? institution?.meg_review[institution?.meg_review.length - 1]?.comment : ""}`} </span></li>
-              </ul> */}
-              <table className="table table-striped table-bordered table-hover">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Value</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>Status</td>
-                    <td className="text-capitalize">{`${institution?.meg_review[institution?.meg_review.length - 1]?.status ? institution?.meg_review[institution?.meg_review.length - 1]?.status : ""}`}</td>
-                  </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>Reason</td>
-                    <td className="text-capitalize">{`${institution?.meg_review[institution?.meg_review.length - 1]?.comment ? institution?.meg_review[institution?.meg_review.length - 1]?.comment : ""}`}</td>
-                  </tr>
+          </Card>
+        </ModalBody>
+        <ModalFooter className="bg-light">
+        </ModalFooter>
+      </Modal>
 
-                </tbody>
-              </table>
-                        </CardBody>
-                        {(aUser.is_admin_meg() && institution.internal.mbg_review_stage && !institution.internal.meg_review_stage ) && 
-                          <div className="gy-0">
-                                <h5>Application Review</h5>
-                                <Button className="btn btn-primary mx-2"  onClick={() => askAction('declineApplicationReview')}>Reject Application</Button>
-                                <Button className="btn btn-success mx-2"  onClick={() => askAction('approveApplicationsReview')}> Upload Application Report</Button>
-                          </div>
-                      }
-                        {(aUser.is_admin_meg2() && institution.internal.meg_review_stage && !institution.internal.meg2_review_stage) && 
-                          <div className="gy-0">
-                                {/* <h5>Application Review</h5> */}
-                                <Button className="btn btn-success mx-2"  onClick={() => askAction('approveMEGApplicationsReview')}> Application Review</Button>
-                          </div>
-                      }
-                      
-                        {(aUser.is_admin_meg() && institution?.internal?.is_applicant_executed_membership_agreement == 1 && institution?.internal?.is_meg_executed_membership_agreement == 0 ) && <>
-                        {/* {(aUser.is_admin_meg() && institution?.internal?.is_applicant_executed_membership_agreement && !institution?.internal?.is_meg_executed_membership_agreement ) && <> */}
-                          <div className="gy-0">
-                                <h5>Upload Signed Agreement</h5>
-                                <a className="btn btn-primary mx-2"  href={institution?.internal?.membership_agreement} target="_blank">View Executed Agreement</a>
-                                <Button className="btn btn-success mx-2"  onClick={toggleSignedAgreement}>Upload Executed Agreement</Button>
-                          </div>
-                        </>
-                        
-                      }
-                        {/* {(aUser.is_admin_meg() && institution?.internal?.is_applicant_executed_membership_agreement == 1 && institution?.internal?.is_meg_executed_membership_agreement == 1 ) && 
-                        <div className="gy-0">
-                                <h5>Final Review</h5>
-                                <a className="btn btn-primary mx-2"   onClick={(e) => navigate(`${process.env.PUBLIC_URL}/${institution?.internal?.institution_id}/list-ars`)} target="_blank">View Authorised Representatives</a>
-                                {!institution?.completed && <Button className="btn btn-success mx-2"   onClick={() => askAction('completeApplication')}>Complete Application</Button>}
-                          </div>
-                      } */}
-                        {(aUser.is_admin_meg() && institution?.internal?.meg2_review_stage == 1 && institution?.internal?.meg_review_stage == 1  && institution?.internal?.is_applicant_executed_membership_agreement == 0 ) && 
-                          <div className="gy-0">
-                                <h5>Membership Agreement</h5>
-                                <a className="btn btn-primary mx-2"  href={institution?.internal?.membership_agreement} target="_blank">Preview Agreement</a>
-                                <Button className="btn btn-success mx-2"  onClick={() => askAction('sendAgreement')}> Send Agreement</Button>
-                          </div>
-                      }
-                        {(aUser.is_admin_meg2() 
-                        && institution.internal.meg2_review_stage  == 1
-                        && institution.internal.meg_review_stage == 1 
-                        && institution?.internal?.is_applicant_executed_membership_agreement == 1 
-                        && institution?.internal?.is_meg_executed_membership_agreement == 1 ) && 
-                          <div className="gy-0">
-                                <h5>Send E-Success Letter</h5>
-                                <a className="btn btn-primary mx-2"  href={institution?.e_success_letter} target="_blank">Preview E-Success Letter</a>
-                                <Button className="btn btn-success mx-2"  onClick={() => askAction('sendESuccessLetter')}> Send E-Success Letter</Button>
-                          </div>
-                      }
-                    </Card>
-            </ModalBody>
-            <ModalFooter className="bg-light">
-                <span className="sub-text">View Institutions</span>
-            </ModalFooter>
-        </Modal>
-        
-        <Modal isOpen={modalViewUpdate} toggle={toggleViewUpdate} size="lg">
-            <ModalHeader toggle={toggleViewUpdate} close={<button className="close" onClick={toggleViewUpdate}><Icon name="cross" /></button>}>
-                View Institution
-            </ModalHeader>
-            <ModalBody>
-                    {/* <Card className="card">   
-                        <CardBody className="card-inner">
-                            <CardTitle tag="h5">{ `${institution.firstName} ${institution.lastName} (${institution.email})` }</CardTitle>
-                          
-                              <ul>
-                                  <li><span className="lead">Phone : </span>{`${institution.phone}`}</li>
-                                  <li><span className="lead">Nationality : </span>{`${institution.nationality}`}</li>
-                                  <li><span className="lead">Role : </span>{`${institution.role.name}`}</li>
-                                  <li><span className="lead">Position : </span>{`${institution.position.name}`}</li>
-                                  <li><span className="lead">Status : </span>{`${institution.approval_status}`}</li>
-                                  <li><span className="lead">RegID : </span>{`${institution.regId}`}</li>
-                                  <li><span className="lead">Institution : </span>{`${institution.institution.name}`}</li>
-                              </ul>
-                        </CardBody>
-                    </Card> */}
-            </ModalBody>
-            <ModalFooter className="bg-light">
-                <span className="sub-text">View Institutions</span>
-            </ModalFooter>
-        </Modal>
-        
-        <Modal isOpen={signedAgreement} toggle={toggleSignedAgreement} size="lg">
-            <ModalHeader toggle={toggleSignedAgreement} close={<button className="close" onClick={toggleSignedAgreement}><Icon name="cross" /></button>}>
-                Upload MEG Signed Agreement
-            </ModalHeader>
-            <ModalBody>
-                    <Row className="gy-5">
-                        <Col md='12'>
-                          <Card className="card-bordered">   
-                            <CardBody className="card-inner">
-                              
-                                    <UploadAgreementModel tabItem={institution} updateParentParent={props.updateParentParent} closeModel={toggleSignedAgreement}/>
-                              
-                            </CardBody>
-                          </Card>
-                        </Col>
-                    </Row>   
-            </ModalBody>
-            <ModalFooter className="bg-light">
-                <span className="sub-text">View Institutions</span>
-            </ModalFooter>
-        </Modal>
     </>
 
 
   );
 };
 
-
-const UploadAgreementModel = ({ updateParentParent, tabItem, positions, closeModel }) => {
-    
-
-    
-    const navigate = useNavigate();
-    const tabItem_id = tabItem.id
-    const [complainFile, setComplainFile] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const dispatch = useDispatch();
-    
-    const { handleSubmit, register, watch, formState: { errors } } = useForm();
-
-    const submitForm = async (data) => {
-            
-            const postValues = new Object();
-              postValues.executed_member_agreement = complainFile;
-              postValues.application_id = tabItem?.internal.application_id;
-
-              try {
-                  setLoading(true);
-                  
-                  const resp = await dispatch(MEGUploadAgreement(postValues));
-
-                  if (resp.payload?.message == "success") {
-                      setTimeout(() => {
-                          setLoading(false);
-                          updateParentParent(Math.random())
-                          closeModel()
-                        //   navigate(`${process.env.PUBLIC_URL}/dashboard`)
-                      }, 1000);
-                  
-                  } else {
-                    setLoading(false);
-                  }
-                  
-              } catch (error) {
-                setLoading(false);
-              }
-          
-        };
-
-    
-    const handleFileChange = (event) => {
-		setComplainFile(event.target.files[0]);
-    };
-    
-  
-    return (
-        <>
-            
-            <form className="content clearfix my-5" onSubmit={handleSubmit(submitForm)}  encType="multipart/form-data">
-                
-                <div className="form-group">
-                    <label className="form-label" htmlFor="proveOfPayment">
-                        Signed Agreement
-                    </label>
-                    <div className="form-control-wrap">
-                        <input type="file" accept=".pdf" id="proveOfPayment" className="form-control" {...register('proveOfPayment', { required: "This Field is required" })} onChange={handleFileChange}/>
-                        {errors.proveOfPayment && <span className="invalid">{ errors.proveOfPayment.message }</span>}
-                    </div>
-                </div>
-                <div className="form-group">
-                    <Button color="primary" type="submit"  size="md">
-                        {loading ? ( <span><Spinner size="sm" color="light" /> Processing...</span>) : "Upload "}
-                    </Button>
-
-                    <Button color="primary" size='md' className="mx-3" onClick={closeModel}>Cancel</Button>
-                </div>
-                
-          </form>
-          
-      </>
-
-
-    );
-};
-
-const UploadConcession = ({ updateParentParent, tabItem, positions, closeModel }) => {
-    
-    const aUser = useUser();
-    const aUserUpdate = useUserUpdate();
-    
-    const tabItem_id = tabItem.id
-    const [complainFile, setComplainFile] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const dispatch = useDispatch();
-    
-    const { handleSubmit, register, watch, formState: { errors } } = useForm();
-
-    const submitForm = async (data) => {
-            
-            const postValues = new Object();
-              postValues.concession_amount = data.concession_amount;
-              postValues.concession_file = complainFile;
-              postValues.application_id = tabItem.internal.application_id;
-
-              try {
-                  setLoading(true);
-                  
-                  const resp = await dispatch(uploadConcession(postValues));
-
-                  if (resp.payload?.message == "success") {
-                      setTimeout(() => {
-                          setLoading(false);
-                          updateParentParent(Math.random())
-                          closeModel()
-                      }, 1000);
-                  
-                  } else {
-                    setLoading(false);
-                  }
-                  
-              } catch (error) {
-                setLoading(false);
-              }
-          
-        };
-
-
-
-    
-    const handleFileChange = (event) => {
-		setComplainFile(event.target.files[0]);
-    };
-    
-  
-    return (
-        <>
-            
-            <form className="content clearfix my-5" onSubmit={handleSubmit(submitForm)}  encType="multipart/form-data">
-                
-    
-                <div className="form-group">
-                    <label className="form-label" htmlFor="concession_amount">
-                        Concession Amount
-                    </label>
-                    <div className="form-control-wrap">
-                        <input type="number" id="concession_amount" className="form-control" {...register('concession_amount', { required: "This Field is required" })}  />
-                        {errors.concession_amount && <span className="invalid">{ errors.concession_amount.message }</span>}
-                    </div>
-                </div>
-                <div className="form-group">
-                    <label className="form-label" htmlFor="concession_file">
-                        Concession Approval (pdf)
-                    </label>
-                    <div className="form-control-wrap">
-                        <input type="file"  accept=".pdf" id="concession_file" className="form-control" {...register('concession_file', { required: "This Field is required" })} onChange={handleFileChange}/>
-                        {errors.concession_file && <span className="invalid">{ errors.concession_file.message }</span>}
-                    </div>
-                </div>
-                <div className="form-group">
-                    <Button color="primary" type="submit"  size="lg">
-                        {loading ? ( <span><Spinner size="sm" color="light" /> Processing...</span>) : "Upload Concession"}
-                    </Button>
-                </div>
-                
-          </form>
-          
-      </>
-
-
-    );
-};
-
-
 const AdminApplicationReportTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent }) => {
-    const complainColumn = [
-      {
-          name: "ID",
-          selector: (row, index) => ++index,
-          sortable: true,
-          width: "100px",
-          wrap: true
-      },
-      {
-          name: "Membership ID",
-          selector: (row) => { return (<>{`${row.basic_details.companyName}`}</>) },
-          sortable: true,
-          width: "auto",
-          wrap: true
-      },
-      {
-          name: "Institution Name",
-          selector: (row) => { return (<>{`${row.basic_details.companyName}`}</>) },
-          sortable: true,
-          width: "auto",
-          wrap: true
-      },
-      {
-          name: "Category",
-          selector: (row) => { return (<><p>{`${row.internal.category_name}`}</p></>) },
-          sortable: true,
-          width: "auto",
-          wrap: true
-      },
-      {
-          name: "Type",
-          selector: (row) => { return (<><Badge color="success" className="text-uppercase">{row.internal.application_type}</Badge></>) },
-          sortable: true,
-          width: "auto",
-          wrap: true
-      },
-      // {
-      //     name: "Concession",
-      //     selector: (row) => { return row.internal.concession_stage == 1 ? (<><Badge color="success" className="text-uppercase">{`Concession Sent`}</Badge></>) : (<><Badge color="success" className="text-uppercase">{`Pending Concession`}</Badge></>) },
-      //     sortable: true,
-      //     width: "auto",
-      //     wrap: true
-      // },
-      // {
-      //     name: "Status",
-      //     selector: (row) => { return (<><Badge color="success" className="text-uppercase">{row.internal.status}</Badge></>) },
-      //     sortable: true,
-      //     width: "auto",
-      //     wrap: true
-      // },
-      {
-          name: "Date Created",
-          selector: (row) => moment(row.createdAt).format('MMM. D, YYYY HH:mm'),
-          sortable: true,
-          width: "auto",
-          wrap: true
-      },{
+  const complainColumn = [
+    {
+      name: "ID",
+      selector: (row, index) => ++index,
+      sortable: true,
+      width: "100px",
+      wrap: true
+    },
+    {
+      name: "Membership ID",
+      selector: (row) => { return (<>{`${row.reg_id}`}</>) },
+      sortable: true,
+      width: "auto",
+      wrap: true
+    },
+    {
+      name: "Institution Name",
+      selector: (row) => { return (<>{`${row.basic_details.companyName}`}</>) },
+      sortable: true,
+      width: "auto",
+      wrap: true
+    },
+    {
+      name: "Category",
+      selector: (row) => { return (<><p>{`${row.internal.category_name}`}</p></>) },
+      sortable: true,
+      width: "auto",
+      wrap: true
+    },
+    {
+      name: "Type",
+      selector: (row) => { return (<><Badge color="success" className="text-uppercase">{row.internal.application_type}</Badge></>) },
+      sortable: true,
+      width: "auto",
+      wrap: true
+    },
+    {
+      name: "Type Status",
+      selector: (row) => { return (<><Badge color="success" className="text-uppercase">{row.internal.application_type_status}</Badge></>) },
+      sortable: true,
+      width: "auto",
+      wrap: true
+    },
+    // {
+    //     name: "Concession",
+    //     selector: (row) => { return row.internal.concession_stage == 1 ? (<><Badge color="success" className="text-uppercase">{`Concession Sent`}</Badge></>) : (<><Badge color="success" className="text-uppercase">{`Pending Concession`}</Badge></>) },
+    //     sortable: true,
+    //     width: "auto",
+    //     wrap: true
+    // },
+    // {
+    //     name: "Status",
+    //     selector: (row) => { return (<><Badge color="success" className="text-uppercase">{row.internal.status}</Badge></>) },
+    //     sortable: true,
+    //     width: "auto",
+    //     wrap: true
+    // },
+    {
+      name: "Date Created",
+      selector: (row) => moment(row.createdAt).format('MMM. D, YYYY HH:mm'),
+      sortable: true,
+      width: "auto",
+      wrap: true
+    }, {
       name: "Action",
       selector: (row) => (<>
         <ActionTab institution={row} updateParentParent={updateParent} />
@@ -1544,9 +842,9 @@ const AdminApplicationReportTable = ({ data, pagination, actions, className, sel
   const [rowsPerPageS, setRowsPerPage] = useState(10);
   const [mobileView, setMobileView] = useState();
 
-    useEffect(() => {
-        setTableData(data)
-    }, [data]);
+  useEffect(() => {
+    setTableData(data)
+  }, [data]);
 
   useEffect(() => {
     let defaultData = tableData;
@@ -1578,9 +876,9 @@ const AdminApplicationReportTable = ({ data, pagination, actions, className, sel
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    // const renderer = ({ hours, minutes, seconds, completed }) => {
-    //         if (completed) {
-              
+  // const renderer = ({ hours, minutes, seconds, completed }) => {
+  //         if (completed) {
+
   return (
     <div className={`dataTables_wrapper dt-bootstrap4 no-footer ${className ? className : ""}`}>
       <Row className={`justify-between g-2 ${actions ? "with-export" : ""}`}>
@@ -1652,26 +950,26 @@ const AdminApplicationReportTable = ({ data, pagination, actions, className, sel
       ></DataTable>
     </div>
   );
-  
-    //         } else {
 
-    //             return (
-    //                     <>
-    //                         <Skeleton count={10} height={20}  style={{display: 'block',lineHeight: 2, padding: '1rem',width: 'auto',}}/>
-    //                     </>
-                        
-    //                 )
-    //         }
-    // };
-    
-    //       return (
-    //               <Countdown
-    //                 date={Date.now() + 5000}
-    //                 renderer={renderer}
-    //             />
+  //         } else {
 
-                
-    //         );
+  //             return (
+  //                     <>
+  //                         <Skeleton count={10} height={20}  style={{display: 'block',lineHeight: 2, padding: '1rem',width: 'auto',}}/>
+  //                     </>
+
+  //                 )
+  //         }
+  // };
+
+  //       return (
+  //               <Countdown
+  //                 date={Date.now() + 5000}
+  //                 renderer={renderer}
+  //             />
+
+
+  //         );
 };
 
 export default AdminApplicationReportTable;

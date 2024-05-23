@@ -125,6 +125,7 @@ Route::middleware('auth')->group(function () {
         //
         Route::group(['prefix' => 'meg/ar'], function () {
 
+            Route::post('/process-member-status/{ARUser}', [ARController::class, 'processMemberStatusMEG']);
             Route::post('/process-add/{ARUser}', [ARController::class, 'processAddByMEG']);
             Route::post('/process-transfer/{record}', [ARController::class, 'processTransferByMEG']);
         });

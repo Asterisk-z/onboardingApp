@@ -6,6 +6,7 @@ use App\Models\Application;
 use App\Models\ApplicationFieldUpload;
 use App\Models\Invoice;
 use App\Models\ProofOfPayment;
+use App\Models\User;
 
 trait ApplicationTraits
 {
@@ -15,6 +16,11 @@ trait ApplicationTraits
         $invoice = Invoice::find($application->invoice_id);
 
         return $invoice;
+    }
+
+    public function institutionUsers($institution_id)
+    {
+        return User::where('institution_id', $institution_id)->where('approval_status', 'approved')->get(['first_name', 'email', 'last_name', 'id', 'reg_id', 'member_status']);
     }
 
     public function subLatestEvidence($application_id)

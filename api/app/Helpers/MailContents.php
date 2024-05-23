@@ -153,7 +153,7 @@ class MailContents
 
     public static function megConversionRequestTitle(): string
     {
-        return "New Membership Conversion Initiated";
+        return "New Membership Conversion Application";
     }
 
     public static function megConversionRequestMail($company_name, $membership_category): string
@@ -165,7 +165,7 @@ class MailContents
 
     public static function megAdditionRequestTitle(): string
     {
-        return "New Membership Addition Initiated";
+        return "New Membership Addition Application";
     }
 
     public static function megAdditionRequestMail($company_name): string

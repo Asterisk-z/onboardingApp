@@ -746,4 +746,35 @@ class ARController extends Controller
 
         return successResponse('Request sent successfully');
     }
+
+    public function processMemberStatusMEG(Request $request, User $ARUser)
+    {
+
+        $request->validate([
+            'action' => 'required|in:approve,suspend',
+        ]);
+
+        $regID = $ARUser->getRegID();
+
+        if ($request->action == 'approve') {
+
+            $ARUser->member_status = 'active';
+            $ARUser->save();
+
+            $logTitle = 'Activate Member';
+            $logMessage = auth()->user()->full_name . " activated member status of AR - $ARUser->email ($regID)";
+            logAction($request->user()->email, $logTitle, $logMessage, $request->ip());
+
+        } else {
+
+            $ARUser->member_status = 'suspended';
+            $ARUser->save();
+
+            $logTitle = 'Suspend Member';
+            $logMessage = auth()->user()->full_name . " suspended  member status of AR - $ARUser->email ($regID)";
+            logAction($request->user()->email, $logTitle, $logMessage, $request->ip());
+        }
+
+        return successResponse('Status Updated Successful', []);
+    }
 }

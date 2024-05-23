@@ -71,7 +71,7 @@ const UpdateGuideComponent = ({ applicantGuide, updateParent }) => {
                     Upload Document
                 </label>
                 <div className="form-control-wrap">
-                    <input type="file"  id="file" className="form-control" {...register('file', { required: "This Field is required" })} />
+                    <input type="file" id="file" className="form-control" {...register('file', { required: "This Field is required" })} />
                     {errors.file && <span className="invalid">{errors.file.message}</span>}
                 </div>
             </div>
@@ -160,8 +160,8 @@ const AdminApplicantGuide = ({ drawer }) => {
                                         <li className="nk-block-tools-opt">
                                             {!$applicantGuide &&
                                                 <Button color="primary">
-                                                <span onClick={toggleForm}>Create Applicant Guide</span>
-                                            </Button>}
+                                                    <span onClick={toggleForm}>Create Applicant Guide</span>
+                                                </Button>}
                                         </li>
                                     </ul>
                                 </div>
@@ -234,7 +234,7 @@ const AdminApplicantGuide = ({ drawer }) => {
                                                 <CardText>
                                                     {/* {$applicantGuide.url} */}
                                                 </CardText>
-                                                <a style={{marginRight:'10px'}} href={$applicantGuide.file} target="_blank" className="btn btn-primary" rel="noreferrer">View Document</a>
+                                                <a style={{ marginRight: '10px' }} href={$applicantGuide.file_path} target="_blank" className="btn btn-primary" rel="noreferrer">View Document</a>
                                                 <Button color="primary" onClick={toggleUpdateForm}>Edit</Button>
                                             </CardBody>
                                             {/* <CardFooter className="border-top">{moment($applicantGuide.created_at).format('ll')}</CardFooter> */}

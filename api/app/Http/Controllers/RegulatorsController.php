@@ -27,6 +27,7 @@ class RegulatorsController extends Controller
     {
         $validated = $request->validate([
             "name" => "required|string",
+            "brief" => "required|string",
             "url" => "required|string|unique:regulators",
         ]);
 
@@ -53,11 +54,13 @@ class RegulatorsController extends Controller
         $validated = $request->validate([
             "name" => "required|string",
             "url" => "required|string",
+            "brief" => "required|string",
         ]);
         //
         $regulators->update([
             'name' => $validated['name'],
             'url' => $validated['url'],
+            'brief' => $validated['brief'],
         ]);
 
         return successResponse('Update successful', $regulators);

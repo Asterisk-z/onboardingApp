@@ -13,81 +13,7 @@ import Head from "layout/head/Head";
 
 
 
-const UpdateMembersComponent = ({ membersGuide, updateParent }) => {
-
-    const dispatch = useDispatch();
-
-    const [loading, setLoading] = useState(false);
-
-    const { register, handleSubmit, formState: { errors }, resetField } = useForm();
-
-    const handleFormUpdate = async (values) => {
-
-
-        const postValues = {};
-        postValues.name = values.name;
-        postValues.file = values.file[0];
-        postValues.id = membersGuide.id;
-
-
-        try {
-            setLoading(true);
-
-
-            const resp = await dispatch(updateMembersGuide(postValues));
-
-            // console.log(values, postValues, loading, resp.payload)
-            if (resp.payload?.message === "success") {
-
-                setTimeout(() => {
-                    setLoading(false);
-                    resetField('name')
-                    resetField('file')
-                    updateParent(Math.random())
-                }, 1000);
-            } else {
-                setLoading(false);
-            }
-
-        } catch (error) {
-            setLoading(false);
-        }
-
-    };
-
-    const checking = () => {
-        console.log("errors")
-    }
-    return (
-        <form onSubmit={handleSubmit(handleFormUpdate)} className="is-alter" encType="multipart/form-data">
-            <div className="form-group">
-                <label className="form-label" htmlFor="name">
-                    name
-                </label>
-                <div className="form-control-wrap">
-                    <input type="text" id="name" className="form-control" {...register('name', { required: "This Field is required", })} defaultValue={membersGuide.name} />
-                    {errors.name && <span className="invalid">{errors.name.message}</span>}
-                </div>
-            </div>
-            <div className="form-group">
-                <label className="form-label" htmlFor="file">
-                    Upload Document
-                </label>
-                <div className="form-control-wrap">
-                    <input type="file" id="file" className="form-control" {...register('file', { required: "This Field is required" })} />
-                    {errors.file && <span className="invalid">{errors.file.message}</span>}
-                </div>
-            </div>
-            <div className="form-group">
-                <Button color="primary" type="submit" size="lg" onClick={checking}>
-                    {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Update"}
-                </Button>
-            </div>
-        </form>
-    )
-}
-
-const AdminMembersGuide = ({ drawer }) => {
+const AdminDoh = ({ drawer }) => {
 
     const dispatch = useDispatch();
 
@@ -96,15 +22,12 @@ const AdminMembersGuide = ({ drawer }) => {
     const [modalForm, setModalForm] = useState(false);
     const [modalFormUpdate, setModalFormUpdate] = useState(false);
 
-    const membersGuide = useSelector((state) => state?.membersGuide?.all_guides) || null;
     const dohList = useSelector((state) => state?.settings?.doh_list) || null;
 
     useEffect(() => {
         dispatch(loadGetSignature());
-        // dispatch(loadAllMembersGuide());
     }, [dispatch, parentState]);
 
-    const $membersGuide = membersGuide ? JSON.parse(membersGuide) : null;
     const $dohList = dohList ? JSON.parse(dohList) : null;
 
     const { register, handleSubmit, formState: { errors }, resetField } = useForm();
@@ -169,9 +92,9 @@ const AdminMembersGuide = ({ drawer }) => {
                                     <ul className="nk-block-tools g-3">
                                         <li className="nk-block-tools-opt">
                                             {/* {!$membersGuide && */}
-                                                <Button color="primary">
-                                                    <span onClick={toggleForm}>Create DOH Signature</span>
-                                                </Button>
+                                            <Button color="primary">
+                                                <span onClick={toggleForm}>Create DOH Signature</span>
+                                            </Button>
                                             {/* } */}
                                         </li>
                                     </ul>
@@ -269,7 +192,7 @@ const AdminMembersGuide = ({ drawer }) => {
                                                     {/* {$applicantGuide.url} */}
                                                 </CardText>
                                                 <a style={{ marginRight: '10px' }} href={dohList.signature} target="_blank" className="btn btn-primary" rel="noreferrer">View Signature</a>
-                                                
+
                                             </CardBody>
                                         </Card>
                                     </>
@@ -288,4 +211,4 @@ const AdminMembersGuide = ({ drawer }) => {
         </React.Fragment>
     );
 };
-export default AdminMembersGuide;
+export default AdminDoh;
