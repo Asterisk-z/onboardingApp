@@ -114,6 +114,30 @@ class MembershipApplicationController extends Controller
         return successResponse('Fields Fetched Successfully', ApplicationFieldResource::collection($data));
     }
 
+    public function getAllFields(Request $request)
+    {
+        // $application = Application::find($request->application_id);
+
+        $pages = [1, 2, 3, 4, 5];
+        $sections = ['basic', 'trade', 'disciplinary', 'document', 'declaration'];
+        $data = [];
+        foreach ($pages as $key => $page) {
+            $application_fields = ApplicationField::where('application_fields.parent_id', null)
+                ->where('application_fields.page', $page)->where('application_fields.category', $request->category)
+                ->leftJoin('application_field_application_field_uploads', function ($join) use ($request) {
+                    $join->on('application_field_application_field_uploads.application_field_id', '=', 'application_fields.id')
+                        ->where('application_field_application_field_uploads.application_id', $request->application_id);
+                })->leftJoin('application_field_uploads', 'application_field_application_field_uploads.application_field_upload_id', '=', 'application_field_uploads.id')
+                ->select('application_fields.*', 'application_field_uploads.uploaded_file', 'application_field_uploads.uploaded_field', DB::raw('application_field_uploads.id as application_field_upload_id'))
+                ->orderBy('application_fields.id', 'ASC')->get();
+
+            $data[$sections[$key]] = ApplicationFieldResource::collection($application_fields);
+
+        }
+
+        return successResponse('All Fields Fetched Successfully', $data);
+    }
+
     public function getField(Request $request)
     {
         // $application = Application::find($request->application_id);
@@ -461,9 +485,9 @@ class MembershipApplicationController extends Controller
             foreach ($fields as $field) {
                 $application = Application::find($field['application_id']);
 
-                    if ($application->status == Application::AWAITINGAPPROVAL) {
-                        return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, "Your application has already been submitted and it is currently under review.");
-                    }
+                if ($application->status == Application::AWAITINGAPPROVAL) {
+                    return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, "Your application has already been submitted and it is currently under review.");
+                }
                 if (ApplicationField::where('category', $field['category_id'])
                     ->where('name', $field['field_name'])
                     ->where('type', $field['field_type'])->exists() && $application) {
@@ -473,7 +497,6 @@ class MembershipApplicationController extends Controller
                         ->where('type', $field['field_type'])->first();
 
                     $data = ['uploaded_field' => $field['field_value']];
-
 
                     if ($field['field_type'] == 'file') {
                         $data['uploaded_field'] = null;

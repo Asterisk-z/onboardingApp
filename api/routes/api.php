@@ -322,6 +322,7 @@ Route::middleware('auth')->group(function () {
         Route::group(['prefix' => 'membership/application'], function () {
             Route::get('/', [MembershipApplicationController::class, 'application']);
             Route::get('/get_application/{application_uuid}', [ApplicationProcessController::class, 'get_application']);
+            Route::get('/all-fields', [MembershipApplicationController::class, 'getAllFields']);
             Route::get('/fields', [MembershipApplicationController::class, 'getField']);
             Route::get('/preview', [MembershipApplicationController::class, 'getPreview']);
             Route::get('/detail', [MembershipApplicationController::class, 'getDetail']);

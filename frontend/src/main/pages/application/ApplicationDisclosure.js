@@ -6,7 +6,7 @@ import Head from "layout/head/Head";
 import Content from "layout/content/Content";
 import { BlockContent, BlockTitle, Icon } from "components/Component";
 import { Steps, Step } from "react-step-builder";
-import { Row, Col, Button, Input } from "reactstrap";
+import { Row, Col, Button, Spinner } from "reactstrap";
 import { HeaderLogo } from "pages/components/HeaderLogo";
 import DatePicker from "react-datepicker";
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
@@ -87,6 +87,7 @@ const Form = () => {
 
 
         const [table, setTable] = useState([]);
+        const [loading, setLoading] = useState(false);
 
         const onInputChange = async (event, values) => {
 
@@ -150,19 +151,18 @@ const Form = () => {
         const submitApplication = async () => {
             try {
 
-
+                setLoading(true)
                 const postValues = new Object();
                 postValues.application_id = $application_details?.id;
                 postValues.status = 'accept';
                 postValues.fields = table;
                 const resp = dispatch(UpdateDisclosure(postValues));
 
-                // if (resp.payload?.message == "success") {
+                setTimeout(() => {
+                    window.location.href = `${process.env.PUBLIC_URL}/application/${$application_details?.uuid}`
+                    // navigate(`${process.env.PUBLIC_URL}/application/${$application_details?.uuid}`)
+                }, 3000)
 
-                    navigate(`${process.env.PUBLIC_URL}/application/${$application_details?.uuid}`)
-                // } else {
-                //     navigate(`${process.env.PUBLIC_URL}/dashboard`)
-                // }
 
             } catch (error) {
 
@@ -200,9 +200,25 @@ const Form = () => {
 
         };
 
+
+        const checkValue = (str) => {
+            try {
+                // JSON.parse(str);
+                if (str?.field?.name == "productOfInterest") {
+                    return JSON.parse(str.uploaded_field) ? Object.keys(JSON.parse(str.uploaded_field)).join(',') : '';
+                } else {
+                    return str.uploaded_field;
+                }
+                // console.log(JSON.parse(str))
+
+            } catch (e) {
+                return false;
+            }
+        }
+
         return (
 
-                <div>
+            <div>
 
 
                 {table.length >= 0 &&
@@ -229,7 +245,8 @@ const Form = () => {
                                     {initial_application_item.uploaded_file != null ? <>
                                         <a className="btn btn-primary" href={initial_application_item.file_path} target="_blank">View File </a>
                                     </> : <>
-                                        {initial_application_item.uploaded_field}
+                                        {/* {initial_application_item.uploaded_field} */}
+                                        <span className="text-capitalize">{checkValue(initial_application_item)}</span>
                                     </>}
                                 </td>
                                 <td>
@@ -246,21 +263,24 @@ const Form = () => {
                                             "category_id": $application_details?.membership_category?.id,
                                             "field_value": (initial_application_item?.uploaded_field ? initial_application_item?.uploaded_field : initial_application_item?.uploaded_file),
                                             "field_type": initial_application_item?.field?.type
-                                        }, }}title="By clicking this button, you confirm acceptance of the existing document" />
+                                        },
+                                    }} title="By clicking this button, you confirm acceptance of the existing document" />
                                 </td>
                             </tr>
 
                         ))}
                     </tbody>
                 </table>
-                        {table.length > 0 && 
-                            <div className="float-end">
-                                <button className="btn btn-primary" onClick={onSubmit}>Continue Application</button>
-                            </div>                        
-                        }
+                {table.length > 0 &&
+                    <div className="float-end">
+                        <button className="btn btn-primary" onClick={onSubmit}>
+                            {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Continue Application"}
+                        </button>
+                    </div>
+                }
 
-                
-                </div>
+
+            </div>
 
         );
     };

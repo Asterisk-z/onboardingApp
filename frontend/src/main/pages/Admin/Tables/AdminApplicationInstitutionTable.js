@@ -1244,7 +1244,7 @@ const ActionTab = (props) => {
                           <div className="gy-0">
                                 <h5>Send E-Success Letter</h5>
                                 <a className="btn btn-primary mx-2"  href={institution?.e_success_letter} target="_blank">Preview E-Success Letter</a>
-                                <Button className="btn btn-success mx-2"  onClick={() => askAction('sendESuccessLetter')}> Send E-Success Letter</Button>
+                                <Button className="btn btn-success mx-2"  onClick={() => askAction('sendESuccessLetter')}> Approve E-Success Letter</Button>
                           </div>
                       }
                     </Card>

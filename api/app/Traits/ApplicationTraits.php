@@ -83,4 +83,16 @@ trait ApplicationTraits
 
         return $application_upload;
     }
+
+    public function childApplicationFieldValues($application_field_id)
+    {
+        $application_field_upload = ApplicationFieldUpload::where('application_field_id', $application_field_id)->where('application_id', request('application_id'))->first();
+        return [
+            'application_field_id' => $application_field_id,
+            'application_id' => request('application_id'),
+            'uploaded_file' => $application_field_upload ? $application_field_upload->uploaded_file : '',
+            'file_path' => $application_field_upload ? ($application_field_upload->uploaded_file ? config('app.url') . 'storage/app/public/' . $application_field_upload->uploaded_file : null) : null,
+            'uploaded_field' => $application_field_upload ? $application_field_upload->uploaded_field : '',
+        ];
+    }
 }

@@ -8,7 +8,7 @@ const initialState = { all: null, list: null, user_application: null, applicatio
 export const fetchApplication = createAsyncThunk(
   "application/fetchApplication",
   async (values) => {
-    
+
     try {
       const { data } = await axios.get(`membership/application/get_application/${values.application_uuid}`);
       return successHandler(data);
@@ -21,7 +21,7 @@ export const fetchApplication = createAsyncThunk(
 export const fetchInitialApplication = createAsyncThunk(
   "application/fetchInitialApplication",
   async (values) => {
-    
+
     const query = queryGenerator(values);
     try {
       const { data } = await axios.get(`membership/application/initial?${query}`);
@@ -64,6 +64,19 @@ export const loadPageFields = createAsyncThunk(
     const query = queryGenerator(values);
     try {
       const { data } = await axios.get(`membership/application/fields?${query}`);
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
+    }
+  }
+);
+
+export const loadAllFields = createAsyncThunk(
+  "application/loadAllFields",
+  async (values) => {
+    const query = queryGenerator(values);
+    try {
+      const { data } = await axios.get(`membership/application/all-fields?${query}`);
       return successHandler(data);
     } catch (error) {
       return errorHandler(error);
@@ -219,7 +232,7 @@ const applicationStore = createSlice({
     },
   },
   extraReducers: (builder) => {
-    
+
     // ====== builders for fetchApplication ======
 
     builder.addCase(fetchApplication.pending, (state) => {
@@ -227,8 +240,8 @@ const applicationStore = createSlice({
     });
 
     builder.addCase(fetchApplication.fulfilled, (state, action) => {
-        state.loading = false;
-        state.application_details = JSON.stringify(action.payload?.data?.data);
+      state.loading = false;
+      state.application_details = JSON.stringify(action.payload?.data?.data);
     });
 
     builder.addCase(fetchApplication.rejected, (state, action) => {
@@ -259,8 +272,8 @@ const applicationStore = createSlice({
     });
 
     builder.addCase(loadApplication.fulfilled, (state, action) => {
-        state.loading = false;
-        state.user_application = JSON.stringify(action.payload?.data?.data);
+      state.loading = false;
+      state.user_application = JSON.stringify(action.payload?.data?.data);
     });
 
     builder.addCase(loadApplication.rejected, (state, action) => {
@@ -275,17 +288,17 @@ const applicationStore = createSlice({
     });
 
     builder.addCase(loadFieldOption.fulfilled, (state, action) => {
-        state.loading = false;
-        // state.list = action.payload?.data?.data?.categories;
-          
-        if (!Array.isArray(state.all)) {
-          state.all = [];
+      state.loading = false;
+      // state.list = action.payload?.data?.data?.categories;
+
+      if (!Array.isArray(state.all)) {
+        state.all = [];
       }
-      
+
       const all = [...state.all];
-      
-        all.push(action.payload?.data.data);
-        state.all = all;
+
+      all.push(action.payload?.data.data);
+      state.all = all;
 
     });
 
@@ -293,7 +306,7 @@ const applicationStore = createSlice({
       state.loading = false;
       state.error = action.payload.message;
     });
-    
+
     // ====== builders for loadExtra ======
 
     builder.addCase(loadExtra.pending, (state) => {
@@ -301,13 +314,13 @@ const applicationStore = createSlice({
     });
 
     builder.addCase(loadExtra.fulfilled, (state, action) => {
-        state.loading = false;
-        // state.list = action.payload?.data?.data?.categories;
-          
-        if (!Array.isArray(state.list_extra)) {
-          state.list_extra = {};
+      state.loading = false;
+      // state.list = action.payload?.data?.data?.categories;
+
+      if (!Array.isArray(state.list_extra)) {
+        state.list_extra = {};
       }
-      
+
       const list_extra = state.list_extra;
       const data = { ...list_extra, [action.payload?.data.data.name]: action.payload?.data.data };
       state.list_extra = data;
@@ -346,7 +359,7 @@ const applicationStore = createSlice({
       state.loading = false;
       state.error = action.payload.message;
     });
-    
+
     // ====== builders for loadPageFields ======
 
     builder.addCase(loadPageFields.pending, (state) => {
@@ -354,22 +367,51 @@ const applicationStore = createSlice({
     });
 
     builder.addCase(loadPageFields.fulfilled, (state, action) => {
-        state.loading = false;
-        // state.list = action.payload?.data?.data?.categories;
-        // state.list = JSON.stringify(action.payload?.data?.data);
-        
-        // if (!Array.isArray(state.all_fields)) {
-          state.all_fields = [];
+      state.loading = false;
+      // state.list = action.payload?.data?.data?.categories;
+      // state.list = JSON.stringify(action.payload?.data?.data);
+
+      // if (!Array.isArray(state.all_fields)) {
+      state.all_fields = [];
       // }
-      
+
       // const all_fields = [...state.all_fields];
       const all_fields = [];
       // console.log(new Date())
-        all_fields.push(...action.payload?.data.data);
-        state.all_fields = all_fields;
+      all_fields.push(...action.payload?.data.data);
+      state.all_fields = all_fields;
     });
 
     builder.addCase(loadPageFields.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
+
+    // ====== builders for loadAllFields ======
+
+    builder.addCase(loadAllFields.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(loadAllFields.fulfilled, (state, action) => {
+      state.loading = false;
+      // state.list = action.payload?.data?.data?.categories;
+      // state.list = JSON.stringify(action.payload?.data?.data);
+
+      console.log(action.payload?.data.data);
+      // if (!Array.isArray(state.all_fields)) {
+      // state.all_fields = [];
+      // }
+
+      // const all_fields = [...state.all_fields];
+      // const all_fields = [];
+      // console.log(new Date())
+      // all_fields.push(...action.payload?.data.data);
+      // state.all_fields = all_fields;
+    });
+
+    builder.addCase(loadAllFields.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });
@@ -404,9 +446,9 @@ const applicationStore = createSlice({
       state.loading = false;
       state.error = action.payload.message;
     });
-  
-    
-    
+
+
+
     // ====== builders for additionRequest ======
 
     builder.addCase(additionRequest.pending, (state) => {
@@ -451,8 +493,8 @@ const applicationStore = createSlice({
       state.loading = false;
       state.error = action.payload.message;
     });
-  
-    
+
+
   },
 });
 

@@ -2,10 +2,12 @@
 
 namespace App\Http\Resources;
 
+use App\Traits\ApplicationTraits;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ApplicationChildFieldResource extends JsonResource
 {
+    use ApplicationTraits;
     /**
      * Transform the resource into an array.
      *
@@ -14,26 +16,22 @@ class ApplicationChildFieldResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        // return parent::toArray($request);
 
-        // return [
-        //     'id' => $this->id,
-        //     'category' => $this->category,
-        //     'name' => $this->name,
-        //     'description' => $this->description,
-        //     'type' => $this->type,
-        //     'required' => $this->required,
-        //     'page' => $this->page,
-        //     'parent_id' => $this->parent_id,
-        //     'created_at' => $this->created_at,
-        //     'field_options' => $this->field_options,
-        //     'field_value' => [
-        //         'uploaded_file' => $this->uploaded_file,
-        //         'file_path' => $this->uploaded_file ? config('app.url') . 'storage/app/public/' . $this->uploaded_file : null,
-        //         'uploaded_field' => $this->uploaded_field,
-        //     ],
-        //     // 'terere' => 'ferferf',
-        // ];
+        return [
+            'id' => $this->id,
+            'category' => $this->category,
+            'name' => $this->name,
+            'description' => $this->description,
+            'type' => $this->type,
+            'required' => $this->required,
+            'page' => $this->page,
+            'parent_id' => $this->parent_id,
+            'created_at' => $this->created_at,
+            'field_options' => $this->field_options,
+            'field_value' => $this->childApplicationFieldValues($this->id),
+            // 'terere' => 'ferferf',
+        ];
 
     }
 }
