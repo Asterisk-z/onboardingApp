@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner } from "reactstrap";
-import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
-import { adminLoadUserARs } from "redux/stores/authorize/representative"
+import { Block, BlockHead, BlockHeadContent, BlockTitle, BlockContent, Button, Row, Col, BlockBetween, Icon, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
+import { adminLoadARsReport } from "redux/stores/authorize/representative"
 import { loadInstitutionApplications } from "redux/stores/membership/applicationProcessStore"
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
@@ -14,6 +14,7 @@ import { loadAllActiveCategories } from 'redux/stores/memberCategory/category'
 import AdminRepresentativeReportTable from './Tables/AdminRepresentativeReportTable'
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 import DatePicker from "react-datepicker";
+import CopyToClipboard from "react-copy-to-clipboard";
 import moment from 'moment';
 
 
@@ -35,12 +36,12 @@ const AdminRepresentativeReport = ({ drawer }) => {
     const institutions = useSelector((state) => state?.institutions?.list) || null;
     const active_positions = useSelector((state) => state?.position?.all_list) || null;
 
-    const ar_users = useSelector((state) => state?.arUsers?.list) || null;
+    const ar_users = useSelector((state) => state?.arUsers?.report_list) || null;
     useEffect(() => {
         dispatch(loadAllActiveInstitutions());
         dispatch(loadAllActivePositions());
         dispatch(loadAllActiveCategories());
-        dispatch(adminLoadUserARs({ "approval_status": "", "institution_id": "", "role_id": "" }));
+        dispatch(adminLoadARsReport({ "approval_status": "", "institution_id": "", "role_id": "" }));
     }, [dispatch, parentState]);
 
     const $ar_users = ar_users ? JSON.parse(ar_users) : null;
@@ -90,6 +91,12 @@ const AdminRepresentativeReport = ({ drawer }) => {
             setEndDate(value)
         }
     }
+
+    const [copied, setCopied] = useState(false);
+
+    const toggleCopied = () => setCopied(!copied);
+
+    const copyToClipboard = () => setCopied(true);
 
     return (
         <React.Fragment>
@@ -213,6 +220,37 @@ const AdminRepresentativeReport = ({ drawer }) => {
                             <Block size="xl">
                                 <BlockHead>
                                     <BlockHeadContent>
+                                        {authUser.is_admin_meg() && <>
+                                            <BlockContent>
+                                                {/* <Button color="primary" type="submit" size="lg">
+                                                    {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Filter Report"}
+                                                </Button> */}
+                                                <div className="float-end" >
+                                                    <CopyToClipboard text={`${window.location.host}${process.env.PUBLIC_URL}/stakeholder-ar-request`}>
+                                                        <Button color="primary" size="lg" onClick={() => copyToClipboard()}>
+                                                            <span>Copy stakeholder request link</span>
+                                                        </Button>
+                                                    </CopyToClipboard>{" "}
+                                                    <Button color="primary" size="lg" onClick={() => navigate(`${process.env.PUBLIC_URL}/admin-stakeholder-request`)}>
+                                                        <span>Stakeholder requests</span>
+                                                    </Button>
+
+                                                    <Modal isOpen={copied} toggle={toggleCopied} className="modal-dialog-centered text-center" size="sm">
+                                                        <ModalHeader toggle={toggleCopied} close={<button className="close" onClick={toggleCopied}><Icon name="cross" /></button>}>
+
+                                                        </ModalHeader>
+                                                        <ModalBody className="text-center m-2">
+                                                            <h5>Copied to clipboard</h5>
+                                                        </ModalBody>
+                                                        <div className="p-3 bg-light">
+                                                            <div className="text-center">AR Report URL link copied to clipboard</div>
+                                                        </div>
+                                                    </Modal>
+
+                                                </div>
+                                            </BlockContent>
+                                        </>}
+
                                         <BlockTitle tag="h4">Authorised Representatives Reports</BlockTitle>
                                     </BlockHeadContent>
                                 </BlockHead>

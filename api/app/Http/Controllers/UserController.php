@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ResponseStatusCodes;
 use App\Helpers\Utility;
+use App\Http\Resources\UserResource;
 use App\Models\Role;
+use App\Models\StakeHolderAccessRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -31,9 +34,52 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function stakeholder_request(Request $request)
     {
-        //
+        $data = $request->validate([
+            'email' => ['required', 'email'],
+            'access' => ['required', 'string'],
+        ]);
+
+        if (!$access = StakeHolderAccessRequest::where('email', request('email'))->where('access', request('access'))->first()) {
+
+            StakeHolderAccessRequest::create([
+                'email' => request('email'),
+                'access' => request('access'),
+            ]);
+
+            $user = User::firstOrCreate(['email' => request('email')], User::STAKEHOLDER_DATA(request('email')));
+
+            logAction($user->email, 'Stake Holder Request Access to ' . request('access'), 'Access Request', $request->ip());
+
+        return errorResponse(ResponseStatusCodes::BAD_REQUEST, "Access Request Sent for approval.");
+
+        }
+
+        if ($access->status == StakeHolderAccessRequest::APPROVED) {
+
+            $user = User::firstOrCreate(['email'  => request('email')], User::STAKEHOLDER_DATA(request('email')));
+
+            if ($user) {
+                $data = [
+                    'authorization' => [
+                        'type' => 'Bearer',
+                        'token' => loginAuth()->fromUser($user),
+                        'expires_in' => config('jwt.ttl') * 60,
+                    ],
+                    'user' => UserResource::make($user),
+                ];
+
+                logAction($user->email, 'Stake Holder Login successful', 'Login Successful', $request->ip());
+                return successResponse("Access Granted.", $data);
+
+            }
+
+        }
+
+        logAction(request('email'), 'Access Not Granted', 'Access Request', $request->ip());
+        return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'Access Not Granted');
+
     }
 
     /**

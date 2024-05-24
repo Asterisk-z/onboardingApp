@@ -17,6 +17,7 @@ import ForgotPassword from "main/auth/ForgotPassword";
 import PasswordUpdate from "main/auth/PasswordUpdate";
 import PasswordReset from "main/auth/PasswordChange";
 import PasswordSet from "main/auth/PasswordSet";
+import StakeHolderRequest from "main/auth/StakeHolderRequest";
 import ApplicationDetail from "main/pages/application/Detail";
 import ApplicationQPay from "main/pages/application/Payment";
 import ApplicationPreview from "main/pages/application/Preview";
@@ -34,6 +35,7 @@ import AdminCategories from "main/pages/Admin/AdminCategories"
 import AdminComplaintType from "main/pages/Admin/AdminComplaintType"
 import AdminPositions from "main/pages/Admin/AdminPositions"
 import AdminCreationRequest from "main/pages/Admin/AdminCreationRequest"
+import AdminStakeHolderRequest from "main/pages/Admin/AdminStakeHolderRequest"
 import AdminComplaint from "main/pages/Admin/AdminComplaint"
 import AdminRegulators from "main/pages/Admin/AdminRegulators"
 import AdminSanctions from "main/pages/Admin/AdminSanctions"
@@ -113,6 +115,7 @@ const Router = () => {
 
       <Route path={`${process.env.PUBLIC_URL}`} element={<MainLayoutNoSidebar />}>
         {/* <Route path="auth-success" element={<Success />}></Route> */}
+        <Route path="stakeholder-ar-request" element={<StakeHolderRequest />}></Route>
         <Route path="auth-password-reset" element={<PasswordReset />}></Route>
         <Route path="set/password" element={<PasswordSet />}></Route>
         <Route path="auth-password-update" element={<PasswordUpdate />}></Route>
@@ -233,6 +236,7 @@ const Router = () => {
         <Route path="admin-applications" element={<AdminApplications />}></Route>
         <Route path="admin-all-applications" element={<AdminAllApplications />}></Route>
         <Route path="admin-creation-request" element={<AdminCreationRequest />}></Route>
+        <Route path="admin-stakeholder-request" element={<AdminStakeHolderRequest />}></Route>
         <Route path="wizard" element={<WizardTest />}></Route>
 
       </Route>

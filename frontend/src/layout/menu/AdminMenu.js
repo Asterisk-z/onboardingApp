@@ -19,20 +19,20 @@ const MenuItem = ({ icon, link, text, sub, subPanel, panel, newTab, mobileView, 
 
   const toggleActionSidebar = (e) => (!sub && !newTab && mobileView) ? sidebarToggle(e) : null;
 
-  currentUrl = (window.location.pathname !== undefined) ?  window.location.pathname : null;
+  currentUrl = (window.location.pathname !== undefined) ? window.location.pathname : null;
 
   const menuHeight = (el) => {
     var totalHeight = [];
     for (var i = 0; i < el.length; i++) {
-      var margin =  parseInt(window.getComputedStyle(el[i]).marginTop.slice(0, -2)) + parseInt(window.getComputedStyle(el[i]).marginBottom.slice(0, -2));
+      var margin = parseInt(window.getComputedStyle(el[i]).marginTop.slice(0, -2)) + parseInt(window.getComputedStyle(el[i]).marginBottom.slice(0, -2));
       var padding = parseInt(window.getComputedStyle(el[i]).paddingTop.slice(0, -2)) + parseInt(window.getComputedStyle(el[i]).paddingBottom.slice(0, -2));
-      var height = el[i].clientHeight + margin + padding;adminApplication
+      var height = el[i].clientHeight + margin + padding; adminApplication
       totalHeight.push(height);
     }
     totalHeight = totalHeight.reduce((sum, value) => (sum += value));
     return totalHeight;
   };
-  
+
   const makeParentActive = (el, childHeight) => {
     let element = el.parentElement.parentElement.parentElement;
     let wrap = el.parentElement.parentElement;
@@ -170,14 +170,14 @@ const PanelItem = ({ icon, link, text, subPanel, index, data, setMenuData, ...pr
     "nk-menu-item": true,
   });
 
-    return (
-      <React.Fragment>
-        {subPanel.map((item) => (
-          <MenuItem key={item.text} link={item.link} icon={item.icon} text={item.text} sub={item.subMenu} badge={item.badge} />
-        ))}
-      </React.Fragment>
-    );
-  
+  return (
+    <React.Fragment>
+      {subPanel.map((item) => (
+        <MenuItem key={item.text} link={item.link} icon={item.icon} text={item.text} sub={item.subMenu} badge={item.badge} />
+      ))}
+    </React.Fragment>
+  );
+
 };
 
 const MenuSub = ({ icon, link, text, sub, sidebarToggle, mobileView, ...props }) => {
@@ -195,23 +195,45 @@ const UserMenu = ({ sidebarToggle, mobileView }) => {
   const aUser = useUser();
   const aUserUpdate = useUserUpdate();
   const [data, setMenuData] = useState(adminApplication);
-  
 
 
-      useEffect(() => {
-        if (aUser.is_admin_meg()) {
-          setMenuData(navData)
-        } else {
-          setMenuData(adminApplication)
-        }
-    }, [aUser]);
-  
-  
+
+  useEffect(() => {
+    if (aUser.is_admin_meg()) {
+      setMenuData(navData)
+    }
+    if (aUser.is_admin_stakeholder()) {
+      setMenuData([])
+    }
+    if (aUser.is_admin_msg()) {
+      setMenuData(adminApplication)
+    }
+    if (aUser.is_admin_meg2()) {
+      setMenuData(adminApplication)
+    }
+    if (aUser.is_admin_fsd()) {
+      setMenuData(adminApplication)
+    }
+    if (aUser.is_admin_mbg()) {
+      setMenuData(adminApplication)
+    }
+    if (aUser.is_admin_blg()) {
+      setMenuData(adminApplication)
+    }
+    if (aUser.is_admin_big()) {
+      setMenuData(adminApplication)
+    }
+    if (aUser.is_admin_helpdesk()) {
+      setMenuData(adminApplication)
+    }
+  }, [aUser]);
+
+
   return (
     <ul className="nk-menu">
       {data.map((item, index) =>
         item.heading ? (<MenuHeading heading={item.heading} key={item.heading} />) : (item.panel && item.isAdmin) ? (
-          <PanelItem key={item.text} link={item.link} icon={item.icon} text={item.text} index={index} panel={item.panel} subPanel={item.subPanel} data={data} setMenuData={setMenuData} sidebarToggle={sidebarToggle}/>
+          <PanelItem key={item.text} link={item.link} icon={item.icon} text={item.text} index={index} panel={item.panel} subPanel={item.subPanel} data={data} setMenuData={setMenuData} sidebarToggle={sidebarToggle} />
         ) : ''
       )}
     </ul>

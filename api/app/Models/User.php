@@ -172,4 +172,22 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasMany(Application::class, 'submitted_by');
     }
+
+    public static function STAKEHOLDER_DATA($email)
+    {
+        $count_stake_holder = (User::where('role_id', Role::STAKEHOLDER)->count()) + 1;
+        return [
+            'first_name' => "stakeholder" . $count_stake_holder,
+            'last_name' => "stakeholder" . $count_stake_holder,
+            'nationality' => 'NG',
+            'email' => $email,
+            'phone' => rand(100000, 999999999) . $count_stake_holder,
+            'approval_status' => 'pending',
+            'role_id' => Role::STAKEHOLDER,
+            'institution_id' => null,
+            'position_id' => null,
+            'verified_at' => now(),
+        ];
+
+    }
 }

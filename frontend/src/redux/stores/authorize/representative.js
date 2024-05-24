@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { errorHandler, successHandler } from "utils/Functions";
 import queryGenerator from "utils/QueryGenerator";
-const initialState = { all: null, list: null, search_list: null, single_ar: null, status_list: null, transfer_list: null, user: null, total: null, error: "", loading: false };
+const initialState = { all: null, list: null, report_list: null, search_list: null, single_ar: null, status_list: null, transfer_list: null, user: null, total: null, error: "", loading: false };
 
 export const userLoadUserARs = createAsyncThunk(
   "arUsers/userLoadUserARs",
@@ -23,6 +23,19 @@ export const adminLoadUserARs = createAsyncThunk(
     const query = queryGenerator(values);
     try {
       const { data } = await axios.get(`meg/ar/list?${query}`);
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
+    }
+  }
+);
+
+export const adminLoadARsReport = createAsyncThunk(
+  "arUsers/adminLoadARsReport",
+  async (values) => {
+    const query = queryGenerator(values);
+    try {
+      const { data } = await axios.get(`report/ar/list?${query}`);
       return successHandler(data);
     } catch (error) {
       return errorHandler(error);
@@ -392,6 +405,23 @@ const arUsersStore = createSlice({
     });
 
     builder.addCase(adminLoadUserARs.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
+    // ====== builders for adminLoadARsReport ======
+
+    builder.addCase(adminLoadARsReport.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(adminLoadARsReport.fulfilled, (state, action) => {
+      state.loading = false;
+      // state.list = action.payload?.data?.data?.categories;
+      state.report_list = JSON.stringify(action.payload?.data?.data);
+    });
+
+    builder.addCase(adminLoadARsReport.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });

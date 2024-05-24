@@ -58,7 +58,7 @@ const Regulators = ({ drawer }) => {
                                                 <Card className="card-bordered gold">
                                                     <CardBody className="card-inner">
                                                         <CardTitle tag="h5">{regulator.name}</CardTitle>
-                                                        <CardText>
+                                                        <CardText className="h-15 overflow-auto">
                                                             {regulator?.brief}
                                                         </CardText>
                                                         <CardLink href={regulator.url} target="_blank" className="btn btn-primary" color="primary">Goto Website</CardLink>

@@ -16,8 +16,8 @@ class UserSeeder extends Seeder
     public function run()
     {
         // User::truncate();
-        $roles = ['msg', 'meg', 'fsd', 'mbg', 'blg', 'meg2', 'big', 'helpdesk'];
-        $roleId = ['1', '2', '3', '4', '7', '8', '9', '10'];
+        $roles = ['msg', 'meg', 'fsd', 'mbg', 'blg', 'meg2', 'big', 'helpdesk', 'stakeholder'];
+        $roleId = ['1', '2', '3', '4', '7', '8', '9', '10', '11'];
 
         foreach ($roles as $index => $role) {
 

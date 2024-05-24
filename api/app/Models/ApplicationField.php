@@ -33,23 +33,6 @@ class ApplicationField extends Model
         //     ->select('application_fields.*', 'application_field_uploads.uploaded_field', DB::raw('application_field_uploads.id as application_field_upload_id'));
 
     }
-    
-    public function getChildUploadFieldsAttribute()
-    {
-        // $request = request()->all();
-        // logger($request);
-        $childFields = ApplicationField::where('id', $this->id)->first();
-
-        
-
-        return $childFields->get();
-        // return $childFields->leftJoin('application_field_application_field_uploads', function ($join) use ($request) {
-        //     $join->on('application_field_application_field_uploads.application_field_id', '=', 'application_fields.id')
-        //         ->where('application_field_application_field_uploads.application_id', $request['application_id']);
-        // })->leftJoin('application_field_uploads', 'application_field_application_field_uploads.application_field_upload_id', '=', 'application_field_uploads.id')
-        //     ->select('application_fields.*', 'application_field_uploads.uploaded_field', DB::raw('application_field_uploads.id as application_field_upload_id'));
-
-    }
 
     public function getFieldOptionsAttribute()
     {

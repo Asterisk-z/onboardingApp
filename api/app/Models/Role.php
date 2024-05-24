@@ -22,12 +22,13 @@ class Role extends Model
     const MEG2 = 8;
     const BIG = 9;
     const HELPDESK = 10;
+    const STAKEHOLDER = 11;
 
     public function toArray()
     {
         return [
             "id" => $this->id,
-            "name" => $this->name
+            "name" => $this->name,
         ];
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccessController;
 use App\Http\Controllers\ApplicantGuidesController;
 use App\Http\Controllers\ApplicationProcessController;
 use App\Http\Controllers\ARController;
@@ -59,6 +60,9 @@ Route::group(['prefix' => 'auth'], function () {
             Route::post('/complete', [PasswordController::class, 'resetPassword'])->middleware('passwordReset');
         });
     });
+
+    Route::post('/stakeholder/access', [UserController::class, 'stakeholder_request']);
+
 });
 
 Route::get('/nationalities', [NationalityController::class, 'index']);
@@ -83,7 +87,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/logs', [AuditController::class, 'userLog']);
     });
 
-    Route::middleware('authRole:' . Role::MSG . ',' . Role::MEG . ',' . Role::FSD . ',' . Role::MBG . ',' . Role::BLG . ',' . Role::MEG2 . ',' . Role::BIG . ',' . Role::HELPDESK)->group(function () {
+    Route::middleware('authRole:' . Role::MSG . ',' . Role::MEG . ',' . Role::FSD . ',' . Role::MBG . ',' . Role::BLG . ',' . Role::MEG2 . ',' . Role::BIG . ',' . Role::HELPDESK . ',' . Role::STAKEHOLDER)->group(function () {
         Route::get('admin/dashboard', [DashboardControler::class, 'adminDashboard']);
 
         // List AR For Admins
@@ -94,6 +98,19 @@ Route::middleware('auth')->group(function () {
 
         Route::group(['prefix' => 'membership/application'], function () {
             Route::get('/all_institutions', [ApplicationProcessController::class, 'all_institutions']);
+        });
+
+    });
+
+    Route::middleware('authRole:' . Role::STAKEHOLDER . ',' . Role::MEG)->group(function () {
+
+        Route::group(['prefix' => 'report/ar'], function () {
+            Route::get('/list', [ARController::class, 'listMEG']);
+        });
+
+        // institutions
+        Route::group(['prefix' => 'institution'], function () {
+            Route::get('/list', [InstitutionController::class, 'listInstitution']);
         });
 
     });
@@ -124,7 +141,6 @@ Route::middleware('auth')->group(function () {
         });
         //
         Route::group(['prefix' => 'meg/ar'], function () {
-
             Route::post('/process-member-status/{ARUser}', [ARController::class, 'processMemberStatusMEG']);
             Route::post('/process-add/{ARUser}', [ARController::class, 'processAddByMEG']);
             Route::post('/process-transfer/{record}', [ARController::class, 'processTransferByMEG']);
@@ -135,10 +151,6 @@ Route::middleware('auth')->group(function () {
             Route::post('/create-message', [BroadcastMessageController::class, 'store']);
         });
 
-        // institutions
-        Route::group(['prefix' => 'institution'], function () {
-            Route::get('/list', [InstitutionController::class, 'listInstitution']);
-        });
         // Membership Category
         Route::group(['prefix' => 'membership/category'], function () {
             Route::get('/list', [MemberCategoryController::class, 'listAll']);
@@ -275,6 +287,11 @@ Route::middleware('auth')->group(function () {
         Route::group(['prefix' => 'doh'], function () {
             Route::get('/signature', [MegApplicationController::class, 'getSignature']);
             Route::post('/signature', [MegApplicationController::class, 'createSignature']);
+        });
+
+        Route::group(['prefix' => 'sh/access'], function () {
+            Route::get('/request', [AccessController::class, 'getAllRequest']);
+            Route::post('/request', [AccessController::class, 'actionRequest']);
         });
     });
 
