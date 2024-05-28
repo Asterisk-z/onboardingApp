@@ -73,6 +73,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo(Position::class, 'position_id');
     }
 
+    public function category()
+    {
+        return $this->belongsTo(MembershipCategory::class, 'category_id');
+    }
+
     public function userNationality()
     {
         return $this->belongsTo(Nationality::class, 'nationality', 'code');
@@ -173,12 +178,12 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Application::class, 'submitted_by');
     }
 
-    public static function STAKEHOLDER_DATA($email)
+    public static function STAKEHOLDER_DATA($email, $firstname = null, $lastname = null)
     {
         $count_stake_holder = (User::where('role_id', Role::STAKEHOLDER)->count()) + 1;
         return [
-            'first_name' => "stakeholder" . $count_stake_holder,
-            'last_name' => "stakeholder" . $count_stake_holder,
+            'first_name' => $firstname ? $firstname : "stakeholder" . $count_stake_holder,
+            'last_name' => $lastname ? $lastname : "stakeholder" . $count_stake_holder,
             'nationality' => 'NG',
             'email' => $email,
             'phone' => rand(100000, 999999999) . $count_stake_holder,

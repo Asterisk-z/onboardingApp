@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnBriefToRegulatorsTable extends Migration
+class AddCategoryColumnToUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddColumnBriefToRegulatorsTable extends Migration
      */
     public function up()
     {
-        Schema::table('regulators', function (Blueprint $table) {
-            $table->text('brief')->nullable();
+        Schema::table('users', function (Blueprint $table) {
+            $table->integer('category_id')->nullable()->after('position_id');
         });
     }
 
@@ -25,8 +25,8 @@ class AddColumnBriefToRegulatorsTable extends Migration
      */
     public function down()
     {
-        Schema::table('regulators', function (Blueprint $table) {
-            $table->dropColumn('brief');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('category_id');
         });
     }
 }

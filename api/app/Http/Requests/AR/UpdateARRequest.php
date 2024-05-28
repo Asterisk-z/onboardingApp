@@ -46,6 +46,7 @@ class UpdateARRequest extends FormRequest
             'last_name' => 'sometimes|string',
             'middle_name' => 'sometimes|string',
             'position_id' => 'sometimes|exists:positions,id',
+            'category_id' => 'required|exists:membership_categories,id',
             'nationality' => 'sometimes|exists:nationalities,code',
             'role_id' => [
                 'sometimes',

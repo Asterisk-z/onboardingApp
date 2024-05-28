@@ -22,12 +22,11 @@ class RegulatorsController extends Controller
         return successResponse('Successful', $regulators);
     }
 
-    //
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
             "name" => "required|string",
-            "brief" => "required|string",
+            "brief" => "required|string|max:50",
             "url" => "required|string|unique:regulators",
         ]);
 
@@ -54,7 +53,7 @@ class RegulatorsController extends Controller
         $validated = $request->validate([
             "name" => "required|string",
             "url" => "required|string",
-            "brief" => "required|string",
+            "brief" => "required|string|max:50",
         ]);
         //
         $regulators->update([

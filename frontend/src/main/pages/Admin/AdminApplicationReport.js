@@ -51,10 +51,10 @@ const AdminApplicationReport = ({ drawer }) => {
     const handleFormSubmit = async (values) => {
 
         if (values?.start_date) {
-            filteredApplication = filteredApplication.filter((item) => item.created_at > values?.start_date)
+            filteredApplication = filteredApplication.filter((item) => (new Date(item.createdAt).getTime()) > (new Date(values?.start_date).getTime()))
         }
         if (values?.end_date) {
-            filteredApplication = filteredApplication.filter((item) => item.created_at < values?.end_date)
+            filteredApplication = filteredApplication.filter((item) => (new Date(item.createdAt).getTime()) < (new Date(values?.end_date).getTime()))
         }
         if (values?.status) {
             filteredApplication = filteredApplication.filter((item) => item.internal.application_type_status == values?.status)

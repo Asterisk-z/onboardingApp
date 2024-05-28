@@ -33,6 +33,7 @@ class AddARRequest extends FormRequest
             'middle_name' => 'nullable|string',
             'position_id' => 'required|exists:positions,id',
             'nationality' => 'required|exists:nationalities,code',
+            'category_id' => 'required|exists:membership_categories,id',
             'role_id' => [
                 'required',
                 'in:' . Role::ARAUTHORISER . ',' . Role::ARINPUTTER,

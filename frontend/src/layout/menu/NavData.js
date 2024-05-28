@@ -130,6 +130,10 @@ const navData = [{
         link: "/admin-regulators",
       },
       {
+        text: "Stakeholders",
+        link: "/admin-stakeholders",
+      },
+      {
         text: "Fees and Dues Framework",
         link: "/admin-fees-framework",
       },

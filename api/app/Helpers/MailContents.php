@@ -2,6 +2,8 @@
 
 namespace App\Helpers;
 
+use App\Models\User;
+
 class MailContents
 {
     public static function signupMailSubject(): string
@@ -383,6 +385,36 @@ class MailContents
         $url = config("app.front_end_url");
         return "<p>Please be informed that MBG has requested
         the creation of some ARs profile on the $system.
-        Kindly log on to the <a href=$url>MROIS Portal</a> to approve or reject the request";
+        Kindly log on to the <a href=$url>MROIS Portal</a> to create profile";
+    }
+
+    public static function arNotificationOfChangeSubject($request_id, $subject): string
+    {
+        return "New FMDQX MROIS Notification of Change {$request_id}:{$subject}";
+    }
+
+    public static function arNotificationOfChangeMail(User $user, $request_id): string
+    {
+        $url = config("app.front_end_url");
+        $ar_id = $user->getRegID();
+        return "<p>Please be informed that a notification of change has been
+        made by an AR of your Institution with AR ID `$ar_id`.
+        Kindly login to <a href=$url>MROIS Portal</a>  to approve the
+        request '$request_id'";
+    }
+
+    public static function megNotificationOfChangeSubject(): string
+    {
+        return "MROIS Notification of Change";
+    }
+
+    public static function megNotificationOfChangeMail(User $user): string
+    {
+        $url = config("app.front_end_url");
+        $ar_id = $user->getRegID();
+        $memberName = $user->full_name;
+        return "<p>Please be informed that a notification of change has been made
+        by the`$ar_id` of '$memberName'.
+        Kindly login to <a href=$url>MROIS Portal</a>  to view change'";
     }
 }

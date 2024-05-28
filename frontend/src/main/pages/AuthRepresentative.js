@@ -20,10 +20,10 @@ import Swal from "sweetalert2";
 
 
 const AuthRepresentative = ({ drawer }) => {
-        
+
     const authUser = useUser();
-    const authUserUpdate = useUserUpdate(); 
-    
+    const authUserUpdate = useUserUpdate();
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -40,7 +40,7 @@ const AuthRepresentative = ({ drawer }) => {
     const myApplicationCategories = useSelector((state) => state?.category?.my_application_categories) || null;
     const positions = useSelector((state) => state?.position?.list) || null;
     const all_positions = useSelector((state) => state?.position?.all_list) || null;
-    
+
     const countries = useSelector((state) => state?.country?.list) || null;
     const authorizers = useSelector((state) => state?.user?.list) || null;
     const authorize_reps = useSelector((state) => state?.arUsers?.list) || null;
@@ -53,17 +53,17 @@ const AuthRepresentative = ({ drawer }) => {
 
     const toggleForm = () => setModalForm(!modalForm);
     const toggleModelForSearch = () => setModelForSearchAR(!modelForSearchAR);
-     
+
     useEffect(() => {
-      dispatch(userSearchUserARs({ "first_name": '-', "last_name": '-' }));
-      dispatch(userLoadUserARs({"approval_status" : "", "role_id": ""}));
-      dispatch(loadAllMyApplicationCategories());
-      dispatch(loadUserRoles());
-      dispatch(loadAllCountries());
-      dispatch(loadAllActiveAuthoriser());
-      dispatch(loadAllActivePositions())
+        dispatch(userSearchUserARs({ "first_name": '-', "last_name": '-' }));
+        dispatch(userLoadUserARs({ "approval_status": "", "role_id": "" }));
+        dispatch(loadAllMyApplicationCategories());
+        dispatch(loadUserRoles());
+        dispatch(loadAllCountries());
+        dispatch(loadAllActiveAuthoriser());
+        dispatch(loadAllActivePositions())
         dispatch(loadAllSettings({ "config": "mandate_form" }));
-        
+
 
     }, [dispatch, parentState]);
 
@@ -75,17 +75,17 @@ const AuthRepresentative = ({ drawer }) => {
         if (myApplicationCategoryIds.length > 0) {
             const postValues = new Object();
             postValues.category_ids = myApplicationCategoryIds;
-            dispatch(loadAllCategoryPositions(postValues));            
+            dispatch(loadAllCategoryPositions(postValues));
         }
     }, [myApplicationCategoryIds]);
 
     useEffect(() => {
         if ($myApplicationCategories) {
-            setMyApplicationCategoryIds($myApplicationCategories.map((cat) => cat.id))        
+            setMyApplicationCategoryIds($myApplicationCategories.map((cat) => cat.id))
         }
     }, [myApplicationCategories]);
-    
-    
+
+
     useEffect(() => {
         if ($ar_search_result) {
             if ($ar_search_result.length > 0) {
@@ -97,7 +97,7 @@ const AuthRepresentative = ({ drawer }) => {
             setModelForSearchAR(false);
         }
     }, [ar_search_result]);
-   
+
     const handleFormSubmit = async (values) => {
 
         const formData = new FormData();
@@ -105,6 +105,7 @@ const AuthRepresentative = ({ drawer }) => {
         formData.append('last_name', values.lastName)
         formData.append('middle_name', values.middleName)
         formData.append('position_id', values.position_id)
+        formData.append('category_id', values.category_type)
         formData.append('nationality', values.nationality)
         formData.append('role_id', values.role)
         formData.append('group_email', values.group_email)
@@ -112,16 +113,16 @@ const AuthRepresentative = ({ drawer }) => {
         formData.append('phone', values.phone)
         formData.append('img', values.digitalPhone[0])
         formData.append('mandate_form', values.signedMandate[0])
-        
+
         try {
             setLoading(true);
-            
+
             const resp = await dispatch(userCreateUserAR(formData));
 
             if (resp.payload?.message == "success") {
                 setTimeout(() => {
-                  setLoading(false);
-                  setModalForm(!modalForm)
+                    setLoading(false);
+                    setModalForm(!modalForm)
                     resetField('firstName')
                     resetField('lastName')
                     resetField('middleName')
@@ -130,22 +131,22 @@ const AuthRepresentative = ({ drawer }) => {
                     resetField('category_type')
                     resetField('group_email')
                     resetField('role')
-                    resetField('digitalPhone')  
+                    resetField('digitalPhone')
                     resetField('signedMandate')
                     resetField('email')
                     resetField('phone')
                     setParentState(Math.random())
                 }, 1000);
-            
-            } else {
-              setLoading(false);
-            }
-            
-      } catch (error) {
-        setLoading(false);
-      }
 
-    }; 
+            } else {
+                setLoading(false);
+            }
+
+        } catch (error) {
+            setLoading(false);
+        }
+
+    };
 
     const $countries = countries ? JSON.parse(countries) : null;
     const $myApplicationCategories = myApplicationCategories ? JSON.parse(myApplicationCategories) : null;
@@ -160,19 +161,19 @@ const AuthRepresentative = ({ drawer }) => {
     const updateParentState = (newState) => {
         setParentState(newState);
     };
-    
+
     const searchArFromFirstNameAndLastName = (event) => {
         if (getValues('firstName') && getValues('lastName')) {
-            dispatch(userSearchUserARs({"first_name" : getValues('firstName'), "last_name": getValues('lastName')}));
+            dispatch(userSearchUserARs({ "first_name": getValues('firstName'), "last_name": getValues('lastName') }));
         }
     }
-    
+
     const handleDificalFileChange = (event) => {
-		  setDocument(event.target.files[0]);
+        setDocument(event.target.files[0]);
     };
-    
+
     const handleSignaturewChange = (event) => {
-		  setSignatureMandate(event.target.files[0]);
+        setSignatureMandate(event.target.files[0]);
     };
 
     const updatePositionList = (event) => {
@@ -205,7 +206,7 @@ const AuthRepresentative = ({ drawer }) => {
         setModelForSearchAR(false)
         navigate(value)
     }
-    
+
     return (
         <React.Fragment>
             <Head title="Authorised Representative"></Head>
@@ -222,16 +223,16 @@ const AuthRepresentative = ({ drawer }) => {
                                 <div className="toggle-expand-content" style={{ display: sm ? "block" : "none" }}>
                                     <ul className="nk-block-tools g-3">
                                         {/* {authUser.is_ar_inputter() && <> */}
-                                            <li className="nk-block-tools-opt">
-                                                <Button color="primary">
-                                                    <span onClick={toggleForm}>Add New AR</span>
-                                                </Button>
-                                            </li>
-                                            <li className="nk-block-tools-opt">
-                                                <Button color="primary">
-                                                    <span onClick={cancelUpdate}>No Update</span>
-                                                </Button>
-                                            </li>
+                                        <li className="nk-block-tools-opt">
+                                            <Button color="primary">
+                                                <span onClick={toggleForm}>Add New AR</span>
+                                            </Button>
+                                        </li>
+                                        <li className="nk-block-tools-opt">
+                                            <Button color="primary">
+                                                <span onClick={cancelUpdate}>No Update</span>
+                                            </Button>
+                                        </li>
                                         {/* </>} */}
                                         {authUser.is_ar_authorizer() && <>
                                             <li className="nk-block-tools-opt">
@@ -249,8 +250,8 @@ const AuthRepresentative = ({ drawer }) => {
                                                     <span>Pending AR</span>
                                                 </Button>
                                             </li>
-                                         </>}
-                                    </ul> 
+                                        </>}
+                                    </ul>
                                 </div>
                             </div>
                         </BlockHeadContent>
@@ -258,7 +259,7 @@ const AuthRepresentative = ({ drawer }) => {
                 </BlockHead>
                 <Modal isOpen={modelForSearchAR} toggle={toggleModelForSearch} size="xl">
                     <ModalHeader toggle={toggleModelForSearch} close={<button className="close" onClick={toggleModelForSearch}><Icon name="cross" /></button>}>
-                        Authorised Representative already exist 
+                        Authorised Representative already exist
                     </ModalHeader>
                     <ModalBody>
                         <p>Do you want to transfer Authorised Representative?</p>
@@ -292,40 +293,40 @@ const AuthRepresentative = ({ drawer }) => {
                             </thead>
                             <tbody className="tb-odr-body">
                                 {$ar_search_result && $ar_search_result.map((item) => {
-                                return (
-                                    <tr className="tb-odr-item" key={item.id}>
-                                        <td className="tb-odr-info">
-                                            <span className="tb-odr-id">{item.id}</span>
-                                        </td>
-                                        <td className="tb-odr-amount">
-                                            <span className="tb-odr-total">
-                                                <img src={item.img} className="rounded-xl" style={{ height: '70px', width: '70px', borderRadius: '100%' }} />
-                                            </span>
-                                        </td>
-                                        <td className="tb-odr-amount">
-                                            <span className="tb-odr-total">{`${item.firstName} ${item.lastName}`}</span>
-                                        </td>
-                                        <td className="tb-odr-amount">
-                                            <span className="tb-odr-total">{`${item.email}`}</span>
-                                        </td>
-                                        <td className="tb-odr-amount">
-                                            <span className="tb-odr-total">{`${item.institution.name} `}</span>
-                                        </td>
-                                        <td className="tb-odr-amount">
-                                            <span className="tb-odr-total">{`${item.role.name}`}</span>
-                                        </td>
-                                        <td className="tb-odr-amount">
-                                            <span className="tb-odr-total">{`${item.position.name}`}</span>
-                                        </td>
-                                        <td className="tb-odr-action">
-                                            <div className="tb-odr-btns d-none d-md-inline">
-                                                <Button color="primary" className="btn-sm" onClick={(e) => gotoRoute(`${process.env.PUBLIC_URL}/transfer-auth-representative/${item.id}`)}>
-                                                    Transfer
-                                                </Button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                );
+                                    return (
+                                        <tr className="tb-odr-item" key={item.id}>
+                                            <td className="tb-odr-info">
+                                                <span className="tb-odr-id">{item.id}</span>
+                                            </td>
+                                            <td className="tb-odr-amount">
+                                                <span className="tb-odr-total">
+                                                    <img src={item.img} className="rounded-xl" style={{ height: '70px', width: '70px', borderRadius: '100%' }} />
+                                                </span>
+                                            </td>
+                                            <td className="tb-odr-amount">
+                                                <span className="tb-odr-total">{`${item.firstName} ${item.lastName}`}</span>
+                                            </td>
+                                            <td className="tb-odr-amount">
+                                                <span className="tb-odr-total">{`${item.email}`}</span>
+                                            </td>
+                                            <td className="tb-odr-amount">
+                                                <span className="tb-odr-total">{`${item.institution.name} `}</span>
+                                            </td>
+                                            <td className="tb-odr-amount">
+                                                <span className="tb-odr-total">{`${item.role.name}`}</span>
+                                            </td>
+                                            <td className="tb-odr-amount">
+                                                <span className="tb-odr-total">{`${item.position.name}`}</span>
+                                            </td>
+                                            <td className="tb-odr-action">
+                                                <div className="tb-odr-btns d-none d-md-inline">
+                                                    <Button color="primary" className="btn-sm" onClick={(e) => gotoRoute(`${process.env.PUBLIC_URL}/transfer-auth-representative/${item.id}`)}>
+                                                        Transfer
+                                                    </Button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    );
                                 })}
                             </tbody>
                         </table>
@@ -340,15 +341,15 @@ const AuthRepresentative = ({ drawer }) => {
                     </ModalHeader>
                     <ModalBody>
                         <form onSubmit={handleSubmit(handleFormSubmit)} className="is-alter" encType="multipart/form-data">
-                                            
+
                             <Row className="gy-4">
                                 <Col sm="6">
                                     <div className="form-group">
                                         <Label htmlFor="lastName" className="form-label">
-                                            Surname<span style={{color:'red'}}> *</span>
+                                            Surname<span style={{ color: 'red' }}> *</span>
                                         </Label>
                                         <div className="form-control-wrap">
-                                            <input className="form-control" type="text" id="lastName" placeholder="Enter Last Name"  {...register('lastName', { required: "Last Name is Required" })} onKeyUp={searchArFromFirstNameAndLastName}/>
+                                            <input className="form-control" type="text" id="lastName" placeholder="Enter Last Name"  {...register('lastName', { required: "Last Name is Required" })} onKeyUp={searchArFromFirstNameAndLastName} />
                                             {errors.lastName && <p className="invalid">{`${errors.lastName.message}`}</p>}
                                         </div>
                                     </div>
@@ -356,10 +357,10 @@ const AuthRepresentative = ({ drawer }) => {
                                 <Col sm="6">
                                     <div className="form-group">
                                         <Label htmlFor="firstName" className="form-label">
-                                            First Name<span style={{color:'red'}}> *</span>
+                                            First Name<span style={{ color: 'red' }}> *</span>
                                         </Label>
                                         <div className="form-control-wrap">
-                                            <input className="form-control" type="text" id="firstName" placeholder="Enter First Name" {...register('firstName', { required: "First Name is Required" })} onKeyUp={searchArFromFirstNameAndLastName}/>
+                                            <input className="form-control" type="text" id="firstName" placeholder="Enter First Name" {...register('firstName', { required: "First Name is Required" })} onKeyUp={searchArFromFirstNameAndLastName} />
                                             {errors.firstName && <p className="invalid">{`${errors.firstName.message}`}</p>}
                                         </div>
                                     </div>
@@ -367,7 +368,7 @@ const AuthRepresentative = ({ drawer }) => {
                                 <Col sm="6">
                                     <div className="form-group">
                                         <Label htmlFor="firstName" className="form-label">
-                                            Middle Name<span style={{color:'red'}}> *</span>
+                                            Middle Name<span style={{ color: 'red' }}> *</span>
                                         </Label>
                                         <div className="form-control-wrap">
                                             <input className="form-control" type="text" id="middleName" placeholder="Enter Middle Name" {...register('middleName', { required: false })} />
@@ -378,7 +379,7 @@ const AuthRepresentative = ({ drawer }) => {
                                 <Col sm="6">
                                     <div className="form-group">
                                         <Label htmlFor="nationality" className="form-label">
-                                            Nationality<span style={{color:'red'}}> *</span>
+                                            Nationality<span style={{ color: 'red' }}> *</span>
                                         </Label>
                                         <div className="form-control-wrap">
                                             <div className="form-control-select">
@@ -398,10 +399,10 @@ const AuthRepresentative = ({ drawer }) => {
                                 <Col sm="6">
                                     <div className="form-group">
                                         <Label htmlFor="email" className="form-label">
-                                            Email Address<span style={{color:'red'}}> *</span>
+                                            Email Address<span style={{ color: 'red' }}> *</span>
                                         </Label>
                                         <div className="form-control-wrap">
-                                            <input className="form-control" type="email" id="email" placeholder="Enter Email Address" {...register('email', { required: "Email Address is Required" })}/>
+                                            <input className="form-control" type="email" id="email" placeholder="Enter Email Address" {...register('email', { required: "Email Address is Required" })} />
                                             {errors.email && <p className="invalid">{`${errors.email.message}`}</p>}
                                         </div>
                                     </div>
@@ -409,11 +410,11 @@ const AuthRepresentative = ({ drawer }) => {
                                 <Col sm="6">
                                     <div className="form-group">
                                         <Label htmlFor="phone" className="form-label">
-                                            Phone Number<span style={{color:'red'}}> *</span>
+                                            Phone Number<span style={{ color: 'red' }}> *</span>
                                         </Label>
-                                         
+
                                         <div className="form-control-wrap">
-                                            <input className="form-control" type="number"  id="phone" placeholder="Enter Phone Number"  {...register('phone', { required: "Phone is Required", setValueAs: (value) => parseInt(value) })} />  
+                                            <input className="form-control" type="number" id="phone" placeholder="Enter Phone Number"  {...register('phone', { required: "Phone is Required", setValueAs: (value) => parseInt(value) })} />
                                             {errors.phone && <p className="invalid">{`${errors.phone.message}`}</p>}
                                         </div>
                                     </div>
@@ -421,10 +422,10 @@ const AuthRepresentative = ({ drawer }) => {
                                 <Col sm="6">
                                     <div className="form-group">
                                         <Label htmlFor="group_email" className="form-label">
-                                            Group Email Address<span style={{color:'red'}}> *</span>
+                                            Group Email Address<span style={{ color: 'red' }}> *</span>
                                         </Label>
                                         <div className="form-control-wrap">
-                                            <input className="form-control" type="email" id="group_email" placeholder="Enter Group Email Address" {...register('group_email', { required: "Group Email Address is Required" })}/>
+                                            <input className="form-control" type="email" id="group_email" placeholder="Enter Group Email Address" {...register('group_email', { required: "Group Email Address is Required" })} />
                                             {errors.group_email && <p className="invalid">{`${errors.group_email.message}`}</p>}
                                         </div>
                                     </div>
@@ -432,7 +433,7 @@ const AuthRepresentative = ({ drawer }) => {
                                 <Col sm="6">
                                     <div className="form-group">
                                         <Label htmlFor="position_id" className="form-label">
-                                            Category<span style={{color:'red'}}> *</span>
+                                            Category<span style={{ color: 'red' }}> *</span>
                                         </Label>
                                         <div className="form-control-wrap">
                                             <div className="form-control-select">
@@ -452,7 +453,7 @@ const AuthRepresentative = ({ drawer }) => {
                                 <Col sm="6">
                                     <div className="form-group">
                                         <Label htmlFor="position_id" className="form-label">
-                                            Position<span style={{color:'red'}}> *</span>
+                                            Position<span style={{ color: 'red' }}> *</span>
                                         </Label>
                                         <div className="form-control-wrap">
                                             <div className="form-control-select">
@@ -473,7 +474,7 @@ const AuthRepresentative = ({ drawer }) => {
                                 <Col sm="6">
                                     <div className="form-group">
                                         <Label htmlFor="nationality" className="form-label">
-                                            Role<span style={{color:'red'}}> *</span>
+                                            Role<span style={{ color: 'red' }}> *</span>
                                         </Label>
                                         <div className="form-control-wrap">
                                             <div className="form-control-select">
@@ -493,10 +494,10 @@ const AuthRepresentative = ({ drawer }) => {
                                 <Col sm="6">
                                     <div className="form-group">
                                         <Label htmlFor="nationality" className="form-label">
-                                           Upload Digital Photo<span style={{color:'red'}}> *</span>
+                                            Upload Digital Photo<span style={{ color: 'red' }}> *</span>
                                         </Label>
                                         <div className="form-control-wrap">
-                                             <input type="file" accept="image/*" className="form-control"  {...register('digitalPhone', {  required: "Digital Photo is Required" })} onChange={handleDificalFileChange}/>
+                                            <input type="file" accept="image/*" className="form-control"  {...register('digitalPhone', { required: "Digital Photo is Required" })} onChange={handleDificalFileChange} />
                                             {errors.digitalPhone && <p className="invalid">{`${errors.digitalPhone.message}`}</p>}
                                         </div>
                                     </div>
@@ -504,10 +505,10 @@ const AuthRepresentative = ({ drawer }) => {
                                 <Col sm="6">
                                     <div className="form-group">
                                         <Label htmlFor="nationality" className="form-label">
-                                            Signed Signature Mandate<span style={{color:'red'}}> *</span>
+                                            Signed Signature Mandate<span style={{ color: 'red' }}> *</span>
                                         </Label>
                                         <div className="form-control-wrap">
-                                             <input type="file" accept=".pdf" className="form-control"  {...register('signedMandate', {  required: "Signed Mandate is Required" })} onChange={handleSignaturewChange}/>
+                                            <input type="file" accept=".pdf" className="form-control"  {...register('signedMandate', { required: "Signed Mandate is Required" })} onChange={handleSignaturewChange} />
                                             {errors.signedMandate && <p className="invalid">{`${errors.signedMandate.message}`}</p>}
                                         </div>
                                     </div>
@@ -516,17 +517,17 @@ const AuthRepresentative = ({ drawer }) => {
                                     <div className="form-group">
                                         {/* {settings} */}
                                         {($settings && $settings.name == 'mandate_form') && <>
-                                            <a  size="lg" href={$settings.value}  download="mandate_form.pdf" target="_blank" className="active btn btn-primary">
+                                            <a size="lg" href={$settings.value} download="mandate_form.pdf" target="_blank" className="active btn btn-primary">
                                                 {"Download Signature Mandate"}
                                             </a>
                                         </>}
-                                        
+
                                     </div>
                                 </Col>
                                 <Col sm="12">
                                     <div className="form-group float-right">
-                                        <Button color="primary" type="submit"  size="lg">
-                                            {loading ? ( <span><Spinner size="sm" color="light" /> Processing...</span>) : "Create"}
+                                        <Button color="primary" type="submit" size="lg">
+                                            {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Create"}
                                         </Button>
                                     </div>
                                 </Col>
@@ -552,7 +553,7 @@ const AuthRepresentative = ({ drawer }) => {
                                 </BlockHead>
 
                                 <PreviewCard>
-                                    {$authorize_reps && <AuthRepTable home={false} updateParent={updateParentState} parentState={parentState} data={$authorize_reps} positions={$all_positions} countries={$countries} authorizers={$authorizers} categories={myApplicationCategories} roles={$roles}  expandableRows pagination actions />}
+                                    {$authorize_reps && <AuthRepTable home={false} updateParent={updateParentState} parentState={parentState} data={$authorize_reps} positions={$all_positions} countries={$countries} authorizers={$authorizers} categories={myApplicationCategories} roles={$roles} expandableRows pagination actions />}
                                 </PreviewCard>
                             </Block>
 

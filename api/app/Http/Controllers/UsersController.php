@@ -89,6 +89,7 @@ class UsersController extends Controller
             'approval_status' => 'approved',
             'role_id' => Role::ARINPUTTER,
             'institution_id' => $institution->id,
+            'category_id' => $request->input('category'),
             'position_id' => $request->input('position'),
             'img' => $request->hasFile('img') ? $request->file('img')->storePublicly('users', 'public') : null,
             'verified_at' => now(),

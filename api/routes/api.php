@@ -23,6 +23,7 @@ use App\Http\Controllers\MemberGuidesController;
 use App\Http\Controllers\MembershipApplicationController;
 use App\Http\Controllers\MsgApplicationController;
 use App\Http\Controllers\NationalityController;
+use App\Http\Controllers\NotificationOfChangeController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\QpayController;
@@ -183,6 +184,16 @@ Route::middleware('auth')->group(function () {
             Route::post('/update/{id}', [RegulatorsController::class, 'update']);
             Route::post('/update-status/{id}', [RegulatorsController::class, 'updateStatus']);
         });
+
+        // stack holder
+        Route::group(['prefix' => 'meg/stakeholder'], function () {
+            Route::get('/active_list', [UserController::class, 'list_active_stakeholders']);
+            Route::get('/view_all', [UserController::class, 'list_stakeholders']);
+            Route::post('/create', [UserController::class, 'store']);
+            Route::post('/update/{id}', [UserController::class, 'update']);
+            Route::post('/update-status/{id}', [UserController::class, 'updateStatus']);
+        });
+
         // sanctions
         Route::group(['prefix' => 'disciplinary-sanctions'], function () {
             Route::get('/list_all', [SanctionsController::class, 'index']);
@@ -400,6 +411,31 @@ Route::middleware('auth')->group(function () {
     Route::group(['prefix' => 'member-guide'], function () {
         Route::get('/current', [MemberGuidesController::class, 'listCurrent']);
     });
+
+    // Notification of change
+    Route::group(['prefix' => 'change-request'], function () {
+
+        Route::middleware('authRole:' . Role::ARINPUTTER)->group(function () {
+            Route::post('/send', [NotificationOfChangeController::class, 'send']);
+            Route::post('/ar-comment', [NotificationOfChangeController::class, 'comment']);
+        });
+
+        Route::middleware('authRole:' . Role::ARAUTHORISER)->group(function () {
+            Route::post('/update-status', [NotificationOfChangeController::class, 'updateStatus']);
+        });
+
+        Route::middleware('authRole:' . Role::ARAUTHORISER . ',' . Role::ARINPUTTER)->group(function () {
+            Route::get('/ar-list', [NotificationOfChangeController::class, 'arList']);
+        });
+
+        Route::middleware('authRole:' . Role::MEG)->group(function () {
+            Route::get('/list', [NotificationOfChangeController::class, 'list']);
+            Route::post('/meg-comment', [NotificationOfChangeController::class, 'comment']);
+            Route::post('/meg-update-status', [NotificationOfChangeController::class, 'megUpdateStatus']);
+        });
+
+    });
+
 });
 
 Route::get('execute-commands', [SystemController::class, 'executeCommands'])->name('executeCommands');
