@@ -49,7 +49,6 @@ const AdminRepresentativeReport = ({ drawer }) => {
     const $institutions = institutions ? JSON.parse(institutions) : null;
     const $active_positions = active_positions ? JSON.parse(active_positions) : null;
 
-
     let filteredApplication = $ar_users;
 
 
@@ -72,6 +71,9 @@ const AdminRepresentativeReport = ({ drawer }) => {
         }
         if (values?.institution) {
             filteredApplication = filteredApplication.filter((item) => item.institution.id == values?.institution)
+        }
+        if (values?.category) {
+            filteredApplication = filteredApplication.filter((item) => item?.category?.id == values?.category)
         }
         if (values?.position) {
             filteredApplication = filteredApplication.filter((item) => item.position.id == values?.position)
@@ -131,7 +133,7 @@ const AdminRepresentativeReport = ({ drawer }) => {
 
                                     <form onSubmit={handleSubmit(handleFormSubmit)} className="is-alter" encType="multipart/form-data">
                                         <Row>
-                                            <Col md={'3'}>
+                                            <Col md={'2'}>
 
                                                 <div className="form-group">
                                                     <label className="form-label" htmlFor="full-name">
@@ -147,7 +149,7 @@ const AdminRepresentativeReport = ({ drawer }) => {
                                                     </div>
                                                 </div>
                                             </Col>
-                                            <Col md={'3'}>
+                                            <Col md={'2'}>
 
                                                 <div className="form-group">
                                                     <label className="form-label" htmlFor="full-name">
@@ -160,6 +162,24 @@ const AdminRepresentativeReport = ({ drawer }) => {
                                                             setDate('end_date', e);
                                                         }} className="form-control date-picker" />
 
+                                                    </div>
+                                                </div>
+                                            </Col>
+
+                                            <Col md={'3'}>
+                                                <div className="form-group">
+                                                    <label className="form-label" htmlFor="category">
+                                                        Category
+                                                    </label>
+                                                    <div className="form-control-wrap">
+                                                        <div className="form-control-select">
+                                                            <select className="form-control form-select" {...register('category')}>
+                                                                <option value=''>All</option>
+                                                                {$active_categories && $active_categories.map((active_category, index) =>
+                                                                    <option key={`activeCategory${index}`} value={active_category.id}>{active_category.name}</option>
+                                                                )}
+                                                            </select>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </Col>
@@ -181,7 +201,7 @@ const AdminRepresentativeReport = ({ drawer }) => {
                                                     </div>
                                                 </div>
                                             </Col>
-                                            <Col md={'3'}>
+                                            <Col md={'2'}>
 
                                                 <div className="form-group">
                                                     <label className="form-label" htmlFor="position">

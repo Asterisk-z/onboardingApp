@@ -37,12 +37,14 @@ import AdminPositions from "main/pages/Admin/AdminPositions"
 import AdminCreationRequest from "main/pages/Admin/AdminCreationRequest"
 import AdminStakeHolderRequest from "main/pages/Admin/AdminStakeHolderRequest"
 import AdminComplaint from "main/pages/Admin/AdminComplaint"
+import AdminNotificationOfChange from "main/pages/Admin/AdminNotificationOfChange"
 import AdminStakeHolders from "main/pages/Admin/AdminStakeHolders"
 import AdminRegulators from "main/pages/Admin/AdminRegulators"
 import AdminSanctions from "main/pages/Admin/AdminSanctions"
 import AdminFeesFramework from "main/pages/Admin/AdminFeesFramework"
 import AdminDoh from "main/pages/Admin/AdminDoh"
 
+import NotificationOfChange from "main/pages/NotificationOfChange"
 import Complaint from "main/pages/Complaint"
 import ARCreationRequest from "main/pages/ARCreationRequest"
 import AuditLog from "main/pages/AuditLog"
@@ -170,6 +172,7 @@ const Router = () => {
         <Route path="dashboard" element={<UserHomepage />}></Route>
         <Route path="complaint" element={<Complaint />}></Route>
         <Route path="ar-creation-request" element={<ARCreationRequest />}></Route>
+        <Route path="notification-of-change" element={<NotificationOfChange />}></Route>
         <Route path="audit-log" element={<AuditLog />}></Route>
         <Route path="auth-representatives-pending" element={<PendingAuthRepresentative />}></Route>
         <Route path="auth-representatives-pending-update" element={<PendingUpdateAuthRepresentative />}></Route>
@@ -206,6 +209,7 @@ const Router = () => {
       <Route path={`${process.env.PUBLIC_URL}`} element={<AdminLayout />}>
         <Route path="admin-dashboard" element={<AdminHomepage />}></Route>
         <Route path="admin-complaint" element={<AdminComplaint />}></Route>
+        <Route path="admin-notification-of-change" element={<AdminNotificationOfChange />}></Route>
         <Route path="admin-audit-log" element={<AdminAuditLog />}></Route>
         <Route path="admin-broadcast" element={<AdminBroadcast />}></Route>
         <Route path="admin-list-ar" element={<AdminListAR />}></Route>

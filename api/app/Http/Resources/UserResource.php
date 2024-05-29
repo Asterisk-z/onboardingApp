@@ -26,6 +26,7 @@ class UserResource extends JsonResource
             'nationality_code' => $this->userNationality->code,
             'role' => $this->role,
             'position' => $this->position ?? null,
+            'category' => $this->category ?? null,
             'approval_status' => $this->approval_status,
             'update_payload' => $this->update_payload,
             'regId' => $this->reg_id,

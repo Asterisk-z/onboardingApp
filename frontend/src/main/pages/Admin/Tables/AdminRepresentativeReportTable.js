@@ -334,13 +334,13 @@ const AdminListARTable = ({ data, pagination, actions, className, selectableRows
       width: "auto",
       wrap: true
     },
-    // {
-    //   name: "Category",
-    //   selector: (row) => { return (<>{`${row.category.name}`}</>) },
-    //   sortable: true,
-    //   width: "auto",
-    //   wrap: true
-    // },
+    {
+      name: "Category",
+      selector: (row) => { return (<>{`${row?.category?.name}`}</>) },
+      sortable: true,
+      width: "auto",
+      wrap: true
+    },
     {
       name: "Position",
       selector: (row) => { return (<>{`${row.position.name}`}</>) },
@@ -362,27 +362,6 @@ const AdminListARTable = ({ data, pagination, actions, className, selectableRows
       width: "auto",
       wrap: true
     },
-    // {
-    //   name: "Status",
-    //   selector: (row) => { return (<><Badge color="success" className="text-uppercase">{`${row.approval_status}`}</Badge></>) },
-    //   sortable: true,
-    //   width: "auto",
-    //   wrap: true
-    // },
-    // {
-    //   name: "Role",
-    //   selector: (row) => { return (<><Badge color="success">{`${row.role.name}`}</Badge></>) },
-    //   sortable: true,
-    //   width: "auto",
-    //   wrap: true
-    // },
-    // {
-    //   name: "Reg No",
-    //   selector: (row) => { return (<>{`${row.regId}`}</>) },
-    //   sortable: true,
-    //   width: "auto",
-    //   wrap: true
-    // },
     {
       name: "Date Created",
       selector: (row) => moment(row.createdAt).format('MMM. D, YYYY HH:mm'),

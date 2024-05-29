@@ -215,7 +215,6 @@ const ActionTab = (props) => {
                     formData.append('action', 'decline');
                     const resp = dispatch(userProcessUpdateUserAR(formData));
                     setModalViewUpdate(false)
-
                     props.updateParentParent(Math.random())
                 }
             });

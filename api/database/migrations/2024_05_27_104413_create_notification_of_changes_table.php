@@ -20,7 +20,7 @@ class CreateNotificationOfChangesTable extends Migration
             $table->enum('regulatory_status', ['yes', 'no'])->default('no');
             $table->string('regulatory_approval')->nullable();
             $table->enum('confidentiality_level', ['high', 'medium', 'low']);
-            $table->string('attachment');
+            $table->string('attachment')->nullable();
             $table->enum('ar_status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->enum('meg_status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->integer('institution_id');

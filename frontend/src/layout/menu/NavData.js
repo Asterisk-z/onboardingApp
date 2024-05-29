@@ -110,6 +110,11 @@ const navData = [{
   },
   {
     icon: "tile-thumb-fill",
+    text: "Notification Of Change",
+    link: "/admin-notification-of-change",
+  },
+  {
+    icon: "tile-thumb-fill",
     text: "Settings",
     active: false,
     subMenu: [
@@ -270,6 +275,11 @@ const navData = [{
     icon: "tile-thumb-fill",
     text: "AR Creation Request",
     link: "/ar-creation-request",
+  },
+  {
+    icon: "tile-thumb-fill",
+    text: "Notification Of Change",
+    link: "/notification-of-change",
   },
     // {
     //   icon: "tile-thumb-fill",

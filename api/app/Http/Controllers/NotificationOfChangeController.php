@@ -19,8 +19,8 @@ class NotificationOfChangeController extends Controller
     public function send(Request $request)
     {
         $data = $request->validate([
-            'subject' => ['required', 'string'],
-            'summary' => ['required', 'string'],
+            'subject' => ['required', 'string', 'max:60'],
+            'summary' => ['required', 'string', 'max:200'],
             'ar_authoriser_id' => ['required', 'integer', 'exists:users,id'],
             'regulatory_status' => ['required', 'string', 'in:yes,no'],
             'regulatory_approval' => ['required_if:regulatory_status,yes', 'file'],
@@ -58,7 +58,7 @@ class NotificationOfChangeController extends Controller
     {
         $data = $request->validate([
             'status' => ['required', 'string', 'in:approved,rejected'],
-            'notification_id' => ['required', 'integer', 'exists:notification_of_requests,id'],
+            'notification_id' => ['required', 'integer', 'exists:notification_of_changes,id'],
             'reason' => ['required_if:status,rejected', 'string'],
         ]);
 
@@ -77,7 +77,6 @@ class NotificationOfChangeController extends Controller
         $logMessage = auth()->user()->email . ' updated  notification of change status ';
 
         logAction($user->email, 'Notification Of Change Status', $logMessage, $request->ip());
-
         logAction(auth()->user()->email, 'Notification Of Change Status', $logMessage, $request->ip());
 
         // status_reason
@@ -93,13 +92,13 @@ class NotificationOfChangeController extends Controller
 
     public function arList()
     {
-        $notify_requests = NotificationOfChange::where('id', auth()->user()->institution_id)->orderBy('created_at', 'DESC')->get();
+        $notify_requests = NotificationOfChange::where('institution_id', auth()->user()->institution_id)->orderBy('created_at', 'DESC')->get();
         return successResponse('Successful', $notify_requests);
 
     }
     public function list()
     {
-        $notify_requests = NotificationOfChange::orderBy('created_at', 'DESC')->get();
+        $notify_requests = NotificationOfChange::where('ar_status', NotificationOfChange::APPROVED)->orderBy('created_at', 'DESC')->get();
         return successResponse('Successful', $notify_requests);
 
     }
@@ -108,19 +107,35 @@ class NotificationOfChangeController extends Controller
     {
 
         $data = $request->validate([
-            'notification_id' => ['required', 'integer', 'exists:notification_of_requests,id'],
+            'notification_id' => ['required', 'integer', 'exists:notification_of_changes,id'],
             'comment' => ['required', 'string'],
         ]);
 
-        if (!$notify_request = NotificationOfChange::where('id', $data['notification_id'])->where('ar_status', NotificationOfChange::APPROVED)->first()) {
+        if (!$notify_request = NotificationOfChange::where('id', $data['notification_id'])->where('ar_status', NotificationOfChange::APPROVED)->where('meg_status', NotificationOfChange::PENDING)->first()) {
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'Can not perform this action at this point');
         }
 
         NotificationOfChangeComment::create([
             'notification_of_change_id' => $notify_request->id,
-            'comment' => $data['comment'],
+            'comments' => $data['comment'],
             'user_id' => auth()->user()->id,
         ]);
+
+        $MEGs = Utility::getUsersByCategory(Role::MEG);
+        if (auth()->user()->id == $notify_request->user->id) {
+
+            if (count($MEGs)) {
+                Notification::send($MEGs, new InfoNotification(MailContents::notificationOfChangeNewCommentMail(), MailContents::notificationOfChangeNewCommentSubject()));
+            }
+
+        } else {
+
+            $user = $notify_request->user;
+            $user_auth = $notify_request->authorizer;
+
+            $user->notify(new InfoNotification(MailContents::arNotificationOfChangeMail($user, $notify_request->request_id), MailContents::arNotificationOfChangeSubject($notify_request->request_id, $notify_request->subject), [ ...$MEGs, $user_auth->email]));
+
+        }
 
         return successResponse('Notification Of Change comment sent', []);
 
@@ -128,7 +143,7 @@ class NotificationOfChangeController extends Controller
     // public function megComment()
     // {
     //     $data = $request->validate([
-    //         'notification_id' => ['required', 'integer', 'exists:notification_of_requests,id'],
+    //         'notification_id' => ['required', 'integer', 'exists:notification_of_changes,id'],
     //         'comment' => ['required', 'string'],
     //     ]);
 
@@ -150,7 +165,7 @@ class NotificationOfChangeController extends Controller
 
         $data = $request->validate([
             'status' => ['required', 'string', 'in:approved,rejected'],
-            'notification_id' => ['required', 'integer', 'exists:notification_of_requests,id'],
+            'notification_id' => ['required', 'integer', 'exists:notification_of_changes,id'],
             'reason' => ['required_if:status,rejected', 'string'],
         ]);
 

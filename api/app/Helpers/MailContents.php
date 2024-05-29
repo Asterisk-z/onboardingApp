@@ -417,4 +417,16 @@ class MailContents
         by the`$ar_id` of '$memberName'.
         Kindly login to <a href=$url>MROIS Portal</a>  to view change'";
     }
+
+    public static function notificationOfChangeNewCommentSubject(): string
+    {
+        return "MROIS Notification of Change New Comment";
+    }
+
+    public static function notificationOfChangeNewCommentMail(): string
+    {
+        $url = config("app.front_end_url");
+        return "<p>Please be informed that a comment was made on a notification of change.
+        Kindly login to <a href=$url>MROIS Portal</a>  to view'";
+    }
 }

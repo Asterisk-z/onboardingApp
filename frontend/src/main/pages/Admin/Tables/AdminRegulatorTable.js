@@ -156,7 +156,7 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
 
         const confirmationText = tabItem.active ? 'Do you want to activate this regulator?' : 'Do you want to deactivate this regulator?';
 
-        const confirmationButtonText = tabItem.active ? 'Yes, activate it!' : 'Yes, deactivate it!';
+        const confirmationButtonText = tabItem.active ? 'Yes' : 'Yes';
 
         Swal.fire({
             title: 'Are you sure?',
@@ -314,7 +314,7 @@ const AdminRegulatorTable = ({ data, pagination, actions, className, selectableR
         },
         {
             name: "Date Created",
-            selector: (row) => moment(row.createdAt).format('MMM. D, YYYY HH:mm'),
+            selector: (row) => moment(row.created_at).format('MMM. D, YYYY HH:mm'),
             sortable: true,
             width: "auto",
             wrap: true
