@@ -26,12 +26,16 @@ const Export = ({ data }) => {
 
   const newData = data.map((item, index) => {
     return ({
-      "IID": ++index,
-      "Name": `${item.name}`,
-      "Categories": item.category,
-      "Total ARs": item.ars,
-      "Status": `Pending Registration`,
-      "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
+      "Membership ID": item?.reg_id,
+      "Institution": item?.basic_details?.companyName,
+      "Institution": item?.basic_details?.companyName,
+      "Category": item?.internal?.category_name,
+      "Address": item?.basic_details?.registeredOfficeAddress,
+      "Phone number": item?.basic_details?.companyTelephoneNumber,
+      "Email address": item?.basic_details?.companyEmailAddress,
+      "Website": item?.basic_details?.corporateWebsiteAddress,
+      "Status": item?.internal?.status_description,
+      "Sign-on date": moment(item?.internal?.createdAt).format('MMM. D, YYYY HH:mm')
     })
   });
 

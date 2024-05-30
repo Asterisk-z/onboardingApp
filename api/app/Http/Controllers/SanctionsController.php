@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\MailContents;
 use App\Helpers\ResponseStatusCodes;
-use App\Helpers\Utility;
+use App\Http\Resources\SanctionResource;
 use App\Models\Role;
 use App\Models\Sanction;
 use App\Models\User;
@@ -21,7 +21,7 @@ class SanctionsController extends Controller
     {
         $sanctions = Sanction::orderBy('created_at', 'DESC')->get();
 
-        return successResponse('Successful', $sanctions);
+        return successResponse('Successful', SanctionResource::collection($sanctions));
     }
 
     //
@@ -29,7 +29,8 @@ class SanctionsController extends Controller
     {
         $sanctions = Sanction::where('institution', auth()->user()->institution_id)->orderBy('created_at', 'DESC')->get();
 
-        return successResponse('Successful', $sanctions);
+        return successResponse('Successful', SanctionResource::collection($sanctions));
+
     }
 
     //
@@ -43,18 +44,14 @@ class SanctionsController extends Controller
             "evidence" => "required|mimes:pdf",
         ]);
 
-        $attachment = [];
-
-        if ($request->hasFile('evidence')) {
-            $attachment = Utility::saveFile('sanctions', $request->file('evidence'));
-        }
+        $attachment = $request->hasFile('evidence') ? $request->file('evidence')->storePublicly('sanctions', 'public') : null;
 
         // $sanction = Sanction::create($validated);
         $sanction = Sanction::create([
             'ar' => $request->input('ar'),
             'ar_summary' => $request->input('ar_summary'),
             'sanction_summary' => $request->input('sanction_summary'),
-            'evidence' => $attachment ? $attachment['path'] : null,
+            'evidence' => $attachment,
             'created_by' => auth()->user()->email,
             'institution' => auth()->user()->institution_id,
             "status" => 'pending',
@@ -86,8 +83,6 @@ class SanctionsController extends Controller
             "status" => "required|string|in:closed,investigating",
         ]);
 
-        $attachment = [];
-
         if (!$sanction = Sanction::where('id', request('sanction_id'))->whereIn('status', ['investigating', 'pending'])->first()) {
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'Can not perform this action at this point');
         }
@@ -96,11 +91,11 @@ class SanctionsController extends Controller
         $sanction->status = request('status');
         $sanction->save();
         //
-        $ar = User::where('id', $request->ar)->first();
+        $ar = User::where('id', $sanction->ar)->first();
         $logMessage = auth()->user()->email . ' updated a sanction ';
         logAction(auth()->user()->email, 'Sanction Update', $logMessage, $request->ip());
         logAction($ar->email, 'Sanction Update', $logMessage, $request->ip());
 
-        return successResponse('Sanction successfully created', $sanction);
+        return successResponse('Sanction successfully updated', $sanction);
     }
 }

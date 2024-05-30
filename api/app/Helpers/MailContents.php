@@ -455,4 +455,16 @@ class MailContents
         <br>
         Reason: $reason ";
     }
+
+    public static function newStakeHolderRequestSubject(): string
+    {
+        return "Internal Stakeholder Request";
+    }
+
+    public static function newStakeHolderRequestMail($email): string
+    {
+        $url = config("app.front_end_url");
+        return "<p>A stakeholder with mail $email sent a request to view report.
+     Kindly login to the  <a href=$url>MROIS Portal</a>  to allow or decline</p>";
+    }
 }

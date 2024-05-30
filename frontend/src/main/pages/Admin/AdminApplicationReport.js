@@ -151,8 +151,9 @@ const AdminApplicationReport = ({ drawer }) => {
                                                         <div className="form-control-select">
                                                             <select className="form-control form-select" {...register('status')}>
                                                                 <option value="">Select Status</option>
-                                                                <option value="Pending">Ongoing</option>
-                                                                <option value="CLOSED">Closed</option>
+                                                                <option value="INPROGRESS">Inprogress</option>
+                                                                <option value="COMPLETED">Completed</option>
+                                                                <option value="CANCELED">Canceled</option>
                                                             </select>
                                                         </div>
                                                     </div>

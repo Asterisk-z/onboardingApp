@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\MailContents;
 use App\Helpers\ResponseStatusCodes;
 use App\Helpers\Utility;
 use App\Http\Resources\UserResource;
 use App\Models\Role;
 use App\Models\StakeHolderAccessRequest;
 use App\Models\User;
+use App\Notifications\InfoNotification;
 use App\Rules\EmailValidation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
 class UserController extends Controller
 {
@@ -52,6 +55,12 @@ class UserController extends Controller
             $user = User::firstOrCreate(['email' => request('email')], User::STAKEHOLDER_DATA(request('email')));
 
             logAction($user->email, 'Stake Holder Request Access to ' . request('access'), 'Access Request', $request->ip());
+
+            $MEGs = Utility::getUsersByCategory(Role::MEG);
+            if (count($MEGs)) {
+
+                Notification::send($MEGs, new InfoNotification(MailContents::newStakeHolderRequestMail($user->email), MailContents::newStakeHolderRequestSubject()));
+            }
 
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, "Access Request Sent for approval.");
 

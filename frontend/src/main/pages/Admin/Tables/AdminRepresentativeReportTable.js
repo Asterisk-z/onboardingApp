@@ -163,18 +163,6 @@ const ActionTab = (props) => {
                     <td>Institution</td>
                     <td className="text-capitalize">{`${ar_user.institution?.name?.toLowerCase()}`}</td>
                   </tr>
-                  {/* <tr>
-                                      <td>Profile Photo</td>
-                                      <td>{ar_user.img ? (
-                                          <a size="lg" href={ar_user.img} target="_blank">
-                                              <Button color="primary">
-                                                  <span >{"View Image"}</span>
-                                              </Button>
-                                          </a>
-
-
-                                      ) : `Not Uploaded`}</td>
-                                  </tr> */}
                   <tr>
                     <td>Signature Mandate</td>
                     <td>{ar_user.mandate_form ? (
@@ -188,115 +176,9 @@ const ActionTab = (props) => {
 
                 </tbody>
               </table>
-              {/* <CardTitle tag="h5">{`${ar_user.firstName} ${ar_user.lastName} (${ar_user.email})`}</CardTitle> */}
-              {/* <CardText> */}
-              {/* <table className="table table-striped table-bordered table-hover">
-                <thead>
-                  <tr>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Phone</td>
-                    <td>{`${ar_user.phone}`}</td>
-                  </tr>
-                  <tr>
-                    <td>Nationality</td>
-                    <td>{`${ar_user.nationality}`}</td>
-                  </tr>
-                  <tr>
-                    <td>Role</td>
-                    <td>{`${ar_user.role.name.toLowerCase() }`}</td>
-                  </tr>
-                  <tr>
-                    <td>Position</td>
-                    <td>{`${ar_user.position.name.toLowerCase() }`}</td>
-                  </tr>
-                  <tr>
-                    <td>Status</td>
-                    <td>{`${ar_user.approval_status.toLowerCase() }`}</td>
-                  </tr>
-                  <tr>
-                    <td>RegID</td>
-                    <td>{`${ar_user.regId}`}</td>
-                  </tr>
-                  <tr>
-                    <td>Institution</td>
-                    <td>{`${ar_user.institution?.name?.toLowerCase() }`}</td>
-                  </tr>
-                  <tr>
-                    <td>Profile Photo</td>
-                    <td>{ar_user.img ? (
-                      <a size="lg" href={ar_user.img} target="_blank">
-                        <Button color="primary">
-                          <span >{"View Image"}</span>
-                        </Button>
-                      </a>
-
-
-                    ) : `Not Uploaded`}</td>
-                  </tr>
-                  <tr>
-                    <td>Signature Mandate</td>
-                    <td>{ar_user.mandate_form ? (
-                      <a size="lg" href={ar_user.mandate_form} target="_blank" className="btn-primary">
-                        <Button color="primary">
-                          <span >{"View Mandate"}</span>
-                        </Button>
-                      </a>
-                    ) : `Not Uploaded`}</td>
-                  </tr>
-
-                </tbody>
-              </table> */}
-              {/* <ul className="gy-3">
-                <li className="text-capitalize"><span className="lead">Phone : </span>{`${ar_user.phone}`}</li>
-                <li className="text-capitalize"><span className="lead">Nationality : </span>{`${ar_user.nationality}`}</li>
-                <li className="text-capitalize"><span className="lead">Role : </span><span className="text-capitalize">{`${ar_user.role.name.toLowerCase()}`}</span></li>
-                <li className="text-capitalize"><span className="lead">Position : </span><span className="text-capitalize">{`${ar_user.position.name.toLowerCase()}`}</span></li>
-                <li className="text-capitalize"><span className="lead">Status : </span>{`${ar_user.approval_status.toLowerCase()}`}</li>
-                <li className="text-capitalize"><span className="lead">RegID : </span>{`${ar_user.regId}`}</li>
-                <li className="text-capitalize"><span className="lead">Institution : </span>{`${ar_user?.institution?.name?.toLowerCase()}`}</li>
-                <li className="text-capitalize"><span className="lead">Profile Photo : </span>{ar_user.img ? (
-                  <a size="lg" href={ar_user.img}  target="_blank">
-                    <Button color="primary">
-                      <span >{"View Image"}</span>
-                    </Button>
-                  </a>
-
-
-                ) : `Not Uploaded`}</li>
-                <li><span className="lead">Signature Mandate : </span>{ar_user.mandate_form ? (
-                  <a size="lg" href={ar_user.mandate_form} target="_blank" className="btn-primary">
-                    <Button color="primary">
-                      <span >{"View Mandate"}</span>
-                    </Button>
-                  </a>
-                ) : `Not Uploaded`}</li>
-              </ul> */}
-
-              {/* {(aUser.is_admin_meg() && ar_user.approval_status == 'pending') &&
-                <>
-                  <ul className="g-4 center">
-                    <li className="btn-group">
-                      <Button color="primary" size="md" onClick={(e) => askAction('approve')} ><span>Approve</span></Button>
-                    </li>
-                    <li className="btn-group">
-                      <Button className="decline" size="md" onClick={(e) => askAction('decline')} >Decline</Button>
-                    </li>
-                  </ul>
-                </>
-              } */}
-
-              {/* </CardText> */}
             </CardBody>
           </Card>
         </ModalBody>
-        {/* <ModalFooter className="bg-light">
-          <span className="sub-text">View Authorised Representative</span>
-        </ModalFooter> */}
       </Modal>
     </>
 

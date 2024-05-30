@@ -48,7 +48,7 @@ const StakeHolderRequest = () => {
 
     return (
         <>
-            <Head title="Forgot-Password" />
+            <Head title="Stake-Holder-Request" />
             <div className="login-block">
                 <Block className="nk-block-middle nk-auth-body  wide-xs">
                     <PreviewCard className="card-bordered" bodyClass="card-inner-lg">
