@@ -154,7 +154,7 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
         const actionText = tabItem.active ? 'Activate' : 'Deactivate';
         const oppositeStatus = tabItem.active ? '1' : '0';
 
-        const confirmationText = tabItem.active ? 'Do you want to activate this regulator?' : 'Do you want to deactivate this regulator?';
+        const confirmationText = !tabItem.active ? 'Do you want to activate this regulator?' : 'Do you want to deactivate this regulator?';
 
         const confirmationButtonText = tabItem.active ? 'Yes' : 'Yes';
 

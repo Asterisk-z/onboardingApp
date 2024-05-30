@@ -29,6 +29,10 @@ const NotificationOfChange = ({ drawer }) => {
     const [modalForm, setModalForm] = useState(false);
     const { register, handleSubmit, formState: { errors }, resetField } = useForm();
 
+    const [parentState, setParentState] = useState('Initial state');
+    const toggleParent = (newState) => {
+        setParentState(newState);
+    };
     const toggleForm = () => setModalForm(!modalForm);
 
     const [requireRegulatoryApproval, setRequireRegulatoryApproval] = useState(true);
@@ -93,8 +97,9 @@ const NotificationOfChange = ({ drawer }) => {
     const list_ar_changes = useSelector((state) => state?.change?.list_ar_changes) || null;
     useEffect(() => {
         dispatch(loadArNotificationOfChange());
-    }, [dispatch, counter]);
+    }, [dispatch, counter, parentState]);
     const $list_ar_changes = list_ar_changes ? JSON.parse(list_ar_changes) : null;
+
 
     return (
         <React.Fragment>
@@ -271,7 +276,7 @@ const NotificationOfChange = ({ drawer }) => {
                                 </BlockHead>
 
                                 <PreviewCard>
-                                    {$list_ar_changes && <NotificationOfChangeTable data={$list_ar_changes} expandableRows pagination actions />}
+                                    {$list_ar_changes && <NotificationOfChangeTable data={$list_ar_changes} updateParent={toggleParent} expandableRows pagination actions />}
                                 </PreviewCard>
                             </Block>
 

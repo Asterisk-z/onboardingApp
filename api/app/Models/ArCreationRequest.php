@@ -27,6 +27,7 @@ class ArCreationRequest extends Model
             "status" => $this->status,
             "createdAt" => $this->created_at,
             "system" => $this->system,
+            "system_name" => $this->system->name,
             "ars" => $this->ars,
         ];
     }

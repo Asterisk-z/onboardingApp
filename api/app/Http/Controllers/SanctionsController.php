@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\MailContents;
+use App\Helpers\ResponseStatusCodes;
 use App\Helpers\Utility;
 use App\Models\Role;
 use App\Models\Sanction;
@@ -56,6 +57,7 @@ class SanctionsController extends Controller
             'evidence' => $attachment ? $attachment['path'] : null,
             'created_by' => auth()->user()->email,
             'institution' => auth()->user()->institution_id,
+            "status" => 'pending',
         ]);
         //
         $logMessage = auth()->user()->email . ' created a new sanction ';
@@ -72,6 +74,33 @@ class SanctionsController extends Controller
         //
         Notification::send($megs, new InfoNotification(MailContents::newSanctionMessage($ar_name, $ar_summary, $sanction_summary), MailContents::newSanctionMessageSubject()));
         //
+        return successResponse('Sanction successfully created', $sanction);
+    }
+    //
+
+    public function updateStatus(Request $request): JsonResponse
+    {
+        //
+        $request->validate([
+            "sanction_id" => "required|integer",
+            "status" => "required|string|in:closed,investigating",
+        ]);
+
+        $attachment = [];
+
+        if (!$sanction = Sanction::where('id', request('sanction_id'))->whereIn('status', ['investigating', 'pending'])->first()) {
+            return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'Can not perform this action at this point');
+        }
+
+        // $sanction = Sanction::create($validated);
+        $sanction->status = request('status');
+        $sanction->save();
+        //
+        $ar = User::where('id', $request->ar)->first();
+        $logMessage = auth()->user()->email . ' updated a sanction ';
+        logAction(auth()->user()->email, 'Sanction Update', $logMessage, $request->ip());
+        logAction($ar->email, 'Sanction Update', $logMessage, $request->ip());
+
         return successResponse('Sanction successfully created', $sanction);
     }
 }

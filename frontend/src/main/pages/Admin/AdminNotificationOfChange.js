@@ -6,6 +6,7 @@ import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col,
 import { loadMegNotificationOfChange } from "redux/stores/notificationOfChange/changeStore";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
+import { loadAllActiveStakeHolders } from "redux/stores/users/userStore";
 import AdminNotificationOfChangeTable from './Tables/AdminNotificationOfChangeTable'
 
 
@@ -17,12 +18,15 @@ const Complaint = ({ drawer }) => {
 
 
     const list_changes = useSelector((state) => state?.change?.list_changes) || null;
+    const stake_active_list = useSelector((state) => state?.user?.stake_active_list) || null;
     useEffect(() => {
+        dispatch(loadAllActiveStakeHolders());
         dispatch(loadMegNotificationOfChange());
     }, [dispatch, parentState]);
+    const $stake_active_list = stake_active_list ? JSON.parse(stake_active_list)?.map((val) => ({ 'label': val.email, 'value': val.id })) : null;
     const $list_changes = list_changes ? JSON.parse(list_changes) : null;
 
-
+    // const $categoryOptions = $categories ? $categories.map((val) => ({ 'label': val.name, 'value': val.id })) : {}
     const updateParentState = (newState) => {
         setParentState(newState);
     };
@@ -51,13 +55,11 @@ const Complaint = ({ drawer }) => {
                                 <BlockHead>
                                     <BlockHeadContent>
                                         <BlockTitle tag="h4">Change  History</BlockTitle>
-                                        {/* <p>{list_changes}</p> */}
-                                        {/* {<p>{parentState}</p>} */}
                                     </BlockHeadContent>
                                 </BlockHead>
 
                                 <PreviewCard>
-                                    {$list_changes && <AdminNotificationOfChangeTable updateParent={updateParentState} parentState={parentState} data={$list_changes} expandableRows pagination actions />}
+                                    {$list_changes && <AdminNotificationOfChangeTable updateParent={updateParentState} parentState={parentState} data={$list_changes} stakeholders={$stake_active_list} expandableRows pagination actions />}
                                 </PreviewCard>
                             </Block>
 

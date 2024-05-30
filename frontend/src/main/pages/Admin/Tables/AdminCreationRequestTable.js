@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import exportFromJSON from "export-from-json";
 import CopyToClipboard from "react-copy-to-clipboard";
+import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge, Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner } from "reactstrap";
@@ -49,6 +50,13 @@ const Export = ({ data }) => {
         setModal(true);
     };
 
+    const exportPdf = () => {
+        const exportType = exportFromJSON.types.pdf;
+        exportFromJSON({ data: newData, fileName: fileName, exportType: exportType });
+
+    };
+
+
     return (
         <React.Fragment>
             <div className="dt-export-buttons d-flex align-center">
@@ -64,6 +72,9 @@ const Export = ({ data }) => {
                     </button>{" "}
                     <button className="btn btn-secondary buttons-excel buttons-html5" type="button" onClick={() => exportExcel()}>
                         <span>Excel</span>
+                    </button>{" "}
+                    <button className="btn btn-secondary buttons-pdf buttons-html5" type="button" onClick={() => exportPdf()}>
+                        <span>PDF</span>
                     </button>{" "}
                 </div>
             </div>
@@ -182,8 +193,8 @@ const ActionTab = ({ updateParentParent, request }) => {
                 }
             });
         }
-        
-        
+
+
         if (action == 'msgApprove') {
             Swal.fire({
                 title: "Are you sure?",
@@ -259,16 +270,17 @@ const ActionTab = ({ updateParentParent, request }) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {ars && ars.map((ar, index) =>
-                                        <tr key={index}>
-                                            <td></td>
-                                            <td className="text-capitalize">{`${ar?.ar?.full_name}`}</td>
-                                            <td className="text-capitalize">{`${ar?.ar?.email}`}</td>
-                                        </tr>
-                                    )}
+                                    {ars && ars.map
+                                        ((ar, index) =>
+                                            <tr key={index}>
+                                                <td>{`${++index}`}</td>
+                                                <td className="text-capitalize">{`${ar?.ar?.full_name}`}</td>
+                                                <td className="text-capitalize">{`${ar?.ar?.email}`}</td>
+                                            </tr>
+                                        )}
                                 </tbody>
                             </table>
-                        </div>                    
+                        </div>
                     </>}
                     {(authUser.is_admin_msg() && request.is_mbg_approved && request.is_pending) && <>
                         <div className="float-end">
@@ -277,7 +289,7 @@ const ActionTab = ({ updateParentParent, request }) => {
                         </div>
                     </>}
 
-                    {(authUser.is_admin_mbg() && request.is_mbg_pending ) && <>
+                    {(authUser.is_admin_mbg() && request.is_mbg_pending) && <>
                         <div className="float-end">
                             <button className="btn btn-sm btn-primary m-2" onClick={(e) => askAction('mbgApprove')}>Approve</button>
                             <button className="btn btn-sm btn-warning m-2" onClick={(e) => askAction('mbgReject')}>Reject</button>

@@ -32,8 +32,8 @@ class NotificationOfChangeController extends Controller
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'AR is not an Authoriser');
         }
 
-        $attachment = $request->hasFile('attachment') ? $request->file('attachment')->storePublicly('attachment', 'public') : null;
-        $regulatory_approval = $request->hasFile('regulatory_approval') ? $request->file('regulatory_approval')->storePublicly('regulatory_approval', 'public') : null;
+        $attachment = $request->hasFile('attachment') ? $request->file('attachment')->storePublicly('change_attachment', 'public') : null;
+        $regulatory_approval = $request->hasFile('regulatory_approval') ? $request->file('regulatory_approval')->storePublicly('change_regulatory_approval', 'public') : null;
 
         $data['attachment'] = $attachment;
         $data['regulatory_approval'] = $regulatory_approval;
@@ -121,7 +121,8 @@ class NotificationOfChangeController extends Controller
             'user_id' => auth()->user()->id,
         ]);
 
-        $MEGs = Utility::getUsersByCategory(Role::MEG);
+        $MEGs = Utility::getUsersEmailByCategory(Role::MEG);
+
         if (auth()->user()->id == $notify_request->user->id) {
 
             if (count($MEGs)) {
@@ -164,37 +165,79 @@ class NotificationOfChangeController extends Controller
     {
 
         $data = $request->validate([
-            'status' => ['required', 'string', 'in:approved,rejected'],
             'notification_id' => ['required', 'integer', 'exists:notification_of_changes,id'],
+            'status' => ['required', 'string', 'in:approved,rejected'],
             'reason' => ['required_if:status,rejected', 'string'],
+            'subject' => ['required_if:status,approved', 'string'],
+            'summary' => ['required_if:status,approved', 'string'],
+            'list_of_stakeholders' => ['required_if:status,approved', 'array'],
+            'list_of_stakeholders.*' => ['required_if:status,approved', 'exists:users,id',
+                function ($attribute, $value, $fail) {
+                    if (User::where('id', $value)->where('role_id', '!=', Role::STAKEHOLDER)->exists()) {
+                        $fail('Select Only Stakeholders.');
+                    }
+                }],
+            'document' => ['file'],
         ]);
 
-        if (!$notify_request = NotificationOfChange::where('id', $data['notification_id'])->where('ar_authoriser_id', auth()->user()->id)->where('ar_status', NotificationOfChange::PENDING)->first()) {
+        if (!$notify_request = NotificationOfChange::where('id', $data['notification_id'])->where('ar_status', NotificationOfChange::APPROVED)->where('meg_status', NotificationOfChange::PENDING)->first()) {
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'Can not perform this action at this point');
         }
 
-        if (!$user = User::where('id', $notify_request->created_by)->first()) {
-            return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'AR is not an Authoriser');
+        if (request('status') == 'rejected') {
+            $notify_request->status_reason = request('reason');
         }
 
-        $notify_request->ar_status = request('status');
-        $notify_request->status_reason = request('reason');
+        if (request('status') == 'approved') {
+            $notify_request->meg_subject = request('subject');
+            $notify_request->meg_summary = request('summary');
+            $notify_request->meg_document = request()->hasFile('document') ? request()->file('document')->storePublicly('change_document', 'public') : null;
+            $notify_request->stakeholders = request('list_of_stakeholders');
+        }
+
+        $notify_request->meg_status = request('status');
+
         $notify_request->save();
 
-        $logMessage = auth()->user()->email . ' updated  notification of change status ';
+        $user = $notify_request->user;
+        $authorizer = $notify_request->authorizer;
 
-        logAction($user->email, 'Notification Of Change Status', $logMessage, $request->ip());
-
-        logAction(auth()->user()->email, 'Notification Of Change Status', $logMessage, $request->ip());
-
-        // status_reason
-
-        $MEGs = Utility::getUsersByCategory(Role::MEG);
-        if (count($MEGs)) {
-            Notification::send($MEGs, new InfoNotification(MailContents::megNotificationOfChangeMail($user), MailContents::megNotificationOfChangeSubject()));
+        $MEGs = Utility::getUsersEmailByCategory(Role::MEG);
+        if (request('status') == 'rejected') {
+            $logMessage = auth()->user()->email . ' rejected  notification of change  ';
+            $user->notify(new InfoNotification(MailContents::arNotificationOfChangeRejectMail($notify_request->request_id, request('reason')), MailContents::arNotificationOfChangeRejectSubject($notify_request->request_id, $notify_request->subject), [ ...$MEGs, $authorizer->email]));
         }
 
-        return successResponse('Notification Of Change status sent to authoriser', []);
+        if (request('status') == 'approved') {
+            $logMessage = auth()->user()->email . ' approved  notification of change ';
+            $user->notify(new InfoNotification(MailContents::arNotificationOfChangeAcceptMail($notify_request->request_id), MailContents::arNotificationOfChangeAcceptSubject($notify_request->request_id, $notify_request->subject), [ ...$MEGs, $authorizer->email]));
+
+            $list_of_stakeholders = User::whereIn('id', request('list_of_stakeholders'))->get();
+
+            if (count($list_of_stakeholders) > 0) {
+
+                // $path = config('app.url') . '/storage/change_document/' . $notify_request->meg_document;
+                if ($notify_request->meg_document) {
+                    $path = config('app.url') . '/storage/app/public/change_document/' . $notify_request->meg_document;
+                    $attachment = [
+                        'saved_path' => $path,
+                        'name' => 'notification-of-change-document' . pathinfo($path, PATHINFO_EXTENSION),
+                    ];
+
+                } else {
+                    $attachment = [];
+
+                }
+
+                Notification::send($list_of_stakeholders, new InfoNotification(request('summary'), request('subject'), [], $attachment));
+            }
+        }
+
+        logAction($user->email, 'Notification Of Change Update', $logMessage, $request->ip());
+
+        logAction(auth()->user()->email, 'Notification Of Change Update', $logMessage, $request->ip());
+
+        return successResponse('Notification Of Change status updated successfully', []);
 
     }
 

@@ -97,6 +97,89 @@ const CustomCheckbox = React.forwardRef(({ onClick, ...rest }, ref) => (
 
 
 
+const CommentSection = ({ updateParentParent, complaint, toggleCommentForm }) => {
+  const authUser = useUser();
+  const authUserUpdate = useUserUpdate();
+  const complaint_id = complaint.id
+
+  const [modalForm, setModalForm] = useState(false);
+  const [modalDetail, setModalDetail] = useState(false);
+
+  const toggleForm = () => setModalForm(!modalForm);
+  const toggleModalDetail = () => { setModalDetail(!modalForm) };
+
+  const dispatch = useDispatch();
+  const { register, handleSubmit, formState: { errors }, resetField, setValue, getValues } = useForm();
+  const [loading, setLoading] = useState(false);
+
+  const sendComment = async (values) => {
+
+    const formData = new FormData();
+    formData.append('notification_id', complaint.id)
+    formData.append('comment', values.comment)
+
+    try {
+      setLoading(true);
+
+      const resp = await dispatch(arSendCommentNotificationOfChange(formData));
+
+      if (resp.payload?.message == "success") {
+        setTimeout(() => {
+          setLoading(false);
+          toggleCommentForm()
+          resetField('comment')
+          updateParentParent(Math.random())
+        }, 1000);
+      } else {
+        setLoading(false);
+      }
+
+    } catch (error) {
+      console.log(error)
+      setLoading(false);
+    }
+  };
+
+  const testAct = () => {
+    console.log(errors)
+  }
+
+  return (
+    <>
+
+
+
+
+      <form onSubmit={handleSubmit(sendComment)} className="is-alter" encType="multipart/form-data">
+
+
+        <div className="form-group">
+          <label className="form-label" htmlFor="email">
+            Comment
+          </label>
+          <div className="form-control-wrap">
+            <textarea type="text" className="form-control" {...register('comment', { required: "This Field is Required" })}></textarea>
+            {errors.comment && <p className="invalid">{`${errors.comment.message}`}</p>}
+          </div>
+        </div>
+
+
+        <div className="form-group">
+          <Button color="primary" type="submit" size="lg" >
+            {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Send Comment"}
+          </Button>
+        </div>
+      </form>
+
+
+
+
+    </>
+
+
+  );
+};
+
 const DropdownTrans = (props) => {
 
   const authUser = useUser();
@@ -118,39 +201,14 @@ const DropdownTrans = (props) => {
 
   const { register, handleSubmit, formState: { errors }, resetField, getValues } = useForm();
 
-  const sendComment = async (values) => {
-    const formData = new FormData();
-    formData.append('notification_id', complaint.id)
-    formData.append('comment', values.comment)
-    try {
-      setLoading(true);
 
-      const resp = await dispatch(arSendCommentNotificationOfChange(formData));
-
-      if (resp.payload?.message == "success") {
-        setTimeout(() => {
-          setLoading(false);
-          setModalCommentForm(!modalCommentForm)
-          resetField('comment')
-          // setCounter(!counter)
-          window.location.reload(true)
-        }, 1000);
-      } else {
-        setLoading(false);
-      }
-
-    } catch (error) {
-      console.log(error)
-      setLoading(false);
-    }
-
-  };
 
   const updateChangeStatus = async (status, reason = '') => {
     const formData = new FormData();
     formData.append('notification_id', complaint.id)
     formData.append('status', status)
-    formData.append('reason', getValues('reason') ? getValues('reason') : '')
+    if (status == 'rejected') formData.append('reason', getValues('reason') ? getValues('reason') : '')
+
 
     try {
       setLoading(true);
@@ -253,10 +311,12 @@ const DropdownTrans = (props) => {
                 <td>AR Status</td>
                 <td className="text-capitalize">{`${complaint.arStatus}`}</td>
               </tr>
-              <tr>
-                <td>AR Status Reason</td>
-                <td className="text-capitalize">{`${complaint.arStatusReason}`}</td>
-              </tr>
+              {complaint.arStatusReason && <>
+                <tr>
+                  <td>AR Status Reason</td>
+                  <td className="text-capitalize">{`${complaint.arStatusReason}`}</td>
+                </tr>
+              </>}
               <tr>
                 <td>Status</td>
                 <td className="text-capitalize">{`${complaint.status}`}</td>
@@ -266,19 +326,7 @@ const DropdownTrans = (props) => {
           </table>
 
           <div className="nk-modal">
-            {/* <h6 className="title">Complaint Type:</h6>
-            <p>
-              {complaint.complaint_type}
-            </p>
-            <h6 className="title">Complaint Description: </h6>
-            <p>
-              {complaint.body}
-            </p> */}
 
-            {/* {complaint.documment &&
-              <>
-                <a href={complaint.documment} target="_blank" className="btn btn-secondary">View Document</a>
-              </>} */}
 
             {complaint.comment.length > 0 && <><h6 className="title">Comment(s):</h6></>}
             {complaint.comment.length > 0 && complaint.comment?.map((comment, index) => (<p key={index}>{comment.comment}<br />{comment.commenter.first_name} <br />{moment(comment.createdAt).format('MMM. D, YYYY HH:mm')}</p>))}
@@ -289,7 +337,7 @@ const DropdownTrans = (props) => {
               </> : ''}
               {authUser.is_ar_authorizer() && complaint.authorizer?.id == authUser?.user_data?.id && complaint.isArPending ? <>
                 <Button className="btn  btn-primary float-end m-2" onClick={(e) => askAction('approved')}>Approve</Button>
-                <Button className="btn  btn-secondary float-end m-2" onClick={(e) => setModalReasonForm(true)} >Reject</Button>
+                <Button className="btn  btn-warning float-end m-2" onClick={(e) => setModalReasonForm(true)} >Reject</Button>
               </> : ''}
 
             </div>
@@ -301,41 +349,6 @@ const DropdownTrans = (props) => {
               Member Regulation and Oversight Information System (MROIS)
             </p>
           </div>
-        </ModalFooter>
-      </Modal>
-
-      <Modal isOpen={modalCommentForm} toggle={toggleCommentForm}>
-        <ModalHeader toggle={toggleCommentForm} close={
-          <button className="close" onClick={toggleCommentForm}>
-            <Icon name="cross" />
-          </button>
-        }
-        >
-          Send Comment
-        </ModalHeader>
-        <ModalBody>
-          <form onSubmit={handleSubmit(sendComment)} className="is-alter" encType="multipart/form-data">
-
-            <div className="form-group">
-              <label className="form-label" htmlFor="email">
-                Comment
-              </label>
-              <div className="form-control-wrap">
-                <textarea type="text" className="form-control" {...register('comment', { required: "This Field is Required" })}></textarea>
-                {errors.comment && <p className="invalid">{`${errors.comment.message}`}</p>}
-              </div>
-            </div>
-
-
-            <div className="form-group">
-              <Button color="primary" type="submit" size="lg">
-                {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Send Comment"}
-              </Button>
-            </div>
-          </form>
-        </ModalBody>
-        <ModalFooter className="bg-light">
-          <span className="sub-text">Notification Of change</span>
         </ModalFooter>
       </Modal>
 
@@ -373,65 +386,89 @@ const DropdownTrans = (props) => {
         <ModalFooter className="bg-light">
           <span className="sub-text">Notification Of change</span>
         </ModalFooter>
-      </Modal >
+      </Modal>
+
+
+      <Modal isOpen={modalCommentForm} toggle={toggleCommentForm}>
+        <ModalHeader toggle={toggleCommentForm} close={
+          <button className="close" onClick={toggleCommentForm}>
+            <Icon name="cross" />
+          </button>
+        }
+        >
+          Send Comment
+        </ModalHeader>
+        <ModalBody>
+
+          <CommentSection toggleCommentForm={toggleCommentForm} updateParentParent={props.updateParentParent} complaint={complaint} />
+
+        </ModalBody>
+        <ModalFooter className="bg-light">
+          <span className="sub-text">Notification Of change</span>
+        </ModalFooter>
+      </Modal>
+
     </>
   );
 };
 
-const complainColumn = [
-  {
-    name: "ID",
-    selector: (row, index) => ++index,
-    sortable: true,
-    width: "80px",
-  },
-  {
-    name: "Subject",
-    selector: (row) => row.subject,
-    sortable: true,
-    width: "auto",
-    wrap: true
-  },
-  // {
-  //   name: "Details",
-  //   selector: (row) => row.summary,
-  //   sortable: true,
-  //   width: "auto",
-  //   wrap: true
-  // },
-  {
-    name: "Confidentiality",
-    selector: (row) => { return (<><Badge color="success" className="text-uppercase">{`${row.confidentialityLevel}`}</Badge></>) },
-    sortable: true,
-  },
-  {
-    name: "AR Status",
-    selector: (row) => { return (<><Badge color="success" className="text-uppercase">{`${row.arStatus}`}</Badge></>) },
-    sortable: true,
-  },
-  {
-    name: "Status",
-    selector: (row) => { return (<><Badge color="success" className="text-uppercase">{`${row.status}`}</Badge></>) },
-    sortable: true,
-  },
-  {
-    name: "Comments",
-    selector: (row) => { return (<><Badge color="gray">{`${row.comment.length} Comments`}</Badge></>) },
-    sortable: true,
-  },
-  {
-    name: "Date Created",
-    selector: (row) => moment(row.createdAt).format('MMM. D, YYYY HH:mm'),
-    sortable: true,
-  },
-  {
-    name: "Action",
-    selector: (row) => (<> <DropdownTrans complaint={row} /></>),
-    sortable: true,
-  },
-];
 
-const ComplaintTableUser = ({ data, pagination, actions, className, selectableRows, expandableRows }) => {
+const ComplaintTableUser = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent }) => {
+
+
+  const complainColumn = [
+    {
+      name: "ID",
+      selector: (row, index) => ++index,
+      sortable: true,
+      width: "80px",
+    },
+    {
+      name: "Subject",
+      selector: (row) => row.subject,
+      sortable: true,
+      width: "auto",
+      wrap: true
+    },
+    // {
+    //   name: "Details",
+    //   selector: (row) => row.summary,
+    //   sortable: true,
+    //   width: "auto",
+    //   wrap: true
+    // },
+    {
+      name: "Confidentiality",
+      selector: (row) => { return (<><Badge color="success" className="text-uppercase">{`${row.confidentialityLevel}`}</Badge></>) },
+      sortable: true,
+    },
+    {
+      name: "AR Status",
+      selector: (row) => { return (<><Badge color="success" className="text-uppercase">{`${row.arStatus}`}</Badge></>) },
+      sortable: true,
+    },
+    {
+      name: "Status",
+      selector: (row) => { return (<><Badge color="success" className="text-uppercase">{`${row.status}`}</Badge></>) },
+      sortable: true,
+    },
+    {
+      name: "Comments",
+      selector: (row) => { return (<><Badge color="gray">{`${row.comment.length} Comments`}</Badge></>) },
+      sortable: true,
+    },
+    {
+      name: "Date Created",
+      selector: (row) => moment(row.createdAt).format('MMM. D, YYYY HH:mm'),
+      sortable: true,
+    },
+    {
+      name: "Action",
+      selector: (row) => (<> <DropdownTrans complaint={row} updateParentParent={updateParent} /></>),
+      sortable: true,
+    },
+  ];
+
   const [tableData, setTableData] = useState(data);
   const [searchText, setSearchText] = useState("");
   const [rowsPerPageS, setRowsPerPage] = useState(10);

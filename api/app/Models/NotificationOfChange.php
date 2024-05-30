@@ -14,7 +14,7 @@ class NotificationOfChange extends Model
     const REJECTED = 'rejected';
 
     protected $guarded = ['id'];
-    protected $appends = ['request_id', 'is_ar_pending', 'is_ar_approved'];
+    protected $appends = ['request_id', 'is_ar_pending', 'is_meg_pending', 'is_ar_approved'];
 
     public function getRequestIdAttribute()
     {
@@ -24,6 +24,11 @@ class NotificationOfChange extends Model
     public function getIsArPendingAttribute()
     {
         return $this->ar_status == 'pending';
+    }
+
+    public function getIsMegPendingAttribute()
+    {
+        return $this->meg_status == 'pending';
     }
 
     public function getIsArApprovedAttribute()
@@ -41,6 +46,7 @@ class NotificationOfChange extends Model
             "requestId" => $this->request_id,
             "authorizer" => $this->authorizer,
             "arStatus" => $this->ar_status,
+            "isMEGPending" => $this->is_meg_pending,
             "isArPending" => $this->is_ar_pending,
             "isArApproved" => $this->is_ar_approved,
             "attachment" => $this->attachment ? config('app.url') . '/storage/app/public/' . $this->attachment : null,

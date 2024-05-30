@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use App\Models\User;
+use Illuminate\Support\Str;
 
 class ARMailContents
 {
@@ -13,8 +14,9 @@ class ARMailContents
 
     public static function approvedARBody(User $ARUser, string $password): string
     {
-        $link = config("app.front_end_url") . "/auth-password-reset";
-        $link = config("app.front_end_url") . "/auth-password-reset";
+
+        $signature = Str::random(100);
+        $link = config("app.front_end_url") . "/auth-password-reset?token=" . $signature . "&email=" . $ARUser->email;
 
         $company = $ARUser->institution->name ?? "undefined";
         $regID = $ARUser->getRegID();
@@ -31,7 +33,6 @@ class ARMailContents
             </p>
 
             <p>
-                Click the link to <a href=" . $link . ">reset</a> the password
                 Click the link to <a href=" . $link . ">reset</a> the password
             </p>
 

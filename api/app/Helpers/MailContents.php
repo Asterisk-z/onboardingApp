@@ -429,4 +429,30 @@ class MailContents
         return "<p>Please be informed that a comment was made on a notification of change.
         Kindly login to <a href=$url>MROIS Portal</a>  to view'";
     }
+
+    public static function arNotificationOfChangeAcceptSubject($request_id, $subject): string
+    {
+        return "New FMDQX MROIS Notification of Change {$request_id}:{$subject}";
+    }
+
+    public static function arNotificationOfChangeAcceptMail($request_id): string
+    {
+        $url = config("app.front_end_url");
+        return "<p>Please be informed that the notification of change `$request_id`.
+        has been accepted. Kindly login to the  <a href=$url>MROIS Portal</a>  to view";
+    }
+
+    public static function arNotificationOfChangeRejectSubject($request_id, $subject): string
+    {
+        return "New FMDQX MROIS Notification of Change {$request_id}:{$subject}";
+    }
+
+    public static function arNotificationOfChangeRejectMail($request_id, $reason): string
+    {
+        $url = config("app.front_end_url");
+        return "<p>Please be informed that the notification of change  `$request_id`.
+        has been rejected.
+        <br>
+        Reason: $reason ";
+    }
 }

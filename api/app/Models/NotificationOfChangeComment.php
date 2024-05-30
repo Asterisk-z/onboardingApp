@@ -15,7 +15,7 @@ class NotificationOfChangeComment extends Model
     {
         return [
             "id" => $this->id,
-            "comment" => $this->comment,
+            "comment" => $this->comments,
             "commenter" => $this->user,
             'createdAt' => $this->created_at,
         ];

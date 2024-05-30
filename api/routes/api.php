@@ -197,6 +197,7 @@ Route::middleware('auth')->group(function () {
         // sanctions
         Route::group(['prefix' => 'disciplinary-sanctions'], function () {
             Route::get('/list_all', [SanctionsController::class, 'index']);
+            Route::post('/update-status', [SanctionsController::class, 'updateStatus']);
         });
         // competency
         Route::group(['prefix' => 'meg/competency-framework'], function () {
