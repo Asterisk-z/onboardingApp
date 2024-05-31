@@ -19,9 +19,17 @@ class EventNotificationUtility
         $subject = EventMailContents::certificateARSubject($eventReg->event->name);
 
         $attachment = [
-            'saved_path' => config('app.url') . '/storage/event_certs/' . $eventReg->certificate_path,
-            'name' => Str::slug($eventReg->event->name) . '-certificate.pdf',
+            [
+                'saved_path' => config('app.url') . '/storage/app/public/event_certs/' . $eventReg->certificate_path,
+                'name' => Str::slug($eventReg->event->name) . '-certificate.pdf',
+            ],
         ];
+        if ($eventReg->event->presentation) {
+            array_push($attachment, [
+                'saved_path' => config('app.url') . '/storage/app/public/' . $eventReg->event->presentation,
+                'name' => Str::slug($eventReg->event->name) . '-presentation.pdf',
+            ]);
+        }
 
         Notification::send($eventReg->user, new InfoNotification($message, $subject, [], $attachment));
     }

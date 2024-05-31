@@ -208,6 +208,76 @@ export const arEventRegistration = createAsyncThunk(
 );
 
 
+export const sendForCertificateSigning = createAsyncThunk(
+  "educationEvent/sendForCertificateSigning",
+  async (values) => {
+    const event_id = values.get('event_id');
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `events/send-for-certificate-signing/${event_id}`,
+        data: values,
+      });
+      return successHandler(data, data.message);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
+
+export const signCertificate = createAsyncThunk(
+  "educationEvent/signCertificate",
+  async (values) => {
+    const event_id = values.get('event_id');
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `events/sign-certificate/${event_id}`,
+        data: values,
+      });
+      return successHandler(data, data.message);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
+
+
+export const sendCertificate = createAsyncThunk(
+  "educationEvent/sendCertificate",
+  async (values) => {
+    const event_id = values.event_id;
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `events/send-certificates/${event_id}`,
+        data: values,
+      });
+      return successHandler(data, data.message);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
+
 
 
 const eventStore = createSlice({
@@ -216,6 +286,7 @@ const eventStore = createSlice({
   reducers: {
     clearEvent: (state) => {
       state.customer = null;
+      state.single_event = null;
     },
   },
   extraReducers: (builder) => {
@@ -227,15 +298,15 @@ const eventStore = createSlice({
     });
 
     builder.addCase(loadAllEvent.fulfilled, (state, action) => {
-        state.loading = false;
-        state.list_all = JSON.stringify(action.payload?.data?.data);
+      state.loading = false;
+      state.list_all = JSON.stringify(action.payload?.data?.data);
     });
 
     builder.addCase(loadAllEvent.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });
-    
+
     // ====== builders for loadSingleEvent ======
 
     builder.addCase(loadSingleEvent.pending, (state) => {
@@ -243,15 +314,15 @@ const eventStore = createSlice({
     });
 
     builder.addCase(loadSingleEvent.fulfilled, (state, action) => {
-        state.loading = false;
-        state.single_event = JSON.stringify(action.payload?.data?.data);
+      state.loading = false;
+      state.single_event = JSON.stringify(action.payload?.data?.data);
     });
 
     builder.addCase(loadSingleEvent.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });
-    
+
     // ====== builders for loadAllRegisteredEvent ======
 
     builder.addCase(loadAllRegisteredEvent.pending, (state) => {
@@ -259,15 +330,15 @@ const eventStore = createSlice({
     });
 
     builder.addCase(loadAllRegisteredEvent.fulfilled, (state, action) => {
-        state.loading = false;
-        state.list_all_registered = JSON.stringify(action.payload?.data?.data);
+      state.loading = false;
+      state.list_all_registered = JSON.stringify(action.payload?.data?.data);
     });
 
     builder.addCase(loadAllRegisteredEvent.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });
-    
+
     // ====== builders for loadAllInvitedEvent ======
 
     builder.addCase(loadAllInvitedEvent.pending, (state) => {
@@ -275,8 +346,8 @@ const eventStore = createSlice({
     });
 
     builder.addCase(loadAllInvitedEvent.fulfilled, (state, action) => {
-        state.loading = false;
-        state.list_all_invited = JSON.stringify(action.payload?.data?.data);
+      state.loading = false;
+      state.list_all_invited = JSON.stringify(action.payload?.data?.data);
     });
 
     builder.addCase(loadAllInvitedEvent.rejected, (state, action) => {
@@ -284,7 +355,7 @@ const eventStore = createSlice({
       state.error = action.payload.message;
     });
 
-    
+
     // ====== builders for megCreateEvent ======
 
     builder.addCase(megCreateEvent.pending, (state) => {
@@ -344,7 +415,7 @@ const eventStore = createSlice({
       state.loading = false;
       state.error = action.payload.message;
     });
-    
+
     // ====== builders for MEGFSGLoadAllEventRegistration ======
 
     builder.addCase(MEGFSGLoadAllEventRegistration.pending, (state) => {
@@ -352,8 +423,8 @@ const eventStore = createSlice({
     });
 
     builder.addCase(MEGFSGLoadAllEventRegistration.fulfilled, (state, action) => {
-        state.loading = false;
-        state.list_all_registrations = JSON.stringify(action.payload?.data?.data);
+      state.loading = false;
+      state.list_all_registrations = JSON.stringify(action.payload?.data?.data);
     });
 
     builder.addCase(MEGFSGLoadAllEventRegistration.rejected, (state, action) => {
@@ -391,7 +462,50 @@ const eventStore = createSlice({
       state.error = action.payload.message;
     });
 
-    
+
+    // ====== builders for sendForCertificateSigning ======
+
+    builder.addCase(sendForCertificateSigning.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(sendForCertificateSigning.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(sendForCertificateSigning.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+    // ====== builders for signCertificate ======
+
+    builder.addCase(signCertificate.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(signCertificate.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(signCertificate.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+    // ====== builders for sendCertificate ======
+
+    builder.addCase(sendCertificate.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(sendCertificate.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(sendCertificate.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
   },
 });
 

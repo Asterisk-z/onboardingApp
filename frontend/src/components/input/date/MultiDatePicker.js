@@ -4,29 +4,30 @@ import DatePicker from "react-multi-date-picker"
 import DatePanel from "react-multi-date-picker/plugins/date_panel"
 
 const MultiDatePicker = ({ id, nameAttr, changeAction, max, properties }) => {
-  
+
   const [values, setValues] = useState([])
   const [inputName, setInputName] = useState(nameAttr)
-  const [minDate, setMinDate] = useState(new Date())
+  const [min, setMin] = useState(new Date())
   // const [maxDate, setMaxDate] = useState(new Date(max))
-        // minDate={minDate}
+  // minDate={minDate}
   // maxDate={maxDate}
   // console.log(values)
   return (
     <React.Fragment>
       <DatePicker inputClass="form-control" containerClassName="custom-container"
         multiple
-        value={values} 
-  // format="MM DDDD YYYY"
+        value={values}
+        // format="MM DDDD YYYY"
         name={inputName}
         id={id}
-        minDate={minDate} maxDate={max ? max : moment().endOf("year").format('L')}
-        { ...properties }
+        minDate={min}
+        maxDate={max ? max : moment().endOf("year").format('L')}
+        {...properties}
         onClose={(value) => changeAction(values.map((val) => `${val.year}-${val.month.number.toString().padStart(2, '0')}-${val.day}`))}
         onChange={setValues}
-          plugins={[
+        plugins={[
           <DatePanel />
-          ]}
+        ]}
       />
     </React.Fragment>
   );

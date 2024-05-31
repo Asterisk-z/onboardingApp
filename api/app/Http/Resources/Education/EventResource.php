@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources\Education;
 
-use App\Http\Resources\UserResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class EventResource extends JsonResource
@@ -28,7 +27,7 @@ class EventResource extends JsonResource
             'unregistered_remainder_frequency' => $this->unregistered_remainder_frequency,
 
             'image' => $this->image,
-            'image_url' => $this->image ? config('app.url') .'/storage/app/public/'.$this->image : null, // Adjust the path based on your storage setup
+            'image_url' => $this->image ? config('app.url') . '/storage/app/public/' . $this->image : null, // Adjust the path based on your storage setup
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
 
@@ -38,6 +37,13 @@ class EventResource extends JsonResource
             'unregistered_remainder_dates' => $this->unregisteredRemainderDates,
             'invited_positions' => $this->invitePosition,
             'registrations_count' => $this->registrations_count,
+
+            'preview_certificate' => route('previewCertificate', $this->id),
+
+            'is_event_completed' => $this->is_event_completed,
+            'is_sent_for_signing' => $this->is_sent_for_signing,
+            'cert_signature' => $this->cert_signature ? config('app.url') . '/storage/app/public/' . $this->cert_signature : null,
+            'signed_by' => $this->signed_by,
 
         ];
     }

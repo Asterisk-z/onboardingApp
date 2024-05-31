@@ -381,15 +381,19 @@ Route::middleware('auth')->group(function () {
         Route::get('/registered', [EventController::class, 'myRegisteredEvents']);
         Route::get('/invited', [EventController::class, 'myInvitedEvents']);
 
-        // Route::middleware('authRole:' . Role::MEG)->group(function () {
-        Route::post('/add', [EventController::class, 'add']);
-        Route::post('/update/{event}', [EventController::class, 'update']);
-        Route::post('/update-invited/{event}', [EventController::class, 'updateInvitePositions']);
-        Route::post('/delete/{eventID}', [EventController::class, 'delete']);
+        Route::middleware('authRole:' . Role::MEG)->group(function () {
+            Route::post('/add', [EventController::class, 'add']);
+            Route::post('/update/{event}', [EventController::class, 'update']);
+            Route::post('/update-invited/{event}', [EventController::class, 'updateInvitePositions']);
+            Route::post('/delete/{eventID}', [EventController::class, 'delete']);
 
-        Route::post('/send-certificates', [EventController::class, 'sendCertificates']);
-        Route::get('/preview-certificate/{event}', [EventController::class, 'certificateSample'])->name('preview.certificate');
+            Route::get('/preview-certificate/{event}', [EventController::class, 'certificateSample'])->name('preview.certificate');
 
+            Route::post('/send-for-certificate-signing/{eventID}', [EventController::class, 'sendCertificateForSigning']);
+            Route::post('/sign-certificate/{eventID}', [EventController::class, 'signCertificate']);
+            Route::post('/send-certificates/{eventID}', [EventController::class, 'sendCertificates']);
+
+        });
         Route::middleware('authRole:' . Role::MEG . ',' . Role::FSD)->group(function () {
             Route::get('/registrations/{event}', [EventController::class, 'eventRegistrations']);
             Route::post('/registration-update-status/{eventReg}', [EventController::class, 'approveEventRegistration']);
@@ -444,8 +448,8 @@ Route::get('clear-model/{model}', [SystemController::class, 'clearModel'])->name
 Route::get('refresh-database', [SystemController::class, 'refreshDatabase'])->name('refreshDatabase');
 Route::get('storage-link', [SystemController::class, 'linkStorage'])->name('linkStorage');
 
-Route::get('cert-sample/{event}', [EventController::class, 'certificateSample'])->name('clearModel');
-Route::get('cert-sample-download/{event}', [EventController::class, 'certificateSampleDownload'])->name('clearModel');
+Route::get('cert-sample/{event}', [EventController::class, 'certificateSample'])->name('previewCertificate');
+Route::get('cert-sample-download/{event}', [EventController::class, 'certificateSampleDownload'])->name('previewCertificateDownload');
 
 Route::group(['prefix' => 'webhook'], function () {
     Route::group(['prefix' => 'qpay/payment'], function () {

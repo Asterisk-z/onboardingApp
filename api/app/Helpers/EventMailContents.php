@@ -35,9 +35,9 @@ class EventMailContents
             </p>
 
             <p>
-                Kindly contact Uju Iwuamadi +234 20-1-700-8555
+               For further clarification, kindly contact Membership & Subscriptions Group on +234 20-1-700-8555
             </p>";
-
+        //  Kindly contact Uju Iwuamadi +234 20-1-700-8555
         return $message;
     }
 
@@ -88,14 +88,14 @@ class EventMailContents
 
     public static function eventAddedSubject(string $eventName): string
     {
-        return "Register $eventName";
+        return "Register $eventName Event";
     }
 
     public static function eventAddedBody($event): string
     {
         $url = config('app.front_end_url');
         $message = "<p>
-                Please be informed that you have been invited for {$event->name} scheduled to hold {$event->date} {$event->time}. Kindly login to the <a href='{$url}'>MROIS Portal</a> to register
+                Please be informed that you have been invited for {$event->name} scheduled to hold {$event->date} {$event->time}. <br/> Kindly login to the <a href='{$url}'>MROIS Portal</a> to register
             </p>";
 
         return $message;
@@ -137,6 +137,25 @@ class EventMailContents
         return $message;
     }
 
+    public static function registerReminderSubject(string $eventName): string
+    {
+        return " Register for the $eventName Event";
+    }
+
+    public static function registerReminderBody($event): string
+    {
+
+        $url = config('app.front_end_url');
+        $message = "<p>
+                Please be informed that you are yet to register for the {$event->name} scheduled to hold on {$event->date} {$event->time}.
+            </p>
+            <p>
+             Kindly login to the <a href='{$url}'>MROIS Portal</a> to register
+            </p>";
+
+        return $message;
+    }
+
     public static function pendingPaymentForEventRegistrationSubject(string $eventName): string
     {
         return "$eventName Registration Fee Pending Approval";
@@ -154,7 +173,7 @@ class EventMailContents
 
     public static function eventUninvitedSubject(string $eventName): string
     {
-        return "Univited from $eventName";
+        return "Uninvited from $eventName";
     }
 
     public static function eventUninvitedBody(string $eventName): string

@@ -7,10 +7,11 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge, Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, CardTitle, CardBody } from "reactstrap";
 import { DataTablePagination } from "components/Component";
-import { loadAllEvent, megDeleteEvent } from "redux/stores/education/eventStore";
+import { megDeleteEvent } from "redux/stores/education/eventStore";
 import moment from "moment";
 import Icon from "components/icon/Icon";
 import Swal from "sweetalert2";
+import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 
 const Export = ({ data }) => {
   const [modal, setModal] = useState(false);
@@ -88,6 +89,8 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
   const [modalForm, setModalForm] = useState(false);
   const navigate = useNavigate();
 
+  const authUser = useUser();
+  const authUserUpdate = useUserUpdate();
   const toggleForm = () => setModalForm(!modalForm);
 
   const dispatch = useDispatch();
@@ -103,14 +106,14 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
 
 
   const askAction = async (action) => {
-    
+
     if (action == 'delete') {
       Swal.fire({
         title: "Are you sure?",
         text: "Do you want to delete this event!",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonText: "Yes, Delete it!",
+        confirmButtonText: "Confirm",
       }).then((result) => {
 
         if (result.isConfirmed) {
@@ -120,7 +123,6 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
           dispatch(megDeleteEvent(formData));
 
           updateParentParent(Math.random())
-
 
         }
       });
@@ -145,18 +147,21 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
                       <span>View</span>
                     </DropdownItem>
                   </li>
-                  <li size="xs">
-                    <DropdownItem tag="a" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/admin-edit-event/${tabItem_id}`)} >
-                      <Icon name="pen"></Icon>
-                      <span>Edit</span>
-                    </DropdownItem>
-                  </li>
-                  <li size="xs">
-                    <DropdownItem tag="a" onClick={(e) => askAction('delete')} >
-                      <Icon name="trash"></Icon>
-                      <span>Delete</span>
-                    </DropdownItem>
-                  </li>
+                  {(authUser.is_admin_meg() && (tabItem.is_event_completed == 0)) && <>
+                    <li size="xs">
+                      <DropdownItem tag="a" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/admin-edit-event/${tabItem_id}`)} >
+                        <Icon name="pen"></Icon>
+                        <span>Edit</span>
+                      </DropdownItem>
+                    </li>
+                    <li size="xs">
+                      <DropdownItem tag="a" onClick={(e) => askAction('delete')} >
+                        <Icon name="trash"></Icon>
+                        <span>Delete</span>
+                      </DropdownItem>
+                    </li>
+                  </>}
+
                   <li size="xs">
                     <DropdownItem tag="a" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/admin-event-registration/${tabItem_id}`)} >
                       <Icon name="eye"></Icon>
@@ -195,14 +200,43 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
             <CardBody className="card-inner">
               <CardTitle tag="h5"></CardTitle>
               {/* <CardText> */}
-              <ul className="gy-3">
-                <li className="text-capitalize"><span className="lead">Event : </span>{tabItem.name}</li>
-                <li className="text-capitalize"><span className="lead">Decription : </span>{tabItem.description}</li>
-                <li className="text-capitalize"><span className="lead">Date(s) : </span>{tabItem.date}<span className="text-capitalize"></span></li>
-                <li className="text-capitalize"><span className="lead">Annual : </span>{(tabItem.is_annual == 1) ? 'Yes' : 'No'}<span className="text-capitalize"></span></li>
-                <li className="text-capitalize"><span className="lead">Registration Fee : </span>{(tabItem.fee < 1) ? 'Free' : `${tabItem.fee}`}</li>
-                <li className="text-capitalize"><span className="lead">Interests : </span>{`${tabItem.registrations_count} users`}</li>
-              </ul>
+
+              <table className="table table-striped table-bordered table-hover">
+
+                <thead>
+                  <tr>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Event </td>
+                    <td className="text-capitalize">{`${tabItem.name}`}</td>
+                  </tr>
+                  <tr>
+                    <td>Decription </td>
+                    <td className="text-capitalize">{`${tabItem.description}`}</td>
+                  </tr>
+                  <tr>
+                    <td>Date </td>
+                    <td className="text-capitalize">{`${tabItem.date}`}</td>
+                  </tr>
+                  <tr>
+                    <td>Annual</td>
+                    <td className="text-capitalize">{`${(tabItem.is_annual == 1) ? 'Yes' : 'No'}`}</td>
+                  </tr>
+                  <tr>
+                    <td>Registration Fee</td>
+                    <td className="text-capitalize">{`${(tabItem.fee < 1) ? 'Free' : `${tabItem.fee}`}`}</td>
+                  </tr>
+                  <tr>
+                    <td>Interests </td>
+                    <td className="text-capitalize">{`${tabItem?.registrations_count}  users`}</td>
+                  </tr>
+
+                </tbody>
+              </table>
             </CardBody>
           </Card>
         </ModalBody>

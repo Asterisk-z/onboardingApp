@@ -30,35 +30,36 @@ const AdminEvents = ({ drawer }) => {
 
 
     const { register, handleSubmit, formState: { errors }, resetField, getValues, setValue } = useForm();
+    const [todaysDate, setTodaysDate] = useState(new Date());
     const [eventTime, setEventTime] = useState(new Date());
     const [eventDate, setEventDate] = useState(new Date());
     const [unregisteredDate, setUnregisteredDate] = useState("");
     const [registeredDate, setRegisteredDate] = useState("");
-    const [unregisteredFrequency, setUnregisteredFrequency] = useState("");
-    const [registeredFrequency, setRegisteredFrequency] = useState("");
+    const [unregisteredFrequency, setUnregisteredFrequency] = useState(false);
+    const [registeredFrequency, setRegisteredFrequency] = useState(false);
     const [isEventFree, setIsEventFree] = useState(false);
 
- 
- 
+
+
     const toggleForm = () => setModalForm(!modalForm);
     const toggleEvent = () => setIsEventFree(!isEventFree);
 
     const handleFormSubmit = async (values) => {
-        
-          const postValues = new Object();
-          postValues.name = values.name;
-          postValues.description = values.description;
-          postValues.date = moment(values.eventDate).format('YYYY-MM-DD');
-          postValues.time = moment(values.eventTime).format('HH:mm');
-          postValues.is_annual = values.isEventAnnual == 'no' ? 0 : 1;
-          postValues.fee = values.isEventFree == 'no' ? values.eventFee : 0;
-          postValues.img = values.img[0];
-          postValues.registered_remainder_frequency = values.registered_remainder_frequency;
-          postValues.registered_remainder_dates = values.registered_remainders;
-          postValues.unregistered_remainder_frequency = values.unregistered_remainder_frequency;
-          postValues.unregistered_remainder_dates = values.registered_remainders;
-          postValues.positions = values.positions.map((val) => (val.value));
-          
+
+        const postValues = new Object();
+        postValues.name = values.name;
+        postValues.description = values.description;
+        postValues.date = moment(values.eventDate).format('YYYY-MM-DD');
+        postValues.time = moment(values.eventTime).format('HH:mm');
+        postValues.is_annual = values.isEventAnnual == 'no' ? 0 : 1;
+        postValues.fee = values.isEventFree == 'no' ? values.eventFee : 0;
+        postValues.img = values.img[0];
+        postValues.registered_remainder_frequency = values.registered_remainder_frequency;
+        postValues.registered_remainder_dates = values.registered_remainders;
+        postValues.unregistered_remainder_frequency = values.unregistered_remainder_frequency;
+        postValues.unregistered_remainder_dates = values.unregistered_remainders;
+        postValues.positions = values.positions.map((val) => (val.value));
+
         try {
             setLoading(true);
 
@@ -67,44 +68,50 @@ const AdminEvents = ({ drawer }) => {
             if (resp.payload?.message == "success") {
                 setTimeout(() => {
                     setLoading(false);
-                    navigate(process.env.PUBLIC_URL+'/admin-events')
+                    navigate(process.env.PUBLIC_URL + '/admin-events')
                 }, 1000);
             } else {
-              setLoading(false);
+                setLoading(false);
             }
 
         } catch (error) {
-            
+
             setLoading(false);
         }
 
-    }; 
-    
+    };
+
     const $categories = categories ? JSON.parse(categories) : null;
     const $positions = positions ? JSON.parse(positions) : null;
-    const $positionOptions = $positions ? $positions.map((val) => ({'label' : val.name, 'value' : val.id})) : {}
-    const $categoryOptions = $categories ? $categories.map((val) => ({'label' : val.name, 'value' : val.id})) : {}
+    const $positionOptions = $positions ? $positions.map((val) => ({ 'label': val.name, 'value': val.id })) : {}
+    const $categoryOptions = $categories ? $categories.map((val) => ({ 'label': val.name, 'value': val.id })) : {}
 
 
     const update_unregistered_remainders = (unregistered_remainders) => {
         if (unregistered_remainders) {
-            setUnregisteredDate(unregistered_remainders.toString())
-            setValue('unregistered_remainders', unregistered_remainders.toString())
+            // moment(values.eventDate).format('YYYY-MM-DD')
+            let dates = unregistered_remainders.map((item) => moment(item).format('YYYY-MM-DD')).toString()
+            // console.log(unregistered_remainders.map((item) => moment(item).format('YYYY-MM-DD')))
+            setUnregisteredDate(dates)
+            // setUnregisteredDate(unregistered_remainders.toString())
+            setValue('unregistered_remainders', dates)
         }
 
     };
 
     const update_registered_remainders = (registered_remainders) => {
         if (registered_remainders) {
-            setRegisteredDate(registered_remainders.toString())
-            setValue('registered_remainders', registered_remainders.toString())
+            let dates = registered_remainders.map((item) => moment(item).format('YYYY-MM-DD')).toString()
+            setRegisteredDate(dates)
+            // setRegisteredDate(registered_remainders.toString())
+            setValue('registered_remainders', dates)
         }
     };
 
     const updateCategory = (value) => {
         setValue('category', value)
         const category = getValues('category').map((val) => (val.value))
-        dispatch(loadAllCategoryPositions({'category_ids' : category}));
+        dispatch(loadAllCategoryPositions({ 'category_ids': category }));
     };
 
     const updateRegisteredFrequency = (value) => {
@@ -114,7 +121,7 @@ const AdminEvents = ({ drawer }) => {
 
 
     const checking = () => {
-        
+
     };
 
 
@@ -186,7 +193,7 @@ const AdminEvents = ({ drawer }) => {
                                                     </label>
                                                     <div className="form-control-wrap">
                                                         <input type="hidden" {...register('eventDate', { required: "This Field is required" })} value={eventDate} />
-                                                        <DatePicker selected={eventDate} onChange={(date) => setEventDate(date)} className="form-control date-picker" id="date" />
+                                                        <DatePicker selected={eventDate} onChange={(date) => setEventDate(date)} className="form-control date-picker" id="date" minDate={todaysDate} />
                                                         {errors.eventDate && <span className="invalid">{errors.eventDate.message}</span>}
                                                     </div>
                                                 </div>
@@ -243,15 +250,15 @@ const AdminEvents = ({ drawer }) => {
                                                         <ul className="custom-control-group" id="isEventFree">
                                                             <li>
                                                                 <div className="custom-control custom-radio custom-control-pro no-control checked">
-                                                                    <input type="radio" className="custom-control-input" name="isEventFree" value={'yes'} id="isEventFreeYes" onClick={toggleEvent}  {...register('isEventFree', { required: "This Field is required" })} defaultChecked={true} />
+                                                                    <input type="radio" className="custom-control-input" name="isEventFree" value={'yes'} id="isEventFreeYes" onClick={() => setIsEventFree(false)}  {...register('isEventFree', { required: "This Field is required" })} defaultChecked={true} />
                                                                     <label className="custom-control-label" htmlFor="isEventFreeYes">
-                                                                        Yes it is
+                                                                        Yes it is Free
                                                                     </label>
                                                                 </div>
                                                             </li>
                                                             <li>
                                                                 <div className="custom-control custom-radio custom-control-pro no-control checked">
-                                                                    <input type="radio" className="custom-control-input" name="isEventFree" value={'no'} id="isEventFreeNo" onClick={toggleEvent}  {...register('isEventFree', { required: "This Field is required" })} />
+                                                                    <input type="radio" className="custom-control-input" name="isEventFree" value={'no'} id="isEventFreeNo" onClick={() => setIsEventFree(true)}  {...register('isEventFree', { required: "This Field is required" })} />
                                                                     <label className="custom-control-label" htmlFor="isEventFreeNo">
                                                                         No it is not
                                                                     </label>
@@ -266,10 +273,10 @@ const AdminEvents = ({ drawer }) => {
                                             {isEventFree && <Col md='12'>
                                                 <div className="form-group">
                                                     <label className="form-label" htmlFor="eventFee">
-                                                        Event Fee
+                                                        Event Registration Fee
                                                     </label>
                                                     <div className="form-control-wrap">
-                                                        <input type="number"   onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""}   id="eventFee" className="form-control" {...register('eventFee', { required: "This Field is required", valueAsNumber: true, })} defaultValue={0} />
+                                                        <input type="number" onKeyUp={(value) => !isNaN(parseInt(value.target.value)) ? value.target.value = parseInt(value.target.value) : ""} id="eventFee" className="form-control" {...register('eventFee', { required: "This Field is required", valueAsNumber: true, })} />
                                                         {errors.eventFee && <span className="invalid">{errors.eventFee.message}</span>}
                                                     </div>
                                                 </div>
@@ -297,7 +304,7 @@ const AdminEvents = ({ drawer }) => {
                                                             {/* <select className="form-control form-select" {...register('registered_remainder_frequency')} id="registered_remainder_frequency" onChange={(value) => updateRegisteredFrequency(value)} > */}
                                                             <select className="form-control form-select" {...register('registered_remainder_frequency')} id="registered_remainder_frequency" onChange={(value) => setRegisteredFrequency(value.target.value)} >
                                                                 <option value="">Select Frequency</option>
-                                                                {/* <option value='none'>None</option> */}
+                                                                <option value=''>None</option>
                                                                 <option value='Daily'>Daily</option>
                                                                 <option value='Weekly'>Weekly</option>
                                                                 <option value='Monthly'>Monthly</option>
@@ -315,9 +322,10 @@ const AdminEvents = ({ drawer }) => {
                                                     </label>
                                                     <div className="form-control-wrap">
                                                         {/* {getValues('registered_remainder_frequency')} */}
-                                                        <input type="hidden" {...register('registered_remainders', { required: "This Field is required" })} value={registeredDate} />
-                                                        <MultiDatePicker nameAttr='registered_remainders' changeAction={update_registered_remainders} max={getValues('eventDate')} />
-                                                        {errors.registered_remainders && <span className="invalid">{errors.registered_remainders.message}</span>}
+                                                        <input type="hidden" {...register('registered_remainders', { required: registeredFrequency })} value={registeredDate} />
+                                                        {/* <input type="hidden" {...register('registered_remainders', { required: "This Field is required" })} value={registeredDate} /> */}
+                                                        <MultiDatePicker nameAttr='registered_remainders' changeAction={update_registered_remainders} max={eventDate} />
+                                                        {errors.registered_remainders && <span className="invalid">{"This Field is required"}</span>}
                                                     </div>
                                                 </div>
                                             </Col>
@@ -331,7 +339,7 @@ const AdminEvents = ({ drawer }) => {
                                                         <div className="form-control-select">
                                                             <select className="form-control form-select" {...register('unregistered_remainder_frequency')} id="unregistered_remainder_frequency" onChange={(value) => setUnregisteredFrequency(value.target.value)} >
                                                                 <option value="">Select Frequency</option>
-                                                                {/* <option value='none'>None</option> */}
+                                                                <option value=''>None</option>
                                                                 <option value='Daily'>Daily</option>
                                                                 <option value='Weekly'>Weekly</option>
                                                                 <option value='Monthly'>Monthly</option>
@@ -342,6 +350,7 @@ const AdminEvents = ({ drawer }) => {
                                                 </div>
                                             </Col>
 
+
                                             <Col md='6'>
                                                 <div className="form-group">
                                                     <label className="form-label" htmlFor="date">
@@ -349,11 +358,12 @@ const AdminEvents = ({ drawer }) => {
                                                     </label>
                                                     <div className="form-control-wrap">
                                                         {/* {getValues('unregistered_remainder_frequency')} */}
-                                                        <input type="hidden" {...register('unregistered_remainders', { required: "This Field is required" })} value={unregisteredDate} />
-                                                        <MultiDatePicker nameAttr='unregistered_remainders' changeAction={update_unregistered_remainders} max={getValues('eventDate')} 
+                                                        <input type="hidden" {...register('unregistered_remainders', { required: unregisteredFrequency })} value={unregisteredDate} />
+                                                        {/* <input type="hidden" {...register('unregistered_remainders', { required: "This Field is required" })} value={unregisteredDate} /> */}
+                                                        <MultiDatePicker nameAttr='unregistered_remainders' changeAction={update_unregistered_remainders} max={eventDate}
                                                         // properties={{ 'readOnly': (!unregisteredFrequency || unregisteredFrequency == 'none') ? true : false }} 
                                                         />
-                                                        {errors.unregistered_remainders && <span className="invalid">{errors.unregistered_remainders.message}</span>}
+                                                        {errors.unregistered_remainders && <span className="invalid">{'This Field is required'}</span>}
                                                     </div>
                                                 </div>
                                             </Col>
@@ -366,7 +376,7 @@ const AdminEvents = ({ drawer }) => {
                                                     </label>
                                                     <div className="form-control-wrap">
                                                         <div className="form-control-select">
-                                                            <input type="hidden" {...register('category', { required: "This Field is Required" })}/>
+                                                            <input type="hidden" {...register('category', { required: "This Field is Required" })} />
                                                             <RSelect name="category" isMulti options={$categoryOptions} onChange={(value) => updateCategory(value)} />
                                                             {errors.category && <p className="invalid">{`${errors.category.message}`}</p>}
                                                         </div>
@@ -382,8 +392,8 @@ const AdminEvents = ({ drawer }) => {
                                                     </label>
                                                     <div className="form-control-wrap">
                                                         <div className="form-control-select">
-                                                            <input type="hidden" {...register('positions', { required: "This Field is Required" })}/>
-                                                            {$positions ? <><RSelect name="positions" isMulti options={$positionOptions} onChange={(value) => setValue('positions', value)} /></> : <><input type="text"  disabled className="form-control"/></> }
+                                                            <input type="hidden" {...register('positions', { required: "This Field is Required" })} />
+                                                            {$positions ? <><RSelect name="positions" isMulti options={$positionOptions} onChange={(value) => setValue('positions', value)} /></> : <><input type="text" disabled className="form-control" /></>}
                                                             {errors.positions && <p className="invalid">{`${errors.positions.message}`}</p>}
                                                         </div>
                                                     </div>
@@ -393,7 +403,7 @@ const AdminEvents = ({ drawer }) => {
                                             <Col md='12'>
                                                 <div className="form-group">
                                                     <Button color="primary" type="submit" size="lg" onClick={checking}>
-                                                        {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Create"}
+                                                        {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Submit"}
                                                     </Button>
                                                 </div>
                                             </Col>

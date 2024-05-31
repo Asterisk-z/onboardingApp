@@ -82,6 +82,7 @@
         .tertiary-color {
             color: #969698;
         }
+
     </style>
 </head>
 
@@ -89,16 +90,16 @@
 
     <?php
     $organizerName = env('EVENT_ORGANIZER_NAME', null);
-    
+
     if (!$organizerName) {
         $organizerName = env('APP_NAME', 'MROIS');
     }
-    
+
     $signature = env('EVENT_ORGANIZER_SIGNATURE', null);
     if (!$organizerName) {
         $signature = $organizerName;
     }
-    
+
     $logo = $isDownload ? public_path('assets/img/logo.png') : asset('assets/img/logo.png');
     $signature = $isDownload ? public_path('assets/img/signature.png') : asset('assets/img/signature.png');
     ?>
@@ -111,15 +112,19 @@
         <div class="date tertiary-color">has successfully participated in the event on
             {{ date('M d, Y', strtotime($event->date)) }}.</div>
         <div class="signature">
+            @if($cert_signature)
+            <img src="{{ $cert_signature }}" alt="Organizer Signature" class="organizer-signature">
+            @else
             <img src="{{ $signature }}" alt="Organizer Signature" class="organizer-signature">
+            @endif
             <p class="secondary-color">{{ $organizerName }}</p>
         </div>
     </div>
 
     @if (!$isDownload)
-        <div class="donload-container">
-            <a href="{{ route('certificateSampleDownload', $event->id) }}">Download</a>
-        </div>
+    <div class="donload-container">
+        <a href="{{ route('certificateSampleDownload', $event->id) }}">Download</a>
+    </div>
     @endif
 
 </body>

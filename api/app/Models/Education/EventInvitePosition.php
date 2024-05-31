@@ -2,7 +2,6 @@
 
 namespace App\Models\Education;
 
-use App\Http\Resources\Education\EventResource;
 use App\Models\Position;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -22,6 +21,11 @@ class EventInvitePosition extends Model
     public function position()
     {
         return $this->belongsTo(Position::class, 'position_id');
+    }
+
+    public function registration()
+    {
+        return $this->hasOne(EventRegistration::class, 'id', 'event_id')->where('is_del', 0);
     }
 
 }

@@ -9,11 +9,14 @@ import { megUpdateEvent, megDeleteEvent, loadAllEvent } from "redux/stores/educa
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
 import AdminEventTable from './Tables/AdminEventTable'
+import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 
 
 
 const AdminEvents = ({ drawer }) => {
 
+    const authUser = useUser();
+    const authUserUpdate = useUserUpdate();
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [parentState, setParentState] = useState('Initial state');
@@ -23,7 +26,7 @@ const AdminEvents = ({ drawer }) => {
     const events = useSelector((state) => state?.educationEvent?.list_all) || null;
 
     useEffect(() => {
-        dispatch(loadAllEvent({'show_past_events' : 1, "name" : "", "from_date" : "", "to_date" : ""}));
+        dispatch(loadAllEvent({ 'show_past_events': 1, "name": "", "from_date": "", "to_date": "" }));
     }, [dispatch, parentState]);
 
     useEffect(() => {
@@ -32,7 +35,7 @@ const AdminEvents = ({ drawer }) => {
 
 
     const { register, handleSubmit, formState: { errors }, resetField, getValues } = useForm();
- 
+
 
 
 
@@ -56,17 +59,20 @@ const AdminEvents = ({ drawer }) => {
                             </BlockTitle>
                         </BlockHeadContent>
                         <BlockHeadContent>
-                            <div className="toggle-wrap nk-block-tools-toggle">
-                                <div className="toggle-expand-content" >
-                                    <ul className="nk-block-tools g-3">
-                                        <li className="nk-block-tools-opt">
-                                            <Button color="primary">
-                                                <span onClick={(e) => navigate(process.env.PUBLIC_URL + '/admin-create-event')}>Add new Event</span>
-                                            </Button>
-                                        </li>
-                                    </ul>
+
+                            {authUser.is_admin_meg() && <>
+                                <div className="toggle-wrap nk-block-tools-toggle">
+                                    <div className="toggle-expand-content" >
+                                        <ul className="nk-block-tools g-3">
+                                            <li className="nk-block-tools-opt">
+                                                <Button color="primary">
+                                                    <span onClick={(e) => navigate(process.env.PUBLIC_URL + '/admin-create-event')}>Add new Event</span>
+                                                </Button>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
-                            </div>
+                            </>}
                         </BlockHeadContent>
                     </BlockBetween>
                 </BlockHead>

@@ -12,19 +12,16 @@ use App\Http\Resources\Education\EventRegistrationResource;
 use App\Http\Resources\Education\EventRegistrationWithEventResource;
 use App\Http\Resources\Education\EventResource;
 use App\Jobs\GenerateAndSendCertificateJob;
-use App\Jobs\SendGeneratedCertificateJob;
 use App\Models\Education\Event;
-use App\Models\Education\EventNotificationDates;
 use App\Models\Education\EventInvitePosition;
 use App\Models\Education\EventNotification;
+use App\Models\Education\EventNotificationDates;
 use App\Models\Education\EventRegistration;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Validation\Rule;
-
 use Illuminate\Support\Facades\App;
-
+use Illuminate\Validation\Rule;
 
 class EventController extends Controller
 {
@@ -36,7 +33,6 @@ class EventController extends Controller
         if (!$event = Event::find($eventId)) {
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, "Record not found");
         }
-
         return successResponse('Successful', EventResource::make($event));
     }
 
@@ -89,7 +85,7 @@ class EventController extends Controller
         $validRegisteredDates = [];
         $validUnregisteredDates = [];
 
-        // split $validated['unregistered_remainder_dates'] by comma. 
+        // split $validated['unregistered_remainder_dates'] by comma.
         // Validate each date to be YYYY-MM-DD
         // Add to $validUnregisteredDates;
 
@@ -126,7 +122,7 @@ class EventController extends Controller
                 EventNotificationDates::create([
                     'type' => 'Registered',
                     'event_id' => $event->id,
-                    'reminder_date' => $notificationDate
+                    'reminder_date' => $notificationDate,
                 ]);
             });
         }
@@ -136,7 +132,7 @@ class EventController extends Controller
                 EventNotificationDates::create([
                     'type' => 'Unregistered',
                     'event_id' => $event->id,
-                    'reminder_date' => $notificationDate
+                    'reminder_date' => $notificationDate,
                 ]);
             });
         }
@@ -169,7 +165,7 @@ class EventController extends Controller
 
         // validate the notification dates
 
-        // split dates by comma. 
+        // split dates by comma.
         // Validate each date to be YYYY-MM-DD
         // Add to $validUnregisteredDates;
 
@@ -195,7 +191,7 @@ class EventController extends Controller
                     EventNotificationDates::create([
                         'type' => 'Registered',
                         'event_id' => $event->id,
-                        'reminder_date' => $notificationDate
+                        'reminder_date' => $notificationDate,
                     ]);
                 });
             }
@@ -224,7 +220,7 @@ class EventController extends Controller
                     EventNotificationDates::create([
                         'type' => 'Unregistered',
                         'event_id' => $event->id,
-                        'reminder_date' => $notificationDate
+                        'reminder_date' => $notificationDate,
                     ]);
                 });
             }
@@ -290,7 +286,7 @@ class EventController extends Controller
                 'event_id' => $event->id,
                 'position_id' => $positionId,
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ];
         }
 
@@ -406,7 +402,6 @@ class EventController extends Controller
         $registered = EventRegistration::where('user_id', $request->user()->id)
             ->where('event_id', $event->id)->first();
 
-
         if ($registered) {
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, "You have already registered for this event. You can can update your POP instead.");
         }
@@ -451,7 +446,6 @@ class EventController extends Controller
         if ($eventReg->user_id != $request->user()->id) {
             return errorResponse(ResponseStatusCodes::PERMISSION_DENIED, "You are not allowed to perform this action");
         }
-
 
         if ($eventReg->status = EventRegistration::STATUS_APPROVED) {
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, "This registration payment has already been approved");
@@ -532,8 +526,9 @@ class EventController extends Controller
 
         $eventName = $event->name;
         $eventDate = $event->date;
+        $cert_signature = $event->cert_signature ? config('app.url') . '/storage/app/public/' . $event->cert_signature : null;
 
-        return view('mails.certificate', compact('event', 'name', 'isDownload'));
+        return view('mails.certificate', compact('event', 'name', 'isDownload', 'cert_signature'));
     }
 
     public function certificateSamplePreview(Event $event)
@@ -543,8 +538,9 @@ class EventController extends Controller
 
         $eventName = $event->name;
         $eventDate = $event->date;
+        $cert_signature = $event->cert_signature ? config('app.url') . '/storage/app/public/' . $event->cert_signature : null;
 
-        return view('mails.certificate', compact('event', 'name', 'isDownload'));
+        return view('mails.certificate', compact('event', 'name', 'isDownload', 'cert_signature'));
     }
 
     public function certificateSampleDownload(Event $event)
@@ -556,7 +552,9 @@ class EventController extends Controller
 
         $eventName = $event->name;
         $eventDate = $event->date;
-        $pdf->loadView('mails.certificate', compact('event', 'name', 'isDownload'))->setPaper($this->certPaperSize);
+        $cert_signature = $event->cert_signature ? config('app.url') . '/storage/app/public/' . $event->cert_signature : null;
+
+        $pdf->loadView('mails.certificate', compact('event', 'name', 'isDownload', 'cert_signature'))->setPaper($this->certPaperSize);
 
         return $pdf->download('certificate.pdf');
     }
@@ -564,12 +562,19 @@ class EventController extends Controller
     public function sendCertificates(Request $request, Event $event)
     {
         $request->validate([
+            'presentation' => 'sometimes|mimes:pdf|max:2048',
             'event_registrations' => 'required|array',
             'event_registrations.*' => [
                 'integer',
                 Rule::exists('event_registrations', 'id'), // Ensure each  ID exists in the 'EventRegistration' table
             ],
         ]);
+        $event = Event::find(request('eventID'));
+        $presentation = $request->hasFile('presentation') ? $request->file('presentation')->storePublicly('event_presentation', 'public') : null;
+
+        $event->is_event_completed = true;
+        $event->presentation = $presentation;
+        $event->save();
 
         $requestedIDs = $request->input('event_registrations');
 
@@ -579,5 +584,47 @@ class EventController extends Controller
 
     }
 
+    public function sendCertificateForSigning(Request $request, $eventID)
+    {
+
+        $event = Event::find($eventID);
+
+        if ($event) {
+
+            $event->is_sent_for_signing = true;
+            $event->save();
+
+            $logMessage = "Sent for certificate signin the Event: {$event->name}";
+            logAction($request->user()->email, 'Event Certificate', $logMessage, $request->ip());
+        }
+
+        return successResponse('Successful');
+    }
+    public function signCertificate(Request $request, $eventID)
+    {
+        // did not inject the model so even already deleted records can return success
+        $event = Event::find($eventID);
+
+        if ($event) {
+
+            $request->validate([
+                'signature' => 'required|mimes:jpeg,png,jpg|max:2048',
+            ]);
+
+            $signature = $request->hasFile('signature') ? $request->file('signature')->storePublicly('event_signature', 'public') : null;
+
+            $event->cert_signature = $signature;
+            $event->signed_by = auth()->user()->id;
+            $event->save();
+
+            $logMessage = "{$request->user()->email} Signed {$event->name} Event certificate";
+            logAction($request->user()->email, 'Delete Event', $logMessage, $request->ip());
+
+            return successResponse("Signature Updated Successfully", []);
+
+        }
+
+        return successResponse('Fail to update signature');
+    }
 
 }

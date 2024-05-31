@@ -4,7 +4,6 @@ namespace App\Jobs;
 
 use App\Models\Education\EventRegistration;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -53,10 +52,11 @@ class GenerateAndSendCertificateJob implements ShouldQueue
             $event = $eventReg->event;
             $eventName = $eventReg->event->name;
             $eventDate = $eventReg->event->date;
+            $cert_signature = $eventReg->event->cert_signature ? config('app.url') . '/storage/app/public/' . $event->cert_signature : null;
             $filePath = "certificate_" . $eventReg->id . ".pdf";
 
             $pdf = App::make('dompdf.wrapper');
-            $pdf->loadView('mails.certificate', compact('event', 'name', 'isDownload'))->setPaper($this->certPaperSize);
+            $pdf->loadView('mails.certificate', compact('event', 'name', 'isDownload', 'cert_signature'))->setPaper($this->certPaperSize);
 
             $pdf->save($eventReg->getCertificateFullPath($filePath));
 

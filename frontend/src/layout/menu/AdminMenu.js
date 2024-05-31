@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import navData from "./NavData";
 import adminApplication from "./AdminApplications";
+import adminFSDApplication from "./AdminFSDApplication";
 import { NavLink, Link } from "react-router-dom";
 import Icon from "../../components/icon/Icon";
 import classNames from "classnames";
@@ -212,7 +213,7 @@ const UserMenu = ({ sidebarToggle, mobileView }) => {
       setMenuData(adminApplication)
     }
     if (aUser.is_admin_fsd()) {
-      setMenuData(adminApplication)
+      setMenuData(adminFSDApplication)
     }
     if (aUser.is_admin_mbg()) {
       setMenuData(adminApplication)

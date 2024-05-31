@@ -2,11 +2,12 @@
 
 namespace App\Http\Resources\Education;
 
-use App\Http\Resources\UserResource;
+use App\Traits\EventTraits;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class EventInvitationWithEventResource extends JsonResource
 {
+    use EventTraits;
     /**
      * Transform the resource into an array.
      *
@@ -15,6 +16,10 @@ class EventInvitationWithEventResource extends JsonResource
      */
     public function toArray($request)
     {
-        return $this->event->getBasicData();
+        $event = $this->event->getBasicData();
+        $otherInfo = [
+            'registration' => $this->userEventRegistration($this->event),
+        ];
+        return array_merge($event, $otherInfo);
     }
 }
