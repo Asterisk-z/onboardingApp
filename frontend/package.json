@@ -1,6 +1,6 @@
 {
     "name": "MROIS DEV",
-    "homepage": "http://localhost:3000/frontend/",
+    "homepage": "https://adgtest.fmdqgroup.com/newmroisdev/frontend/",
     "version": "1.7.1",
     "private": true,
     "dependencies": {
@@ -29,6 +29,8 @@
         "dotenv": "^16.3.1",
         "export-from-json": "^1.7.0",
         "html-react-parser": "^1.4.14",
+        "html2canvas": "^1.4.1",
+        "jspdf": "^2.5.1",
         "jwt-decode": "^4.0.0",
         "moment": "^2.29.4",
         "nouislider-react": "^3.4.1",

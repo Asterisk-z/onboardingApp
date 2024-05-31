@@ -13,7 +13,7 @@ import { megProcessAddUserAR } from "redux/stores/authorize/representative";
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 import Swal from "sweetalert2";
 
-const Export = ({ data }) => {
+const Export = ({ data, reportUrl }) => {
   const [modal, setModal] = useState(false);
 
   useEffect(() => {
@@ -69,6 +69,12 @@ const Export = ({ data }) => {
           <button className="btn btn-secondary buttons-excel buttons-html5" type="button" onClick={() => exportExcel()}>
             <span>Excel</span>
           </button>{" "}
+          <a href={reportUrl} target="_blank">
+            <button className="btn btn-secondary buttons-pdf buttons-html5" type="button" title="Export To PDF">
+              <span>PDF</span>
+            </button>
+          </a>
+          {" "}
         </div>
       </div>
       <Modal isOpen={modal} className="modal-dialog-centered text-center" size="sm">
@@ -186,7 +192,7 @@ const ActionTab = (props) => {
   );
 };
 
-const AdminListARTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState }) => {
+const AdminListARTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState, reportUrl }) => {
   const complainColumn = [
     {
       name: "UID",
@@ -320,7 +326,7 @@ const AdminListARTable = ({ data, pagination, actions, className, selectableRows
           <div className="datatable-filter">
 
             <div className="d-flex justify-content-end g-2">
-              {actions && <Export data={data} />}
+              {actions && <Export data={data} reportUrl={reportUrl} />}
               <div className="dataTables_length" id="DataTables_Table_0_length">
                 <label>
                   <span className="d-none d-sm-inline-block">Show</span>

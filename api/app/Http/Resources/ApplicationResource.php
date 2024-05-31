@@ -194,6 +194,8 @@ class ApplicationResource extends JsonResource
 
             "ars" => $this->institutionUsers($application->institution_id),
 
+            "report_table" => $this->report_table(),
+
         ];
     }
 }

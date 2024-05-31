@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { errorHandler, successHandler } from "utils/Functions";
 import queryGenerator from "utils/QueryGenerator";
-const initialState = { all_institutions: null, all: null, list: null, latest_evidence: null, invoice_download: null, all_fields: null, list_extra: {}, status_list: null, transfer_list: null, user: null, total: null, error: "", loading: false };
+const initialState = { all_institutions: null, all_institution_report: null, all: null, list: null, latest_evidence: null, invoice_download: null, all_fields: null, list_extra: {}, status_list: null, transfer_list: null, user: null, total: null, error: "", loading: false };
 
 export const loadApplications = createAsyncThunk(
   "applicationProcess/loadApplications",
@@ -22,6 +22,18 @@ export const loadInstitutionApplications = createAsyncThunk(
   async () => {
     try {
       const { data } = await axios.get(`membership/application/all_institutions`);
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
+    }
+  }
+);
+
+export const loadInstitutionApplicationReport = createAsyncThunk(
+  "applicationProcess/loadInstitutionApplicationReport",
+  async () => {
+    try {
+      const { data } = await axios.get(`report/application/all_institution`);
       return successHandler(data);
     } catch (error) {
       return errorHandler(error);
@@ -572,6 +584,25 @@ const applicationProcess = createSlice({
     });
 
     builder.addCase(loadInstitutionApplications.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
+    // ====== builders for loadInstitutionApplicationReport ======
+
+    builder.addCase(loadInstitutionApplicationReport.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(loadInstitutionApplicationReport.fulfilled, (state, action) => {
+      state.loading = false;
+      // state.list = action.payload?.data?.data?.categories;
+
+      state.all_institution_report = JSON.stringify(action.payload?.data?.data);
+
+    });
+
+    builder.addCase(loadInstitutionApplicationReport.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });

@@ -4,12 +4,30 @@ namespace App\Http\Controllers;
 
 use App\Models\SystemSetting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 
 class SystemController extends Controller
 {
     //
+
+    public function report($data)
+    {
+
+        $pdf = App::make('dompdf.wrapper');
+
+        $dataTable = base64_decode($data);
+
+        // dd($dataTable);
+
+        // return view('report', compact('dataTable'));
+
+        $pdf->loadView('report', compact('dataTable'))->setPaper(array(0, 0, 800, 480));
+
+        return $pdf->download('report.pdf');
+
+    }
 
     public function index()
     {

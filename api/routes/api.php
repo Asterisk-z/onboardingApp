@@ -107,7 +107,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('authRole:' . Role::STAKEHOLDER . ',' . Role::MEG)->group(function () {
 
         Route::group(['prefix' => 'report/ar'], function () {
-            Route::get('/list', [ARController::class, 'listMEG']);
+            Route::get('/list', [ARController::class, 'listReportMEG']);
         });
 
         // institutions
@@ -115,6 +115,9 @@ Route::middleware('auth')->group(function () {
             Route::get('/list', [InstitutionController::class, 'listInstitution']);
         });
 
+        Route::group(['prefix' => 'report/application'], function () {
+            Route::get('/all_institution', [ApplicationProcessController::class, 'all_institution_report']);
+        });
     });
 
     Route::middleware('authRole:' . Role::ARAUTHORISER . ',' . Role::ARINPUTTER)->group(function () {
@@ -452,6 +455,7 @@ Route::get('storage-link', [SystemController::class, 'linkStorage'])->name('link
 
 Route::get('cert-sample/{event}', [EventController::class, 'certificateSample'])->name('previewCertificate');
 Route::get('cert-sample-download/{event}', [EventController::class, 'certificateSampleDownload'])->name('previewCertificateDownload');
+Route::get('report-download/{data}', [SystemController::class, 'report'])->name('downloadReport');
 
 Route::group(['prefix' => 'webhook'], function () {
     Route::group(['prefix' => 'qpay/payment'], function () {

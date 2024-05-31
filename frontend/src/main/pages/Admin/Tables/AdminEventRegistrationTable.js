@@ -13,7 +13,7 @@ import Icon from "components/icon/Icon";
 import Swal from "sweetalert2";
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 
-const Export = ({ data }) => {
+const Export = ({ data, reportUrl }) => {
     const [modal, setModal] = useState(false);
 
     useEffect(() => {
@@ -76,9 +76,12 @@ const Export = ({ data }) => {
                     <button className="btn btn-secondary buttons-excel buttons-html5" type="button" onClick={() => exportExcel()}>
                         <span>Excel</span>
                     </button>{" "}
-                    <button className="btn btn-secondary buttons-excel buttons-html5" type="button" onClick={() => exportToPDF()}>
-                        <span>PDF</span>
-                    </button>{" "}
+                    <a href={reportUrl} target="_blank">
+                        <button className="btn btn-secondary buttons-pdf buttons-html5" type="button" title="Export To PDF">
+                            <span>PDF</span>
+                        </button>
+                    </a>
+                    {" "}
                 </div>
             </div>
             <Modal isOpen={modal} className="modal-dialog-centered text-center" size="sm">
@@ -281,7 +284,7 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
 };
 
 
-const AdminEventRegistrationTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState }) => {
+const AdminEventRegistrationTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState, reportUrl }) => {
 
     const tableColumn = [
         {
@@ -408,7 +411,7 @@ const AdminEventRegistrationTable = ({ data, pagination, actions, className, sel
                     <div className="datatable-filter">
 
                         <div className="d-flex justify-content-end g-2">
-                            {actions && <Export data={data} />}
+                            {actions && <Export data={data} reportUrl={reportUrl} />}
                             <div className="dataTables_length" id="DataTables_Table_0_length">
                                 <label>
                                     <span className="d-none d-sm-inline-block">Show</span>

@@ -49,7 +49,7 @@ const AdminRepresentativeReport = ({ drawer }) => {
     const $institutions = institutions ? JSON.parse(institutions) : null;
     const $active_positions = active_positions ? JSON.parse(active_positions) : null;
 
-    let filteredApplication = $ar_users;
+    let filteredApplication = $ar_users?.report;
 
 
 
@@ -57,7 +57,7 @@ const AdminRepresentativeReport = ({ drawer }) => {
     const [loading, setLoading] = useState(false);
     const [startDate, setStartDate] = useState(false);
     const [endDate, setEndDate] = useState(false);
-    const [tableData, setTableData] = useState($ar_users);
+    const [tableData, setTableData] = useState($ar_users?.report);
 
 
     const handleFormSubmit = async (values) => {
@@ -276,7 +276,7 @@ const AdminRepresentativeReport = ({ drawer }) => {
                                 </BlockHead>
 
                                 <PreviewCard>
-                                    {$ar_users && <AdminRepresentativeReportTable updateParent={updateParentState} parentState={parentState} data={tableData || $ar_users} expandableRows pagination actions />}
+                                    {$ar_users && <AdminRepresentativeReportTable updateParent={updateParentState} parentState={parentState} data={tableData || $ar_users?.report} reportUrl={$ar_users?.report_url} expandableRows pagination actions />}
                                 </PreviewCard>
                             </Block>
 

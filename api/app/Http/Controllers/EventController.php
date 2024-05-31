@@ -495,7 +495,37 @@ class EventController extends Controller
     public function eventRegistrations(Request $request, Event $event)
     {
         $records = EventRegistration::with(['user', 'event'])->where('is_del', 0)->where('event_id', $event->id)->latest()->get();
-        return successResponse('Successful', EventRegistrationWithEventResource::collection($records));
+
+        $table = "<table>
+            <thead>
+                <tr>
+                    <th scope='col'>Registrant</th>
+                    <th scope='col'>Email</th>
+                    <th scope='col'>Event Name</th>
+                    <th scope='col'>Event Description</th>
+                    <th scope='col'>Date</th>
+                    <th scope='col'>Status</th>
+                    <th scope='col'>Fee</th>
+                <tr>
+            </thead>
+            <tbody>";
+        foreach ($records as $setData) {
+
+            $table .= "<tr>
+                            <td  scope='row'>{$setData->user->full_name}</td>
+                            <td>{$setData->user->email}</td>
+                            <td>{$setData->event->name}</td>
+                            <td>{$setData->event->description}</td>
+                            <td>{$setData->event->date}</td>
+                            <td>{$setData->status}</td>
+                            <td>{$setData->event->fee}</td>
+                        </tr>";
+        }
+
+        $table .= "</tbody>
+            </table>";
+
+        return successResponse('Successful', ['report' => EventRegistrationWithEventResource::collection($records), 'report_url' => route('downloadReport', base64_encode($table))]);
     }
 
     public function approveEventRegistration(Request $request, EventRegistration $eventReg)

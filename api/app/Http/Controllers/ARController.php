@@ -51,6 +51,56 @@ class ARController extends Controller
         return successResponse('Successful', UserResource::collection($users));
     }
 
+    public function listReportMEG(Request $request)
+    {
+        $query = User::whereNotNull('institution_id');
+
+        if ($request->institution_id) {
+            $query = $query->where('institution_id', $request->institution_id);
+        }
+
+        if ($request->approval_status) {
+            $query = $query->where('approval_status', strtolower($request->approval_status));
+        }
+
+        if ($request->role_id) {
+            $query = $query->where('role_id', $request->role_id);
+        }
+
+        $users = $query->latest()->get();
+
+        $table = "<table>
+            <thead>
+                <tr>
+                    <th scope='col'>Surname</th>
+                    <th scope='col'>First name</th>
+                    <th scope='col'>Institution</th>
+                    <th scope='col'>Category</th>
+                    <th scope='col'>Position</th>
+                    <th scope='col'>Email address</th>
+                    <th scope='col'>Phone number</th>
+                <tr>
+            </thead>
+            <tbody>";
+        foreach ($users as $setData) {
+
+            $table .= "<tr>
+                            <td  scope='row'>{$setData->last_name}</td>
+                            <td>{$setData->first_name}</td>
+                            <td>{$setData->institution->name}</td>
+                            <td>{$setData->category->name}</td>
+                            <td>{$setData->position->name}</td>
+                            <td>{$setData->email}</td>
+                            <td>{$setData->phone}</td>
+                        </tr>";
+        }
+
+        $table .= "</tbody>
+            </table>";
+
+        return successResponse('Successful', ['report' => UserResource::collection($users), 'report_url' => route('downloadReport', base64_encode($table))]);
+    }
+
     public function list(Request $request)
     {
         $query = User::where('institution_id', $request->user()->institution_id);

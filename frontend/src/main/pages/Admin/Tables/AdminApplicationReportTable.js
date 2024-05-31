@@ -13,9 +13,11 @@ import { uploadConcession, FSDPaymentEvidence, FSDReviewSummary, MBGPaymentEvide
 import { megProcessMemberStatus } from "redux/stores/authorize/representative";
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 import Swal from "sweetalert2";
+import JsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 
-const Export = ({ data }) => {
+const Export = ({ data, reportUrl }) => {
   const [modal, setModal] = useState(false);
 
   useEffect(() => {
@@ -57,6 +59,8 @@ const Export = ({ data }) => {
     setModal(true);
   };
 
+
+
   return (
     <React.Fragment>
       <div className="dt-export-buttons d-flex align-center">
@@ -73,6 +77,12 @@ const Export = ({ data }) => {
           <button className="btn btn-secondary buttons-excel buttons-html5" type="button" onClick={() => exportExcel()}>
             <span>Excel</span>
           </button>{" "}
+          <a href={reportUrl} target="_blank">
+            <button className="btn btn-secondary buttons-pdf buttons-html5" type="button" title="Export To PDF">
+              <span>PDF</span>
+            </button>
+          </a>
+          {" "}
         </div>
       </div>
       <Modal isOpen={modal} className="modal-dialog-centered text-center" size="sm">
@@ -768,7 +778,7 @@ const ActionTab = (props) => {
   );
 };
 
-const AdminApplicationReportTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent }) => {
+const AdminApplicationReportTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, reportUrl }) => {
   const complainColumn = [
     {
       name: "ID",
@@ -902,7 +912,7 @@ const AdminApplicationReportTable = ({ data, pagination, actions, className, sel
           <div className="datatable-filter">
 
             <div className="d-flex justify-content-end g-2">
-              {actions && <Export data={data} />}
+              {actions && <Export data={data} reportUrl={reportUrl} />}
               <div className="dataTables_length" id="DataTables_Table_0_length">
                 <label>
                   <span className="d-none d-sm-inline-block">Show</span>

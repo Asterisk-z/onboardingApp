@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner } from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
-import { loadInstitutionApplications } from "redux/stores/membership/applicationProcessStore"
+import { loadInstitutionApplicationReport } from "redux/stores/membership/applicationProcessStore"
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
 import { loadAllActiveCategories } from 'redux/stores/memberCategory/category'
@@ -27,18 +27,18 @@ const AdminApplicationReport = ({ drawer }) => {
         setParentState(newState);
     };
 
-    const all_institutions = useSelector((state) => state?.applicationProcess?.all_institutions) || null;
+    const all_institution_report = useSelector((state) => state?.applicationProcess?.all_institution_report) || null;
     const active_categories = useSelector((state) => state?.category?.list) || null;
     useEffect(() => {
         dispatch(loadAllActiveCategories());
-        dispatch(loadInstitutionApplications());
+        dispatch(loadInstitutionApplicationReport());
     }, [dispatch, parentState]);
 
-    const $all_institutions = all_institutions ? JSON.parse(all_institutions) : null;
+    const $all_institution_report = all_institution_report ? JSON.parse(all_institution_report) : null;
     const $active_categories = active_categories ? JSON.parse(active_categories) : null;
 
 
-    let filteredApplication = $all_institutions;
+    let filteredApplication = $all_institution_report?.report;
 
 
 
@@ -46,7 +46,7 @@ const AdminApplicationReport = ({ drawer }) => {
     const [loading, setLoading] = useState(false);
     const [startDate, setStartDate] = useState(false);
     const [endDate, setEndDate] = useState(false);
-    const [tableData, setTableData] = useState($all_institutions);
+    const [tableData, setTableData] = useState($all_institution_report?.report);
 
     const handleFormSubmit = async (values) => {
 
@@ -203,7 +203,7 @@ const AdminApplicationReport = ({ drawer }) => {
                                 </BlockHead>
 
                                 <PreviewCard>
-                                    {$all_institutions && <AdminApplicationReportTable updateParent={updateParentState} data={tableData || $all_institutions} expandableRows pagination actions />}
+                                    {$all_institution_report && <AdminApplicationReportTable updateParent={updateParentState} data={tableData || $all_institution_report?.report} reportUrl={$all_institution_report?.report_url} expandableRows pagination actions />}
                                 </PreviewCard>
                             </Block>
 

@@ -7,6 +7,7 @@ use App\Models\ApplicationFieldUpload;
 use App\Models\Invoice;
 use App\Models\ProofOfPayment;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 trait ApplicationTraits
 {
@@ -94,5 +95,15 @@ trait ApplicationTraits
             'file_path' => $application_field_upload ? ($application_field_upload->uploaded_file ? config('app.url') . 'storage/app/public/' . $application_field_upload->uploaded_file : null) : null,
             'uploaded_field' => $application_field_upload ? $application_field_upload->uploaded_field : '',
         ];
+    }
+
+    public function report_table()
+    {
+        $pdf = Pdf::loadHTML('<h1>Test</h1>');
+        // $pdf = App::make('dompdf.wrapper');
+        // $pdf->loadHTML('<h1>Test</h1>');
+        // return $pdf->stream();
+        return $pdf;
+
     }
 }

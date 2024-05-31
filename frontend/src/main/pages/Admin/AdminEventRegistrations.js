@@ -237,7 +237,7 @@ const AdminEvents = ({ drawer }) => {
                                                 <div className="toggle-expand-content" >
                                                     <ul className="nk-block-tools g-3">
 
-                                                        {(authUser.is_admin_meg() && $event && $event_registrations?.length > 0 && ($event.is_event_completed == 0)) && <>
+                                                        {(authUser.is_admin_meg() && $event && $event_registrations?.report?.length > 0 && ($event.is_event_completed == 0)) && <>
                                                             <li className="nk-block-tools-opt">
                                                                 <a href={$event?.preview_certificate} target="_blank">
                                                                     <Button color="primary">
@@ -332,14 +332,14 @@ const AdminEvents = ({ drawer }) => {
                                         Send Event AR Certificate
                                     </ModalHeader>
                                     <ModalBody>
-                                        {$event_registrations && <FinalForm setModalFinalForm={setModalFinalForm} event_id={event_id} event_registrations={$event_registrations} />}
+                                        {$event_registrations && <FinalForm setModalFinalForm={setModalFinalForm} event_id={event_id} event_registrations={$event_registrations?.report} />}
                                     </ModalBody>
                                     <ModalFooter className="bg-light">
                                         <span className="sub-text"></span>
                                     </ModalFooter>
                                 </Modal>
                                 <PreviewCard>
-                                    {$event_registrations && <AdminEventRegistrationTable updateParent={updateParentState} parentState={parentState} data={$event_registrations} expandableRows pagination actions />}
+                                    {$event_registrations && <AdminEventRegistrationTable updateParent={updateParentState} parentState={parentState} data={$event_registrations?.report} reportUrl={$event_registrations?.report_url} expandableRows pagination actions />}
                                 </PreviewCard>
                             </Block>
                         </Content>
