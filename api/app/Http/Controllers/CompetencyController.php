@@ -26,10 +26,18 @@ class CompetencyController extends Controller
     //
     public function listActive()
     {
-        $competencies = CompetencyFramework::where('is_del', 0)->where('position', auth()->user()->position_id)->orderBy('created_at', 'DESC')->get()->toArray();
+        // $competencies = CompetencyFramework::where('is_del', 0)->where('position', auth()->user()->position->position_group_id)->where('member_category', auth()->user()->category_id)->orderBy('created_at', 'DESC')->get()->toArray();
+        $competencies = CompetencyFramework::where('is_del', 0)->where('position', auth()->user()->position->position_group_id)->orderBy('created_at', 'DESC')->get()->toArray();
         return successResponse('Successful', $competencies);
     }
 
+    public function listGroupName()
+    {
+
+        // $competencies = CompetencyFramework::where('is_del', 0)->where('position', auth()->user()->position->position_group_id)->where('member_category', auth()->user()->category_id)->orderBy('created_at', 'DESC')->get()->toArray();
+        $competencies = CompetencyFramework::select('name', DB::raw('count(*) as total'))->groupBy('name')->orderBy('name', 'DESC')->get()->toArray();
+        return successResponse('Successful', $competencies);
+    }
     //
 
     public function listAllCompliantArs(): JsonResponse
@@ -98,7 +106,7 @@ class CompetencyController extends Controller
         $validated = $request->validate([
             "name" => "required|string",
             "description" => "required",
-            "position" => "required|exists:positions,id",
+            "position" => "required|exists:position_groups,id",
             "member_category" => "required|exists:membership_categories,id",
         ]);
 
@@ -199,6 +207,8 @@ class CompetencyController extends Controller
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'Does not exist');
         }
 
+        $competencyFramework = $competencies->framework;
+
         if (request('action') == 'activate') {
             $competencies->update([
                 'status' => $request->status,
@@ -210,13 +220,14 @@ class CompetencyController extends Controller
                 'reason' => 'required',
             ]);
 
-            $ar = User::where('id', $competencies->id)->first();
-
-            Notification::send($ar, new InfoNotification(MailContents::rejectedCompetencyMessage(request('reason')), MailContents::rejectedCompetencySubject()));
-
             $competencies->delete();
 
         }
+
+        $ar = User::where('id', $competencies->ar_id)->first();
+        $authoriser = auth()->user();
+
+        Notification::send($ar, new InfoNotification(MailContents::arStatusCompetencyMessage($authoriser, $competencyFramework), MailContents::arStatusCompetencySubject()));
 
         return successResponse('Competency status updated', $competencies);
     }
@@ -240,6 +251,7 @@ class CompetencyController extends Controller
             'framework_id' => $validated['framework_id'],
             'ar_id' => auth()->user()->id,
             'institution_id' => auth()->user()->institution_id,
+            'comment' => request('comment'),
             'is_competent' => $validated['is_competent'],
             'evidence' => $request->hasFile('evidence') ? $request->file('evidence')->storePublicly('evidence', 'public') : null,
             'status' => 'pending',
@@ -248,7 +260,7 @@ class CompetencyController extends Controller
         $cco_position = Position::where('name', Position::CCO)->first();
         $ccos = User::where('position_id', $cco_position->id)->where('approval_status', 'approved')->get();
         //
-        Notification::send($ccos, new InfoNotification(MailContents::submitCompetencyMessage(), MailContents::submitCompetencySubject()));
+        Notification::send($ccos, new InfoNotification(MailContents::submitCompetencyMessage($user), MailContents::submitCompetencySubject()));
         // log
         $logMessage = $user->email . ' submitted a competency.';
         logAction($user->email, 'Submitted a competency', $logMessage, $request->ip());

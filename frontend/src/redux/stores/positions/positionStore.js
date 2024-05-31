@@ -3,7 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { errorHandler, successHandler } from "../../../utils/Functions";
 import queryGenerator from "../../../utils/QueryGenerator";
-const initialState = { list: null, error: "", all_list: null, loading: false };
+const initialState = { list: null, error: "", all_list: null, all_group_list: null, loading: false };
 
 export const loadAllActivePositions = createAsyncThunk(
   "position/loadAllActivePositions",
@@ -16,12 +16,23 @@ export const loadAllActivePositions = createAsyncThunk(
     }
   }
 );
+export const loadAllActiveGroupPositions = createAsyncThunk(
+  "position/loadAllActiveGroupPositions",
+  async (arg) => {
+    try {
+      const { data } = await axios.get(`position-group`);
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
+    }
+  }
+);
 
 export const loadAllCategoryPositions = createAsyncThunk(
   "position/loadAllCategoryPositions",
   async (values) => {
     try {
-       const { data } = await axios({
+      const { data } = await axios({
         method: "post",
         headers: {
           Accept: "application/json",
@@ -30,7 +41,7 @@ export const loadAllCategoryPositions = createAsyncThunk(
         url: `category/positions`,
         data: values,
       });
-      
+
       return successHandler(data);
     } catch (error) {
       return errorHandler(error);
@@ -173,11 +184,27 @@ const positionStore = createSlice({
 
     builder.addCase(loadAllActivePositions.fulfilled, (state, action) => {
       state.loading = false;
-        // state.list = action.payload?.data?.data?.positions;
-        state.all_list = JSON.stringify(action.payload?.data?.data?.positions);
+      // state.list = action.payload?.data?.data?.positions;
+      state.all_list = JSON.stringify(action.payload?.data?.data?.positions);
     });
 
     builder.addCase(loadAllActivePositions.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+    // ====== builders for loadAllActiveGroupPositions ======
+
+    builder.addCase(loadAllActiveGroupPositions.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(loadAllActiveGroupPositions.fulfilled, (state, action) => {
+      state.loading = false;
+      // state.list = action.payload?.data?.data?.positions;
+      state.all_group_list = JSON.stringify(action.payload?.data?.data?.positions);
+    });
+
+    builder.addCase(loadAllActiveGroupPositions.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });
@@ -190,8 +217,8 @@ const positionStore = createSlice({
 
     builder.addCase(loadAllCategoryPositions.fulfilled, (state, action) => {
       state.loading = false;
-        // state.list = action.payload?.data?.data?.positions;
-        state.list = JSON.stringify(action.payload?.data?.data);
+      // state.list = action.payload?.data?.data?.positions;
+      state.list = JSON.stringify(action.payload?.data?.data);
     });
 
     builder.addCase(loadAllCategoryPositions.rejected, (state, action) => {
@@ -206,9 +233,9 @@ const positionStore = createSlice({
     });
 
     builder.addCase(loadAllPositions.fulfilled, (state, action) => {
-        state.loading = false;
-        // state.list = action.payload?.data?.data?.categories;
-        state.all_list = JSON.stringify(action.payload?.data?.data.positions);
+      state.loading = false;
+      // state.list = action.payload?.data?.data?.categories;
+      state.all_list = JSON.stringify(action.payload?.data?.data.positions);
     });
 
     builder.addCase(loadAllPositions.rejected, (state, action) => {
@@ -231,7 +258,7 @@ const positionStore = createSlice({
       state.loading = false;
       state.error = action.payload.message;
     });
-    
+
     // ====== builders for updatePositionStatus ======
 
     builder.addCase(updatePositionStatus.pending, (state) => {
@@ -246,7 +273,7 @@ const positionStore = createSlice({
       state.loading = false;
       state.error = action.payload.message;
     });
-    
+
     // ====== builders for unlinkFromCategories ======
 
     builder.addCase(unlinkFromCategories.pending, (state) => {

@@ -112,22 +112,34 @@ class MailContents
 
     public static function submitCompetencySubject(): string
     {
-        return "Competency Submitted";
+        return "Competency Review";
     }
 
-    public static function submitCompetencyMessage(): string
+    public static function submitCompetencyMessage(User $arUser): string
     {
-        return "<p>A new competency has been submitted.</p>";
+
+        $url = config("app.front_end_url");
+
+        return "<p>Please be informed that the {$arUser->full_name} with
+                    {$arUser->reg_id} has updated his competency
+                    module. </p>
+        <p>Kindly log on to the <a href=$url>MROIS Portal</a>
+                    to approve/ decline.</p>";
     }
 
-    public static function rejectedCompetencySubject(): string
+    public static function arStatusCompetencySubject(): string
     {
-        return "Competency Response Rejected";
+        return "Competency Review";
     }
 
-    public static function rejectedCompetencyMessage($reason): string
+    public static function arStatusCompetencyMessage(User $arUser, $competencyFramework): string
     {
-        return "<p>A new competency has been submitted.</p><p>Reason: {$reason}.</p>";
+        $url = config("app.front_end_url");
+
+        return "<p>Please be informed that the {$competencyFramework->name} update
+            has been “Approved” or “Declined” by the {$arUser->full_name}. </p>
+        <p>Kindly log on to the <a href=$url>MROIS Portal</a>
+                    to view.</p>";
     }
 
     public static function invoiceSubject(): string

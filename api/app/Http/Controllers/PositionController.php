@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\Utility;
 use App\Models\MembershipCategoryPostition;
 use App\Models\Position;
+use App\Models\PositionGroup;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -26,6 +27,21 @@ class PositionController extends Controller
         return successResponse('Positions Fetched Successfully', $data);
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function groupList()
+    {
+        $positions = PositionGroup::where('is_del', 0)->get()->toArray();
+        $converted_positions = Utility::arrayKeysToCamelCase($positions);
+
+        $data = [
+            'positions' => (array) $converted_positions,
+        ];
+        return successResponse('Positions Fetched Successfully', $data);
+    }
     /**
      * Display a listing of the resource.
      *

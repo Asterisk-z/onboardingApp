@@ -68,6 +68,7 @@ Route::group(['prefix' => 'auth'], function () {
 
 Route::get('/nationalities', [NationalityController::class, 'index']);
 Route::get('/positions', [PositionController::class, 'index']);
+Route::get('/position-group', [PositionController::class, 'groupList']);
 Route::get('/ar_roles', [RoleController::class, 'user_roles']);
 Route::get('/admin_roles', [RoleController::class, 'admin_roles']);
 Route::get('/categories', [MemberCategoryController::class, 'index']);
@@ -201,6 +202,7 @@ Route::middleware('auth')->group(function () {
         });
         // competency
         Route::group(['prefix' => 'meg/competency-framework'], function () {
+            Route::get('/list-group-name', [CompetencyController::class, 'listGroupName']);
             Route::get('/list-all', [CompetencyController::class, 'listAll']);
             Route::get('/list-compliant-ars/{id}', [CompetencyController::class, 'listCompliantArs']);
             Route::get('/list-non-complaint-ars/{id}', [CompetencyController::class, 'listNonCompliantArs']);

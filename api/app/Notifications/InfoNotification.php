@@ -91,9 +91,20 @@ class InfoNotification extends Notification implements ShouldQueue
         }
 
         if ($this->attachment) {
-            $mail = $mail->attach($this->attachment['saved_path'], [
-                'as' => $this->attachment['name'],
-            ]);
+            if (in_array("saved_path", $this->attachment) && in_array("name", $this->attachment)) {
+                $mail = $mail->attach($this->attachment['saved_path'], [
+                    'as' => $this->attachment['name'],
+                ]);
+            } else {
+                foreach ($this->attachment as $attachment) {
+                    if (in_array("saved_path", $attachment) && in_array("name", $attachment)) {
+                        $mail = $mail->attach($attachment['saved_path'], [
+                            'as' => $attachment['name'],
+                        ]);
+                    }
+                }
+            }
+
         }
 
         $displayName = null;

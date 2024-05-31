@@ -30,7 +30,11 @@ class AddColumnsToEventsTable extends Migration
     public function down()
     {
         Schema::table('events', function (Blueprint $table) {
-            //
+            $table->dropColumn('is_event_completed');
+            $table->dropColumn('is_sent_for_signing');
+            $table->dropColumn('cert_signature');
+            $table->dropColumn('presentation');
+            $table->dropColumn('signed_by');
         });
     }
 }

@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner} from "reactstrap";
+import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner } from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
 import { loadAllActiveCategories } from "redux/stores/memberCategory/category";
-import { loadAllActivePositions } from "redux/stores/positions/positionStore";
+import { loadAllActiveGroupPositions } from "redux/stores/positions/positionStore";
 import { createCompetency, loadAllCompetency } from "redux/stores/competency/competencyStore";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
@@ -14,30 +14,30 @@ import AdminCompetencyTable from './Tables/AdminCompetencyTable'
 
 
 const AdminCompetencyFramework = ({ drawer }) => {
-        
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const [parentState, setParentState] = useState('Initial state');
     const [loading, setLoading] = useState(false);
     const [modalForm, setModalForm] = useState(false);
-    
+
     const categories = useSelector((state) => state?.category?.list) || null;
-    const positions = useSelector((state) => state?.position?.all_list) || null;
+    const positions = useSelector((state) => state?.position?.all_group_list) || null;
     const competencies = useSelector((state) => state?.competency?.list) || null;
 
     useEffect(() => {
         dispatch(loadAllCompetency());
     }, [dispatch, parentState]);
-    
+
     useEffect(() => {
-        dispatch(loadAllActivePositions());
+        dispatch(loadAllActiveGroupPositions());
         dispatch(loadAllActiveCategories());
     }, [dispatch]);
 
-    
+
     const { register, handleSubmit, formState: { errors }, resetField } = useForm();
- 
+
     const toggleForm = () => setModalForm(!modalForm);
 
     const handleFormSubmit = async (values) => {
@@ -46,10 +46,10 @@ const AdminCompetencyFramework = ({ drawer }) => {
         formData.append('description', values.description)
         formData.append('position', values.position)
         formData.append('member_category', values.member_category)
-    
+
         try {
             setLoading(true);
-            
+
             const resp = await dispatch(createCompetency(formData));
 
             if (resp.payload?.message == "success") {
@@ -63,19 +63,19 @@ const AdminCompetencyFramework = ({ drawer }) => {
                     setParentState(Math.random())
                 }, 1000);
             } else {
-              setLoading(false);
+                setLoading(false);
             }
-            
-      } catch (error) {
-        setLoading(false);
-      }
 
-    }; 
-    
+        } catch (error) {
+            setLoading(false);
+        }
+
+    };
+
     const $categories = categories ? JSON.parse(categories) : null;
     const $positions = positions ? JSON.parse(positions) : null;
     const $competencies = competencies ? JSON.parse(competencies) : null;
-    
+
     const updateParentState = (newState) => {
         setParentState(newState);
     };
@@ -119,23 +119,23 @@ const AdminCompetencyFramework = ({ drawer }) => {
                 </BlockHead>
                 <Modal isOpen={modalForm} toggle={toggleForm}>
                     <ModalHeader toggle={toggleForm} close={
-                            <button className="close" onClick={toggleForm}>
-                                <Icon name="cross" />
-                            </button>
-                        }
+                        <button className="close" onClick={toggleForm}>
+                            <Icon name="cross" />
+                        </button>
+                    }
                     >
                         Create Competency
                     </ModalHeader>
                     <ModalBody>
-                        <form  onSubmit={handleSubmit(handleFormSubmit)}  className="is-alter" encType="multipart/form-data">
-                            
+                        <form onSubmit={handleSubmit(handleFormSubmit)} className="is-alter" encType="multipart/form-data">
+
                             <div className="form-group">
                                 <label className="form-label" htmlFor="name">
                                     Name
                                 </label>
                                 <div className="form-control-wrap">
-                                    <input type="text" id="name" className="form-control" {...register('name', { required: "This Field is required" })}  />
-                                    {errors.name && <span className="invalid">{ errors.name.message }</span>}
+                                    <input type="text" id="name" className="form-control" {...register('name', { required: "This Field is required" })} />
+                                    {errors.name && <span className="invalid">{errors.name.message}</span>}
                                 </div>
                             </div>
                             <div className="form-group">
@@ -153,13 +153,13 @@ const AdminCompetencyFramework = ({ drawer }) => {
                                 </label>
                                 <div className="form-control-wrap">
                                     <div className="form-control-select">
-                                        <select className="form-control form-select" id="member_category"  style={{ color: "black !important" }} {...register('member_category', { required: "This Field is Required" })}>
-                                        <option value="">Select Membership Category</option>
-                                        {$categories && $categories?.map((category) => (
-                                            <option key={category.id} value={category.id}>
-                                                {category.name}
-                                            </option>
-                                        ))}
+                                        <select className="form-control form-select" id="member_category" style={{ color: "black !important" }} {...register('member_category', { required: "This Field is Required" })}>
+                                            <option value="">Select Membership Category</option>
+                                            {$categories && $categories?.map((category) => (
+                                                <option key={category.id} value={category.id}>
+                                                    {category.name}
+                                                </option>
+                                            ))}
                                         </select>
                                         {errors.member_category && <p className="invalid">{`${errors.member_category.message}`}</p>}
                                     </div>
@@ -172,21 +172,21 @@ const AdminCompetencyFramework = ({ drawer }) => {
                                 <div className="form-control-wrap">
                                     <div className="form-control-select">
                                         <select className="form-control form-select" id="position" style={{ color: "black !important" }} {...register('position', { required: "THis Field is Required" })}>
-                                        <option value="">Select Position</option>
-                                        {$positions && $positions?.map((position) => (
-                                            <option key={position.id} value={position.id}>
-                                                {position.name}
-                                                {position.is_compulsory == '1' && <span style={{ color: 'red' }}>*</span>}
-                                            </option>
-                                        ))}
+                                            <option value="">Select Position</option>
+                                            {$positions && $positions?.map((position) => (
+                                                <option key={position.id} value={position.id}>
+                                                    {position.name}
+                                                    {position.is_compulsory == '1' && <span style={{ color: 'red' }}>*</span>}
+                                                </option>
+                                            ))}
                                         </select>
                                         {errors.positions && <p className="invalid">{`${errors.positions.message}`}</p>}
                                     </div>
                                 </div>
                             </div>
                             <div className="form-group">
-                                <Button color="primary" type="submit"  size="lg">
-                                    {loading ? ( <span><Spinner size="sm" color="light" /> Processing...</span>) : "Create"}
+                                <Button color="primary" type="submit" size="lg">
+                                    {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Create"}
                                 </Button>
                             </div>
                         </form>
@@ -210,7 +210,7 @@ const AdminCompetencyFramework = ({ drawer }) => {
                                 </BlockHead>
 
                                 <PreviewCard>
-                                    {$competencies && <AdminCompetencyTable  updateParent={updateParentState} parentState={parentState} data={$competencies} positions={$positions} categories={$categories} expandableRows pagination actions />}
+                                    {$competencies && <AdminCompetencyTable updateParent={updateParentState} parentState={parentState} data={$competencies} positions={$positions} categories={$categories} expandableRows pagination actions />}
                                 </PreviewCard>
                             </Block>
 

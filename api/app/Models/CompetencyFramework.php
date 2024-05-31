@@ -11,7 +11,7 @@ class CompetencyFramework extends Model
     protected $table = 'competency_frameworks';
     protected $guarded = [];
     protected $appends = ['active', 'ar_response'];
-    protected $with = ['position_obj', 'category_obj'];
+    protected $with = ['position_obj', 'position_group_obj', 'category_obj'];
 
     public function getActiveAttribute()
     {
@@ -26,6 +26,11 @@ class CompetencyFramework extends Model
     public function position_obj()
     {
         return $this->hasOne(Position::class, 'id', 'position');
+    }
+
+    public function position_group_obj()
+    {
+        return $this->hasOne(PositionGroup::class, 'id', 'position');
     }
 
     public function category_obj()

@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner} from "reactstrap";
+import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner } from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
-import { loadOverAllCompliantArs } from "redux/stores/competency/competencyStore";
+import { loadOverAllCompliantArs, loadAllCompetencyGroupName } from "redux/stores/competency/competencyStore";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
 import AdminCompetencyAllARTable from './Tables/AdminCompetencyAllARTable'
@@ -12,21 +12,25 @@ import AdminCompetencyAllARTable from './Tables/AdminCompetencyAllARTable'
 
 
 const AdminCompliantArs = ({ drawer }) => {
-        
+
     const dispatch = useDispatch();
 
     const navigate = useNavigate();
 
     const [parentState, setParentState] = useState('Initial state');
-    
+
     const compliant_ars = useSelector((state) => state?.competency?.list_all_com_ars) || null;
-    
+    const list_com_group_name = useSelector((state) => state?.competency?.list_com_group_name) || null;
+
+
     useEffect(() => {
+        dispatch(loadAllCompetencyGroupName());
         dispatch(loadOverAllCompliantArs());
     }, [dispatch, parentState]);
-    
+
     const $compliant_ars = compliant_ars ? JSON.parse(compliant_ars) : null;
-    
+    const $list_com_group_name = list_com_group_name ? JSON.parse(list_com_group_name) : null;
+
     const updateParentState = (newState) => {
         setParentState(newState);
     };
@@ -49,7 +53,7 @@ const AdminCompliantArs = ({ drawer }) => {
                                     <ul className="nk-block-tools g-3">
                                         <li className="nk-block-tools-opt">
                                             <Button color="primary">
-                                                <span onClick={(e) => navigate(process.env.PUBLIC_URL+'/admin-competency-framework')}>Back</span>
+                                                <span onClick={(e) => navigate(process.env.PUBLIC_URL + '/admin-competency-framework')}>Back</span>
                                             </Button>
                                         </li>
                                     </ul>
@@ -73,7 +77,7 @@ const AdminCompliantArs = ({ drawer }) => {
                                 </BlockHead>
 
                                 <PreviewCard>
-                                    {$compliant_ars && <AdminCompetencyAllARTable parentState={parentState} data={$compliant_ars}  expandableRows pagination actions />}
+                                    {$compliant_ars && <AdminCompetencyAllARTable parentState={parentState} data={$compliant_ars} expandableRows pagination actions />}
                                 </PreviewCard>
                             </Block>
 

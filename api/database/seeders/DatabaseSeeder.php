@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(Countries::class);
+        $this->call(PositionGroupSeed::class);
         $this->call(MembershipCategories::class);
         $this->call(Positions::class);
         $this->call(LinkGroupMailSeeder::class);
@@ -29,5 +30,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ReasonSeeder::class);
         $this->call(AccountDetailsSeeder::class);
         $this->call(FmdqSystemSeeder::class);
+        $this->call(CompetencyFrameworkSeed::class);
     }
 }
