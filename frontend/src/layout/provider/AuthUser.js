@@ -16,7 +16,7 @@ const checkUser = (type, role) => {
 
   const admin_type = ['MSG', 'MEG', 'FSD', 'MBG', 'BLG', 'MEG2', 'BIG', 'FMDQ HELPDESK', 'FMDQ STAKEHOLDER']
   const user_type = ['AR INPUTER', 'AR AUTHORISER']
-  console.log(role)
+
   if (type == 'user') {
     if (!user_type.includes(role)) {
       window.location.href = `${process.env.PUBLIC_URL}/admin-dashboard`;

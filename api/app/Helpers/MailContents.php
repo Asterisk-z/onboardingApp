@@ -149,7 +149,7 @@ class MailContents
     {
         $url = config("app.front_end_url");
 
-        return "<p>Please be informed that the {$competencyFramework->name} update
+        return "<p>Please be informed that the {$competencyFramework->name}
             has been “Approved” or “Declined” by the {$arUser->full_name}. </p>
         <p>Kindly log on to the <a href=$url>MROIS Portal</a>
                     to view.</p>";

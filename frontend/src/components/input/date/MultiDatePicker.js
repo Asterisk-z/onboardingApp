@@ -17,7 +17,7 @@ const MultiDatePicker = ({ id, nameAttr, changeAction, max, properties }) => {
       <DatePicker inputClass="form-control" containerClassName="custom-container"
         multiple
         value={values}
-        // format="MM DDDD YYYY"
+        format="DD/MM/YYYY"
         name={inputName}
         id={id}
         minDate={min}

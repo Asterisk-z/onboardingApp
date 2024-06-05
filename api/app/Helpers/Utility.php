@@ -4,6 +4,7 @@ namespace App\Helpers;
 use App\Mail\FinalApplicationMail;
 use App\Mail\NotificationMail;
 use App\Models\Application;
+use App\Models\Education\EventRegistration;
 use App\Models\Invoice;
 use App\Models\MembershipCategoryPostition;
 use App\Models\Position;
@@ -557,4 +558,125 @@ class Utility
     {
         return Str::of(Str::slug($name, '-'))->upper() . "." . pathinfo($path, PATHINFO_EXTENSION);
     }
+
+    public static function applicationReport()
+    {
+
+        $data = Application::where('applications.institution_id', '!=', null);
+        $data = Utility::applicationDetails($data);
+        $data = $data->get();
+
+        $table = "<table>
+                    <thead>
+                        <tr>
+                            <th scope='col'>Membership ID</th>
+                            <th scope='col'>Institution</th>
+                            <th scope='col'>Category</th>
+                            <th scope='col'>Address</th>
+                            <th scope='col'>Phone Number</th>
+                            <th scope='col'>Email address</th>
+                            <th scope='col'>Website</th>
+                            <th scope='col'>Status</th>
+                            <th scope='col'>Sign-on date</th>
+                        <tr>
+                    </thead>
+                    <tbody>";
+        foreach ($data as $setData) {
+
+            $application = Application::find($setData->application_id);
+
+            $table .= "<tr>
+                                    <td scope='row'>{$application->reg_id}</td>
+                                    <td>{$setData->companyName}</td>
+                                    <td>{$setData->category_name}</td>
+                                    <td>{$setData->registeredOfficeAddress}</td>
+                                    <td>{$setData->companyTelephoneNumber}</td>
+                                    <td>{$setData->companyEmailAddress}</td>
+                                    <td>{$setData->corporateWebsiteAddress}</td>
+                                    <td>{$setData->status_description}</td>
+                                    <td>{$application->created_at}</td>
+                                </tr>";
+        }
+
+        $table .= "</tbody>
+                    </table>";
+        return $table;
+
+    }
+    public static function educationReport()
+    {
+        // $records = EventRegistration::with(['user', 'event'])->where('is_del', 0)->where('event_id', $event->id)->latest()->get();
+        $records = EventRegistration::with(['user', 'event'])->where('is_del', 0)->latest()->get();
+
+        $table = "<table>
+                    <thead>
+                        <tr>
+                            <th scope='col'>Registrant</th>
+                            <th scope='col'>Email</th>
+                            <th scope='col'>Event Name</th>
+                            <th scope='col'>Event Description</th>
+                            <th scope='col'>Date</th>
+                            <th scope='col'>Status</th>
+                            <th scope='col'>Fee</th>
+                        <tr>
+                    </thead>
+                    <tbody>";
+        foreach ($records as $setData) {
+
+            $table .= "<tr>
+                                    <td  scope='row'>{$setData->user->full_name}</td>
+                                    <td>{$setData->user->email}</td>
+                                    <td>{$setData->event->name}</td>
+                                    <td>{$setData->event->description}</td>
+                                    <td>{$setData->event->date}</td>
+                                    <td>{$setData->status}</td>
+                                    <td>{$setData->event->fee}</td>
+                                </tr>";
+        }
+
+        $table .= "</tbody>
+                    </table>";
+            return $table;
+
+    }
+    public static function representativeReport()
+    {
+        $query = User::whereNotNull('institution_id');
+        $query = $query->whereIn('role_id', [Role::ARAUTHORISER, Role::ARINPUTTER]);
+
+
+            $users = $query->latest()->get();
+            $table = "<table>
+                        <thead>
+                            <tr>
+                                <th scope='col'>Surname</th>
+                                <th scope='col'>First name</th>
+                                <th scope='col'>Institution</th>
+                                <th scope='col'>Category</th>
+                                <th scope='col'>Position</th>
+                                <th scope='col'>Email address</th>
+                                <th scope='col'>Phone number</th>
+                            <tr>
+                        </thead>
+                        <tbody>";
+            foreach ($users as $setData) {
+
+                $table .= "<tr>
+                                        <td  scope='row'>{$setData->last_name}</td>
+                                        <td>{$setData->first_name}</td>
+                                        <td>{$setData->institution->name}</td>
+                                        <td>{$setData->category->name}</td>
+                                        <td>{$setData->position->name}</td>
+                                        <td>{$setData->email}</td>
+                                        <td>{$setData->phone}</td>
+                                    </tr>";
+            }
+
+            $table .= "</tbody>
+                        </table>";
+            return $table;
+
+
+    }
+
 }

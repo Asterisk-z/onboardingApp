@@ -51,42 +51,7 @@ class ApplicationProcessController extends Controller
         $data = Utility::applicationDetails($data);
         $data = $data->get();
 
-        $table = "<table>
-            <thead>
-                <tr>
-                    <th scope='col'>Membership ID</th>
-                    <th scope='col'>Institution</th>
-                    <th scope='col'>Category</th>
-                    <th scope='col'>Address</th>
-                    <th scope='col'>Phone Number</th>
-                    <th scope='col'>Email address</th>
-                    <th scope='col'>Website</th>
-                    <th scope='col'>Status</th>
-                    <th scope='col'>Sign-on date</th>
-                <tr>
-            </thead>
-            <tbody>";
-        foreach ($data as $setData) {
-
-            $application = Application::find($setData->application_id);
-
-            $table .= "<tr>
-                            <td scope='row'>{$application->reg_id}</td>
-                            <td>{$setData->companyName}</td>
-                            <td>{$setData->category_name}</td>
-                            <td>{$setData->registeredOfficeAddress}</td>
-                            <td>{$setData->companyTelephoneNumber}</td>
-                            <td>{$setData->companyEmailAddress}</td>
-                            <td>{$setData->corporateWebsiteAddress}</td>
-                            <td>{$setData->status_description}</td>
-                            <td>{$application->created_at}</td>
-                        </tr>";
-        }
-
-        $table .= "</tbody>
-            </table>";
-
-        return successResponse("Here you go", ['report' => ApplicationResource::collection($data),  'report_url' => route('downloadReport', base64_encode($table))]);
+        return successResponse("Here you go", ['report' => ApplicationResource::collection($data), 'report_url' => route('downloadReport', 'application_report')]);
     }
 
     public function get_application(Request $request)

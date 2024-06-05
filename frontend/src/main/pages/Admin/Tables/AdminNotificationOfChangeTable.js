@@ -380,11 +380,11 @@ const SendFeedback = ({ updateParentParent, complaint, stakeholders }) => {
                         </thead>
                         <tbody>
                             <tr>
-                                <td>Subject</td>
+                                <td>Notification Of Change Subject</td>
                                 <td className="text-capitalize">{`${complaint.subject}`}</td>
                             </tr>
                             <tr>
-                                <td>Summery</td>
+                                <td>Summary Explanation</td>
                                 <td className="text-capitalize">{`${complaint.summary}`}</td>
                             </tr>
                             <tr>
@@ -562,14 +562,14 @@ const ComplaintTableUser = ({ data, pagination, actions, className, selectableRo
             wrap: true
         },
         {
-            name: "Subject",
+            name: "Change Subject",
             selector: (row) => row.subject,
             sortable: true,
             width: "auto",
             wrap: true
         },
         {
-            name: "AR No.",
+            name: "AR Number",
             selector: (row) => row.requester?.reg_id,
             sortable: true,
             width: "auto",

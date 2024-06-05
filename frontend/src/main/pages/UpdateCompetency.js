@@ -148,7 +148,7 @@ const UpdateCompetency = ({ drawer }) => {
                                                         </> : <>
                                                             <div className="flex">
                                                                 <CardLink className="btn btn-primary" color="primary">{competency.ar_response.status == 'pending' ? `Awaiting CCO Approval` : `Approved by CCO`}</CardLink>
-                                                                <CardLink href={competency?.ar_response?.evidence_file} className="btn btn-primary" color="primary" target="_blank">{competency.ar_response.status == 'pending' ? `View` : `Approved by CCO`}</CardLink>
+                                                                <CardLink href={competency?.ar_response?.evidence_file} className="btn btn-primary" color="primary" target="_blank">{`View`}</CardLink>
                                                             </div>
                                                         </>}
                                                     </CardBody>

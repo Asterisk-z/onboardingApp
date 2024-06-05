@@ -271,7 +271,7 @@ const DropdownTrans = (props) => {
                 <td className="text-capitalize">{`${complaint.subject}`}</td>
               </tr>
               <tr>
-                <td>Summery</td>
+                <td>Summary</td>
                 <td className="text-capitalize">{`${complaint.summary}`}</td>
               </tr>
               <tr>
@@ -318,7 +318,7 @@ const DropdownTrans = (props) => {
                 </tr>
               </>}
               <tr>
-                <td>Status</td>
+                <td>Request Status</td>
                 <td className="text-capitalize">{`${complaint.status}`}</td>
               </tr>
 
@@ -448,7 +448,7 @@ const ComplaintTableUser = ({ data, pagination, actions, className, selectableRo
       sortable: true,
     },
     {
-      name: "Status",
+      name: "Request Status",
       selector: (row) => { return (<><Badge color="success" className="text-uppercase">{`${row.status}`}</Badge></>) },
       sortable: true,
     },

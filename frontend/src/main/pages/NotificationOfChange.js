@@ -27,7 +27,7 @@ const NotificationOfChange = ({ drawer }) => {
     const [complainFile, setComplainFile] = useState([]);
     const [sm, updateSm] = useState(false);
     const [modalForm, setModalForm] = useState(false);
-    const { register, handleSubmit, formState: { errors }, resetField } = useForm();
+    const { register, handleSubmit, formState: { errors }, resetField, setError, clearErrors } = useForm();
 
     const [parentState, setParentState] = useState('Initial state');
     const toggleParent = (newState) => {
@@ -93,6 +93,14 @@ const NotificationOfChange = ({ drawer }) => {
         setComplainFile(event.target.files[0]);
     };
 
+    const checkLength = (event, field) => {
+        if (event.target.value.length > 200) {
+            setError(field, { type: 'fieldLength', message: 'The characters can not be more than 200 characters' }, { shouldFocus: true });
+        } else {
+            clearErrors(`${field}.fieldLength`)
+        }
+    };
+
 
     const list_ar_changes = useSelector((state) => state?.change?.list_ar_changes) || null;
     useEffect(() => {
@@ -145,7 +153,7 @@ const NotificationOfChange = ({ drawer }) => {
                                     Change Subject
                                 </label>
                                 <div className="form-control-wrap">
-                                    <input type="text" className="form-control" {...register('subject', { required: "This Field is Required" })} />
+                                    <input type="text" className="form-control" {...register('subject', { required: "This Field is Required" })} onBlur={(event) => checkLength(event, 'subject')} />
                                     {errors.subject && <p className="invalid">{`${errors.subject.message}`}</p>}
                                 </div>
                             </div>
@@ -154,7 +162,7 @@ const NotificationOfChange = ({ drawer }) => {
                                     Summary Explanation Of Change
                                 </label>
                                 <div className="form-control-wrap">
-                                    <textarea type="text" className="form-control" {...register('summary', { required: "This Field is Required" })}></textarea>
+                                    <textarea type="text" className="form-control" {...register('summary', { required: "This Field is Required" })} onBlur={(event) => checkLength(event, 'summary')}></textarea>
                                     {errors.summary && <p className="invalid">{`${errors.summary.message}`}</p>}
                                 </div>
                             </div>

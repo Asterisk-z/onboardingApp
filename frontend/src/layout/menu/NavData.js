@@ -223,12 +223,6 @@ const navData = [{
   },
   {
     icon: "tile-thumb-fill",
-    text: "Disciplinary and Sanctions History",
-    access: ['cco'],
-    link: "/sanctions",
-  },
-  {
-    icon: "tile-thumb-fill",
     text: "Regulators",
     link: "/regulators",
   },
@@ -260,10 +254,6 @@ const navData = [{
       text: "Update Competency",
       link: "/update-competency",
     },
-    {
-      text: "Approve Competency",
-      link: "/approve-competency",
-    },
     ],
   },
   {
@@ -281,22 +271,6 @@ const navData = [{
     text: "Notification Of Change",
     link: "/notification-of-change",
   },
-    // {
-    //   icon: "tile-thumb-fill",
-    //   text: "FMDQ Fees and Dues",
-    //   link: "/fees-framework",
-    // },
-    // {
-    // icon: "tile-thumb-fill",
-    // text: "Projects",
-    // active: false,
-    // subMenu: [
-    //     {
-    //       text: "Project Item",
-    //       link: "/dashboard",
-    //     },
-    //   ],
-    // },
   ],
 },
 ];

@@ -66,7 +66,7 @@ const AdminEvents = ({ drawer }) => {
                                         <ul className="nk-block-tools g-3">
                                             <li className="nk-block-tools-opt">
                                                 <Button color="primary">
-                                                    <span onClick={(e) => navigate(process.env.PUBLIC_URL + '/admin-create-event')}>Add new Event</span>
+                                                    <span onClick={(e) => navigate(process.env.PUBLIC_URL + '/admin-create-event')}>Add New Event</span>
                                                 </Button>
                                             </li>
                                         </ul>

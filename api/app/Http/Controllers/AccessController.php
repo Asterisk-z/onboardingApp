@@ -35,11 +35,10 @@ class AccessController extends Controller
             $user = User::firstOrCreate(['email' => $access->email], User::STAKEHOLDER_DATA($access->email));
             $user->approval_status = 'approved';
             $user->save();
-
+            logAction($user->email, 'Stake holder access status updated', "Access Request.", $request->ip());
         }
 
-        logAction($user->email, 'Stake holder access status updated', "Access Request.", $request->ip());
+        return successResponse("Access Status Updated Successfully", []);
 
-        return successResponse("Access Granted Successfully", []);
     }
 }

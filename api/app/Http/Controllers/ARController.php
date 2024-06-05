@@ -69,36 +69,7 @@ class ARController extends Controller
 
         $users = $query->latest()->get();
 
-        $table = "<table>
-            <thead>
-                <tr>
-                    <th scope='col'>Surname</th>
-                    <th scope='col'>First name</th>
-                    <th scope='col'>Institution</th>
-                    <th scope='col'>Category</th>
-                    <th scope='col'>Position</th>
-                    <th scope='col'>Email address</th>
-                    <th scope='col'>Phone number</th>
-                <tr>
-            </thead>
-            <tbody>";
-        foreach ($users as $setData) {
-
-            $table .= "<tr>
-                            <td  scope='row'>{$setData->last_name}</td>
-                            <td>{$setData->first_name}</td>
-                            <td>{$setData->institution->name}</td>
-                            <td>{$setData->category->name}</td>
-                            <td>{$setData->position->name}</td>
-                            <td>{$setData->email}</td>
-                            <td>{$setData->phone}</td>
-                        </tr>";
-        }
-
-        $table .= "</tbody>
-            </table>";
-
-        return successResponse('Successful', ['report' => UserResource::collection($users), 'report_url' => route('downloadReport', base64_encode($table))]);
+        return successResponse('Successful', ['report' => UserResource::collection($users), 'report_url' => route('downloadReport', 'representation_report')]);
     }
 
     public function list(Request $request)

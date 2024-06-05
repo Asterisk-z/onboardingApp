@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import navData from "./NavData";
+import arCCONavData from "./ArCCONavData";
 import arApplication from "./ArApplications";
 import { NavLink, Link } from "react-router-dom";
 import Icon from "../../components/icon/Icon";
@@ -19,12 +20,12 @@ const MenuItem = ({ icon, link, text, sub, subPanel, panel, newTab, mobileView, 
 
   const toggleActionSidebar = (e) => (!sub && !newTab && mobileView) ? sidebarToggle(e) : null;
 
-  currentUrl = (window.location.pathname !== undefined) ?  window.location.pathname : null;
+  currentUrl = (window.location.pathname !== undefined) ? window.location.pathname : null;
 
   const menuHeight = (el) => {
     var totalHeight = [];
     for (var i = 0; i < el.length; i++) {
-      var margin =  parseInt(window.getComputedStyle(el[i]).marginTop.slice(0, -2)) + parseInt(window.getComputedStyle(el[i]).marginBottom.slice(0, -2));
+      var margin = parseInt(window.getComputedStyle(el[i]).marginTop.slice(0, -2)) + parseInt(window.getComputedStyle(el[i]).marginBottom.slice(0, -2));
       var padding = parseInt(window.getComputedStyle(el[i]).paddingTop.slice(0, -2)) + parseInt(window.getComputedStyle(el[i]).paddingBottom.slice(0, -2));
       var height = el[i].clientHeight + margin + padding;
       totalHeight.push(height);
@@ -32,7 +33,7 @@ const MenuItem = ({ icon, link, text, sub, subPanel, panel, newTab, mobileView, 
     totalHeight = totalHeight.reduce((sum, value) => (sum += value));
     return totalHeight;
   };
-  
+
   const makeParentActive = (el, childHeight) => {
     let element = el.parentElement.parentElement.parentElement;
     let wrap = el.parentElement.parentElement;
@@ -170,14 +171,14 @@ const PanelItem = ({ icon, link, text, subPanel, index, data, setMenuData, ...pr
     "nk-menu-item": true,
   });
 
-    return (
-      <React.Fragment>
-        {subPanel.map((item) => (
-          <MenuItem key={item.text} link={item.link} icon={item.icon} text={item.text} sub={item.subMenu} badge={item.badge} />
-        ))}
-      </React.Fragment>
-    );
-  
+  return (
+    <React.Fragment>
+      {subPanel.map((item) => (
+        <MenuItem key={item.text} link={item.link} icon={item.icon} text={item.text} sub={item.subMenu} badge={item.badge} />
+      ))}
+    </React.Fragment>
+  );
+
 };
 
 const MenuSub = ({ icon, link, text, sub, sidebarToggle, mobileView, ...props }) => {
@@ -192,27 +193,33 @@ const MenuSub = ({ icon, link, text, sub, sidebarToggle, mobileView, ...props })
 
 
 const UserMenu = ({ sidebarToggle, mobileView }) => {
-    const authUser = useUser();
-    const authUserUpdate = useUserUpdate();
-  const [data, setMenuData] = useState(arApplication); 
+  const authUser = useUser();
+  const authUserUpdate = useUserUpdate();
+  const [data, setMenuData] = useState(arApplication);
+
 
   useEffect(() => {
     if (authUser?.user_data?.institution?.application[0].completed_at) {
-      setMenuData(navData)
+
+      if (authUser?.is_position_cco()) {
+        setMenuData(arCCONavData)
+      } else {
+        setMenuData(navData)
+      }
     } else {
       setMenuData(arApplication)
     }
   }, [authUser]);
 
-    return (
-      <ul className="nk-menu">
-        {data.map((item, index) =>
-          item.heading ? (<MenuHeading heading={item.heading} key={item.heading} />) : (item.panel && !item.isAdmin) ? (
-            <PanelItem key={item.text} link={item.link} icon={item.icon} text={item.text} index={index} panel={item.panel} subPanel={item.subPanel} data={data} setMenuData={setMenuData} sidebarToggle={sidebarToggle}/>
-          ) : ''
-        )}
-      </ul>
-    );
+  return (
+    <ul className="nk-menu">
+      {data.map((item, index) =>
+        item.heading ? (<MenuHeading heading={item.heading} key={item.heading} />) : (item.panel && !item.isAdmin) ? (
+          <PanelItem key={item.text} link={item.link} icon={item.icon} text={item.text} index={index} panel={item.panel} subPanel={item.subPanel} data={data} setMenuData={setMenuData} sidebarToggle={sidebarToggle} />
+        ) : ''
+      )}
+    </ul>
+  );
 };
 
 export default UserMenu;

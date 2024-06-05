@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Utility;
 use App\Models\SystemSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -16,16 +17,30 @@ class SystemController extends Controller
     {
 
         $pdf = App::make('dompdf.wrapper');
+        $tableData = null;
 
-        $dataTable = base64_decode($data);
+        if ($data == 'application_report') {
+            $tableData = Utility::applicationReport();
+        }
 
-        // dd($dataTable);
+        if ($data == 'education_report') {
+            $tableData = Utility::educationReport();
+        }
 
-        // return view('report', compact('dataTable'));
+        if ($data == 'representation_report') {
+            $tableData = Utility::representativeReport();
+        }
 
-        $pdf->loadView('report', compact('dataTable'))->setPaper(array(0, 0, 800, 480));
+        if ($tableData) {
 
-        return $pdf->download('report.pdf');
+            $dataTable = $tableData;
+
+            // dd($tableData);
+
+            $pdf->loadView('report', compact('dataTable'))->setPaper(array(0, 0, 800, 480));
+
+            return $pdf->download('report.pdf');
+        }
 
     }
 
