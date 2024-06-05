@@ -83,13 +83,13 @@ const AdminCompetencyFramework = ({ drawer }) => {
 
     return (
         <React.Fragment>
-            <Head title="Competency Framework"></Head>
+            <Head title="Competency"></Head>
             <Content>
                 <BlockHead size="sm">
                     <BlockBetween>
                         <BlockHeadContent>
                             <BlockTitle page tag="h3">
-                                Competency Framework
+                                Competency
                             </BlockTitle>
                         </BlockHeadContent>
                         <BlockHeadContent>

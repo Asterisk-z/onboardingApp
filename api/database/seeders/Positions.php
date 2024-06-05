@@ -76,12 +76,15 @@ class Positions extends Seeder
             ["name" => "Primary Contact(s)", "position_group_id" => 21],
             ["name" => "Treasurer/Chief Financial Officer", "can_be_authorizer" => true, "position_group_id" => 15],
             // Added By developer
-            ["name" => "Head ALM Officer", "position_group_id" => 16],
-            ["name" => "Head, Brokerage Operations", "position_group_id" => 17],
+            // ["name" => "Head ALM Officer", "position_group_id" => 16],
+            // ["name" => "Head, Brokerage Operations", "position_group_id" => 17],
         ];
 
         foreach ($positions as $position) {
             if (Position::where('name', $position['name'])->exists()) {
+                // $pposition = Position::where('name', $position['name'])->first();
+                // $pposition->position_group_id = $position['position_group_id'];
+                // $pposition->save();
                 continue;
             }
 

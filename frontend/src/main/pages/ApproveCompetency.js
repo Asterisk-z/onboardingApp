@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner} from "reactstrap";
+import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner } from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
-import {  loadCCOArCompetency } from "redux/stores/competency/competencyStore";
+import { loadCCOArCompetency } from "redux/stores/competency/competencyStore";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
 import ApproveCompetencyTable from './Tables/ApproveCompetencyTable'
@@ -13,10 +13,10 @@ import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 
 
 const ApproveCompetency = ({ drawer }) => {
-        
+
     const authUser = useUser();
     const authUserUpdate = useUserUpdate();
-    
+
     if (authUser.is_position_cco()) {
         const [counter, setCounter] = useState(false);
         const dispatch = useDispatch();
@@ -27,10 +27,10 @@ const ApproveCompetency = ({ drawer }) => {
         useEffect(() => {
             dispatch(loadCCOArCompetency());
         }, [dispatch, parentState]);
-    
-        
+
+
         const $competencies = competencies ? JSON.parse(competencies) : null;
-        
+
         const updateParentState = (newState) => {
             setParentState(newState);
         };
@@ -38,13 +38,13 @@ const ApproveCompetency = ({ drawer }) => {
 
         return (
             <React.Fragment>
-                <Head title="Approve Competency Framework"></Head>
+                <Head title="Approve Competency"></Head>
                 <Content>
                     <BlockHead size="sm">
                         <BlockBetween>
                             <BlockHeadContent>
                                 <BlockTitle page tag="h3">
-                                    Approve Competency Framework
+                                    Approve Competency
                                 </BlockTitle>
                             </BlockHeadContent>
                         </BlockBetween>
@@ -74,7 +74,7 @@ const ApproveCompetency = ({ drawer }) => {
                 </Content>
             </React.Fragment>
         );
-     } else {
+    } else {
 
         return (
             <React.Fragment>

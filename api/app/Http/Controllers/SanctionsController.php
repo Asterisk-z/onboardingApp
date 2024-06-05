@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Helpers\MailContents;
 use App\Helpers\ResponseStatusCodes;
+use App\Helpers\Utility;
 use App\Http\Resources\SanctionResource;
 use App\Models\Role;
 use App\Models\Sanction;
+use App\Models\SanctionType;
 use App\Models\User;
 use App\Notifications\InfoNotification;
 use App\Rules\ValidArRole;
@@ -24,6 +26,21 @@ class SanctionsController extends Controller
         return successResponse('Successful', SanctionResource::collection($sanctions));
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function indexTypes()
+    {
+        $sanction_type = SanctionType::where('is_del', '0')->orderBy('name', 'DESC')->get();
+        $converted_sanction_type = Utility::arrayKeysToCamelCase($sanction_type);
+
+        $data = [
+            'sanction_type' => (array) $converted_sanction_type,
+        ];
+        return successResponse('Sanction Types Fetched Successfully', $data);
+    }
     //
     public function mySanction()
     {
@@ -40,6 +57,7 @@ class SanctionsController extends Controller
         $request->validate([
             "ar" => ["required", "string", new ValidArRole],
             "ar_summary" => "required|string",
+            "type_id" => "required",
             "sanction_summary" => "required|string",
             "evidence" => "required|mimes:pdf",
         ]);
@@ -50,6 +68,7 @@ class SanctionsController extends Controller
         $sanction = Sanction::create([
             'ar' => $request->input('ar'),
             'ar_summary' => $request->input('ar_summary'),
+            'type_id' => $request->input('type_id'),
             'sanction_summary' => $request->input('sanction_summary'),
             'evidence' => $attachment,
             'created_by' => auth()->user()->email,
@@ -62,14 +81,21 @@ class SanctionsController extends Controller
         //
         $ar = User::where('id', $request->ar)->first();
         $ar_name = $ar->first_name . ' ' . $ar->last_name;
+        $ar_reg = $ar->reg_id;
         $ar_summary = $request->ar_summary;
         $sanction_summary = $request->sanction_summary;
 
+        $ars = User::where(function ($query) {
+            $query->where('role_id', Role::ARINPUTTER)
+                ->orWhere('role_id', Role::ARAUTHORISER);
+        })->where('approval_status', 'approved')->get();
+
         $megs = User::where(function ($query) {
-            $query->where('role_id', Role::ARINPUTTER)->orWhere('role_id', Role::ARAUTHORISER);
+            $query->where('role_id', Role::MEG);
         })->where('approval_status', 'approved')->get();
         //
-        Notification::send($megs, new InfoNotification(MailContents::newSanctionMessage($ar_name, $ar_summary, $sanction_summary), MailContents::newSanctionMessageSubject()));
+        // Notification::send($ars, new InfoNotification(MailContents::newSanctionMessage($ar_name, $ar_summary, $sanction_summary), MailContents::newSanctionMessageSubject()));
+        Notification::send($megs, new InfoNotification(MailContents::newMegSanctionMessage($ar_reg, $ar_name), MailContents::newMegSanctionMessageSubject()));
         //
         return successResponse('Sanction successfully created', $sanction);
     }

@@ -36,7 +36,7 @@ const AdminCompliantArs = ({ drawer }) => {
 
     return (
         <React.Fragment>
-            <Head title="Compliant Ars - Competency Framework"></Head>
+            <Head title="Compliant Ars - Competency"></Head>
             <Content>
                 <BlockHead size="sm">
                     <BlockBetween>

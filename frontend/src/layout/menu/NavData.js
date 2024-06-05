@@ -63,7 +63,7 @@ const navData = [{
   },
   {
     icon: "dashboard-fill",
-    text: "Competency Framework",
+    text: "Competency",
     link: "/admin-competency-framework",
   },
   {
@@ -254,7 +254,7 @@ const navData = [{
   },
   {
     icon: "tile-thumb-fill",
-    text: "Competency Framework",
+    text: "Competency",
     active: false,
     subMenu: [{
       text: "Update Competency",

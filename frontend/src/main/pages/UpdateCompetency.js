@@ -41,7 +41,7 @@ const UpdateCompetency = ({ drawer }) => {
 
         try {
             setLoading(true);
-            
+
             const resp = await dispatch(sendCompetency(formData));
 
             if (resp.payload?.message == "success") {
@@ -75,7 +75,7 @@ const UpdateCompetency = ({ drawer }) => {
                     <BlockBetween>
                         <BlockHeadContent>
                             <BlockTitle page tag="h3">
-                                Competency Framework
+                                Competency
                             </BlockTitle>
                         </BlockHeadContent>
                     </BlockBetween>
@@ -128,7 +128,7 @@ const UpdateCompetency = ({ drawer }) => {
                                                                 </div> */}
                                                             </div>
                                                             <div className="form-group">
-                                                                
+
                                                             </div>
                                                         </form>
                                                     </ModalBody>

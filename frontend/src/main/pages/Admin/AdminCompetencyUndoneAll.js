@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner} from "reactstrap";
+import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner } from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
 import { loadOverAllNonCompliantArs } from "redux/stores/competency/competencyStore";
 import Content from "layout/content/Content";
@@ -12,21 +12,21 @@ import AdminCompetencyAllARTable from './Tables/AdminCompetencyAllARTable'
 
 
 const AdminNonCompliantArsAll = ({ drawer }) => {
-        
+
     const dispatch = useDispatch();
-    
+
     const navigate = useNavigate();
 
     const [parentState, setParentState] = useState('Initial state');
-    
+
     const non_compliant_ars = useSelector((state) => state?.competency?.list_all_non_com_ars) || null;
 
     useEffect(() => {
         dispatch(loadOverAllNonCompliantArs());
     }, [dispatch, parentState]);
-    
+
     const $non_compliant_ars = non_compliant_ars ? JSON.parse(non_compliant_ars) : null;
-    
+
     const updateParentState = (newState) => {
         setParentState(newState);
     };
@@ -34,7 +34,7 @@ const AdminNonCompliantArsAll = ({ drawer }) => {
 
     return (
         <React.Fragment>
-            <Head title="Non Compliant Ars - Competency Framework"></Head>
+            <Head title="Non Compliant Ars - Competency"></Head>
             <Content>
                 <BlockHead size="sm">
                     <BlockBetween>
@@ -49,7 +49,7 @@ const AdminNonCompliantArsAll = ({ drawer }) => {
                                     <ul className="nk-block-tools g-3">
                                         <li className="nk-block-tools-opt">
                                             <Button color="primary">
-                                                <span onClick={(e) => navigate(process.env.PUBLIC_URL+'/admin-competency-framework')}>Back</span>
+                                                <span onClick={(e) => navigate(process.env.PUBLIC_URL + '/admin-competency-framework')}>Back</span>
                                             </Button>
                                         </li>
                                     </ul>
@@ -73,7 +73,7 @@ const AdminNonCompliantArsAll = ({ drawer }) => {
                                 </BlockHead>
 
                                 <PreviewCard>
-                                    {$non_compliant_ars && <AdminCompetencyAllARTable  parentState={parentState} data={$non_compliant_ars}  expandableRows pagination actions />}
+                                    {$non_compliant_ars && <AdminCompetencyAllARTable parentState={parentState} data={$non_compliant_ars} expandableRows pagination actions />}
                                 </PreviewCard>
                             </Block>
 

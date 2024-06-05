@@ -105,9 +105,22 @@ class MailContents
 
         <ul>
             <li><strong>AR:</strong> {$ar_name}</li>
-            <li>AR Summary<strong>{$ar_summary}</strong></li>
-            <li>Sanction Summary<strong>{$sanction_summary}</strong></li>
+            <li>AR Summary: <strong>{$ar_summary}</strong></li>
+            <li>Sanction Summary: <strong>{$sanction_summary}</strong></li>
         </ul>";
+    }
+
+    public static function newMegSanctionMessageSubject(): string
+    {
+        return "New Disciplinary & Sanctions Record";
+    }
+
+    public static function newMegSanctionMessage($ar_reg, $ar_name): string
+    {
+        $url = config("app.front_end_url");
+        return "<p>Please be informed that the {$ar_reg} Of {$ar_name} has been sanction for an infraction. <br>
+        Kindly log on to the <a href=$url>MROIS Portal</a>
+                    to view change </p>";
     }
 
     public static function submitCompetencySubject(): string

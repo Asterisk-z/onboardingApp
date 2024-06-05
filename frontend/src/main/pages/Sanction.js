@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
-import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner} from "reactstrap";
+import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner } from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
 import { userLoadUserARs } from "redux/stores/authorize/representative";
-import { sendSanction, loadUserSanctions } from "redux/stores/sanctions/sanctionStore";
+import { sendSanction, loadUserSanctions, loadAllActiveSanctionTypes } from "redux/stores/sanctions/sanctionStore";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
@@ -14,7 +14,7 @@ import SanctionTable from './Tables/SanctionTable'
 
 
 const Sanction = ({ drawer }) => {
-        
+
     const authUser = useUser();
     const authUserUpdate = useUserUpdate();
 
@@ -29,20 +29,25 @@ const Sanction = ({ drawer }) => {
 
         const toggleForm = () => setModalForm(!modalForm);
         const ar_users = useSelector((state) => state?.arUsers?.list) || null;
+        const sanction_types = useSelector((state) => state?.sanctions?.sanction_types) || null;
         const sanctions = useSelector((state) => state?.sanctions?.view_all) || null;
 
         useEffect(() => {
-            dispatch(userLoadUserARs({"approval_status" : "approved", "role_id": ""}));
+            dispatch(userLoadUserARs({ "approval_status": "approved", "role_id": "" }));
             dispatch(loadUserSanctions());
+            dispatch(loadAllActiveSanctionTypes());
+
         }, [dispatch, counter]);
 
         const $ar_users = ar_users ? JSON.parse(ar_users) : null;
         const $sanctions = sanctions ? JSON.parse(sanctions) : null;
-            
+        const $sanction_types = sanction_types ? JSON.parse(sanction_types) : null;
+
         const handleFormSubmit = async (values) => {
             const formData = new FormData();
             formData.append('ar', values.ar)
             formData.append('ar_summary', values.ar_summary)
+            formData.append('type_id', values.type_id)
             formData.append('sanction_summary', values.sanction_summary)
             formData.append('evidence', evidenceFile)
 
@@ -56,28 +61,29 @@ const Sanction = ({ drawer }) => {
                         setLoading(false);
                         setModalForm(!modalForm)
                         resetField('ar')
+                        resetField('type_id')
                         resetField('ar_summary')
                         resetField('sanction_summary')
                         resetField('evidence')
                         setCounter(!counter)
                     }, 1000);
                 } else {
-                setLoading(false);
+                    setLoading(false);
                 }
-                
-        } catch (error) {
-            setLoading(false);
-        }
 
-        }; 
+            } catch (error) {
+                setLoading(false);
+            }
+
+        };
 
         const handleFileChange = (event) => {
             setEvidenceFile(event.target.files[0]);
         };
 
 
-    
-    
+
+
 
         return (
             <React.Fragment>
@@ -110,15 +116,36 @@ const Sanction = ({ drawer }) => {
                             Fill Disciplinary and Sanction Form
                         </ModalHeader>
                         <ModalBody>
-                            <form  onSubmit={handleSubmit(handleFormSubmit)}  className="is-alter" encType="multipart/form-data">
+                            <form onSubmit={handleSubmit(handleFormSubmit)} className="is-alter" encType="multipart/form-data">
+                                <div className="form-group">
+                                    <label className="form-label" htmlFor="full-name">
+                                        Sanction Type
+                                    </label>
+                                    <div className="form-control-wrap">
+                                        <div className="form-control-select">
+                                            <select className="form-control form-select" style={{ color: "black !important" }} {...register('type_id', { required: "Type is Required" })}>
+                                                <option value="">Select Type</option>
+                                                {$sanction_types && $sanction_types?.map((sanction_type) => {
+                                                    return (
+                                                        <option key={sanction_type.id} value={sanction_type.id}>
+                                                            {`${sanction_type.name}`}
+                                                        </option>
+                                                    )
+                                                })}
+                                            </select>
+                                            {errors.ar && <p className="invalid">{`${errors.ar.message}`}</p>}
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div className="form-group">
                                     <label className="form-label" htmlFor="full-name">
                                         Authorised Representative
                                     </label>
                                     <div className="form-control-wrap">
                                         <div className="form-control-select">
-                                            <select className="form-control form-select"  style={{ color: "black !important" }} {...register('ar', { required: "AR is Required" })}>
-                                            <option value="">Select Authorised Representative</option>
+                                            <select className="form-control form-select" style={{ color: "black !important" }} {...register('ar', { required: "AR is Required" })}>
+                                                <option value="">Select Authorised Representative</option>
                                                 {$ar_users && $ar_users?.map((ar_user) => {
                                                     if (authUser.id != ar_user.id) {
                                                         return (
@@ -133,7 +160,7 @@ const Sanction = ({ drawer }) => {
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div className="form-group">
                                     <label className="form-label" htmlFor="email">
                                         Summary of AR's Infraction
@@ -145,7 +172,7 @@ const Sanction = ({ drawer }) => {
                                 </div>
                                 <div className="form-group">
                                     <label className="form-label" htmlFor="email">
-                                       Summary of Sanction
+                                        Summary of Sanction
                                     </label>
                                     <div className="form-control-wrap">
                                         <textarea type="text" className="form-control" {...register('sanction_summary', { required: "This field is Required" })}></textarea>
@@ -157,13 +184,13 @@ const Sanction = ({ drawer }) => {
                                         Infraction and Sanction evidence (*pdf)
                                     </label>
                                     <div className="form-control-wrap">
-                                        <input type="file" accept=".pdf" className="form-control"  {...register('evidence', {required: "This field is Required" })} onChange={handleFileChange}/>
+                                        <input type="file" accept=".pdf" className="form-control"  {...register('evidence', { required: "This field is Required" })} onChange={handleFileChange} />
                                         {errors.evidence && <p className="invalid">{`${errors.evidence.message}`}</p>}
                                     </div>
                                 </div>
                                 <div className="form-group">
-                                    <Button color="primary" type="submit"  size="lg">
-                                        {loading ? ( <span><Spinner size="sm" color="light" /> Processing...</span>) : "Send Sanction"}
+                                    <Button color="primary" type="submit" size="lg">
+                                        {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Submit"}
                                     </Button>
                                 </div>
                             </form>

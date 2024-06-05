@@ -227,7 +227,7 @@ class CompetencyController extends Controller
         $ar = User::where('id', $competencies->ar_id)->first();
         $authoriser = auth()->user();
 
-        Notification::send($ar, new InfoNotification(MailContents::arStatusCompetencyMessage($authoriser, $competencyFramework), MailContents::arStatusCompetencySubject()));
+        Notification::send($ar, new InfoNotification(MailContents::arStatusCompetencyMessage($authoriser, $competencyFramework), MailContents::arStatusCompetencySubject(), [$authoriser->email]));
 
         return successResponse('Competency status updated', $competencies);
     }

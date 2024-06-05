@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { Col, Modal, ModalBody, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge, ModalHeader, Card, Spinner, CardTitle, CardBody } from "reactstrap";
 import { DataTablePagination } from "components/Component";
-import { updateCCOStatusCompetency } from "redux/stores/competency/competencyStore";
+import { updateCCOStatusCompetency, loadCCOArCompetency } from "redux/stores/competency/competencyStore";
 import moment from "moment";
 import Icon from "components/icon/Icon";
 import Swal from "sweetalert2";
@@ -126,6 +126,12 @@ const ActionTab = (props) => {
                     formData.append('status', 'approved');
                     const resp = dispatch(updateCCOStatusCompetency(formData));
                     updateParentParent(Math.random())
+                    setTimeout(() => {
+
+                        dispatch(loadCCOArCompetency());
+                    }, 2000)
+
+
 
 
                 }
@@ -327,7 +333,7 @@ const ApproveCompetencyTable = ({ data, pagination, actions, className, selectab
         },
         {
             name: "Date Created",
-            selector: (row) => moment(row.createdAt).format('MMM. D, YYYY HH:mm'),
+            selector: (row) => moment(row.created_at).format('MMM. D, YYYY HH:mm'),
             sortable: true,
             width: "150px",
         },

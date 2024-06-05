@@ -146,6 +146,13 @@ const sanctionColumn = [
         width: "80px",
     },
     {
+        name: "AR Id",
+        selector: (row) => row.sanctionee.regId,
+        sortable: true,
+        width: "auto",
+        wrap: true
+    },
+    {
         name: "Sanction Summary",
         selector: (row) => row.sanction_summary,
         sortable: true,
