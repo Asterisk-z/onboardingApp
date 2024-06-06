@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Helpers\MailContents;
 use App\Helpers\ResponseStatusCodes;
+use App\Helpers\Utility;
+use App\Http\Resources\ComptencyResource;
 use App\Models\Competency;
 use App\Models\CompetencyFramework;
 use App\Models\Position;
+use App\Models\Role;
 use App\Models\User;
 use App\Notifications\InfoNotification;
 use Illuminate\Http\JsonResponse;
@@ -43,20 +46,22 @@ class CompetencyController extends Controller
     public function listAllCompliantArs(): JsonResponse
     {
 
-        $competency = Competency::select('competency_frameworks.name', 'competency_frameworks.created_at', 'competency_frameworks.description', 'users.first_name', 'users.first_name', 'users.last_name', 'users.email', DB::raw('institutions.name as institution_name'))
-            ->where('status', 'approved')
-            ->leftJoin('competency_frameworks', 'competency_frameworks.id', '=', 'competencies.framework_id')
-            ->join('users', 'users.id', '=', 'competencies.ar_id')
-            ->join('institutions', 'institutions.id', '=', 'users.institution_id')->with(['framework'])
-            ->get();
+        // $competency = Competency::select('competency_frameworks.name', 'competency_frameworks.created_at', 'competency_frameworks.description', 'users.first_name', 'users.first_name', 'users.last_name', 'users.email', DB::raw('institutions.name as institution_name'))
+        //     ->where('status', 'approved')
+        //     ->leftJoin('competency_frameworks', 'competency_frameworks.id', '=', 'competencies.framework_id')
+        //     ->join('users', 'users.id', '=', 'competencies.ar_id')
+        //     ->join('institutions', 'institutions.id', '=', 'users.institution_id')->with(['framework'])
+        //     ->get();
 
-        return successResponse('successful', $competency);
+        $competencies = Competency::where('status', 'approved')->orderBy('created_at', 'DESC')->get();
+
+        return successResponse('successful', ComptencyResource::collection($competencies));
     }
 
     //
     public function listAllNonCompliantArs(): JsonResponse
     {
-        $competency = CompetencyFramework::select(DB::raw('users.id as user_ids'), DB::raw('competency_frameworks.id as competency_framework_id'), DB::raw('institutions.name as institution_name'), 'competency_frameworks.name', 'competency_frameworks.created_at', 'competency_frameworks.description', 'users.first_name', 'users.last_name', 'users.email')
+        $competency = CompetencyFramework::select(DB::raw('users.id as user_ids'), DB::raw('competency_frameworks.id as competency_framework_id'), DB::raw('competency_frameworks.position as position'), DB::raw('competency_frameworks.member_category as member_category'), DB::raw('institutions.name as institution_name'), 'competency_frameworks.name', 'competency_frameworks.created_at', 'competency_frameworks.description', 'users.first_name', 'users.last_name', 'users.email')
             ->join('users', 'users.position_id', '=', 'competency_frameworks.position')
             ->join('institutions', 'institutions.id', '=', 'users.institution_id')
             ->leftJoin('competencies', function ($join) {
@@ -64,6 +69,7 @@ class CompetencyController extends Controller
                 $join->on('competencies.ar_id', '=', 'users.id');
             })
             ->where('competencies.is_competent', null)
+            ->where('institutions.name', '!=', null)
             ->get();
 
         return successResponse('successful', $competency);
@@ -232,6 +238,39 @@ class CompetencyController extends Controller
         return successResponse('Competency status updated', $competencies);
     }
 
+    public function megStatusCompetency(Request $request): JsonResponse
+    {
+
+        $request->validate([
+            'message' => 'required',
+            'competency_id' => 'required',
+        ]);
+
+        if (!$competencies = Competency::find(request('competency_id'))) {
+            return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'Does not exist');
+        }
+
+        $ars = User::whereIn('id', [$competencies->ar_id, $competencies->cco_id])->get();
+        $megs = Utility::getUsersEmailByCategory(Role::MEG);
+        $competencyFramework = $competencies->framework;
+        $ar = $competencies->ar;
+        $cco = $competencies->cco;
+        $message = request('message');
+
+        Notification::send($ars, new InfoNotification(MailContents::megStatusCompetencyMessage($message, $competencyFramework, $ar), MailContents::megStatusCompetencySubject(), $megs));
+
+        $competencies->delete();
+
+        $meg = auth()->user();
+
+        $logMessage = "Competency rejected with deficiency: $message";
+        logAction($meg->email, 'Competency Update', $logMessage, $request->ip());
+        logAction($ar->email, 'Competency Update', $logMessage, $request->ip());
+        logAction($cco->email, 'Competency Update', $logMessage, $request->ip());
+
+        return successResponse('Competency status updated', $competencies);
+    }
+
     //
     public function submitCompetency(Request $request): JsonResponse
     {
@@ -266,4 +305,5 @@ class CompetencyController extends Controller
         logAction($user->email, 'Submitted a competency', $logMessage, $request->ip());
         return successResponse('Competency submitted', $competency);
     }
+
 }

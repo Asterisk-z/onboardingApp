@@ -155,6 +155,22 @@ class MailContents
                     to view.</p>";
     }
 
+    public static function megStatusCompetencySubject(): string
+    {
+        return "Competency Review";
+    }
+
+    public static function megStatusCompetencyMessage($message, $competencyFramework, User $arUser): string
+    {
+        $url = config("app.front_end_url");
+
+        return "<p>Please be informed that the {$competencyFramework->name} upload by {$arUser->full_name}
+            has the below deficiency.</p>
+            <p>{$message}</p>
+        <p>Kindly log on to the <a href=$url>MROIS Portal</a>
+                    to reload and approve.</p>";
+    }
+
     public static function invoiceSubject(): string
     {
         return "MROIS Membership Payment Notification";

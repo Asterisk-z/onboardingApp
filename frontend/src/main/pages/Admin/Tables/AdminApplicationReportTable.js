@@ -9,7 +9,7 @@ import Icon from "components/icon/Icon";
 import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge, Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, CardBody, CardTitle } from "reactstrap";
 import { DataTablePagination } from "components/Component";
 import moment from "moment";
-import { uploadConcession, FSDPaymentEvidence, FSDReviewSummary, MBGPaymentEvidence, MBGReview, MEGReview, MEG2Review, MEGUploadAgreement, completeApplication, MEGSendMembershipAgreement, MEG2SendESuccess } from "redux/stores/membership/applicationProcessStore"
+import { loadInstitutionApplicationReport, FSDPaymentEvidence, FSDReviewSummary, MBGPaymentEvidence, MBGReview, MEGReview, MEG2Review, MEGUploadAgreement, completeApplication, MEGSendMembershipAgreement, MEG2SendESuccess } from "redux/stores/membership/applicationProcessStore"
 import { megProcessMemberStatus } from "redux/stores/authorize/representative";
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 import Swal from "sweetalert2";
@@ -143,10 +143,12 @@ const ActionTab = (props) => {
 
           const formData = new FormData();
           formData.append('user_id', ar.id);
-          formData.append('action', ar.member_status == 'active' ? 'suspend' : 'active');
+          formData.append('action', ar.member_status == 'active' ? 'suspend' : 'approve');
           dispatch(megProcessMemberStatus(formData));
           setModalView(false)
           props.updateParentParent(Math.random());
+
+          dispatch(loadInstitutionApplicationReport());
 
         }
       });
@@ -428,7 +430,7 @@ const ActionTab = (props) => {
               <table className="table table-striped table-bordered table-hover">
                 <thead>
                   <tr>
-                    <th scope="col">#</th>
+                    {/* <th scope="col">#</th> */}
                     <th scope="col">Name</th>
                     <th scope="col">Value</th>
                   </tr>
@@ -436,182 +438,182 @@ const ActionTab = (props) => {
                 <tbody>
                   {institution?.disciplinary_details?.chiefComplianceOfficerDisciplinary && <>
                     <tr>
-                      <td>-</td>
+                      {/* <td>-</td> */}
                       <td>chiefComplianceOfficerDisciplinary</td>
                       <td className="text-capitalize">{`${institution?.disciplinary_details?.chiefComplianceOfficerDisciplinary}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryFive && <>
                     <tr>
-                      <td>-</td>
+                      {/* <td>-</td> */}
                       <td>Ever been the subject of any disciplinary or criminal proceedings or been the subject of any investigation by any Authority which may lead to such proceedings?</td>
                       <td className="text-capitalize">{`${institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryFive}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryFour && <>
                     <tr>
-                      <td>-</td>
+                      {/* <td>-</td> */}
                       <td>Ever been declared bankrupt or entered into any compromise arrangement with creditors related to bankruptcy or insolvency?</td>
                       <td className="text-capitalize">{`${institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryFour}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryOne && <>
                     <tr>
-                      <td>-</td>
+                      {/* <td>-</td> */}
                       <td>Ever been convicted of any criminal offence? </td>
                       <td className="text-capitalize">{`${institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryOne}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryThree && <>
                     <tr>
-                      <td>-</td>
+                      {/* <td>-</td> */}
                       <td>Ever been concerned in the management of a business which has gone into insolvency, liquidation, administration or the equivalent proceedings within or outside of the Nigerian jurisdiction while connected with such organisation within one (1) year of that connection?</td>
                       <td className="text-capitalize">{`${institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryThree}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryTwo && <>
                     <tr>
-                      <td>-</td>
+                      {/* <td>-</td> */}
                       <td>Ever been the subject of an adverse finding by, or settlement with, any government agency, court, securities exchange, SRO, tribunal or other regulatory authority?</td>
                       <td className="text-capitalize">{`${institution?.disciplinary_details?.chiefComplianceOfficerDisciplinaryTwo}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.companyDisciplinary && <>
                     <tr>
-                      <td>-</td>
+                      {/* <td>-</td> */}
                       <td>companyDisciplinary</td>
                       <td className="text-capitalize">{`${institution?.disciplinary_details?.companyDisciplinary}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.companyDisciplinaryFour && <>
                     <tr>
-                      <td>-</td>
+                      {/* <td>-</td> */}
                       <td>Has your company, or any of its affiliates, been subject to any winding up order/receivership arrangement? </td>
                       <td className="text-capitalize">{`${institution?.disciplinary_details?.companyDisciplinaryFour}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.companyDisciplinaryOne && <>
                     <tr>
-                      <td>-</td>
+                      {/* <td>-</td> */}
                       <td>Has the company or any of its affiliates , been denied registration or expelled from membership of any securities exchange, self-regulatory organisation (SRO) or associations?</td>
                       <td className="text-capitalize">{`${institution?.disciplinary_details?.companyDisciplinaryOne}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.companyDisciplinaryThree && <>
                     <tr>
-                      <td>-</td>
+                      {/* <td>-</td> */}
                       <td>Has your company, or any of its affiliates, ever been refused any Fidelity Bond?</td>
                       <td className="text-capitalize">{`${institution?.disciplinary_details?.companyDisciplinaryThree}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.companyDisciplinaryTwo && <>
                     <tr>
-                      <td>-</td>
+                      {/* <td>-</td> */}
                       <td>Has your membership, or that of any affiliates, in any of the institutions/associations mentioned above at any time been revoked, suspended or withdrawn?</td>
                       <td className="text-capitalize">{`${institution?.disciplinary_details?.companyDisciplinaryTwo}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.mdceoDisciplinary && <>
                     <tr>
-                      <td>-</td>
+                      {/* <td>-</td> */}
                       <td>mdceoDisciplinary</td>
                       <td className="text-capitalize">{`${institution?.disciplinary_details?.mdceoDisciplinary}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.mdceoDisciplinaryEight && <>
                     <tr>
-                      <td>-</td>
+                      {/* <td>-</td> */}
                       <td>Ever been disqualified from acting as a Director?</td>
                       <td className="text-capitalize">{`${institution?.disciplinary_details?.mdceoDisciplinaryEight}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.mdceoDisciplinaryFive && <>
                     <tr>
-                      <td>-</td>
+                      {/* <td>-</td> */}
                       <td>Ever been the subject of any disciplinary or criminal proceedings or been the subject of any investigation by any authority which may lead to such proceedings?</td>
                       <td className="text-capitalize">{`${institution?.disciplinary_details?.mdceoDisciplinaryFive}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.mdceoDisciplinaryFour && <>
                     <tr>
-                      <td>-</td>
+                      {/* <td>-</td> */}
                       <td>Ever been declared bankrupt or entered into any compromise arrangement with creditors related to bankruptcy or insolvency?</td>
                       <td className="text-capitalize">{`${institution?.disciplinary_details?.mdceoDisciplinaryFour}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.mdceoDisciplinaryOne && <>
                     <tr>
-                      <td>-</td>
+                      {/* <td>-</td> */}
                       <td>Ever been convicted of any criminal offence?</td>
                       <td className="text-capitalize">{`${institution?.disciplinary_details?.mdceoDisciplinaryOne}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.mdceoDisciplinarySeven && <>
                     <tr>
-                      <td>-</td>
+                      {/* <td>-</td> */}
                       <td>Ever had such authorisation, membership or licence (referred to above) revoked or terminated?</td>
                       <td className="text-capitalize">{`${institution?.disciplinary_details?.mdceoDisciplinarySeven}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.mdceoDisciplinarySix && <>
                     <tr>
-                      <td>-</td>
+                      {/* <td>-</td> */}
                       <td>Ever been refused authorisation or licence to carry on a trade, business or profession or to be a member of a securities exchange?</td>
                       <td className="text-capitalize">{`${institution?.disciplinary_details?.mdceoDisciplinarySix}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.mdceoDisciplinaryThree && <>
                     <tr>
-                      <td>-</td>
+                      {/* <td>-</td> */}
                       <td>Ever been a Director, partner or otherwise concerned in the management of a business which has gone into insolvency, liquidation, administration or the similar proceedings within or outside of the Nigerian jurisdiction while connected with such organisation within one (1) year of that connection?</td>
                       <td className="text-capitalize">{`${institution?.disciplinary_details?.mdceoDisciplinaryThree}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.mdceoDisciplinaryTwo && <>
                     <tr>
-                      <td>-</td>
+                      {/* <td>-</td> */}
                       <td>Ever been the subject of an adverse finding by, or settlement with, any government agency, court, securities exchange, SRO, tribunal or other regulatory authority?</td>
                       <td className="text-capitalize">{`${institution?.disciplinary_details?.mdceoDisciplinaryTwo}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.treasureDisciplinary && <>
                     <tr>
-                      <td>-</td>
+                      {/* <td>-</td> */}
                       <td>treasureDisciplinary</td>
                       <td className="text-capitalize">{`${institution?.disciplinary_details?.treasureDisciplinary}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.treasureDisciplinaryFive && <>
                     <tr>
-                      <td>-</td>
+                      {/* <td>-</td> */}
                       <td>Ever been the subject of any disciplinary or criminal proceedings or been the subject of any investigation by any authority which may lead to such proceedings?</td>
                       <td className="text-capitalize">{`${institution?.disciplinary_details?.treasureDisciplinaryFive}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.treasureDisciplinaryFour && <>
                     <tr>
-                      <td>-</td>
+                      {/* <td>-</td> */}
                       <td>'Ever been declared bankrupt or entered into any compromise arrangement with creditors related to bankruptcy or insolvency?</td>
                       <td className="text-capitalize">{`${institution?.disciplinary_details?.treasureDisciplinaryFour}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.treasureDisciplinaryOne && <>
                     <tr>
-                      <td>-</td>
+                      {/* <td>-</td> */}
                       <td>Ever been convicted of any criminal offence?</td>
                       <td className="text-capitalize">{`${institution?.disciplinary_details?.treasureDisciplinaryOne}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.treasureDisciplinaryThree && <>
                     <tr>
-                      <td>-</td>
+                      {/* <td>-</td> */}
                       <td>Ever been concerned in the management of a business which has gone into insolvency, liquidation, administration or the similar proceedings within or outside of the Nigerian jurisdiction while connected with such organisation within one (1) year of that connection?</td>
                       <td className="text-capitalize">{`${institution?.disciplinary_details?.treasureDisciplinaryThree}`}</td>
                     </tr>
                   </>}
                   {institution?.disciplinary_details?.treasureDisciplinaryTwo && <>
                     <tr>
-                      <td>-</td>
+                      {/* <td>-</td> */}
                       <td>Ever been the subject of an adverse finding by, or settlement with, any government agency, court, securities exchange, SRO, tribunal or other regulatory authority?</td>
                       <td className="text-capitalize">{`${institution?.disciplinary_details?.treasureDisciplinaryTwo}`}</td>
                     </tr>

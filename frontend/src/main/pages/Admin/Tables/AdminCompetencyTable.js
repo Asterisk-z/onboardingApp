@@ -363,7 +363,7 @@ const AdminCompetencyTable = ({ data, pagination, actions, className, selectable
         },
         {
             name: "Date Created",
-            selector: (row) => moment(row.createdAt).format('MMM. D, YYYY HH:mm'),
+            selector: (row) => moment(row.created_at).format('MMM. D, YYYY HH:mm'),
             sortable: true,
             width: "auto",
             wrap: true

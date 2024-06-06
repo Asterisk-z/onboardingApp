@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux";
 import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge, Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, CardBody, CardTitle } from "reactstrap";
 import { DataTablePagination } from "components/Component";
 import moment from "moment";
-import { updateMEGStatusCompetency, loadOverAllCompliantArs } from "redux/stores/competency/competencyStore";
+import { megProcessAddUserAR } from "redux/stores/authorize/representative";
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 import Swal from "sweetalert2";
 
@@ -86,211 +86,19 @@ const ActionTab = (props) => {
 
   const aUser = useUser();
   const aUserUpdate = useUserUpdate();
-
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const [modalForm, setModalForm] = useState(false);
-  const toggleForm = () => setModalForm(!modalForm);
-
-  const [sendDeficiency, setSendDeficiency] = useState(false);
-  const toggleSendDeficiency = () => setSendDeficiency(!sendDeficiency);
-
-  const competency = props.competency
-  const framework = props.competency?.framework
-  const proficiencies = props.competency?.framework?.proficiencies
+  const ar_user = props.ar_user
 
   // const { competency_id } = useParams();
 
   // const competency_response = ar_user.competency_response.filter((response) => response.framework_id == competency_id)[0]
 
-  const { register, handleSubmit, formState: { errors }, resetField } = useForm();
-  const [loading, setLoading] = useState(false);
-
-  const handleFormSubmit = async (values) => {
-
-    const formData = new FormData();
-    formData.append('competency_id', competency?.id)
-    formData.append('message', values.deficiency)
-
-    try {
-      setLoading(true);
-
-      const resp = await dispatch(updateMEGStatusCompetency(formData));
-
-      if (resp.payload?.message == "success") {
-        setTimeout(() => {
-          setLoading(false);
-          setModalForm(!modalForm)
-          setSendDeficiency(!sendDeficiency)
-          resetField('deficiency')
-          dispatch(loadOverAllCompliantArs());
-        }, 1000);
-
-      } else {
-        setLoading(false);
-      }
-
-    } catch (error) {
-      setLoading(false);
-    }
-  };
-
 
 
   return (
     <>
-
-      <Button className="btn btn-secondary btn-sm " onClick={toggleForm} color="primary" >Details</Button>
-
-
-      <Modal isOpen={modalForm} toggle={toggleForm} size="lg">
-        <ModalHeader toggle={toggleForm} close={<button className="close" onClick={toggleForm}><Icon name="cross" /></button>}>
-          Update
-        </ModalHeader>
-        <ModalBody>
-          {competency && <>
-            <div>
-              <h6 className="title">Competency Update </h6>
-              <table className="table table-striped table-bordered table-hover">
-                <thead>
-                  <tr>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>AR </td>
-                    <td className="text-capitalize">{`${competency?.ar?.full_name} `}</td>
-                  </tr>
-                  <tr>
-                    <td>AR Email </td>
-                    <td className="text-capitalize">{`${competency?.ar?.email} `}</td>
-                  </tr>
-                  <tr>
-                    <td>Authorized By</td>
-                    <td className="text-capitalize">{`${competency?.cco?.full_name_with_mail}`}</td>
-                  </tr>
-                  <tr>
-                    <td>Institution</td>
-                    <td className="text-capitalize">{`${competency?.institution?.name}`}</td>
-                  </tr>
-                  {competency?.evidence_file && <>
-                    <tr>
-                      <td>Evidence</td>
-                      <td className="text-capitalize">
-                        <a target="_blank" href={competency?.evidence_file} className="btn btn-secondary"> View Evidence</a>
-                      </td>
-                    </tr>
-                  </>}
-                  {competency?.comment && <>
-                    <tr>
-                      <td>Comment</td>
-                      <td className="text-capitalize">{`${competency?.comment}`}</td>
-                    </tr>
-                  </>}
-
-                </tbody>
-              </table>
-              <div className="text-center">
-                <Button className="btn btn-success btn-sm " onClick={toggleSendDeficiency} color="primary"  >Send Deficiency</Button>
-              </div>
-            </div>
-          </>}
-          {framework && <>
-            <div>
-              <h6 className="title">Competency </h6>
-              <table className="table table-striped table-bordered table-hover">
-                <thead>
-                  <tr>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Name</td>
-                    <td className="text-capitalize">{`${framework?.name}`}</td>
-                  </tr>
-                  <tr>
-                    <td>Description</td>
-                    <td className="text-capitalize">{`${framework?.description}`}</td>
-                  </tr>
-                  <tr>
-                    <td>Category</td>
-                    <td className="text-capitalize">{`${framework?.category_obj?.name}`}</td>
-                  </tr>
-                  <tr>
-                    <td>Position</td>
-                    <td className="text-capitalize">{`${framework?.position_group_obj?.name}`}</td>
-                  </tr>
-                  <tr>
-                    <td>Expected Proficiency</td>
-                    <td className="text-capitalize">{`${framework?.expected_proficiency}`}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </>}
-          {proficiencies?.length > 0 && <>
-            <div>
-              <h6 className="title">Competency Proficiencies </h6>
-              <table className="table table-striped table-bordered table-hover">
-                <thead>
-                  <tr>
-                    {/* <th scope="col">#</th>
-                    <th scope="col">Full Name</th>
-                    <th scope="col">Email</th> */}
-                  </tr>
-                </thead>
-                <tbody>
-                  {proficiencies && proficiencies.map
-                    ((proficiency, index) =>
-                      <tr key={index}>
-                        <td>{`${++index}`}</td>
-                        <td className="text-capitalize">{`${proficiency?.description}`}</td>
-                      </tr>
-                    )}
-                </tbody>
-              </table>
-            </div>
-          </>}
-
-        </ModalBody>
-        <ModalFooter className="bg-light">
-          <span className="sub-text">Update Competency</span>
-        </ModalFooter>
-      </Modal>
-
-
-      <Modal isOpen={sendDeficiency} toggle={toggleSendDeficiency} size="lg">
-        <ModalHeader toggle={toggleSendDeficiency} close={<button className="close" onClick={toggleSendDeficiency}><Icon name="cross" /></button>}>
-          Update
-        </ModalHeader>
-        <ModalBody>
-
-          <form onSubmit={handleSubmit(handleFormSubmit)} className="is-alter" encType="multipart/form-data">
-            <div className="form-group">
-              <label className="form-label" htmlFor="email">
-                Deficiency
-              </label>
-              <div className="form-control-wrap">
-                <textarea type="text" className="form-control" {...register('deficiency', { required: "deficiency is Required" })}></textarea>
-                {errors.deficiency && <p className="invalid">{`${errors.deficiency.message}`}</p>}
-              </div>
-            </div>
-            <div className="form-group">
-              <Button color="primary" type="submit" size="lg">
-                {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Send"}
-              </Button>
-            </div>
-          </form>
-        </ModalBody>
-        <ModalFooter className="bg-light">
-          <span className="sub-text">Update Competency</span>
-        </ModalFooter>
-      </Modal>
+      <div className="toggle-expand-content" style={{ display: "block" }}>
+        {/* {competency_response?.evidence_file && <a href={competency_response.evidence_file} target="_blank" className="btn btn-secondary btn-sm">View</a>} */}
+      </div>
     </>
 
 
@@ -308,51 +116,37 @@ const AdminCompetencyARTable = ({ data, pagination, actions, className, selectab
     },
     {
       name: "User Detail",
-      selector: (row) => { return (<><p>{`${row.ar?.first_name} ${row.ar?.last_name}`}<br />{`${row.ar?.email}`}</p></>) },
+      selector: (row) => { return (<><p>{`${row.first_name} ${row.last_name}`}<br />{`${row.email}`}</p></>) },
       sortable: true,
       width: "auto",
       wrap: true
     },
     {
       name: "Institution",
-      selector: (row) => { return (<>{`${row.institution?.name}`}</>) },
+      selector: (row) => { return (<>{`${row.institution_name ? row.institution_name : ''}`}</>) },
       sortable: true,
       width: "auto",
       wrap: true
     },
-    // {
-    //     name: "Position",
-    //     selector: (row) => { return (<>{`${row.position_obj.name}`}</>) },
-    //     sortable: true,
-    //     width: "auto",
-    //     wrap: true
-    // },
     {
       name: "Competency Name",
-      selector: (row) => { return (<>{`${row?.framework?.name}`}</>) },
+      selector: (row) => { return (<>{`${row?.name}`}</>) },
       sortable: true,
       width: "auto",
       wrap: true
     },
     {
       name: "Competency Description",
-      selector: (row) => { return (<>{`${row?.framework?.description}`}</>) },
-      sortable: true,
-      width: "auto",
-      wrap: true
-    },
-    {
-      name: "Date Created",
-      selector: (row) => moment(row.created_at).format('MMM. D, YYYY HH:mm'),
+      selector: (row) => { return (<>{`${row.description}`}</>) },
       sortable: true,
       width: "auto",
       wrap: true
     },
     {
       name: "Action",
-      selector: (row) => (<>
-        <ActionTab competency={row} updateParentParent={updateParent} />
-      </>),
+      selector: (row) => (row?.competency_response?.length > 0 ? <>
+        {/* <ActionTab ar_user={row}  updateParentParent={updateParent} /> */}
+      </> : ""),
       width: "100px",
     },
   ];

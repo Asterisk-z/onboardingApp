@@ -53,7 +53,7 @@ export const loadAllCompetencyGroupName = createAsyncThunk(
   "competency/loadAllCompetencyGroupName",
   async (arg) => {
     try {
-      const { data } = await axios.get(`meg/competency-framework/list-group-name`);
+      const { data } = await axios.get(`competency-list-name`);
       return successHandler(data);
     } catch (error) {
       return errorHandler(error);
@@ -168,6 +168,29 @@ export const updateStatusCompetency = createAsyncThunk(
           "Content-Type": "multipart/form-data",
         },
         url: `meg/competency-framework/update-status/${id}`,
+        data: values,
+      });
+      return successHandler(data, data.message);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
+
+export const updateMEGStatusCompetency = createAsyncThunk(
+  "competency/updateMEGStatusCompetency",
+  async (values) => {
+
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `meg/competency-framework/update-competency-status`,
         data: values,
       });
       return successHandler(data, data.message);
@@ -410,6 +433,23 @@ const competencyStore = createSlice({
     });
 
     builder.addCase(updateStatusCompetency.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
+
+
+    // ====== builders for updateMEGStatusCompetency ======
+
+    builder.addCase(updateMEGStatusCompetency.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(updateMEGStatusCompetency.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(updateMEGStatusCompetency.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });

@@ -78,6 +78,7 @@ Route::get('/sanction-types', [SanctionsController::class, 'indexTypes']);
 
 Route::middleware('auth')->group(function () {
 
+    Route::get('/competency-list-name', [CompetencyController::class, 'listGroupName']);
     Route::get('/system/configs', [SystemController::class, 'index']);
     //
     Route::group(['prefix' => 'complaint'], function () {
@@ -215,6 +216,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/create', [CompetencyController::class, 'store']);
             Route::post('/update/{id}', [CompetencyController::class, 'update']);
             Route::post('/update-status/{id}', [CompetencyController::class, 'updateStatus']);
+            Route::post('/update-competency-status', [CompetencyController::class, 'megStatusCompetency']);
         });
         // fees and dues
         Route::group(['prefix' => 'meg/fees-and-dues'], function () {

@@ -10,12 +10,17 @@ class Competency extends Model
     use HasFactory;
     protected $table = 'competencies';
     protected $guarded = [];
-    protected $with = ['ar'];
+    protected $with = ['ar', 'cco'];
     protected $appends = ['evidence_file'];
 
     public function ar()
     {
         return $this->belongsTo(User::class, 'ar_id', 'id');
+    }
+
+    public function cco()
+    {
+        return $this->belongsTo(User::class, 'cco_id', 'id');
     }
 
     public function framework()
