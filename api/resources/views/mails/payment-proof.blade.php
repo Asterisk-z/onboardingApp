@@ -11,6 +11,7 @@
             padding: 0;
             background-color: #f4f4f4;
         }
+
         .container {
             max-width: 600px;
             margin: 20px auto;
@@ -19,31 +20,42 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+
         .logo {
-            text-align: center;
+            text-align: right;
         }
+
         .logo img {
             max-width: 100px;
             height: auto;
         }
+
         .payment-details {
             margin-top: 20px;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
-        table, th, td {
+
+        table,
+        th,
+        td {
             border: 1px solid #ddd;
         }
-        th, td {
+
+        th,
+        td {
             padding: 12px;
             text-align: left;
         }
+
         th {
             background-color: #f2f2f2;
         }
+
     </style>
 </head>
 <body>
@@ -52,7 +64,7 @@
             <img src="{{asset('assets/img/logo.png')}}" alt="Company Logo">
         </div>
         <h2>Payment Confirmation</h2>
-        
+
         <div class="payment-details">
             <table>
                 <tr>
@@ -75,11 +87,11 @@
                     <th>Download Receipt</th>
                     <td>
                         <a href="{{ $data['download_link'] }}" download="{{ $data['name'] }}">
-                            <button style="padding: 8px 12px; background-color: #23346A; color: white; border: none; border-radius: 4px; cursor: pointer;">
-                                Download
-                            </button>
-                        </a>
-                    </td>
+                <button style="padding: 8px 12px; background-color: #23346A; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                    Download
+                </button>
+                </a>
+                </td>
                 </tr> --}}
                 <!-- Add more payment details as needed -->
             </table>

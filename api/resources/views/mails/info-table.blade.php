@@ -21,7 +21,7 @@
 
         /* Header styles */
         .header {
-            text-align: center;
+            text-align: right;
             padding: 20px 0;
         }
 
@@ -55,6 +55,7 @@
             text-align: center;
             padding: 20px 0;
         }
+
     </style>
 </head>
 
@@ -69,26 +70,26 @@
 
             <!-- Example Table -->
             @if(isset($data))
-                <table border="1" cellspacing="0" cellpadding="10" style="width: 100%;">
-                    <thead>
-                        <tr>
-                            @foreach($data["header"] as $header)
-                                <th>{{$header}}</th>
-                            @endforeach
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($data["body"] as $records)
-                            <tr>
-                                @foreach($records as $record)
-                                    <td>{{$record}}</td>
-                                @endforeach
-                            </tr>
+            <table border="1" cellspacing="0" cellpadding="10" style="width: 100%;">
+                <thead>
+                    <tr>
+                        @foreach($data["header"] as $header)
+                        <th>{{$header}}</th>
                         @endforeach
-                    </tbody>
-                </table>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($data["body"] as $records)
+                    <tr>
+                        @foreach($records as $record)
+                        <td>{{$record}}</td>
+                        @endforeach
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
             @endif
-            
+
             <!-- End of Example Table -->
 
             <p>Thank You.</p>

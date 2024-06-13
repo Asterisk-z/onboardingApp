@@ -43,6 +43,11 @@ class UsersController extends Controller
             return errorResponse(ResponseStatusCodes::INVALID_AUTH_CREDENTIAL, "Incorrect login credentials.", [], Response::HTTP_UNAUTHORIZED);
         }
 
+        if (!$user->is_active) {
+            logAction($request->email, 'Failed Login', 'Failed Login - Account Suspended', $request->ip());
+            return errorResponse(ResponseStatusCodes::UNAUTHORIZED, "Account Suspended.");
+        }
+
         //check if user is verified, force if otherwise.
         if (!$user->verified_at) {
             logAction($request->email, 'Failed Login', 'Failed Login - Not yet reset passwword', $request->ip());

@@ -76,7 +76,7 @@ Route::post('/category/positions', [MemberCategoryController::class, 'positions'
 Route::get('/complaint-types', [ComplaintTypeController::class, 'index']);
 Route::get('/sanction-types', [SanctionsController::class, 'indexTypes']);
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'activeAuth'])->group(function () {
 
     Route::get('/competency-list-name', [CompetencyController::class, 'listGroupName']);
     Route::get('/system/configs', [SystemController::class, 'index']);

@@ -114,7 +114,7 @@ class EventController extends Controller
 
         $validated['image'] = $imagePath;
         $validated['user_id'] = $request->user()->id;
-
+        logger($validated);
         $event = Event::create($validated);
 
         if (!empty($validRegisteredDates)) {

@@ -88,14 +88,14 @@ class EventMailContents
 
     public static function eventAddedSubject(string $eventName): string
     {
-        return "Register $eventName Event";
+        return "Register for the $eventName Event";
     }
 
     public static function eventAddedBody($event): string
     {
         $url = config('app.front_end_url');
         $message = "<p>
-                Please be informed that you have been invited for {$event->name} scheduled to hold {$event->date} {$event->time}. <br/> Kindly login to the <a href='{$url}'>MROIS Portal</a> to register
+                Please be informed that you have been invited for {$event->name} scheduled to hold {$event->date} {$event->time}. <br/> Kindly login to the <a href='{$url}'>MROIS Portal</a> to register.
             </p>";
 
         return $message;
@@ -110,7 +110,7 @@ class EventMailContents
     {
         $url = config('app.front_end_url');
         $message = "<p>
-                Please be informed that you have been invited for {$event->name} scheduled to hold {$event->date} {$event->time}. Kindly login to the <a href='{$url}'>MROIS Portal</a> to register
+                Please be informed that you have been invited for {$event->name} scheduled to hold {$event->date} {$event->time}. Kindly login to the <a href='{$url}'>MROIS Portal</a> to register.
             </p>";
 
         return $message;
@@ -150,7 +150,7 @@ class EventMailContents
                 Please be informed that you are yet to register for the {$event->name} scheduled to hold on {$event->date} {$event->time}.
             </p>
             <p>
-             Kindly login to the <a href='{$url}'>MROIS Portal</a> to register
+             Kindly login to the <a href='{$url}'>MROIS Portal</a> to register.
             </p>";
 
         return $message;

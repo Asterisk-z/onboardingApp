@@ -17,7 +17,7 @@ class User extends Authenticatable implements JWTSubject
     const PENDING = "pending";
 
     protected $with = ['role', 'userNationality']; // almost all use of user model requires this information.
-    protected $appends = ['full_name', 'full_name_with_mail'];
+    protected $appends = ['full_name', 'full_name_with_mail', 'is_active'];
     /**
      * The attributes that are mass assignable.
      *
@@ -149,6 +149,10 @@ class User extends Authenticatable implements JWTSubject
     public function getFullNameWithMailAttribute()
     {
         return $this->first_name . " " . $this->last_name . " (" . $this->email . ")";
+    }
+    public function getIsActiveAttribute()
+    {
+        return $this->member_status == 'active';
     }
 
     private function createRegID(): string

@@ -21,7 +21,7 @@
 
         /* Header styles */
         .header {
-            text-align: center;
+            text-align: right;
             padding: 20px 0;
         }
 
@@ -55,6 +55,7 @@
             text-align: center;
             padding: 20px 0;
         }
+
     </style>
 </head>
 

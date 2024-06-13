@@ -49,15 +49,15 @@ const AdminEvents = ({ drawer }) => {
         const postValues = new Object();
         postValues.name = values.name;
         postValues.description = values.description;
-        postValues.date = moment(values.eventDate).format('YYYY-MM-DD');
-        postValues.time = moment(values.eventTime).format('HH:mm');
+        postValues.date = moment(eventDate).format('YYYY-MM-DD');
+        postValues.time = moment(eventTime).format('HH:mm');
         postValues.is_annual = values.isEventAnnual == 'no' ? 0 : 1;
         postValues.fee = values.isEventFree == 'no' ? values.eventFee : 0;
         postValues.img = values.img[0];
         postValues.registered_remainder_frequency = values.registered_remainder_frequency;
-        postValues.registered_remainder_dates = values.registered_remainders;
+        postValues.registered_remainder_dates = values.registered_remainders && values.registered_remainder_frequency ? values.registered_remainders : '';
         postValues.unregistered_remainder_frequency = values.unregistered_remainder_frequency;
-        postValues.unregistered_remainder_dates = values.unregistered_remainders;
+        postValues.unregistered_remainder_dates = values.unregistered_remainders && values.unregistered_remainder_frequency ? values.unregistered_remainders : '';
         postValues.positions = values.positions.map((val) => (val.value));
 
         try {
@@ -118,6 +118,13 @@ const AdminEvents = ({ drawer }) => {
         console.log(value.target.value)
     };
 
+    const toggleEventDate = (value) => {
+        setUnregisteredDate("")
+        setRegisteredDate("")
+        setValue('unregistered_remainders', '')
+        setValue('registered_remainders', '')
+        setEventDate(value)
+    };
 
 
     const checking = () => {
@@ -193,7 +200,7 @@ const AdminEvents = ({ drawer }) => {
                                                     </label>
                                                     <div className="form-control-wrap">
                                                         <input type="hidden" {...register('eventDate', { required: "This Field is required" })} value={eventDate} />
-                                                        <DatePicker selected={eventDate} onChange={(date) => setEventDate(date)} className="form-control date-picker" id="date" minDate={todaysDate} />
+                                                        <DatePicker selected={eventDate} onChange={(date) => toggleEventDate(date)} className="form-control date-picker" id="date" minDate={todaysDate} />
                                                         {errors.eventDate && <span className="invalid">{errors.eventDate.message}</span>}
                                                     </div>
                                                 </div>
@@ -354,7 +361,7 @@ const AdminEvents = ({ drawer }) => {
 
 
                                             <Col md='6'>
-                                                {registeredFrequency && <>
+                                                {unregisteredFrequency && <>
                                                     <div className="form-group">
                                                         <label className="form-label" htmlFor="date">
                                                             Select Reminder Dates For Non-Registered ARs
