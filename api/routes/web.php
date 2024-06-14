@@ -26,6 +26,15 @@ use Illuminate\Support\Str;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/mail', function () {
+    $displayName = "sfksfjsff";
+    $info = "<p>A new applicant, Drake Hardin, has successfully signed up on the FMDQX MROIS Portal</p>
+
+<p>Thank You.</p>
+
+<p>FMDQ Securities Exchange</p>";
+    return view('mails.info', compact('displayName', 'info'));
+});
 
 Route::get('execute-commands', [SystemController::class, 'executeCommands'])->name('executeCommands');
 

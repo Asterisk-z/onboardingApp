@@ -361,6 +361,7 @@ Route::middleware(['auth', 'activeAuth'])->group(function () {
             Route::get('/get_application/{application_uuid}', [ApplicationProcessController::class, 'get_application']);
             Route::get('/all-fields', [MembershipApplicationController::class, 'getAllFields']);
             Route::get('/fields', [MembershipApplicationController::class, 'getField']);
+            Route::post('/submitPage', [MembershipApplicationController::class, 'submitPage']);
             Route::get('/preview', [MembershipApplicationController::class, 'getPreview']);
             Route::get('/detail', [MembershipApplicationController::class, 'getDetail']);
             Route::get('/initial', [MembershipApplicationController::class, 'getInitial']);

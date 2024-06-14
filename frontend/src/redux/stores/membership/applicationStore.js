@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { errorHandler, successHandler } from "utils/Functions";
 import queryGenerator from "utils/QueryGenerator";
-const initialState = { all: null, list: null, user_application: null, application_details: null, initial_application: null, all_fields: null, preview: [], list_extra: {}, status_list: null, transfer_list: null, user: null, total: null, error: "", loading: false };
+const initialState = { all: null, list: null, user_application: null, application_details: null, initial_application: null, all_fields: null, overall_fields: null, preview: [], list_extra: {}, status_list: null, transfer_list: null, user: null, total: null, error: "", loading: false };
 
 
 export const fetchApplication = createAsyncThunk(
@@ -152,6 +152,27 @@ export const uploadField = createAsyncThunk(
   }
 );
 
+
+export const submitPage = createAsyncThunk(
+  "application/submitPage",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `membership/application/submitPage`,
+        data: values,
+      });
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
 
 export const completeApplication = createAsyncThunk(
   "application/completeApplication",
@@ -396,19 +417,17 @@ const applicationStore = createSlice({
 
     builder.addCase(loadAllFields.fulfilled, (state, action) => {
       state.loading = false;
-      // state.list = action.payload?.data?.data?.categories;
-      // state.list = JSON.stringify(action.payload?.data?.data);
 
-      console.log(action.payload?.data.data);
-      // if (!Array.isArray(state.all_fields)) {
-      // state.all_fields = [];
-      // }
+      if (!Array.isArray(state.overall_fields)) {
+        state.overall_fields = [];
+      }
 
-      // const all_fields = [...state.all_fields];
-      // const all_fields = [];
-      // console.log(new Date())
-      // all_fields.push(...action.payload?.data.data);
-      // state.all_fields = all_fields;
+      // let overall_fields = [];
+      let overall_fields = action.payload?.data.data;
+      // // console.log(new Date())
+      state.overall_fields = overall_fields;
+      // state.overall_fields = action.payload?.data.data;
+
     });
 
     builder.addCase(loadAllFields.rejected, (state, action) => {
@@ -443,6 +462,22 @@ const applicationStore = createSlice({
     });
 
     builder.addCase(uploadField.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
+
+    // ====== builders for submitPage ======
+
+    builder.addCase(submitPage.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(submitPage.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(submitPage.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });

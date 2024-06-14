@@ -22,12 +22,14 @@
         /* Header styles */
         .header {
             text-align: right;
-            padding: 20px 0;
+            padding: 30px 0;
         }
 
         /* Logo styles */
         .logo {
-            max-width: 100px;
+            max-width: 150px !important;
+            max-height: 100px !important;
+            text-align: right;
         }
 
         /* Main content styles */

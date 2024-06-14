@@ -306,6 +306,76 @@ class MembershipApplicationController extends Controller
         return successResponse('Fields Fetched Successfully', auth()->user()->institution->application);
     }
 
+    public function submitPage(Request $request)
+    {
+        $request->validate([
+            'category_id' => 'required',
+            'application_id' => 'required',
+            'fields' => 'nullable|array',
+        ]);
+        $user = $request->user();
+
+        $fields = request('fields');
+
+        if ($fields) {
+            foreach ($fields as $field) {
+
+                $application = Application::find($request->application_id);
+                if (!ApplicationField::where('category', $request->category_id)
+                    ->where('name', $field['field_name'])
+                    ->where('type', $field['field_type'])->exists() || !$application) {
+                    return;
+                }
+
+                $applicationField = ApplicationField::where('category', $request->category_id)
+                    ->where('name', $field['field_name'])
+                    ->where('type', $field['field_type'])->first();
+
+                $data = ['uploaded_field' => $field['field_value']];
+
+                if ($application->status == Application::AWAITINGAPPROVAL) {
+                    return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, "Your application has already been submitted and it is currently under review.");
+                }
+
+                if ($field['field_type'] == 'file') {
+
+                    $attachment = null;
+
+                    // if ($field['field_type']->hasFile('field_value')) {
+                    //     $attachment = $request->file('field_value')->storePublicly('application', 'public');
+                    // }
+                    $data['uploaded_field'] = null;
+                    // $data = ['uploaded_file' => $attachment];
+                }
+
+                $upload_action = ApplicationFieldUpload::updateOrCreate(
+                    ['application_field_id' => $applicationField->id, 'application_id' => $application->id],
+                    $data
+                );
+
+                ApplicationFieldApplicationFieldUpload::updateOrCreate(
+                    [
+                        'application_id' => $application->id,
+                        'application_field_id' => $applicationField->id,
+                        'application_field_upload_id' => $upload_action->id,
+                    ],
+                    [
+                        'application_id' => $application->id,
+                        'application_field_id' => $applicationField->id,
+                        'application_field_upload_id' => $upload_action->id,
+                    ]);
+
+                $application->step = $applicationField->page;
+                $application->save();
+
+            }
+
+        }
+
+        return successResponse('Fields Fetched Successfully', auth()->user()->institution->application);
+
+    }
+
     /**
      * This method does the final submission of an application
      *
@@ -368,6 +438,9 @@ class MembershipApplicationController extends Controller
             $requiredFieldIds,
             $applicationFieldIds
         );
+        $mFields = ApplicationField::whereIn('id', $missingFieldIds)->get();
+logger($missingFieldIds);
+        logger($mFields);
 
         if (!empty($missingFieldIds)) {
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, "Submission failed. There are required fields you are yet to fill.");

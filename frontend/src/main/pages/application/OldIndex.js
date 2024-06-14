@@ -10,7 +10,7 @@ import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, Dropd
 import { HeaderLogo } from "pages/components/HeaderLogo";
 import DatePicker from "react-datepicker";
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
-import { loadPageFields, loadAllFields, loadExtra, uploadField, fetchApplication, submitPage } from "redux/stores/membership/applicationStore";
+import { loadPageFields, loadAllFields, loadExtra, uploadField, fetchApplication } from "redux/stores/membership/applicationStore";
 import { UpdateDisclosure } from "redux/stores/membership/applicationProcessStore";
 import moment from 'moment';
 import Swal from "sweetalert2";
@@ -27,9 +27,9 @@ const Form = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const [parentState, setParentState] = useState('0')
   const [showDisclosureModal, setShowDisclosureModal] = useState(false);
+
 
   const application_details = useSelector((state) => state?.application?.application_details) || null;
   useEffect(() => {
@@ -39,6 +39,7 @@ const Form = () => {
   const $application_details = application_details ? JSON.parse(application_details) : null;
 
   useEffect(() => {
+    console.log("coming in disclosure")
 
     if ($application_details && !$application_details?.disclosure_stage && !showDisclosureModal) {
 
@@ -86,18 +87,32 @@ const Form = () => {
     }
   }
 
-  const overall_fields = useSelector((state) => state?.application?.overall_fields) || null;
   useEffect(() => {
     if ($application_details && $application_details?.disclosure_stage) {
       dispatch(loadAllFields({ "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
     }
-  }, [application_details]);
+  }, [$application_details]);
 
 
   const ApplicantInformation = (props) => {
 
-    const { reset, register, handleSubmit, formState: { errors }, setValue, clearErrors } = useForm();
+    const authUser = useUser();
+    const authUserUpdate = useUserUpdate();
 
+    const dispatch = useDispatch();
+
+    const [parentState, setParentState] = useState('Initial state');
+    const [loading, setLoading] = useState(false);
+    const [modalForm, setModalForm] = useState(false);
+
+    const { reset, register, handleSubmit, formState: { errors }, setValue, clearErrors } = useForm();
+    const fields = useSelector((state) => state?.application?.all_fields) || null;
+    // console.log($application_details?.uuid)
+    useEffect(() => {
+      if ($application_details && $application_details?.disclosure_stage) {
+        dispatch(loadPageFields({ "page": "1", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
+      }
+    }, [dispatch, parentState, $application_details]);
 
 
     const onInputChange = async (values) => {
@@ -117,7 +132,7 @@ const Form = () => {
         const resp = await dispatch(uploadField(postValues));
 
         if (resp.payload?.message == "success") {
-          dispatch(loadPageFields({ "page": "1", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
+          setParentState(Math.random())
         } else {
 
         }
@@ -126,76 +141,17 @@ const Form = () => {
 
       }
     };
-
-    const updatedApplicationFields = useSelector((state) => state?.application?.all_fields) || null;
-    const [applicationFields, setApplicationFields] = useState(overall_fields?.basic);
-
-    let fields = updatedApplicationFields ? (updatedApplicationFields[0]?.page == 1 ? updatedApplicationFields : applicationFields) : applicationFields
-
-    const submitForm = async (data) => {
-
-      let field_value = Object.values(data)
-      let field_name = Object.keys(data)
-
-      let list = [];
-
-      for (let index = 0; index < field_value.length; index++) {
-        let inputField = field_name[index];
-        let inputValue = field_value[index];
-        let field = applicationFields.filter((item) => item.name == inputField);
-
-        if (field) {
-          let fieldItem = field[0] ? field[0] : null;
-
-
-          if (fieldItem?.name == inputField) {
-
-            const postValue = new Object();
-            postValue.field_name = inputField;
-            postValue.field_value = inputValue;
-            postValue.field_type = fieldItem.type;
-
-            list.push(postValue)
-
-          }
-        }
-
-      }
-      // for (let index = 0; index < applicationFields.length; index++) {
-      //   let field = applicationFields[index];
-      //   let inputField = field_name[index];
-      //   let inputValue = field_value[index];
-      //   if (field.name == inputField) {
-
-      //     const postValue = new Object();
-      //     postValue.field_name = inputField;
-      //     postValue.field_value = inputValue;
-      //     postValue.field_type = field.type;
-
-      //     list.push(postValue)
-
-      //   }
-      // }
-
-
-      try {
-
-        const postValues = new Object();
-        postValues.application_id = $application_details?.id;
-        postValues.category_id = $application_details?.membership_category?.id;
-        postValues.fields = list;
-        const resp = await dispatch(submitPage(postValues));
-
-        if (resp.payload?.message == "success") {
-          dispatch(loadPageFields({ "page": "1", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
-        }
-
-        props.next()
-      } catch (error) {
-
-      }
-
+    //
+    // console.log(props)
+    const submitForm = (data) => {
+      // initialValues = []
+      props.next()
     };
+
+    const nextProcess = () => {
+      // console.log(errors)
+    }
+
 
     return (
       <div>
@@ -316,7 +272,7 @@ const Form = () => {
               <div className="actions clearfix">
                 <ul>
                   <li>
-                    <Button color="primary" type="submit" onClick={(e) => { }}>
+                    <Button color="primary" type="submit" onClick={nextProcess}>
                       Next
                     </Button>
                   </li>
@@ -335,7 +291,24 @@ const Form = () => {
   const TradingDetail = (props) => {
 
 
+    const authUser = useUser();
+    const authUserUpdate = useUserUpdate();
+
+    const dispatch = useDispatch();
+
+    const [parentState, setParentState] = useState('Initial state');
+    const [loading, setLoading] = useState(false);
+    const [modalForm, setModalForm] = useState(false);
+
     const { reset, register, handleSubmit, formState: { errors }, setValue, clearErrors } = useForm();
+    const fields = useSelector((state) => state?.application?.all_fields) || null;
+
+    useEffect(() => {
+      if ($application_details) {
+        dispatch(loadPageFields({ "page": "2", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
+      }
+    }, [dispatch, parentState, $application_details]);
+
 
     const onInputChange = async (values) => {
 
@@ -354,7 +327,7 @@ const Form = () => {
         const resp = await dispatch(uploadField(postValues));
 
         if (resp.payload?.message == "success") {
-          dispatch(loadPageFields({ "page": "2", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
+          setParentState(Math.random())
         } else {
 
         }
@@ -365,60 +338,21 @@ const Form = () => {
     };
 
 
-    const updatedApplicationFields = useSelector((state) => state?.application?.all_fields) || null;
-    const [applicationFields, setApplicationFields] = useState(overall_fields?.trade);
+    const submitForm = (data) => {
+      props.next()
+    };
 
-    let fields = updatedApplicationFields ? (updatedApplicationFields[0]?.page == 2 ? updatedApplicationFields : applicationFields) : applicationFields
-
-    const submitForm = async (data) => {
-
-      let field_value = Object.values(data)
-      let field_name = Object.keys(data)
-
-      let list = [];
-
-      for (let index = 0; index < field_value.length; index++) {
-        let inputField = field_name[index];
-        let inputValue = field_value[index];
-        let field = applicationFields.filter((item) => item.name == inputField);
-
-        if (field) {
-          let fieldItem = field[0] ? field[0] : null;
+    const nextProcess = () => {
+      // console.log(errors)
+    }
 
 
-          if (fieldItem?.name == inputField) {
+    const onInputChangeTest = async (values) => {
 
-            const postValue = new Object();
-            postValue.field_name = inputField;
-            postValue.field_value = inputValue;
-            postValue.field_type = fieldItem.type;
-
-            list.push(postValue)
-
-          }
-        }
-
-      }
-
-
-      try {
-
-        const postValues = new Object();
-        postValues.application_id = $application_details?.id;
-        postValues.category_id = $application_details?.membership_category?.id;
-        postValues.fields = list;
-        const resp = await dispatch(submitPage(postValues));
-
-        if (resp.payload?.message == "success") {
-          dispatch(loadPageFields({ "page": "2", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
-        }
-
-        props.next()
-      } catch (error) {
-
-      }
+      // console.log(values)
 
     };
+
 
     return (
       <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
@@ -763,7 +697,7 @@ const Form = () => {
             <div className="actions clearfix">
               <ul>
                 <li>
-                  <Button color="primary" type="submit" onClick={(e) => { }}>
+                  <Button color="primary" type="submit" onClick={nextProcess}>
                     Next
                   </Button>
                 </li>
@@ -784,10 +718,23 @@ const Form = () => {
   const DisciplinaryHistory = (props) => {
 
 
+    const authUser = useUser();
+    const authUserUpdate = useUserUpdate();
 
+    const dispatch = useDispatch();
 
+    const [parentState, setParentState] = useState('Initial state');
+    const [loading, setLoading] = useState(false);
+    const [modalForm, setModalForm] = useState(false);
 
     const { reset, register, handleSubmit, formState: { errors }, setValue, clearErrors } = useForm();
+    const fields = useSelector((state) => state?.application?.all_fields) || null;
+
+    useEffect(() => {
+      if ($application_details) {
+        dispatch(loadPageFields({ "page": "3", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
+      }
+    }, [dispatch, parentState, $application_details]);
 
 
     const onInputChange = async (values) => {
@@ -807,7 +754,7 @@ const Form = () => {
         const resp = await dispatch(uploadField(postValues));
 
         if (resp.payload?.message == "success") {
-          dispatch(loadPageFields({ "page": "3", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
+          setParentState(Math.random())
         } else {
 
         }
@@ -818,19 +765,13 @@ const Form = () => {
     };
 
 
-
-
-    const updatedApplicationFields = useSelector((state) => state?.application?.all_fields) || null;
-    const [applicationFields, setApplicationFields] = useState(overall_fields?.disciplinary);
-
-    let fields = updatedApplicationFields ? (updatedApplicationFields[0]?.page == 3 ? updatedApplicationFields : applicationFields) : applicationFields
-
-    const submitForm = async (data) => {
-
-
+    const submitForm = (data) => {
       props.next()
-
     };
+
+    const nextProcess = () => {
+      // console.log(errors)
+    }
 
 
     return (
@@ -904,7 +845,7 @@ const Form = () => {
             <div className="actions clearfix">
               <ul>
                 <li>
-                  <Button color="primary" type="submit" onClick={(e) => { }}>
+                  <Button color="primary" type="submit" onClick={nextProcess}>
                     Next
                   </Button>
                 </li>
@@ -923,8 +864,24 @@ const Form = () => {
 
   const SupportingDocuments = (props) => {
 
+    const authUser = useUser();
+    const authUserUpdate = useUserUpdate();
+
+    const dispatch = useDispatch();
+
+    const [parentState, setParentState] = useState('Initial state');
+    const [loading, setLoading] = useState(false);
+    const [modalForm, setModalForm] = useState(false);
 
     const { reset, register, handleSubmit, formState: { errors }, setValue, clearErrors } = useForm();
+    const fields = useSelector((state) => state?.application?.all_fields) || null;
+    const extra = useSelector((state) => state?.application?.list_extra) || null;
+
+    useEffect(() => {
+      if ($application_details) {
+        dispatch(loadPageFields({ "page": "4", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
+      }
+    }, [dispatch, parentState, $application_details]);
 
 
     const onInputChange = async (values) => {
@@ -944,7 +901,7 @@ const Form = () => {
         const resp = await dispatch(uploadField(postValues));
 
         if (resp.payload?.message == "success") {
-          dispatch(loadPageFields({ "page": "4", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
+          setParentState(Math.random())
         } else {
 
         }
@@ -955,19 +912,14 @@ const Form = () => {
     };
 
 
-
-
-
-    const updatedApplicationFields = useSelector((state) => state?.application?.all_fields) || null;
-    const [applicationFields, setApplicationFields] = useState(overall_fields?.document);
-
-    let fields = updatedApplicationFields ? (updatedApplicationFields[0]?.page == 4 ? updatedApplicationFields : applicationFields) : applicationFields
-
-    const submitForm = async (data) => {
-
+    const submitForm = (data) => {
       props.next()
-
     };
+
+    const nextProcess = () => {
+      // console.log(errors)
+    }
+
 
     return (
       <form className="content clearfix" onSubmit={handleSubmit(submitForm)} encType="multipart/form-data">
@@ -1007,7 +959,7 @@ const Form = () => {
           <div className="actions clearfix">
             <ul>
               <li>
-                <Button color="primary" type="submit" onClick={(e) => { }}>
+                <Button color="primary" type="submit" onClick={nextProcess}>
                   Next
                 </Button>
               </li>
@@ -1026,18 +978,26 @@ const Form = () => {
 
   const ApplicationDeclaration = (props) => {
 
+    const authUser = useUser();
+    const authUserUpdate = useUserUpdate();
+
+    const dispatch = useDispatch();
+
+    const [parentState, setParentState] = useState('Initial state');
+    const [loading, setLoading] = useState(false);
+    const [modalForm, setModalForm] = useState(false);
 
     const { reset, register, handleSubmit, formState: { errors }, setValue, clearErrors } = useForm();
-
+    const fields = useSelector((state) => state?.application?.all_fields) || null;
     const extra = useSelector((state) => state?.application?.list_extra) || null;
 
     useEffect(() => {
       if ($application_details) {
-
+        dispatch(loadPageFields({ "page": "5", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
         dispatch(loadExtra({ "name": "applicantDeclaration", "category": $application_details?.membership_category?.id }));
       }
 
-    }, [dispatch, $application_details]);
+    }, [dispatch, parentState, $application_details]);
 
 
     const onInputChange = async (values) => {
@@ -1057,7 +1017,7 @@ const Form = () => {
         const resp = await dispatch(uploadField(postValues));
 
         if (resp.payload?.message == "success") {
-          dispatch(loadPageFields({ "page": "5", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
+          setParentState(Math.random())
         } else {
 
         }
@@ -1068,16 +1028,13 @@ const Form = () => {
     };
 
 
-    const updatedApplicationFields = useSelector((state) => state?.application?.all_fields) || null;
-    const [applicationFields, setApplicationFields] = useState(overall_fields?.declaration);
-
-    let fields = updatedApplicationFields ? (updatedApplicationFields[0]?.page == 5 ? updatedApplicationFields : applicationFields) : applicationFields
-
-    const submitForm = async (data) => {
-
+    const submitForm = (data) => {
       props.next()
-
     };
+
+    const nextProcess = () => {
+      // console.log(errors)
+    }
 
 
     return (
@@ -1115,6 +1072,7 @@ const Form = () => {
 
                 )
               }
+
 
             })}
 
@@ -1156,7 +1114,7 @@ const Form = () => {
           <div className="actions clearfix">
             <ul>
               <li>
-                <Button color="primary" type="submit" onClick={(e) => { }}>
+                <Button color="primary" type="submit" onClick={nextProcess}>
                   Next
                 </Button>
               </li>
@@ -1195,12 +1153,12 @@ const Form = () => {
   const Header = (props) => {
     useEffect(() => {
       if ($application_details) {
-        // console.log($application_details)
+        console.log($application_details)
         props.jump($application_details?.step)
       }
     }, [])
 
-    // console.log(props)
+    console.log(props)
     return (
       <div className="steps clearfix">
         <ul>

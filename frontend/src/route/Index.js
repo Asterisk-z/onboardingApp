@@ -21,6 +21,7 @@ import StakeHolderRequest from "main/auth/StakeHolderRequest";
 import ApplicationDetail from "main/pages/application/Detail";
 import ApplicationQPay from "main/pages/application/Payment";
 import ApplicationPreview from "main/pages/application/Preview";
+import Applying from "main/pages/application/Applying";
 import Application from "main/pages/application/Index";
 import Applications from "main/pages/application/Applications";
 import ApplicationDisclosure from "main/pages/application/ApplicationDisclosure";
@@ -196,6 +197,7 @@ const Router = () => {
         <Route path="membership-addictions" element={<Additions />}></Route>
         <Route path="membership-conversions" element={<Conversions />}></Route>
         <Route path="application/:application_uuid" element={<Application />}></Route>
+        <Route path="applying/:application_uuid" element={<Applying />}></Route>
         <Route path="application_disclosure/:application_uuid" element={<ApplicationDisclosure />}></Route>
         <Route path="application_preview/:application_uuid" element={<ApplicationPreview />}></Route>
         <Route path="application_detail/:application_uuid" element={<ApplicationDetail />}></Route>

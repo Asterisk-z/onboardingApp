@@ -89,7 +89,7 @@ class SystemController extends Controller
         }
     }
 
-    public function refreshDatabase($modelName)
+    public function refreshDatabase()
     {
 
         Artisan::call('migrate:fresh');

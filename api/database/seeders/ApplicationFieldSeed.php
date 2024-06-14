@@ -7909,7 +7909,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'select',
                 "required" => 1,
                 "page" => '3',
-                "parent_id" => ApplicationField::where('category', '9')->where('name', 'companyDisciplinary')->first()->id,
+                "parent_id" => ApplicationField::where('category', '12')->where('name', 'companyDisciplinary')->first()->id,
             ],
             [
                 "category" => '12',
@@ -7918,7 +7918,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'select',
                 "required" => 1,
                 "page" => '3',
-                "parent_id" => ApplicationField::where('category', '9')->where('name', 'companyDisciplinary')->first()->id,
+                "parent_id" => ApplicationField::where('category', '12')->where('name', 'companyDisciplinary')->first()->id,
             ],
             [
                 "category" => '12',
@@ -7927,7 +7927,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'select',
                 "required" => 1,
                 "page" => '3',
-                "parent_id" => ApplicationField::where('category', '9')->where('name', 'companyDisciplinary')->first()->id,
+                "parent_id" => ApplicationField::where('category', '12')->where('name', 'companyDisciplinary')->first()->id,
             ],
             [
                 "category" => '12',
@@ -7936,7 +7936,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'select',
                 "required" => 1,
                 "page" => '3',
-                "parent_id" => ApplicationField::where('category', '9')->where('name', 'companyDisciplinary')->first()->id,
+                "parent_id" => ApplicationField::where('category', '12')->where('name', 'companyDisciplinary')->first()->id,
             ],
         ];
 
@@ -8284,7 +8284,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'select',
                 "required" => 1,
                 "page" => '3',
-                "parent_id" => ApplicationField::where('category', '10')->where('name', 'companyDisciplinary')->first()->id,
+                "parent_id" => ApplicationField::where('category', '13')->where('name', 'companyDisciplinary')->first()->id,
             ],
             [
                 "category" => '13',
@@ -8293,7 +8293,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'select',
                 "required" => 1,
                 "page" => '3',
-                "parent_id" => ApplicationField::where('category', '10')->where('name', 'companyDisciplinary')->first()->id,
+                "parent_id" => ApplicationField::where('category', '13')->where('name', 'companyDisciplinary')->first()->id,
             ],
             [
                 "category" => '13',
@@ -8302,7 +8302,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'select',
                 "required" => 1,
                 "page" => '3',
-                "parent_id" => ApplicationField::where('category', '10')->where('name', 'companyDisciplinary')->first()->id,
+                "parent_id" => ApplicationField::where('category', '13')->where('name', 'companyDisciplinary')->first()->id,
             ],
             [
                 "category" => '13',
@@ -8311,7 +8311,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'select',
                 "required" => 1,
                 "page" => '3',
-                "parent_id" => ApplicationField::where('category', '10')->where('name', 'companyDisciplinary')->first()->id,
+                "parent_id" => ApplicationField::where('category', '13')->where('name', 'companyDisciplinary')->first()->id,
             ],
         ];
 
@@ -8562,7 +8562,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'select',
                 "required" => 1,
                 "page" => '3',
-                "parent_id" => ApplicationField::where('category', '11')->where('name', 'companyDisciplinary')->first()->id,
+                "parent_id" => ApplicationField::where('category', '14')->where('name', 'companyDisciplinary')->first()->id,
             ],
             [
                 "category" => '14',
@@ -8571,7 +8571,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'select',
                 "required" => 1,
                 "page" => '3',
-                "parent_id" => ApplicationField::where('category', '11')->where('name', 'companyDisciplinary')->first()->id,
+                "parent_id" => ApplicationField::where('category', '14')->where('name', 'companyDisciplinary')->first()->id,
             ],
             [
                 "category" => '14',
@@ -8580,7 +8580,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'select',
                 "required" => 1,
                 "page" => '3',
-                "parent_id" => ApplicationField::where('category', '11')->where('name', 'companyDisciplinary')->first()->id,
+                "parent_id" => ApplicationField::where('category', '14')->where('name', 'companyDisciplinary')->first()->id,
             ],
             [
                 "category" => '14',
@@ -8589,7 +8589,7 @@ class ApplicationFieldSeed extends Seeder
                 "type" => 'select',
                 "required" => 1,
                 "page" => '3',
-                "parent_id" => ApplicationField::where('category', '11')->where('name', 'companyDisciplinary')->first()->id,
+                "parent_id" => ApplicationField::where('category', '14')->where('name', 'companyDisciplinary')->first()->id,
             ],
         ];
         foreach ($fields as $field) {
