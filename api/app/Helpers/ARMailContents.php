@@ -98,7 +98,7 @@ class ARMailContents
     {
         $regID = $ARUser->getRegID();
         return "<p>
-            Kindly login to the “MROIS Portal” to approve/reject the <bUpdate</b> of <b>$regID</b>
+            Kindly login to the “MROIS Portal” to approve/reject the <b>Update</b> of <b>$regID</b>
         </p>
         ";
     }

@@ -59,7 +59,7 @@ const Landing = ({ ...props }) => {
                   </p>
 
                   <h4 className="title">Technical Methods Used to Collect and Store Information</h4>
-                  <p>The methods and mediums used by the Exchange in the collection of personal information include: (a) Online forms embedded on the Member Regulation Oversight Information System; (b) Contracts and Agreements; (c) Surveys and Questionnaires; (d) Interviews; (e) Other systems to which access has been granted by virtue of your membership; and (f) Website visits. Your personal information will be retained and stored for the period in which it is needed for the purposes set out in this Notice or in line with relevant legal and regulatory requirements.</p>
+                  <p>The methods and mediums used by the Exchange in the collection of personal information include: (a) Online forms embedded on the Member Regulation and Oversight Information System; (b) Contracts and Agreements; (c) Surveys and Questionnaires; (d) Interviews; (e) Other systems to which access has been granted by virtue of your membership; and (f) Website visits. Your personal information will be retained and stored for the period in which it is needed for the purposes set out in this Notice or in line with relevant legal and regulatory requirements.</p>
 
                   <h4 className="title">Third Party Access to Personal Information</h4>
                   <p>The Exchange is the recipient of your personal data. In the course of providing services to you, the data collected may be shared with other FMDQ associated entities under FMDQ Group and service providers engaged by us. We will not disclose your personal information to external organisations that are not our service providers unless you give us your consent, or required by law to do so, or where necessary to the conclusion of performance of our obligations to you. In addition, we may transfer your personal information out of Nigeria in line with the requirements of the Nigeria Data Protection Regulation, 2019. We may also share your information where there is a regulatory or statutory obligation to disclose such personal information in accordance with the provisions of applicable laws.</p>
@@ -70,7 +70,7 @@ const Landing = ({ ...props }) => {
                   <h4 className="title">Available Remedies in the Event of Violation and Timeframe for Remedy</h4>
                   <p>You have a right to withdraw consent for processing your personal information in cases where consent has previously been given, and the right to rectify inaccurate and incomplete information at any time, and the Exchange shall upon receipt of such request, ensure same is rectified without delay and at least within one month. You also have the right to request from the Exchange, access and the ability to rectify your personal information, restriction of the processing of your personal information, request for deletion of your personal information or to object to the processing as well the right to data portability.</p>
                   <p>The Member can also contact the Exchange's Data Protection Officer:</p>
-                  Contact Name: Dipo Omotoso 
+                  Contact Name: Dipo Omotoso
                   <br />
                   Email: privacypolicy@fmdqgroup.com
 

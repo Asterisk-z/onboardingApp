@@ -17,7 +17,7 @@ class Application extends Model
     const statuses = [
         'PEN' => 'PENDING',
         'FDP' => 'FSD DECLINED PAYMENT',
-        'FAP' => 'FSD APPROVED PAYMENT',
+        'FAP' => 'FSD CONFIRMED PAYMENT',
         'AS' => 'APPLICATION SUBMITTED',
         'MPC' => 'MEMBERSHIP APPLICATION COMPLETED',
         'ACS' => 'APPLICATION AWAITING CONCESSION',
@@ -32,7 +32,7 @@ class Application extends Model
         'MRF' => 'MBG REJECTED FSD REVIEW',
         'MDP' => 'MBG DECLINED PAYMENT',
         'MDFR' => 'FSD REVIEW DECLINED BY MBG',
-        'MAFR' => 'FSD REVIEW APPROVED BY MBG',
+        'MAFR' => 'MBG APPROVED PAYMENT',
         'MDD' => "MEG DECLINED DOCUMENT",
         'MDMR' => "MEG DECLINED MBG REVIEW",
         'MAMR' => "MEG APPROVED MBG REVIEW",

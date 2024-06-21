@@ -95,7 +95,7 @@ class ApplicationSubmissionListener implements ShouldQueue
             'name' => 'Team',
             'subject' => 'New Membership Application',
             'content' => "A new applicant, $name, has successfully submitted
-                            an application on the MROIS Portal as a $categoryName",
+                            an application on the MROIS Portal as a/an $categoryName",
         ];
 
         Utility::emailHelper($emailD, $tos);

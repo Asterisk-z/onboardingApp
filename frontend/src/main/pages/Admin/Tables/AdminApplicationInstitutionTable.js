@@ -159,8 +159,8 @@ const ActionTab = (props) => {
   const askAction = (action) => {
     if (action == 'approvePaymentReview') {
       Swal.fire({
-        title: "Kindly confirm payment",
-        text: "Do you want to approve payment!",
+        title: "Kindly Validate Payment",
+        text: "Do you want to validate payment!",
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Confirm!",
@@ -590,7 +590,7 @@ const ActionTab = (props) => {
               <a className="btn btn-primary mx-2" href={institution?.payment_details?.concession_file} target="_blank">View Concession Document </a>
 
               <div className="my-4">
-                <Button color="primary" className="mx-2" onClick={() => askAction('approvePaymentReview')}>Approve</Button>
+                <Button color="primary" className="mx-2" onClick={() => askAction('approvePaymentReview')}>Validate Payment</Button>
                 <Button color="primary" className="mx-2" onClick={() => askAction('declinePaymentReview')}>Decline</Button>
               </div>
             </>}
@@ -1141,7 +1141,7 @@ const ActionTab = (props) => {
               </table>
             </CardBody>
             <CardBody className="card-inner">
-              <CardTitle tag="h5">{`FSG Review`}</CardTitle>
+              <CardTitle tag="h5">{`FSD Review`}</CardTitle>
               {/* <ul>
                                   <li><span className="lead">Status :{`${institution?.fsd_review[institution?.fsd_review.length - 1]?.status ? institution?.fsd_review[institution?.fsd_review.length - 1]?.status : ""}`} </span></li>
                                   <li><span className="lead">Reason :{`${institution?.fsd_review[institution?.fsd_review.length - 1]?.comment ? institution?.fsd_review[institution?.fsd_review.length - 1]?.comment : ""}`} </span></li>

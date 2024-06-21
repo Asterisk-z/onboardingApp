@@ -83,7 +83,7 @@ class MegApplicationController extends Controller
 
             $application->reupload = true;
             $application->show_form = 1;
-            $application->step = 1;
+            $application->step = 4;
             $application->save();
 
             return successResponse("Application updated successfully");

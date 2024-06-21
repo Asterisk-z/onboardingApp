@@ -439,8 +439,8 @@ class MembershipApplicationController extends Controller
             $applicationFieldIds
         );
         $mFields = ApplicationField::whereIn('id', $missingFieldIds)->get();
-logger($missingFieldIds);
-        logger($mFields);
+        // logger($missingFieldIds);
+        // logger($mFields);
 
         if (!empty($missingFieldIds)) {
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, "Submission failed. There are required fields you are yet to fill.");

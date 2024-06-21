@@ -9,6 +9,7 @@ use App\Models\Application;
 use App\Models\InstitutionMembership;
 use App\Models\MembershipCategory;
 use App\Models\MembershipCategoryPostition;
+use App\Models\Position;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -72,12 +73,16 @@ class MemberCategoryController extends Controller
         // $positions = Position::whereIn('positions.id', $position_ids)->get();
 // ->leftJoin('membership_category_postitions', 'positions.id', '=', 'membership_category_postitions.position_id')
 
-        $position_ids = MembershipCategoryPostition::whereIn('membership_category_postitions.category_id', $request->category_ids)
-            ->rightJoin('positions', 'positions.id', '=', 'membership_category_postitions.position_id')
-            ->select('positions.*', 'membership_category_postitions.is_compulsory')
-            ->orderBy('membership_category_postitions.is_compulsory')->get();
+        $position_ids = MembershipCategoryPostition::whereIn('membership_category_postitions.category_id', $request->category_ids)->pluck('position_id');
+        $positions = Position::whereIn('id', $position_ids)->orderBy('name', 'ASC')->get();
+        // logger($positions);
 
-        return successResponse('Here you go', $position_ids);
+        // $position_ids = MembershipCategoryPostition::whereIn('membership_category_postitions.category_id', $request->category_ids)
+        //     ->rightJoin('positions', 'positions.id', '=', 'membership_category_postitions.position_id')
+        //     ->select('positions.*', 'membership_category_postitions.is_compulsory')
+        //     ->orderBy('membership_category_postitions.is_compulsory')->get();
+
+        return successResponse('Here you go', $positions);
     }
     /**
      * Display a listing of the resource.
