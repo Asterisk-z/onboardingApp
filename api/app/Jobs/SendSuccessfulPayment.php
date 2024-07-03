@@ -74,7 +74,7 @@ class SendSuccessfulPayment implements ShouldQueue
             mkdir($path, 0777, true);
         }
         $filepath = "$path/$fileName";
-        $publicPath = config("app.url") . "/storage/proof_of_payment/online/" . $fileName;
+        $publicPath = config("app.url") . "/storage/app/public/proof_of_payment/online/" . $fileName;
         $name = "proof_of_payment_$date.pdf";
 
         $proof = ProofOfPayment::create([

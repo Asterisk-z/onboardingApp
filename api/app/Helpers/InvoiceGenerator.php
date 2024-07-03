@@ -6,7 +6,7 @@ use Carbon\Carbon;
 
 class InvoiceGenerator
 {
-    
+
     public static function generateInvoiceNumber()
     {
         $year = Carbon::now()->format('Y');
@@ -20,9 +20,11 @@ class InvoiceGenerator
         $yearMonth = Carbon::now()->format('Y-m');
         $nextReferenceNumber = self::getNextReferenceNumber();
 
-        return "REF{$yearMonth}-{$nextReferenceNumber}";
+        return "MR{$nextReferenceNumber}";
+        // return "REF{$yearMonth}-{$nextReferenceNumber}";
+
     }
-    
+
     private static function getNextInvoiceNumber()
     {
         $invoice = Invoice::all();
@@ -32,7 +34,7 @@ class InvoiceGenerator
     private static function getNextReferenceNumber()
     {
         $invoice = Invoice::all();
-        return self::padToDigits(count($invoice) + 1, 5);
+        return self::padToDigits(count($invoice) + 1, 4);
     }
 
     private static function padToDigits($number, $lenght)

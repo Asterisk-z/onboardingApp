@@ -246,7 +246,7 @@ const AdminRepresentativeReport = ({ drawer }) => {
                                                     {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Filter Report"}
                                                 </Button> */}
                                                 <div className="float-end" >
-                                                    <CopyToClipboard text={`${window.location.host}${process.env.PUBLIC_URL}/stakeholder-ar-request`}>
+                                                    <CopyToClipboard text={`${window.location.origin}${process.env.PUBLIC_URL}/stakeholder-ar-request`}>
                                                         <Button color="primary" size="lg" onClick={() => copyToClipboard()}>
                                                             <span>Copy stakeholder request link</span>
                                                         </Button>

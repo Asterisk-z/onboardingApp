@@ -26,7 +26,7 @@ const Export = ({ data, reportUrl }) => {
     return ({
       "ID": ++index,
       "Surname": `${item.lastName}`,
-      "FirstName": `${item.lastName}`,
+      "FirstName": `${item.firstName}`,
       "Email": `${item.email}`,
       "Institution": item.institution.name,
       "Position": item.position.name,

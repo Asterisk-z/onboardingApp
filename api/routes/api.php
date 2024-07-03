@@ -73,6 +73,7 @@ Route::get('/ar_roles', [RoleController::class, 'user_roles']);
 Route::get('/admin_roles', [RoleController::class, 'admin_roles']);
 Route::get('/categories', [MemberCategoryController::class, 'index']);
 Route::post('/category/positions', [MemberCategoryController::class, 'positions']);
+Route::post('/broadcast/category/positions', [MemberCategoryController::class, 'boardcastPositions']);
 Route::get('/complaint-types', [ComplaintTypeController::class, 'index']);
 Route::get('/sanction-types', [SanctionsController::class, 'indexTypes']);
 

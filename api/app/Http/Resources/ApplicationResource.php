@@ -29,7 +29,7 @@ class ApplicationResource extends JsonResource
                 "institution_id" => $this->institution_id,
                 "concession_stage" => $this->concession_stage,
                 "disclosure_stage" => $this->disclosure_stage,
-                "amount_received_by_fsd" => $this->amount_received_by_fsd,
+                "amount_received_by_fsd" => $this->amount_received_by_fsd ? number_format($this->amount_received_by_fsd, 2) : $this->amount_received_by_fsds,
                 "mbg_review_stage" => $this->mbg_review_stage,
                 "meg_review_stage" => $this->meg_review_stage,
                 "meg2_review_stage" => $this->meg2_review_stage,

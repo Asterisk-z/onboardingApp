@@ -56,7 +56,8 @@ class ARMailContents
                 <br>
                 <p>
                     Kindly login to the <a href='" . $link . "'>MROIS Portal</a> to approve or reject
-                </p>";
+                </p>
+                <br>";
 
         return $message;
     }

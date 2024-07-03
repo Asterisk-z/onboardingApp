@@ -71,7 +71,7 @@ class ApplicationSubmissionListener implements ShouldQueue
         $emailData = [
             'name' => $name,
             'subject' => 'New Membership Application',
-            'content' => "Thank you for your interest in the $categoryName of FMDQ Securities Exchange Limited.
+            'content' => "Thank you for your interest in the $categoryName categories of FMDQ Securities Exchange Limited.
                         We are currently reviewing your application and will provide feedback within three (3) business
                         days",
         ];
@@ -91,11 +91,13 @@ class ApplicationSubmissionListener implements ShouldQueue
         $fsd = Utility::getUsersEmailByCategory(Role::FSD);
         $tos = array_merge($Meg, $Mbg, $fsd);
 
+        $categoryNameWithPronoun = Utility::categoryNameWithPronoun($categoryName);
+
         $emailD = [
             'name' => 'Team',
             'subject' => 'New Membership Application',
             'content' => "A new applicant, $name, has successfully submitted
-                            an application on the MROIS Portal as a/an $categoryName",
+                            an application on the MROIS Portal as $categoryNameWithPronoun",
         ];
 
         Utility::emailHelper($emailD, $tos);

@@ -26,7 +26,7 @@ class RegulatorsController extends Controller
     {
         $validated = $request->validate([
             "name" => "required|string",
-            "brief" => "required|string|max:50",
+            "brief" => "required|string|max:200",
             "url" => "required|string|unique:regulators",
         ]);
 
@@ -53,7 +53,7 @@ class RegulatorsController extends Controller
         $validated = $request->validate([
             "name" => "required|string",
             "url" => "required|string",
-            "brief" => "required|string|max:50",
+            "brief" => "required|string|max:200",
         ]);
         //
         $regulators->update([

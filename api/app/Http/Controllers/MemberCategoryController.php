@@ -69,18 +69,20 @@ class MemberCategoryController extends Controller
 
     public function positions(CategoryRequest $request): JsonResponse
     {
-        // $position_ids = MembershipCategoryPostition::whereIn('category_id', $request->category_ids)->pluck('position_id');
-        // $positions = Position::whereIn('positions.id', $position_ids)->get();
-// ->leftJoin('membership_category_postitions', 'positions.id', '=', 'membership_category_postitions.position_id')
+
+        $position_ids = MembershipCategoryPostition::whereIn('membership_category_postitions.category_id', $request->category_ids)
+            ->rightJoin('positions', 'positions.id', '=', 'membership_category_postitions.position_id')
+            ->select('positions.*', 'membership_category_postitions.is_compulsory')
+            ->orderBy('membership_category_postitions.is_compulsory')->get();
+
+        return successResponse('Here you go', $position_ids);
+    }
+
+    public function boardcastPositions(CategoryRequest $request): JsonResponse
+    {
 
         $position_ids = MembershipCategoryPostition::whereIn('membership_category_postitions.category_id', $request->category_ids)->pluck('position_id');
         $positions = Position::whereIn('id', $position_ids)->orderBy('name', 'ASC')->get();
-        // logger($positions);
-
-        // $position_ids = MembershipCategoryPostition::whereIn('membership_category_postitions.category_id', $request->category_ids)
-        //     ->rightJoin('positions', 'positions.id', '=', 'membership_category_postitions.position_id')
-        //     ->select('positions.*', 'membership_category_postitions.is_compulsory')
-        //     ->orderBy('membership_category_postitions.is_compulsory')->get();
 
         return successResponse('Here you go', $positions);
     }

@@ -636,7 +636,7 @@ class Utility
 
         $table .= "</tbody>
                     </table>";
-            return $table;
+        return $table;
 
     }
     public static function representativeReport()
@@ -644,9 +644,8 @@ class Utility
         $query = User::whereNotNull('institution_id');
         $query = $query->whereIn('role_id', [Role::ARAUTHORISER, Role::ARINPUTTER]);
 
-
-            $users = $query->latest()->get();
-            $table = "<table>
+        $users = $query->latest()->get();
+        $table = "<table>
                         <thead>
                             <tr>
                                 <th scope='col'>Surname</th>
@@ -659,9 +658,9 @@ class Utility
                             <tr>
                         </thead>
                         <tbody>";
-            foreach ($users as $setData) {
+        foreach ($users as $setData) {
 
-                $table .= "<tr>
+            $table .= "<tr>
                                         <td  scope='row'>{$setData->last_name}</td>
                                         <td>{$setData->first_name}</td>
                                         <td>{$setData->institution->name}</td>
@@ -670,13 +669,19 @@ class Utility
                                         <td>{$setData->email}</td>
                                         <td>{$setData->phone}</td>
                                     </tr>";
-            }
+        }
 
-            $table .= "</tbody>
+        $table .= "</tbody>
                         </table>";
-            return $table;
-
+        return $table;
 
     }
 
+    public static function categoryNameWithPronoun($categoryName)
+    {
+        $catList = explode(' ', $categoryName);
+        $anList = ['Associate', 'Affiliate'];
+        $pronoun = (in_array($catList[0], $anList)) ? "an" : "a";
+        return "$pronoun $categoryName";
+    }
 }

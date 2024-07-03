@@ -710,7 +710,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '1',
                 "name" => 'CompanyOverview',
-                "description" => 'Company Profile containing brief description of the following inter alias: History & Company Overview  & Details of Business Services & Profiles of Board of Directors & Profiles of Executive Management Staff',
+                "description" => 'Company Profile containing brief description of the following inter alia: History & Company Overview  & Details of Business Services & Profiles of Board of Directors & Profiles of Executive Management Staff',
                 "type" => 'file',
                 "required" => 1,
                 "page" => '4',
@@ -1552,7 +1552,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '2',
                 "name" => 'CompanyOverview',
-                "description" => 'Company Profile containing brief description of the following inter alias: History & Company Overview  & Details of Business Services & Profiles of Board of Directors & Profiles of Executive Management Staff',
+                "description" => 'Company Profile containing brief description of the following inter alia: History & Company Overview  & Details of Business Services & Profiles of Board of Directors & Profiles of Executive Management Staff',
                 "type" => 'file',
                 "required" => 1,
                 "page" => '4',
@@ -2446,7 +2446,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '3',
                 "name" => 'CompanyOverview',
-                "description" => 'Company Profile containing brief description of the following inter alias: History & Company Overview  & Details of Business Services & Profiles of Board of Directors & Profiles of Executive Management Staff',
+                "description" => 'Company Profile containing brief description of the following inter alia: History & Company Overview  & Details of Business Services & Profiles of Board of Directors & Profiles of Executive Management Staff',
                 "type" => 'file',
                 "required" => 1,
                 "page" => '4',
@@ -3358,7 +3358,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '4',
                 "name" => 'CompanyOverview',
-                "description" => 'Company Profile containing brief description of the following inter alias: History & Company Overview  & Details of Business Services & Profiles of Board of Directors & Profiles of Executive Management Staff',
+                "description" => 'Company Profile containing brief description of the following inter alia: History & Company Overview  & Details of Business Services & Profiles of Board of Directors & Profiles of Executive Management Staff',
                 "type" => 'file',
                 "required" => 1,
                 "page" => '4',
@@ -4352,7 +4352,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '5',
                 "name" => 'CompanyOverview',
-                "description" => 'Company Profile containing brief description of the following inter alias: History & Company Overview  & Details of Business Services & Profiles of Board of Directors & Profiles of Executive Management Staff',
+                "description" => 'Company Profile containing brief description of the following inter alia: History & Company Overview  & Details of Business Services & Profiles of Board of Directors & Profiles of Executive Management Staff',
                 "type" => 'file',
                 "required" => 1,
                 "page" => '4',
@@ -5141,7 +5141,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '6',
                 "name" => 'CompanyOverview',
-                "description" => 'Company Profile containing brief description of the following inter alias: History & Company Overview  & Details of Business Services & Profiles of Board of Directors & Profiles of Executive Management Staff',
+                "description" => 'Company Profile containing brief description of the following inter alia: History & Company Overview  & Details of Business Services & Profiles of Board of Directors & Profiles of Executive Management Staff',
                 "type" => 'file',
                 "required" => 1,
                 "page" => '4',
@@ -5994,7 +5994,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '7',
                 "name" => 'CompanyOverview',
-                "description" => 'Company Profile containing brief description of the following inter alias: History & Company Overview  & Details of Business Services & Profiles of Board of Directors & Profiles of Executive Management Staff',
+                "description" => 'Company Profile containing brief description of the following inter alia: History & Company Overview  & Details of Business Services & Profiles of Board of Directors & Profiles of Executive Management Staff',
                 "type" => 'file',
                 "required" => 1,
                 "page" => '4',
@@ -6678,7 +6678,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '8',
                 "name" => 'CompanyOverview',
-                "description" => 'Company Profile containing brief description of the following inter alias: History & Company Overview  & Details of Business Services & Profiles of Board of Directors & Profiles of Executive Management Staff',
+                "description" => 'Company Profile containing brief description of the following inter alia: History & Company Overview  & Details of Business Services & Profiles of Board of Directors & Profiles of Executive Management Staff',
                 "type" => 'file',
                 "required" => 1,
                 "page" => '4',
@@ -7706,7 +7706,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '11',
                 "name" => 'CompanyOverview',
-                "description" => 'Company Profile containing brief description of the following inter alias: History & Company Overview  & Details of Business Services & Profiles of Board of Directors & Profiles of Executive Management Staff',
+                "description" => 'Company Profile containing brief description of the following inter alia: History & Company Overview  & Details of Business Services & Profiles of Board of Directors & Profiles of Executive Management Staff',
                 "type" => 'file',
                 "required" => 1,
                 "page" => '4',
@@ -8099,7 +8099,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '12',
                 "name" => 'CompanyOverview',
-                "description" => 'Company Profile containing brief description of the following inter alias: History & Company Overview  & Details of Business Services & Profiles of Board of Directors & Profiles of Executive Management Staff',
+                "description" => 'Company Profile containing brief description of the following inter alia: History & Company Overview  & Details of Business Services & Profiles of Board of Directors & Profiles of Executive Management Staff',
                 "type" => 'file',
                 "required" => 1,
                 "page" => '4',
@@ -8768,7 +8768,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '14',
                 "name" => 'CompanyOverview',
-                "description" => 'Company Profile containing brief description of the following inter alias: History & Company Overview  & Details of Business Services & Profiles of Board of Directors & Profiles of Executive Management Staff',
+                "description" => 'Company Profile containing brief description of the following inter alia: History & Company Overview  & Details of Business Services & Profiles of Board of Directors & Profiles of Executive Management Staff',
                 "type" => 'file',
                 "required" => 1,
                 "page" => '4',
@@ -9690,7 +9690,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '15',
                 "name" => 'CompanyOverview',
-                "description" => 'Company Profile containing brief description of the following inter alias: History & Company Overview  & Details of Business Services & Profiles of Board of Directors & Profiles of Executive Management Staff',
+                "description" => 'Company Profile containing brief description of the following inter alia: History & Company Overview  & Details of Business Services & Profiles of Board of Directors & Profiles of Executive Management Staff',
                 "type" => 'file',
                 "required" => 1,
                 "page" => '4',

@@ -61,7 +61,7 @@ const Regulators = ({ drawer }) => {
                                                         <CardText className="h-15 overflow-auto">
                                                             {regulator?.brief}
                                                         </CardText>
-                                                        <CardLink href={regulator.url} target="_blank" className="btn btn-primary" color="primary">Goto Website</CardLink>
+                                                        <CardLink href={regulator.url} target="_blank" className="btn btn-primary" color="primary">Go to Website</CardLink>
                                                     </CardBody>
                                                 </Card>
                                             </Col>)}

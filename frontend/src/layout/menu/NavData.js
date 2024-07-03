@@ -233,7 +233,7 @@ const navData = [{
   },
   {
     icon: "tile-thumb-fill",
-    text: "Portals Guide",
+    text: "Portal Guide",
     active: false,
     subMenu: [{
       text: "Applicant Guide",

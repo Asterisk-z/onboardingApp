@@ -64,9 +64,9 @@ trait ApplicationTraits
         $payment_url = $application->invoiceToken ? route('invoice', ['uuid' => $application->invoiceToken]) : null;
 
         $data = [
-            'concession_amount' => $concession,
+            'concession_amount' => $concession ? number_format($concession, '2') : '0',
             'concession_file' => $application->concession_file ? config('app.url') . '/storage/app/public/' . $application->concession_file : null,
-            'total' => $total,
+            'total' => $total ? number_format($total, '2') : '0',
             'invoice_url' => $payment_url,
         ];
 

@@ -147,13 +147,13 @@ const Sanction = ({ drawer }) => {
                                             <select className="form-control form-select" style={{ color: "black !important" }} {...register('ar', { required: "AR is Required" })}>
                                                 <option value="">Select Authorised Representative</option>
                                                 {$ar_users && $ar_users?.map((ar_user) => {
-                                                    if (authUser.id != ar_user.id) {
-                                                        return (
-                                                            <option key={ar_user.id} value={ar_user.id}>
-                                                                {`${ar_user.firstName} ${ar_user.lastName} (${ar_user.email})`}
-                                                            </option>
-                                                        )
-                                                    }
+                                                    // if (authUser.id != ar_user.id) {
+                                                    return (
+                                                        <option key={ar_user.id} value={ar_user.id}>
+                                                            {`${ar_user.firstName} ${ar_user.lastName} (${ar_user.email})`}
+                                                        </option>
+                                                    )
+                                                    // }
                                                 })}
                                             </select>
                                             {errors.ar && <p className="invalid">{`${errors.ar.message}`}</p>}

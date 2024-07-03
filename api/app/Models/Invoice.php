@@ -11,14 +11,15 @@ class Invoice extends Model
 
     protected $guarded = ['id'];
 
-    public function toArray(){
+    public function toArray()
+    {
         return [
             'id' => $this->id,
             'invoice_number' => $this->invoice_number,
             'reference' => $this->reference,
-            'date_paid' => $this->date_paid,
+            'date_paid' => $this->date_paid ?? '',
             'is_paid' => $this->is_paid,
-            'contents' => $this->contents
+            'contents' => $this->contents,
         ];
     }
 
@@ -27,7 +28,8 @@ class Invoice extends Model
         return $this->morphTo();
     }
 
-    public function contents(){
+    public function contents()
+    {
         return $this->hasMany(InvoiceContent::class);
     }
 }

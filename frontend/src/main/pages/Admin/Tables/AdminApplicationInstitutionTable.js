@@ -531,12 +531,12 @@ const ActionTab = (props) => {
           </> :
             (institution?.latest_evidence?.proof) ? <>
               <ul>
-                <li><span className="lead">Invoice Number : </span>{`${institution?.payment_information?.invoice_number}`}</li>
-                <li><span className="lead">Date of Payment : </span>{`${institution?.latest_evidence?.dateUpload ? institution?.latest_evidence?.dateUpload : ''}`}</li>
-                <li><span className="lead">Reference : </span>{`${institution?.payment_information?.reference}`}</li>
+                <li><span className="lead">Invoice Number : {`${institution?.payment_information?.invoice_number}`} </span></li>
+                <li><span className="lead">Date of Payment : {`${institution?.latest_evidence?.dateUpload ? institution?.latest_evidence?.dateUpload : ''}`}</span></li>
+                <li><span className="lead">Reference : {`${institution?.payment_information?.reference}`}</span></li>
                 {(aUser.is_admin_mbg() && $latest_evidence) && <>
-                  <li><span className="lead">Amount received by FSD : </span>{`${institution?.internal?.amount_received_by_fsd}`}</li>
-                  <li><span className="lead">Comment : </span>{`${institution.fsd_review[institution.fsd_review.length - 1].comment}`}</li>
+                  <li><span className="lead">Amount received by FSD : {`${institution?.internal?.amount_received_by_fsd}`}</span></li>
+                  <li><span className="lead">Comment : {`${institution.fsd_review[institution.fsd_review.length - 1].comment}`}</span></li>
                 </>}
               </ul>
               <div className="my-4">

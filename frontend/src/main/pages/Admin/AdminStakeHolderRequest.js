@@ -37,13 +37,13 @@ const AdminStakeHolder = ({ drawer }) => {
 
     return (
         <React.Fragment>
-            <Head title="Stack Holder  Request"></Head>
+            <Head title="Stake Holder  Request"></Head>
             <Content>
                 <BlockHead size="sm">
                     <BlockBetween>
                         <BlockHeadContent>
                             <BlockTitle page tag="h3">
-                                Stack Holder Request
+                                Stake Holder Request
                             </BlockTitle>
                         </BlockHeadContent>
                         <BlockHeadContent>
@@ -58,7 +58,7 @@ const AdminStakeHolder = ({ drawer }) => {
                             <Block size="xl">
                                 <BlockHead>
                                     <BlockHeadContent>
-                                        <BlockTitle tag="h4">Stack Holder Request History</BlockTitle>
+                                        <BlockTitle tag="h4">Stake Holder Request History</BlockTitle>
                                         {/* <p>{request_list}</p> */}
                                         {/* {<p>{parentState}</p>} */}
                                     </BlockHeadContent>

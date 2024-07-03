@@ -147,7 +147,7 @@ class MegApplicationController extends Controller
         $emailData = [
             'name' => $name,
             'subject' => MailContents::memberAgreementSubject(),
-            'content' => MailContents::memberAgreementMail(),
+            'content' => MailContents::memberAgreementMail($data->company_name),
         ];
 
         $attachment = [

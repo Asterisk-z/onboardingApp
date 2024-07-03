@@ -29,7 +29,14 @@ class QpayController extends Controller
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        if (!$invoice = Invoice::where('reference', $request->newRef)->first()) {
+        $ref = $request->newRef;
+
+        logger($ref);
+
+        $refArr = explode('_', $ref);
+        $reference = $refArr[1];
+
+        if (!$invoice = Invoice::where('reference', $reference)->first()) {
             logger("Invalid Reference: $request->newRef");
 
             return response()->json([
@@ -37,7 +44,7 @@ class QpayController extends Controller
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        if (strtolower($request->newStatus) != 'success') {
+        if (strtolower($request->newStatus) != 'successful') {
             logger("Invalid Status: Status should be success, {$request->newStatus} was returned.");
 
             return response()->json([
@@ -53,7 +60,9 @@ class QpayController extends Controller
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        SendSuccessfulPayment::dispatch($request->all(), $request->ip());
+        $data['newRef'] = $reference;
+
+        SendSuccessfulPayment::dispatch($data, $request->ip());
 
         return redirect(config('app.front_end_url') . '/qpay_check?status=success');
 

@@ -301,10 +301,10 @@ class MailContents
         return "Membership Agreement";
     }
 
-    public static function memberAgreementMail(): string
+    public static function memberAgreementMail($applicant): string
     {
         $url = config("app.front_end_url");
-        return "<p>Kindly log on to <a href=$url>MROIS Portal</a> to view the latest update concerning Agreement Review.</p>";
+        return "<p>Kindly login to <a href=$url>MROIS Portal</a> to view the latest update concerning FMDQ Membership Agreement - $applicant.</p>";
     }
 
     public static function meG2ApprovalSubject(): string
@@ -315,7 +315,7 @@ class MailContents
     public static function meG2ApprovalMail($companyName, $categoryName): string
     {
         $url = config("app.front_end_url");
-        return "<p>Kindly be informed that {$companyName} Application Report for {$categoryName} Category has been approved.</p>
+        return "<p>Kindly be informed that {$companyName} Application Report for {$categoryName} Categories has been approved.</p>
         <p>Kindly log on to <a href=$url>MROIS Portal</a> to proceed with the Application.</p>";
     }
 
@@ -440,8 +440,8 @@ class MailContents
         $ar_id = $user->getRegID();
         return "<p>Please be informed that a notification of change has been
         made by an AR of your Institution with AR ID `$ar_id`.
-        Kindly login to <a href=$url>MROIS Portal</a>  to approve the
-        request '$request_id'";
+        Kindly login to the <a href=$url>MROIS Portal</a>  to approve the
+        request $request_id.";
     }
 
     public static function megNotificationOfChangeSubject(): string
@@ -456,7 +456,7 @@ class MailContents
         $memberName = $user->full_name;
         return "<p>Please be informed that a notification of change has been made
         by the`$ar_id` of '$memberName'.
-        Kindly login to <a href=$url>MROIS Portal</a>  to view change'";
+        Kindly login to the <a href=$url>MROIS Portal</a>  to view change.";
     }
 
     public static function notificationOfChangeNewCommentSubject(): string
@@ -468,7 +468,7 @@ class MailContents
     {
         $url = config("app.front_end_url");
         return "<p>Please be informed that a comment was made on a notification of change.
-        Kindly login to <a href=$url>MROIS Portal</a>  to view'";
+        Kindly login to the <a href=$url>MROIS Portal</a>  to view.";
     }
 
     public static function arNotificationOfChangeAcceptSubject($request_id, $subject): string
@@ -480,7 +480,7 @@ class MailContents
     {
         $url = config("app.front_end_url");
         return "<p>Please be informed that the notification of change `$request_id`.
-        has been accepted. Kindly login to the  <a href=$url>MROIS Portal</a>  to view";
+        has been accepted. Kindly login to the  <a href=$url>MROIS Portal</a>  to view.";
     }
 
     public static function arNotificationOfChangeRejectSubject($request_id, $subject): string
@@ -506,6 +506,6 @@ class MailContents
     {
         $url = config("app.front_end_url");
         return "<p>A stakeholder with mail $email sent a request to view report.
-     Kindly login to the  <a href=$url>MROIS Portal</a>  to allow or decline</p>";
+     Kindly login to the  <a href=$url>MROIS Portal</a>  to allow or decline.</p>";
     }
 }
