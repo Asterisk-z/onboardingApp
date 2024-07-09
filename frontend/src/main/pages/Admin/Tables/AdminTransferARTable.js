@@ -18,71 +18,71 @@ import Swal from "sweetalert2";
 
 
 const Export = ({ data }) => {
-    const [modal, setModal] = useState(false);
+  const [modal, setModal] = useState(false);
 
-    useEffect(() => {
-        if (modal === true) {
-        setTimeout(() => setModal(false), 2000);
-        }
-    }, [modal]);
+  useEffect(() => {
+    if (modal === true) {
+      setTimeout(() => setModal(false), 2000);
+    }
+  }, [modal]);
 
-    const newData = data.map((item, index) => {
-        return ({
-            "ID": ++index,
-            "Institution": `${item.new_institution.category[0].name}`,
-            "Email": item.ar.email,
-            "Status": item.approval_status,
-            "Role": item.ar.role.name,
-            "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
-        })
-    });
+  const newData = data.map((item, index) => {
+    return ({
+      "ID": ++index,
+      "Institution": `${item.new_institution.category[0].name}`,
+      "Email": item.ar.email,
+      "Status": item.approval_status,
+      "Role": item.ar.role.name,
+      "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
+    })
+  });
 
-    const fileName = "data";
+  const fileName = "data";
 
-    const exportCSV = () => {
-        const exportType = exportFromJSON.types.csv;
-        exportFromJSON({ data: newData, fileName: fileName, exportType: exportType });
+  const exportCSV = () => {
+    const exportType = exportFromJSON.types.csv;
+    exportFromJSON({ data: newData, fileName: fileName, exportType: exportType });
 
-    };
+  };
 
-    const exportExcel = () => {
-        const exportType = exportFromJSON.types.xls;
-        exportFromJSON({ data: newData, fileName: fileName, exportType: exportType });
+  const exportExcel = () => {
+    const exportType = exportFromJSON.types.xls;
+    exportFromJSON({ data: newData, fileName: fileName, exportType: exportType });
 
-    };
+  };
 
-    const copyToClipboard = () => {
-        setModal(true);
-    };
+  const copyToClipboard = () => {
+    setModal(true);
+  };
 
-    return (
-        <React.Fragment>
-        <div className="dt-export-buttons d-flex align-center">
-            <div className="dt-export-title d-none d-md-inline-block">Export</div>
-            <div className="dt-buttons btn-group flex-wrap">
-            <CopyToClipboard text={JSON.stringify(newData)}>
-                <Button className="buttons-copy buttons-html5" onClick={() => copyToClipboard()}>
-                <span>Copy</span>
-                </Button>
-            </CopyToClipboard>{" "}
-            <button className="btn btn-secondary buttons-csv buttons-html5" type="button" onClick={() => exportCSV()}>
-                <span>CSV</span>
-            </button>{" "}
-            <button className="btn btn-secondary buttons-excel buttons-html5" type="button" onClick={() => exportExcel()}>
-                <span>Excel</span>
-            </button>{" "}
-            </div>
+  return (
+    <React.Fragment>
+      <div className="dt-export-buttons d-flex align-center">
+        <div className="dt-export-title d-none d-md-inline-block">Export</div>
+        <div className="dt-buttons btn-group flex-wrap">
+          <CopyToClipboard text={JSON.stringify(newData)}>
+            <Button className="buttons-copy buttons-html5" onClick={() => copyToClipboard()}>
+              <span>Copy</span>
+            </Button>
+          </CopyToClipboard>{" "}
+          <button className="btn btn-secondary buttons-csv buttons-html5" type="button" onClick={() => exportCSV()}>
+            <span>CSV</span>
+          </button>{" "}
+          <button className="btn btn-secondary buttons-excel buttons-html5" type="button" onClick={() => exportExcel()}>
+            <span>Excel</span>
+          </button>{" "}
         </div>
-        <Modal isOpen={modal} className="modal-dialog-centered text-center" size="sm">
-            <ModalBody className="text-center m-2">
-                <h5>Copied to clipboard</h5>
-            </ModalBody>
-            <div className="p-3 bg-light">
-                <div className="text-center">Copied {newData.length} rows to clipboard</div>
-            </div>
-        </Modal>
-        </React.Fragment>
-    );
+      </div>
+      <Modal isOpen={modal} className="modal-dialog-centered text-center" size="sm">
+        <ModalBody className="text-center m-2">
+          <h5>Copied to clipboard</h5>
+        </ModalBody>
+        <div className="p-3 bg-light">
+          <div className="text-center">Copied {newData.length} rows to clipboard</div>
+        </div>
+      </Modal>
+    </React.Fragment>
+  );
 };
 
 const ActionTab = (props) => {
@@ -124,10 +124,10 @@ const ActionTab = (props) => {
           const resp = dispatch(megProcessTransferUserAR(formData));
 
           // if (resp.payload?.message == "success") {
-            setTimeout(() => {
-              props.updateParentParent(Math.random())
-              setModalViewUpdate(false)
-            }, 1000);
+          setTimeout(() => {
+            props.updateParentParent(Math.random())
+            setModalViewUpdate(false)
+          }, 1000);
 
           // }
         }
@@ -150,10 +150,10 @@ const ActionTab = (props) => {
           const resp = dispatch(megProcessTransferUserAR(formData));
 
           // if (resp.payload?.message == "success") {
-            setTimeout(() => {
-              props.updateParentParent(Math.random())
-              setModalViewUpdate(false)
-            }, 1000);
+          setTimeout(() => {
+            props.updateParentParent(Math.random())
+            setModalViewUpdate(false)
+          }, 1000);
 
           // }
         }
@@ -167,14 +167,14 @@ const ActionTab = (props) => {
     <>
       <div className="toggle-expand-content" style={{ display: "block" }}>
         <ul className="nk-block-tools g-3">
-                  {(aUser.is_admin_meg() ) &&
-                    <>
-          <li className="nk-block-tools-opt">
-            <UncontrolledDropdown direction="right">
-              <DropdownToggle className="dropdown-toggle btn btn-md" color="secondary">MEG Review</DropdownToggle>
+          {(aUser.is_admin_meg()) &&
+            <>
+              <li className="nk-block-tools-opt">
+                <UncontrolledDropdown direction="right">
+                  <DropdownToggle className="dropdown-toggle btn btn-md" color="secondary">MEG Review</DropdownToggle>
 
-              <DropdownMenu>
-                <ul className="link-list-opt">
+                  <DropdownMenu>
+                    <ul className="link-list-opt">
 
 
 
@@ -186,18 +186,18 @@ const ActionTab = (props) => {
                       </li>
 
 
-                </ul>
-              </DropdownMenu>
-            </UncontrolledDropdown>
-          </li>
+                    </ul>
+                  </DropdownMenu>
+                </UncontrolledDropdown>
+              </li>
 
 
-                    </>
-                  }
+            </>
+          }
         </ul>
       </div>
 
-      
+
       <Modal isOpen={modalViewUpdate} toggle={toggleViewUpdate} size="lg">
         <ModalHeader toggle={toggleViewUpdate} close={<button className="close" onClick={toggleViewUpdate}><Icon name="cross" /></button>}>
           Transfer Review
@@ -243,7 +243,7 @@ const ActionTab = (props) => {
                   </tr>
                   <tr>
                     <td>Role</td>
-                    <td className="text-capitalize">{`${ar_user.role.name.toLowerCase()}`}</td>
+                    <td className="text-capitalize">{`${ar_user.role.name ? ar_user.role.name.split(' ')[0] + ' ' + ar_user.role.name.split(' ')[1].toLowerCase() : ''}`}</td>
                   </tr>
                   <tr>
                     <td>Position</td>
@@ -308,72 +308,72 @@ const ActionTab = (props) => {
 };
 
 const AdminListARTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState }) => {
-    const complainColumn = [
+  const complainColumn = [
     {
-        name: "UID",
-        selector: (row, index) => ++index,
-        sortable: true,
-        width: "150px",
-        wrap: true,
+      name: "UID",
+      selector: (row, index) => ++index,
+      sortable: true,
+      width: "150px",
+      wrap: true,
     },
     {
-        name: "Institution",
-        selector: (row) => (`${row.new_institution.category[0].name}`),
-        sortable: true,
-        width: "auto",
-        wrap: true,
+      name: "Institution",
+      selector: (row) => (`${row.new_institution.category[0].name}`),
+      sortable: true,
+      width: "auto",
+      wrap: true,
     },
     {
-        name: "Email",
-        selector: (row) => (`${row.ar.email}`),
-        sortable: true,
-        width: "auto",
-        wrap: true,
+      name: "Email",
+      selector: (row) => (`${row.ar.email}`),
+      sortable: true,
+      width: "auto",
+      wrap: true,
     },
     {
-        name: "Status",
-        selector: (row) => { return (<><Badge color="success" className="text-uppercase">{`${row.approval_status}`}</Badge></>) },
-        sortable: true,
-        width: "auto",
-        wrap: true,
+      name: "Status",
+      selector: (row) => { return (<><Badge color="success" className="text-uppercase">{`${row.approval_status}`}</Badge></>) },
+      sortable: true,
+      width: "auto",
+      wrap: true,
     },
     {
-        name: "MEG Status",
-        selector: (row) => { return (<><Badge color="success" className="text-uppercase">{`${row.mbg_approval_status}`}</Badge></>) },
-        sortable: true,
-        width: "auto",
-        wrap: true,
+      name: "MEG Status",
+      selector: (row) => { return (<><Badge color="success" className="text-uppercase">{`${row.mbg_approval_status}`}</Badge></>) },
+      sortable: true,
+      width: "auto",
+      wrap: true,
     },
     {
-        name: "Role",
-        selector: (row) => { return (<><Badge color="success">{`${row.ar.role.name}`}</Badge></>) },
-        sortable: true,
-        width: "auto",
-        wrap: true,
+      name: "Role",
+      selector: (row) => { return (<><Badge color="success">{`${row.ar.role.name}`}</Badge></>) },
+      sortable: true,
+      width: "auto",
+      wrap: true,
     },
     {
-        name: "Date Created",
-        selector: (row) => moment(row.createdAt).format('MMM. D, YYYY HH:mm'),
-        sortable: true,
-        width: "auto",
-        wrap: true,
+      name: "Date Created",
+      selector: (row) => moment(row.createdAt).format('MMM. D, YYYY HH:mm'),
+      sortable: true,
+      width: "auto",
+      wrap: true,
     },
     {
-        name: "Action",
-        selector: (row) => (<>
-                        <ActionTab data={row} updateParentParent={updateParent} />
-                    </>),
-        width: "18%",
+      name: "Action",
+      selector: (row) => (<>
+        <ActionTab data={row} updateParentParent={updateParent} />
+      </>),
+      width: "18%",
     },
-    ];
+  ];
   const [tableData, setTableData] = useState(data);
   const [searchText, setSearchText] = useState("");
   const [rowsPerPageS, setRowsPerPage] = useState(10);
   const [mobileView, setMobileView] = useState();
 
-    useEffect(() => {
-        setTableData(data)
-    }, [data]);
+  useEffect(() => {
+    setTableData(data)
+  }, [data]);
 
   useEffect(() => {
     let defaultData = tableData;
@@ -405,9 +405,9 @@ const AdminListARTable = ({ data, pagination, actions, className, selectableRows
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    // const renderer = ({ hours, minutes, seconds, completed }) => {
-    //         if (completed) {
-              
+  // const renderer = ({ hours, minutes, seconds, completed }) => {
+  //         if (completed) {
+
   return (
     <div className={`dataTables_wrapper dt-bootstrap4 no-footer ${className ? className : ""}`}>
       <Row className={`justify-between g-2 ${actions ? "with-export" : ""}`}>
@@ -479,26 +479,26 @@ const AdminListARTable = ({ data, pagination, actions, className, selectableRows
       ></DataTable>
     </div>
   );
-  
-    //         } else {
 
-    //             return (
-    //                     <>
-    //                         <Skeleton count={10} height={20}  style={{display: 'block',lineHeight: 2, padding: '1rem',width: 'auto',}}/>
-    //                     </>
-                        
-    //                 )
-    //         }
-    // };
-    
-    //       return (
-    //               <Countdown
-    //                 date={Date.now() + 5000}
-    //                 renderer={renderer}
-    //             />
+  //         } else {
 
-                
-    //         );
+  //             return (
+  //                     <>
+  //                         <Skeleton count={10} height={20}  style={{display: 'block',lineHeight: 2, padding: '1rem',width: 'auto',}}/>
+  //                     </>
+
+  //                 )
+  //         }
+  // };
+
+  //       return (
+  //               <Countdown
+  //                 date={Date.now() + 5000}
+  //                 renderer={renderer}
+  //             />
+
+
+  //         );
 };
 
 export default AdminListARTable;

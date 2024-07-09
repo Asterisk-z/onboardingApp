@@ -198,60 +198,60 @@ const ActionTab = (props) => {
         <ModalBody>
           <Card className="card">
             <CardBody className="card-inner">
-              
-                            <CardTitle tag="h5" className="text-center">
-                              <img src={ar_user.img} className="rounded-xl" style={{ height: '200px', width: '200px', borderRadius: '100%' }} />
-                          </CardTitle>
 
-                          <table className="table table-striped table-bordered table-hover">
-                              <thead>
-                                  <tr>
-                                      <th scope="col"></th>
-                                      <th scope="col"></th>
-                                  </tr>
-                              </thead>
-                              <tbody>
-                                  <tr>
-                                      <td>First Name</td>
-                                      <td className="text-capitalize">{`${ar_user.firstName}`}</td>
-                                  </tr>
-                                  <tr>
-                                      <td>Last Name</td>
-                                      <td className="text-capitalize">{`${ar_user.lastName}`}</td>
-                                  </tr>
-                                  <tr>
-                                      <td>Email</td>
-                                      <td className="text-capitalize">{`${ar_user.email}`}</td>
-                                  </tr>
-                                  <tr>
-                                      <td>Phone</td>
-                                      <td className="text-capitalize">{`${ar_user.phone}`}</td>
-                                  </tr>
-                                  <tr>
-                                      <td>Nationality</td>
-                                      <td className="text-capitalize">{`${ar_user.nationality.toLowerCase() }`}</td>
-                                  </tr>
-                                  <tr>
-                                      <td>Role</td>
-                                      <td className="text-capitalize">{`${ar_user.role.name.toLowerCase()}`}</td>
-                                  </tr>
-                                  <tr>
-                                      <td>Position</td>
-                                      <td className="text-capitalize">{`${ar_user.position.name.toLowerCase()}`}</td>
-                                  </tr>
-                                  <tr>
-                                      <td>Status</td>
-                                      <td className="text-capitalize">{`${ar_user.approval_status.toLowerCase()}`}</td>
-                                  </tr>
-                                  <tr>
-                                      <td>RegID</td>
-                                      <td className="text-capitalize">{`${ar_user.regId}`}</td>
-                                  </tr>
-                                  <tr>
-                                      <td>Institution</td>
-                                      <td className="text-capitalize">{`${ar_user.institution?.name?.toLowerCase()}`}</td>
-                                  </tr>
-                                  {/* <tr>
+              <CardTitle tag="h5" className="text-center">
+                <img src={ar_user.img} className="rounded-xl" style={{ height: '200px', width: '200px', borderRadius: '100%' }} />
+              </CardTitle>
+
+              <table className="table table-striped table-bordered table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>First Name</td>
+                    <td className="text-capitalize">{`${ar_user.firstName}`}</td>
+                  </tr>
+                  <tr>
+                    <td>Last Name</td>
+                    <td className="text-capitalize">{`${ar_user.lastName}`}</td>
+                  </tr>
+                  <tr>
+                    <td>Email</td>
+                    <td className="text-capitalize">{`${ar_user.email}`}</td>
+                  </tr>
+                  <tr>
+                    <td>Phone</td>
+                    <td className="text-capitalize">{`${ar_user.phone}`}</td>
+                  </tr>
+                  <tr>
+                    <td>Nationality</td>
+                    <td className="text-capitalize">{`${ar_user.nationality.toLowerCase()}`}</td>
+                  </tr>
+                  <tr>
+                    <td>Role</td>
+                    <td className="text-capitalize">{`${ar_user.role.name ? ar_user.role.name.split(' ')[0] + ' ' + ar_user.role.name.split(' ')[1].toLowerCase() : ''}`}</td>
+                  </tr>
+                  <tr>
+                    <td>Position</td>
+                    <td className="text-capitalize">{`${ar_user.position.name.toLowerCase()}`}</td>
+                  </tr>
+                  <tr>
+                    <td>Status</td>
+                    <td className="text-capitalize">{`${ar_user.approval_status.toLowerCase()}`}</td>
+                  </tr>
+                  <tr>
+                    <td>RegID</td>
+                    <td className="text-capitalize">{`${ar_user.regId}`}</td>
+                  </tr>
+                  <tr>
+                    <td>Institution</td>
+                    <td className="text-capitalize">{`${ar_user.institution?.name?.toLowerCase()}`}</td>
+                  </tr>
+                  {/* <tr>
                                       <td>Profile Photo</td>
                                       <td>{ar_user.img ? (
                                           <a size="lg" href={ar_user.img} target="_blank">
@@ -263,69 +263,6 @@ const ActionTab = (props) => {
 
                                       ) : `Not Uploaded`}</td>
                                   </tr> */}
-                                  <tr>
-                                      <td>Signature Mandate</td>
-                                      <td>{ar_user.mandate_form ? (
-                                          <a size="lg" href={ar_user.mandate_form} target="_blank" className="btn-primary">
-                                              <Button color="primary">
-                                                  <span >{"View Mandate"}</span>
-                                              </Button>
-                                          </a>
-                                      ) : `Not Uploaded`}</td>
-                                  </tr>
-
-                              </tbody>
-                          </table>
-              {/* <CardTitle tag="h5">{`${ar_user.firstName} ${ar_user.lastName} (${ar_user.email})`}</CardTitle> */}
-              {/* <CardText> */}
-              {/* <table className="table table-striped table-bordered table-hover">
-                <thead>
-                  <tr>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Phone</td>
-                    <td>{`${ar_user.phone}`}</td>
-                  </tr>
-                  <tr>
-                    <td>Nationality</td>
-                    <td>{`${ar_user.nationality}`}</td>
-                  </tr>
-                  <tr>
-                    <td>Role</td>
-                    <td>{`${ar_user.role.name.toLowerCase() }`}</td>
-                  </tr>
-                  <tr>
-                    <td>Position</td>
-                    <td>{`${ar_user.position.name.toLowerCase() }`}</td>
-                  </tr>
-                  <tr>
-                    <td>Status</td>
-                    <td>{`${ar_user.approval_status.toLowerCase() }`}</td>
-                  </tr>
-                  <tr>
-                    <td>RegID</td>
-                    <td>{`${ar_user.regId}`}</td>
-                  </tr>
-                  <tr>
-                    <td>Institution</td>
-                    <td>{`${ar_user.institution?.name?.toLowerCase() }`}</td>
-                  </tr>
-                  <tr>
-                    <td>Profile Photo</td>
-                    <td>{ar_user.img ? (
-                      <a size="lg" href={ar_user.img} target="_blank">
-                        <Button color="primary">
-                          <span >{"View Image"}</span>
-                        </Button>
-                      </a>
-
-
-                    ) : `Not Uploaded`}</td>
-                  </tr>
                   <tr>
                     <td>Signature Mandate</td>
                     <td>{ar_user.mandate_form ? (
@@ -338,32 +275,7 @@ const ActionTab = (props) => {
                   </tr>
 
                 </tbody>
-              </table> */}
-              {/* <ul className="gy-3">
-                <li className="text-capitalize"><span className="lead">Phone : </span>{`${ar_user.phone}`}</li>
-                <li className="text-capitalize"><span className="lead">Nationality : </span>{`${ar_user.nationality}`}</li>
-                <li className="text-capitalize"><span className="lead">Role : </span><span className="text-capitalize">{`${ar_user.role.name.toLowerCase()}`}</span></li>
-                <li className="text-capitalize"><span className="lead">Position : </span><span className="text-capitalize">{`${ar_user.position.name.toLowerCase()}`}</span></li>
-                <li className="text-capitalize"><span className="lead">Status : </span>{`${ar_user.approval_status.toLowerCase()}`}</li>
-                <li className="text-capitalize"><span className="lead">RegID : </span>{`${ar_user.regId}`}</li>
-                <li className="text-capitalize"><span className="lead">Institution : </span>{`${ar_user?.institution?.name?.toLowerCase()}`}</li>
-                <li className="text-capitalize"><span className="lead">Profile Photo : </span>{ar_user.img ? (
-                  <a size="lg" href={ar_user.img}  target="_blank">
-                    <Button color="primary">
-                      <span >{"View Image"}</span>
-                    </Button>
-                  </a>
-
-
-                ) : `Not Uploaded`}</li>
-                <li><span className="lead">Signature Mandate : </span>{ar_user.mandate_form ? (
-                  <a size="lg" href={ar_user.mandate_form} target="_blank" className="btn-primary">
-                    <Button color="primary">
-                      <span >{"View Mandate"}</span>
-                    </Button>
-                  </a>
-                ) : `Not Uploaded`}</li>
-              </ul> */}
+              </table>
 
               {(aUser.is_admin_meg() && ar_user.approval_status == 'pending') &&
                 <>

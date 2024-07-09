@@ -17,7 +17,7 @@ import Swal from "sweetalert2";
 
 
 
- 
+
 
 
 
@@ -37,10 +37,10 @@ const config = {
 };
 
 const Form = () => {
-    
-    
-    const authUser = useUser();
-    const authUserUpdate = useUserUpdate();
+
+
+  const authUser = useUser();
+  const authUserUpdate = useUserUpdate();
 
   const styles = {
     color: {
@@ -56,18 +56,18 @@ const Form = () => {
     }
 
   }
-    const dispatch = useDispatch();
-    const { application_uuid } = useParams();
-    const application_details = useSelector((state) => state?.application?.application_details) || null;
-    useEffect(() => {
-      if (application_uuid) {
-        dispatch(fetchApplication({ "application_uuid": application_uuid }));
-      }
-    }, [dispatch]);
+  const dispatch = useDispatch();
+  const { application_uuid } = useParams();
+  const application_details = useSelector((state) => state?.application?.application_details) || null;
+  useEffect(() => {
+    if (application_uuid) {
+      dispatch(fetchApplication({ "application_uuid": application_uuid }));
+    }
+  }, [dispatch]);
 
-    const $application_details = application_details ? JSON.parse(application_details) : null;
+  const $application_details = application_details ? JSON.parse(application_details) : null;
 
-  
+
   const ApplicantInformation = (props) => {
 
     const navigate = useNavigate();
@@ -145,17 +145,17 @@ const Form = () => {
         <Row className="gy-4">
           {fields && fields.map((field, index) => {
 
-              return (
-                <Col md="6" key={index}>
-                  <div className="form-group">
-                    <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
-                    <div className="form-control-wrap">
-                      <input type="text" id={field.name} className="form-control" {...register(field.name, { required: 'This field is required' })} disabled defaultValue={field?.field_value?.uploaded_field} />
-                      {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
-                    </div>
+            return (
+              <Col md="6" key={index}>
+                <div className="form-group">
+                  <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
+                  <div className="form-control-wrap">
+                    <input type="text" id={field.name} className="form-control" {...register(field.name, { required: 'This field is required' })} disabled defaultValue={field?.type == 'date' ? moment(field?.field_value?.uploaded_field).format('MMM DD, YYYY') : field?.field_value?.uploaded_field} />
+                    {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
                   </div>
-                </Col>
-              )
+                </div>
+              </Col>
+            )
           })}
 
         </Row>
@@ -181,30 +181,30 @@ const Form = () => {
   return <>
     <Head title="Form" />
     <HeaderLogo />
-    
+
     <Content>
-        <Content>
-          <div className="">
-            <div style={{ 'margin': '0px 10px !important' }}>
-              <div style={styles.card}>
-                <div style={styles.color}>
-                      {$application_details && <h3>{`${$application_details.membership_category.name} Application`} </h3>}
-                  <p>Check for any errors</p>
-                </div>
-                <div className="nk-wizard nk-wizard-simple is-alter wizard clearfix">
-                  <Steps config={config}>
-                    <Step component={ApplicantInformation} />
-                    {/* <Step component={TradingDetail} />
+      <Content>
+        <div className="">
+          <div style={{ 'margin': '0px 10px !important' }}>
+            <div style={styles.card}>
+              <div style={styles.color}>
+                {$application_details && <h3>{`${$application_details.membership_category.name} Application`} </h3>}
+                <p>Check for any errors</p>
+              </div>
+              <div className="nk-wizard nk-wizard-simple is-alter wizard clearfix">
+                <Steps config={config}>
+                  <Step component={ApplicantInformation} />
+                  {/* <Step component={TradingDetail} />
                     <Step component={DisciplinaryHistory} />
                     <Step component={SupportingDocuments} />
                     <Step component={ApplicationDeclaration} />
                     <Step component={ApplicationCompleted} /> */}
-                  </Steps>
-                </div>
+                </Steps>
               </div>
             </div>
           </div>
-        </Content>
+        </div>
+      </Content>
     </Content>
 
   </>;

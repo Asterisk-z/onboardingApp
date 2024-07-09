@@ -200,17 +200,28 @@ const Form = () => {
 
         };
 
+        const formatWord = (str) => {
+            const value = str
+            const firstLetter = value.charAt(0)
+            const remainingLetters = value.substring(1)
+            const firstLetterCap = firstLetter.toUpperCase()
+            const remainingLettersLow = remainingLetters.toLowerCase()
+            return `${firstLetterCap}${remainingLettersLow}`;
+
+        }
 
         const checkValue = (str) => {
             try {
                 // JSON.parse(str);
                 if (str?.field?.name == "productOfInterest") {
                     return JSON.parse(str.uploaded_field) ? Object.keys(JSON.parse(str.uploaded_field)).join(',') : '';
-                } else {
-                    return str.uploaded_field;
                 }
-                // console.log(JSON.parse(str))
 
+                if (str?.field?.type == "date") {
+                    return moment(str?.uploaded_field).format('MMM DD, YYYY')
+                }
+
+                return formatWord(str.uploaded_field)
             } catch (e) {
                 return false;
             }
@@ -240,7 +251,7 @@ const Form = () => {
                         {$initial_application?.application_requirements && $initial_application?.application_requirements?.map((initial_application_item, index) => (
                             <tr key={index}>
                                 <th scope="row">{++index}</th>
-                                <td>{initial_application_item.field.description}</td>
+                                <td>{formatWord(initial_application_item.field.description)}</td>
                                 <td>
                                     {initial_application_item.uploaded_file != null ? <>
                                         <a className="btn btn-primary" href={initial_application_item.file_path} target="_blank">View File </a>

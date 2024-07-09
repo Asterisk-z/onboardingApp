@@ -25,7 +25,7 @@ class MembershipCategories extends Seeder
             ],
             [
                 "code" => "dms",
-                "name" => "Dealing Member (Specialist)",
+                "name" => "Dealing Member (Specialists)",
                 "application_fee" => 150000,
                 "membership_dues" => 2500000,
                 "membership_agreement" => config('app.url') . '/assets/membership_agreement/dms.pdf',
@@ -39,7 +39,7 @@ class MembershipCategories extends Seeder
             ],
             [
                 "code" => "ami",
-                "name" => "Associate Member (Inter-Dealer Broker)",
+                "name" => "Associate Member (Inter-Dealer Brokers)",
                 "application_fee" => 250000,
                 "membership_dues" => 3500000,
                 "membership_agreement" => config('app.url') . '/assets/membership_agreement/ami.pdf',

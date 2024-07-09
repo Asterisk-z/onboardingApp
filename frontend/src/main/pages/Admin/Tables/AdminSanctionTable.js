@@ -235,7 +235,7 @@ const DropdownTrans = (props) => {
                                     </tr>
                                     <tr>
                                         <td>Role</td>
-                                        <td className="text-capitalize">{`${sanction?.sanctionee?.role.name.toLowerCase()}`}</td>
+                                        <td className="text-capitalize">{`${sanction?.sanctionee?.role.name ? sanction?.sanctionee?.role.name.split(' ')[0] + ' ' + sanction?.sanctionee?.role.name.split(' ')[1].toLowerCase() : ''}`}</td>
                                     </tr>
                                     <tr>
                                         <td>Position</td>

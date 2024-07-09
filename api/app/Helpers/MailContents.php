@@ -358,7 +358,7 @@ class MailContents
         return "<p>We are pleased to inform you that your application for the {$categoryName}
         category of FMDQ Securities Exchange Limited is successful.</p>
 
-        <p>Kindly log on to the <a href=$url>MROIS Portal</a> to review application.</p>";
+        <p>Kindly log on to the <a href=$url>MROIS Portal</a> to view your completed application.</p>";
     }
 
     public static function msgProfilingSubject($categoryName): string

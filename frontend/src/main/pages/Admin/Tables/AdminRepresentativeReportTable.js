@@ -151,7 +151,7 @@ const ActionTab = (props) => {
                   </tr>
                   <tr>
                     <td>Role</td>
-                    <td className="text-capitalize">{`${ar_user.role.name.toLowerCase()}`}</td>
+                    <td className="text-capitalize">{`${ar_user.role.name ? ar_user.role.name.split(' ')[0] + ' ' + ar_user.role.name.split(' ')[1].toLowerCase() : ''}`}</td>
                   </tr>
                   <tr>
                     <td>Position</td>

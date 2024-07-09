@@ -170,16 +170,19 @@ class MbgApplicationController extends Controller
         $application->invoiceToken = Str::uuid();
         $application->save();
 
+        $MEGs = Utility::getUsersEmailByCategory(Role::MEG);
+
+        $CCs = array_merge($MEGs);
+
         logAction($user->email, 'Concession stage Passed', "Application successfully passed through concession stage.", $request->ip());
 
         //Notify applicant
         $applicant = $application->applicant;
-        $applicant->notify(new InfoNotification(MailContents::invoiceMail(), MailContents::invoiceSubject()));
+        $applicant->notify(new InfoNotification(MailContents::invoiceMail(), MailContents::invoiceSubject(), $CCs));
 
         //Notify fsd if concession was added
         if ($request->concession_amount) {
             $MBGs = Utility::getUsersEmailByCategory(Role::MBG);
-            $MEGs = Utility::getUsersEmailByCategory(Role::MEG);
             $FSDs = Utility::getUsersByCategory(Role::FSD);
             $CCs = array_merge($MBGs, $MEGs);
             Notification::send($FSDs, new InfoNotification(MailContents::concessionMail($apllication_details->company_name), MailContents::concessionSubject(), $CCs));

@@ -22,7 +22,7 @@ class ARMailContents
         $regID = $ARUser->getRegID();
 
         return "<p>
-                Please be informed that you have been selected as an Authorised Representative for the $company.
+                Please be informed that you have been selected as an Authorised Representative for $company.
                 </p>
 
             <p>

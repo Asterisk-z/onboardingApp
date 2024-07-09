@@ -3459,18 +3459,18 @@ class ApplicationFieldOptionSeeder extends Seeder
         // RGI
 
         $fields = [
-            [
-                "category" => "8",
-                "field_name" => "categoryOfMembership",
-                "option_name" => "Registration Member (Listings)",
-                "option_value" => "listings",
-            ],
-            [
-                "category" => "8",
-                "field_name" => "categoryOfMembership",
-                "option_name" => "Registration Member (Quotations)",
-                "option_value" => "quotations",
-            ],
+            // [
+            //     "category" => "8",
+            //     "field_name" => "categoryOfMembership",
+            //     "option_name" => "Registration Member (Listings)",
+            //     "option_value" => "listings",
+            // ],
+            // [
+            //     "category" => "8",
+            //     "field_name" => "categoryOfMembership",
+            //     "option_name" => "Registration Member (Quotations)",
+            //     "option_value" => "quotations",
+            // ],
             [
                 "category" => "8",
                 "field_name" => "authorisedShareCapitalCurrency",

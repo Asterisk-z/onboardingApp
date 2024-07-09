@@ -261,15 +261,31 @@ const Form = () => {
       }
     }
 
+    const formatWord = (str) => {
+      const value = str
+      const firstLetter = value.charAt(0)
+      const remainingLetters = value.substring(1)
+      const firstLetterCap = firstLetter.toUpperCase()
+      const remainingLettersLow = remainingLetters.toLowerCase()
+      return `${firstLetterCap}${remainingLettersLow}`;
+
+    }
+
     const checkValue = (str) => {
       try {
         // JSON.parse(str);
+        // console.log(str)
         if (str?.field?.name == "productOfInterest") {
           return JSON.parse(str.uploaded_field) ? Object.keys(JSON.parse(str.uploaded_field)).join(',') : '';
-        } else {
-          return str.uploaded_field;
         }
-        // console.log(JSON.parse(str))
+
+        if (str?.field?.type == "date") {
+          return moment(str?.uploaded_field).format('MMM DD, YYYY')
+        }
+
+
+        return formatWord(str.uploaded_field)
+
 
       } catch (e) {
         return false;
@@ -290,7 +306,8 @@ const Form = () => {
               </> : <>
                 {/* { ?
                       <><a className="btn btn-primary mx-1" href="#" onClick={toggleView} >Make Payment </a></> : */}
-                <a className="btn btn-success mx-1" href="#">Payment Sent</a>
+                {$user_application?.application?.status_description == 'PROOF OF PAYMENT UPLOADED' && <> <a className="btn btn-success mx-1" href="#">Payment Sent</a></>}
+
               </>}
 
             </>}
@@ -317,13 +334,13 @@ const Form = () => {
                 {$user_application?.application_requirements && $user_application?.application_requirements?.map((user_application_item, index) => (
                   <tr key={index}>
                     <th scope="row">{++index}</th>
-                    <td className="text-capitalize">{user_application_item.field.description}</td>
+                    <td className="">{formatWord(user_application_item.field.description)}</td>
                     <td>
                       {user_application_item.uploaded_file != null ? <>
                         <a className="btn btn-primary" href={user_application_item.file_path} target="_blank">View File </a>
                       </> : <>
                         {/* {user_application_item.uploaded_field} */}
-                        <span className="text-capitalize">{checkValue(user_application_item)}</span>
+                        <span className="">{checkValue(user_application_item)}</span>
                         {/* {isJSON(user_application_item.uploaded_field) ? "Object" : user_application_item.uploaded_field} */}
                       </>}
                     </td>
@@ -478,7 +495,7 @@ const Form = () => {
                       ))} */}
                       <tr>
                         <th scope="row"></th>
-                        <td className="text-capitalize">Membership category</td>
+                        <td className="">Membership category</td>
                         <td>
                           {`${$application_details?.membership_category?.name}`}
                         </td>
@@ -486,7 +503,7 @@ const Form = () => {
 
                       <tr>
                         <th scope="row"></th>
-                        <td className="text-capitalize">Identification Number</td>
+                        <td className="">Identification number</td>
                         <td>
                           {`${$application_details?.reg_id}`}
                         </td>
@@ -494,7 +511,7 @@ const Form = () => {
 
                       <tr>
                         <th scope="row"></th>
-                        <td className="text-capitalize">Sign-up Email Address</td>
+                        <td className="">Sign-up email address</td>
                         <td>
                           {`${$application_details?.applicant_email}`}
                         </td>
@@ -502,7 +519,7 @@ const Form = () => {
 
                       <tr>
                         <th scope="row"></th>
-                        <td className="text-capitalize">Sign-on Date</td>
+                        <td className="">Sign-on date</td>
                         <td>
                           {`${$application_details?.created_at ? moment($application_details?.created_at).format('YYYY-MM-DD') : ''}`}
                         </td>
@@ -510,7 +527,7 @@ const Form = () => {
 
                       <tr>
                         <th scope="row"></th>
-                        <td className="text-capitalize"> Status of application</td>
+                        <td className=""> Status of application</td>
                         <td>
                           {`${$application_details?.status_description}`}
                         </td>
@@ -518,7 +535,7 @@ const Form = () => {
 
                       <tr>
                         <th scope="row"></th>
-                        <td className="text-capitalize"> Membership Agreement</td>
+                        <td className=""> Membership agreement</td>
                         <td>
                           {$application_details.executed_membership_agreement != null && <>
                             <a className="btn btn-primary" href={$application_details.executed_membership_agreement} target="_blank">Download </a>
@@ -527,24 +544,13 @@ const Form = () => {
                       </tr>
                       <tr>
                         <th scope="row"></th>
-                        <td className="text-capitalize"> E-Success Letter</td>
+                        <td className=""> E-Success letter</td>
                         <td>
                           {$application_details.e_success_letter != null && <>
                             <a className="btn btn-primary" href={$application_details.e_success_letter} target="_blank">Download </a>
                           </>}
                         </td>
                       </tr>
-                      {/* <tr>
-                        <th scope="row"></th>
-                        <td className="text-capitalize">Membership category</td>
-                        <td>
-                          {$application_details.uploaded_file != null ? <>
-                            <a className="btn btn-primary" href={user_application_item.file_path} target="_blank">View File </a>
-                          </> : <>
-                            {user_application_item.uploaded_field}
-                          </>}
-                        </td>
-                      </tr> */}
                     </tbody>
                   </table>
                 </>}

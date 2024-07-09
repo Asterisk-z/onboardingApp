@@ -204,7 +204,7 @@ class MegApplicationController extends Controller
         $CCs = $MEGs;
         // logger('test3');
         Notification::send($MEG2s, new InfoNotification(MailContents::meg2EsuccessMail($data->company_name), MailContents::meg2EsuccessSubject(), $CCs));
-        logger('test4');
+
         return successResponse("Agreement uploaded successfully");
 
     }

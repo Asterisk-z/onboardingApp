@@ -19,7 +19,7 @@ const Export = ({ data }) => {
 
     useEffect(() => {
         if (modal === true) {
-        setTimeout(() => setModal(false), 2000);
+            setTimeout(() => setModal(false), 2000);
         }
     }, [modal]);
 
@@ -54,40 +54,40 @@ const Export = ({ data }) => {
 
     return (
         <React.Fragment>
-        <div className="dt-export-buttons d-flex align-center">
-            <div className="dt-export-title d-none d-md-inline-block">Export</div>
-            <div className="dt-buttons btn-group flex-wrap">
-            <CopyToClipboard text={JSON.stringify(newData)}>
-                <Button className="buttons-copy buttons-html5" onClick={() => copyToClipboard()}>
-                <span>Copy</span>
-                </Button>
-            </CopyToClipboard>{" "}
-            <button className="btn btn-secondary buttons-csv buttons-html5" type="button" onClick={() => exportCSV()}>
-                <span>CSV</span>
-            </button>{" "}
-            <button className="btn btn-secondary buttons-excel buttons-html5" type="button" onClick={() => exportExcel()}>
-                <span>Excel</span>
-            </button>{" "}
+            <div className="dt-export-buttons d-flex align-center">
+                <div className="dt-export-title d-none d-md-inline-block">Export</div>
+                <div className="dt-buttons btn-group flex-wrap">
+                    <CopyToClipboard text={JSON.stringify(newData)}>
+                        <Button className="buttons-copy buttons-html5" onClick={() => copyToClipboard()}>
+                            <span>Copy</span>
+                        </Button>
+                    </CopyToClipboard>{" "}
+                    <button className="btn btn-secondary buttons-csv buttons-html5" type="button" onClick={() => exportCSV()}>
+                        <span>CSV</span>
+                    </button>{" "}
+                    <button className="btn btn-secondary buttons-excel buttons-html5" type="button" onClick={() => exportExcel()}>
+                        <span>Excel</span>
+                    </button>{" "}
+                </div>
             </div>
-        </div>
-        <Modal isOpen={modal} className="modal-dialog-centered text-center" size="sm">
-            <ModalBody className="text-center m-2">
-                <h5>Copied to clipboard</h5>
-            </ModalBody>
-            <div className="p-3 bg-light">
-                <div className="text-center">Copied {newData.length} rows to clipboard</div>
-            </div>
-        </Modal>
+            <Modal isOpen={modal} className="modal-dialog-centered text-center" size="sm">
+                <ModalBody className="text-center m-2">
+                    <h5>Copied to clipboard</h5>
+                </ModalBody>
+                <div className="p-3 bg-light">
+                    <div className="text-center">Copied {newData.length} rows to clipboard</div>
+                </div>
+            </Modal>
         </React.Fragment>
     );
 };
 
 
 const ActionTab = (props) => {
-    
 
-  const aUser = useUser();
-  const aUserUpdate = useUserUpdate();
+
+    const aUser = useUser();
+    const aUserUpdate = useUserUpdate();
     const record = props.data
 
     const ar_user = record.ar
@@ -130,189 +130,189 @@ const ActionTab = (props) => {
         });
 
         // setLoading(false);
-    };  
-    
-  const askAction = async (action) => {
-    if(action == 'approve') {
-        Swal.fire({
-            title: "Are you sure?",
-            text: "You won't be able to revert this!",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Yes, approve it!",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                
-                const formData = new FormData();
-                formData.append('user_id', record.id);
-                formData.append('action', 'approve');
-                dispatch(userProcessTransferUserAR(formData));
+    };
 
-                props.updateParentParent(Math.random())
-                setModalViewUpdate(false)
-                    
-            }
-        });
-    }
-  };
-  
-  return (
-    <>
-    
-                          <button className="btn btn-sm btn-secondary" color="secondary" onClick={toggleViewUpdate}>Review</button>
+    const askAction = async (action) => {
+        if (action == 'approve') {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, approve it!",
+            }).then((result) => {
+                if (result.isConfirmed) {
 
+                    const formData = new FormData();
+                    formData.append('user_id', record.id);
+                    formData.append('action', 'approve');
+                    dispatch(userProcessTransferUserAR(formData));
 
+                    props.updateParentParent(Math.random())
+                    setModalViewUpdate(false)
 
-          <Modal isOpen={modalReason} toggle={toggleReason} size="lg">
-              <ModalHeader toggle={toggleReason} close={<button className="close" onClick={toggleReason}><Icon name="cross" /></button>}>
-                  
-              </ModalHeader>
-              <ModalBody>
+                }
+            });
+        }
+    };
 
-                  <Card className="card">
-                      <CardBody className="card-inner">
+    return (
+        <>
+
+            <button className="btn btn-sm btn-secondary" color="secondary" onClick={toggleViewUpdate}>Review</button>
 
 
-                          <form onSubmit={handleSubmit(handleMainFormSubmit)} className="is-alter" encType="multipart/form-data">
 
-                              <Row className="gy-4">
+            <Modal isOpen={modalReason} toggle={toggleReason} size="lg">
+                <ModalHeader toggle={toggleReason} close={<button className="close" onClick={toggleReason}><Icon name="cross" /></button>}>
 
-                                  <Col sm="12">
-                                      <div className="form-group">
-                                          <Label htmlFor="nationality" className="form-label">
-                                              Reason
-                                          </Label>
-                                          <div className="form-control-wrap">
-                                              <textarea type="text" className="form-control" {...register('reason', { required: "Reason is Required" })}></textarea>
-                                              {errors.reason && <p className="invalid">{`${errors.reason.message}`}</p>}
-                                          </div>
-                                      </div>
-                                  </Col>
-                                  <Col sm="12">
-                                      <div className="form-group">
-                                          <Button color="primary" type="submit" size="sm">
-                                              {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Reject"}
-                                          </Button>
-                                      </div>
-                                  </Col>
-                              </Row>
+                </ModalHeader>
+                <ModalBody>
 
-                          </form>
-                      </CardBody>
-                  </Card>
-              </ModalBody>
-              <ModalFooter className="bg-light">
-                  
-              </ModalFooter>
-          </Modal>
-
-          <Modal isOpen={modalViewUpdate} toggle={toggleViewUpdate} size="lg">
-              <ModalHeader toggle={toggleViewUpdate} close={<button className="close" onClick={toggleViewUpdate}><Icon name="cross" /></button>}>
-                  Transfer Review
-              </ModalHeader>
-              <ModalBody>
-
-                  <Card className="card">
-                      <CardBody className="card-inner">
-                          {/* <CardTitle tag="h5">{`View User`}</CardTitle> */}
-                          {/* <CardText> */}
-
-                          <CardTitle tag="h5" className="text-center">
-                              <img src={ar_user.img} className="rounded-xl" style={{ height: '200px', width: '200px', borderRadius: '100%' }} />
-                          </CardTitle>
-
-                          <table className="table table-striped table-bordered table-hover">
-                              <thead>
-                                  <tr>
-                                      <th scope="col"></th>
-                                      <th scope="col"></th>
-                                  </tr>
-                              </thead>
-                              <tbody>
-                                  <tr>
-                                      <td>First Name</td>
-                                      <td className="text-capitalize">{`${ar_user.firstName}`}</td>
-                                  </tr>
-                                  <tr>
-                                      <td>Last Name</td>
-                                      <td className="text-capitalize">{`${ar_user.lastName}`}</td>
-                                  </tr>
-                                  <tr>
-                                      <td>Email</td>
-                                      <td className="text-capitalize">{`${ar_user.email}`}</td>
-                                  </tr>
-                                  <tr>
-                                      <td>Phone</td>
-                                      <td className="text-capitalize">{`${ar_user.phone}`}</td>
-                                  </tr>
-                                  <tr>
-                                      <td>Nationality</td>
-                                      <td className="text-capitalize">{`${ar_user.nationality?.toLowerCase()}`}</td>
-                                  </tr>
-                                  <tr>
-                                      <td>Role</td>
-                                      <td className="text-capitalize">{`${ar_user.role?.name?.toLowerCase()}`}</td>
-                                  </tr>
-                                  <tr>
-                                      <td>Position</td>
-                                      <td className="text-capitalize">{`${ar_user.position?.name?.toLowerCase()}`}</td>
-                                  </tr>
-                                  <tr>
-                                      <td>Status</td>
-                                      <td className="text-capitalize">{`${ar_user.approval_status?.toLowerCase()}`}</td>
-                                  </tr>
-                                  <tr>
-                                      <td>RegID</td>
-                                      <td className="text-capitalize">{`${ar_user.regId}`}</td>
-                                  </tr>
-                                  <tr>
-                                      <td>Institution</td>
-                                      <td className="text-capitalize">{`${ar_user.institution?.name?.toLowerCase()}`}</td>
-                                  </tr>
-                                  <tr>
-                                      <td>Signature Mandate</td>
-                                      <td>{ar_user.mandate_form ? (
-                                          <a size="lg" href={ar_user.mandate_form} target="_blank" className="btn-primary">
-                                              <Button color="primary">
-                                                  <span >{"View Mandate"}</span>
-                                              </Button>
-                                          </a>
-                                      ) : `Not Uploaded`}</td>
-                                  </tr>
-                                  <tr>
-                                      <td>Requester</td>
-                                      <td className="text-capitalize">{`${requester.firstName} ${requester.lastName} (${requester.email})`}</td>
-                                  </tr>
-                                  <tr>
-                                      <td>Approver</td>
-                                      <td className="text-capitalize">{`${approver.firstName} ${approver.lastName} (${approver.email})`}</td>
-                                  </tr>
-                                  <tr>
-                                      <td>Authoriser Transfer Status</td>
-                                      <td className="text-capitalize">{`${record.approval_status}`}</td>
-                                  </tr>
-
-                              </tbody>
-                          </table>
-                          {(aUser.is_ar_authorizer() && record?.approval_status == 'pending') &&
-                              <>
-                                  <div className="float-end">
-                                      <button className="btn  btn-primary  m-2" onClick={(e) => askAction('approve')}>Approve</button>
-                                      <button className="btn  btn-secondary  m-2" onClick={(e) => setModalReason(true)} >Reject</button>
-                                  </div>
-                              </>
-                          }
-                      </CardBody>
-                  </Card>
-              </ModalBody>
-              <ModalFooter className="bg-light">
-                  <span className="sub-text">View Institutions</span>
-              </ModalFooter>
-          </Modal>
-    </>
+                    <Card className="card">
+                        <CardBody className="card-inner">
 
 
-  );
+                            <form onSubmit={handleSubmit(handleMainFormSubmit)} className="is-alter" encType="multipart/form-data">
+
+                                <Row className="gy-4">
+
+                                    <Col sm="12">
+                                        <div className="form-group">
+                                            <Label htmlFor="nationality" className="form-label">
+                                                Reason
+                                            </Label>
+                                            <div className="form-control-wrap">
+                                                <textarea type="text" className="form-control" {...register('reason', { required: "Reason is Required" })}></textarea>
+                                                {errors.reason && <p className="invalid">{`${errors.reason.message}`}</p>}
+                                            </div>
+                                        </div>
+                                    </Col>
+                                    <Col sm="12">
+                                        <div className="form-group">
+                                            <Button color="primary" type="submit" size="sm">
+                                                {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Reject"}
+                                            </Button>
+                                        </div>
+                                    </Col>
+                                </Row>
+
+                            </form>
+                        </CardBody>
+                    </Card>
+                </ModalBody>
+                <ModalFooter className="bg-light">
+
+                </ModalFooter>
+            </Modal>
+
+            <Modal isOpen={modalViewUpdate} toggle={toggleViewUpdate} size="lg">
+                <ModalHeader toggle={toggleViewUpdate} close={<button className="close" onClick={toggleViewUpdate}><Icon name="cross" /></button>}>
+                    Transfer Review
+                </ModalHeader>
+                <ModalBody>
+
+                    <Card className="card">
+                        <CardBody className="card-inner">
+                            {/* <CardTitle tag="h5">{`View User`}</CardTitle> */}
+                            {/* <CardText> */}
+
+                            <CardTitle tag="h5" className="text-center">
+                                <img src={ar_user.img} className="rounded-xl" style={{ height: '200px', width: '200px', borderRadius: '100%' }} />
+                            </CardTitle>
+
+                            <table className="table table-striped table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>First Name</td>
+                                        <td className="text-capitalize">{`${ar_user.firstName}`}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Last Name</td>
+                                        <td className="text-capitalize">{`${ar_user.lastName}`}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email</td>
+                                        <td className="text-capitalize">{`${ar_user.email}`}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Phone</td>
+                                        <td className="text-capitalize">{`${ar_user.phone}`}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Nationality</td>
+                                        <td className="text-capitalize">{`${ar_user.nationality?.toLowerCase()}`}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Role</td>
+                                        <td className="text-capitalize">{`${ar_user.role.name ? ar_user.role.name.split(' ')[0] + ' ' + ar_user.role.name.split(' ')[1].toLowerCase() : ''}`}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Position</td>
+                                        <td className="text-capitalize">{`${ar_user.position?.name?.toLowerCase()}`}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Status</td>
+                                        <td className="text-capitalize">{`${ar_user.approval_status?.toLowerCase()}`}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RegID</td>
+                                        <td className="text-capitalize">{`${ar_user.regId}`}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Institution</td>
+                                        <td className="text-capitalize">{`${ar_user.institution?.name?.toLowerCase()}`}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Signature Mandate</td>
+                                        <td>{ar_user.mandate_form ? (
+                                            <a size="lg" href={ar_user.mandate_form} target="_blank" className="btn-primary">
+                                                <Button color="primary">
+                                                    <span >{"View Mandate"}</span>
+                                                </Button>
+                                            </a>
+                                        ) : `Not Uploaded`}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Requester</td>
+                                        <td className="text-capitalize">{`${requester.firstName} ${requester.lastName} (${requester.email})`}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Approver</td>
+                                        <td className="text-capitalize">{`${approver.firstName} ${approver.lastName} (${approver.email})`}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Authoriser Transfer Status</td>
+                                        <td className="text-capitalize">{`${record.approval_status}`}</td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                            {(aUser.is_ar_authorizer() && record?.approval_status == 'pending') &&
+                                <>
+                                    <div className="float-end">
+                                        <button className="btn  btn-primary  m-2" onClick={(e) => askAction('approve')}>Approve</button>
+                                        <button className="btn  btn-secondary  m-2" onClick={(e) => setModalReason(true)} >Reject</button>
+                                    </div>
+                                </>
+                            }
+                        </CardBody>
+                    </Card>
+                </ModalBody>
+                <ModalFooter className="bg-light">
+                    <span className="sub-text">View Institutions</span>
+                </ModalFooter>
+            </Modal>
+        </>
+
+
+    );
 };
 
 const TransferAuthRepTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState }) => {
@@ -340,7 +340,7 @@ const TransferAuthRepTable = ({ data, pagination, actions, className, selectable
         },
         {
             name: "Status",
-            selector: (row) => { return (<><Badge color="success"  className="text-uppercase">{`${row.approval_status}`}</Badge></>) },
+            selector: (row) => { return (<><Badge color="success" className="text-uppercase">{`${row.approval_status}`}</Badge></>) },
             sortable: true,
             width: "auto",
             wrap: true,
@@ -362,8 +362,8 @@ const TransferAuthRepTable = ({ data, pagination, actions, className, selectable
         {
             name: "Action",
             selector: (row) => (<>
-                            <ActionTab data={row} updateParentParent={updateParent} />
-                        </>),
+                <ActionTab data={row} updateParentParent={updateParent} />
+            </>),
             width: "18%",
         },
     ];
@@ -375,130 +375,130 @@ const TransferAuthRepTable = ({ data, pagination, actions, className, selectable
     useEffect(() => {
         setTableData(data)
     }, [data]);
-  
-  useEffect(() => {
-    let defaultData = tableData;
-    if (searchText !== "") {
-      defaultData = data.filter((item) => {
-        // return item.name.toLowerCase().includes(searchText.toLowerCase());
-        return (Object.values(item).join('').toLowerCase()).includes(searchText.toLowerCase())
-      });
-      setTableData(defaultData);
-    } else {
-      setTableData(data);
-    }
-  }, [searchText]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // function to change the design view under 1200 px
-  const viewChange = () => {
-    if (window.innerWidth < 960 && expandableRows) {
-      setMobileView(true);
-    } else {
-      setMobileView(false);
-    }
-  };
+    useEffect(() => {
+        let defaultData = tableData;
+        if (searchText !== "") {
+            defaultData = data.filter((item) => {
+                // return item.name.toLowerCase().includes(searchText.toLowerCase());
+                return (Object.values(item).join('').toLowerCase()).includes(searchText.toLowerCase())
+            });
+            setTableData(defaultData);
+        } else {
+            setTableData(data);
+        }
+    }, [searchText]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  useEffect(() => {
-    window.addEventListener("load", viewChange);
-    window.addEventListener("resize", viewChange);
-    return () => {
-      window.removeEventListener("resize", viewChange);
+    // function to change the design view under 1200 px
+    const viewChange = () => {
+        if (window.innerWidth < 960 && expandableRows) {
+            setMobileView(true);
+        } else {
+            setMobileView(false);
+        }
     };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-    
+
+    useEffect(() => {
+        window.addEventListener("load", viewChange);
+        window.addEventListener("resize", viewChange);
+        return () => {
+            window.removeEventListener("resize", viewChange);
+        };
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
     // const renderer = ({ hours, minutes, seconds, completed }) => {
     //         if (completed) {
-                return (
-                    <div className={`dataTables_wrapper dt-bootstrap4 no-footer ${className ? className : ""}`}>
-                        <Row className={`justify-between g-2 ${actions ? "with-export" : ""}`}>
-                            <Col className="col-7 text-start" sm="4">
-                            <div id="DataTables_Table_0_filter" className="dataTables_filter">
-                                <label>
-                                <input
-                                    type="search"
-                                    className="form-control form-control-sm"
-                                    placeholder="Search by name"
-                                    onChange={(ev) => setSearchText(ev.target.value)}
-                                />
-                                </label>
-                            </div>
-                            </Col>
-                            <Col className="col-5 text-end" sm="8">
-                            <div className="datatable-filter">
+    return (
+        <div className={`dataTables_wrapper dt-bootstrap4 no-footer ${className ? className : ""}`}>
+            <Row className={`justify-between g-2 ${actions ? "with-export" : ""}`}>
+                <Col className="col-7 text-start" sm="4">
+                    <div id="DataTables_Table_0_filter" className="dataTables_filter">
+                        <label>
+                            <input
+                                type="search"
+                                className="form-control form-control-sm"
+                                placeholder="Search by name"
+                                onChange={(ev) => setSearchText(ev.target.value)}
+                            />
+                        </label>
+                    </div>
+                </Col>
+                <Col className="col-5 text-end" sm="8">
+                    <div className="datatable-filter">
 
-                                <div className="d-flex justify-content-end g-2">
-                                {actions && <Export data={data} />}
-                                <div className="dataTables_length" id="DataTables_Table_0_length">
-                                    <label>
+                        <div className="d-flex justify-content-end g-2">
+                            {actions && <Export data={data} />}
+                            <div className="dataTables_length" id="DataTables_Table_0_length">
+                                <label>
                                     <span className="d-none d-sm-inline-block">Show</span>
                                     <div className="form-control-select">
                                         {" "}
                                         <select
-                                        name="DataTables_Table_0_length"
-                                        className="custom-select custom-select-sm form-control form-control-sm"
-                                        onChange={(e) => setRowsPerPage(e.target.value)}
-                                        value={rowsPerPageS}
+                                            name="DataTables_Table_0_length"
+                                            className="custom-select custom-select-sm form-control form-control-sm"
+                                            onChange={(e) => setRowsPerPage(e.target.value)}
+                                            value={rowsPerPageS}
                                         >
-                                        <option value="10">10</option>
-                                        <option value="25">25</option>
-                                        <option value="40">40</option>
-                                        <option value="50">50</option>
+                                            <option value="10">10</option>
+                                            <option value="25">25</option>
+                                            <option value="40">40</option>
+                                            <option value="50">50</option>
                                         </select>{" "}
                                     </div>
-                                    </label>
-                                </div>
-                                </div>
+                                </label>
                             </div>
-                            </Col>
-                        </Row>
-                        <DataTable
-                            data={tableData}
-                            columns={authRepColumn}
-                            className={className + ' customMroisDatatable'} id='customMroisDatatable'
-                            selectableRows={selectableRows}
-                            expandableRows={mobileView}
-                            noDataComponent={<div className="p-2">There are no records found</div>}
-                            sortIcon={
-                            <div>
-                                <span>&darr;</span>
-                                <span>&uarr;</span>
-                            </div>
-                            }
-                            pagination={pagination}
-                            paginationComponent={({ currentPage, rowsPerPage, rowCount, onChangePage, onChangeRowsPerPage }) => (
-                            <DataTablePagination
-                                customItemPerPage={rowsPerPageS}
-                                itemPerPage={rowsPerPage}
-                                totalItems={rowCount}
-                                paginate={onChangePage}
-                                currentPage={currentPage}
-                                onChangeRowsPerPage={onChangeRowsPerPage}
-                                setRowsPerPage={setRowsPerPage}
-                            />
-                            )}
-                        ></DataTable>
+                        </div>
                     </div>
-                );
+                </Col>
+            </Row>
+            <DataTable
+                data={tableData}
+                columns={authRepColumn}
+                className={className + ' customMroisDatatable'} id='customMroisDatatable'
+                selectableRows={selectableRows}
+                expandableRows={mobileView}
+                noDataComponent={<div className="p-2">There are no records found</div>}
+                sortIcon={
+                    <div>
+                        <span>&darr;</span>
+                        <span>&uarr;</span>
+                    </div>
+                }
+                pagination={pagination}
+                paginationComponent={({ currentPage, rowsPerPage, rowCount, onChangePage, onChangeRowsPerPage }) => (
+                    <DataTablePagination
+                        customItemPerPage={rowsPerPageS}
+                        itemPerPage={rowsPerPage}
+                        totalItems={rowCount}
+                        paginate={onChangePage}
+                        currentPage={currentPage}
+                        onChangeRowsPerPage={onChangeRowsPerPage}
+                        setRowsPerPage={setRowsPerPage}
+                    />
+                )}
+            ></DataTable>
+        </div>
+    );
     //         } else {
 
     //             return (
     //                     <>
     //                         <Skeleton count={20} height={30}  style={{display: 'block',lineHeight: 2, padding: '1rem',width: 'auto',}}/>
     //                     </>
-                        
+
     //                 )
     //         }
     // };
-    
+
     //       return (
     //               <Countdown
     //                 date={Date.now() + 5000}
     //                 renderer={renderer}
     //             />
 
-                
+
     //         );
- 
+
 
 
 };

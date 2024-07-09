@@ -368,7 +368,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '1',
                 "name" => 'custodianInformationName',
-                "description" => 'Custodian Information Name',
+                "description" => 'Custodian Name',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '2',
@@ -376,7 +376,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '1',
                 "name" => 'custodianInformationAddress',
-                "description" => 'Custodian Information Address',
+                "description" => 'Custodian Address',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '2',
@@ -384,7 +384,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '1',
                 "name" => 'custodianInformationTelephone',
-                "description" => 'Custodian Information Telephone',
+                "description" => 'Custodian Telephone',
                 "type" => 'number',
                 "required" => 1,
                 "page" => '2',
@@ -392,7 +392,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '1',
                 "name" => 'custodianInformationMobileNumberOfContact',
-                "description" => 'Custodian Information Mobile Number Of Contact',
+                "description" => 'Custodian Mobile Number Of Contact',
                 "type" => 'number',
                 "required" => 1,
                 "page" => '2',
@@ -1210,7 +1210,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '2',
                 "name" => 'custodianInformationName',
-                "description" => 'Custodian Information Name',
+                "description" => 'Custodian Name',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '2',
@@ -1218,7 +1218,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '2',
                 "name" => 'custodianInformationAddress',
-                "description" => 'Custodian Information Address',
+                "description" => 'Custodian Address',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '2',
@@ -1226,7 +1226,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '2',
                 "name" => 'custodianInformationTelephone',
-                "description" => 'Custodian Information Telephone',
+                "description" => 'Custodian Telephone',
                 "type" => 'number',
                 "required" => 1,
                 "page" => '2',
@@ -1234,7 +1234,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '2',
                 "name" => 'custodianInformationMobileNumberOfContact',
-                "description" => 'Custodian Information Mobile Number Of Contact',
+                "description" => 'Custodian Mobile Number Of Contact',
                 "type" => 'number',
                 "required" => 1,
                 "page" => '2',
@@ -2058,7 +2058,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '3',
                 "name" => 'custodianInformationName',
-                "description" => 'Custodian Information Name',
+                "description" => 'Custodian Name',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '2',
@@ -2066,7 +2066,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '3',
                 "name" => 'custodianInformationAddress',
-                "description" => 'Custodian Information Address',
+                "description" => 'Custodian Address',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '2',
@@ -2074,7 +2074,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '3',
                 "name" => 'custodianInformationTelephone',
-                "description" => 'Custodian Information Telephone',
+                "description" => 'Custodian Telephone',
                 "type" => 'number',
                 "required" => 1,
                 "page" => '2',
@@ -2082,7 +2082,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '3',
                 "name" => 'custodianInformationMobileNumberOfContact',
-                "description" => 'Custodian Information Mobile Number Of Contact',
+                "description" => 'Custodian Mobile Number Of Contact',
                 "type" => 'number',
                 "required" => 1,
                 "page" => '2',
@@ -2970,7 +2970,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '4',
                 "name" => 'custodianInformationName',
-                "description" => 'Custodian Information Name',
+                "description" => 'Custodian Name',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '2',
@@ -2978,7 +2978,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '4',
                 "name" => 'custodianInformationAddress',
-                "description" => 'Custodian Information Address',
+                "description" => 'Custodian Address',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '2',
@@ -2986,7 +2986,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '4',
                 "name" => 'custodianInformationTelephone',
-                "description" => 'Custodian Information Telephone',
+                "description" => 'Custodian Telephone',
                 "type" => 'number',
                 "required" => 1,
                 "page" => '2',
@@ -2994,7 +2994,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '4',
                 "name" => 'custodianInformationMobileNumberOfContact',
-                "description" => 'Custodian Information Mobile Number Of Contact',
+                "description" => 'Custodian Mobile Number Of Contact',
                 "type" => 'number',
                 "required" => 1,
                 "page" => '2',
@@ -3964,7 +3964,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '5',
                 "name" => 'custodianInformationName',
-                "description" => 'Custodian Information Name',
+                "description" => 'Custodian Name',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '2',
@@ -3972,7 +3972,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '5',
                 "name" => 'custodianInformationAddress',
-                "description" => 'Custodian Information Address',
+                "description" => 'Custodian Address',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '2',
@@ -3980,7 +3980,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '5',
                 "name" => 'custodianInformationTelephone',
-                "description" => 'Custodian Information Telephone',
+                "description" => 'Custodian Telephone',
                 "type" => 'number',
                 "required" => 1,
                 "page" => '2',
@@ -3988,7 +3988,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '5',
                 "name" => 'custodianInformationMobileNumberOfContact',
-                "description" => 'Custodian Information Mobile Number Of Contact',
+                "description" => 'Custodian Mobile Number Of Contact',
                 "type" => 'number',
                 "required" => 1,
                 "page" => '2',
@@ -4799,7 +4799,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '6',
                 "name" => 'custodianInformationName',
-                "description" => 'Custodian Information Name',
+                "description" => 'Custodian Name',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '2',
@@ -4807,7 +4807,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '6',
                 "name" => 'custodianInformationAddress',
-                "description" => 'Custodian Information Address',
+                "description" => 'Custodian Address',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '2',
@@ -4815,7 +4815,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '6',
                 "name" => 'custodianInformationTelephone',
-                "description" => 'Custodian Information Telephone',
+                "description" => 'Custodian Telephone',
                 "type" => 'number',
                 "required" => 1,
                 "page" => '2',
@@ -4823,7 +4823,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '6',
                 "name" => 'custodianInformationMobileNumberOfContact',
-                "description" => 'Custodian Information Mobile Number Of Contact',
+                "description" => 'Custodian Mobile Number Of Contact',
                 "type" => 'number',
                 "required" => 1,
                 "page" => '2',
@@ -5597,7 +5597,7 @@ class ApplicationFieldSeed extends Seeder
             // [
             //     "category" => '7',
             //     "name" => 'custodianInformationName',
-            //     "description" => 'Custodian Information Name',
+            //     "description" => 'Custodian Name',
             //     "type" => 'text',
             //     "required" => 1,
             //     "page" => '2',
@@ -5605,7 +5605,7 @@ class ApplicationFieldSeed extends Seeder
             // [
             //     "category" => '7',
             //     "name" => 'custodianInformationAddress',
-            //     "description" => 'Custodian Information Address',
+            //     "description" => 'Custodian Address',
             //     "type" => 'text',
             //     "required" => 1,
             //     "page" => '2',
@@ -5613,7 +5613,7 @@ class ApplicationFieldSeed extends Seeder
             // [
             //     "category" => '7',
             //     "name" => 'custodianInformationTelephone',
-            //     "description" => 'Custodian Information Telephone',
+            //     "description" => 'Custodian Telephone',
             //     "type" => 'number',
             //     "required" => 1,
             //     "page" => '2',
@@ -5621,7 +5621,7 @@ class ApplicationFieldSeed extends Seeder
             // [
             //     "category" => '7',
             //     "name" => 'custodianInformationMobileNumberOfContact',
-            //     "description" => 'Custodian Information Mobile Number Of Contact',
+            //     "description" => 'Custodian Mobile Number Of Contact',
             //     "type" => 'number',
             //     "required" => 1,
             //     "page" => '2',
@@ -6228,14 +6228,14 @@ class ApplicationFieldSeed extends Seeder
 
         $fields = [
 
-            [
-                "category" => '8',
-                "name" => 'categoryOfMembership',
-                "description" => 'Category Of Membership',
-                "type" => 'checkbox',
-                "required" => 1,
-                "page" => '2',
-            ],
+            // [
+            //     "category" => '8',
+            //     "name" => 'categoryOfMembership',
+            //     "description" => 'Category Of Membership',
+            //     "type" => 'checkbox',
+            //     "required" => 1,
+            //     "page" => '2',
+            // ],
             [
                 "category" => '8',
                 "name" => 'bankDetailNameOne',
@@ -6336,7 +6336,7 @@ class ApplicationFieldSeed extends Seeder
             // [
             //     "category" => '8',
             //     "name" => 'custodianInformationName',
-            //     "description" => 'Custodian Information Name',
+            //     "description" => 'Custodian Name',
             //     "type" => 'text',
             //     "required" => 1,
             //     "page" => '2',
@@ -6344,7 +6344,7 @@ class ApplicationFieldSeed extends Seeder
             // [
             //     "category" => '8',
             //     "name" => 'custodianInformationAddress',
-            //     "description" => 'Custodian Information Address',
+            //     "description" => 'Custodian Address',
             //     "type" => 'text',
             //     "required" => 1,
             //     "page" => '2',
@@ -6352,7 +6352,7 @@ class ApplicationFieldSeed extends Seeder
             // [
             //     "category" => '8',
             //     "name" => 'custodianInformationTelephone',
-            //     "description" => 'Custodian Information Telephone',
+            //     "description" => 'Custodian Telephone',
             //     "type" => 'number',
             //     "required" => 1,
             //     "page" => '2',
@@ -6360,7 +6360,7 @@ class ApplicationFieldSeed extends Seeder
             // [
             //     "category" => '8',
             //     "name" => 'custodianInformationMobileNumberOfContact',
-            //     "description" => 'Custodian Information Mobile Number Of Contact',
+            //     "description" => 'Custodian Mobile Number Of Contact',
             //     "type" => 'number',
             //     "required" => 1,
             //     "page" => '2',
@@ -9309,7 +9309,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '15',
                 "name" => 'custodianInformationName',
-                "description" => 'Custodian Information Name',
+                "description" => 'Custodian Name',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '2',
@@ -9317,7 +9317,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '15',
                 "name" => 'custodianInformationAddress',
-                "description" => 'Custodian Information Address',
+                "description" => 'Custodian Address',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '2',
@@ -9325,7 +9325,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '15',
                 "name" => 'custodianInformationTelephone',
-                "description" => 'Custodian Information Telephone',
+                "description" => 'Custodian Telephone',
                 "type" => 'number',
                 "required" => 1,
                 "page" => '2',
@@ -9333,7 +9333,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '15',
                 "name" => 'custodianInformationMobileNumberOfContact',
-                "description" => 'Custodian Information Mobile Number Of Contact',
+                "description" => 'Custodian Mobile Number Of Contact',
                 "type" => 'number',
                 "required" => 1,
                 "page" => '2',

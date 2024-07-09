@@ -69,16 +69,17 @@ class SendSuccessfulPayment implements ShouldQueue
         $date = Carbon::now()->format('YmdHis');
 
         $fileName = "online_proof_of_payment_" . $invoice->id . $date . ".pdf";
-        $path = storage_path("app/public/proof_of_payment/online");
+        $pathPipe = 'proof_of_payment/online';
+        $path = storage_path("app/public/{$pathPipe}");
         if (!file_exists($path)) {
             mkdir($path, 0777, true);
         }
         $filepath = "$path/$fileName";
-        $publicPath = config("app.url") . "/storage/app/public/proof_of_payment/online/" . $fileName;
+        $publicPath = config("app.url") . "/storage/app/public/{$pathPipe}/" . $fileName;
         $name = "proof_of_payment_$date.pdf";
 
         $proof = ProofOfPayment::create([
-            'proof' => $fileName,
+            'proof' => "{$pathPipe}/{$fileName}",
         ]);
 
         $application->proof_of_payment = $proof->id;

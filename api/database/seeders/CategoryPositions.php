@@ -107,7 +107,7 @@ class CategoryPositions extends Seeder
             }
 
         }
-        $membership_category = 'Dealing Member (Specialist)';
+        $membership_category = 'Dealing Member (Specialists)';
 
         $rows = [
             ["name" => "Managing Director/CEO", "is_compulsory" => true, "email" => "DMSCEOsActivated@fmdqgroup.com"],
@@ -189,7 +189,7 @@ class CategoryPositions extends Seeder
             }
 
         }
-        $membership_category = 'Associate Member (Inter-Dealer Broker)';
+        $membership_category = 'Associate Member (Inter-Dealer Brokers)';
 
         $rows = [
             ["name" => "Managing Director/CEO", "is_compulsory" => true, "email" => "AMICEOS@fmdqgroup.com"],

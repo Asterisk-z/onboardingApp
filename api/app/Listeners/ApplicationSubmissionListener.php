@@ -109,8 +109,8 @@ class ApplicationSubmissionListener implements ShouldQueue
         $emailC = [
             'name' => 'Team',
             'subject' => 'New Membership Application: Concession Confirmation',
-            'content' => "A new applicant, $name, has successfully submitted an application as a
-            $categoryName on the MROIS Portal. Kindly grant a concession (where applicable)",
+            'content' => "A new applicant, $name, has successfully submitted an application as $categoryNameWithPronoun
+             on the MROIS Portal. Kindly grant a concession (where applicable)",
         ];
 
         Utility::emailHelper($emailC, $to, $ccs);

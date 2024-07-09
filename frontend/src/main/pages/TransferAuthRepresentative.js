@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { Card, Spinner, Label, Input,  CardText, CardBody, CardTitle } from "reactstrap";
+import { Card, Spinner, Label, Input, CardText, CardBody, CardTitle } from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
 import { loadUserRoles } from "redux/stores/roles/roleStore";
 import { loadAllCategoryPositions } from "redux/stores/positions/positionStore";
 import { loadAllCountries } from "redux/stores/nationality/country";
-import {  userTransferUserAR, userViewUserAR } from "redux/stores/authorize/representative";
+import { userTransferUserAR, userViewUserAR } from "redux/stores/authorize/representative";
 import { loadAllActiveAuthoriser } from "redux/stores/users/userStore";
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
@@ -17,9 +17,9 @@ import Swal from "sweetalert2";
 
 
 const TransferAuthRepresentative = ({ drawer }) => {
-    
+
     const { ar_user_id } = useParams();
-    
+
     const authUser = useUser();
     const authUserUpdate = useUserUpdate();
     const categories = authUser.user_data.institution.category ? authUser.user_data.institution.category : [];
@@ -44,7 +44,7 @@ const TransferAuthRepresentative = ({ drawer }) => {
 
 
     useEffect(() => {
-        dispatch(userViewUserAR({"user_id" : ar_user_id}));
+        dispatch(userViewUserAR({ "user_id": ar_user_id }));
         dispatch(loadUserRoles());
         dispatch(loadAllCountries());
         dispatch(loadAllActiveAuthoriser());
@@ -52,7 +52,7 @@ const TransferAuthRepresentative = ({ drawer }) => {
     }, [dispatch, parentState]);
 
     useEffect(() => {
-        dispatch(loadAllCategoryPositions({'category_ids' : categoryIds}));
+        dispatch(loadAllCategoryPositions({ 'category_ids': categoryIds }));
     }, [categoryIds]);
 
     const $countries = countries ? JSON.parse(countries) : null;
@@ -71,7 +71,7 @@ const TransferAuthRepresentative = ({ drawer }) => {
         nationality: $user?.nationality,
         position: $user?.position?.id,
         role_id: $user?.role?.id,
-    }; 
+    };
 
     useEffect(() => {
         if ($user) {
@@ -85,7 +85,7 @@ const TransferAuthRepresentative = ({ drawer }) => {
                 nationality: $user?.nationality,
                 position: $user?.position?.id,
                 role_id: $user?.role?.id,
-            }; 
+            };
         }
     }, [$user]);
 
@@ -101,7 +101,7 @@ const TransferAuthRepresentative = ({ drawer }) => {
                 handleMainFormSubmit(values)
             }
         });
-    
+
     }
 
     const handleMainFormSubmit = async (values) => {
@@ -118,7 +118,7 @@ const TransferAuthRepresentative = ({ drawer }) => {
         formData.append('ar_authoriser_id', values.ar_authoriser_id)
         formData.append('phone', values.phone)
         formData.append('reason', values.reason)
-        
+
         if (document) {
             formData.append('img', document)
         }
@@ -128,43 +128,43 @@ const TransferAuthRepresentative = ({ drawer }) => {
 
         try {
             setLoading(true);
-            
+
             const resp = await dispatch(userTransferUserAR(formData));
 
             if (resp.payload?.message == "success") {
                 setTimeout(() => {
-                setLoading(false);
-                // setInitValues({
-                //     email: $user?.email,
-                //     phone: $user?.phone,
-                //     nationality: $user?.nationality,
-                //     position: $user?.position,
-                //     role_id: $user?.role.id,
-                // });
-                
+                    setLoading(false);
+                    // setInitValues({
+                    //     email: $user?.email,
+                    //     phone: $user?.phone,
+                    //     nationality: $user?.nationality,
+                    //     position: $user?.position,
+                    //     role_id: $user?.role.id,
+                    // });
+
                 }, 1000);
-                
+
                 navigate(`${process.env.PUBLIC_URL}/auth-representatives`)
-                
+
                 props.updateParentParent(Math.random())
 
-            
+
             } else {
-            setLoading(false);
+                setLoading(false);
             }
-            
-    } catch (error) {
-        setLoading(false);
-    }
-    };    
 
-  
+        } catch (error) {
+            setLoading(false);
+        }
+    };
+
+
     const $settings = settings ? JSON.parse(settings) : null;
-     
 
-    
+
+
     const handleDificalFileChange = (event) => {
-		  setDocument(event.target.files[0]);
+        setDocument(event.target.files[0]);
     };
 
     const handleSignaturewChange = (event) => {
@@ -184,7 +184,7 @@ const TransferAuthRepresentative = ({ drawer }) => {
                             </BlockTitle>
                         </BlockHeadContent>
                         <BlockHeadContent>
-                            
+
                         </BlockHeadContent>
                     </BlockBetween>
                 </BlockHead>
@@ -214,18 +214,18 @@ const TransferAuthRepresentative = ({ drawer }) => {
                                 </BlockHead>
 
                                 <PreviewCard>
-                                    
+
                                     <Row className="gy-4">
-                                       
+
                                         <Col sm="6">
-                                            
+
                                             {$user && <>
-                                            
-                                                 <Card className="card-borderless">   
+
+                                                <Card className="card-borderless">
                                                     <CardBody className="card-inner">
                                                         {/* <CardTitle tag="h5">{ `${$user.firstName} ${$user.lastName} (${$user.email})` }</CardTitle> */}
                                                         {/* <CardText> */}
-                                                            {/* <ul>
+                                                        {/* <ul>
                                                                 <li><span className="lead">Phone : </span>{`${$user.phone}`}</li>
                                                                 <li><span className="lead">Nationality : </span>{`${$user.nationality}`}</li>
                                                                 <li><span className="lead">Role : </span>{`${$user.role.name}`}</li>
@@ -270,7 +270,7 @@ const TransferAuthRepresentative = ({ drawer }) => {
                                                                 </tr>
                                                                 <tr>
                                                                     <td>Role</td>
-                                                                    <td className="text-capitalize">{`${$user.role.name.toLowerCase()}`}</td>
+                                                                    <td className="text-capitalize">{`${user.role.name ? user.role.name.split(' ')[0] + ' ' + user.role.name.split(' ')[1].toLowerCase() : ''}`}</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td>Position</td>
@@ -292,225 +292,225 @@ const TransferAuthRepresentative = ({ drawer }) => {
                                                             </tbody>
                                                         </table>
                                                     </CardBody>
-                                                    
-                                                </Card>
-                                            
-                                            </>}
-                                           
-                                        </Col> 
-                                        <Col sm="6">
-                                                 {$user &&
-                                                    <>
-                                                        <form onSubmit={handleSubmit(handleFormSubmit)} className="is-alter" encType="multipart/form-data">
-                                                                        
-                                                            <Row className="gy-4">
-                                                                <Col sm="6">
-                                                                    <div className="form-group">
-                                                                        <Label htmlFor="lastName" className="form-label">
-                                                                            Surname
-                                                                        </Label>
-                                                                        <div className="form-control-wrap">
-                                                                            <input className="form-control" type="text" id="lastName" placeholder="Enter Last Name"  {...register('lastName', { required: "Surname is Required" })}  defaultValue={initValues.lastName}/>
-                                                                            {errors.lastName && <p className="invalid">{`${errors.lastName.message}`}</p>}
-                                                                        </div>
-                                                                    </div>
-                                                                </Col>
-                                                                <Col sm="6">
-                                                                    <div className="form-group">
-                                                                        <Label htmlFor="firstName" className="form-label">
-                                                                            First Name
-                                                                        </Label>
-                                                                        <div className="form-control-wrap">
-                                                                            <input className="form-control" type="text" id="firstName" placeholder="Enter First Name" {...register('firstName', { required: "First Name is Required" })} defaultValue={initValues.firstName}/>
-                                                                            {errors.firstName && <p className="invalid">{`${errors.firstName.message}`}</p>}
-                                                                        </div>
-                                                                    </div>
-                                                                </Col>
-                                                                <Col sm="6">
-                                                                    <div className="form-group">
-                                                                        <Label htmlFor="middleName" className="form-label">
-                                                                            Middle Name
-                                                                        </Label>
-                                                                        <div className="form-control-wrap">
-                                                                            <input className="form-control" type="text" id="middleName" placeholder="Enter First Name" {...register('middleName', { required: false })} defaultValue={initValues.middleName}/>
-                                                                            {errors.middleName && <p className="invalid">{`${errors.middleName.message}`}</p>}
-                                                                        </div>
-                                                                    </div>
-                                                                </Col>
-                                                                <Col sm="6">
-                                                                    <div className="form-group">
-                                                                        <Label htmlFor="email" className="form-label">
-                                                                            Email Address
-                                                                        </Label>
-                                                                        <div className="form-control-wrap">
-                                                                            <input className="form-control" type="email" id="email" placeholder="Enter Email Address" {...register('email', { required: "Email Address is Required" })} defaultValue={initValues.email} />
-                                                                            {errors.email && <p className="invalid">{`${errors.email.message}`}</p>}
-                                                                        </div>
-                                                                    </div>
-                                                                </Col>
-                                                                <Col sm="6">
-                                                                    <div className="form-group">
-                                                                        <Label htmlFor="email" className="form-label">
-                                                                            Group Email Address
-                                                                        </Label>
-                                                                        <div className="form-control-wrap">
-                                                                            <input className="form-control" type="email" id="group_email" placeholder="Enter Group Email Address" {...register('group_email', { required: "Group Email Address is Required" })}  defaultValue={initValues.groupEmail}/>
-                                                                            {errors.group_email && <p className="invalid">{`${errors.group_email.message}`}</p>}
-                                                                        </div>
-                                                                    </div>
-                                                                </Col>
-                                                                <Col sm="6">
-                                                                    <div className="form-group">
-                                                                        <Label htmlFor="phone" className="form-label">
-                                                                            Phone Number
-                                                                        </Label>
-                                                                        <div className="form-control-wrap">
-                                                                            <input className="form-control" type="text" id="phone" placeholder="Enter Phone Name"  {...register('phone', { required: "Phone is Required" })} defaultValue={initValues.phone} />
-                                                                            {errors.phone && <p className="invalid">{`${errors.phone.message}`}</p>}
-                                                                        </div>
-                                                                    </div>
-                                                                </Col>
-                                                                <Col sm="6">
-                                                                    <div className="form-group">
-                                                                        <Label htmlFor="position_id" className="form-label">
-                                                                            Position
-                                                                        </Label>
-                                                                        <div className="form-control-wrap">
-                                                                            <div className="form-control-select">
-                                                                                <select className="form-control form-select" {...register('position_id', { required: "Position is Required" })} defaultValue={initValues.position}>
-                                                                                    <option value="">Select Position</option>
-                                                                                    {$positions && $positions?.map((position, index) => (
-                                                                                        <option key={index} value={position.id}>
-                                                                                            {position.name}
-                                                                                            {position.is_compulsory == '1' && <>*</>}
-                                                                                        </option>
-                                                                                    ))}
-                                                                                </select>
-                                                                                {errors.position_id && <p className="invalid">{`${errors.position_id.message}`}</p>}
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </Col>
-                                                                <Col sm="6">
-                                                                    <div className="form-group">
-                                                                        <Label htmlFor="nationality" className="form-label">
-                                                                            Nationality
-                                                                        </Label>
-                                                                        <div className="form-control-wrap">
-                                                                            <div className="form-control-select">
-                                                                                <select className="form-control form-select" {...register('nationality', { required: "Nationality is Required" })} defaultValue={initValues.nationality}>
-                                                                                    <option value="">Select Nationality</option>
-                                                                                    {$countries && $countries?.map((country, index) => (
-                                                                                        <option key={index} value={country.code}>
-                                                                                            {country.name}
-                                                                                        </option>
-                                                                                    ))}
-                                                                                </select>
-                                                                                {errors.nationality && <p className="invalid">{`${errors.nationality.message}`}</p>}
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </Col>
-                                                                <Col sm="12">
-                                                                    <div className="form-group">
-                                                                        {/* {settings} */}
-                                                                        {($settings && $settings.name == 'mandate_form') && <>
-                                                                            <a  size="lg" href={$settings.value}  download="mandate_form.pdf" target="_blank" className="active btn btn-primary">
-                                                                                {"Download Signature Mandate"}
-                                                                            </a>
-                                                                        </>}
-                                                                        
-                                                                    </div>
-                                                                </Col>
-                                                                <Col sm="6">
-                                                                    <div className="form-group">
-                                                                        <Label htmlFor="nationality" className="form-label">
-                                                                            Upload Digital Photo
-                                                                        </Label>
-                                                                        <div className="form-control-wrap">
-                                                                    <input type="file" accept="image/*" className="form-control"  {...register('digitalPhone', {  required: false })} onChange={handleDificalFileChange}/>
-                                                                            {errors.digitalPhone && <p className="invalid">{`${errors.digitalPhone.message}`}</p>}
-                                                                        </div>
-                                                                    </div>
-                                                                </Col>
-                                                                <Col sm="6">
-                                                                    <div className="form-group">
-                                                                        <Label htmlFor="Signature" className="form-label">
-                                                                            Signed Signature Mandate<span style={{color:'red'}}> *</span>
-                                                                        </Label>
-                                                                        <div className="form-control-wrap">
-                                                                            <input type="file" accept=".pdf" className="form-control"  {...register('signedMandate', {  required: "Signed Mandate is Required" })} onChange={handleSignaturewChange}/>
-                                                                            {errors.signedMandate && <p className="invalid">{`${errors.signedMandate.message}`}</p>}
-                                                                        </div>
-                                                                    </div>
-                                                                </Col>
-                                                                <Col sm="6">
-                                                                    <div className="form-group">
-                                                                        <Label htmlFor="nationality" className="form-label">
-                                                                            Role
-                                                                        </Label>
-                                                                        <div className="form-control-wrap">
-                                                                            <div className="form-control-select">
-                                                                                <select className="form-control form-select" {...register('role', { required: "Roles is Required" })} defaultValue={initValues.role_id}>
-                                                                                    <option value="">Select Role</option>
-                                                                                    {$roles && $roles?.map((role, index) => (
-                                                                                        <option key={index} value={role.id}>
-                                                                                            {role.name}
-                                                                                        </option>
-                                                                                    ))}
-                                                                                </select>
-                                                                                {errors.role && <p className="invalid">{`${errors.role.message}`}</p>}
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </Col>
-                                                                <Col sm="6">
-                                                                    <div className="form-group">
-                                                                        <Label htmlFor="nationality" className="form-label">
-                                                                            Authoriser
-                                                                        </Label>
-                                                                        <div className="form-control-wrap">
-                                                                            <div className="form-control-select">
-                                                                                <select className="form-control form-select" {...register('ar_authoriser_id', { required: "Authoriser is Required" })}>
-                                                                                    <option value="">Select Authoriser</option>
-                                                                                    {$authorizers && $authorizers?.map((authorizer, index) => ar_user_id != authorizer.id  && authorizer.approval_status == 'approved' ? (
-                                                                                        <option key={index} value={authorizer.id}>
-                                                                                            {`${authorizer.first_name} ${authorizer.last_name} ( ${authorizer.email} )`}
-                                                                                        </option>
-                                                                                    ) : "")}
-                                                                                </select>
-                                                                                {errors.ar_authoriser_id && <p className="invalid">{`${errors.ar_authoriser_id.message}`}</p>}
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </Col>
-                                                                <Col sm="12">
-                                                                    <div className="form-group">
-                                                                        <Label htmlFor="nationality" className="form-label">
-                                                                            Reason
-                                                                        </Label>
-                                                                        <div className="form-control-wrap">
-                                                                            <textarea type="text" className="form-control" {...register('reason', { required: "Reason is Required" })}></textarea>
-                                                                            {errors.reason && <p className="invalid">{`${errors.reason.message}`}</p>}
-                                                                        </div>
-                                                                    </div>
-                                                                </Col>
-                                                                <Col sm="12">
-                                                                    <div className="form-group">
-                                                                        <Button color="primary" type="submit" size="lg">
-                                                                            {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Transfer"}
-                                                                        </Button>
-                                                                    </div>
-                                                                </Col>
-                                                            </Row>
-                                                        </form>
-                                                    </>
-                                                }                           
-                                        </Col> 
 
-                                    
+                                                </Card>
+
+                                            </>}
+
+                                        </Col>
+                                        <Col sm="6">
+                                            {$user &&
+                                                <>
+                                                    <form onSubmit={handleSubmit(handleFormSubmit)} className="is-alter" encType="multipart/form-data">
+
+                                                        <Row className="gy-4">
+                                                            <Col sm="6">
+                                                                <div className="form-group">
+                                                                    <Label htmlFor="lastName" className="form-label">
+                                                                        Surname
+                                                                    </Label>
+                                                                    <div className="form-control-wrap">
+                                                                        <input className="form-control" type="text" id="lastName" placeholder="Enter Last Name"  {...register('lastName', { required: "Surname is Required" })} defaultValue={initValues.lastName} />
+                                                                        {errors.lastName && <p className="invalid">{`${errors.lastName.message}`}</p>}
+                                                                    </div>
+                                                                </div>
+                                                            </Col>
+                                                            <Col sm="6">
+                                                                <div className="form-group">
+                                                                    <Label htmlFor="firstName" className="form-label">
+                                                                        First Name
+                                                                    </Label>
+                                                                    <div className="form-control-wrap">
+                                                                        <input className="form-control" type="text" id="firstName" placeholder="Enter First Name" {...register('firstName', { required: "First Name is Required" })} defaultValue={initValues.firstName} />
+                                                                        {errors.firstName && <p className="invalid">{`${errors.firstName.message}`}</p>}
+                                                                    </div>
+                                                                </div>
+                                                            </Col>
+                                                            <Col sm="6">
+                                                                <div className="form-group">
+                                                                    <Label htmlFor="middleName" className="form-label">
+                                                                        Middle Name
+                                                                    </Label>
+                                                                    <div className="form-control-wrap">
+                                                                        <input className="form-control" type="text" id="middleName" placeholder="Enter First Name" {...register('middleName', { required: false })} defaultValue={initValues.middleName} />
+                                                                        {errors.middleName && <p className="invalid">{`${errors.middleName.message}`}</p>}
+                                                                    </div>
+                                                                </div>
+                                                            </Col>
+                                                            <Col sm="6">
+                                                                <div className="form-group">
+                                                                    <Label htmlFor="email" className="form-label">
+                                                                        Email Address
+                                                                    </Label>
+                                                                    <div className="form-control-wrap">
+                                                                        <input className="form-control" type="email" id="email" placeholder="Enter Email Address" {...register('email', { required: "Email Address is Required" })} defaultValue={initValues.email} />
+                                                                        {errors.email && <p className="invalid">{`${errors.email.message}`}</p>}
+                                                                    </div>
+                                                                </div>
+                                                            </Col>
+                                                            <Col sm="6">
+                                                                <div className="form-group">
+                                                                    <Label htmlFor="email" className="form-label">
+                                                                        Group Email Address
+                                                                    </Label>
+                                                                    <div className="form-control-wrap">
+                                                                        <input className="form-control" type="email" id="group_email" placeholder="Enter Group Email Address" {...register('group_email', { required: "Group Email Address is Required" })} defaultValue={initValues.groupEmail} />
+                                                                        {errors.group_email && <p className="invalid">{`${errors.group_email.message}`}</p>}
+                                                                    </div>
+                                                                </div>
+                                                            </Col>
+                                                            <Col sm="6">
+                                                                <div className="form-group">
+                                                                    <Label htmlFor="phone" className="form-label">
+                                                                        Phone Number
+                                                                    </Label>
+                                                                    <div className="form-control-wrap">
+                                                                        <input className="form-control" type="text" id="phone" placeholder="Enter Phone Name"  {...register('phone', { required: "Phone is Required" })} defaultValue={initValues.phone} />
+                                                                        {errors.phone && <p className="invalid">{`${errors.phone.message}`}</p>}
+                                                                    </div>
+                                                                </div>
+                                                            </Col>
+                                                            <Col sm="6">
+                                                                <div className="form-group">
+                                                                    <Label htmlFor="position_id" className="form-label">
+                                                                        Position
+                                                                    </Label>
+                                                                    <div className="form-control-wrap">
+                                                                        <div className="form-control-select">
+                                                                            <select className="form-control form-select" {...register('position_id', { required: "Position is Required" })} defaultValue={initValues.position}>
+                                                                                <option value="">Select Position</option>
+                                                                                {$positions && $positions?.map((position, index) => (
+                                                                                    <option key={index} value={position.id}>
+                                                                                        {position.name}
+                                                                                        {position.is_compulsory == '1' && <>*</>}
+                                                                                    </option>
+                                                                                ))}
+                                                                            </select>
+                                                                            {errors.position_id && <p className="invalid">{`${errors.position_id.message}`}</p>}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </Col>
+                                                            <Col sm="6">
+                                                                <div className="form-group">
+                                                                    <Label htmlFor="nationality" className="form-label">
+                                                                        Nationality
+                                                                    </Label>
+                                                                    <div className="form-control-wrap">
+                                                                        <div className="form-control-select">
+                                                                            <select className="form-control form-select" {...register('nationality', { required: "Nationality is Required" })} defaultValue={initValues.nationality}>
+                                                                                <option value="">Select Nationality</option>
+                                                                                {$countries && $countries?.map((country, index) => (
+                                                                                    <option key={index} value={country.code}>
+                                                                                        {country.name}
+                                                                                    </option>
+                                                                                ))}
+                                                                            </select>
+                                                                            {errors.nationality && <p className="invalid">{`${errors.nationality.message}`}</p>}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </Col>
+                                                            <Col sm="12">
+                                                                <div className="form-group">
+                                                                    {/* {settings} */}
+                                                                    {($settings && $settings.name == 'mandate_form') && <>
+                                                                        <a size="lg" href={$settings.value} download="mandate_form.pdf" target="_blank" className="active btn btn-primary">
+                                                                            {"Download Signature Mandate"}
+                                                                        </a>
+                                                                    </>}
+
+                                                                </div>
+                                                            </Col>
+                                                            <Col sm="6">
+                                                                <div className="form-group">
+                                                                    <Label htmlFor="nationality" className="form-label">
+                                                                        Upload Digital Photo
+                                                                    </Label>
+                                                                    <div className="form-control-wrap">
+                                                                        <input type="file" accept="image/*" className="form-control"  {...register('digitalPhone', { required: false })} onChange={handleDificalFileChange} />
+                                                                        {errors.digitalPhone && <p className="invalid">{`${errors.digitalPhone.message}`}</p>}
+                                                                    </div>
+                                                                </div>
+                                                            </Col>
+                                                            <Col sm="6">
+                                                                <div className="form-group">
+                                                                    <Label htmlFor="Signature" className="form-label">
+                                                                        Signed Signature Mandate<span style={{ color: 'red' }}> *</span>
+                                                                    </Label>
+                                                                    <div className="form-control-wrap">
+                                                                        <input type="file" accept=".pdf" className="form-control"  {...register('signedMandate', { required: "Signed Mandate is Required" })} onChange={handleSignaturewChange} />
+                                                                        {errors.signedMandate && <p className="invalid">{`${errors.signedMandate.message}`}</p>}
+                                                                    </div>
+                                                                </div>
+                                                            </Col>
+                                                            <Col sm="6">
+                                                                <div className="form-group">
+                                                                    <Label htmlFor="nationality" className="form-label">
+                                                                        Role
+                                                                    </Label>
+                                                                    <div className="form-control-wrap">
+                                                                        <div className="form-control-select">
+                                                                            <select className="form-control form-select" {...register('role', { required: "Roles is Required" })} defaultValue={initValues.role_id}>
+                                                                                <option value="">Select Role</option>
+                                                                                {$roles && $roles?.map((role, index) => (
+                                                                                    <option key={index} value={role.id}>
+                                                                                        {role.name}
+                                                                                    </option>
+                                                                                ))}
+                                                                            </select>
+                                                                            {errors.role && <p className="invalid">{`${errors.role.message}`}</p>}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </Col>
+                                                            <Col sm="6">
+                                                                <div className="form-group">
+                                                                    <Label htmlFor="nationality" className="form-label">
+                                                                        Authoriser
+                                                                    </Label>
+                                                                    <div className="form-control-wrap">
+                                                                        <div className="form-control-select">
+                                                                            <select className="form-control form-select" {...register('ar_authoriser_id', { required: "Authoriser is Required" })}>
+                                                                                <option value="">Select Authoriser</option>
+                                                                                {$authorizers && $authorizers?.map((authorizer, index) => ar_user_id != authorizer.id && authorizer.approval_status == 'approved' ? (
+                                                                                    <option key={index} value={authorizer.id}>
+                                                                                        {`${authorizer.first_name} ${authorizer.last_name} ( ${authorizer.email} )`}
+                                                                                    </option>
+                                                                                ) : "")}
+                                                                            </select>
+                                                                            {errors.ar_authoriser_id && <p className="invalid">{`${errors.ar_authoriser_id.message}`}</p>}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </Col>
+                                                            <Col sm="12">
+                                                                <div className="form-group">
+                                                                    <Label htmlFor="nationality" className="form-label">
+                                                                        Reason
+                                                                    </Label>
+                                                                    <div className="form-control-wrap">
+                                                                        <textarea type="text" className="form-control" {...register('reason', { required: "Reason is Required" })}></textarea>
+                                                                        {errors.reason && <p className="invalid">{`${errors.reason.message}`}</p>}
+                                                                    </div>
+                                                                </div>
+                                                            </Col>
+                                                            <Col sm="12">
+                                                                <div className="form-group">
+                                                                    <Button color="primary" type="submit" size="lg">
+                                                                        {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Transfer"}
+                                                                    </Button>
+                                                                </div>
+                                                            </Col>
+                                                        </Row>
+                                                    </form>
+                                                </>
+                                            }
+                                        </Col>
+
+
                                     </Row>
-                  
+
                                 </PreviewCard>
                             </Block>
 

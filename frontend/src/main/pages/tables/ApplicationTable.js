@@ -101,7 +101,10 @@ const ActionTab = (props) => {
                 {tabItem.internal?.show_form == 1 ? <>
                     <button className="btn btn-sm btn-secondary" color="secondary" onClick={(ev) => navigate(`${process.env.PUBLIC_URL}/application/${tabItem.internal?.application_uuid}`)}>Continue Application</button>
                 </> : <>
-                    <button className="btn btn-sm btn-secondary" color="secondary" onClick={(ev) => navigate(`${process.env.PUBLIC_URL}/application_detail/${tabItem.internal?.application_uuid}`)} >Basic Information</button>
+
+                    <button className="btn btn-sm btn-secondary" color="secondary" onClick={(ev) => navigate(`${process.env.PUBLIC_URL}/application_detail/${tabItem.internal?.application_uuid}`)} >
+                        Basic Information
+                    </button>
                 </>}
             </>}
 
