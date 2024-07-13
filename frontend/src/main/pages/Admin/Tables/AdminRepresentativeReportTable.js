@@ -31,7 +31,7 @@ const Export = ({ data, reportUrl }) => {
       "Institution": item.institution.name,
       "Position": item.position.name,
       "Phone": item.phone,
-      "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
+      "Sign-on Date": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
     })
   });
 
@@ -251,7 +251,7 @@ const AdminListARTable = ({ data, pagination, actions, className, selectableRows
       wrap: true
     },
     {
-      name: "Date Created",
+      name: "Sign-on Date",
       selector: (row) => moment(row.createdAt).format('MMM. D, YYYY HH:mm'),
       sortable: true,
       width: "auto",

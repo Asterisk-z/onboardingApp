@@ -33,7 +33,7 @@ const Export = ({ data }) => {
             "Phone": item.phone,
             "Role": item.role.name,
             "Status": item.approval_status,
-            "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
+            "Sign-on Date": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
         })
     });
 
@@ -375,7 +375,7 @@ const DashARTable = ({ data, pagination, actions, className, selectableRows, exp
             wrap: true
         },
         {
-            name: "Date Created",
+            name: "Sign-on Date",
             selector: (row) => moment(row.createdAt).format('MMM. D, YYYY HH:mm'),
             sortable: true,
             width: "auto",

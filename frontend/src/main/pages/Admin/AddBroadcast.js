@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner } from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
-import { CreateBroadcast, loadViewMessages } from "redux/stores/broadcast/broadcastStore";
+import { CreateBroadcast, loadBoardCastCategoryPositions } from "redux/stores/broadcast/broadcastStore";
 import { loadAllCategoryPositions } from "redux/stores/positions/positionStore";
 import { loadAllActiveCategories } from "redux/stores/memberCategory/category";
 import Content from "layout/content/Content";
@@ -183,7 +183,7 @@ const AdminBroadcast = ({ drawer }) => {
     };
 
     const CategorySection = (props) => {
-        
+
         const [categoryIds, setCategoryIds] = useState([]);
 
         const { handleSubmit, register, watch, formState: { errors } } = useForm();
@@ -206,7 +206,7 @@ const AdminBroadcast = ({ drawer }) => {
             const ids = categoryIds;
             ids[event.target.value] = event.target.checked
         };
-        
+
 
         return (
             <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
@@ -222,7 +222,7 @@ const AdminBroadcast = ({ drawer }) => {
                                     <article className="custom-control" key={index} style={{ paddingLeft: '5px !important' }}>
                                         {/* checked={formData.category_ids.includes(category.id)} */}
                                         {/* {...register(`category_ids${index}`, { required: false })} */}
-                                        <input type="checkbox" className="" onChange={(e) => checkCategory(e)} name='category_id[]'  value={category.id} id={`fw-policy${category.id}`} />
+                                        <input type="checkbox" className="" onChange={(e) => checkCategory(e)} name='category_id[]' value={category.id} id={`fw-policy${category.id}`} />
                                         {/* {errors.terms && <span className="invalid">This field is required</span>} */}
                                         <label className="" htmlFor={`fw-policy${category.id}`}>
                                             <span>
@@ -256,10 +256,12 @@ const AdminBroadcast = ({ drawer }) => {
 
     const PositionSection = (props) => {
 
-        const positions = useSelector((state) => state?.position?.list) || null;
+        // const positions = useSelector((state) => state?.position?.list) || null;
+        const positions = useSelector((state) => state?.broadcasts?.list_positions) || null;
 
         useEffect(() => {
-            dispatch(loadAllCategoryPositions({ 'category_ids': overAllForm.category_ids }));
+            dispatch(loadBoardCastCategoryPositions({ 'category_ids': overAllForm.category_ids }));
+            // dispatch(loadAllCategoryPositions({ 'category_ids': overAllForm.category_ids }));
         }, [dispatch]);
 
         const $positions = positions ? JSON.parse(positions) : null;

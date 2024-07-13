@@ -29,7 +29,7 @@ const Export = ({ data }) => {
       "Institution": item.institution_name,
       "Competency Name": item.name,
       "Competency Description": item.description,
-      "Date Created": moment(item.created_at).format('MMM. D, YYYY HH:mm')
+      "Sign-on Date": moment(item.created_at).format('MMM. D, YYYY HH:mm')
     })
   });
 

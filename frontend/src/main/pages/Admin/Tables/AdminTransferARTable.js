@@ -352,7 +352,7 @@ const AdminListARTable = ({ data, pagination, actions, className, selectableRows
       wrap: true,
     },
     {
-      name: "Date Created",
+      name: "Sign-on Date",
       selector: (row) => moment(row.createdAt).format('MMM. D, YYYY HH:mm'),
       sortable: true,
       width: "auto",

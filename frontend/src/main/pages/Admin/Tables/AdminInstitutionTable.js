@@ -6,7 +6,7 @@ import exportFromJSON from "export-from-json";
 import CopyToClipboard from "react-copy-to-clipboard";
 import Icon from "components/icon/Icon";
 import { useDispatch } from "react-redux";
-import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge,  Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, CardBody, CardTitle } from "reactstrap";
+import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge, Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, CardBody, CardTitle } from "reactstrap";
 import { DataTablePagination } from "components/Component";
 import moment from "moment";
 import { megProcessTransferUserAR } from "redux/stores/authorize/representative";
@@ -15,198 +15,198 @@ import Swal from "sweetalert2";
 
 
 const Export = ({ data }) => {
-    const [modal, setModal] = useState(false);
+  const [modal, setModal] = useState(false);
 
-    useEffect(() => {
-        if (modal === true) {
-        setTimeout(() => setModal(false), 2000);
-        }
-    }, [modal]);
+  useEffect(() => {
+    if (modal === true) {
+      setTimeout(() => setModal(false), 2000);
+    }
+  }, [modal]);
 
-    const newData = data.map((item, index) => {
-        return ({
-            "IID": ++index,
-            "Name": `${item.name}`,
-            "Categories": item.category.map((cat) => cat.name).toString(),
-            "Total ARs": item.ars.length,
-            "Status": `Pending Registration`,
-            "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
-        })
-    });
+  const newData = data.map((item, index) => {
+    return ({
+      "IID": ++index,
+      "Name": `${item.name}`,
+      "Categories": item.category.map((cat) => cat.name).toString(),
+      "Total ARs": item.ars.length,
+      "Status": `Pending Registration`,
+      "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
+    })
+  });
 
-    const fileName = "data";
+  const fileName = "data";
 
-    const exportCSV = () => {
-        const exportType = exportFromJSON.types.csv;
-        exportFromJSON({ data: newData, fileName: fileName, exportType: exportType });
+  const exportCSV = () => {
+    const exportType = exportFromJSON.types.csv;
+    exportFromJSON({ data: newData, fileName: fileName, exportType: exportType });
 
-    };
+  };
 
-    const exportExcel = () => {
-        const exportType = exportFromJSON.types.xls;
-        exportFromJSON({ data: newData, fileName: fileName, exportType: exportType });
+  const exportExcel = () => {
+    const exportType = exportFromJSON.types.xls;
+    exportFromJSON({ data: newData, fileName: fileName, exportType: exportType });
 
-    };
+  };
 
-    const copyToClipboard = () => {
-        setModal(true);
-    };
+  const copyToClipboard = () => {
+    setModal(true);
+  };
 
-    return (
-        <React.Fragment>
-        <div className="dt-export-buttons d-flex align-center">
-            <div className="dt-export-title d-none d-md-inline-block">Export</div>
-            <div className="dt-buttons btn-group flex-wrap">
-            <CopyToClipboard text={JSON.stringify(newData)}>
-                <Button className="buttons-copy buttons-html5" onClick={() => copyToClipboard()}>
-                <span>Copy</span>
-                </Button>
-            </CopyToClipboard>{" "}
-            <button className="btn btn-secondary buttons-csv buttons-html5" type="button" onClick={() => exportCSV()}>
-                <span>CSV</span>
-            </button>{" "}
-            <button className="btn btn-secondary buttons-excel buttons-html5" type="button" onClick={() => exportExcel()}>
-                <span>Excel</span>
-            </button>{" "}
-            </div>
+  return (
+    <React.Fragment>
+      <div className="dt-export-buttons d-flex align-center">
+        <div className="dt-export-title d-none d-md-inline-block">Export</div>
+        <div className="dt-buttons btn-group flex-wrap">
+          <CopyToClipboard text={JSON.stringify(newData)}>
+            <Button className="buttons-copy buttons-html5" onClick={() => copyToClipboard()}>
+              <span>Copy</span>
+            </Button>
+          </CopyToClipboard>{" "}
+          <button className="btn btn-secondary buttons-csv buttons-html5" type="button" onClick={() => exportCSV()}>
+            <span>CSV</span>
+          </button>{" "}
+          <button className="btn btn-secondary buttons-excel buttons-html5" type="button" onClick={() => exportExcel()}>
+            <span>Excel</span>
+          </button>{" "}
         </div>
-        <Modal isOpen={modal} className="modal-dialog-centered text-center" size="sm">
-            <ModalBody className="text-center m-2">
-                <h5>Copied to clipboard</h5>
-            </ModalBody>
-            <div className="p-3 bg-light">
-                <div className="text-center">Copied {newData.length} rows to clipboard</div>
-            </div>
-        </Modal>
-        </React.Fragment>
-    );
+      </div>
+      <Modal isOpen={modal} className="modal-dialog-centered text-center" size="sm">
+        <ModalBody className="text-center m-2">
+          <h5>Copied to clipboard</h5>
+        </ModalBody>
+        <div className="p-3 bg-light">
+          <div className="text-center">Copied {newData.length} rows to clipboard</div>
+        </div>
+      </Modal>
+    </React.Fragment>
+  );
 };
 
 
 const ActionTab = (props) => {
-        
-    const aUser = useUser();
-    const aUserUpdate = useUserUpdate();
-    
-    const institution = props.institution
-    const navigate = useNavigate();
-    const [modalForm, setModalForm] = useState(false);
-    const [modalView, setModalView] = useState(false);
-    const [modalViewUpdate, setModalViewUpdate] = useState(false);
 
-    const toggleForm = () => setModalForm(!modalForm);
-    const toggleView = () => setModalView(!modalView);
-    const toggleViewUpdate = () => setModalViewUpdate(!modalViewUpdate);
-    
-    const dispatch = useDispatch();
-  
-    
-    const askAction = async (action) => {
-      if(action == 'approve') {
-          Swal.fire({
-              title: "Are you sure?",
-              text: "You won't be able to revert this!",
-              icon: "warning",
-              showCancelButton: true,
-              confirmButtonText: "Yes, approve it!",
-          }).then((result) => {
-              if (result.isConfirmed) {
-                  
-                  const formData = new FormData();
-                  formData.append('user_id', institution.id);
-                  formData.append('action', 'approve');
-                  const resp = dispatch(megProcessTransferUserAR(formData));
+  const aUser = useUser();
+  const aUserUpdate = useUserUpdate();
 
-                  if (resp.payload?.message == "success") {
-                      setTimeout(() => {
-                          props.updateParentParent(Math.random())
-                      }, 1000);
-                  
-                  }
-              }
-          });
-      }
-      
-      if(action == 'decline') {
-          Swal.fire({
-              title: "Are you sure?",
-              text: "You won't be able to revert this!",
-              icon: "warning",
-              showCancelButton: true,
-              confirmButtonText: "Yes, decline it!",
-          }).then((result) => {
-              if (result.isConfirmed) {
-                  
-                  const formData = new FormData();
-                  formData.append('user_id', institution.id);
-                  formData.append('action', 'decline');
-                  const resp = dispatch(megProcessTransferUserAR(formData));
+  const institution = props.institution
+  const navigate = useNavigate();
+  const [modalForm, setModalForm] = useState(false);
+  const [modalView, setModalView] = useState(false);
+  const [modalViewUpdate, setModalViewUpdate] = useState(false);
 
-                  if (resp.payload?.message == "success") {
-                      setTimeout(() => {
-                          props.updateParentParent(Math.random())
-                      }, 1000);
-                  
-                  }
-              }
-          });
-      }
-      
+  const toggleForm = () => setModalForm(!modalForm);
+  const toggleView = () => setModalView(!modalView);
+  const toggleViewUpdate = () => setModalViewUpdate(!modalViewUpdate);
 
-    };
-  
+  const dispatch = useDispatch();
+
+
+  const askAction = async (action) => {
+    if (action == 'approve') {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, approve it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+
+          const formData = new FormData();
+          formData.append('user_id', institution.id);
+          formData.append('action', 'approve');
+          const resp = dispatch(megProcessTransferUserAR(formData));
+
+          if (resp.payload?.message == "success") {
+            setTimeout(() => {
+              props.updateParentParent(Math.random())
+            }, 1000);
+
+          }
+        }
+      });
+    }
+
+    if (action == 'decline') {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, decline it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+
+          const formData = new FormData();
+          formData.append('user_id', institution.id);
+          formData.append('action', 'decline');
+          const resp = dispatch(megProcessTransferUserAR(formData));
+
+          if (resp.payload?.message == "success") {
+            setTimeout(() => {
+              props.updateParentParent(Math.random())
+            }, 1000);
+
+          }
+        }
+      });
+    }
+
+
+  };
+
   return (
     <>
-        <div className="toggle-expand-content" style={{ display: "block" }}>
-            <ul className="nk-block-tools g-3">
-                 <li className="nk-block-tools-opt">
-                    <UncontrolledDropdown direction="right">
-                        <DropdownToggle className="dropdown-toggle btn btn-md" color="secondary">Action</DropdownToggle>
+      <div className="toggle-expand-content" style={{ display: "block" }}>
+        <ul className="nk-block-tools g-3">
+          <li className="nk-block-tools-opt">
+            <UncontrolledDropdown direction="right">
+              <DropdownToggle className="dropdown-toggle btn btn-md" color="secondary">Action</DropdownToggle>
 
-                        <DropdownMenu>
-                            <ul className="link-list-opt">
-                        
-                                    <li size="xs">
-                                        <DropdownItem tag="a"  onClick={toggleView} >
-                                            <Icon name="eye"></Icon>
-                                            <span>View Institution</span>
-                                        </DropdownItem>
-                                    </li>
-                                    
+              <DropdownMenu>
+                <ul className="link-list-opt">
 
-                                    {(aUser.is_admin_meg() ) &&
-                                        <>
-                                            <li size="xs">
-                                                <DropdownItem tag="a"  onClick={(e) => navigate(`${process.env.PUBLIC_URL}/${institution.id}/list-ars`)} >
-                                                    <Icon name="eye"></Icon>
-                                                    <span>Authorised Representative Review</span>
-                                                </DropdownItem>
-                                            </li>
-                                            {/* <li size="xs">
+                  <li size="xs">
+                    <DropdownItem tag="a" onClick={toggleView} >
+                      <Icon name="eye"></Icon>
+                      <span>View Institution</span>
+                    </DropdownItem>
+                  </li>
+
+
+                  {(aUser.is_admin_meg()) &&
+                    <>
+                      <li size="xs">
+                        <DropdownItem tag="a" onClick={(e) => navigate(`${process.env.PUBLIC_URL}/${institution.id}/list-ars`)} >
+                          <Icon name="eye"></Icon>
+                          <span>Authorised Representative Review</span>
+                        </DropdownItem>
+                      </li>
+                      {/* <li size="xs">
                                                 <DropdownItem tag="a"  onClick={(e) => askAction('decline')} >
                                                     <Icon name="eye"></Icon>
                                                     <span>Decline</span>
                                                 </DropdownItem>
                                             </li> */}
-                                        </>
-                                    }
+                    </>
+                  }
 
-                                
-                            </ul>
-                        </DropdownMenu>
-                    </UncontrolledDropdown>
-                </li>
-                
 
-            </ul>
-        </div>
-       
-        <Modal isOpen={modalViewUpdate} toggle={toggleViewUpdate} size="lg">
-            <ModalHeader toggle={toggleViewUpdate} close={<button className="close" onClick={toggleViewUpdate}><Icon name="cross" /></button>}>
-                View Institution
-            </ModalHeader>
-            <ModalBody>
-                    {/* <Card className="card">   
+                </ul>
+              </DropdownMenu>
+            </UncontrolledDropdown>
+          </li>
+
+
+        </ul>
+      </div>
+
+      <Modal isOpen={modalViewUpdate} toggle={toggleViewUpdate} size="lg">
+        <ModalHeader toggle={toggleViewUpdate} close={<button className="close" onClick={toggleViewUpdate}><Icon name="cross" /></button>}>
+          View Institution
+        </ModalHeader>
+        <ModalBody>
+          {/* <Card className="card">   
                         <CardBody className="card-inner">
                             <CardTitle tag="h5">{ `${institution.firstName} ${institution.lastName} (${institution.email})` }</CardTitle>
                           
@@ -221,11 +221,11 @@ const ActionTab = (props) => {
                               </ul>
                         </CardBody>
                     </Card> */}
-            </ModalBody>
-            <ModalFooter className="bg-light">
-                <span className="sub-text">View Institutions</span>
-            </ModalFooter>
-        </Modal>
+        </ModalBody>
+        <ModalFooter className="bg-light">
+          <span className="sub-text">View Institutions</span>
+        </ModalFooter>
+      </Modal>
     </>
 
 
@@ -233,65 +233,65 @@ const ActionTab = (props) => {
 };
 
 const AdminInstitutionTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState }) => {
-    const complainColumn = [
-      {
-          name: "IID",
-          selector: (row, index) => ++index,
-          sortable: true,
-          width: "100px",
-          wrap: true
-      },
-      {
-          name: "Name",
-          selector: (row) => { return (<><p>{`${row.name}`}</p></>) },
-          sortable: true,
-          width: "auto",
-          wrap: true
-      },
-      {
-          name: "Categories",
-          selector: (row) => { return (<>{`${(row.category.map((cat) => cat.name)).toString()}`}</>) },
-          sortable: true,
-          width: "auto",
-          wrap: true
-      },
-      {
-          name: "Total ARs",
-          selector: (row) => { return (<>{`${row.ars.length} ARs`}</>) },
-          sortable: true,
-          width: "auto",
-          wrap: true
-      },
-      {
-          name: "Status",
-          selector: (row) => { return (<><Badge color="success" className="text-uppercase">{`Pending Registration`}</Badge></>) },
-          sortable: true,
-          width: "auto",
-          wrap: true
-      },
-      {
-          name: "Date Created",
-          selector: (row) => moment(row.createdAt).format('MMM. D, YYYY HH:mm'),
-          sortable: true,
-          width: "auto",
-          wrap: true
-      },
-      {
-        name: "Action",
-        selector: (row) => (<>
-                        <ActionTab institution={row}  updateParentParent={updateParent} />
-                    </>),
-        width: "100px",
-      },
-    ];
+  const complainColumn = [
+    {
+      name: "IID",
+      selector: (row, index) => ++index,
+      sortable: true,
+      width: "100px",
+      wrap: true
+    },
+    {
+      name: "Name",
+      selector: (row) => { return (<><p>{`${row.name}`}</p></>) },
+      sortable: true,
+      width: "auto",
+      wrap: true
+    },
+    {
+      name: "Categories",
+      selector: (row) => { return (<>{`${(row.category.map((cat) => cat.name)).toString()}`}</>) },
+      sortable: true,
+      width: "auto",
+      wrap: true
+    },
+    {
+      name: "Total ARs",
+      selector: (row) => { return (<>{`${row.ars.length} ARs`}</>) },
+      sortable: true,
+      width: "auto",
+      wrap: true
+    },
+    {
+      name: "Status",
+      selector: (row) => { return (<><Badge color="success" className="text-uppercase">{`Pending Registration`}</Badge></>) },
+      sortable: true,
+      width: "auto",
+      wrap: true
+    },
+    {
+      name: "Sign-on Date",
+      selector: (row) => moment(row.createdAt).format('MMM. D, YYYY HH:mm'),
+      sortable: true,
+      width: "auto",
+      wrap: true
+    },
+    {
+      name: "Action",
+      selector: (row) => (<>
+        <ActionTab institution={row} updateParentParent={updateParent} />
+      </>),
+      width: "100px",
+    },
+  ];
   const [tableData, setTableData] = useState(data);
   const [searchText, setSearchText] = useState("");
   const [rowsPerPageS, setRowsPerPage] = useState(10);
   const [mobileView, setMobileView] = useState();
 
-    useEffect(() => {
-        setTableData(data)
-    }, [data]);
+  useEffect(() => {
+    setTableData(data)
+  }, [data]);
 
   useEffect(() => {
     let defaultData = tableData;
@@ -323,9 +323,9 @@ const AdminInstitutionTable = ({ data, pagination, actions, className, selectabl
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    // const renderer = ({ hours, minutes, seconds, completed }) => {
-    //         if (completed) {
-              
+  // const renderer = ({ hours, minutes, seconds, completed }) => {
+  //         if (completed) {
+
   return (
     <div className={`dataTables_wrapper dt-bootstrap4 no-footer ${className ? className : ""}`}>
       <Row className={`justify-between g-2 ${actions ? "with-export" : ""}`}>
@@ -397,26 +397,26 @@ const AdminInstitutionTable = ({ data, pagination, actions, className, selectabl
       ></DataTable>
     </div>
   );
-  
-    //         } else {
 
-    //             return (
-    //                     <>
-    //                         <Skeleton count={10} height={20}  style={{display: 'block',lineHeight: 2, padding: '1rem',width: 'auto',}}/>
-    //                     </>
-                        
-    //                 )
-    //         }
-    // };
-    
-    //       return (
-    //               <Countdown
-    //                 date={Date.now() + 5000}
-    //                 renderer={renderer}
-    //             />
+  //         } else {
 
-                
-    //         );
+  //             return (
+  //                     <>
+  //                         <Skeleton count={10} height={20}  style={{display: 'block',lineHeight: 2, padding: '1rem',width: 'auto',}}/>
+  //                     </>
+
+  //                 )
+  //         }
+  // };
+
+  //       return (
+  //               <Countdown
+  //                 date={Date.now() + 5000}
+  //                 renderer={renderer}
+  //             />
+
+
+  //         );
 };
 
 export default AdminInstitutionTable;

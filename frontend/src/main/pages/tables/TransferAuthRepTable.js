@@ -30,7 +30,7 @@ const Export = ({ data }) => {
             "Email": item.ar.email,
             "Status": item.approval_status,
             "Role": item.ar.role.name,
-            "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
+            "Sign-on Date": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
         })
     });
 
@@ -353,7 +353,7 @@ const TransferAuthRepTable = ({ data, pagination, actions, className, selectable
             wrap: true,
         },
         {
-            name: "Date Created",
+            name: "Sign-on Date",
             selector: (row) => moment(row.createdAt).format('MMM. D, YYYY HH:mm'),
             sortable: true,
             width: "auto",

@@ -4,11 +4,33 @@ import { toast } from "react-toastify";
 import { errorHandler, successHandler } from "../../../utils/Functions";
 import queryGenerator from "../../../utils/QueryGenerator";
 const initialState = {
-                    list: null,
-                    error: "",
-                    loading: false,
+  list: null,
+  list_positions: null,
+  error: "",
+  loading: false,
 };
 
+
+export const loadBoardCastCategoryPositions = createAsyncThunk(
+  "position/loadBoardCastCategoryPositions",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+        url: `broadcast/category/positions`,
+        data: values,
+      });
+
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
+    }
+  }
+);
 
 export const loadViewMessages = createAsyncThunk(
   "broadcast/loadViewMessages",
@@ -61,15 +83,32 @@ const broadcastStore = createSlice({
 
     builder.addCase(loadViewMessages.fulfilled, (state, action) => {
       state.loading = false;
-        // state.list = action.payload?.data?.data?.countries;
-        state.list = JSON.stringify(action.payload?.data?.data);
+      // state.list = action.payload?.data?.data?.countries;
+      state.list = JSON.stringify(action.payload?.data?.data);
     });
 
     builder.addCase(loadViewMessages.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });
-        
+
+    // ====== builders for loadBoardCastCategoryPositions ======
+
+    builder.addCase(loadBoardCastCategoryPositions.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(loadBoardCastCategoryPositions.fulfilled, (state, action) => {
+      state.loading = false;
+      // state.list = action.payload?.data?.data?.positions;
+      state.list_positions = JSON.stringify(action.payload?.data?.data);
+    });
+
+    builder.addCase(loadBoardCastCategoryPositions.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
     // ====== builders for CreateBroadcast ======
 
     builder.addCase(CreateBroadcast.pending, (state) => {

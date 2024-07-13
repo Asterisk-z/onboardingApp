@@ -27,7 +27,7 @@ const Export = ({ data }) => {
             "Description": `${item.body}`,
             "Status": item.status,
             // "Comment(s)": item.comment.length,
-            "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
+            "Sign-on Date": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
         })
     });
 
@@ -260,7 +260,7 @@ const AdminCreationRequestTable = ({ data, pagination, actions, className, selec
             wrap: true
         },
         {
-            name: "Date Created",
+            name: "Sign-on Date",
             selector: (row) => moment(row.createdAt).format('MMM. D, YYYY HH:mm'),
             sortable: true,
             width: "auto",

@@ -26,7 +26,7 @@ const Export = ({ data }) => {
             "Name": `${item.name}`,
             "Website": item.url,
             "Status": item.active,
-            "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
+            "Sign-on Date": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
         })
     });
 
@@ -287,7 +287,7 @@ const AdminRegulatorTable = ({ data, pagination, actions, className, selectableR
             wrap: true
         },
         {
-            name: "Date Created",
+            name: "Sign-on Date",
             selector: (row) => moment(row.createdAt).format('MMM. D, YYYY HH:mm'),
             sortable: true,
             width: "auto",

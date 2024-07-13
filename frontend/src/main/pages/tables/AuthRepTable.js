@@ -861,9 +861,8 @@ const AuthRepTable = ({ data, pagination, actions, className, selectableRows, ex
             wrap: true
         },
         {
-            name: "Date Created",
+            name: "Sign-on Date",
             selector: (row) => {
-                console.log("ferere")
                 return (moment(row.createdAt).format('MMM. D, YYYY HH:mm'))
             },
             sortable: true,

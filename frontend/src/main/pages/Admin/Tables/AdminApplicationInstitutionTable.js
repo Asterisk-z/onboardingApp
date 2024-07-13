@@ -1511,7 +1511,7 @@ const AdminInstitutionTable = ({ data, pagination, actions, className, selectabl
       wrap: true
     },
     {
-      name: "Date Created",
+      name: "Sign-on Date",
       selector: (row) => moment(row.createdAt).format('MMM. D, YYYY HH:mm'),
       sortable: true,
       width: "auto",

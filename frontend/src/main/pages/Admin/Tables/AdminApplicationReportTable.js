@@ -839,7 +839,7 @@ const AdminApplicationReportTable = ({ data, pagination, actions, className, sel
     //     wrap: true
     // },
     {
-      name: "Date Created",
+      name: "Sign-on Date",
       selector: (row) => moment(row.createdAt).format('MMM. D, YYYY HH:mm'),
       sortable: true,
       width: "auto",

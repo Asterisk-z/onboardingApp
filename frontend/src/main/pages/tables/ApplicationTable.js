@@ -32,7 +32,7 @@ const Export = ({ data }) => {
             "Phone": item.phone,
             "Role": item.role,
             "Status": item.approval_status,
-            "Date Created": moment(item?.createdAt).format('MMM. D, YYYY HH:mm')
+            "Sign-on Date": moment(item?.createdAt).format('MMM. D, YYYY HH:mm')
         })
     });
 
