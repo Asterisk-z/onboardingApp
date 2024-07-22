@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\EMemberAgreement;
 use App\Helpers\ESuccessLetter;
 use App\Helpers\MailContents;
 use App\Helpers\Utility;
@@ -9,10 +10,12 @@ use App\Http\Resources\ApplicationResource;
 use App\Jobs\FinalApplicationProcessingJob;
 use App\Models\Application;
 use App\Models\DohSignature;
+use App\Models\MemberAgreement;
 use App\Models\Role;
 use App\Models\User;
 use App\Notifications\InfoNotification;
 use App\Traits\ApplicationTraits;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use Symfony\Component\HttpFoundation\Response;
@@ -111,6 +114,42 @@ class MegApplicationController extends Controller
         }
     }
 
+    public function updateMembershipAgreement(Request $request)
+    {
+        $request->validate([
+            'application_id' => 'required|exists:applications,uuid',
+            'name' => 'required',
+            'address' => 'required',
+            'rc_number' => 'required',
+            'date' => 'required',
+        ]);
+
+        $user = $request->user();
+        $application = Application::where('uuid', $request->application_id)->first();
+
+        $errorMsg = "Unable to complete your request at this point.";
+
+        if ($application->is_applicant_executed_membership_agreement) {
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+        }
+
+        if ($application->currentStatus() != Application::statuses['M2AMR']) {
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+        }
+
+        MemberAgreement::updateOrCreate(["application_id" => $application->id], [
+            "application_id" => $application->id,
+            "name" => request('name'),
+            "address" => request('address'),
+            "date" => Carbon::create(request('date')),
+            "rc_number" => request('rc_number'),
+        ]);
+
+        logAction($user->email, 'MEG Updated Agreement', "MEG updated membership agreement details", $request->ip());
+
+        return successResponse("Membership agreement has been updated successfully.");
+    }
+
     public function sendMembershipAgreement(Request $request)
     {
         $request->validate([
@@ -123,6 +162,10 @@ class MegApplicationController extends Controller
 
         $errorMsg = "Unable to complete your request at this point.";
 
+        if (!$agreement = MemberAgreement::where('application_id', $application->id)->first()) {
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, "Update membership agreement details");
+        }
+
         if ($application->office_to_perform_next_action != Application::office['MEG']) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
@@ -130,6 +173,8 @@ class MegApplicationController extends Controller
         if ($application->currentStatus() != Application::statuses['M2AMR']) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
+
+        (new EMemberAgreement)->generate($application);
 
         $applicant = User::find($application->submitted_by);
         $name = $applicant->first_name . ' ' . $applicant->last_name;
@@ -150,16 +195,19 @@ class MegApplicationController extends Controller
             'content' => MailContents::memberAgreementMail($data->company_name),
         ];
 
+        $path = config('app.url') . "/storage" . "/" . $application->membership_agreement;
+        // $path = config('app.url') . '/storage/app/public/' . $application->membership_agreement;
+
         $attachment = [
             [
                 "name" => Utility::getFileName("{$membershipCategory->name} Membership Agreement", $membershipCategory->membership_agreement),
-                "saved_path" => $membershipCategory->membership_agreement,
+                "saved_path" => $path,
             ],
         ];
 
         Utility::notifyApplicantAndContact($request->application_id, $applicant, $emailData, $Meg, $attachment);
 
-        Utility::applicationStatusHelper($application, Application::statuses['MSMA'], Application::office['MEG'], Application::office['AP']);
+        // Utility::applicationStatusHelper($application, Application::statuses['MSMA'], Application::office['MEG'], Application::office['AP']);
 
         logAction($user->email, 'MEG Sent Agreement', "MEG Send membership agreement to applicant", $request->ip());
 

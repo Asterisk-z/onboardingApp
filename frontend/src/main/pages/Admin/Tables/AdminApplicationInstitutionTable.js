@@ -10,9 +10,10 @@ import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, Dropd
 import { DataTablePagination } from "components/Component";
 import moment from "moment";
 import { uploadConcession, FSDPaymentEvidence, FSDReviewSummary, MBGPaymentEvidence, MBGReview, MEGReview, MEG2Review, MEGUploadAgreement, completeApplication, MEGSendMembershipAgreement, MEG2SendESuccess } from "redux/stores/membership/applicationProcessStore"
-import { megProcessTransferUserAR } from "redux/stores/authorize/representative";
+import { MEGUpdateMembershipAgreement } from "redux/stores/membership/applicationProcessStore";
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 import Swal from "sweetalert2";
+import DatePicker from "react-datepicker"
 
 
 const Export = ({ data }) => {
@@ -94,15 +95,18 @@ const ActionTab = (props) => {
   const [modalForm, setModalForm] = useState(false);
   const [modalView, setModalView] = useState(false);
   const [signedAgreement, setSignedAgreement] = useState(false);
+  const [updateMemberAgreement, setUpdateMemberAgreement] = useState(false);
   const [modalReviewView, setModalReviewView] = useState(false);
   const [showConcession, setShowConcession] = useState(false);
   const [modalPaymentView, setModalPaymentView] = useState(false);
   const [modalViewUpdate, setModalViewUpdate] = useState(false);
 
+
   const toggleForm = () => setModalForm(!modalForm);
   const toggleReviewView = () => setModalReviewView(!modalReviewView);
   const toggleView = () => setModalView(!modalView);
   const toggleSignedAgreement = () => setSignedAgreement(!signedAgreement);
+  const toggleUpdateMemberAgreement = () => setUpdateMemberAgreement(!updateMemberAgreement);
   const togglePaymentView = () => setModalPaymentView(!modalPaymentView);
 
   const toggleConcession = () => {
@@ -133,6 +137,7 @@ const ActionTab = (props) => {
     }
 
   }
+
   const toggleViewUpdate = () => setModalViewUpdate(!modalViewUpdate);
 
   const dispatch = useDispatch();
@@ -1232,8 +1237,12 @@ const ActionTab = (props) => {
             {(aUser.is_admin_meg() && institution?.internal?.meg2_review_stage == 1 && institution?.internal?.meg_review_stage == 1 && institution?.internal?.is_applicant_executed_membership_agreement == 0) &&
               <div className="gy-0">
                 <h5>Membership Agreement</h5>
-                <a className="btn btn-primary mx-2" href={institution?.internal?.membership_agreement} target="_blank">Preview Agreement</a>
-                <Button className="btn btn-success mx-2" onClick={() => askAction('sendAgreement')}> Send Agreement</Button>
+                <a className="btn btn-primary mx-2" onClick={() => setUpdateMemberAgreement(true)}>Update Agreement Detail</a>
+                {institution?.internal?.has_member_agreement && <>
+                  <a className="btn btn-primary mx-2" href={institution?.internal?.member_agreement_preview} target="_blank">Preview Agreement</a>
+                  <Button className="btn btn-success mx-2" onClick={() => askAction('sendAgreement')}> Send Agreement</Button>
+
+                </>}
               </div>
             }
             {(aUser.is_admin_meg2()
@@ -1259,21 +1268,7 @@ const ActionTab = (props) => {
           View Institution
         </ModalHeader>
         <ModalBody>
-          {/* <Card className="card">   
-                        <CardBody className="card-inner">
-                            <CardTitle tag="h5">{ `${institution.firstName} ${institution.lastName} (${institution.email})` }</CardTitle>
-                          
-                              <ul>
-                                  <li><span className="lead">Phone : </span>{`${institution.phone}`}</li>
-                                  <li><span className="lead">Nationality : </span>{`${institution.nationality}`}</li>
-                                  <li><span className="lead">Role : </span>{`${institution.role.name}`}</li>
-                                  <li><span className="lead">Position : </span>{`${institution.position.name}`}</li>
-                                  <li><span className="lead">Status : </span>{`${institution.approval_status}`}</li>
-                                  <li><span className="lead">RegID : </span>{`${institution.regId}`}</li>
-                                  <li><span className="lead">Institution : </span>{`${institution.institution.name}`}</li>
-                              </ul>
-                        </CardBody>
-                    </Card> */}
+
         </ModalBody>
         <ModalFooter className="bg-light">
           <span className="sub-text">View Institutions</span>
@@ -1301,12 +1296,217 @@ const ActionTab = (props) => {
           <span className="sub-text">View Institutions</span>
         </ModalFooter>
       </Modal>
+
+      <Modal isOpen={updateMemberAgreement} toggle={toggleUpdateMemberAgreement} size="lg">
+        <ModalHeader toggle={toggleUpdateMemberAgreement} close={<button className="close" onClick={toggleUpdateMemberAgreement}><Icon name="cross" /></button>}>
+          Update Member Agreement
+        </ModalHeader>
+        <ModalBody>
+          <Row className="gy-5">
+            <Col md='12'>
+              <Card className="card-bordered">
+                {/* <CardBody className="card-inner"> */}
+
+                <UpdateAgreement tabItem={institution} updateParentParent={props.updateParentParent} closeModel={toggleUpdateMemberAgreement} />
+
+                {/* </CardBody> */}
+              </Card>
+            </Col>
+          </Row>
+        </ModalBody>
+        <ModalFooter className="bg-light">
+          <span className="sub-text">View Institutions</span>
+        </ModalFooter>
+      </Modal>
     </>
 
 
   );
 };
 
+
+
+const UpdateAgreement = ({ updateParentParent, tabItem, positions, closeModel }) => {
+
+  const aUser = useUser();
+  const aUserUpdate = useUserUpdate();
+
+  const tabItem_id = tabItem.id
+  const [complainFile, setComplainFile] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+
+  const [date, setDate] = useState(new Date());
+  const toggleDate = (value) => {
+    setDate(value)
+  };
+
+  const { handleSubmit, register, watch, formState: { errors } } = useForm();
+
+  const submitForm = async (data) => {
+
+    const postValues = new Object();
+    postValues.application_id = tabItem.internal.application_uuid;
+    postValues.name = data.institution_name;
+    postValues.address = data.institution_address;
+    postValues.rc_number = data.institution_rc_number;
+    postValues.date = moment(date).format('YYYY-MM-DD');
+
+    try {
+      setLoading(true);
+
+      const resp = await dispatch(MEGUpdateMembershipAgreement(postValues));
+
+      if (resp.payload?.message == "success") {
+        setTimeout(() => {
+          setLoading(false);
+          updateParentParent(Math.random())
+          closeModel()
+        }, 1000);
+
+      } else {
+        setLoading(false);
+      }
+
+    } catch (error) {
+      setLoading(false);
+    }
+
+  };
+
+
+  const handleFileChange = (event) => {
+    setComplainFile(event.target.files[0]);
+  };
+
+
+  return (
+    <>
+
+      <form className="content clearfix my-5" onSubmit={handleSubmit(submitForm)} encType="multipart/form-data">
+
+        <div className="form-group">
+          <label className="form-label" htmlFor="institution_name">
+            Institution Name
+          </label>
+          <div className="form-control-wrap">
+            <input type="text" id="institution_name" className="form-control" {...register('institution_name', { required: "This Field is required" })} defaultValue={tabItem?.basic_details?.companyName} />
+            {errors.institution_name && <span className="invalid">{errors.institution_name.message}</span>}
+          </div>
+        </div>
+        <div className="form-group">
+          <label className="form-label" htmlFor="institution_address">
+            Institution Address
+          </label>
+          <div className="form-control-wrap">
+            <input type="text" id="institution_address" className="form-control" {...register('institution_address', { required: "This Field is required" })} defaultValue={tabItem?.basic_details?.registeredOfficeAddress} />
+            {errors.institution_address && <span className="invalid">{errors.institution_address.message}</span>}
+          </div>
+        </div>
+
+        {tabItem?.basic_details?.rcNumber && <>
+          <div className="form-group">
+            <label className="form-label" htmlFor="institution_rc_number">
+              Institution RC Number
+            </label>
+            <div className="form-control-wrap">
+              <input type="text" id="institution_rc_number" className="form-control" {...register('institution_rc_number', { required: "This Field is required" })} defaultValue={tabItem?.basic_details?.rcNumber} />
+              {errors.institution_rc_number && <span className="invalid">{errors.institution_rc_number.message}</span>}
+            </div>
+          </div>
+        </>}
+
+        <div className="form-group">
+          <label className="form-label" htmlFor="date">
+            Date
+          </label>
+          <div className="form-control-wrap">
+            <input type="hidden" {...register('date', { required: "This Field is required" })} value={date} />
+            <DatePicker selected={date} onChange={(date) => toggleDate(date)} className="form-control date-picker" id="date" maxDate={new Date()} />
+            {errors.date && <span className="invalid">{errors.date.message}</span>}
+          </div>
+        </div>
+
+        {/* <Card className="card-bordered">
+          <CardBody className="card-inner">
+            <CardTitle>Authorised Signatory</CardTitle>
+            <div className="form-group">
+              <label className="form-label" htmlFor="authorised_signatory_name_one">
+                Name
+              </label>
+              <div className="form-control-wrap">
+                <input type="number" id="authorised_signatory_name_one" className="form-control" {...register('authorised_signatory_name_one', { required: "This Field is required" })} />
+                {errors.authorised_signatory_name_one && <span className="invalid">{errors.authorised_signatory_name_one.message}</span>}
+              </div>
+            </div>
+            <div className="form-group">
+              <label className="form-label" htmlFor="authorised_signatory_designation_one">
+                Designation
+              </label>
+              <div className="form-control-wrap">
+                <input type="number" id="authorised_signatory_designation_one" className="form-control" {...register('authorised_signatory_designation_one', { required: "This Field is required" })} />
+                {errors.authorised_signatory_designation_one && <span className="invalid">{errors.authorised_signatory_designation_one.message}</span>}
+              </div>
+            </div>
+            <div className="form-group">
+              <label className="form-label" htmlFor="authorised_signatory_signature_one">
+                Signature (image)
+              </label>
+              <div className="form-control-wrap">
+                <input type="file" accept=".png,.jpg,.jpeg" id="authorised_signatory_signature_one" className="form-control" {...register('authorised_signatory_signature_one', { required: "This Field is required" })} onChange={handleFileChange} />
+                {errors.authorised_signatory_signature_one && <span className="invalid">{errors.authorised_signatory_signature_one.message}</span>}
+              </div>
+            </div>
+          </CardBody>
+        </Card>
+
+        <Card className="card-bordered">
+          <CardBody className="card-inner">
+            <CardTitle>Authorised Signatory 2</CardTitle>
+            <div className="form-group">
+              <label className="form-label" htmlFor="authorised_signatory_name_two">
+                Name
+              </label>
+              <div className="form-control-wrap">
+                <input type="number" id="authorised_signatory_name_two" className="form-control" {...register('authorised_signatory_name_two', { required: "This Field is required" })} />
+                {errors.authorised_signatory_name_two && <span className="invalid">{errors.authorised_signatory_name_two.message}</span>}
+              </div>
+            </div>
+            <div className="form-group">
+              <label className="form-label" htmlFor="authorised_signatory_designation_two">
+                Designation
+              </label>
+              <div className="form-control-wrap">
+                <input type="number" id="authorised_signatory_designation_two" className="form-control" {...register('authorised_signatory_designation_two', { required: "This Field is required" })} />
+                {errors.authorised_signatory_designation_two && <span className="invalid">{errors.authorised_signatory_designation_two.message}</span>}
+              </div>
+            </div>
+            <div className="form-group">
+              <label className="form-label" htmlFor="authorised_signatory_signature_two">
+                Signature (image)
+              </label>
+              <div className="form-control-wrap">
+                <input type="file" accept=".png,.jpg,.jpeg" id="authorised_signatory_signature_two" className="form-control" {...register('authorised_signatory_signature_two', { required: "This Field is required" })} onChange={handleFileChange} />
+                {errors.authorised_signatory_signature_two && <span className="invalid">{errors.authorised_signatory_signature_two.message}</span>}
+              </div>
+            </div>
+          </CardBody>
+        </Card> */}
+
+
+        <div className="form-group">
+          <Button color="primary" type="submit" size="lg">
+            {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Update "}
+          </Button>
+        </div>
+
+      </form>
+
+    </>
+
+
+  );
+};
 
 const UploadAgreementModel = ({ updateParentParent, tabItem, positions, closeModel }) => {
 

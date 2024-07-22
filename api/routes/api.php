@@ -20,6 +20,7 @@ use App\Http\Controllers\Meg2ApplicationController;
 use App\Http\Controllers\MegApplicationController;
 use App\Http\Controllers\MemberCategoryController;
 use App\Http\Controllers\MemberGuidesController;
+use App\Http\Controllers\MembershipAgreementController;
 use App\Http\Controllers\MembershipApplicationController;
 use App\Http\Controllers\MsgApplicationController;
 use App\Http\Controllers\NationalityController;
@@ -300,6 +301,7 @@ Route::middleware(['auth', 'activeAuth'])->group(function () {
             Route::get('/institutions', [MegApplicationController::class, 'institutions']);
             Route::post('/review', [MegApplicationController::class, 'megReview']);
             //NEW API
+            Route::post('/update-membership-agreement', [MegApplicationController::class, 'updateMembershipAgreement']);
             Route::post('/send-membership-agreement', [MegApplicationController::class, 'sendMembershipAgreement']);
             Route::post('/upload-membership-agreement', [MegApplicationController::class, 'uploadMemberAgreement']);
             Route::post('/complete-company-application', [MegApplicationController::class, 'completeCompanyApplication']);
@@ -461,6 +463,8 @@ Route::get('storage-link', [SystemController::class, 'linkStorage'])->name('link
 Route::get('cert-sample/{event}', [EventController::class, 'certificateSample'])->name('previewCertificate');
 Route::get('cert-sample-download/{event}', [EventController::class, 'certificateSampleDownload'])->name('previewCertificateDownload');
 Route::get('report-download/{data}', [SystemController::class, 'report'])->name('downloadReport');
+
+Route::get('member-agreement/{uuid}', [MembershipAgreementController::class, 'preview'])->name('agreementPreview');
 
 Route::group(['prefix' => 'webhook'], function () {
     Route::group(['prefix' => 'qpay/payment'], function () {

@@ -85,6 +85,8 @@ class Application extends Model
             'meg2_review_stage' => $this->meg2_review_stage,
             'is_applicant_executed_membership_agreement' => $this->is_applicant_executed_membership_agreement,
             'membership_agreement' => $this->membership_agreement,
+            'has_member_agreement' => $this->agreement ? true : false,
+            'member_agreement_link' => $this->agreement ? route('agreementPreview', $this->uuid) : null,
             "executed_membership_agreement" => ($this->meg_executed_membership_agreement) ? config('app.url') . '/storage/app/public/' . $this->meg_executed_membership_agreement : null,
             'e_success_letter' => ($this->e_success_letter) ? config('app.url') . '/storage/app/public/' . $this->e_success_letter : null,
             'completed_at' => $this->completed_at,
@@ -125,6 +127,11 @@ class Application extends Model
     public function uploads()
     {
         return $this->hasMany(ApplicationFieldUpload::class, 'application_id');
+    }
+
+    public function agreement()
+    {
+        return $this->hasOne(MemberAgreement::class, 'application_id');
     }
 
     public function currentStatus()

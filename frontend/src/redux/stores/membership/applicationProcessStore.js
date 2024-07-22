@@ -119,7 +119,7 @@ export const loadMBGInstitutionApplications = createAsyncThunk(
 export const loadFSDInstitutionApplications = createAsyncThunk(
   "applicationProcess/loadFSDInstitutionApplications",
   async () => {
-    
+
     try {
       const { data } = await axios.get(`membership/application/fsd/institutions`);
       return successHandler(data);
@@ -132,7 +132,7 @@ export const loadFSDInstitutionApplications = createAsyncThunk(
 export const loadMEGInstitutionApplications = createAsyncThunk(
   "applicationProcess/loadMEGInstitutionApplications",
   async () => {
-    
+
     try {
       const { data } = await axios.get(`membership/application/meg/institutions`);
       return successHandler(data);
@@ -198,24 +198,24 @@ export const uploadConcession = createAsyncThunk(
 
 
 export const completeApplication = createAsyncThunk(
-    "applicationProcess/completeApplication",
-    async (values) => {
-        try {
-            const { data } = await axios({
-                method: "post",
-                headers: {
-                    Accept: "application/json",
-                    // "Content-Type": "application/json;charset=UTF-8",
-                    "Content-Type": "multipart/form-data",
-                },
-                url: `membership/application/meg/complete-company-application`,
-                data: values,
-            });
-            return successHandler(data, data.message);
-        } catch (error) {
-            return errorHandler(error, true);
-        }
+  "applicationProcess/completeApplication",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `membership/application/meg/complete-company-application`,
+        data: values,
+      });
+      return successHandler(data, data.message);
+    } catch (error) {
+      return errorHandler(error, true);
     }
+  }
 );
 
 
@@ -491,6 +491,26 @@ export const MEGUploadAgreement = createAsyncThunk(
     }
   }
 );
+export const MEGUpdateMembershipAgreement = createAsyncThunk(
+  "applicationProcess/MEGUpdateMembershipAgreement",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `membership/application/meg/update-membership-agreement`,
+        data: values,
+      });
+      return successHandler(data, data.message);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
 export const MEGSendMembershipAgreement = createAsyncThunk(
   "applicationProcess/MEGSendMembershipAgreement",
   async (values) => {
@@ -576,10 +596,10 @@ const applicationProcess = createSlice({
     });
 
     builder.addCase(loadInstitutionApplications.fulfilled, (state, action) => {
-        state.loading = false;
-        // state.list = action.payload?.data?.data?.categories;
-          
-        state.all_institutions = JSON.stringify(action.payload?.data?.data);
+      state.loading = false;
+      // state.list = action.payload?.data?.data?.categories;
+
+      state.all_institutions = JSON.stringify(action.payload?.data?.data);
 
     });
 
@@ -615,7 +635,7 @@ const applicationProcess = createSlice({
 
     builder.addCase(onlinePayment.fulfilled, (state, action) => {
       state.loading = false;
-      
+
       if (action.payload.data.data.url) {
         window.location.href = action.payload.data.data.url
       }
@@ -648,9 +668,9 @@ const applicationProcess = createSlice({
     });
 
     builder.addCase(loadInvoiceDownload.fulfilled, (state, action) => {
-        state.loading = false;
-        // state.list = action.payload?.data?.data?.categories;
-        state.invoice_download = JSON.stringify(action.payload?.data?.file_path);
+      state.loading = false;
+      // state.list = action.payload?.data?.data?.categories;
+      state.invoice_download = JSON.stringify(action.payload?.data?.file_path);
     });
 
     builder.addCase(loadInvoiceDownload.rejected, (state, action) => {
@@ -665,10 +685,10 @@ const applicationProcess = createSlice({
     });
 
     builder.addCase(loadMBGInstitutionApplications.fulfilled, (state, action) => {
-        state.loading = false;
-        // state.list = action.payload?.data?.data?.categories;
-          
-        state.all_institutions = JSON.stringify(action.payload?.data?.data);
+      state.loading = false;
+      // state.list = action.payload?.data?.data?.categories;
+
+      state.all_institutions = JSON.stringify(action.payload?.data?.data);
     });
 
     builder.addCase(loadMBGInstitutionApplications.rejected, (state, action) => {
@@ -683,10 +703,10 @@ const applicationProcess = createSlice({
     });
 
     builder.addCase(loadMEG2InstitutionApplications.fulfilled, (state, action) => {
-        state.loading = false;
-        // state.list = action.payload?.data?.data?.categories;
-          
-        state.all_institutions = JSON.stringify(action.payload?.data?.data);
+      state.loading = false;
+      // state.list = action.payload?.data?.data?.categories;
+
+      state.all_institutions = JSON.stringify(action.payload?.data?.data);
 
     });
 
@@ -702,10 +722,10 @@ const applicationProcess = createSlice({
     });
 
     builder.addCase(loadMEGInstitutionApplications.fulfilled, (state, action) => {
-        state.loading = false;
-        // state.list = action.payload?.data?.data?.categories;
-          
-        state.all_institutions = JSON.stringify(action.payload?.data?.data);
+      state.loading = false;
+      // state.list = action.payload?.data?.data?.categories;
+
+      state.all_institutions = JSON.stringify(action.payload?.data?.data);
 
     });
 
@@ -721,10 +741,10 @@ const applicationProcess = createSlice({
     });
 
     builder.addCase(loadFSDInstitutionApplications.fulfilled, (state, action) => {
-        state.loading = false;
-        // state.list = action.payload?.data?.data?.categories;
-          
-        state.all_institutions = JSON.stringify(action.payload?.data?.data);
+      state.loading = false;
+      // state.list = action.payload?.data?.data?.categories;
+
+      state.all_institutions = JSON.stringify(action.payload?.data?.data);
 
     });
 
@@ -763,7 +783,7 @@ const applicationProcess = createSlice({
       state.loading = false;
       state.error = action.payload.message;
     });
-      
+
     // ====== builders for completeApplication ======
 
     builder.addCase(completeApplication.pending, (state) => {
@@ -977,6 +997,20 @@ const applicationProcess = createSlice({
       state.loading = false;
       state.error = action.payload.message;
     });
+    // ====== builders for MEGUpdateMembershipAgreement ======
+
+    builder.addCase(MEGUpdateMembershipAgreement.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(MEGUpdateMembershipAgreement.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(MEGUpdateMembershipAgreement.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
 
     // ====== builders for MEG2SendESuccess ======
 
@@ -992,9 +1026,9 @@ const applicationProcess = createSlice({
       state.loading = false;
       state.error = action.payload.message;
     });
-    
 
-    
+
+
   },
 });
 

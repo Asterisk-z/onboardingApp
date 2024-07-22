@@ -6,9 +6,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\MembershipApplicationController;
 use App\Http\Controllers\SystemController;
 use App\Models\Application;
-use App\Models\Invoice;
 use App\Models\MembershipCategory;
-use App\Models\MembershipCategoryPostition;
 use App\Models\Role;
 use App\Models\User;
 // use Dompdf\Dompdf;
@@ -28,20 +26,20 @@ use Illuminate\Support\Str;
 
 Route::get('/', function () {
 
-    $invoice = Invoice::all();
-    dd(str_pad(count($invoice) + 1, 3, '0', STR_PAD_LEFT));
+    // $invoice = Invoice::all();
+    // dd(str_pad(count($invoice) + 1, 3, '0', STR_PAD_LEFT));
 
-    $mailgroup = MembershipCategoryPostition::where([
-        'category_id' => 8,
-        'position_id' => 2,
-    ])->first();
-    if ($mailgroup) {
-        $group_mail = $mailgroup->groupMail ? $mailgroup->groupMail->email : '';
+    // $mailgroup = MembershipCategoryPostition::where([
+    //     'category_id' => 8,
+    //     'position_id' => 2,
+    // ])->first();
+    // if ($mailgroup) {
+    //     $group_mail = $mailgroup->groupMail ? $mailgroup->groupMail->email : '';
 
-    }
-    dd($mailgroup);
+    // }
+    // dd($mailgroup);
 
-    return view('welcome');
+    return view('agreement.afs');
 });
 Route::get('/mail', function () {
     $displayName = "sfksfjsff";
