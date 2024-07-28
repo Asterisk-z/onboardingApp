@@ -58,6 +58,8 @@ return [
 
     'front_end_url' => env("APP_FRONTEND_URL", "http://localhost:3000/frontend/"),
 
+    'storage_path' => env('STORAGE_PATH', "storage/"),
+
     'asset_url' => env('ASSET_URL', null),
 
     'password_expiry' => env('PASSWORD_EXPIRY', 1),

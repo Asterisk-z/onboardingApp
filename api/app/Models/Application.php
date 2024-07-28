@@ -85,7 +85,9 @@ class Application extends Model
             'meg2_review_stage' => $this->meg2_review_stage,
             'is_applicant_executed_membership_agreement' => $this->is_applicant_executed_membership_agreement,
             'membership_agreement' => $this->membership_agreement,
+            "member_agreement" => ($this->membership_agreement) ? config('app.url') . '/storage/app/public/' . $this->membership_agreement : null,
             'has_member_agreement' => $this->agreement ? true : false,
+            'has_e_success' => $this->eSuccess ? true : false,
             'member_agreement_link' => $this->agreement ? route('agreementPreview', $this->uuid) : null,
             "executed_membership_agreement" => ($this->meg_executed_membership_agreement) ? config('app.url') . '/storage/app/public/' . $this->meg_executed_membership_agreement : null,
             'e_success_letter' => ($this->e_success_letter) ? config('app.url') . '/storage/app/public/' . $this->e_success_letter : null,
@@ -96,6 +98,7 @@ class Application extends Model
             'created_at' => $this->created_at,
             'reg_id' => $this->reg_id,
             'applicant_email' => $this->applicant->email,
+            'applicant_full_name' => $this->applicant->full_name,
         ];
     }
 
@@ -133,6 +136,10 @@ class Application extends Model
     {
         return $this->hasOne(MemberAgreement::class, 'application_id');
     }
+    public function eSuccess()
+    {
+        return $this->hasOne(MemberESuccessLetter::class, 'application_id');
+    }
 
     public function currentStatus()
     {
@@ -150,7 +157,7 @@ class Application extends Model
 
     public function applicant()
     {
-        return $this->belongsTo(User::class, 'submitted_by');
+        return $this->hasOne(User::class, 'id', 'submitted_by');
     }
 
     public function getStatusDescriptionAttribute()

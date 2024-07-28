@@ -10,7 +10,7 @@ import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, Dropd
 import { DataTablePagination } from "components/Component";
 import moment from "moment";
 import { uploadConcession, FSDPaymentEvidence, FSDReviewSummary, MBGPaymentEvidence, MBGReview, MEGReview, MEG2Review, MEGUploadAgreement, completeApplication, MEGSendMembershipAgreement, MEG2SendESuccess } from "redux/stores/membership/applicationProcessStore"
-import { MEGUpdateMembershipAgreement } from "redux/stores/membership/applicationProcessStore";
+import { MEGUpdateMembershipAgreement, MEGUpdateMembershipESuccessLetter } from "redux/stores/membership/applicationProcessStore";
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 import Swal from "sweetalert2";
 import DatePicker from "react-datepicker"
@@ -96,6 +96,7 @@ const ActionTab = (props) => {
   const [modalView, setModalView] = useState(false);
   const [signedAgreement, setSignedAgreement] = useState(false);
   const [updateMemberAgreement, setUpdateMemberAgreement] = useState(false);
+  const [updateMemberESuccessLetter, setUpdateMemberESuccessLetter] = useState(false);
   const [modalReviewView, setModalReviewView] = useState(false);
   const [showConcession, setShowConcession] = useState(false);
   const [modalPaymentView, setModalPaymentView] = useState(false);
@@ -107,6 +108,7 @@ const ActionTab = (props) => {
   const toggleView = () => setModalView(!modalView);
   const toggleSignedAgreement = () => setSignedAgreement(!signedAgreement);
   const toggleUpdateMemberAgreement = () => setUpdateMemberAgreement(!updateMemberAgreement);
+  const toggleUpdateMemberESuccessLetter = () => setUpdateMemberESuccessLetter(!updateMemberESuccessLetter);
   const togglePaymentView = () => setModalPaymentView(!modalPaymentView);
 
   const toggleConcession = () => {
@@ -1221,7 +1223,7 @@ const ActionTab = (props) => {
               {/* {(aUser.is_admin_meg() && institution?.internal?.is_applicant_executed_membership_agreement && !institution?.internal?.is_meg_executed_membership_agreement ) && <> */}
               <div className="gy-0">
                 <h5>Upload Signed Agreement</h5>
-                <a className="btn btn-primary mx-2" href={institution?.internal?.membership_agreement} target="_blank">View Executed Agreement</a>
+                <a className="btn btn-primary mx-2" href={institution?.internal?.applicant_executed_membership_agreement} target="_blank">View Executed Agreement</a>
                 <Button className="btn btn-success mx-2" onClick={toggleSignedAgreement}>Upload Executed Agreement</Button>
               </div>
             </>
@@ -1252,8 +1254,12 @@ const ActionTab = (props) => {
               && institution?.internal?.is_meg_executed_membership_agreement == 1) &&
               <div className="gy-0">
                 <h5>Send E-Success Letter</h5>
-                <a className="btn btn-primary mx-2" href={institution?.e_success_letter} target="_blank">Preview E-Success Letter</a>
-                <Button className="btn btn-success mx-2" onClick={() => askAction('sendESuccessLetter')}> Approve E-Success Letter</Button>
+                <a className="btn btn-primary mx-2" onClick={() => setUpdateMemberESuccessLetter(true)}>Update E-Success Letter Detail</a>
+                {institution?.internal?.has_e_success && <>
+                  <a className="btn btn-primary mx-2" href={institution?.internal?.e_success_letter_preview} target="_blank">Preview E-Success Letter</a>
+                  <Button className="btn btn-success mx-2" onClick={() => askAction('sendESuccessLetter')}> Approve E-Success Letter</Button>
+
+                </>}
               </div>
             }
           </Card>
@@ -1308,6 +1314,28 @@ const ActionTab = (props) => {
                 {/* <CardBody className="card-inner"> */}
 
                 <UpdateAgreement tabItem={institution} updateParentParent={props.updateParentParent} closeModel={toggleUpdateMemberAgreement} />
+
+                {/* </CardBody> */}
+              </Card>
+            </Col>
+          </Row>
+        </ModalBody>
+        <ModalFooter className="bg-light">
+          <span className="sub-text">View Institutions</span>
+        </ModalFooter>
+      </Modal>
+
+      <Modal isOpen={updateMemberESuccessLetter} toggle={toggleUpdateMemberESuccessLetter} size="lg">
+        <ModalHeader toggle={toggleUpdateMemberESuccessLetter} close={<button className="close" onClick={toggleUpdateMemberESuccessLetter}><Icon name="cross" /></button>}>
+          Update E-Success Letter
+        </ModalHeader>
+        <ModalBody>
+          <Row className="gy-5">
+            <Col md='12'>
+              <Card className="card-bordered">
+                {/* <CardBody className="card-inner"> */}
+
+                <UpdateESuccessLetter tabItem={institution} updateParentParent={props.updateParentParent} closeModel={toggleUpdateMemberESuccessLetter} />
 
                 {/* </CardBody> */}
               </Card>
@@ -1493,6 +1521,109 @@ const UpdateAgreement = ({ updateParentParent, tabItem, positions, closeModel })
           </CardBody>
         </Card> */}
 
+
+        <div className="form-group">
+          <Button color="primary" type="submit" size="lg">
+            {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Update "}
+          </Button>
+        </div>
+
+      </form>
+
+    </>
+
+
+  );
+};
+
+const UpdateESuccessLetter = ({ updateParentParent, tabItem, positions, closeModel }) => {
+
+  const aUser = useUser();
+  const aUserUpdate = useUserUpdate();
+
+  const tabItem_id = tabItem.id
+  const [complainFile, setComplainFile] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+
+  const [date, setDate] = useState(new Date());
+  const toggleDate = (value) => {
+    setDate(value)
+  };
+
+  const { handleSubmit, register, watch, formState: { errors } } = useForm();
+
+  const submitForm = async (data) => {
+
+    const postValues = new Object();
+    postValues.application_id = tabItem.internal.application_uuid;
+    postValues.name = data.institution_name;
+    postValues.address = data.institution_address;
+    postValues.member = data.member_name;
+
+    try {
+      setLoading(true);
+
+      const resp = await dispatch(MEGUpdateMembershipESuccessLetter(postValues));
+
+      if (resp.payload?.message == "success") {
+        setTimeout(() => {
+          setLoading(false);
+          updateParentParent(Math.random())
+          closeModel()
+        }, 1000);
+
+      } else {
+        setLoading(false);
+      }
+
+    } catch (error) {
+      setLoading(false);
+    }
+
+  };
+
+
+  const handleFileChange = (event) => {
+    setComplainFile(event.target.files[0]);
+  };
+
+
+  return (
+    <>
+
+      <form className="content clearfix my-5" onSubmit={handleSubmit(submitForm)} encType="multipart/form-data">
+
+        <div className="form-group">
+          <label className="form-label" htmlFor="institution_name">
+            Institution Name
+          </label>
+          <div className="form-control-wrap">
+            <input type="text" id="institution_name" className="form-control" {...register('institution_name', { required: "This Field is required" })} defaultValue={tabItem?.basic_details?.companyName} />
+            {errors.institution_name && <span className="invalid">{errors.institution_name.message}</span>}
+          </div>
+        </div>
+        <div className="form-group">
+          <label className="form-label" htmlFor="institution_address">
+            Institution Address
+          </label>
+          <div className="form-control-wrap">
+            <input type="text" id="institution_address" className="form-control" {...register('institution_address', { required: "This Field is required" })} defaultValue={tabItem?.basic_details?.registeredOfficeAddress} />
+            {errors.institution_address && <span className="invalid">{errors.institution_address.message}</span>}
+          </div>
+        </div>
+
+        {tabItem?.basic_details?.rcNumber && <>
+          <div className="form-group">
+            <label className="form-label" htmlFor="member_name">
+              Member Name
+            </label>
+            <div className="form-control-wrap">
+              <input type="text" id="member_name" className="form-control" {...register('member_name', { required: "This Field is required" })} defaultValue={tabItem?.applicant_name} />
+              {errors.member_name && <span className="invalid">{errors.member_name.message}</span>}
+            </div>
+          </div>
+        </>}
 
         <div className="form-group">
           <Button color="primary" type="submit" size="lg">

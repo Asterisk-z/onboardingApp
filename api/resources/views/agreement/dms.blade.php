@@ -353,7 +353,7 @@
                             <p>BETWEEN</p>
                             <p>FMDQ SECURITIES EXCHANGE LIMITED</p>
                             <p>AND</p>
-                            <p>[INSTITUTION’S NAME]</p>
+                            <p>{{ $details->name }}</p>
                         </div>
                     </div>
                 </div>
@@ -431,7 +431,7 @@
                             <p><strong>PARTIES</strong></p><br>
                             <p><strong>FMDQ SECURITIES EXCHANGE LIMITED (RC. NO. 1617162)</strong>, a company incorporated under the laws of the Federal Republic of Nigeria with its principal place of business at 35 Idowu Taylor Street, Victoria Island, Lagos, (hereinafter called <strong>“FMDQ Exchange”</strong> which expression shall where the context so admits include its successors and assigns) of the first part.</p><br>
                             <p>AND</p><br>
-                            <p>[Insert Institution’s name] (RC NO. XXXXX),, <br>a company incorporated under the laws of the Federal Republic of Nigeria with its registered office at [Insert Institution’s address] (the “Member” which expression shall where the context so admits include its successors and assigns) of the second part.</p><br>
+                            <p>{{ $details->name }} (RC NO. {{ $details->rc_number }}),, <br>a company incorporated under the laws of the Federal Republic of Nigeria with its registered office at {{ $details->address }} (the “Member” which expression shall where the context so admits include its successors and assigns) of the second part.</p><br>
                             <p><strong>BACKGROUND</strong></p><br>
                             <ol type="A" style="margin-left: 20px;">
                                 <li>FMDQ Securities Exchange Limited (“FMDQ Exchange” or the “Exchange”) is a securities exchange and self-regulatory organisation (“SRO”) licensed and regulated by the Securities and Exchange Commission (“SEC” or the “Commission”).</li><br>
@@ -779,7 +779,7 @@
                             </div><br>
                             <div>
                                 <p>Signed for and on behalf of the within-named</p>
-                                <p><strong>[INSTITUTION’S NAME]</strong></p>
+                                <p><strong>{{ $details->name }}</strong></p>
                             </div><br><br><br><br>
                             <div class="whole-signatory">
                                 <div class="signatory-cont">

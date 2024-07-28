@@ -353,7 +353,7 @@
                             <p>BETWEEN</p>
                             <p>FMDQ SECURITIES EXCHANGE LIMITED</p>
                             <p>AND</p>
-                            <p>[INSTITUTION’S NAME]</p>
+                            <p>{{ $details->name }}</p>
                         </div>
                     </div>
                 </div>
@@ -470,12 +470,12 @@
                             <p><strong>BETWEEN</strong></p><br>
                             <p><strong>FMDQ SECURITIES EXCHANGE LIMITED (RC. NO. 1617162)</strong>, a company incorporated under the laws of the Federal Republic of Nigeria with its principal place of business at Exchange Place, 35, Idowu Taylor Street, Victoria Island, Lagos, (hereinafter called <strong>“FMDQ Exchange”</strong> which expressionshall where the context so admits shall include its successors and assigns) of the first part.</p><br>
                             <p>AND</p><br>
-                            <p>[Insert Institution’s name] (RC NO. XXXXX), a company incorporated under the laws of the Federal Republic of Nigeria with its registered office at [Insert Institution’s address] (the “Member” which expression shall where the context so admits shall include its successors and assigns) of the second part.</p><br>
+                            <p>{{ $details->name }} (RC NO. {{ $details->rc_number }}), a company incorporated under the laws of the Federal Republic of Nigeria with its registered office at {{ $details->address }} (the “Member” which expression shall where the context so admits shall include its successors and assigns) of the second part.</p><br>
                             <p>In this Agreement, FMDQ Exchange and the Member shall individually be referred to as a “Party” and collectively be referred to as the “Parties”.</p><br>
                             <p><strong>WHEREAS</strong></p><br>
                             <ol type="A" style="margin-left: 20px;">
                                 <li>FMDQ Exchange is licensed by the Securities and Exchange Commission as a securities exchange and self-regulatory organisation with a Platform (as defined below) to enable its Members deal in Securities (as defined below) and carry out other activities.</li><br>
-                                <li>[Insert Institution’s name], the Member, is a financial institution licensed by the SEC and has indicated interest in becoming a Member (as defined below) of FMDQ Exchange with a view to acting as a sponsor to Issuers’ listing of Securities on the Platform. </li><br>
+                                <li>{{ $details->name }}, the Member, is a financial institution licensed by the SEC and has indicated interest in becoming a Member (as defined below) of FMDQ Exchange with a view to acting as a sponsor to Issuers’ listing of Securities on the Platform. </li><br>
                                 <li>The Member has agreed to be duly licenced by FMDQ Exchange as a Registration Member (Listings). </li><br>
                                 <li> Pursuant to the foregoing, the Parties hereby agree to be bound by the terms herein contained.</li>
                             </ol><br>
@@ -1547,8 +1547,8 @@
                                         OR via email: <a href="" style="color: #0A6AC8;">meg@fmdqgroup.com</a><br><br>
                                         If to the Member: <br><br>
                                         <strong>Managing Director</strong> <br>
-                                        [<i>Insert Institution’s name</i>] <br>
-                                        [<i>Insert Institution’s address</i>] <br>
+                                        [<i>{{ $details->name }}</i>] <br>
+                                        [<i>{{ $details->address }}</i>] <br>
 
                                     </div>
                                 </div><br>
@@ -1664,7 +1664,7 @@
                                 </div><br>
                                 <div>
                                     <p>Signed for and on behalf of the within-named</p>
-                                    <p><strong>[INSTITUTION’S NAME]</strong></p>
+                                    <p><strong>{{ $details->name }}</strong></p>
                                 </div><br><br><br><br>
                                 <div class="whole-signatory">
                                     <div class="signatory-cont">
@@ -1705,7 +1705,7 @@
                             <p>BETWEEN</p>
                             <p>FMDQ SECURITIES EXCHANGE LIMITED</p>
                             <p>AND</p>
-                            <p>[INSTITUTION’S NAME]</p>
+                            <p>{{ $details->name }}</p>
                         </div>
                     </div>
                 </div>
@@ -1822,12 +1822,12 @@
                             <p><strong>BETWEEN</strong></p><br>
                             <p><strong>FMDQ SECURITIES EXCHANGE LIMITED (RC. NO. 1617162)</strong>, a company incorporated under the laws of the Federal Republic of Nigeria with its principal place of business at Exchange Place, 35, Idowu Taylor Street, Victoria Island, Lagos, (hereinafter called <strong>“FMDQ Exchange”</strong> which expressionshall where the context so admits shall include its successors and assigns) of the first part.</p><br>
                             <p>AND</p><br>
-                            <p>[Insert Institution’s name] (RC NO. XXXXX), a company incorporated under the laws of the Federal Republic of Nigeria with its registered office at [Insert Institution’s address] (the “Member” which expression shall where the context so admits shall include its successors and assigns) of the second part.</p><br>
+                            <p>{{ $details->name }} (RC NO. {{ $details->rc_number }}), a company incorporated under the laws of the Federal Republic of Nigeria with its registered office at {{ $details->address }} (the “Member” which expression shall where the context so admits shall include its successors and assigns) of the second part.</p><br>
                             <p>In this Agreement, FMDQ Exchange and the Member shall individually be referred to as a “Party” and collectively be referred to as the “Parties”.</p><br>
                             <p><strong>WHEREAS</strong></p><br>
                             <ol type="A" style="margin-left: 20px;">
                                 <li>FMDQ Exchange is licensed by the Securities and Exchange Commission as a securities exchange and self-regulatory organisation with a Platform (as defined below) to enable its Members deal in Securities (as defined below) and carry out other activities.</li><br>
-                                <li>[Insert Institution’s name], the Member, is a financial institution licensed by the SEC and has indicated interest in becoming a Member (as defined below) of FMDQ Exchange with a view to acting as a sponsor to Issuers’ quotation of Securities on the Platform. </li><br>
+                                <li>{{ $details->name }}, the Member, is a financial institution licensed by the SEC and has indicated interest in becoming a Member (as defined below) of FMDQ Exchange with a view to acting as a sponsor to Issuers’ quotation of Securities on the Platform. </li><br>
                                 <li>The Member has agreed to be duly licenced by FMDQ Exchange as a Registration Member (Quotations). </li><br>
                                 <li> Pursuant to the foregoing, the Parties hereby agree to be bound by the terms herein contained.</li>
                             </ol><br>
@@ -2943,8 +2943,8 @@
                                         OR via email: <a href="" style="color: #0A6AC8;">meg@fmdqgroup.com</a><br><br>
                                         If to the Member: <br><br>
                                         <strong>Managing Director</strong> <br>
-                                        [<i>Insert Institution’s name</i>] <br>
-                                        [<i>Insert Institution’s address</i>] <br>
+                                        [<i>{{ $details->name }}</i>] <br>
+                                        [<i>{{ $details->address }}</i>] <br>
 
                                     </div>
                                 </div><br>
@@ -3060,7 +3060,7 @@
                                 </div><br>
                                 <div>
                                     <p>Signed for and on behalf of the within-named</p>
-                                    <p><strong>[INSTITUTION’S NAME]</strong></p>
+                                    <p><strong>{{ $details->name }}</strong></p>
                                 </div><br><br><br><br>
                                 <div class="whole-signatory">
                                     <div class="signatory-cont">

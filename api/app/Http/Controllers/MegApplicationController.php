@@ -195,8 +195,7 @@ class MegApplicationController extends Controller
             'content' => MailContents::memberAgreementMail($data->company_name),
         ];
 
-        $path = config('app.url') . "/storage" . "/" . $application->membership_agreement;
-        // $path = config('app.url') . '/storage/app/public/' . $application->membership_agreement;
+        $path = config('app.url') . '' . config('app.storage_path') . '' . $application->membership_agreement;
 
         $attachment = [
             [
@@ -207,7 +206,7 @@ class MegApplicationController extends Controller
 
         Utility::notifyApplicantAndContact($request->application_id, $applicant, $emailData, $Meg, $attachment);
 
-        // Utility::applicationStatusHelper($application, Application::statuses['MSMA'], Application::office['MEG'], Application::office['AP']);
+        Utility::applicationStatusHelper($application, Application::statuses['MSMA'], Application::office['MEG'], Application::office['AP']);
 
         logAction($user->email, 'MEG Sent Agreement', "MEG Send membership agreement to applicant", $request->ip());
 

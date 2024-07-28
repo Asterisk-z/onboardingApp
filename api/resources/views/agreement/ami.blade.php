@@ -353,7 +353,7 @@
                             <p>BETWEEN</p>
                             <p>FMDQ SECURITIES EXCHANGE LIMITED</p>
                             <p>AND</p>
-                            <p>[INSTITUTION’S NAME]</p>
+                            <p>{{ $details->name }}</p>
                         </div>
                     </div>
                 </div>
@@ -523,8 +523,8 @@
                                 (hereinafter called <strong>“FMDQ Exchange”</strong> which expressionshall where the
                                 context so admits shall include its successors and assigns) of the first part.</p><br>
                             <p>AND</p><br>
-                            <p>[Insert Institution’s name] (RC NO. XXXXX), a company incorporated under the laws of the
-                                Federal Republic of Nigeria with its registered office at [Insert Institution’s address]
+                            <p>{{ $details->name }} (RC NO. {{ $details->rc_number }}), a company incorporated under the laws of the
+                                Federal Republic of Nigeria with its registered office at {{ $details->address }}
                                 (the “Member” which expression shall where the context so admits shall include its
                                 successors and assigns) of the second part.</p><br>
                             <p>In this Agreement, FMDQ Exchange and the Member shall individually be referred to as a
@@ -2400,9 +2400,9 @@
                                                 <p>
                                                     <b>Managing Director</b>
                                                     <br>
-                                                    [Insert Institution’s name]
+                                                    {{ $details->name }}
                                                     <br>
-                                                    [Insert Institution’s address]
+                                                    {{ $details->address }}
                                                     <br>
                                                 </p>
                                             </div>
@@ -2560,7 +2560,7 @@
                                 <div>
                                     <p>Signed for and on behalf of the within-named
                                         <br>
-                                        <b>[INSTITUTION’S NAME]</b>
+                                        <b>{{ $details->name }}</b>
                                     </p>
                                     <p><strong></strong></p>
                                 </div><br><br><br><br>

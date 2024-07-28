@@ -323,6 +323,7 @@ Route::middleware(['auth', 'activeAuth'])->group(function () {
         Route::group(['prefix' => 'membership/application/meg2'], function () {
             Route::get('/institutions', [Meg2ApplicationController::class, 'institutions']);
             Route::post('/review', [Meg2ApplicationController::class, 'meg2Approval']);
+            Route::post('/update-success-letter', [Meg2ApplicationController::class, 'updateMemberSuccessLetter']);
             Route::post('/esuccess/approve', [Meg2ApplicationController::class, 'approveEsuccessLetter']);
         });
     });
@@ -465,6 +466,7 @@ Route::get('cert-sample-download/{event}', [EventController::class, 'certificate
 Route::get('report-download/{data}', [SystemController::class, 'report'])->name('downloadReport');
 
 Route::get('member-agreement/{uuid}', [MembershipAgreementController::class, 'preview'])->name('agreementPreview');
+Route::get('success-letter/{uuid}', [MembershipAgreementController::class, 'previewLetter'])->name('eSuccessPreview');
 
 Route::group(['prefix' => 'webhook'], function () {
     Route::group(['prefix' => 'qpay/payment'], function () {

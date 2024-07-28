@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ESuccessLetter;
 use App\Helpers\Utility;
 use App\Models\Application;
 use App\Models\MemberAgreement;
+use App\Models\MemberESuccessLetter;
 use App\Models\User;
 
 class MembershipAgreementController extends Controller
@@ -39,6 +41,28 @@ class MembershipAgreementController extends Controller
         }
 
         return view('agreement.' . $membershipCategory->code, ['details' => $details]);
+
+    }
+
+    public function previewLetter($uuid)
+    {
+
+        $uuid = request('uuid');
+        $application = Application::where('uuid', $uuid)->first();
+
+        $membershipCategory = $application->membershipCategory;
+
+        $data = Application::where('applications.id', $application->id);
+        $data = Utility::applicationDetails($data);
+        $data = $data->first();
+
+        if (!$detail = MemberESuccessLetter::where('application_id', $application->id)->first()) {
+            return "error";
+        }
+
+        $content = (new ESuccessLetter())->generate($application, true);
+
+        return view('success.e-letter', ['content' => $content]);
 
     }
 

@@ -314,7 +314,7 @@ const Form = () => {
 
             {($user_application?.application?.meg2_review_stage == 1 && $user_application?.application?.membership_agreement && $user_application?.application?.is_applicant_executed_membership_agreement == 0 && $user_application?.application?.status_description == 'MEG SENT MEMBERSHIP AGREEMENT') && <>
 
-              <a className="btn btn-primary mx-1" href={$user_application?.application?.membership_agreement} target="_blank"> Download Agreement </a>
+              <a className="btn btn-primary mx-1" href={$user_application?.application?.member_agreement} target="_blank"> Download Agreement </a>
               <a className="btn btn-primary mx-1" href="#" onClick={toggleUploadAgreeView} >Upload Signed Agreement </a>
             </>}
           </Col>

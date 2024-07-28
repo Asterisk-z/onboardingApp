@@ -511,6 +511,26 @@ export const MEGUpdateMembershipAgreement = createAsyncThunk(
     }
   }
 );
+export const MEGUpdateMembershipESuccessLetter = createAsyncThunk(
+  "applicationProcess/MEGUpdateMembershipESuccessLetter",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `membership/application/meg2/update-success-letter`,
+        data: values,
+      });
+      return successHandler(data, data.message);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
 export const MEGSendMembershipAgreement = createAsyncThunk(
   "applicationProcess/MEGSendMembershipAgreement",
   async (values) => {
@@ -1008,6 +1028,20 @@ const applicationProcess = createSlice({
     });
 
     builder.addCase(MEGUpdateMembershipAgreement.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+    // ====== builders for MEGUpdateMembershipESuccessLetter ======
+
+    builder.addCase(MEGUpdateMembershipESuccessLetter.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(MEGUpdateMembershipESuccessLetter.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(MEGUpdateMembershipESuccessLetter.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });

@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ESuccessLetter;
 use App\Helpers\MailContents;
 use App\Helpers\Utility;
 use App\Http\Resources\ApplicationResource;
 use App\Jobs\FinalApplicationProcessingJob;
 use App\Models\Application;
+use App\Models\MemberESuccessLetter;
 use App\Models\Role;
 use App\Models\User;
 use App\Notifications\InfoNotification;
@@ -35,6 +37,40 @@ class Meg2ApplicationController extends Controller
         $data = $data->get();
 
         return successResponse("Here you go", ApplicationResource::collection($data));
+    }
+
+    public function updateMemberSuccessLetter(Request $request)
+    {
+        $request->validate([
+            'application_id' => 'required|exists:applications,uuid',
+            'name' => 'required',
+            'address' => 'required',
+            'member' => 'required',
+        ]);
+
+        $user = $request->user();
+        $application = Application::where('uuid', $request->application_id)->first();
+
+        $errorMsg = "Unable to complete your request at this point.";
+
+        if (!$application->is_meg_executed_membership_agreement) {
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+        }
+
+        if ($application->office_to_perform_next_action != Application::office['MEG2']) {
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg . "1");
+        }
+
+        MemberESuccessLetter::updateOrCreate(["application_id" => $application->id], [
+            "application_id" => $application->id,
+            "companyName" => request('name'),
+            "address" => request('address'),
+            "designation" => request('member'),
+        ]);
+
+        logAction($user->email, 'MEG Level 2 Updated E-Success Letter', "MEG Level 2 updated membership agreement details", $request->ip());
+
+        return successResponse("E-Success Letter has been updated successfully.");
     }
 
     public function meg2Approval(Request $request)
@@ -115,6 +151,14 @@ class Meg2ApplicationController extends Controller
         $user = $request->user();
         $application = Application::find($request->application_id);
         $membershipCategory = $application->membershipCategory;
+
+        if (!$agreement = MemberESuccessLetter::where('application_id', $application->id)->first()) {
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, "Update e-success letter details");
+        }
+
+        (new ESuccessLetter)->generate($application);
+
+        $application->refresh();
 
         $errorMsg = "Unable to complete your request at this point.";
 

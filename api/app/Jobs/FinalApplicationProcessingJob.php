@@ -72,11 +72,11 @@ class FinalApplicationProcessingJob implements ShouldQueue
         $attachment = [
             [
                 "name" => Utility::getFileName("{$companyName} Membership Agreement", $application->meg_executed_membership_agreement),
-                "saved_path" => config('app.url') . '/storage/app/public/' . $application->meg_executed_membership_agreement,
+                "saved_path" => config('app.url') . '' . config('app.storage_path') . '' . $application->meg_executed_membership_agreement,
             ],
             [
                 "name" => Utility::getFileName("{$companyName} E-Success Letter", $application->e_success_letter),
-                "saved_path" => config('app.url') . '/storage/app/public/' . $application->e_success_letter,
+                "saved_path" => config('app.url') . '' . config('app.storage_path') . '' . $application->e_success_letter,
             ],
         ];
 

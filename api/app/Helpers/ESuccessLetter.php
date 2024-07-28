@@ -14,8 +14,11 @@ class ESuccessLetter
     protected $division = null;
     protected $signature = null;
     protected $regId = null;
+    protected $designation = null;
+    protected $address = null;
+    protected $companyName = null;
 
-    public function generate(Application $application)
+    public function generate(Application $application, $preview = false)
     {
         $content = null;
         $category = $application->membership_category_id;
@@ -25,6 +28,10 @@ class ESuccessLetter
         $data = Application::where('applications.id', $application->id);
         $application_data = Utility::applicationDetails($data);
         $application_data = $application_data->first();
+
+        $this->designation = $application->eSuccess ? $application->eSuccess->designation : $this->designation;
+        $this->address = $application->eSuccess ? $application->eSuccess->address : $this->address;
+        $this->companyName = $application->eSuccess ? $application->eSuccess->companyName : $this->companyName;
 
         if ($dohData = DohSignature::latest()->first()) {
             $this->name = $dohData->name;
@@ -90,6 +97,10 @@ class ESuccessLetter
                 break;
         }
 
+        if ($preview) {
+            return $content;
+        }
+
         if ($content) {
 
             $pdf = PDF::loadView('success.e-letter', compact('content'));
@@ -103,9 +114,9 @@ class ESuccessLetter
     protected function dmbWithoutSECLicenseLetterContent($application)
     {
         $date = now();
-        $designation = $application->applicationPrimaryContactName;
-        $address = $application->registeredOfficeAddress;
-        $companyName = $application->companyName;
+        $designation = $this->designation;
+        $address = $this->address;
+        $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
 
@@ -171,9 +182,9 @@ class ESuccessLetter
     {
 
         $date = now();
-        $designation = $application->applicationPrimaryContactName;
-        $address = $application->registeredOfficeAddress;
-        $companyName = $application->companyName;
+        $designation = $this->designation;
+        $address = $this->address;
+        $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
 
@@ -230,9 +241,9 @@ class ESuccessLetter
     {
 
         $date = now();
-        $designation = $application->applicationPrimaryContactName;
-        $address = $application->registeredOfficeAddress;
-        $companyName = $application->companyName;
+        $designation = $this->designation;
+        $address = $this->address;
+        $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
 
@@ -291,9 +302,9 @@ class ESuccessLetter
     {
 
         $date = now();
-        $designation = $application->applicationPrimaryContactName;
-        $address = $application->registeredOfficeAddress;
-        $companyName = $application->companyName;
+        $designation = $this->designation;
+        $address = $this->address;
+        $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
 
@@ -352,9 +363,9 @@ class ESuccessLetter
     {
 
         $date = now();
-        $designation = $application->applicationPrimaryContactName;
-        $address = $application->registeredOfficeAddress;
-        $companyName = $application->companyName;
+        $designation = $this->designation;
+        $address = $this->address;
+        $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
 
@@ -414,9 +425,9 @@ class ESuccessLetter
     {
 
         $date = now();
-        $designation = $application->applicationPrimaryContactName;
-        $address = $application->registeredOfficeAddress;
-        $companyName = $application->companyName;
+        $designation = $this->designation;
+        $address = $this->address;
+        $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
 
@@ -476,9 +487,9 @@ class ESuccessLetter
     {
 
         $date = now();
-        $designation = $application->applicationPrimaryContactName;
-        $address = $application->registeredOfficeAddress;
-        $companyName = $application->companyName;
+        $designation = $this->designation;
+        $address = $this->address;
+        $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
         return [
@@ -538,9 +549,9 @@ class ESuccessLetter
     protected function rmlLetterContent($application)
     {
         $date = now();
-        $designation = $application->applicationPrimaryContactName;
-        $address = $application->registeredOfficeAddress;
-        $companyName = $application->companyName;
+        $designation = $this->designation;
+        $address = $this->address;
+        $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
 
@@ -599,9 +610,9 @@ class ESuccessLetter
     protected function rmqLetterContent($application)
     {
         $date = now();
-        $designation = $application->applicationPrimaryContactName;
-        $address = $application->registeredOfficeAddress;
-        $companyName = $application->companyName;
+        $designation = $this->designation;
+        $address = $this->address;
+        $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
 
@@ -661,9 +672,9 @@ class ESuccessLetter
     protected function affLetterContent($application)
     {
         $date = now();
-        $designation = $application->applicationPrimaryContactName;
-        $address = $application->registeredOfficeAddress;
-        $companyName = $application->companyName;
+        $designation = $this->designation;
+        $address = $this->address;
+        $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
 
@@ -724,9 +735,9 @@ class ESuccessLetter
     {
 
         $date = now();
-        $designation = $application->applicationPrimaryContactName;
-        $address = $application->registeredOfficeAddress;
-        $companyName = $application->companyName;
+        $designation = $this->designation;
+        $address = $this->address;
+        $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
 
@@ -787,9 +798,9 @@ class ESuccessLetter
     {
 
         $date = now();
-        $designation = $application->applicationPrimaryContactName;
-        $address = $application->registeredOfficeAddress;
-        $companyName = $application->companyName;
+        $designation = $this->designation;
+        $address = $this->address;
+        $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
 

@@ -40,8 +40,11 @@ class ApplicationResource extends JsonResource
                 "is_meg_executed_membership_agreement" => $application->is_meg_executed_membership_agreement,
                 "is_applicant_executed_membership_agreement" => $this->is_applicant_executed_membership_agreement,
                 "membership_agreement" => $application->membership_agreement ? $application->membership_agreement : null,
+                "member_agreement" => $application->agreement ? config('app.url') . '/storage/app/public/' . $application->membership_agreement : null,
                 "member_agreement_preview" => $application->agreement ? route('agreementPreview', $this->uuid) : false,
+                "e_success_letter_preview" => $application->eSuccess ? route('eSuccessPreview', $this->uuid) : false,
                 "has_member_agreement" => $application->agreement ? true : false,
+                'has_e_success' => $application->eSuccess ? true : false,
                 // "membership_agreement" => $application->membership_agreement ? config('app.url') . '/public/assets/membership_agreement/' . $application->membership_agreement : null,
                 "meg_executed_membership_agreement" => $application->meg_executed_membership_agreement ? config('app.url') . '/storage/app/public/' . $application->meg_executed_membership_agreement : null,
                 "applicant_executed_membership_agreement" => $application->applicant_executed_membership_agreement ? config('app.url') . '/storage/app/public/' . $application->applicant_executed_membership_agreement : null,
@@ -193,6 +196,8 @@ class ApplicationResource extends JsonResource
             "createdAt" => $application->created_at,
 
             "reg_id" => $application->reg_id,
+
+            'applicant_name' => $application->applicant->full_name,
 
             "ars" => $this->institutionUsers($application->institution_id),
 

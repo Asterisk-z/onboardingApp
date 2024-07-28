@@ -119,6 +119,8 @@ class SendSuccessfulPayment implements ShouldQueue
             'name' => $name,
         ];
 
-        Notification::send($FSDs, new InfoNotification(MailContents::paymentMail($user), MailContents::paymentSubject(), $CCs, $attachment));
+        Notification::send($FSDs, new InfoNotification(MailContents::paymentMail($user), MailContents::paymentSubject(), $CCs));
+        // Notification::send($FSDs, new InfoNotification(MailContents::paymentMail($user), MailContents::paymentSubject(), $CCs, $attachment));
+
     }
 }
