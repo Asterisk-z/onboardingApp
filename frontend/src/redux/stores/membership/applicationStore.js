@@ -152,6 +152,27 @@ export const uploadField = createAsyncThunk(
   }
 );
 
+export const updateStep = createAsyncThunk(
+  "application/updateStep",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `membership/application/update-step`,
+        data: values,
+      });
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
 
 export const submitPage = createAsyncThunk(
   "application/submitPage",
@@ -466,6 +487,20 @@ const applicationStore = createSlice({
       state.error = action.payload.message;
     });
 
+    // ====== builders for updateStep ======
+
+    builder.addCase(updateStep.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(updateStep.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(updateStep.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
 
     // ====== builders for submitPage ======
 

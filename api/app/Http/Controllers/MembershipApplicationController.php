@@ -245,6 +245,21 @@ class MembershipApplicationController extends Controller
         return successResponse('Fields Fetched Successfully', auth()->user()->institution->application);
     }
 
+    public function updateStep(Request $request)
+    {
+        $validated = $request->validate([
+            'step' => 'required|integer',
+            'application_id' => 'required',
+        ]);
+
+        if (!$application = Application::find($request->application_id)) {
+            return;
+        }
+
+        $application->step = $request->step;
+        $application->save();
+        return successResponse('Application Step Updated Successfully', auth()->user()->institution->application);
+    }
     public function uploadField(Request $request)
     {
         $validated = $request->validate([

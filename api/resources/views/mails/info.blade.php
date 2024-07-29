@@ -26,9 +26,9 @@
         }
 
         /* Logo styles */
-        .logo {
-            max-width: 150px !important;
-            max-height: 100px !important;
+        img.logo {
+            max-width: 100px !important;
+            max-height: 80px !important;
             text-align: right;
         }
 

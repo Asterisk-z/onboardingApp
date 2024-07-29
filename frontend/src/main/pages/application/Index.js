@@ -10,7 +10,7 @@ import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, Dropd
 import { HeaderLogo } from "pages/components/HeaderLogo";
 import DatePicker from "react-datepicker";
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
-import { loadPageFields, loadAllFields, loadExtra, uploadField, fetchApplication, submitPage } from "redux/stores/membership/applicationStore";
+import { loadPageFields, loadAllFields, loadExtra, uploadField, fetchApplication, submitPage, updateStep } from "redux/stores/membership/applicationStore";
 import { UpdateDisclosure } from "redux/stores/membership/applicationProcessStore";
 import moment from 'moment';
 import Swal from "sweetalert2";
@@ -95,6 +95,12 @@ const Form = () => {
 
 
     const ApplicantInformation = (props) => {
+
+        useEffect(() => {
+            if ($application_details) {
+                dispatch(updateStep({ "application_id": $application_details?.id, "step": 1 }));
+            }
+        }, [dispatch]);
 
         const { reset, register, handleSubmit, formState: { errors }, setValue, clearErrors } = useForm();
 
@@ -333,7 +339,11 @@ const Form = () => {
     };
 
     const TradingDetail = (props) => {
-
+        useEffect(() => {
+            if ($application_details) {
+                dispatch(updateStep({ "application_id": $application_details?.id, "step": 2 }));
+            }
+        }, [dispatch]);
 
         const { reset, register, handleSubmit, formState: { errors }, setValue, clearErrors } = useForm();
 
@@ -783,7 +793,11 @@ const Form = () => {
 
     const DisciplinaryHistory = (props) => {
 
-
+        useEffect(() => {
+            if ($application_details) {
+                dispatch(updateStep({ "application_id": $application_details?.id, "step": 3 }));
+            }
+        }, [dispatch]);
 
 
 
@@ -922,7 +936,11 @@ const Form = () => {
     };
 
     const SupportingDocuments = (props) => {
-
+        useEffect(() => {
+            if ($application_details) {
+                dispatch(updateStep({ "application_id": $application_details?.id, "step": 4 }));
+            }
+        }, [dispatch]);
 
         const { reset, register, handleSubmit, formState: { errors }, setValue, clearErrors } = useForm();
 
@@ -1026,7 +1044,11 @@ const Form = () => {
     };
 
     const ApplicationDeclaration = (props) => {
-
+        useEffect(() => {
+            if ($application_details) {
+                dispatch(updateStep({ "application_id": $application_details?.id, "step": 5 }));
+            }
+        }, [dispatch]);
 
         const { reset, register, handleSubmit, formState: { errors }, setValue, clearErrors } = useForm();
 

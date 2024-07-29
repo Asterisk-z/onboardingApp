@@ -43,7 +43,7 @@ const AdminStakeHolder = ({ drawer }) => {
                     <BlockBetween>
                         <BlockHeadContent>
                             <BlockTitle page tag="h3">
-                                Stake Holder Request
+                                Stakeholder Request
                             </BlockTitle>
                         </BlockHeadContent>
                         <BlockHeadContent>
@@ -58,7 +58,7 @@ const AdminStakeHolder = ({ drawer }) => {
                             <Block size="xl">
                                 <BlockHead>
                                     <BlockHeadContent>
-                                        <BlockTitle tag="h4">Stake Holder Request History</BlockTitle>
+                                        <BlockTitle tag="h4">Stakeholder Request History</BlockTitle>
                                         {/* <p>{request_list}</p> */}
                                         {/* {<p>{parentState}</p>} */}
                                     </BlockHeadContent>

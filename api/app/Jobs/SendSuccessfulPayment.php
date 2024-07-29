@@ -70,12 +70,13 @@ class SendSuccessfulPayment implements ShouldQueue
 
         $fileName = "online_proof_of_payment_" . $invoice->id . $date . ".pdf";
         $pathPipe = 'proof_of_payment/online';
-        $path = storage_path("app/public/{$pathPipe}");
+        $pathName = str_contains(config('app.storage_path'), 'app/public') ? 'app/public' : '';
+        $path = storage_path("{$pathName}/{$pathPipe}");
         if (!file_exists($path)) {
             mkdir($path, 0777, true);
         }
         $filepath = "$path/$fileName";
-        $publicPath = config("app.url") . "/storage/app/public/{$pathPipe}/" . $fileName;
+        $publicPath = config("app.url") . "/" . config('app.storage_path') . "{$pathPipe}/" . $fileName;
         $name = "proof_of_payment_$date.pdf";
 
         $proof = ProofOfPayment::create([
@@ -115,12 +116,13 @@ class SendSuccessfulPayment implements ShouldQueue
         $CCs = array_merge($MBGs, $MEGs);
 
         $attachment = [
-            'saved_path' => $publicPath,
-            'name' => $name,
+            [
+                'saved_path' => $publicPath,
+                'name' => $name,
+            ],
         ];
 
-        Notification::send($FSDs, new InfoNotification(MailContents::paymentMail($user), MailContents::paymentSubject(), $CCs));
-        // Notification::send($FSDs, new InfoNotification(MailContents::paymentMail($user), MailContents::paymentSubject(), $CCs, $attachment));
+        Notification::send($FSDs, new InfoNotification(MailContents::paymentMail($user), MailContents::paymentSubject(), $CCs, $attachment));
 
     }
 }
