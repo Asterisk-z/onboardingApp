@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\MailContents;
 use App\Helpers\Utility;
 use App\Models\Complaint;
+use App\Models\ComplaintType;
 use App\Models\Role;
 use App\Notifications\InfoNotification;
 use Illuminate\Http\Request;
@@ -21,7 +22,7 @@ class ComplaintController extends Controller
     public function index(Request $request)
     {
         $request->validate([
-            'status' => 'sometimes|in:NEW,ONGOING,CLOSED'
+            'status' => 'sometimes|in:NEW,ONGOING,CLOSED',
         ]);
 
         $status = $request->input('status');
@@ -53,7 +54,7 @@ class ComplaintController extends Controller
     public function allComplaints(Request $request)
     {
         $request->validate([
-            'status' => 'sometimes|in:NEW,ONGOING,CLOSED'
+            'status' => 'sometimes|in:NEW,ONGOING,CLOSED',
         ]);
 
         $status = $request->input('status');
@@ -87,7 +88,7 @@ class ComplaintController extends Controller
         $request->validate([
             "complaint_type" => "required|exists:complaint_types,id",
             "body" => "required|string",
-            "document" => "nullable|mimes:jpeg,png,jpg,pdf|max:5048"
+            "document" => "nullable|mimes:jpeg,png,jpg,pdf|max:5048",
         ]);
 
         $user = $request->user();
@@ -95,12 +96,15 @@ class ComplaintController extends Controller
         $user->complaints()->create([
             'document' => $request->hasFile('document') ? $request->file('document')->storePublicly('complaint', 'public') : null,
             'body' => $request->input('body'),
-            'complaint_type_id' => $request->input('complaint_type')
+            'complaint_type_id' => $request->input('complaint_type'),
         ]);
 
+        $complaint_type = ComplaintType::find($request->input('complaint_type'));
+
         $MEGs = Utility::getUsersByCategory(Role::MEG);
-        if (count($MEGs))
-            Notification::send($MEGs, new InfoNotification(MailContents::complaintSubmitMail($user->first_name . " " . $user->last_name, $user->institution->name ?? null, $request->input('body')), MailContents::complaintSubmitSubject()));
+        if (count($MEGs)) {
+            Notification::send($MEGs, new InfoNotification(MailContents::complaintSubmitMail($user->first_name . " " . $user->last_name, $user->institution->name ?? null, $request->input('body')), MailContents::complaintSubmitSubject($complaint_type ? $complaint_type->name : "")));
+        }
 
         logAction($request->user()->email, 'New Complaint', 'Logged a new complaint', $request->ip());
         return successResponse('Your complaint has been submitted.');
@@ -117,18 +121,18 @@ class ComplaintController extends Controller
         $request->validate([
             "complaint_id" => "required|exists:complaints,id",
             "comment" => "required|string",
-            "status" => "nullable|in:ONGOING,CLOSED"
+            "status" => "nullable|in:ONGOING,CLOSED",
         ]);
 
         $user = $request->user();
 
         $comment = $user->comments()->create([
             'complaint_id' => $request->input('complaint_id'),
-            'comment' => $request->input('comment')
+            'comment' => $request->input('comment'),
         ]);
 
         $comment->complaint()->update([
-            "status" => $request->input('status') ?? "ONGOING"
+            "status" => $request->input('status') ?? "ONGOING",
         ]);
 
         $comment->complaint->user->notify(new InfoNotification(MailContents::complaintCommentMail($request->input('comment'), $request->input('status')), MailContents::complaintCommentSubject()));
@@ -146,13 +150,13 @@ class ComplaintController extends Controller
     {
         $request->validate([
             "complaint_id" => "required|exists:complaints,id",
-            "status" => "required|in:ONGOING,CLOSED"
+            "status" => "required|in:ONGOING,CLOSED",
         ]);
 
         $complaint = Complaint::find($request->input('complaint_id'));
 
         $complaint->update([
-            "status" => $request->input('status')
+            "status" => $request->input('status'),
         ]);
 
         $complaint->user->notify(new InfoNotification(MailContents::complaintStatusMail($request->input('status')), MailContents::complaintStatusSubject()));

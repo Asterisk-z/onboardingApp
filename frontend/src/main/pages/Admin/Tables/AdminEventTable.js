@@ -211,11 +211,11 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>Event </td>
+                                        <td>Event Name </td>
                                         <td className="text-capitalize">{`${tabItem.name}`}</td>
                                     </tr>
                                     <tr>
-                                        <td>Decription </td>
+                                        <td>Description </td>
                                         <td className="text-capitalize">{`${tabItem.description}`}</td>
                                     </tr>
                                     <tr>

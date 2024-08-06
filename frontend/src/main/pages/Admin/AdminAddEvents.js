@@ -200,7 +200,7 @@ const AdminEvents = ({ drawer }) => {
                                                     </label>
                                                     <div className="form-control-wrap">
                                                         <input type="hidden" {...register('eventDate', { required: "This Field is required" })} value={eventDate} />
-                                                        <DatePicker selected={eventDate} onChange={(date) => toggleEventDate(date)} className="form-control date-picker" id="date" minDate={todaysDate} />
+                                                        <DatePicker selected={eventDate} onChange={(date) => toggleEventDate(date)} className="form-control date-picker" id="date" minDate={todaysDate} dateFormat="dd/MM/yyyy" />
                                                         {errors.eventDate && <span className="invalid">{errors.eventDate.message}</span>}
                                                     </div>
                                                 </div>

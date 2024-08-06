@@ -131,7 +131,7 @@ const navData = [{
         link: "/admin-positions",
       },
       {
-        text: "Regulators",
+        text: "Quick links",
         link: "/admin-regulators",
       },
       {
@@ -223,7 +223,7 @@ const navData = [{
   },
   {
     icon: "tile-thumb-fill",
-    text: "Regulators",
+    text: "Quick links",
     link: "/regulators",
   },
   {

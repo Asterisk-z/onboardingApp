@@ -54,21 +54,56 @@ const Form = () => {
                 if (result.isConfirmed) {
 
                     Swal.close()
+                    uploadDisclosure('accept')
 
-                    navigate(`${process.env.PUBLIC_URL}/application_disclosure/${$application_details.uuid}`)
+                    // navigate(`${process.env.PUBLIC_URL}/application_disclosure/${$application_details.uuid}`)
+
+                    // const postValues = new Object();
+                    // postValues.application_id = $application_details?.id;
+                    // postValues.status = 'accept';
+                    // const resp = dispatch(UpdateDisclosure(postValues));
+                    // setParentState(Math.random());
+                    // setTimeout(() => {
+                    //     window.location.reload();
+                    // }, 4000)
+                    // setShowDisclosureModal(true)
 
                 } else {
-
-                    const postValues = new Object();
-                    postValues.application_id = $application_details?.id;
-                    postValues.status = 'reject';
-                    const resp = dispatch(UpdateDisclosure(postValues));
-                    setParentState(Math.random());
+                    Swal.close()
+                    uploadDisclosure('reject')
+                    // const postValues = new Object();
+                    // postValues.application_id = $application_details?.id;
+                    // postValues.status = 'reject';
+                    // const resp = dispatch(UpdateDisclosure(postValues));
+                    // setParentState(Math.random());
+                    // setTimeout(() => {
+                    //     window.location.reload();
+                    // }, 4000)
+                    // setShowDisclosureModal(true)
                 }
             });
 
         }
     }, [dispatch, $application_details]);
+
+    const uploadDisclosure = async (value) => {
+
+        const postValues = new Object();
+        postValues.application_id = $application_details?.id;
+        postValues.status = value;
+        const resp = await dispatch(UpdateDisclosure(postValues));
+        if (resp) {
+            // window.location.reload();
+            setShowDisclosureModal(true)
+            dispatch(fetchApplication({ "application_uuid": application_uuid }));
+            console.log(resp)
+        }
+        // setParentState(Math.random());
+        // setTimeout(() => {
+        //     window.location.reload();
+        // }, 4000)
+
+    }
 
 
 

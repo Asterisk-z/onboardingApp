@@ -21,7 +21,7 @@ class EventResource extends JsonResource
             'date' => $this->date,
             'time' => $this->time,
             'is_annual' => $this->is_annual,
-            'fee' => $this->fee,
+            'fee' => $this->fee > 1 ? number_format($this->fee, 2) : 0,
 
             'registered_remainder_frequency' => $this->registered_remainder_frequency,
             'unregistered_remainder_frequency' => $this->unregistered_remainder_frequency,

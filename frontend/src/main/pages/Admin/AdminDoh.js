@@ -170,10 +170,7 @@ const AdminDoh = ({ drawer }) => {
                             <Block size="xl">
                                 <BlockHead>
                                     <BlockHeadContent>
-                                        {/* {membersGuide} */}
-                                        {/* <BlockTitle tag="h4">All Membership</BlockTitle> */}
-                                        {/* <p>{regulators}</p> */}
-                                        {/* {<p>{parentState}</p>} */}
+
                                     </BlockHeadContent>
                                 </BlockHead>
 

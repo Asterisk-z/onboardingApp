@@ -37,7 +37,7 @@ const AdminStakeHolder = ({ drawer }) => {
 
     return (
         <React.Fragment>
-            <Head title="Stake Holder  Request"></Head>
+            <Head title="Stakeholder  Request"></Head>
             <Content>
                 <BlockHead size="sm">
                     <BlockBetween>

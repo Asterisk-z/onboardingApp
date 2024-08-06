@@ -68,7 +68,7 @@ const AdminStakeHolder = ({ drawer }) => {
 
     return (
         <React.Fragment>
-            <Head title="Stake Holders"></Head>
+            <Head title="Stakeholders"></Head>
             <Content>
                 <BlockHead size="sm">
                     <BlockBetween>
@@ -83,7 +83,7 @@ const AdminStakeHolder = ({ drawer }) => {
                                     <ul className="nk-block-tools g-3">
                                         <li className="nk-block-tools-opt">
                                             <Button color="primary">
-                                                <span onClick={toggleForm}>Create Stake holder</span>
+                                                <span onClick={toggleForm}>Create Stakeholder</span>
                                             </Button>
                                         </li>
                                     </ul>

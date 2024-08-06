@@ -24,20 +24,17 @@ class MailContents
         <p>Kindly click on this <a href=$url>link</a> to proceed.</p>";
     }
 
-    public static function complaintSubmitSubject(): string
+    public static function complaintSubmitSubject($name): string
     {
-        return "New Complaint Logged";
+        return "New FMDQX MROIS Complaint {$name}";
     }
 
     public static function complaintSubmitMail($name, $institution, $body): string
     {
-        return "<p>You have a new complaint, details below:</p>
-
-        <ul>
-            <li><strong>Name:</strong> {$name}</li>
-            <li><strong>Institution:</strong> {$institution}</li>
-            <li><strong>Body:</strong> {$body}</li>
-        </ul>";
+        return "<p>Please be informed that the '{$institution}' has logged a complaint. Kindly see the complaint below :</p>
+            <p><strong>Name:</strong> {$name}</p>
+            <p><strong>Institution:</strong> {$institution}</p>
+            <p><strong>Body:</strong> {$body}</p>";
     }
 
     public static function complaintCommentSubject(): string
@@ -48,7 +45,6 @@ class MailContents
     public static function complaintCommentMail($comment, $status): string
     {
         return "<p>You have a new comment on the complaint you made:</p>
-
         <ul>
             <li><strong>Status:</strong> {$status}</li>
             <li><strong>Comment:</strong> {$comment}</li>

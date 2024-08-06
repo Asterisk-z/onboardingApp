@@ -68,13 +68,13 @@ const AdminRegulator = ({ drawer }) => {
 
     return (
         <React.Fragment>
-            <Head title="Regulators"></Head>
+            <Head title="Quick links"></Head>
             <Content>
                 <BlockHead size="sm">
                     <BlockBetween>
                         <BlockHeadContent>
                             <BlockTitle page tag="h3">
-                                Regulators
+                                Configure Quick Links
                             </BlockTitle>
                         </BlockHeadContent>
                         <BlockHeadContent>
@@ -83,7 +83,7 @@ const AdminRegulator = ({ drawer }) => {
                                     <ul className="nk-block-tools g-3">
                                         <li className="nk-block-tools-opt">
                                             <Button color="primary">
-                                                <span onClick={toggleForm}>Create Regulator</span>
+                                                <span onClick={toggleForm}>Create Quick Link</span>
                                             </Button>
                                         </li>
                                     </ul>
@@ -99,7 +99,7 @@ const AdminRegulator = ({ drawer }) => {
                         </button>
                     }
                     >
-                        Create Regulator
+                        Create Quick link
                     </ModalHeader>
                     <ModalBody>
                         <form onSubmit={handleSubmit(handleFormSubmit)} className="is-alter" encType="multipart/form-data">
@@ -139,7 +139,7 @@ const AdminRegulator = ({ drawer }) => {
                         </form>
                     </ModalBody>
                     <ModalFooter className="bg-light">
-                        <span className="sub-text">List of Regulators</span>
+                        <span className="sub-text">List of Quick Links</span>
                     </ModalFooter>
                 </Modal>
                 <Block size="lg">
@@ -148,9 +148,8 @@ const AdminRegulator = ({ drawer }) => {
                             <Block size="xl">
                                 <BlockHead>
                                     <BlockHeadContent>
-                                        {/* <BlockTitle tag="h4">All Membership</BlockTitle> */}
-                                        {/* <p>{regulators}</p> */}
-                                        {/* {<p>{parentState}</p>} */}
+
+
                                     </BlockHeadContent>
                                 </BlockHead>
 

@@ -216,14 +216,12 @@ const AdminApplicantGuide = ({ drawer }) => {
                             <Block size="xl">
                                 <BlockHead>
                                     <BlockHeadContent>
-                                        {/* <BlockTitle tag="h4">All Membership</BlockTitle> */}
-                                        {/* <p>{regulators}</p> */}
-                                        {/* {<p>{parentState}</p>} */}
+
                                     </BlockHeadContent>
                                 </BlockHead>
 
                                 <PreviewCard>
-                                    {/* {$fees && <AdminRegulatorTable  updateParent={updateParentState} parentState={parentState} data={$regulators} expandableRows pagination actions />} */}
+
                                     {$applicantGuide &&
                                         <Card className="card-bordered gold">
                                             <CardHeader className="border-bottom">

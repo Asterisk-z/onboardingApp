@@ -13,29 +13,29 @@ import moment from "moment";
 
 
 
-const UpdateFeeComponent = ({fee, updateParent}) => {
+const UpdateFeeComponent = ({ fee, updateParent }) => {
 
     const dispatch = useDispatch();
 
     const [loading, setLoading] = useState(false);
 
     const { register, handleSubmit, formState: { errors }, resetField } = useForm();
-    
+
     const handleFormUpdate = async (values) => {
-        
+
 
         const postValues = {};
         postValues.title = values.title;
         postValues.url = values.url;
         postValues.id = fee.id;
-        
-        
+
+
         try {
             setLoading(true);
 
 
             const resp = await dispatch(updateFeesAndDues(postValues));
-            
+
             // console.log(values, postValues, loading, resp.payload)
             if (resp.payload?.message === "success") {
 
@@ -216,39 +216,37 @@ const AdminFees = ({ drawer }) => {
                             <Block size="xl">
                                 <BlockHead>
                                     <BlockHeadContent>
-                                        {/* <BlockTitle tag="h4">All Membership</BlockTitle> */}
-                                        {/* <p>{regulators}</p> */}
-                                        {/* {<p>{parentState}</p>} */}
+
                                     </BlockHeadContent>
                                 </BlockHead>
 
                                 <PreviewCard>
-                                    {/* {$fees && <AdminRegulatorTable  updateParent={updateParentState} parentState={parentState} data={$regulators} expandableRows pagination actions />} */}
-                                    {$fees && 
-                                    <Card className="card-bordered gold">
-                                        <CardHeader className="border-bottom">
-                                            Fees and Dues
-                                        </CardHeader>
-                                        <CardBody className="card-inner">
-                                            <CardTitle tag="h5">{$fees.title}</CardTitle>
-                                            <CardText>
-                                                {$fees.url}
-                                            </CardText>
-                                            <Button color="primary" onClick={toggleUpdateForm}>Edit</Button>
-                                        </CardBody>
-                                        <CardFooter className="border-top">{moment($fees.created_at).format('ll')}</CardFooter>
 
-                                        <Modal isOpen={modalFormUpdate} toggle={toggleUpdateForm} >
-                                            <ModalHeader toggle={toggleUpdateForm} close={<button className="close" onClick={toggleUpdateForm}><Icon name="cross" /></button>}>
-                                                Update
-                                            </ModalHeader>
-                                            <ModalBody>
-                                                <UpdateFeeComponent fee={$fees} updateParent={updateParentState}/>
-                                            </ModalBody>
-                                            <ModalFooter className="bg-light">
-                                                <span className="sub-text">Update Fees and Dues</span>
-                                            </ModalFooter>
-                                        </Modal>                                    
+                                    {$fees &&
+                                        <Card className="card-bordered gold">
+                                            <CardHeader className="border-bottom">
+                                                Fees and Dues
+                                            </CardHeader>
+                                            <CardBody className="card-inner">
+                                                <CardTitle tag="h5">{$fees.title}</CardTitle>
+                                                <CardText>
+                                                    {$fees.url}
+                                                </CardText>
+                                                <Button color="primary" onClick={toggleUpdateForm}>Edit</Button>
+                                            </CardBody>
+                                            <CardFooter className="border-top">{moment($fees.created_at).format('ll')}</CardFooter>
+
+                                            <Modal isOpen={modalFormUpdate} toggle={toggleUpdateForm} >
+                                                <ModalHeader toggle={toggleUpdateForm} close={<button className="close" onClick={toggleUpdateForm}><Icon name="cross" /></button>}>
+                                                    Update
+                                                </ModalHeader>
+                                                <ModalBody>
+                                                    <UpdateFeeComponent fee={$fees} updateParent={updateParentState} />
+                                                </ModalBody>
+                                                <ModalFooter className="bg-light">
+                                                    <span className="sub-text">Update Fees and Dues</span>
+                                                </ModalFooter>
+                                            </Modal>
                                         </Card>
 
                                     }

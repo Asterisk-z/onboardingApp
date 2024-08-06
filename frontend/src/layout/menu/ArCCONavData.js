@@ -73,7 +73,7 @@ const arCCONavData = [
     },
     {
       icon: "tile-thumb-fill",
-      text: "Regulators",
+      text: "Quick links",
       link: "/regulators",
     },
     {

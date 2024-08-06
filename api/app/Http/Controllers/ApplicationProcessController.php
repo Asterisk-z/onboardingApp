@@ -21,7 +21,8 @@ class ApplicationProcessController extends Controller
     public function applications(Request $request)
     {
 
-        $application_list = Application::where('applications.submitted_by', auth()->user()->id);
+        // $application_list = Application::where('applications.submitted_by', auth()->user()->id);
+        $application_list = Application::where('applications.institution_id', auth()->user()->institution_id);
 
         if (request('application_type')) {
             $application_list = $application_list->where('applications.application_type', request('application_type'));
@@ -77,7 +78,8 @@ class ApplicationProcessController extends Controller
         }
         $institution = Institution::find(auth()->user()->institution_id);
         $old_category = MembershipCategory::find(request('old_category'));
-        $data = Application::where('applications.id', auth()->user()->application[0]->id);
+        // $data = Application::where('applications.id', auth()->user()->application[0]->id);
+        $data = Application::where('applications.id', $institution->application[0]->id);
         $data = Utility::applicationDetails($data);
         $data = $data->first();
 
@@ -119,7 +121,8 @@ class ApplicationProcessController extends Controller
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
         $institution = Institution::find(auth()->user()->institution_id);
-        $data = Application::where('applications.id', auth()->user()->application[0]->id);
+        // $data = Application::where('applications.id', auth()->user()->application[0]->id);
+        $data = Application::where('applications.id', $institution->application[0]->id);
         $data = Utility::applicationDetails($data);
         $data = $data->first();
 

@@ -21,7 +21,7 @@ class EventBasicResource extends JsonResource
             'date' => $this->date,
             'time' => $this->time,
             'is_annual' => $this->is_annual,
-            'fee' => $this->fee,
+            'fee' => $this->fee > 1 ? number_format($this->fee, 2) : 0,
 
             'image' => $this->image,
             'image_url' => $this->image ? config('app.url') . '/storage/app/public/' . $this->image : null, // Adjust the path based on your storage setup

@@ -175,7 +175,7 @@ const ApproveSection = ({ updateParentParent, complaint, stakeholders, toggleApp
                 <div className="form-group">
 
                     <label className="form-label" htmlFor="position">
-                        Stake Holder
+                        Stakeholder
                     </label>
                     <div className="form-control-wrap">
                         <div className="form-control-select">

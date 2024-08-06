@@ -76,7 +76,7 @@ export const UpdateDisclosure = createAsyncThunk(
         url: `membership/application/disclosure`,
         data: values,
       });
-      return successHandler(data);
+      return successHandler(data, data.message);
     } catch (error) {
       return errorHandler(error, true);
     }

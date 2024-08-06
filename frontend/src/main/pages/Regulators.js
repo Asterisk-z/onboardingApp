@@ -27,13 +27,13 @@ const Regulators = ({ drawer }) => {
 
     return (
         <React.Fragment>
-            <Head title="Regulators"></Head>
+            <Head title="Quick links"></Head>
             <Content>
                 <BlockHead size="sm">
                     <BlockBetween>
                         <BlockHeadContent>
                             <BlockTitle page tag="h3">
-                                Regulators
+                                Quick links
                             </BlockTitle>
                         </BlockHeadContent>
                     </BlockBetween>
@@ -46,8 +46,7 @@ const Regulators = ({ drawer }) => {
                             <Block size="xl">
                                 <BlockHead>
                                     <BlockHeadContent>
-                                        <BlockTitle tag="h4">Regulators</BlockTitle>
-                                        {/* <p>{regulators}</p> */}
+                                        <BlockTitle tag="h4">Regulators/Membership Categories/Membership Requirements</BlockTitle>
                                     </BlockHeadContent>
                                 </BlockHead>
 

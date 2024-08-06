@@ -151,10 +151,10 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
 
 
     const askAction = async (status) => {
-        const actionText = tabItem.active ? 'Activate' : 'Deactivate';
-        const oppositeStatus = tabItem.active ? '1' : '0';
+        const actionText = tabItem.active ? 'Deactivate' : 'Activate';
+        const oppositeStatus = tabItem.active ? '0' : '1';
 
-        const confirmationText = !tabItem.active ? 'Do you want to activate this regulator?' : 'Do you want to deactivate this regulator?';
+        const confirmationText = !tabItem.active ? 'Do you want to deactivate this quick link?' : 'Do you want to activate this quick link?';
 
         const confirmationButtonText = tabItem.active ? 'Yes' : 'Yes';
 
