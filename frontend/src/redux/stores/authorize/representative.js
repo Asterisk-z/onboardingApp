@@ -277,6 +277,26 @@ export const megProcessAddUserAR = createAsyncThunk(
   }
 );
 
+export const megProcessInstitutionStatus = createAsyncThunk(
+  "arUsers/megProcessInstitutionStatus",
+  async (values) => {
+    const id = values.get('user_id')
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+        url: `meg/process-institution-status/${id}`,
+        data: values,
+      });
+      return successHandler(data, data.message);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
 
 export const megProcessMemberStatus = createAsyncThunk(
   "arUsers/megProcessMemberStatus",
@@ -646,6 +666,21 @@ const arUsersStore = createSlice({
     });
 
     builder.addCase(megProcessTransferUserAR.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
+
+    // ====== builders for megProcessInstitutionStatus ======
+
+    builder.addCase(megProcessInstitutionStatus.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(megProcessInstitutionStatus.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(megProcessInstitutionStatus.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
     });

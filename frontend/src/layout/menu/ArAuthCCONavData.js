@@ -104,6 +104,10 @@ const arCCONavData = [
         text: "Update Competency",
         link: "/update-competency",
       },
+      {
+        text: "Approve Competency",
+        link: "/approve-competency",
+      },
       ],
     },
     {

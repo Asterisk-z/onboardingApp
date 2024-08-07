@@ -22,9 +22,9 @@ const Export = ({ data }) => {
 
   const newData = data.map((item, index) => {
     return ({
-      "TID ID": ++index,
+      "SN": ++index,
       "Description": `${item.body}`,
-      "Status": item.status,
+      "Status": item.status?.split('_').join(' '),
       "Comment(s)": item.comment.length,
       "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
     })
@@ -141,7 +141,7 @@ const SendFeedback = ({ updateParentParent, complaint }) => {
 
           const formData = new FormData();
           formData.append('complaint_id', complaint_id);
-          formData.append('status', 'ONGOING');
+          formData.append('status', 'WORK_IN_PROGRESS');
           const resp = dispatch(updateComplaintStatus(formData));
 
           setTimeout(() => {
@@ -244,7 +244,7 @@ const SendFeedback = ({ updateParentParent, complaint }) => {
                 <div className="form-control-select">
                   <select className="form-control form-select" {...register('status', { required: "Type is Required" })}>
                     <option value="">Select Type</option>
-                    <option value="ONGOING">Ongoing</option>
+                    <option value="WORK_IN_PROGRESS">Work in progress</option>
                     <option value="CLOSED">Closed</option>
                   </select>
                   {errors.status && <p className="invalid">{`${errors.status.message}`}</p>}
@@ -317,7 +317,7 @@ const SendFeedback = ({ updateParentParent, complaint }) => {
 const ComplaintTableUser = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState }) => {
   const complainColumn = [
     {
-      name: "TID",
+      name: "SN",
       selector: (row, index) => ++index,
       sortable: true,
       width: "100px",
@@ -332,7 +332,7 @@ const ComplaintTableUser = ({ data, pagination, actions, className, selectableRo
     },
     {
       name: "Status",
-      selector: (row) => { return (<><Badge color="success">{`${row.status}`}</Badge></>) },
+      selector: (row) => { return (<><Badge color="success">{`${row.status?.split('_').join(' ')}`}</Badge></>) },
       sortable: true,
       width: "auto",
       wrap: true

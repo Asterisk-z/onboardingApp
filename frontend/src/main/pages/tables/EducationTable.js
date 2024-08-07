@@ -24,7 +24,7 @@ const Export = ({ data }) => {
 
     const newData = data.map((item, index) => {
         return ({
-            "TID": ++index,
+            "SN": ++index,
             "Description": `${item.body}`,
             "Status": item.status,
             "Comments": item.comment,
@@ -304,7 +304,7 @@ const EducationTable = ({ data, pagination, actions, className, selectableRows, 
 
     const EducationColumn = [
         {
-            name: "ID",
+            name: "SN",
             selector: (row, index) => ++index,
             sortable: true,
             width: "80px",

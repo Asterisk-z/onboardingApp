@@ -41,7 +41,13 @@ class UserController extends Controller
     public function stakeholder_request(Request $request)
     {
         $data = $request->validate([
-            'email' => ['required', 'email'],
+            'email' => ['required', 'email',
+                function ($attribute, $value, $fail) {
+                    if (User::where('email', $value)->where('is_del', false)->exists()) {
+                        $fail('The email has been taken.');
+                    }
+                },
+                new EmailValidation],
             'access' => ['required', 'string'],
         ]);
 

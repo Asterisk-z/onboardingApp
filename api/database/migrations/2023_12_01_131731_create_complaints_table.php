@@ -19,7 +19,7 @@ class CreateComplaintsTable extends Migration
             $table->foreignId('complaint_type_id')->constrained('complaint_types')->onDelete('cascade');
             $table->text('body');
             $table->string('document')->nullable();
-            $table->string('status')->default('NEW')->comment('NEW, ONGOING, CLOSED');
+            $table->string('status')->default('PENDING')->comment('PENDING, WORK_IN_PROGRESS, CLOSED');
             $table->timestamps();
             $table->softDeletes();
         });

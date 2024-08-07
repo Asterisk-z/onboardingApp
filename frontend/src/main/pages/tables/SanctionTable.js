@@ -18,7 +18,7 @@ const Export = ({ data }) => {
 
     const newData = data.map((item, index) => {
         return ({
-            "ID": ++index,
+            "SN": ++index,
             "Sanction Summary": `${item.sanction_summary}`,
             "AR Summary": item.ar_summary,
             "CCO": item.sanctioner.fullName,
@@ -140,7 +140,7 @@ const DropdownTrans = (props) => {
 
 const sanctionColumn = [
     {
-        name: "ID",
+        name: "SN",
         selector: (row, index) => ++index,
         sortable: true,
         width: "80px",

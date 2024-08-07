@@ -27,7 +27,7 @@ const Export = ({ data }) => {
 
   const newData = data.map((item, index) => {
     return ({
-      "IID": ++index,
+      "SN": ++index,
       "Name": `${item.name}`,
       "Categories": item.category,
       "Total ARs": item.ars,
@@ -1807,7 +1807,7 @@ const UploadConcession = ({ updateParentParent, tabItem, positions, closeModel }
 const AdminInstitutionTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState, allApplications }) => {
   const complainColumn = [
     {
-      name: "ID",
+      name: "SN",
       selector: (row, index) => ++index,
       sortable: true,
       width: "100px",

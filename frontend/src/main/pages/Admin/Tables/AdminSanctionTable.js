@@ -287,7 +287,7 @@ const AdminSanctionTable = ({ data, pagination, actions, className, selectableRo
 
     const sanctionColumn = [
         {
-            name: "ID",
+            name: "SN",
             selector: (row, index) => ++index,
             sortable: true,
             width: "80px",

@@ -24,7 +24,7 @@ const Export = ({ data }) => {
 
     const newData = data.map((item, index) => {
         return ({
-            "TID ID": ++index,
+            "SN": ++index,
             "Description": `${item.body}`,
             "Status": item.status,
             // "Comment(s)": item.comment.length,
@@ -313,7 +313,7 @@ const ActionTab = ({ updateParentParent, request }) => {
 const AdminCreationRequestTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState }) => {
     const ColumnHeader = [
         {
-            name: "ID",
+            name: "SN",
             selector: (row, index) => ++index,
             sortable: true,
             width: "100px",

@@ -116,7 +116,7 @@ const ConvertMemberForm = ({ other_categories, my_categories, updateParent }) =>
 
             <div className="form-group">
                 <Button color="primary" type="submit" size="lg">
-                    {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Send Conversion Request"}
+                    {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Submit"}
                 </Button>
             </div>
         </form>

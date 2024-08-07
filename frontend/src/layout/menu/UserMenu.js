@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import navData from "./NavData";
 import arCCONavData from "./ArCCONavData";
+import ArAuthCCONavData from "./ArAuthCCONavData";
 import arApplication from "./ArApplications";
 import { NavLink, Link } from "react-router-dom";
 import Icon from "../../components/icon/Icon";
@@ -201,8 +202,16 @@ const UserMenu = ({ sidebarToggle, mobileView }) => {
   useEffect(() => {
     if (authUser?.user_data?.institution?.application[0].completed_at) {
 
-      if (authUser?.is_position_cco()) {
-        setMenuData(arCCONavData)
+      if (authUser?.is_position_cco() && authUser?.is_ar_authorizer()) {
+
+
+        if (authUser?.is_ar_authorizer()) {
+          setMenuData(ArAuthCCONavData)
+        } else {
+
+          setMenuData(arCCONavData)
+        }
+
       } else {
         setMenuData(navData)
       }

@@ -26,7 +26,7 @@ const Export = ({ data }) => {
 
     const newData = data.map((item, index) => {
         return ({
-            "User ID": ++index,
+            "SN": ++index,
             "Name": `${item.firstName} ${item.lastName}`,
             "Email": item.email,
             "Phone": item.phone,
@@ -150,7 +150,7 @@ const ActionTab = (props) => {
 const AuthRepTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState, positions, countries, roles, authorizers, pending }) => {
     const authRepColumn = [
         {
-            name: "ID",
+            name: "SN",
             selector: (row, index) => ++index,
             sortable: true,
             width: "100px",

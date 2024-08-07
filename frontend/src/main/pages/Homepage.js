@@ -29,46 +29,46 @@ import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 
 const AddMemberForm = ({ other_categories, updateParent }) => {
 
-    const authUser = useUser();
-    const dispatch = useDispatch();
+  const authUser = useUser();
+  const dispatch = useDispatch();
 
-    const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-    const { register, handleSubmit, formState: { errors }, resetField } = useForm();
+  const { register, handleSubmit, formState: { errors }, resetField } = useForm();
 
-    const handleFormSubmit = async (values) => {
-
-
-        const postValues = {};
-        postValues.new_category = values.category;
-        postValues.institution = authUser?.user_data?.institution?.id;
+  const handleFormSubmit = async (values) => {
 
 
-      try {
-        setLoading(true);
+    const postValues = {};
+    postValues.new_category = values.category;
+    postValues.institution = authUser?.user_data?.institution?.id;
 
 
-        const resp = await dispatch(additionRequest(postValues));
+    try {
+      setLoading(true);
 
-        // console.log(values, postValues, loading, resp.payload)
-        if (resp.payload?.message === "success") {
 
-          setTimeout(() => {
-            setLoading(false);
-            resetField('name')
-            updateParent(Math.random())
-          }, 1000);
-        } else {
+      const resp = await dispatch(additionRequest(postValues));
+
+      // console.log(values, postValues, loading, resp.payload)
+      if (resp.payload?.message === "success") {
+
+        setTimeout(() => {
           setLoading(false);
-        }
-
-      } catch (error) {
+          resetField('name')
+          updateParent(Math.random())
+        }, 1000);
+      } else {
         setLoading(false);
       }
 
-    };
-  
-  
+    } catch (error) {
+      setLoading(false);
+    }
+
+  };
+
+
   return (
     <form onSubmit={handleSubmit(handleFormSubmit)} className="is-alter" encType="multipart/form-data">
 
@@ -93,7 +93,7 @@ const AddMemberForm = ({ other_categories, updateParent }) => {
 
       <div className="form-group">
         <Button color="primary" type="submit" size="lg">
-          {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Send Addition Request"}
+          {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Submit"}
         </Button>
       </div>
     </form>
@@ -103,15 +103,15 @@ const AddMemberForm = ({ other_categories, updateParent }) => {
 
 const ConvertMemberForm = ({ other_categories, my_categories, updateParent }) => {
 
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-    const authUser = useUser();
-    const authUserUpdate = useUserUpdate();
-    const [loading, setLoading] = useState(false);
+  const authUser = useUser();
+  const authUserUpdate = useUserUpdate();
+  const [loading, setLoading] = useState(false);
 
-    const { register, handleSubmit, formState: { errors }, resetField } = useForm();
+  const { register, handleSubmit, formState: { errors }, resetField } = useForm();
 
-    const handleFormSubmit = async (values) => {
+  const handleFormSubmit = async (values) => {
 
 
     const postValues = {};
@@ -189,7 +189,7 @@ const ConvertMemberForm = ({ other_categories, my_categories, updateParent }) =>
 
       <div className="form-group">
         <Button color="primary" type="submit" size="lg">
-          {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Send Conversion Request"}
+          {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Submit"}
         </Button>
       </div>
     </form>
@@ -197,39 +197,39 @@ const ConvertMemberForm = ({ other_categories, my_categories, updateParent }) =>
 }
 
 const Homepage = () => {
-    const authUser = useUser();
-    const authUserUpdate = useUserUpdate();
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    
-    const [modalForm, setModalForm] = useState(false);
-    const [modalAddForm, setModalAddForm] = useState(false);
-    const [parentState, setParentState] = useState('Initial state');
+  const authUser = useUser();
+  const authUserUpdate = useUserUpdate();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-    const toggleAddForm = () => setModalAddForm(!modalAddForm);
-    const toggleForm = () => setModalForm(!modalForm);
+  const [modalForm, setModalForm] = useState(false);
+  const [modalAddForm, setModalAddForm] = useState(false);
+  const [parentState, setParentState] = useState('Initial state');
 
-    const arUsers = useSelector((state) => state?.arUsers?.list) || null;
+  const toggleAddForm = () => setModalAddForm(!modalAddForm);
+  const toggleForm = () => setModalForm(!modalForm);
 
-    const complaints = useSelector((state) => state?.dashboard?.complaints) || 0;
-    const applications = useSelector((state) => state?.dashboard?.applications) || 0;
-    const ars = useSelector((state) => state?.dashboard?.ars) || 0;
-    const application_list = useSelector((state) => state?.dashboard?.application_list) || null;
-    const my_categories = useSelector((state) => state?.category?.my_categories) || null;
-    const other_categories = useSelector((state) => state?.category?.other_categories) || null;
-  
-  
-    useEffect(() => {
-      dispatch(userLoadUserARs({"approval_status" : "", "role_id": ""}));
-      dispatch(loadArDashboard());
-      dispatch(loadAllMyActiveCategories());
-      dispatch(loadAllOtherActiveCategories());
-    }, [dispatch, parentState]);
+  const arUsers = useSelector((state) => state?.arUsers?.list) || null;
+
+  const complaints = useSelector((state) => state?.dashboard?.complaints) || 0;
+  const applications = useSelector((state) => state?.dashboard?.applications) || 0;
+  const ars = useSelector((state) => state?.dashboard?.ars) || 0;
+  const application_list = useSelector((state) => state?.dashboard?.application_list) || null;
+  const my_categories = useSelector((state) => state?.category?.my_categories) || null;
+  const other_categories = useSelector((state) => state?.category?.other_categories) || null;
 
 
+  useEffect(() => {
+    dispatch(userLoadUserARs({ "approval_status": "", "role_id": "" }));
+    dispatch(loadArDashboard());
+    dispatch(loadAllMyActiveCategories());
+    dispatch(loadAllOtherActiveCategories());
+  }, [dispatch, parentState]);
 
-    const $my_categories = my_categories ? JSON.parse(my_categories) : null;
-    const $other_categories = other_categories ? JSON.parse(other_categories) : null;
+
+
+  const $my_categories = my_categories ? JSON.parse(my_categories) : null;
+  const $other_categories = other_categories ? JSON.parse(other_categories) : null;
 
 
 
@@ -238,7 +238,7 @@ const Homepage = () => {
     setModalForm(false)
     setParentState(newState);
   };
-  
+
 
   const $arUsers = arUsers ? JSON.parse(arUsers) : null;
   return (
@@ -272,7 +272,7 @@ const Homepage = () => {
                     </div>
                   </div>
                 </div>
-                
+
               </Card>
             </Col>
             <Col xxl="3" sm="6">
@@ -332,7 +332,7 @@ const Homepage = () => {
                 </div>
               </Card>
             </Col>
-            
+
           </Row>
         </Block>
         <Content>
@@ -344,7 +344,7 @@ const Homepage = () => {
                 <BlockTitle tag="h4">Applications</BlockTitle>
               </BlockHeadContent>
               <BlockHeadContent>
-                
+
                 {authUser?.user_data?.institution?.application[0].completed_at && <>
                   <div className="toggle-wrap nk-block-tools-toggle w-auto">
                     <div className="toggle-expand-content" >
@@ -376,7 +376,7 @@ const Homepage = () => {
                 New Member Addition
               </ModalHeader>
               <ModalBody>
-                <AddMemberForm other_categories={$other_categories} updateParent={updateParentState}/>
+                <AddMemberForm other_categories={$other_categories} updateParent={updateParentState} />
               </ModalBody>
               <ModalFooter className="bg-light">
                 <span className="sub-text">Application</span>
@@ -399,15 +399,15 @@ const Homepage = () => {
                 <span className="sub-text">Application</span>
               </ModalFooter>
             </Modal>
-            
+
             <PreviewCard>
               {application_list && <ApplicationTable data={application_list} expandableRows pagination actions />}
             </PreviewCard>
           </Block>
 
-          
 
-          
+
+
           <Block size="xl">
             <BlockHead>
               <BlockHeadContent>
@@ -417,11 +417,11 @@ const Homepage = () => {
                     <Button color="primary">
                       <span onClick={() => navigate(`${process.env.PUBLIC_URL}/auth-representatives`)}>Update Authorised Representative </span>
                     </Button>
-                  </>}      
+                  </>}
                 </>}
               </BlockHeadContent>
             </BlockHead>
-            
+
             <PreviewCard>
               {$arUsers && <AuthRepTable data={$arUsers} home={true} expandableRows pagination actions />}
             </PreviewCard>

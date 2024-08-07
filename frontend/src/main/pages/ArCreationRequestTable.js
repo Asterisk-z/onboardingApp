@@ -19,7 +19,7 @@ const Export = ({ data }) => {
 
   const newData = data.map((item, index) => {
     return ({
-      "TID": ++index,
+      "SN": ++index,
       "Description": `${item.body}`,
       "Status": item.status,
       // "Comments": item.comment.length,
@@ -140,7 +140,7 @@ const DropdownTrans = (props) => {
 
 const arCreationColumn = [
   {
-    name: "TID",
+    name: "SN",
     selector: (row, index) => ++index,
     sortable: true,
     width: "80px",

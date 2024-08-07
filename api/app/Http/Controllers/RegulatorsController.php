@@ -36,7 +36,7 @@ class RegulatorsController extends Controller
         $logMessage = $user->email . ' created a regulator message named : ' . $request->name;
         logAction($user->email, 'New Regulator Created', $logMessage, $request->ip());
         //
-        return successResponse('New Regulator Created', $regulator);
+        return successResponse('New Link Created', $regulator);
 
         //
     }

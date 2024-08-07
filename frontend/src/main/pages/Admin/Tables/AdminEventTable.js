@@ -30,7 +30,7 @@ const Export = ({ data }) => {
             "Date": moment(item.date).format('MMM D, YYYY'),
             "Annual": item.is_annual,
             "Registration Fee": (item.fee < 1) ? 'Free' : `${item.fee}`,
-            "Interests": item.registrations_count,
+            "Interests": `${item.registrations_count}  Users`,
             "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
         })
     });
@@ -232,7 +232,7 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
                                     </tr>
                                     <tr>
                                         <td>Interests </td>
-                                        <td className="text-capitalize">{`${tabItem?.registrations_count}  users`}</td>
+                                        <td className="text-capitalize">{`${tabItem?.registrations_count}  Users`}</td>
                                     </tr>
 
                                 </tbody>
@@ -251,7 +251,7 @@ const AdminEventTable = ({ data, pagination, actions, className, selectableRows,
 
     const tableColumn = [
         {
-            name: "ID",
+            name: "SN",
             selector: (row, index) => ++index,
             sortable: true,
             width: "60px",
@@ -294,7 +294,7 @@ const AdminEventTable = ({ data, pagination, actions, className, selectableRows,
         },
         {
             name: "Interests",
-            selector: (row) => `${row.registrations_count} users`,
+            selector: (row) => `${row.registrations_count} Users`,
             sortable: true,
             width: "auto",
             wrap: true

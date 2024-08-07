@@ -19,21 +19,25 @@ class Complaint extends Model
             "complainer" => $this->user,
             "complaint_type" => $this->type,
             "status" => $this->status,
-            "documment" => $this->document ? config('app.url') .'/storage/app/public/'.$this->document : null,
+            "documment" => $this->document ? config('app.url') . '/storage/app/public/' . $this->document : null,
             "comment" => $this->comments,
-            'createdAt' => $this->created_at
+            'createdAt' => $this->created_at,
         ];
     }
 
-    public function comments(){
+    public function comments()
+    {
         return $this->hasMany(ComplaintComment::class, 'complaint_id');
     }
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function type(){
+    public function type()
+    {
         return $this->belongsTo(ComplaintType::class, 'complaint_type_id');
     }
+
 }

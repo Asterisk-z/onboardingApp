@@ -141,12 +141,27 @@ class MailContents
         return "Competency Review";
     }
 
-    public static function arStatusCompetencyMessage(User $arUser, $competencyFramework): string
+    public static function arStatusCompetencyMessage(User $arUser, $competencyFramework, $status): string
     {
         $url = config("app.front_end_url");
 
         return "<p>Please be informed that the {$competencyFramework->name}
-            has been “Approved” or “Declined” by the {$arUser->full_name}. </p>
+            has been {$status} by {$arUser->full_name}. </p>
+        <p>Kindly log on to the <a href=$url>MROIS Portal</a>
+                    to view.</p>";
+    }
+
+    public static function megArStatusCompetencySubject(): string
+    {
+        return "AR Competency Update";
+    }
+
+    public static function megArStatusCompetencyMessage(User $arUser, $competencyFramework): string
+    {
+        $url = config("app.front_end_url");
+
+        return "<p>Please be informed that the {$competencyFramework->name}
+            was updated by {$arUser->full_name}. </p>
         <p>Kindly log on to the <a href=$url>MROIS Portal</a>
                     to view.</p>";
     }
@@ -199,7 +214,7 @@ class MailContents
     {
         $url = config("app.front_end_url");
 
-        return "<p>Please be informed that {$company_name} a {$membership_category} has initiated a Membership Conversion.</p>";
+        return "<p>Please be informed that {$company_name} {$membership_category} has initiated a Membership Conversion.</p>";
     }
 
     public static function megAdditionRequestTitle(): string

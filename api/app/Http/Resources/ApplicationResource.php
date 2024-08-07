@@ -27,6 +27,7 @@ class ApplicationResource extends JsonResource
                 "office_to_perform_next_action" => $this->office_to_perform_next_action,
                 "application_id" => $this->application_id,
                 "institution_id" => $this->institution_id,
+                'institution_status' => $application->institution_status,
                 "concession_stage" => $this->concession_stage,
                 "disclosure_stage" => $this->disclosure_stage,
                 "amount_received_by_fsd" => $this->amount_received_by_fsd ? number_format($this->amount_received_by_fsd, 2) : $this->amount_received_by_fsds,

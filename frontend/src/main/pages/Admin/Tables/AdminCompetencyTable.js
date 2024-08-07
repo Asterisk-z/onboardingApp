@@ -314,7 +314,7 @@ const ActionTab = ({ updateParentParent, tabItem, positions, categories }) => {
 const AdminCompetencyTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState, positions, categories }) => {
     const tableColumn = [
         {
-            name: "ID",
+            name: "SN",
             selector: (row, index) => ++index,
             sortable: true,
             width: "100px",

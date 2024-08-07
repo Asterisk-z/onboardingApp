@@ -30,7 +30,7 @@ const Export = ({ data, reportUrl }) => {
             "Date": moment(item.date).format('MMM D, YYYY'),
             "Annual": item.is_annual,
             "Registration Fee": (item.fee < 1) ? 'Free' : `${item.fee}`,
-            "Interests": item.registrations_count,
+            "Interests": `${item.registrations_count}  Users`,
             "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
         })
     });
@@ -100,11 +100,13 @@ const Export = ({ data, reportUrl }) => {
 const ActionTab = ({ updateParentParent, tabItem }) => {
     const tabItem_id = tabItem.id
     const [modalForm, setModalForm] = useState(false);
+    const [declineCommentForm, setDeclineCommentForm] = useState(false);
     const navigate = useNavigate();
     const authUser = useUser();
     const authUserUpdate = useUserUpdate();
 
     const toggleForm = () => setModalForm(!modalForm);
+    const toggleDeclineCommentForm = () => setDeclineCommentForm(!declineCommentForm);
 
     const dispatch = useDispatch();
     const { register, handleSubmit, formState: { errors }, resetField } = useForm();
@@ -210,6 +212,24 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
 
                 </ul>
             </div>
+
+            <Modal isOpen={declineCommentForm} toggle={toggleDeclineCommentForm}>
+                <ModalHeader toggle={toggleDeclineCommentForm} close={
+                    <button className="close" onClick={toggleDeclineCommentForm}>
+                        <Icon name="cross" />
+                    </button>
+                }
+                >
+                    Reason
+                </ModalHeader>
+                <ModalBody>
+                    <DeclineCommentFormCard />
+                </ModalBody>
+                <ModalFooter className="bg-light">
+                    <span className="sub-text"></span>
+                </ModalFooter>
+            </Modal>
+
             <Modal isOpen={modalForm} toggle={toggleForm} size="lg">
                 <ModalHeader toggle={toggleForm} close={<button className="close" onClick={toggleForm}><Icon name="cross" /></button>}>
                     View Event
@@ -283,12 +303,41 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
     );
 };
 
+const DeclineCommentFormCard = () => {
+
+    return (<>
+
+        <form onSubmit={handleSubmit(handleFormSubmit)} className="is-alter" encType="multipart/form-data">
+
+            <div className="form-group">
+                <label className="form-label" htmlFor="signature">
+                    Comment
+                </label>
+                <div className="form-control-wrap">
+
+                    <textarea
+                        className="form-control"
+                        {...register('comment', { required: true })}
+                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    ></textarea>
+                    {errors.comment && <span className="invalid">{errors.comment.message}</span>}
+                </div>
+            </div>
+            <div className="form-group">
+                <Button color="primary" type="submit" size="lg">
+                    {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Create"}
+                </Button>
+            </div>
+        </form>
+    </>);
+}
+
 
 const AdminEventRegistrationTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState, reportUrl }) => {
 
     const tableColumn = [
         {
-            name: "ID",
+            name: "SN",
             selector: (row, index) => ++index,
             sortable: true,
             width: "60px",

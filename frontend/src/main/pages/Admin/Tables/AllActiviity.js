@@ -9,70 +9,70 @@ import Skeleton from 'react-loading-skeleton'
 import Countdown from 'react-countdown';
 
 const Export = ({ data }) => {
-    const [modal, setModal] = useState(false);
+  const [modal, setModal] = useState(false);
 
-    useEffect(() => {
-        if (modal === true) {
-        setTimeout(() => setModal(false), 2000);
-        }
-    }, [modal]);
+  useEffect(() => {
+    if (modal === true) {
+      setTimeout(() => setModal(false), 2000);
+    }
+  }, [modal]);
 
-    const newData = data.map((item, index) => {
-        return ({
-            "ID": ++index,
-            "User": `${item.user}`,
-            "Description": item.description,
-            "IP Address": item.ip_address,
-            "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
-        })
-    });
+  const newData = data.map((item, index) => {
+    return ({
+      "SN": ++index,
+      "User": `${item.user}`,
+      "Description": item.description,
+      "IP Address": item.ip_address,
+      "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
+    })
+  });
 
-    const fileName = "data";
+  const fileName = "data";
 
-    const exportCSV = () => {
-        const exportType = exportFromJSON.types.csv;
-        exportFromJSON({ data: newData, fileName: fileName, exportType: exportType });
+  const exportCSV = () => {
+    const exportType = exportFromJSON.types.csv;
+    exportFromJSON({ data: newData, fileName: fileName, exportType: exportType });
 
-    };
+  };
 
-    const exportExcel = () => {
-        const exportType = exportFromJSON.types.xls;
-        exportFromJSON({ data: newData, fileName: fileName, exportType: exportType });
+  const exportExcel = () => {
+    const exportType = exportFromJSON.types.xls;
+    exportFromJSON({ data: newData, fileName: fileName, exportType: exportType });
 
-    };
+  };
 
-    const copyToClipboard = () => {
-        setModal(true);
-    };
+  const copyToClipboard = () => {
+    setModal(true);
+  };
 
-    return (
-        <React.Fragment>
-        <div className="dt-export-buttons d-flex align-center">
-            <div className="dt-export-title d-none d-md-inline-block">Export</div>
-            <div className="dt-buttons btn-group flex-wrap">
-            <CopyToClipboard text={JSON.stringify(newData)}>
-                <Button className="buttons-copy buttons-html5" onClick={() => copyToClipboard()}>
-                <span>Copy</span>
-                </Button>
-            </CopyToClipboard>{" "}
-            <button className="btn btn-secondary buttons-csv buttons-html5" type="button" onClick={() => exportCSV()}>
-                <span>CSV</span>
-            </button>{" "}
-            <button className="btn btn-secondary buttons-excel buttons-html5" type="button" onClick={() => exportExcel()}>
-                <span>Excel</span>
-            </button>{" "}
-            </div>
+  return (
+    <React.Fragment>
+      <div className="dt-export-buttons d-flex align-center">
+        <div className="dt-export-title d-none d-md-inline-block">Export</div>
+        <div className="dt-buttons btn-group flex-wrap">
+          <CopyToClipboard text={JSON.stringify(newData)}>
+            <Button className="buttons-copy buttons-html5" onClick={() => copyToClipboard()}>
+              <span>Copy</span>
+            </Button>
+          </CopyToClipboard>{" "}
+          <button className="btn btn-secondary buttons-csv buttons-html5" type="button" onClick={() => exportCSV()}>
+            <span>CSV</span>
+          </button>{" "}
+          <button className="btn btn-secondary buttons-excel buttons-html5" type="button" onClick={() => exportExcel()}>
+            <span>Excel</span>
+          </button>{" "}
         </div>
-        <Modal isOpen={modal} className="modal-dialog-centered text-center" size="sm">
-            <ModalBody className="text-center m-2">
-                <h5>Copied to clipboard</h5>
-            </ModalBody>
-            <div className="p-3 bg-light">
-                <div className="text-center">Copied {newData.length} rows to clipboard</div>
-            </div>
-        </Modal>
-        </React.Fragment>
-    );
+      </div>
+      <Modal isOpen={modal} className="modal-dialog-centered text-center" size="sm">
+        <ModalBody className="text-center m-2">
+          <h5>Copied to clipboard</h5>
+        </ModalBody>
+        <div className="p-3 bg-light">
+          <div className="text-center">Copied {newData.length} rows to clipboard</div>
+        </div>
+      </Modal>
+    </React.Fragment>
+  );
 };
 
 
@@ -92,42 +92,42 @@ const CustomCheckbox = React.forwardRef(({ onClick, ...rest }, ref) => (
 
 
 const tableColumn = [
-      {
-        name: "ID",
-        selector: (row, index) => ++index,
-        sortable: true,
-        width: "100px",
-        wrap: true
-      },
-      {
-        name: "User",
-        selector: (row) => row.user,
-        sortable: true,
-        width: "auto",
-        wrap: true
-      },
-      {
-        name: "Description",
-        selector: (row) => row.description,
-        sortable: [true],
-        width: "auto",
-        wrap: true
-      },
-      {
-        name: "IP Address",
-        selector: (row) => row.ip_address,
-        sortable: true,
-        width: "auto",
-        wrap: true
-      },
-      {
-        name: "Date Created",
-        selector: (row) => moment(row.created_at).format('MMM. D, YYYY HH:mm'),
-        sortable: true,
-        width: "auto",
-        wrap: true
-      },
-  ];
+  {
+    name: "SN",
+    selector: (row, index) => ++index,
+    sortable: true,
+    width: "100px",
+    wrap: true
+  },
+  {
+    name: "User",
+    selector: (row) => row.user,
+    sortable: true,
+    width: "auto",
+    wrap: true
+  },
+  {
+    name: "Description",
+    selector: (row) => row.description,
+    sortable: [true],
+    width: "auto",
+    wrap: true
+  },
+  {
+    name: "IP Address",
+    selector: (row) => row.ip_address,
+    sortable: true,
+    width: "auto",
+    wrap: true
+  },
+  {
+    name: "Date Created",
+    selector: (row) => moment(row.created_at).format('MMM. D, YYYY HH:mm'),
+    sortable: true,
+    width: "auto",
+    wrap: true
+  },
+];
 
 const AllActivities = ({ data, pagination, actions, className, selectableRows, expandableRows }) => {
   const [tableData, setTableData] = useState(data);
@@ -135,10 +135,10 @@ const AllActivities = ({ data, pagination, actions, className, selectableRows, e
   const [rowsPerPageS, setRowsPerPage] = useState(10);
   const [mobileView, setMobileView] = useState();
 
-    useEffect(() => {
-        setTableData(data)
-    }, [data]);
-  
+  useEffect(() => {
+    setTableData(data)
+  }, [data]);
+
   useEffect(() => {
     let defaultData = tableData;
     // console.log(searchText, defaultData)
@@ -171,9 +171,9 @@ const AllActivities = ({ data, pagination, actions, className, selectableRows, e
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    // const renderer = ({ hours, minutes, seconds, completed }) => {
-    //         if (completed) {
-                  
+  // const renderer = ({ hours, minutes, seconds, completed }) => {
+  //         if (completed) {
+
   return (
     <div className={`dataTables_wrapper dt-bootstrap4 no-footer ${className ? className : ""}`}>
       <Row className={`justify-between g-2 ${actions ? "with-export" : ""}`}>
@@ -191,7 +191,7 @@ const AllActivities = ({ data, pagination, actions, className, selectableRows, e
         </Col>
         <Col className="col-5 text-end" sm="8">
           <div className="datatable-filter">
-            
+
             <div className="d-flex justify-content-end g-2">
               {actions && <Export data={data} />}
               <div className="dataTables_length" id="DataTables_Table_0_length">
@@ -246,26 +246,26 @@ const AllActivities = ({ data, pagination, actions, className, selectableRows, e
       ></DataTable>
     </div>
   );
-  
-    //         } else {
 
-    //             return (
-    //                     <>
-    //                         <Skeleton count={10} height={20}  style={{display: 'block',lineHeight: 2, padding: '1rem',width: 'auto',}}/>
-    //                     </>
-                        
-    //                 )
-    //         }
-    // };
-    
-    //       return (
-    //               <Countdown
-    //                 date={Date.now() + 5000}
-    //                 renderer={renderer}
-    //             />
+  //         } else {
 
-                
-    //         );
+  //             return (
+  //                     <>
+  //                         <Skeleton count={10} height={20}  style={{display: 'block',lineHeight: 2, padding: '1rem',width: 'auto',}}/>
+  //                     </>
+
+  //                 )
+  //         }
+  // };
+
+  //       return (
+  //               <Countdown
+  //                 date={Date.now() + 5000}
+  //                 renderer={renderer}
+  //             />
+
+
+  //         );
 };
 
 export default AllActivities;

@@ -177,7 +177,7 @@ const UpdateCompetency = ({ drawer }) => {
                                                     </div>
                                                     <div className="form-group">
                                                         <label className="form-label" htmlFor="evidence">
-                                                            Upload Evidence (*jpg, png) (optional)
+                                                            Upload Evidence (*jpg, png, pdf) (optional)
                                                         </label>
                                                         <div className="form-control-wrap">
                                                             <input type="file" accept=".gif,.jpg,.jpeg,.png,.pdf" id="evidence" className="form-control"  {...register('evidence', {})} onChange={handleFileChange} />

@@ -253,7 +253,7 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
 const AdminRegulatorTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState }) => {
     const tableColumn = [
         {
-            name: "ID",
+            name: "SN",
             selector: (row, index) => ++index,
             sortable: true,
             width: "auto",

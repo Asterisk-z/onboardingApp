@@ -84,7 +84,7 @@ const AdminCreateCompetencyFramework = ({ activeCategories, activePositions, upd
                         <div className="form-control-select">
                             <select className="form-control form-select" id="member_category" style={{ color: "black !important" }} {...register('member_category', { required: "This Field is Required" })}>
                                 <option value="">Select Membership Category</option>
-                                {$activeCategories && $activeCategories?.map((category) => (
+                                {activeCategories && activeCategories?.map((category) => (
                                     <option key={category.id} value={category.id}>
                                         {category.name}
                                     </option>
@@ -102,7 +102,7 @@ const AdminCreateCompetencyFramework = ({ activeCategories, activePositions, upd
                         <div className="form-control-select">
                             <select className="form-control form-select" id="position" style={{ color: "black !important" }} {...register('position', { required: "THis Field is Required" })}>
                                 <option value="">Select Position</option>
-                                {$activePositions && $activePositions?.map((position) => (
+                                {activePositions && activePositions?.map((position) => (
                                     <option key={position.id} value={position.id}>
                                         {position.name}
                                         {position.is_compulsory == '1' && <span style={{ color: 'red' }}>*</span>}

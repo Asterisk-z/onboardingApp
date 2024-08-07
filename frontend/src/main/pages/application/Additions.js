@@ -93,7 +93,7 @@ const AddMemberForm = ({ other_categories, updateParent }) => {
 
             <div className="form-group">
                 <Button color="primary" type="submit" size="lg">
-                    {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Send Addition Request"}
+                    {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Submit"}
                 </Button>
             </div>
         </form>
@@ -117,8 +117,8 @@ const Homepage = () => {
 
     useEffect(() => {
         dispatch(loadApplications({ 'application_type': 'addition' }));
-      dispatch(loadAllMyActiveCategories());
-      dispatch(loadAllOtherActiveCategories());
+        dispatch(loadAllMyActiveCategories());
+        dispatch(loadAllOtherActiveCategories());
     }, [dispatch, parentState]);
 
     const updateParentState = (newState) => {
@@ -144,7 +144,7 @@ const Homepage = () => {
                         </BlockHeadContent>
 
                         <BlockHeadContent>
-                             {authUser?.user_data?.institution?.application[0].completed_at && <>
+                            {authUser?.user_data?.institution?.application[0].completed_at && <>
                                 <div className="toggle-wrap nk-block-tools-toggle">
                                     <div className="toggle-expand-content" style={{ display: true ? "block" : "none" }}>
                                         <ul className="nk-block-tools g-3">

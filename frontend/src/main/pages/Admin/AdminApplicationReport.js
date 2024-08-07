@@ -57,7 +57,7 @@ const AdminApplicationReport = ({ drawer }) => {
             filteredApplication = filteredApplication.filter((item) => (new Date(item.createdAt).getTime()) < (new Date(values?.end_date).getTime()))
         }
         if (values?.status) {
-            filteredApplication = filteredApplication.filter((item) => item.internal.application_type_status == values?.status)
+            filteredApplication = filteredApplication.filter((item) => item.internal.application_type_status == values?.status || item.internal.status_description == values?.status)
         }
         if (values?.category) {
             filteredApplication = filteredApplication.filter((item) => item.internal.category_id == values?.category)
@@ -150,9 +150,17 @@ const AdminApplicationReport = ({ drawer }) => {
                                                     <div className="form-control-wrap">
                                                         <div className="form-control-select">
                                                             <select className="form-control form-select" {...register('status')}>
-                                                                <option value="">Select Status</option>
-                                                                <option value="INPROGRESS">Inprogress</option>
+                                                                <option value="">All</option>
+                                                                <option value="INPROGRESS">Ongoing</option>
+                                                                <option value="MEG APPROVED MBG REVIEW">Report uploaded</option>
+                                                                <option value="APPLICATION SUBMITTED">Submitted (all documents submitted)</option>
+                                                                <option value="FSD CONFIRMED PAYMENT">Approved by FSD</option>
+                                                                <option value="MBG APPROVED PAYMENT">Approved by MBG</option>
+                                                                <option value="PROOF OF PAYMENT UPLOADED">Payment pending</option>
+                                                                <option value="MEG APPROVE APPLICATION">Approved by MEG</option>
                                                                 <option value="COMPLETED">Completed</option>
+                                                                <option value="TERMINATED">Suspended /Terminated</option>
+                                                                <option value="MEMBERSHIP AGREEMENT EXECUTED BY APPLICANT">Agreement Uploaded</option>
                                                                 <option value="CANCELED">Canceled</option>
                                                             </select>
                                                         </div>

@@ -22,18 +22,18 @@ class ComplaintController extends Controller
     public function index(Request $request)
     {
         $request->validate([
-            'status' => 'sometimes|in:NEW,ONGOING,CLOSED',
+            'status' => 'sometimes|in:PENDING,WORK_IN_PROGRESS,CLOSED',
         ]);
 
         $status = $request->input('status');
         $user = $request->user();
 
         switch ($status) {
-            case 'NEW':
-                $complaints = $user->complaints()->where('status', 'NEW')->latest()->get();
+            case 'PENDING':
+                $complaints = $user->complaints()->where('status', 'PENDING')->latest()->get();
                 break;
-            case 'ONGOING':
-                $complaints = $user->complaints()->where('status', 'ONGOING')->latest()->get();
+            case 'WORK_IN_PROGRESS':
+                $complaints = $user->complaints()->where('status', 'WORK_IN_PROGRESS')->latest()->get();
                 break;
             case 'CLOSED':
                 $complaints = $user->complaints()->where('status', 'CLOSED')->latest()->get();
@@ -54,17 +54,17 @@ class ComplaintController extends Controller
     public function allComplaints(Request $request)
     {
         $request->validate([
-            'status' => 'sometimes|in:NEW,ONGOING,CLOSED',
+            'status' => 'sometimes|in:PENDING,WORK_IN_PROGRESS,CLOSED',
         ]);
 
         $status = $request->input('status');
 
         switch ($status) {
-            case 'NEW':
-                $complaints = Complaint::where('status', 'NEW')->latest()->get();
+            case 'PENDING':
+                $complaints = Complaint::where('status', 'PENDING')->latest()->get();
                 break;
-            case 'ONGOING':
-                $complaints = Complaint::where('status', 'ONGOING')->latest()->get();
+            case 'WORK_IN_PROGRESS':
+                $complaints = Complaint::where('status', 'WORK_IN_PROGRESS')->latest()->get();
                 break;
             case 'CLOSED':
                 $complaints = Complaint::where('status', 'CLOSED')->latest()->get();
@@ -101,9 +101,21 @@ class ComplaintController extends Controller
 
         $complaint_type = ComplaintType::find($request->input('complaint_type'));
 
-        $MEGs = Utility::getUsersByCategory(Role::MEG);
-        if (count($MEGs)) {
-            Notification::send($MEGs, new InfoNotification(MailContents::complaintSubmitMail($user->first_name . " " . $user->last_name, $user->institution->name ?? null, $request->input('body')), MailContents::complaintSubmitSubject($complaint_type ? $complaint_type->name : "")));
+        //
+
+        if ($request->input('complaint_type') === '1') {
+            $ccMEGs = Utility::getUsersEmailByCategory(Role::MEG);
+            $helpDeskEmail = Utility::getUsersByCategory(Role::HELPDESK);
+
+            Notification::send(
+                $helpDeskEmail,
+                new InfoNotification(MailContents::complaintSubmitMail($user->first_name . " " . $user->last_name, $user->institution->name ?? null, $request->input('body')), MailContents::complaintSubmitSubject($complaint_type ? $complaint_type->name : ""), $ccMEGs)
+            );
+        } else {
+            $MEGs = Utility::getUsersByCategory(Role::MEG);
+            if (count($MEGs)) {
+                Notification::send($MEGs, new InfoNotification(MailContents::complaintSubmitMail($user->first_name . " " . $user->last_name, $user->institution->name ?? null, $request->input('body')), MailContents::complaintSubmitSubject($complaint_type ? $complaint_type->name : "")));
+            }
         }
 
         logAction($request->user()->email, 'New Complaint', 'Logged a new complaint', $request->ip());
@@ -121,7 +133,7 @@ class ComplaintController extends Controller
         $request->validate([
             "complaint_id" => "required|exists:complaints,id",
             "comment" => "required|string",
-            "status" => "nullable|in:ONGOING,CLOSED",
+            "status" => "nullable|in:WORK_IN_PROGRESS,CLOSED",
         ]);
 
         $user = $request->user();
@@ -132,7 +144,7 @@ class ComplaintController extends Controller
         ]);
 
         $comment->complaint()->update([
-            "status" => $request->input('status') ?? "ONGOING",
+            "status" => $request->input('status') ?? "WORK_IN_PROGRESS",
         ]);
 
         $comment->complaint->user->notify(new InfoNotification(MailContents::complaintCommentMail($request->input('comment'), $request->input('status')), MailContents::complaintCommentSubject()));
@@ -150,7 +162,7 @@ class ComplaintController extends Controller
     {
         $request->validate([
             "complaint_id" => "required|exists:complaints,id",
-            "status" => "required|in:ONGOING,CLOSED",
+            "status" => "required|in:WORK_IN_PROGRESS,CLOSED",
         ]);
 
         $complaint = Complaint::find($request->input('complaint_id'));

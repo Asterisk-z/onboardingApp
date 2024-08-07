@@ -10,7 +10,7 @@ import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, Dropd
 import { DataTablePagination } from "components/Component";
 import moment from "moment";
 import { loadInstitutionApplicationReport, FSDPaymentEvidence, FSDReviewSummary, MBGPaymentEvidence, MBGReview, MEGReview, MEG2Review, MEGUploadAgreement, completeApplication, MEGSendMembershipAgreement, MEG2SendESuccess } from "redux/stores/membership/applicationProcessStore"
-import { megProcessMemberStatus } from "redux/stores/authorize/representative";
+import { megProcessMemberStatus, megProcessInstitutionStatus } from "redux/stores/authorize/representative";
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 import Swal from "sweetalert2";
 import JsPDF from "jspdf";
@@ -155,6 +155,31 @@ const ActionTab = (props) => {
     }
 
 
+    if (action == 'institutionStatus') {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+      }).then((result) => {
+        if (result.isConfirmed) {
+
+          const formData = new FormData();
+          formData.append('institution_id', institution?.internal?.institution_id);
+          formData.append('action', institution?.internal?.institution_status == 'Active' ? 'suspend' : 'approve');
+          dispatch(megProcessInstitutionStatus(formData));
+          setModalView(false)
+          props.updateParentParent(Math.random());
+
+          dispatch(loadInstitutionApplicationReport());
+
+        }
+      });
+    }
+
+
 
   };
 
@@ -169,6 +194,8 @@ const ActionTab = (props) => {
         <ModalBody>
           <Card className="card">
             <CardBody className="card-inner">
+
+              <button className="btn btn-primary btn-sm" onClick={() => askAction('institutionStatus', institution?.internal?.institution_id)}>{institution?.internal?.institution_status == 'Active' ? 'Terminate' : 'Reactivate'}</button>
               <CardTitle tag="h5">{`Basic Information`}</CardTitle>
 
               <table className="table table-striped table-bordered table-hover">
@@ -715,7 +742,7 @@ const ActionTab = (props) => {
                       <td>{document.description}</td>
                       <td>
                         {document.uploaded_file != null ? <>
-                          <a className="btn btn-primary" href={document.file_path} target="_blank">View File </a>
+                          <a className="btn btn-primary" href={document.file_path} target="_blank">View File Document </a>
                         </> : <>
                           {document.uploaded_field}
                         </>}
@@ -783,10 +810,10 @@ const ActionTab = (props) => {
 const AdminApplicationReportTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, reportUrl }) => {
   const complainColumn = [
     {
-      name: "ID",
+      name: "SN",
       selector: (row, index) => ++index,
       sortable: true,
-      width: "100px",
+      width: "auto",
       wrap: true
     },
     {
@@ -797,8 +824,8 @@ const AdminApplicationReportTable = ({ data, pagination, actions, className, sel
       wrap: true
     },
     {
-      name: "Institution Name",
-      selector: (row) => { return (<>{`${row.basic_details.companyName}`}</>) },
+      name: "Institution",
+      selector: (row) => { return (<>{`${row.basic_details.companyName ? row.basic_details.companyName : ''}`}</>) },
       sortable: true,
       width: "auto",
       wrap: true
@@ -811,6 +838,34 @@ const AdminApplicationReportTable = ({ data, pagination, actions, className, sel
       wrap: true
     },
     {
+      name: "Address",
+      selector: (row) => { return (<><p>{`${row.basic_details.registeredOfficeAddress}`}</p></>) },
+      sortable: true,
+      width: "auto",
+      wrap: true
+    },
+    {
+      name: "Phone Number",
+      selector: (row) => { return (<><p>{`${row.basic_details.companyTelephoneNumber}`}</p></>) },
+      sortable: true,
+      width: "auto",
+      wrap: true
+    },
+    {
+      name: "Email Address",
+      selector: (row) => { return (<><p>{`${row.basic_details.companyEmailAddress}`}</p></>) },
+      sortable: true,
+      width: "auto",
+      wrap: true
+    },
+    {
+      name: "Website",
+      selector: (row) => { return (<><p>{`${row.basic_details.corporateWebsiteAddress}`}</p></>) },
+      sortable: true,
+      width: "auto",
+      wrap: true
+    },
+    {
       name: "Type",
       selector: (row) => { return (<><Badge color="success" className="text-uppercase">{row.internal.application_type}</Badge></>) },
       sortable: true,
@@ -818,8 +873,9 @@ const AdminApplicationReportTable = ({ data, pagination, actions, className, sel
       wrap: true
     },
     {
-      name: "Type Status",
-      selector: (row) => { return (<><Badge color="success" className="text-uppercase">{row.internal.application_type_status}</Badge></>) },
+      name: "Status",
+      selector: (row) => { return (<><Badge color="success" className="text-uppercase">{row.internal.status_description}</Badge></>) },
+      // selector: (row) => { return (<><Badge color="success" className="text-uppercase">{row.internal.application_type_status}</Badge></>) },
       sortable: true,
       width: "auto",
       wrap: true

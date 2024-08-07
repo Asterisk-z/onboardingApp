@@ -149,6 +149,10 @@ Route::middleware(['auth', 'activeAuth'])->group(function () {
             Route::get('/logs', [AuditController::class, 'index']);
         });
         //
+        Route::group(['prefix' => 'meg'], function () {
+            Route::post('/process-institution-status/{institution}', [InstitutionController::class, 'processStatusMEG']);
+        });
+
         Route::group(['prefix' => 'meg/ar'], function () {
             Route::post('/process-member-status/{ARUser}', [ARController::class, 'processMemberStatusMEG']);
             Route::post('/process-add/{ARUser}', [ARController::class, 'processAddByMEG']);
@@ -254,7 +258,7 @@ Route::middleware(['auth', 'activeAuth'])->group(function () {
         // competency
         Route::group(['prefix' => 'cco/competency'], function () {
             Route::get('/ar', [CompetencyController::class, 'listARCompetencies']);
-            Route::post('/status', [CompetencyController::class, 'statusCompetency']);
+            Route::post('/status', [CompetencyController::class, 'statusCompetency'])->middleware('authRole:' . Role::ARAUTHORISER);
         });
     });
 

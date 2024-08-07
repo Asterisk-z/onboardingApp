@@ -16,9 +16,10 @@ class Institution extends Model
         return [
             "id" => $this->id,
             "name" => $this->name,
+            "status" => $this->is_del ? 'Deactivated' : 'Active',
             "category" => $this->membershipCategories,
             "ars" => $this->ars,
-            "application" => $this->application
+            "application" => $this->application,
         ];
     }
 
@@ -32,7 +33,8 @@ class Institution extends Model
         return $this->hasMany(User::class, 'institution_id', 'id');
     }
 
-    public function application() {
+    public function application()
+    {
         return $this->hasMany(Application::class, 'institution_id', 'id');
     }
 }

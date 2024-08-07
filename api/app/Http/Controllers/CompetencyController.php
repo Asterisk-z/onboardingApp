@@ -213,6 +213,7 @@ class CompetencyController extends Controller
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'Does not exist');
         }
 
+        $status = request('action') == 'activate' ? 'Approved' : 'Declined';
         $competencyFramework = $competencies->framework;
 
         if (request('action') == 'activate') {
@@ -233,7 +234,12 @@ class CompetencyController extends Controller
         $ar = User::where('id', $competencies->ar_id)->first();
         $authoriser = auth()->user();
 
-        Notification::send($ar, new InfoNotification(MailContents::arStatusCompetencyMessage($authoriser, $competencyFramework), MailContents::arStatusCompetencySubject(), [$authoriser->email]));
+        Notification::send($ar, new InfoNotification(MailContents::arStatusCompetencyMessage($authoriser, $competencyFramework, $status), MailContents::arStatusCompetencySubject(), [$authoriser->email]));
+
+        if (request('action') == 'activate') {
+            $megs = Utility::getUsersEmailByCategory(Role::MEG);
+            Notification::send($megs, new InfoNotification(MailContents::megArStatusCompetencyMessage($authoriser, $competencyFramework), MailContents::megArStatusCompetencySubject()));
+        }
 
         return successResponse('Competency status updated', $competencies);
     }
@@ -257,7 +263,7 @@ class CompetencyController extends Controller
         $cco = $competencies->cco;
         $message = request('message');
 
-        Notification::send($ars, new InfoNotification(MailContents::megStatusCompetencyMessage($message, $competencyFramework, $ar), MailContents::megStatusCompetencySubject(), $megs));
+        Notification::send($ars, new InfoNotification(MailContents::megStatusCompetencyMessage($message, $competencyFramework, $ar), MailContents::megStatusCompetencySubject()));
 
         $competencies->delete();
 
@@ -297,9 +303,9 @@ class CompetencyController extends Controller
         ]);
         // mail
         $cco_position = Position::where('name', Position::CCO)->first();
-        $ccos = User::where('position_id', $cco_position->id)->where('approval_status', 'approved')->get();
+        $ccos = User::where('position_id', $cco_position->id)->where('role_id', Role::ARAUTHORISER)->where('institution_id', auth()->user()->institution_id)->where('approval_status', 'approved')->get();
         //
-        Notification::send($ccos, new InfoNotification(MailContents::submitCompetencyMessage($user), MailContents::submitCompetencySubject()));
+        Notification::send($ccos, new InfoNotification(MailContents::submitCompetencyMessage($user), MailContents::submitCompetencySubject(), [$user->email]));
         // log
         $logMessage = $user->email . ' submitted a competency.';
         logAction($user->email, 'Submitted a competency', $logMessage, $request->ip());

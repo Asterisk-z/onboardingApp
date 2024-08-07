@@ -28,7 +28,7 @@ const Export = ({ data }) => {
 
   const newData = data.map((item, index) => {
     return ({
-      "ID": ++index,
+      "SN": ++index,
       "Institution": `${item.new_institution.category[0].name}`,
       "Email": item.ar.email,
       "Status": item.approval_status,
@@ -310,7 +310,7 @@ const ActionTab = (props) => {
 const AdminListARTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState }) => {
   const complainColumn = [
     {
-      name: "UID",
+      name: "SN",
       selector: (row, index) => ++index,
       sortable: true,
       width: "150px",

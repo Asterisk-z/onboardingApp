@@ -47,6 +47,8 @@ class Application extends Model
         'MAA' => "MEG APPROVE APPLICATION",
         'RMA' => "REQUIRE MEG APPROVAL",
         'AD' => "ADMIN",
+        "TER" => "TERMINATED",
+        "ACT" => "ACTIVE",
     ];
 
     const office = [
@@ -78,6 +80,7 @@ class Application extends Model
             'id' => $this->id,
             'uuid' => $this->uuid,
             'institution_id' => $this->institution_id,
+            'institution_status' => $this->institution->status,
             'membership_category' => $this->membershipCategory,
             'status_description' => $this->status_description,
             'concession_stage' => $this->concession_stage,
@@ -97,8 +100,8 @@ class Application extends Model
             'all_ar_uploaded' => $this->all_ar_uploaded,
             'created_at' => $this->created_at,
             'reg_id' => $this->reg_id,
-            'applicant_email' => $this->applicant->email,
-            'applicant_full_name' => $this->applicant->full_name,
+            'applicant_email' => $this->applicant ? $this->applicant->email : "",
+            'applicant_full_name' => $this->applicant ? $this->applicant->full_name : "",
         ];
     }
 

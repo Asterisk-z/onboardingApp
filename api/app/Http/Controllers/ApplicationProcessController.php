@@ -74,7 +74,7 @@ class ApplicationProcessController extends Controller
 
         if (Application::where('membership_category_id', request('old_category'))->where('institution_id', auth()->user()->institution_id)->where('completed_at', null)->exists() ||
             Application::where('membership_category_id', request('new_category'))->where('institution_id', auth()->user()->institution_id)->whereIn('application_type_status', [Application::typeStatus['ASP'], Application::typeStatus['ASC']])->exists()) {
-            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, "Institution has a pending request for this membership category");
         }
         $institution = Institution::find(auth()->user()->institution_id);
         $old_category = MembershipCategory::find(request('old_category'));
@@ -102,7 +102,14 @@ class ApplicationProcessController extends Controller
         $application->status()->save($status);
 
         $Meg = Utility::getUsersByCategory(Role::MEG);
-        Notification::send($Meg, new InfoNotification(MailContents::megConversionRequestMail($data->company_name, $old_category->name), MailContents::megConversionRequestTitle()));
+        $categoryNameWithPronoun = Utility::categoryNameWithPronoun($old_category->name);
+
+        $Mbg = Utility::getUsersEmailByCategory(Role::MBG);
+        $fsd = Utility::getUsersEmailByCategory(Role::FSD);
+
+        $ccs = array_merge($Mbg, $fsd);
+
+        Notification::send($Meg, new InfoNotification(MailContents::megConversionRequestMail($data->company_name, $categoryNameWithPronoun), MailContents::megConversionRequestTitle(), $ccs));
 
         logAction(auth()->user()->email, 'Conversion Request Sent', "Conversion Request Sent {$data->company_name}.", $request->ip());
 
@@ -118,7 +125,7 @@ class ApplicationProcessController extends Controller
         $errorMsg = "Unable to complete your request at this point.";
 
         if (Application::where('membership_category_id', request('new_category'))->where('institution_id', auth()->user()->institution_id)->whereIn('application_type_status', [Application::typeStatus['ASP'], Application::typeStatus['ASC']])->exists()) {
-            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, "Institution has a pending request for this membership category");
         }
         $institution = Institution::find(auth()->user()->institution_id);
         // $data = Application::where('applications.id', auth()->user()->application[0]->id);

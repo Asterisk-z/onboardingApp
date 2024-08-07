@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner} from "reactstrap";
+import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner } from "reactstrap";
 import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
 import { loadAllActiveComplaintTypes } from "redux/stores/complaints/complaintTypes";
 import { sendComplaint, loadAllComplaints } from "redux/stores/complaints/complaint";
@@ -13,7 +13,7 @@ import ComplaintTableUser from './ComplaintTableUser'
 
 
 const Complaint = ({ drawer }) => {
-        
+
     const [counter, setCounter] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -31,7 +31,7 @@ const Complaint = ({ drawer }) => {
     }, [dispatch]);
 
     const $complaintType = complaintType ? JSON.parse(complaintType) : null;
-        
+
     const handleFormSubmit = async (values) => {
         const formData = new FormData();
         formData.append('complaint_type', values.complaint_type)
@@ -40,7 +40,7 @@ const Complaint = ({ drawer }) => {
         // console.log(complainFile)
         try {
             setLoading(true);
-            
+
             const resp = await dispatch(sendComplaint(formData));
 
             if (resp.payload?.message == "success") {
@@ -54,25 +54,25 @@ const Complaint = ({ drawer }) => {
                     // window.location.reload(true)
                 }, 1000);
             } else {
-              setLoading(false);
+                setLoading(false);
             }
-            
-      } catch (error) {
-        setLoading(false);
-      }
 
-    }; 
+        } catch (error) {
+            setLoading(false);
+        }
+
+    };
 
     const handleFileChange = (event) => {
-		  setComplainFile(event.target.files[0]);
+        setComplainFile(event.target.files[0]);
     };
 
     const complaints = useSelector((state) => state?.complaint?.list) || null;
     useEffect(() => {
         dispatch(loadAllComplaints());
     }, [dispatch, counter]);
-  
-    
+
+
     const $complaints = complaints ? JSON.parse(complaints) : null;
 
     return (
@@ -103,28 +103,28 @@ const Complaint = ({ drawer }) => {
                 </BlockHead>
                 <Modal isOpen={modalForm} toggle={toggleForm}>
                     <ModalHeader toggle={toggleForm} close={
-                            <button className="close" onClick={toggleForm}>
-                                <Icon name="cross" />
-                            </button>
-                        }
+                        <button className="close" onClick={toggleForm}>
+                            <Icon name="cross" />
+                        </button>
+                    }
                     >
                         Fill Complain Form
                     </ModalHeader>
                     <ModalBody>
-                        <form  onSubmit={handleSubmit(handleFormSubmit)}  className="is-alter" encType="multipart/form-data">
+                        <form onSubmit={handleSubmit(handleFormSubmit)} className="is-alter" encType="multipart/form-data">
                             <div className="form-group">
                                 <label className="form-label" htmlFor="full-name">
                                     Complaint Type
                                 </label>
                                 <div className="form-control-wrap">
                                     <div className="form-control-select">
-                                        <select className="form-control form-select"  style={{ color: "black !important" }} {...register('complaint_type', { required: "Type is Required" })}>
-                                        <option value="">Select Type</option>
-                                        {$complaintType && $complaintType?.map((complaintType) => (
-                                            <option key={complaintType.id} value={complaintType.id}>
-                                                {complaintType.name}
-                                            </option>
-                                        ))}
+                                        <select className="form-control form-select" style={{ color: "black !important" }} {...register('complaint_type', { required: "Type is Required" })}>
+                                            <option value="">Select Type</option>
+                                            {$complaintType && $complaintType?.map((complaintType) => (
+                                                <option key={complaintType.id} value={complaintType.id}>
+                                                    {complaintType.name}
+                                                </option>
+                                            ))}
                                         </select>
                                         {errors.complaint_type && <p className="invalid">{`${errors.complaint_type.message}`}</p>}
                                     </div>
@@ -136,21 +136,21 @@ const Complaint = ({ drawer }) => {
                                 </label>
                                 <div className="form-control-wrap">
                                     <textarea type="text" className="form-control" {...register('body', { required: "Body is Required" })}></textarea>
-                                     {errors.body && <p className="invalid">{`${errors.body.message}`}</p>}
+                                    {errors.body && <p className="invalid">{`${errors.body.message}`}</p>}
                                 </div>
                             </div>
                             <div className="form-group">
                                 <label className="form-label" htmlFor="phone-no">
-                                    Upload Document (*jpg, png)
+                                    Upload Document (*jpg, png, pdf)
                                 </label>
                                 <div className="form-control-wrap">
-                                    <input type="file" accept=".gif,.jpg,.jpeg,.png,.pdf" className="form-control"  {...register('document', { })} onChange={handleFileChange}/>
-                                     {errors.document && <p className="invalid">{`${errors.document.message}`}</p>}
+                                    <input type="file" accept=".gif,.jpg,.jpeg,.png,.pdf" className="form-control"  {...register('document', {})} onChange={handleFileChange} />
+                                    {errors.document && <p className="invalid">{`${errors.document.message}`}</p>}
                                 </div>
                             </div>
                             <div className="form-group">
-                                <Button color="primary" type="submit"  size="lg">
-                                    {loading ? ( <span><Spinner size="sm" color="light" /> Processing...</span>) : "File Complain"}
+                                <Button color="primary" type="submit" size="lg">
+                                    {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "File Complain"}
                                 </Button>
                             </div>
                         </form>

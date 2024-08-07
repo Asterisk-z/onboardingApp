@@ -22,7 +22,7 @@ const Export = ({ data }) => {
 
     const newData = data.map((item, index) => {
         return ({
-            "TID": ++index,
+            "SN": ++index,
             "Competency": `${item.framework.description}`,
             "AR Detail": item.ar.email,
             "Response": item.is_competent ? 'YES' : 'NO',
@@ -294,7 +294,7 @@ const ApproveCompetencyTable = ({ data, pagination, actions, className, selectab
 
     const ApproveCompetencyColumn = [
         {
-            name: "ID",
+            name: "SN",
             selector: (row, index) => ++index,
             sortable: true,
             width: "80px",

@@ -323,20 +323,18 @@ const AdminEvents = ({ drawer }) => {
                                             </Col>
 
                                             <Col md='6'>
-                                                {registeredFrequency && <>
-                                                    <div className="form-group">
-                                                        <label className="form-label" htmlFor="date">
-                                                            Select Reminder Dates For Registered ARs
-                                                        </label>
-                                                        <div className="form-control-wrap">
-                                                            {/* {getValues('registered_remainder_frequency')} */}
-                                                            <input type="hidden" {...register('registered_remainders', { required: registeredFrequency })} value={registeredDate} />
-                                                            {/* <input type="hidden" {...register('registered_remainders', { required: "This Field is required" })} value={registeredDate} /> */}
-                                                            <MultiDatePicker nameAttr='registered_remainders' changeAction={update_registered_remainders} max={eventDate} />
-                                                            {errors.registered_remainders && <span className="invalid">{"This Field is required"}</span>}
-                                                        </div>
+                                                <div className="form-group">
+                                                    <label className="form-label" htmlFor="date">
+                                                        Select Reminder Dates For Registered ARs
+                                                    </label>
+                                                    <div className="form-control-wrap">
+                                                        {/* {getValues('registered_remainder_frequency')} */}
+                                                        <input type="hidden" {...register('registered_remainders')} value={registeredDate} />
+                                                        {/* <input type="hidden" {...register('registered_remainders', { required: "This Field is required" })} value={registeredDate} /> */}
+                                                        <MultiDatePicker nameAttr='registered_remainders' changeAction={update_registered_remainders} max={eventDate} />
+                                                        {errors.registered_remainders && <span className="invalid">{"This Field is required"}</span>}
                                                     </div>
-                                                </>}
+                                                </div>
                                             </Col>
 
                                             <Col sm="6">
@@ -361,22 +359,21 @@ const AdminEvents = ({ drawer }) => {
 
 
                                             <Col md='6'>
-                                                {unregisteredFrequency && <>
-                                                    <div className="form-group">
-                                                        <label className="form-label" htmlFor="date">
-                                                            Select Reminder Dates For Non-Registered ARs
-                                                        </label>
-                                                        <div className="form-control-wrap">
-                                                            {/* {getValues('unregistered_remainder_frequency')} */}
-                                                            <input type="hidden" {...register('unregistered_remainders', { required: unregisteredFrequency })} value={unregisteredDate} />
-                                                            {/* <input type="hidden" {...register('unregistered_remainders', { required: "This Field is required" })} value={unregisteredDate} /> */}
-                                                            <MultiDatePicker nameAttr='unregistered_remainders' changeAction={update_unregistered_remainders} max={eventDate}
-                                                            // properties={{ 'readOnly': (!unregisteredFrequency || unregisteredFrequency == 'none') ? true : false }} 
-                                                            />
-                                                            {errors.unregistered_remainders && <span className="invalid">{'This Field is required'}</span>}
-                                                        </div>
+                                                <div className="form-group">
+                                                    <label className="form-label" htmlFor="date">
+                                                        Select Reminder Dates For Non-Registered ARs
+                                                    </label>
+                                                    <div className="form-control-wrap">
+                                                        {/* {getValues('unregistered_remainder_frequency')} */}
+                                                        <input type="hidden" {...register('unregistered_remainders')} value={unregisteredDate} />
+                                                        {/* <input type="hidden" {...register('unregistered_remainders', { required: "This Field is required" })} value={unregisteredDate} /> */}
+                                                        <MultiDatePicker nameAttr='unregistered_remainders' changeAction={update_unregistered_remainders} max={eventDate}
+                                                        // properties={{ 'readOnly': (!unregisteredFrequency || unregisteredFrequency == 'none') ? true : false }} 
+                                                        />
+                                                        {errors.unregistered_remainders && <span className="invalid">{'This Field is required'}</span>}
                                                     </div>
-                                                </>}
+                                                </div>
+
                                             </Col>
 
                                             <Col md='6'>

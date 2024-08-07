@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\ResponseStatusCodes;
 use App\Helpers\Utility;
 use App\Models\ComplaintType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
 
 class ComplaintTypeController extends Controller
 {
@@ -69,6 +67,10 @@ class ComplaintTypeController extends Controller
             'action' => 'required|string|in:activate,deactivate',
         ]);
 
+        if (in_array($complainType->id, [1, 2])) {
+            return successResponse('Can not updated ComplainType', $complainType);
+        }
+
         if ($request->action == 'activate') {
 
             $complainType->is_del = ComplaintType::ACTIVATE;
@@ -92,10 +94,14 @@ class ComplaintTypeController extends Controller
             'name' => 'required|string|unique:complaint_types,name',
         ]);
 
+        if (in_array($complainType->id, [1, 2])) {
+            return successResponse('Can not updated ComplainType', $complainType);
+        }
+
         $complainType->name = $request->name;
         $complainType->is_del = ComplaintType::ACTIVATE;
         $complainType->save();
 
-        return successResponse('ComplainType Successfullyd', $complainType);
+        return successResponse('ComplainType Successfully', $complainType);
     }
 }
