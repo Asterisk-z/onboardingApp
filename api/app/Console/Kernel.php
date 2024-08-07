@@ -15,9 +15,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
-        $schedule->command('event:send-freq-reminders')->dailyAt('8:00');
-        $schedule->command('event:send-date-reminders')->dailyAt('8:30');
+        $schedule->command('event:send-freq-reminders')->everyMinute();
+        $schedule->command('event:send-date-reminders')->everyMinute();
         $schedule->command('applicant:notify')->dailyAt('12:00');
     }
 

@@ -34,9 +34,15 @@ class AddEventRequest extends FormRequest
             'fee' => 'required|numeric|min:0',
             'img' => 'required|mimes:jpeg,png,jpg|max:10048',
             'registered_remainder_frequency' => 'nullable|in:Daily,Weekly,Monthly',
+
             'registered_remainder_dates' => 'nullable|string||required_if:registered_remainder_frequency,null',
             'unregistered_remainder_frequency' => 'nullable|in:Daily,Weekly,Monthly',
             'unregistered_remainder_dates' => 'nullable|string|required_if:unregistered_remainder_frequency,null',
+
+            // 'registered_remainder_dates' => 'nullable|string',
+            // 'unregistered_remainder_frequency' => 'nullable|in:Daily,Weekly,Monthly',
+            // 'unregistered_remainder_dates' => 'nullable|string',
+
             'positions' => 'required|array', // Ensure 'positions' is present and is an array
             'positions.*' => [
                 'integer',

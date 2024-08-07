@@ -50,7 +50,7 @@ class SendEventRemindersByFrequency extends Command
 
 
         foreach ($events as $event) {
-            $currentDate = now();
+            $currentDate = now()->format('Y-m-d');
 
             // send registered AR reminder based on frequency
             switch ($event->registered_remainder_frequency) {
@@ -106,7 +106,7 @@ class SendEventRemindersByFrequency extends Command
             $lastReminderDate = Carbon::parse($event->last_reminder_date);
         }
 
-        $nextReminderDate = $lastReminderDate->addDays($interval);
+        $nextReminderDate = $lastReminderDate->addDays($interval)->format('Y-m-d');
 
         if ($nextReminderDate <= $currentDate) {
 
@@ -127,7 +127,7 @@ class SendEventRemindersByFrequency extends Command
             $lastReminderDate = Carbon::parse($event->last_reminder_date_non_registered);
         }
 
-        $nextReminderDate = $lastReminderDate->addDays($interval);
+        $nextReminderDate = $lastReminderDate->addDays($interval)->format('Y-m-d');
 
         if ($nextReminderDate <= $currentDate) {
 
