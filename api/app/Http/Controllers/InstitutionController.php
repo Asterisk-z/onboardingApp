@@ -28,8 +28,6 @@ class InstitutionController extends Controller
             'action' => 'required|in:approve,suspend',
         ]);
 
-        $regID = $institution->getRegID();
-
         if ($request->action == 'approve') {
 
             $institution->is_del = 0;
@@ -56,7 +54,7 @@ class InstitutionController extends Controller
             }
 
             $logTitle = 'Activate Institution';
-            $logMessage = auth()->user()->full_name . " activated institution status of AR - $institution->email ($regID)";
+            $logMessage = auth()->user()->full_name . " activated institution status of AR - $institution->name";
             logAction($request->user()->email, $logTitle, $logMessage, $request->ip());
 
         } else {
@@ -82,7 +80,7 @@ class InstitutionController extends Controller
             }
 
             $logTitle = 'Suspend Institution';
-            $logMessage = auth()->user()->full_name . " suspended  institution status of AR - $institution->email ($regID)";
+            $logMessage = auth()->user()->full_name . " suspended  institution status of AR - $institution->name";
             logAction($request->user()->email, $logTitle, $logMessage, $request->ip());
         }
 

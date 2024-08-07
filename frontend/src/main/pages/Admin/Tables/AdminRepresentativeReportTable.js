@@ -27,10 +27,10 @@ const Export = ({ data, reportUrl }) => {
       "ID": ++index,
       "Surname": `${item.lastName}`,
       "FirstName": `${item.firstName}`,
-      "Email": `${item.email}`,
-      "Institution": item.institution.name,
+      "Institution": item.institution.name ? item.institution.name : "",
       "Position": item.position.name,
-      "Phone": item.phone,
+      "Email Address": `${item.email}`,
+      "Phone Number": item.phone,
       "Sign-on Date": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
     })
   });
@@ -217,7 +217,7 @@ const AdminListARTable = ({ data, pagination, actions, className, selectableRows
     },
     {
       name: "Institution",
-      selector: (row) => { return (<>{`${row.institution.name}`}</>) },
+      selector: (row) => { return (<>{`${row.institution.name ? row.institution.name : ''}`}</>) },
       sortable: true,
       width: "auto",
       wrap: true

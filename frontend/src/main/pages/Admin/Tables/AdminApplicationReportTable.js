@@ -30,7 +30,7 @@ const Export = ({ data, reportUrl }) => {
     return ({
       "Membership ID": item?.reg_id,
       "Institution": item?.basic_details?.companyName,
-      "Institution": item?.basic_details?.companyName,
+      // "Institution": item?.basic_details?.companyName,
       "Category": item?.internal?.category_name,
       "Address": item?.basic_details?.registeredOfficeAddress,
       "Phone number": item?.basic_details?.companyTelephoneNumber,
@@ -168,7 +168,7 @@ const ActionTab = (props) => {
 
           const formData = new FormData();
           formData.append('institution_id', institution?.internal?.institution_id);
-          formData.append('action', institution?.internal?.institution_status == 'Active' ? 'suspend' : 'approve');
+          formData.append('action', institution?.internal?.institution?.status == 'Active' ? 'suspend' : 'approve');
           dispatch(megProcessInstitutionStatus(formData));
           setModalView(false)
           props.updateParentParent(Math.random());
@@ -195,8 +195,12 @@ const ActionTab = (props) => {
           <Card className="card">
             <CardBody className="card-inner">
 
-              <button className="btn btn-primary btn-sm" onClick={() => askAction('institutionStatus', institution?.internal?.institution_id)}>{institution?.internal?.institution_status == 'Active' ? 'Terminate' : 'Reactivate'}</button>
-              <CardTitle tag="h5">{`Basic Information`}</CardTitle>
+              <CardTitle>
+                <button className="btn btn-primary btn-sm float-end" onClick={() => askAction('institutionStatus', institution?.internal?.institution_id)}>{institution?.internal?.institution?.status == 'Active' ? 'Terminate' : 'Reactivate'}</button>
+
+                <h5 className="title">{`Basic Information`}</h5>
+
+              </CardTitle>
 
               <table className="table table-striped table-bordered table-hover">
                 <thead>
@@ -714,7 +718,9 @@ const ActionTab = (props) => {
                       <td>{ar.reg_id}</td>
                       <td>{ar.member_status == 'active' ? 'Active' : 'Suspended'}</td>
                       <td>
-                        <button className="btn btn-primary btn-sm" onClick={() => askAction('memberStatus', ar)}>{ar.member_status == 'active' ? 'Suspend' : 'Reactivate'}</button>
+                        {institution?.internal?.institution?.status == 'Active' && <>
+                          <button className="btn btn-primary btn-sm" onClick={() => askAction('memberStatus', ar)}>{ar.member_status == 'active' ? 'Suspend' : 'Reactivate'}</button>
+                        </>}
                       </td>
                     </tr>
 

@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use App\Models\Application;
 use App\Models\ApplicationFieldUpload;
+use App\Models\Institution;
 use App\Models\Invoice;
 use App\Models\ProofOfPayment;
 use App\Models\User;
@@ -22,6 +23,12 @@ trait ApplicationTraits
     public function institutionUsers($institution_id)
     {
         return User::where('institution_id', $institution_id)->where('approval_status', 'approved')->get(['first_name', 'email', 'last_name', 'id', 'reg_id', 'member_status']);
+    }
+
+    public function institutionStatus($institution_id)
+    {
+        $institution = Institution::where('id', $institution_id)->first();
+        return $institution;
     }
 
     public function subLatestEvidence($application_id)

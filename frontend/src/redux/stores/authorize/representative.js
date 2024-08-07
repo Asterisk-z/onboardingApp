@@ -280,7 +280,7 @@ export const megProcessAddUserAR = createAsyncThunk(
 export const megProcessInstitutionStatus = createAsyncThunk(
   "arUsers/megProcessInstitutionStatus",
   async (values) => {
-    const id = values.get('user_id')
+    const id = values.get('institution_id')
     try {
       const { data } = await axios({
         method: "post",

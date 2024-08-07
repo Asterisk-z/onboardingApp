@@ -194,6 +194,7 @@ const AdminRepresentativeReport = ({ drawer }) => {
                                                             <select className="form-control form-select" {...register('institution')}>
                                                                 <option value=''>All</option>
                                                                 {$institutions && $institutions.map((institution, index) =>
+                                                                    institution?.name &&
                                                                     <option key={`activeInstitution${index}`} value={institution.id}>{institution.name}</option>
                                                                 )}
                                                             </select>
