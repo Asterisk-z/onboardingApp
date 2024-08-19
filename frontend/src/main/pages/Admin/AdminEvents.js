@@ -30,7 +30,7 @@ const AdminEvents = ({ drawer }) => {
     }, [dispatch, parentState]);
 
     useEffect(() => {
-        dispatch(megDeleteEvent());
+        // dispatch(megDeleteEvent());
     }, [dispatch]);
 
 

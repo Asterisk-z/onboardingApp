@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import navData from "./NavData";
 import adminApplication from "./AdminApplications";
+import admiMSGnApplication from "./AdminMSGApplication";
 import adminFSDApplication from "./AdminFSDApplication";
+import adminMDApplication from "./AdminMDApplication";
 import { NavLink, Link } from "react-router-dom";
 import Icon from "../../components/icon/Icon";
 import classNames from "classnames";
@@ -207,16 +209,19 @@ const UserMenu = ({ sidebarToggle, mobileView }) => {
       setMenuData([])
     }
     if (aUser.is_admin_msg()) {
-      setMenuData(adminApplication)
+      setMenuData(admiMSGnApplication)
     }
     if (aUser.is_admin_meg2()) {
-      setMenuData(adminApplication)
+      setMenuData(admiMSGnApplication)
     }
     if (aUser.is_admin_fsd()) {
       setMenuData(adminFSDApplication)
     }
     if (aUser.is_admin_mbg()) {
-      setMenuData(adminApplication)
+      setMenuData(admiMSGnApplication)
+    }
+    if (aUser.is_admin_md()) {
+      setMenuData(adminMDApplication)
     }
     if (aUser.is_admin_blg()) {
       setMenuData(adminApplication)

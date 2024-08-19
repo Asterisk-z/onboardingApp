@@ -25,11 +25,12 @@ class Roles extends Seeder
             ["name" => "MEG2"],
             ["name" => "BIG"],
             ["name" => "FMDQ Help Desk"],
-            ["name" => "FMDQ STAKEHOLDER"]
+            ["name" => "FMDQ STAKEHOLDER"],
+            ["name" => "MD"],
         ];
 
-        foreach($roles as $role){
-            if(Role::where('name', $role['name'])->exists()){
+        foreach ($roles as $role) {
+            if (Role::where('name', $role['name'])->exists()) {
                 continue;
             }
 

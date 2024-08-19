@@ -826,56 +826,56 @@ const AdminApplicationReportTable = ({ data, pagination, actions, className, sel
       name: "Membership ID",
       selector: (row) => { return (<>{`${row.reg_id}`}</>) },
       sortable: true,
-      width: "auto",
+      width: "200px",
       wrap: true
     },
     {
       name: "Institution",
       selector: (row) => { return (<>{`${row.basic_details.companyName ? row.basic_details.companyName : ''}`}</>) },
       sortable: true,
-      width: "auto",
+      width: "200px",
       wrap: true
     },
     {
       name: "Category",
       selector: (row) => { return (<><p>{`${row.internal.category_name}`}</p></>) },
       sortable: true,
-      width: "auto",
+      width: "200px",
       wrap: true
     },
     {
       name: "Address",
       selector: (row) => { return (<><p>{`${row.basic_details.registeredOfficeAddress}`}</p></>) },
       sortable: true,
-      width: "auto",
+      width: "200px",
       wrap: true
     },
     {
       name: "Phone Number",
       selector: (row) => { return (<><p>{`${row.basic_details.companyTelephoneNumber}`}</p></>) },
       sortable: true,
-      width: "auto",
+      width: "200px",
       wrap: true
     },
     {
       name: "Email Address",
       selector: (row) => { return (<><p>{`${row.basic_details.companyEmailAddress}`}</p></>) },
       sortable: true,
-      width: "auto",
+      width: "200px",
       wrap: true
     },
     {
       name: "Website",
       selector: (row) => { return (<><p>{`${row.basic_details.corporateWebsiteAddress}`}</p></>) },
       sortable: true,
-      width: "auto",
+      width: "200px",
       wrap: true
     },
     {
       name: "Type",
       selector: (row) => { return (<><Badge color="success" className="text-uppercase">{row.internal.application_type}</Badge></>) },
       sortable: true,
-      width: "auto",
+      width: "200px",
       wrap: true
     },
     {
@@ -883,7 +883,7 @@ const AdminApplicationReportTable = ({ data, pagination, actions, className, sel
       selector: (row) => { return (<><Badge color="success" className="text-uppercase">{row.internal.status_description}</Badge></>) },
       // selector: (row) => { return (<><Badge color="success" className="text-uppercase">{row.internal.application_type_status}</Badge></>) },
       sortable: true,
-      width: "auto",
+      width: "300px",
       wrap: true
     },
     // {
@@ -904,7 +904,7 @@ const AdminApplicationReportTable = ({ data, pagination, actions, className, sel
       name: "Sign-on Date",
       selector: (row) => moment(row.createdAt).format('MMM. D, YYYY HH:mm'),
       sortable: true,
-      width: "auto",
+      width: "200px",
       wrap: true
     }, {
       name: "Action",

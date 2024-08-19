@@ -209,12 +209,15 @@ class EventNotificationUtility
         }
     }
 
-    public static function eventDeleted($registeredUsers, string $eventName)
+    public static function eventDeleted($registeredUsers, Event $event, string $reason)
     {
         $to = null;
         $CCs = [];
 
-        $message = EventMailContents::eventDeletedBody($eventName);
+        $eventName = $event->name;
+        $eventDate = $event->date;
+
+        $message = EventMailContents::eventDeletedBody($eventName, $eventDate, $reason);
         $subject = EventMailContents::eventDeletedSubject($eventName);
 
         if ($registeredUsers) {

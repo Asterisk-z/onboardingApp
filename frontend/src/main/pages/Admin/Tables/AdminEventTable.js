@@ -113,16 +113,23 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
                 text: "Do you want to delete this event!",
                 icon: "warning",
                 showCancelButton: true,
-                confirmButtonText: "Confirm",
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                html: '<div class="flex flex-column text-left"><label htmlFor="comments">Enter Reason</label><textarea id="comments" class="form-control" rows="4" cols="50" placeholder="Enter Reason" required></textarea></div>', // Add textarea to the alert
             }).then((result) => {
 
                 if (result.isConfirmed) {
-                    console.log('herer')
-                    const formData = new FormData();
-                    formData.append('event_id', tabItem_id);
-                    dispatch(megDeleteEvent(formData));
+                    const reason = document.getElementById('comments').value;
+                    if (comments) {
+                        const formData = new FormData();
+                        formData.append('event_id', tabItem_id);
+                        formData.append('reason', reason);
+                        dispatch(megDeleteEvent(formData));
 
-                    updateParentParent(Math.random())
+                        updateParentParent(Math.random())
+                    } else {
+                        Swal.fire("Reason is required!");
+                    }
 
                 }
             });

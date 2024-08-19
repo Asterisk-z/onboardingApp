@@ -249,7 +249,7 @@ const AdminEvents = ({ drawer }) => {
                                                                 <li className="nk-block-tools-opt">
                                                                     {/* {!$membersGuide && */}
                                                                     <Button color="primary">
-                                                                        <span onClick={() => askAction('sendSigning')}>Send For Certificate for signing</span>
+                                                                        <span onClick={() => askAction('sendSigning')}>Send Certificate for signing</span>
                                                                     </Button>
                                                                     {/* } */}
                                                                 </li>

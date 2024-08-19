@@ -50,7 +50,7 @@ class Event extends Model
             'date' => $this->date,
             'time' => $this->time,
             'is_annual' => $this->is_annual,
-            'fee' => $this->fee,
+            'fee' => $this->fee > 0 ? number_format($this->fee, 2) : $this->fee,
             'image_url' => $this->image ? config('app.url') . '/storage/app/public/' . $this->image : null, // Adjust the path based on your storage setup
             'is_event_completed' => $this->is_event_completed,
             'is_sent_for_signing' => $this->is_sent_for_signing,

@@ -326,7 +326,7 @@ class EventController extends Controller
     {
         // did not inject the model so even already deleted records can return success
         $event = Event::find($eventID);
-
+        $reason = $request->reason;
         if ($event) {
 
             $eventName = $event->name;
@@ -344,7 +344,7 @@ class EventController extends Controller
             $logMessage = "Deleted the Event: $eventName";
             logAction($request->user()->email, 'Delete Event', $logMessage, $request->ip());
 
-            EventNotificationUtility::eventDeleted($invitedUsers, $eventName);
+            EventNotificationUtility::eventDeleted($invitedUsers, $event, $reason);
         }
 
         return successResponse('Successful');

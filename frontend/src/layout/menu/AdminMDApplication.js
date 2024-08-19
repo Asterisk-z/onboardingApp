@@ -15,11 +15,6 @@ const adminApplication = [{
         link: "/admin-dashboard",
     },
     {
-        icon: "dashboard-fill",
-        text: "Pending Applications",
-        link: "/admin-applications",
-    },
-    {
         icon: "tile-thumb-fill",
         text: "Education and Learning",
         active: false,

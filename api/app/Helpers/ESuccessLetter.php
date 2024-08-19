@@ -47,7 +47,7 @@ class ESuccessLetter
                 $content = $this->dmbWithoutSECLicenseLetterContent($application_data);
                 break;
 
-            case '1':
+            case '15':
                 $content = $this->dmbWithSECLicenseLetterContent($application_data);
                 break;
 
@@ -90,7 +90,15 @@ class ESuccessLetter
             case '9':
                 $content = $this->afiLetterContent($application_data);
                 break;
-
+            case '11':
+                $content = $this->afiLetterContent($application_data);
+                break;
+            case '13':
+                $content = $this->afiLetterContent($application_data);
+                break;
+            case '14':
+                $content = $this->afiLetterContent($application_data);
+                break;
             default:
                 // $content = [];
                 // $content = $this->dmbWithoutSECLicenseLetterContent($application_data);

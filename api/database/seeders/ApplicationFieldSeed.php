@@ -3456,7 +3456,7 @@ class ApplicationFieldSeed extends Seeder
             // [
             //     "category" => '4',
             //     "name" => 'evidenceOfCompliance',
-            //     "description" => 'Evidence of compliance with the minimum paid-up capital as stipulated by SEC/Central Bank of Nigeria (CBN)	',
+            //     "description" => 'Evidence of compliance with the minimum paid-up capital as stipulated by SEC/Central Bank of Nigeria (CBN)    ',
             //     "type" => 'file',
             //     "required" => 1,
             //     "page" => '4',
@@ -3464,7 +3464,7 @@ class ApplicationFieldSeed extends Seeder
             // [
             //     "category" => '4',
             //     "name" => 'evidenceOfMinimumShareholder',
-            //     "description" => 'Evidence of minimum shareholders’ funds of N500,000,000.00 (Five Hundred Million Naira) only	',
+            //     "description" => 'Evidence of minimum shareholders’ funds of N500,000,000.00 (Five Hundred Million Naira) only    ',
             //     "type" => 'file',
             //     "required" => 1,
             //     "page" => '4',
@@ -6876,7 +6876,7 @@ class ApplicationFieldSeed extends Seeder
             ],
             [
                 "category" => '9',
-                "name" => 'IndividualFullName',
+                "name" => 'applicationPrimaryContactName',
                 "description" => 'Individual Full Name',
                 "type" => 'text',
                 "required" => 1,
@@ -6900,7 +6900,7 @@ class ApplicationFieldSeed extends Seeder
             ],
             [
                 "category" => '9',
-                "name" => 'IndividualTelephoneNo',
+                "name" => 'applicationPrimaryContactTelephone',
                 "description" => 'Individual Telephone No.',
                 "type" => 'number',
                 "required" => 1,
@@ -6908,7 +6908,7 @@ class ApplicationFieldSeed extends Seeder
             ],
             [
                 "category" => '9',
-                "name" => 'IndividualEmail',
+                "name" => 'applicationPrimaryContactEmailAddress',
                 "description" => 'Individual Email',
                 "type" => 'email',
                 "required" => 1,
@@ -7219,7 +7219,7 @@ class ApplicationFieldSeed extends Seeder
             ],
             [
                 "category" => '10',
-                "name" => 'IndividualFullName',
+                "name" => 'applicationPrimaryContactName',
                 "description" => 'Individual Full Name',
                 "type" => 'text',
                 "required" => 1,
@@ -7243,7 +7243,7 @@ class ApplicationFieldSeed extends Seeder
             ],
             [
                 "category" => '10',
-                "name" => 'IndividualTelephoneNo',
+                "name" => 'applicationPrimaryContactTelephone',
                 "description" => 'Individual Telephone No.',
                 "type" => 'number',
                 "required" => 1,
@@ -7251,7 +7251,7 @@ class ApplicationFieldSeed extends Seeder
             ],
             [
                 "category" => '10',
-                "name" => 'IndividualEmail',
+                "name" => 'applicationPrimaryContactEmailAddress',
                 "description" => 'Individual Email',
                 "type" => 'email',
                 "required" => 1,
@@ -7540,6 +7540,31 @@ class ApplicationFieldSeed extends Seeder
                 "category" => '11',
                 "name" => 'companyEmailAddress',
                 "description" => 'Company Email Address',
+                "type" => 'email',
+                "required" => 1,
+                "page" => '1',
+            ],
+            //Because of Email
+            [
+                "category" => '11',
+                "name" => 'applicationPrimaryContactName',
+                "description" => "Applicant's Primary Contact Name",
+                "type" => 'text',
+                "required" => 1,
+                "page" => '1',
+            ],
+            [
+                "category" => '11',
+                "name" => 'applicationPrimaryContactTelephone',
+                "description" => "Applicant's Primary Contact Telephone",
+                "type" => 'number',
+                "required" => 1,
+                "page" => '1',
+            ],
+            [
+                "category" => '11',
+                "name" => 'applicationPrimaryContactEmailAddress',
+                "description" => "Applicant's Primary Contact Email Address",
                 "type" => 'email',
                 "required" => 1,
                 "page" => '1',
@@ -7935,6 +7960,32 @@ class ApplicationFieldSeed extends Seeder
                 "required" => 1,
                 "page" => '1',
             ],
+//Because of Email
+
+            [
+                "category" => '12',
+                "name" => 'applicationPrimaryContactName',
+                "description" => "Applicant's Primary Contact Name",
+                "type" => 'text',
+                "required" => 1,
+                "page" => '1',
+            ],
+            [
+                "category" => '12',
+                "name" => 'applicationPrimaryContactTelephone',
+                "description" => "Applicant's Primary Contact Telephone",
+                "type" => 'number',
+                "required" => 1,
+                "page" => '1',
+            ],
+            [
+                "category" => '12',
+                "name" => 'applicationPrimaryContactEmailAddress',
+                "description" => "Applicant's Primary Contact Email Address",
+                "type" => 'email',
+                "required" => 1,
+                "page" => '1',
+            ],
 
             [
                 "category" => '12',
@@ -8281,7 +8332,7 @@ class ApplicationFieldSeed extends Seeder
             ],
             [
                 "category" => '13',
-                "name" => 'IndividualFullName',
+                "name" => 'applicationPrimaryContactName',
                 "description" => 'Individual Full Name',
                 "type" => 'text',
                 "required" => 1,
@@ -8305,7 +8356,7 @@ class ApplicationFieldSeed extends Seeder
             ],
             [
                 "category" => '13',
-                "name" => 'IndividualTelephoneNo',
+                "name" => 'applicationPrimaryContactTelephone',
                 "description" => 'Individual Telephone No.',
                 "type" => 'number',
                 "required" => 1,
@@ -8313,7 +8364,7 @@ class ApplicationFieldSeed extends Seeder
             ],
             [
                 "category" => '13',
-                "name" => 'IndividualEmail',
+                "name" => 'applicationPrimaryContactEmailAddress',
                 "description" => 'Individual Email',
                 "type" => 'email',
                 "required" => 1,
@@ -8611,6 +8662,32 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'corporateWebsiteAddress',
                 "description" => 'Corporate Website Address',
                 "type" => 'url',
+                "required" => 1,
+                "page" => '1',
+            ],
+//Because of Email
+
+            [
+                "category" => '14',
+                "name" => 'applicationPrimaryContactName',
+                "description" => "Applicant's Primary Contact Name",
+                "type" => 'text',
+                "required" => 1,
+                "page" => '1',
+            ],
+            [
+                "category" => '14',
+                "name" => 'applicationPrimaryContactTelephone',
+                "description" => "Applicant's Primary Contact Telephone",
+                "type" => 'number',
+                "required" => 1,
+                "page" => '1',
+            ],
+            [
+                "category" => '14',
+                "name" => 'applicationPrimaryContactEmailAddress',
+                "description" => "Applicant's Primary Contact Email Address",
+                "type" => 'email',
                 "required" => 1,
                 "page" => '1',
             ],

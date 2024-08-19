@@ -93,7 +93,7 @@ Route::middleware(['auth', 'activeAuth'])->group(function () {
         Route::get('/logs', [AuditController::class, 'userLog']);
     });
 
-    Route::middleware('authRole:' . Role::MSG . ',' . Role::MEG . ',' . Role::FSD . ',' . Role::MBG . ',' . Role::BLG . ',' . Role::MEG2 . ',' . Role::BIG . ',' . Role::HELPDESK . ',' . Role::STAKEHOLDER)->group(function () {
+    Route::middleware('authRole:' . Role::MSG . ',' . Role::MEG . ',' . Role::FSD . ',' . Role::MBG . ',' . Role::BLG . ',' . Role::MEG2 . ',' . Role::BIG . ',' . Role::HELPDESK . ',' . Role::STAKEHOLDER . ',' . Role::MD)->group(function () {
         Route::get('admin/dashboard', [DashboardControler::class, 'adminDashboard']);
 
         // List AR For Admins

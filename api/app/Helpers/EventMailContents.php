@@ -58,14 +58,14 @@ class EventMailContents
 
     public static function eventDeletedSubject(string $eventName): string
     {
-        return "$eventName Has Been Cancelled";
+        return "Cancellation of $eventName Event";
     }
 
-    public static function eventDeletedBody(string $eventName): string
+    public static function eventDeletedBody(string $eventName, string $eventDate, string $reason): string
     {
-
+        $date = formatDate($eventDate);
         $message = "<p>
-                Please be informed that the event: $eventName has been cancelled.
+                Please be informed that the $eventName which was scheduled  to hold on $date has been cancelled due to <br/> $reason.
             </p>";
 
         return $message;
@@ -96,7 +96,7 @@ class EventMailContents
         $url = config('app.front_end_url');
         $date = formatDate($event->date);
         $message = "<p>
-                Please be informed that you have been invited for {$event->name} scheduled to hold {$date} {$event->time}. <br/> Kindly login to the <a href='{$url}'>MROIS Portal</a> to register.
+                Please be informed that you have been invited for {$event->name} scheduled to hold on {$date} {$event->time}. <br/> Kindly login to the <a href='{$url}'>MROIS Portal</a> to register.
             </p>";
 
         return $message;
@@ -112,7 +112,7 @@ class EventMailContents
         $url = config('app.front_end_url');
         $date = formatDate($event->date);
         $message = "<p>
-                Please be informed that you have been invited for {$event->name} scheduled to hold {$date} {$event->time}. Kindly login to the <a href='{$url}'>MROIS Portal</a> to register.
+                Please be informed that you have been invited for {$event->name} scheduled to hold on {$date} {$event->time}. Kindly login to the <a href='{$url}'>MROIS Portal</a> to register.
             </p>";
 
         return $message;
@@ -131,7 +131,7 @@ class EventMailContents
                 Trust this mail meets you well.
             </p>
             <p>
-            We wish to remind you of the {$event->name} event scheduled {$date} {$event->time}.
+            We wish to remind you of the {$event->name} event scheduled for {$date} {$event->time}.
             </p>
             <p>
             We look forward to your attendance.

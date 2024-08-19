@@ -14,7 +14,7 @@ export function useUserUpdate() {
 
 const checkUser = (type, role) => {
 
-  const admin_type = ['MSG', 'MEG', 'FSD', 'MBG', 'BLG', 'MEG2', 'BIG', 'FMDQ HELPDESK', 'FMDQ STAKEHOLDER']
+  const admin_type = ['MSG', 'MEG', 'FSD', 'MBG', 'BLG', 'MEG2', 'BIG', 'FMDQ Help Desk', 'FMDQ STAKEHOLDER', 'MD']
   const user_type = ['AR INPUTER', 'AR AUTHORISER']
 
   if (type == 'user') {
@@ -68,10 +68,13 @@ const UserProvider = ({ ...props }) => {
       return localStorage.getItem('role') == "BIG" ? true : false;
     },
     is_admin_helpdesk: function () {
-      return localStorage.getItem('role') == "FMDQHELPDESK" ? true : false;
+      return localStorage.getItem('role') == "FMDQ Help Desk" ? true : false;
     },
     is_admin_stakeholder: function () {
-      return localStorage.getItem('role') == "FMDQSTAKEHOLDER" ? true : false;
+      return localStorage.getItem('role') == "FMDQ STAKEHOLDER" ? true : false;
+    },
+    is_admin_md: function () {
+      return localStorage.getItem('role') == "MD" ? true : false;
     },
     is_position_cco: function () {
       return json_user.position.name == "Chief Compliance Officer" ? true : false;

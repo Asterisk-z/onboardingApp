@@ -1,5 +1,5 @@
 
-const adminApplication = [{
+const adminMSGApplication = [{
     heading: "Navigation",
 },
 {
@@ -20,16 +20,12 @@ const adminApplication = [{
         link: "/admin-applications",
     },
     {
-        icon: "tile-thumb-fill",
-        text: "Education and Learning",
-        active: false,
-        subMenu: [{
-            text: "Conference & Events",
-            link: "/admin-events",
-        },],
+        icon: "dashboard-fill",
+        text: "AR Creation Request",
+        link: "/admin-creation-request",
     },
     ],
 },
 ];
 
-export default adminApplication;
+export default adminMSGApplication;
