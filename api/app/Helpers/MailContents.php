@@ -315,7 +315,7 @@ class MailContents
     public static function memberAgreementMail($applicant): string
     {
         $url = config("app.front_end_url");
-        return "<p>Kindly login to <a href=$url>MROIS Portal</a> to view the latest update concerning Membership Agreement Review.</p>";
+        return "<p>Kindly login to the <a href=$url>MROIS Portal</a> to view the latest update concerning Agreement Review.</p>";
     }
 
     public static function meG2ApprovalSubject(): string

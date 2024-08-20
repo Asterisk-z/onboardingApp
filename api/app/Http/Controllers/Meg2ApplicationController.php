@@ -129,8 +129,10 @@ class Meg2ApplicationController extends Controller
         $MEG2s = Utility::getUsersEmailByCategory(Role::MEG2);
         $CCs = $MEG2s;
 
+        $categoryNameWithPronoun = Utility::categoryNameWithPronoun($membershipCategory->name);
+
         //NOTIFY MEG OF APPROVAL
-        Notification::send($MEGs, new InfoNotification(MailContents::meG2ApprovalMail($companyName, $membershipCategory->name), MailContents::meG2ApprovalSubject(), $CCs));
+        Notification::send($MEGs, new InfoNotification(MailContents::meG2ApprovalMail($companyName, $categoryNameWithPronoun), MailContents::meG2ApprovalSubject(), $CCs));
 
         $application->membership_agreement = $membershipCategory->membership_agreement;
         $application->save();

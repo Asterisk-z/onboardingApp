@@ -223,11 +223,12 @@ class MbgApplicationController extends Controller
         $invoice = Invoice::find($application->invoice_id);
 
         if ($request->status == 'decline') {
-            $categoryName = $membershipCategory->name;
+
+            $categoryNameWithPronoun = Utility::categoryNameWithPronoun($membershipCategory->name);
             $emailData = [
                 'name' => $name,
                 'subject' => 'Membership Application Payment Declined',
-                'content' => "Please be informed that your payment as a {$categoryName} was declined.
+                'content' => "Please be informed that your payment as {$categoryNameWithPronoun} was declined.
                         <p>Reason: {$request->comment}</p>
                         <p>For further clarification, kindly contact Membership & Subscriptions Group on +234 20-1-700-8555</p>",
             ];

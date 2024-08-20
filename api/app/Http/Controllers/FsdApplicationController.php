@@ -103,12 +103,12 @@ class FsdApplicationController extends Controller
             $companyEmail = $data->company_email;
             $contactEmail = $data->primary_contact_email;
 
-            $categoryName = $membershipCategory->name;
+            $categoryNameWithPronoun = Utility::categoryNameWithPronoun($membershipCategory->name);
 
             $emailData = [
                 'name' => $name,
                 'subject' => 'Membership Application Payment Declined',
-                'content' => "Please be informed that your payment for application as a {$categoryName} was declined.
+                'content' => "Please be informed that your payment for application as {$categoryNameWithPronoun} was declined.
                         <p>Reason: {$request->comment}</p>
                         <p>For further clarification, kindly contact Membership & Subscriptions Group on +234 20-1-700-8555</p>",
             ];

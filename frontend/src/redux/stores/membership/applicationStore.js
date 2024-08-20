@@ -495,6 +495,16 @@ const applicationStore = createSlice({
 
     builder.addCase(updateStep.fulfilled, (state, action) => {
       state.loading = false;
+      // console.log(action.payload?.data)
+
+      // if (!Array.isArray(state.overall_fields)) {
+      //   state.overall_fields = [];
+      // }
+
+      // // let overall_fields = [];
+      // let overall_fields = action.payload?.data.data;
+      // // // console.log(new Date())
+      // state.overall_fields = overall_fields;
     });
 
     builder.addCase(updateStep.rejected, (state, action) => {

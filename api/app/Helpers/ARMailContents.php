@@ -53,11 +53,9 @@ class ARMailContents
         $message = "<p>
                     Please be informed that $company has added a new Authorised Representative.
                 </p>
-                <br>
                 <p>
                     Kindly login to the <a href='" . $link . "'>MROIS Portal</a> to approve or reject
-                </p>
-                <br>";
+                </p>";
 
         return $message;
     }

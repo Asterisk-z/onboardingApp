@@ -231,12 +231,19 @@ const Form = () => {
                     dispatch(loadPageFields({ "page": "1", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
                 }
 
+
                 props.next()
             } catch (error) {
 
             }
 
         };
+
+        const goBack = () => {
+            dispatch(loadPageFields({ "page": "1", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
+            props.prev()
+        }
+
 
         return (
             <div>
@@ -464,6 +471,12 @@ const Form = () => {
             }
 
         };
+
+        const goBack = () => {
+
+            dispatch(loadPageFields({ "page": "1", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
+            props.prev()
+        }
 
         return (
             <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
@@ -813,7 +826,7 @@ const Form = () => {
                                     </Button>
                                 </li>
                                 <li>
-                                    <Button color="primary" onClick={props.prev}>
+                                    <Button color="primary" onClick={() => goBack()}>
                                         Previous
                                     </Button>
                                 </li>
@@ -877,9 +890,17 @@ const Form = () => {
         const submitForm = async (data) => {
 
 
+
+            dispatch(loadPageFields({ "page": "4", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
             props.next()
 
         };
+
+        const goBack = () => {
+
+            dispatch(loadPageFields({ "page": "2", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
+            props.prev()
+        }
 
 
         return (
@@ -958,7 +979,7 @@ const Form = () => {
                                     </Button>
                                 </li>
                                 <li>
-                                    <Button color="primary" onClick={props.prev}>
+                                    <Button color="primary" onClick={() => goBack()}>
                                         Previous
                                     </Button>
                                 </li>
@@ -1018,9 +1039,15 @@ const Form = () => {
 
         const submitForm = async (data) => {
 
+            dispatch(loadPageFields({ "page": "5", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
             props.next()
 
         };
+
+        const goBack = () => {
+            dispatch(loadPageFields({ "page": "3", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
+            props.prev()
+        }
 
         return (
             <form className="content clearfix" onSubmit={handleSubmit(submitForm)} encType="multipart/form-data">
@@ -1066,7 +1093,7 @@ const Form = () => {
                                 </Button>
                             </li>
                             <li>
-                                <Button color="primary" onClick={props.prev}>
+                                <Button color="primary" onClick={() => goBack()}>
                                     Previous
                                 </Button>
                             </li>
@@ -1136,6 +1163,11 @@ const Form = () => {
             props.next()
 
         };
+
+        const goBack = () => {
+            dispatch(loadPageFields({ "page": "4", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
+            props.prev()
+        }
 
 
         return (
@@ -1219,7 +1251,7 @@ const Form = () => {
                                 </Button>
                             </li>
                             <li>
-                                <Button color="primary" onClick={props.prev}>
+                                <Button color="primary" onClick={() => goBack()}>
                                     Previous
                                 </Button>
                             </li>
@@ -1254,8 +1286,13 @@ const Form = () => {
         useEffect(() => {
             if ($application_details) {
                 // console.log($application_details)
+                // dispatch(fetchApplication({ "application_uuid": application_uuid }));
+
+                // if (props.current != $application_details?.step) {
                 props.jump($application_details?.step)
+                // }
             }
+
         }, [])
 
         // console.log(props)
