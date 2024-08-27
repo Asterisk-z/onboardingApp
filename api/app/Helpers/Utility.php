@@ -1,6 +1,7 @@
 <?php
 namespace App\Helpers;
 
+use App\Http\Resources\ApplicationResource;
 use App\Mail\FinalApplicationMail;
 use App\Mail\NotificationMail;
 use App\Models\Application;
@@ -615,7 +616,7 @@ class Utility
                             <th scope='col'>Email</th>
                             <th scope='col'>Event Name</th>
                             <th scope='col'>Event Description</th>
-                            <th scope='col'>Date</th>
+                            <th scope='col'>Event Date</th>
                             <th scope='col'>Status</th>
                             <th scope='col'>Fee</th>
                         <tr>
@@ -673,6 +674,641 @@ class Utility
 
         $table .= "</tbody>
                         </table>";
+        return $table;
+
+    }
+
+    public static function institutionApplicationReport($applicationId)
+    {
+
+        $data = Application::where('applications.uuid', $applicationId);
+        $application_data = Utility::applicationDetails($data);
+        $application_data = $application_data->get();
+
+        $application_datas = ApplicationResource::collection($application_data);
+
+        $table = "";
+
+        $application_datas = json_decode($application_datas->toJson());
+
+        foreach ($application_datas as $application_data) {
+
+            $table = "
+                <div>
+            <div class='card-inner'>
+
+              <div>
+
+                <h5 class='title'>Basic Information</h5>
+
+              </div>
+
+              <table class='table table-striped table-bordered table-hover'>
+                <thead>
+                  <tr>
+                    <th scope='col'>#</th>
+                    <th scope='col'>Name</th>
+                    <th scope='col'>Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>Company Name</td>
+                    <td class='text-capitalize'>{$application_data->basic_details->companyName}</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>RC Number</td>
+                    <td class='text-capitalize'>{$application_data->basic_details->rcNumber}</td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>Registered Office Address</td>
+                    <td class='text-capitalize'>{$application_data->basic_details->registeredOfficeAddress}</td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td>Town/City</td>
+                    <td class='text-capitalize'>{$application_data->basic_details->placeOfIncorporation}</td>
+                  </tr>
+                  <tr>
+                    <td>5</td>
+                    <td>Date of Incorporation</td>
+                    <td class='text-capitalize'>{$application_data->basic_details->dateOfIncorporation}</td>
+                  </tr>
+                  <tr>
+                    <td>6</td>
+                    <td>Place of Incorporation</td>
+                    <td class='text-capitalize'>{$application_data->basic_details->placeOfIncorporation}</td>
+                  </tr>
+                  <tr>
+                    <td>7</td>
+                    <td>Nature of Business</td>
+                    <td class='text-capitalize'>{$application_data->basic_details->natureOfBusiness}</td>
+                  </tr>
+                  <tr>
+                    <td>8</td>
+                    <td>Company Primary Telephone Number</td>
+                    <td class='text-capitalize'>{$application_data->basic_details->companyTelephoneNumber}</td>
+                  </tr>
+                  <tr>
+                    <td>9</td>
+                    <td>Company Secondary Telephone Number</td>
+                    <td class='text-capitalize'>{$application_data->basic_details->companyTelephoneNumber}</td>
+                  </tr>
+                  <tr>
+                    <td>10</td>
+                    <td>Company Email Address</td>
+                    <td class='text-capitalize'>{$application_data->basic_details->companyEmailAddress}</td>
+                  </tr>
+                  <tr>
+                    <td>11</td>
+                    <td>Company Website Address</td>
+                    <td class='text-capitalize'>{$application_data->basic_details->corporateWebsiteAddress}</td>
+                  </tr>
+                  <tr>
+                    <td>12</td>
+                    <td>Authorised Share Capital</td>
+                    <td class='text-capitalize'>{$application_data->basic_details->authorisedShareCapital}</td>
+                  </tr>
+                  <tr>
+                    <td>13</td>
+                    <td>Authorised Share Capital Currency</td>
+                    <td class='text-capitalize'>{$application_data->basic_details->authorisedShareCapitalCurrency}</td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>";
+
+            if ($application_data->primary_contact_details->applicationPrimaryContactName) {
+                $table .= "
+                        <div class='card-inner'>
+                            <h5>Primary Contact Details</h5>
+
+                            <table class='table table-striped table-bordered table-hover'>
+                                <thead>
+                                    <tr>
+                                        <th scope='col'>#</th>
+                                        <th scope='col'>Name</th>
+                                        <th scope='col'>Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>-</td>
+                                        <td>Primary Contact Name</td>
+                                        <td class='text-capitalize'>{$application_data->primary_contact_details->applicationPrimaryContactName}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>-</td>
+                                        <td>Primary Contact Email Address</td>
+                                        <td class='text-capitalize'>{$application_data->primary_contact_details->applicationPrimaryContactEmailAddress}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>-</td>
+                                        <td>Primary Contact Telephone</td>
+                                        <td class='text-capitalize'>{$application_data->primary_contact_details->applicationPrimaryContactTelephone}</td>
+                                    </tr>
+
+
+                                </tbody>
+                            </table>
+                        </div>";
+            }
+
+            $table .= " <div class='card-inner'>
+                        <div tag='h5'>Bank Details</div>
+
+                        <table class='table table-striped table-bordered table-hover'>
+                            <thead>
+                            <tr>
+                                <th scope='col'>#</th>
+                                <th scope='col'>Name</th>
+                                <th scope='col'>Value</th>
+                            </tr>
+                            </thead>
+                                <tbody>";
+
+            if ($application_data->bank_details->bankDetailName) {
+                $table .= "
+                        <tr>
+                            <td>1</td>
+                            <td>Bank Detail</td>
+                            <td class='text-capitalize'>{$application_data->bank_details->bankDetailName}</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Bank Address</td>
+                            <td class='text-capitalize'>{$application_data->bank_details->bankDetailAddress}</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Bank Telephone</td>
+                            <td class='text-capitalize'>{$application_data->bank_details->bankDetailTelephone}</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>Type Of Account</td>
+                            <td class='text-capitalize'>{$application_data->bank_details->bankDetailTypeOfAccount}</td>
+                        </tr>";
+            }
+
+            if ($application_data->bank_details->bankDetailNameOne) {
+                $table .= "
+
+                    <tr>
+                      <td>1</td>
+                      <td>Bank Detail</td>
+                      <td class='text-capitalize'>{$application_data->bank_details->bankDetailNameOne}</td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>Bank Address</td>
+                      <td class='text-capitalize'>{$application_data->bank_details->bankDetailAddressOne}</td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td>Bank Telephone</td>
+                      <td class='text-capitalize'>{$application_data->bank_details->bankDetailTelephoneOne}</td>
+                    </tr>
+                    <tr>
+                      <td>4</td>
+                      <td>Type Of Account</td>
+                      <td class='text-capitalize'>{$application_data->bank_details->bankDetailTypeOfAccountOne}</td>
+                    </tr>";
+            }
+
+            if ($application_data->bank_details->bankDetailNameTwo) {
+                $table .= "
+                    <tr>
+                      <td>1</td>
+                      <td>Bank Detail</td>
+                      <td class='text-capitalize'>{$application_data->bank_details->bankDetailNameTwo}</td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>Bank Address</td>
+                      <td class='text-capitalize'>{$application_data->bank_details->bankDetailAddressTwo}</td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td>Bank Telephone</td>
+                      <td class='text-capitalize'>{$application_data->bank_details->bankDetailTelephoneTwo}</td>
+                    </tr>
+                    <tr>
+                      <td>4</td>
+                      <td>Type Of Account</td>
+                      <td class='text-capitalize'>{$application_data->bank_details->bankDetailTypeOfAccountTwo}</td>
+                    </tr>";
+            }
+
+            $table .= "</tbody>
+              </table>
+            </div>";
+
+            if ($application_data->bank_license_details->bankingLicense) {
+                $table .= "
+
+              <div class='card-inner'>
+                <div tag='h5'>Bank License</div>
+
+                <table class='table table-striped table-bordered table-hover'>
+                  <thead>
+                    <tr>
+                      <th scope='col'>#</th>
+                      <th scope='col'>Name</th>
+                      <th scope='col'>Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>Banking License</td>
+                      <td class='text-capitalize'>{$application_data->bank_license_details->bankingLicense}</td>
+                    </tr>
+
+
+                  </tbody>
+                </table>
+              </div>";
+            }
+
+            $table .= "
+            <div class='card-inner'>
+              <div tag='h5'>Disciplinary History</div>
+
+              <table class='table table-striped table-bordered table-hover'>
+                <thead>
+                  <tr>
+                    <th scope='col'>Name</th>
+                    <th scope='col'>Value</th>
+                  </tr>
+                </thead>
+                <tbody>";
+
+            if ($application_data->disciplinary_details->chiefComplianceOfficerDisciplinary) {
+                $table .= "
+                    <tr>
+                      <td>chiefComplianceOfficerDisciplinary</td>
+                      <td class='text-capitalize'>{$application_data->disciplinary_details->chiefComplianceOfficerDisciplinary}</td>
+                    </tr>";
+            }
+
+            if ($application_data->disciplinary_details->chiefComplianceOfficerDisciplinaryFive) {
+                $table .= "
+                    <tr>
+                      <td>Ever been the subject of any disciplinary or criminal proceedings or been the subject of any investigation by any Authority which may lead to such proceedings?</td>
+                      <td class='text-capitalize'>{$application_data->disciplinary_details->chiefComplianceOfficerDisciplinaryFive}</td>
+                    </tr>";
+            }
+            if ($application_data->disciplinary_details->chiefComplianceOfficerDisciplinaryFour) {
+                $table .= "
+                    <tr>
+                      <td>Ever been declared bankrupt or entered into any compromise arrangement with creditors related to bankruptcy or insolvency?</td>
+                      <td class='text-capitalize'>{$application_data->disciplinary_details->chiefComplianceOfficerDisciplinaryFour}</td>
+                    </tr>";
+            }
+            if ($application_data->disciplinary_details->chiefComplianceOfficerDisciplinaryOne) {
+                $table .= "
+                    <tr>
+                      <td>Ever been convicted of any criminal offence? </td>
+                      <td class='text-capitalize'>{$application_data->disciplinary_details->chiefComplianceOfficerDisciplinaryOne}</td>
+                    </tr>";
+            }
+            if ($application_data->disciplinary_details->chiefComplianceOfficerDisciplinaryThree) {
+                $table .= "
+                    <tr>
+                      <td>Ever been concerned in the management of a business which has gone into insolvency, liquidation, administration or the equivalent proceedings within or outside of the Nigerian jurisdiction while connected with such organisation within one (1) year of that connection?</td>
+                      <td class='text-capitalize'>{$application_data->disciplinary_details->chiefComplianceOfficerDisciplinaryThree}</td>
+                    </tr>";
+            }
+            if ($application_data->disciplinary_details->chiefComplianceOfficerDisciplinaryTwo) {
+                $table .= "
+                    <tr>
+                      <td>Ever been the subject of an adverse finding by, or settlement with, any government agency, court, securities exchange, SRO, tribunal or other regulatory authority?</td>
+                      <td class='text-capitalize'>{$application_data->disciplinary_details->chiefComplianceOfficerDisciplinaryTwo}</td>
+                    </tr>";
+            }
+
+            if ($application_data->disciplinary_details->companyDisciplinary) {
+                $table .= "
+                    <tr>
+                      <td>companyDisciplinary</td>
+                      <td class='text-capitalize'>{$application_data->disciplinary_details->companyDisciplinary}</td>
+                    </tr>";
+            }
+
+            if ($application_data->disciplinary_details->companyDisciplinaryFour) {
+                $table .= "
+                    <tr>
+                      <td>Has your company, or any of its affiliates, been subject to any winding up order/receivership arrangement? </td>
+                      <td class='text-capitalize'>{$application_data->disciplinary_details->companyDisciplinaryFour}</td>
+                    </tr>";
+            }
+
+            if ($application_data->disciplinary_details->companyDisciplinaryOne) {
+                $table .= "
+                    <tr>
+                      <td>Has the company or any of its affiliates , been denied registration or expelled from membership of any securities exchange, self-regulatory organisation (SRO) or associations?</td>
+                      <td class='text-capitalize'>{$application_data->disciplinary_details->companyDisciplinaryOne}</td>
+                    </tr>";
+            }
+
+            if ($application_data->disciplinary_details->companyDisciplinaryThree) {
+                $table .= "
+                    <tr>
+                      <td>Has your company, or any of its affiliates, ever been refused any Fidelity Bond?</td>
+                      <td class='text-capitalize'>{$application_data->disciplinary_details->companyDisciplinaryThree}</td>
+                    </tr>";
+            }
+
+            if ($application_data->disciplinary_details->companyDisciplinaryTwo) {
+                $table .= "
+                    <tr>
+                      <td>Has your membership, or that of any affiliates, in any of the institutions/associations mentioned above at any time been revoked, suspended or withdrawn?</td>
+                      <td class='text-capitalize'>{$application_data->disciplinary_details->companyDisciplinaryTwo}</td>
+                    </tr>";
+            }
+
+            if ($application_data->disciplinary_details->mdceoDisciplinary) {
+                $table .= "
+                    <tr>
+                      <td>mdceoDisciplinary</td>
+                      <td class='text-capitalize'>{$application_data->disciplinary_details->mdceoDisciplinary}</td>
+                    </tr>";
+            }
+
+            if ($application_data->disciplinary_details->mdceoDisciplinaryEight) {
+                $table .= "
+                    <tr>
+                      <td>Ever been disqualified from acting as a Director?</td>
+                      <td class='text-capitalize'>{$application_data->disciplinary_details->mdceoDisciplinaryEight}</td>
+                    </tr>";
+            }
+            if ($application_data->disciplinary_details->mdceoDisciplinaryFive) {
+                $table .= "
+                    <tr>
+                      <td>Ever been the subject of any disciplinary or criminal proceedings or been the subject of any investigation by any authority which may lead to such proceedings?</td>
+                      <td class='text-capitalize'>{$application_data->disciplinary_details->mdceoDisciplinaryFive}</td>
+                    </tr>";
+            }
+
+            if ($application_data->disciplinary_details->mdceoDisciplinaryFour) {
+                $table .= "
+                    <tr>
+                      <td>Ever been declared bankrupt or entered into any compromise arrangement with creditors related to bankruptcy or insolvency?</td>
+                      <td class='text-capitalize'>{$application_data->disciplinary_details->mdceoDisciplinaryFour}</td>
+                    </tr>";
+            }
+
+            if ($application_data->disciplinary_details->mdceoDisciplinaryOne) {
+                $table .= "
+                    <tr>
+                      <td>Ever been convicted of any criminal offence?</td>
+                      <td class='text-capitalize'>{$application_data->disciplinary_details->mdceoDisciplinaryOne}</td>
+                    </tr>";
+            }
+
+            if ($application_data->disciplinary_details->mdceoDisciplinarySeven) {
+                $table .= "
+                    <tr>
+                      <td>Ever had such authorisation, membership or licence (referred to above) revoked or terminated?</td>
+                      <td class='text-capitalize'>{$application_data->disciplinary_details->mdceoDisciplinarySeven}</td>
+                    </tr>";
+            }
+
+            if ($application_data->disciplinary_details->mdceoDisciplinarySix) {
+                $table .= "
+                    <tr>
+                      <td>Ever been refused authorisation or licence to carry on a trade, business or profession or to be a member of a securities exchange?</td>
+                      <td class='text-capitalize'>{$application_data->disciplinary_details->mdceoDisciplinarySix}</td>
+                    </tr>";
+            }
+
+            if ($application_data->disciplinary_details->mdceoDisciplinaryThree) {
+                $table .= "
+                    <tr>
+                      <td>Ever been a Director, partner or otherwise concerned in the management of a business which has gone into insolvency, liquidation, administration or the similar proceedings within or outside of the Nigerian jurisdiction while connected with such organisation within one (1) year of that connection?</td>
+                      <td class='text-capitalize'>{$application_data->disciplinary_details->mdceoDisciplinaryThree}</td>
+                    </tr>";
+            }
+
+            if ($application_data->disciplinary_details->mdceoDisciplinaryTwo) {
+                $table .= "
+                    <tr>
+                      <td>Ever been the subject of an adverse finding by, or settlement with, any government agency, court, securities exchange, SRO, tribunal or other regulatory authority?</td>
+                      <td class='text-capitalize'>{$application_data->disciplinary_details->mdceoDisciplinaryTwo}</td>
+                    </tr>";
+            }
+
+            if ($application_data->disciplinary_details->treasureDisciplinary) {
+                $table .= "
+                    <tr>
+                      <td>treasureDisciplinary</td>
+                      <td class='text-capitalize'>{$application_data->disciplinary_details->treasureDisciplinary}</td>
+                    </tr>";
+            }
+
+            if ($application_data->disciplinary_details->treasureDisciplinaryFive) {
+                $table .= "
+                    <tr>
+                      <td>Ever been the subject of any disciplinary or criminal proceedings or been the subject of any investigation by any authority which may lead to such proceedings?</td>
+                      <td class='text-capitalize'>{$application_data->disciplinary_details->treasureDisciplinaryFive}</td>
+                    </tr>";
+            }
+
+            if ($application_data->disciplinary_details->treasureDisciplinaryFour) {
+                $table .= "
+                    <tr>
+                      <td>'Ever been declared bankrupt or entered into any compromise arrangement with creditors related to bankruptcy or insolvency?</td>
+                      <td class='text-capitalize'>{$application_data->disciplinary_details->treasureDisciplinaryFour}</td>
+                    </tr>";
+            }
+
+            if ($application_data->disciplinary_details->treasureDisciplinaryOne) {
+                $table .= "
+                    <tr>
+                      <td>Ever been convicted of any criminal offence?</td>
+                      <td class='text-capitalize'>{$application_data->disciplinary_details->treasureDisciplinaryOne}</td>
+                    </tr>";
+            }
+
+            if ($application_data->disciplinary_details->treasureDisciplinaryThree) {
+                $table .= "
+                    <tr>
+                      <td>Ever been concerned in the management of a business which has gone into insolvency, liquidation, administration or the similar proceedings within or outside of the Nigerian jurisdiction while connected with such organisation within one (1) year of that connection?</td>
+                      <td class='text-capitalize'>{$application_data->disciplinary_details->treasureDisciplinaryThree}</td>
+                    </tr>";
+            }
+            if ($application_data->disciplinary_details->treasureDisciplinaryTwo) {
+                $table .= "
+                    <tr>
+                      <td>Ever been the subject of an adverse finding by, or settlement with, any government agency, court, securities exchange, SRO, tribunal or other regulatory authority?</td>
+                      <td class='text-capitalize'>{$application_data->disciplinary_details->treasureDisciplinaryTwo}</td>
+                    </tr>";
+            }
+
+            $table .= " </tbody>
+              </table>
+            </div>";
+
+            if ($application_data->custodian_details->custodianInformationName) {
+                $table .= "<div class='card-inner'>
+                        <div tag='h5'>Custodian Information</div>
+
+                        <table class='table table-striped table-bordered table-hover'>
+                        <thead>
+                            <tr>
+                            <th scope='col'>#</th>
+                            <th scope='col'>Name</th>
+                            <th scope='col'>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr>
+                            <td>1</td>
+                            <td>Name</td>
+                            <td class='text-capitalize'>{$application_data->custodian_details->custodianInformationName}</td>
+                            </tr>
+                            <tr>
+                            <td>2</td>
+                            <td> Address</td>
+                            <td class='text-capitalize'>{$application_data->custodian_details->custodianInformationAddress}</td>
+                            </tr>
+                            <tr>
+                            <td>3</td>
+                            <td>Mobile Contact</td>
+                            <td class='text-capitalize'>{$application_data->custodian_details->custodianInformationMobileNumberOfContact}</td>
+                            </tr>
+                            <tr>
+                            <td>4</td>
+                            <td>Telephone</td>
+                            <td class='text-capitalize'>{$application_data->custodian_details->custodianInformationTelephone}</td>
+                            </tr>
+                        </tbody>
+                        </table>
+                    </div>";
+            }
+
+            $table .= "<div class='card-inner'>
+              <div tag='h5'>Key Officers</div>
+
+              <table class='table table-striped table-bordered table-hover'>
+                <thead>
+                  <tr>
+                    <th scope='col'>#</th>
+                    <th scope='col'>Full Name</th>
+                    <th scope='col'>Email</th>
+                    <th scope='col'>Reg ID</th>
+                    <th scope='col'>Status</th>
+                  </tr>
+                </thead>
+                <tbody>";
+
+            foreach ($application_data->ars as $user) {
+                $status = $user->member_status == 'active' ? 'Active' : 'Suspended';
+                $table .= "<tr>
+                      <th scope='row'></th>
+                      <td>{$user->full_name}</td>
+                      <td>{$user->email}</td>
+                      <td>{$user->reg_id}</td>
+                      <td>{$status}</td>
+                    </tr>";
+            }
+
+            $table .= "</tbody>
+              </table>
+            </div>
+
+            <div class='card-inner'>
+              <div tag='h5'>Supporting Documents</div>
+
+              <table class='table table-striped table-bordered table-hover'>
+                <thead>
+                  <tr>
+                    <th scope='col'>#</th>
+                    <th scope='col'>Name</th>
+                    <th scope='col' class='width-30'>Value</th>
+                  </tr>
+                </thead>
+                <tbody>";
+
+            foreach ($application_data->required_documents as $required_document) {
+                $status = $required_document->uploaded_file ? 'Uploaded' : $required_document->uploaded_field;
+                $table .= "<tr>
+                      <th scope='row'></th>
+                      <td>{$required_document->description}</td>
+                      <td>{$status}</td>
+                    </tr>";
+            }
+
+            $table .= "</tbody>
+              </table>
+            </div>
+
+            <div class='card-inner'>
+              <div tag='h5'>Payment Information</div>
+
+              <table class='table table-striped table-bordered table-hover'>
+                <thead>
+                  <tr>
+                    <th scope='col'>#</th>
+                    <th scope='col'>Name</th>
+                    <th scope='col'>Value</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>Invoice Number</td>
+                    <td class='text-capitalize'>{$application_data->payment_information->invoice_number}</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>Payment Reference</td>
+                    <td class='text-capitalize'>{$application_data->payment_information->reference}</td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td>Date of Payment</td>
+                    <td class='text-capitalize'>{$application_data->payment_information->date_paid}</td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td>Amount Paid</td>
+                    <td class='text-capitalize'>{$application_data->payment_details->total}</td>
+                  </tr>
+                  <tr>
+                    <td>5</td>
+                    <td>Concession Amount</td>
+                    <td class='text-capitalize'>{$application_data->payment_details->concession_amount}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+        </div>";
+
+            // foreach ($users as $setData) {
+
+            //     $table .= "<tr>
+            //                                 <td  scope='row'>{$setData->last_name}</td>
+            //                                 <td>{$setData->first_name}</td>
+            //                                 <td>{$setData->institution->name}</td>
+            //                                 <td>{$setData->category->name}</td>
+            //                                 <td>{$setData->position->name}</td>
+            //                                 <td>{$setData->email}</td>
+            //                                 <td>{$setData->phone}</td>
+            //                             </tr>";
+            // }
+
+            // $table .= "</tbody>
+            //                 </table>";
+        }
+
         return $table;
 
     }

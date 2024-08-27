@@ -6,7 +6,7 @@ import exportFromJSON from "export-from-json";
 import CopyToClipboard from "react-copy-to-clipboard";
 import Icon from "components/icon/Icon";
 import { useDispatch } from "react-redux";
-import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge,  Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, CardBody, CardTitle } from "reactstrap";
+import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge, Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, CardBody, CardTitle } from "reactstrap";
 import { DataTablePagination } from "components/Component";
 import moment from "moment";
 import { megProcessAddUserAR } from "redux/stores/authorize/representative";
@@ -14,94 +14,94 @@ import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 import Swal from "sweetalert2";
 
 const Export = ({ data }) => {
-    const [modal, setModal] = useState(false);
+  const [modal, setModal] = useState(false);
 
-    useEffect(() => {
-        if (modal === true) {
-        setTimeout(() => setModal(false), 2000);
-        }
-    }, [modal]);
+  useEffect(() => {
+    if (modal === true) {
+      setTimeout(() => setModal(false), 2000);
+    }
+  }, [modal]);
 
-    const newData = data.map((item, index) => {
-        return ({
-            "ID": ++index,
-            "User": `${item.firstName} ${item.lastName} ${item.email}`,
-            "Institution": item.institution.name,
-            "Nationality": item.nationality,
-            "Status": item.approval_status,
-            "Role": item.role.name,
-            "Position": item.position.name,
-            "Reg No": item.reg_Id,
-            "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
-        })
-    });
-  
-    const fileName = "data";
+  const newData = data.map((item, index) => {
+    return ({
+      "ID": ++index,
+      "User": `${item.firstName} ${item.lastName} ${item.email}`,
+      "Institution": item.institution.name,
+      "Nationality": item.nationality,
+      "Status": item.approval_status,
+      "Role": item.role.name,
+      "Position": item.position.name,
+      "Reg No": item.reg_Id,
+      "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
+    })
+  });
 
-    const exportCSV = () => {
-        const exportType = exportFromJSON.types.csv;
-        exportFromJSON({ data: newData, fileName: fileName, exportType: exportType });
+  const fileName = "data";
 
-    };
+  const exportCSV = () => {
+    const exportType = exportFromJSON.types.csv;
+    exportFromJSON({ data: newData, fileName: fileName, exportType: exportType });
 
-    const exportExcel = () => {
-        const exportType = exportFromJSON.types.xls;
-        exportFromJSON({ data: newData, fileName: fileName, exportType: exportType });
+  };
 
-    };
+  const exportExcel = () => {
+    const exportType = exportFromJSON.types.xls;
+    exportFromJSON({ data: newData, fileName: fileName, exportType: exportType });
 
-    const copyToClipboard = () => {
-        setModal(true);
-    };
+  };
 
-    return (
-        <React.Fragment>
-        <div className="dt-export-buttons d-flex align-center">
-            <div className="dt-export-title d-none d-md-inline-block">Export</div>
-            <div className="dt-buttons btn-group flex-wrap">
-            <CopyToClipboard text={JSON.stringify(newData)}>
-                <Button className="buttons-copy buttons-html5" onClick={() => copyToClipboard()}>
-                <span>Copy</span>
-                </Button>
-            </CopyToClipboard>{" "}
-            <button className="btn btn-secondary buttons-csv buttons-html5" type="button" onClick={() => exportCSV()}>
-                <span>CSV</span>
-            </button>{" "}
-            <button className="btn btn-secondary buttons-excel buttons-html5" type="button" onClick={() => exportExcel()}>
-                <span>Excel</span>
-            </button>{" "}
-            </div>
+  const copyToClipboard = () => {
+    setModal(true);
+  };
+
+  return (
+    <React.Fragment>
+      <div className="dt-export-buttons d-flex align-center">
+        <div className="dt-export-title d-none d-md-inline-block">Export</div>
+        <div className="dt-buttons btn-group flex-wrap">
+          <CopyToClipboard text={JSON.stringify(newData)}>
+            <Button className="buttons-copy buttons-html5" title="Copy To Clipboard" onClick={() => copyToClipboard()}>
+              <span>Copy</span>
+            </Button>
+          </CopyToClipboard>{" "}
+          <button className="btn btn-secondary buttons-csv buttons-html5" title="Export To CSV" type="button" onClick={() => exportCSV()}>
+            <span>CSV</span>
+          </button>{" "}
+          <button className="btn btn-secondary buttons-excel buttons-html5" title="Export To Excel" type="button" onClick={() => exportExcel()}>
+            <span>Excel</span>
+          </button>{" "}
         </div>
-        <Modal isOpen={modal} className="modal-dialog-centered text-center" size="sm">
-            <ModalBody className="text-center m-2">
-                <h5>Copied to clipboard</h5>
-            </ModalBody>
-            <div className="p-3 bg-light">
-                <div className="text-center">Copied {newData.length} rows to clipboard</div>
-            </div>
-        </Modal>
-        </React.Fragment>
-    );
+      </div>
+      <Modal isOpen={modal} className="modal-dialog-centered text-center" size="sm">
+        <ModalBody className="text-center m-2">
+          <h5>Copied to clipboard</h5>
+        </ModalBody>
+        <div className="p-3 bg-light">
+          <div className="text-center">Copied {newData.length} rows to clipboard</div>
+        </div>
+      </Modal>
+    </React.Fragment>
+  );
 };
 
 
 const ActionTab = (props) => {
-        
-    const aUser = useUser();
-    const aUserUpdate = useUserUpdate();
-    const ar_user = props.ar_user
 
-    const { competency_id } = useParams();
+  const aUser = useUser();
+  const aUserUpdate = useUserUpdate();
+  const ar_user = props.ar_user
 
-    const competency_response = ar_user.competency_response.filter((response) => response.framework_id == competency_id)[0]
+  const { competency_id } = useParams();
+
+  const competency_response = ar_user.competency_response.filter((response) => response.framework_id == competency_id)[0]
 
 
-  
+
   return (
     <>
-        <div className="toggle-expand-content" style={{ display: "block" }}>
+      <div className="toggle-expand-content" style={{ display: "block" }}>
         {competency_response?.evidence_file && <a href={competency_response.evidence_file} target="_blank" className="btn btn-secondary btn-sm">View</a>}
-        </div>
+      </div>
     </>
 
 
@@ -109,72 +109,72 @@ const ActionTab = (props) => {
 };
 
 const AdminCompetencyARTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState }) => {
-    const complainColumn = [
-      {
-          name: "UID",
-          selector: (row, index) => ++index,
-          sortable: true,
-          width: "100px",
-          wrap: true
-      },
-      {
-          name: "User Detail",
-          selector: (row) => { return (<><p>{`${row.first_name} ${row.last_name}`}<br/>{`${row.email}`}</p></>) },
-          sortable: true,
-          width: "auto",
-          wrap: true
-      },
-      {
-          name: "Institution",
-          selector: (row) => { return (<>{`${row.institution.name}`}</>) },
-          sortable: true,
-          width: "auto",
-          wrap: true
-      },
-      {
-          name: "Role",
-          selector: (row) =>  { return (<><Badge color="success">{`${row.role.name}`}</Badge></>) },
-          sortable: true,
-          width: "auto",
-          wrap: true
-      },
-      {
-          name: "Position",
-          selector: (row) => { return (<>{`${row.position.name}`}</>) },
-          sortable: true,
-          width: "auto",
-          wrap: true
-      },
-      {
-          name: "Reg No",
-          selector: (row) => { return (<>{`${row.reg_id}`}</>) },
-          sortable: true,
-          width: "auto",
-          wrap: true
-      },
-      {
-          name: "Date Created",
-          selector: (row) => moment(row.created_at).format('MMM. D, YYYY HH:mm'),
-          sortable: true,
-          width: "auto",
-          wrap: true
-      },
-      {
-        name: "Action",
-        selector: (row) => (row.competency_response.length > 0 ? <>
-                        <ActionTab ar_user={row}  updateParentParent={updateParent} />
-                    </> : ""),
-        width: "100px",
-      },
-    ];
+  const complainColumn = [
+    {
+      name: "UID",
+      selector: (row, index) => ++index,
+      sortable: true,
+      width: "100px",
+      wrap: true
+    },
+    {
+      name: "User Detail",
+      selector: (row) => { return (<><p>{`${row.first_name} ${row.last_name}`}<br />{`${row.email}`}</p></>) },
+      sortable: true,
+      width: "auto",
+      wrap: true
+    },
+    {
+      name: "Institution",
+      selector: (row) => { return (<>{`${row.institution.name}`}</>) },
+      sortable: true,
+      width: "auto",
+      wrap: true
+    },
+    {
+      name: "Role",
+      selector: (row) => { return (<><Badge color="success">{`${row.role.name}`}</Badge></>) },
+      sortable: true,
+      width: "auto",
+      wrap: true
+    },
+    {
+      name: "Position",
+      selector: (row) => { return (<>{`${row.position.name}`}</>) },
+      sortable: true,
+      width: "auto",
+      wrap: true
+    },
+    {
+      name: "Reg No",
+      selector: (row) => { return (<>{`${row.reg_id}`}</>) },
+      sortable: true,
+      width: "auto",
+      wrap: true
+    },
+    {
+      name: "Date Created",
+      selector: (row) => moment(row.created_at).format('MMM. D, YYYY HH:mm'),
+      sortable: true,
+      width: "auto",
+      wrap: true
+    },
+    {
+      name: "Action",
+      selector: (row) => (row.competency_response.length > 0 ? <>
+        <ActionTab ar_user={row} updateParentParent={updateParent} />
+      </> : ""),
+      width: "100px",
+    },
+  ];
   const [tableData, setTableData] = useState(data);
   const [searchText, setSearchText] = useState("");
   const [rowsPerPageS, setRowsPerPage] = useState(10);
   const [mobileView, setMobileView] = useState();
 
-    useEffect(() => {
-        setTableData(data)
-    }, [data]);
+  useEffect(() => {
+    setTableData(data)
+  }, [data]);
 
   useEffect(() => {
     let defaultData = tableData;
@@ -206,9 +206,9 @@ const AdminCompetencyARTable = ({ data, pagination, actions, className, selectab
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    // const renderer = ({ hours, minutes, seconds, completed }) => {
-    //         if (completed) {
-              
+  // const renderer = ({ hours, minutes, seconds, completed }) => {
+  //         if (completed) {
+
   return (
     <div className={`dataTables_wrapper dt-bootstrap4 no-footer ${className ? className : ""}`}>
       <Row className={`justify-between g-2 ${actions ? "with-export" : ""}`}>
@@ -280,26 +280,26 @@ const AdminCompetencyARTable = ({ data, pagination, actions, className, selectab
       ></DataTable>
     </div>
   );
-  
-    //         } else {
 
-    //             return (
-    //                     <>
-    //                         <Skeleton count={10} height={20}  style={{display: 'block',lineHeight: 2, padding: '1rem',width: 'auto',}}/>
-    //                     </>
-                        
-    //                 )
-    //         }
-    // };
-    
-    //       return (
-    //               <Countdown
-    //                 date={Date.now() + 5000}
-    //                 renderer={renderer}
-    //             />
+  //         } else {
 
-                
-    //         );
+  //             return (
+  //                     <>
+  //                         <Skeleton count={10} height={20}  style={{display: 'block',lineHeight: 2, padding: '1rem',width: 'auto',}}/>
+  //                     </>
+
+  //                 )
+  //         }
+  // };
+
+  //       return (
+  //               <Countdown
+  //                 date={Date.now() + 5000}
+  //                 renderer={renderer}
+  //             />
+
+
+  //         );
 };
 
 export default AdminCompetencyARTable;

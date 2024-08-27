@@ -59,14 +59,14 @@ const Export = ({ data, reportUrl }) => {
         <div className="dt-export-title d-none d-md-inline-block">Export</div>
         <div className="dt-buttons btn-group flex-wrap">
           <CopyToClipboard text={JSON.stringify(newData)}>
-            <Button className="buttons-copy buttons-html5" onClick={() => copyToClipboard()}>
+            <Button className="buttons-copy buttons-html5" title="Copy To Clipboard" onClick={() => copyToClipboard()}>
               <span>Copy</span>
             </Button>
           </CopyToClipboard>{" "}
-          <button className="btn btn-secondary buttons-csv buttons-html5" type="button" onClick={() => exportCSV()}>
+          <button className="btn btn-secondary buttons-csv buttons-html5" title="Export To CSV" type="button" onClick={() => exportCSV()}>
             <span>CSV</span>
           </button>{" "}
-          <button className="btn btn-secondary buttons-excel buttons-html5" type="button" onClick={() => exportExcel()}>
+          <button className="btn btn-secondary buttons-excel buttons-html5" title="Export To Excel" type="button" onClick={() => exportExcel()}>
             <span>Excel</span>
           </button>{" "}
           <a href={reportUrl} target="_blank">

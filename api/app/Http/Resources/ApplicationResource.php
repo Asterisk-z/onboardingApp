@@ -204,6 +204,8 @@ class ApplicationResource extends JsonResource
 
             "report_table" => $this->report_table(),
 
+            "download_link" => route('downloadReport', ['institution_application_report', $application->uuid]),
+
         ];
     }
 }

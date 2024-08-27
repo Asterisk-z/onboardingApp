@@ -24,11 +24,11 @@ const Export = ({ data }) => {
 
     const newData = data.map((item, index) => {
         return ({
-            "ID": ++index,
+            "S/N": ++index,
             "Event Name": `${item.name}`,
             "Description": item.description,
-            "Date": moment(item.date).format('MMM D, YYYY'),
-            "Annual": item.is_annual,
+            "Event Date": moment(item.date).format('MMM D, YYYY'),
+            "Annual": item.is_annual == 1 ? 'Yes' : 'No',
             "Registration Fee": (item.fee < 1) ? 'Free' : `${item.fee}`,
             "Interests": `${item.registrations_count}  Users`,
             "Date Created": moment(item.createdAt).format('MMM. D, YYYY HH:mm')
@@ -59,14 +59,14 @@ const Export = ({ data }) => {
                 <div className="dt-export-title d-none d-md-inline-block">Export</div>
                 <div className="dt-buttons btn-group flex-wrap">
                     <CopyToClipboard text={JSON.stringify(newData)}>
-                        <Button className="buttons-copy buttons-html5" onClick={() => copyToClipboard()}>
+                        <Button className="buttons-copy buttons-html5" title="Copy To Clipboard" onClick={() => copyToClipboard()}>
                             <span>Copy</span>
                         </Button>
                     </CopyToClipboard>{" "}
-                    <button className="btn btn-secondary buttons-csv buttons-html5" type="button" onClick={() => exportCSV()}>
+                    <button className="btn btn-secondary buttons-csv buttons-html5" title="Export To CSV" type="button" onClick={() => exportCSV()}>
                         <span>CSV</span>
                     </button>{" "}
-                    <button className="btn btn-secondary buttons-excel buttons-html5" type="button" onClick={() => exportExcel()}>
+                    <button className="btn btn-secondary buttons-excel buttons-html5" title="Export To Excel" type="button" onClick={() => exportExcel()}>
                         <span>Excel</span>
                     </button>{" "}
                 </div>

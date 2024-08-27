@@ -69,7 +69,7 @@ class ARController extends Controller
 
         $users = $query->latest()->get();
 
-        return successResponse('Successful', ['report' => UserResource::collection($users), 'report_url' => route('downloadReport', 'representation_report')]);
+        return successResponse('Successful', ['report' => UserResource::collection($users), 'report_url' => route('downloadReport', ['representation_report'])]);
     }
 
     public function list(Request $request)

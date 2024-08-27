@@ -15,7 +15,7 @@ class SystemController extends Controller
 
     public function report($data)
     {
-
+        $data = request('data');
         $pdf = App::make('dompdf.wrapper');
         $tableData = null;
 
@@ -29,6 +29,10 @@ class SystemController extends Controller
 
         if ($data == 'representation_report') {
             $tableData = Utility::representativeReport();
+        }
+
+        if ($data == 'institution_application_report') {
+            $tableData = Utility::institutionApplicationReport(request('key'));
         }
 
         if ($tableData) {

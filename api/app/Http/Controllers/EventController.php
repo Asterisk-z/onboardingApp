@@ -496,7 +496,7 @@ class EventController extends Controller
     {
         $records = EventRegistration::with(['user', 'event'])->where('is_del', 0)->where('event_id', $event->id)->latest()->get();
 
-        return successResponse('Successful', ['report' => EventRegistrationWithEventResource::collection($records), 'report_url' => route('downloadReport', 'education_report')]);
+        return successResponse('Successful', ['report' => EventRegistrationWithEventResource::collection($records), 'report_url' => route('downloadReport', ['education_report'])]);
     }
 
     public function approveEventRegistration(Request $request, EventRegistration $eventReg)

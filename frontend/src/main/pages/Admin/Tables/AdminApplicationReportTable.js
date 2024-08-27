@@ -67,14 +67,14 @@ const Export = ({ data, reportUrl }) => {
         <div className="dt-export-title d-none d-md-inline-block">Export</div>
         <div className="dt-buttons btn-group flex-wrap">
           <CopyToClipboard text={JSON.stringify(newData)}>
-            <Button className="buttons-copy buttons-html5" onClick={() => copyToClipboard()}>
+            <Button className="buttons-copy buttons-html5" title="Copy To Clipboard" onClick={() => copyToClipboard()}>
               <span>Copy</span>
             </Button>
           </CopyToClipboard>{" "}
-          <button className="btn btn-secondary buttons-csv buttons-html5" type="button" onClick={() => exportCSV()}>
+          <button className="btn btn-secondary buttons-csv buttons-html5" title="Export To CSV" type="button" onClick={() => exportCSV()}>
             <span>CSV</span>
           </button>{" "}
-          <button className="btn btn-secondary buttons-excel buttons-html5" type="button" onClick={() => exportExcel()}>
+          <button className="btn btn-secondary buttons-excel buttons-html5" title="Export To Excel" type="button" onClick={() => exportExcel()}>
             <span>Excel</span>
           </button>{" "}
           <a href={reportUrl} target="_blank">
@@ -104,6 +104,7 @@ const ActionTab = (props) => {
   const aUserUpdate = useUserUpdate();
 
   const institution = props.institution
+  const isReport = props.isReport
   const navigate = useNavigate();
   const [modalView, setModalView] = useState(false);
 
@@ -196,7 +197,11 @@ const ActionTab = (props) => {
             <CardBody className="card-inner">
 
               <CardTitle>
-                <button className="btn btn-primary btn-sm float-end" onClick={() => askAction('institutionStatus', institution?.internal?.institution_id)}>{institution?.internal?.institution?.status == 'Active' ? 'Terminate' : 'Reactivate'}</button>
+
+                {isReport && <a className="btn btn-primary btn-sm float-end m-2" href={institution?.download_link} target="_blank" >Download Application</a>}
+
+
+                <button className="btn btn-primary btn-sm float-end  m-2" onClick={() => askAction('institutionStatus', institution?.internal?.institution_id)}>{institution?.internal?.institution?.status == 'Active' ? 'Terminate' : 'Reactivate'}</button>
 
                 <h5 className="title">{`Basic Information`}</h5>
 
@@ -748,7 +753,7 @@ const ActionTab = (props) => {
                       <td>{document.description}</td>
                       <td>
                         {document.uploaded_file != null ? <>
-                          <a className="btn btn-primary" href={document.file_path} target="_blank">View File Document </a>
+                          <a className="btn btn-primary" href={document.file_path} target="_blank">View/Download Document </a>
                         </> : <>
                           {document.uploaded_field}
                         </>}
@@ -813,7 +818,7 @@ const ActionTab = (props) => {
   );
 };
 
-const AdminApplicationReportTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, reportUrl }) => {
+const AdminApplicationReportTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, reportUrl, isReport }) => {
   const complainColumn = [
     {
       name: "SN",
@@ -909,7 +914,7 @@ const AdminApplicationReportTable = ({ data, pagination, actions, className, sel
     }, {
       name: "Action",
       selector: (row) => (<>
-        <ActionTab institution={row} updateParentParent={updateParent} />
+        <ActionTab institution={row} updateParentParent={updateParent} isReport={isReport} />
       </>),
       width: "100px",
     }

@@ -52,7 +52,7 @@ class ApplicationProcessController extends Controller
         $data = Utility::applicationDetails($data);
         $data = $data->get();
 
-        return successResponse("Here you go", ['report' => ApplicationResource::collection($data), 'report_url' => route('downloadReport', 'application_report')]);
+        return successResponse("Here you go", ['report' => ApplicationResource::collection($data), 'report_url' => route('downloadReport', ['application_report'])]);
     }
 
     public function get_application(Request $request)

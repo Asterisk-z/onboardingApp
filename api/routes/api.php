@@ -468,7 +468,7 @@ Route::get('storage-link', [SystemController::class, 'linkStorage'])->name('link
 
 Route::get('cert-sample/{event}', [EventController::class, 'certificateSample'])->name('previewCertificate');
 Route::get('cert-sample-download/{event}', [EventController::class, 'certificateSampleDownload'])->name('previewCertificateDownload');
-Route::get('report-download/{data}', [SystemController::class, 'report'])->name('downloadReport');
+Route::get('report-download/{data}/{key?}', [SystemController::class, 'report'])->name('downloadReport');
 
 Route::get('member-agreement/{uuid}', [MembershipAgreementController::class, 'preview'])->name('agreementPreview');
 Route::get('success-letter/{uuid}', [MembershipAgreementController::class, 'previewLetter'])->name('eSuccessPreview');

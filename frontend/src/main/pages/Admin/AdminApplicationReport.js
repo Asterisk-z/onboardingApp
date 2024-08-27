@@ -211,7 +211,7 @@ const AdminApplicationReport = ({ drawer }) => {
                                 </BlockHead>
 
                                 <PreviewCard>
-                                    {$all_institution_report && <AdminApplicationReportTable updateParent={updateParentState} data={tableData || $all_institution_report?.report} reportUrl={$all_institution_report?.report_url} className='overflow-auto' expandableRows pagination actions />}
+                                    {$all_institution_report && <AdminApplicationReportTable updateParent={updateParentState} data={tableData || $all_institution_report?.report} reportUrl={$all_institution_report?.report_url} isReport={true} className='overflow-auto' expandableRows pagination actions />}
                                 </PreviewCard>
                             </Block>
 
