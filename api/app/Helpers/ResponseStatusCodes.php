@@ -5,6 +5,7 @@ namespace App\Helpers;
 class ResponseStatusCodes
 {
     const INVALID_AUTH_CREDENTIAL = '99';
+    const ACCOUNT_SUSPENDED = '000';
     const FORCE_PASSWORD_RESET = '666';
     const UNAUTHORIZED = '999';
     const PERMISSION_DENIED = '99';
