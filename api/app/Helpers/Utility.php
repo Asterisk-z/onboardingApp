@@ -706,7 +706,7 @@ class Utility
               <table class='table table-striped table-bordered table-hover'>
                 <thead>
                   <tr>
-                    <th scope='col'>#</th>
+                    <th scope='col'>S/N</th>
                     <th scope='col'>Name</th>
                     <th scope='col'>Value</th>
                   </tr>
@@ -790,24 +790,24 @@ class Utility
                             <table class='table table-striped table-bordered table-hover'>
                                 <thead>
                                     <tr>
-                                        <th scope='col'>#</th>
+                                        <th scope='col'>S/N</th>
                                         <th scope='col'>Name</th>
                                         <th scope='col'>Value</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>-</td>
+                                        <td>1</td>
                                         <td>Primary Contact Name</td>
                                         <td class='text-capitalize'>{$application_data->primary_contact_details->applicationPrimaryContactName}</td>
                                     </tr>
                                     <tr>
-                                        <td>-</td>
+                                        <td>2</td>
                                         <td>Primary Contact Email Address</td>
                                         <td class='text-capitalize'>{$application_data->primary_contact_details->applicationPrimaryContactEmailAddress}</td>
                                     </tr>
                                     <tr>
-                                        <td>-</td>
+                                        <td>3</td>
                                         <td>Primary Contact Telephone</td>
                                         <td class='text-capitalize'>{$application_data->primary_contact_details->applicationPrimaryContactTelephone}</td>
                                     </tr>
@@ -824,7 +824,7 @@ class Utility
                         <table class='table table-striped table-bordered table-hover'>
                             <thead>
                             <tr>
-                                <th scope='col'>#</th>
+                                <th scope='col'>SN</th>
                                 <th scope='col'>Name</th>
                                 <th scope='col'>Value</th>
                             </tr>
@@ -917,7 +917,7 @@ class Utility
                 <table class='table table-striped table-bordered table-hover'>
                   <thead>
                     <tr>
-                      <th scope='col'>#</th>
+                      <th scope='col'>S/N</th>
                       <th scope='col'>Name</th>
                       <th scope='col'>Value</th>
                     </tr>
@@ -1161,7 +1161,7 @@ class Utility
                         <table class='table table-striped table-bordered table-hover'>
                         <thead>
                             <tr>
-                            <th scope='col'>#</th>
+                            <th scope='col'>S/N</th>
                             <th scope='col'>Name</th>
                             <th scope='col'>Value</th>
                             </tr>
@@ -1199,7 +1199,7 @@ class Utility
               <table class='table table-striped table-bordered table-hover'>
                 <thead>
                   <tr>
-                    <th scope='col'>#</th>
+                    <th scope='col'>S/N</th>
                     <th scope='col'>Full Name</th>
                     <th scope='col'>Email</th>
                     <th scope='col'>Reg ID</th>

@@ -36,12 +36,13 @@ const Export = ({ data, reportUrl }) => {
       "Phone number": item?.basic_details?.companyTelephoneNumber,
       "Email address": item?.basic_details?.companyEmailAddress,
       "Website": item?.basic_details?.corporateWebsiteAddress,
+      "Type": item?.internal?.application_type,
       "Status": item?.internal?.status_description,
       "Sign-on date": moment(item?.internal?.createdAt).format('MMM. D, YYYY HH:mm')
     })
   });
 
-  const fileName = "data";
+  const fileName = "report";
 
   const exportCSV = () => {
     const exportType = exportFromJSON.types.csv;
@@ -201,7 +202,7 @@ const ActionTab = (props) => {
                 {isReport && <a className="btn btn-primary btn-sm float-end m-2" href={institution?.download_link} target="_blank" >Download Application</a>}
 
 
-                <button className="btn btn-primary btn-sm float-end  m-2" onClick={() => askAction('institutionStatus', institution?.internal?.institution_id)}>{institution?.internal?.institution?.status == 'Active' ? 'Terminate' : 'Reactivate'}</button>
+                <button className="btn btn-primary btn-sm float-end  m-2" onClick={() => askAction('institutionStatus', institution?.internal?.institution_id)}>{institution?.internal?.institution?.status == 'Active' ? 'Suspend/Terminate' : 'Reactivate'}</button>
 
                 <h5 className="title">{`Basic Information`}</h5>
 
@@ -210,7 +211,7 @@ const ActionTab = (props) => {
               <table className="table table-striped table-bordered table-hover">
                 <thead>
                   <tr>
-                    <th scope="col">#</th>
+                    <th scope="col">S/N</th>
                     <th scope="col">Name</th>
                     <th scope="col">Value</th>
                   </tr>
@@ -294,24 +295,20 @@ const ActionTab = (props) => {
                 <table className="table table-striped table-bordered table-hover">
                   <thead>
                     <tr>
-                      <th scope="col">#</th>
                       <th scope="col">Name</th>
                       <th scope="col">Value</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td>-</td>
                       <td>Primary Contact Name</td>
                       <td className="text-capitalize">{`${institution?.primary_contact_details?.applicationPrimaryContactName}`}</td>
                     </tr>
                     <tr>
-                      <td>-</td>
                       <td>Primary Contact Email Address</td>
                       <td className="text-capitalize">{`${institution?.primary_contact_details?.applicationPrimaryContactEmailAddress}`}</td>
                     </tr>
                     <tr>
-                      <td>-</td>
                       <td>Primary Contact Telephone</td>
                       <td className="text-capitalize">{`${institution?.primary_contact_details?.applicationPrimaryContactTelephone}`}</td>
                     </tr>
@@ -327,7 +324,7 @@ const ActionTab = (props) => {
               <table className="table table-striped table-bordered table-hover">
                 <thead>
                   <tr>
-                    <th scope="col">#</th>
+                    <th scope="col">S/N</th>
                     <th scope="col">Name</th>
                     <th scope="col">Value</th>
                   </tr>
@@ -414,7 +411,7 @@ const ActionTab = (props) => {
                 <table className="table table-striped table-bordered table-hover">
                   <thead>
                     <tr>
-                      <th scope="col">#</th>
+                      <th scope="col">S/N</th>
                       <th scope="col">Name</th>
                       <th scope="col">Value</th>
                     </tr>
@@ -440,7 +437,7 @@ const ActionTab = (props) => {
                 <table className="table table-striped table-bordered table-hover">
                   <thead>
                     <tr>
-                      <th scope="col">#</th>
+                      <th scope="col">S/N</th>
                       <th scope="col">Name</th>
                       <th scope="col">Value</th>
                     </tr>
@@ -466,7 +463,7 @@ const ActionTab = (props) => {
               <table className="table table-striped table-bordered table-hover">
                 <thead>
                   <tr>
-                    {/* <th scope="col">#</th> */}
+                    {/* <th scope="col">S/N</th> */}
                     <th scope="col">Name</th>
                     <th scope="col">Value</th>
                   </tr>
@@ -667,7 +664,7 @@ const ActionTab = (props) => {
                 <table className="table table-striped table-bordered table-hover">
                   <thead>
                     <tr>
-                      <th scope="col">#</th>
+                      <th scope="col">S/N</th>
                       <th scope="col">Name</th>
                       <th scope="col">Value</th>
                     </tr>
@@ -705,7 +702,7 @@ const ActionTab = (props) => {
               <table className="table table-striped table-bordered table-hover">
                 <thead>
                   <tr>
-                    <th scope="col">#</th>
+                    <th scope="col">S/N</th>
                     <th scope="col">Full Name</th>
                     <th scope="col">Email</th>
                     <th scope="col">Reg ID</th>
@@ -717,14 +714,14 @@ const ActionTab = (props) => {
                   {/* {$user_application} */}
                   {institution?.ars && institution?.ars?.map((ar, index) => (
                     <tr key={index}>
-                      <th scope="row">{++index}</th>
+                      <td scope="row">{++index}</td>
                       <td>{ar.full_name}</td>
                       <td>{ar.email}</td>
                       <td>{ar.reg_id}</td>
                       <td>{ar.member_status == 'active' ? 'Active' : 'Suspended'}</td>
                       <td>
                         {institution?.internal?.institution?.status == 'Active' && <>
-                          <button className="btn btn-primary btn-sm" onClick={() => askAction('memberStatus', ar)}>{ar.member_status == 'active' ? 'Suspend' : 'Reactivate'}</button>
+                          <button className="btn btn-primary btn-sm" onClick={() => askAction('memberStatus', ar)}>{ar.member_status == 'active' ? 'Suspend/Terminate' : 'Reactivate'}</button>
                         </>}
                       </td>
                     </tr>
@@ -740,7 +737,7 @@ const ActionTab = (props) => {
               <table className="table table-striped table-bordered table-hover">
                 <thead>
                   <tr>
-                    <th scope="col">#</th>
+                    <th scope="col">S/N</th>
                     <th scope="col">Name</th>
                     <th scope="col" className="width-30">Value</th>
                   </tr>
@@ -749,7 +746,7 @@ const ActionTab = (props) => {
                   {/* {$user_application} */}
                   {institution?.required_documents && institution?.required_documents?.map((document, index) => (
                     <tr key={index}>
-                      <th scope="row">{++index}</th>
+                      <td scope="row">{++index}</td>
                       <td>{document.description}</td>
                       <td>
                         {document.uploaded_file != null ? <>
@@ -771,7 +768,7 @@ const ActionTab = (props) => {
               <table className="table table-striped table-bordered table-hover">
                 <thead>
                   <tr>
-                    <th scope="col">#</th>
+                    <th scope="col">S/N</th>
                     <th scope="col">Name</th>
                     <th scope="col">Value</th>
                   </tr>
