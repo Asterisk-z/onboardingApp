@@ -5,6 +5,7 @@ namespace App\Listeners;
 use App\Events\ApplicationSubmissionEvent;
 use App\Helpers\InvoiceGenerator;
 use App\Helpers\Utility;
+use App\Models\Application;
 use App\Models\ApplicationField;
 use App\Models\Invoice;
 use App\Models\InvoiceContent;
@@ -68,13 +69,17 @@ class ApplicationSubmissionListener implements ShouldQueue
         $name = $user->first_name . ' ' . $user->last_name;
         $categoryName = $membershipCategory->name;
 
-        $emailData = [
-            'name' => $name,
-            'subject' => 'New Membership Application',
-            'content' => "Thank you for your interest in the $categoryName categories of FMDQ Securities Exchange Limited.
+        $subject = $this->getSubject($application);
+
+        if ($application) {
+            $emailData = [
+                'name' => $name,
+                'subject' => $subject,
+                'content' => "Thank you for your interest in the $categoryName of FMDQ Securities Exchange Limited.
                         We are currently reviewing your application and will provide feedback within three (3) business
                         days",
-        ];
+            ];
+        }
 
         // Recipient email addresses
         $toEmails = [$user->email, $companyEmail, $contactEmail];
@@ -95,7 +100,7 @@ class ApplicationSubmissionListener implements ShouldQueue
 
         $emailD = [
             'name' => 'Team',
-            'subject' => 'New Membership Application',
+            'subject' => $subject,
             'content' => "A new applicant, $name, has successfully submitted
                             an application on the MROIS Portal as $categoryNameWithPronoun",
         ];
@@ -196,5 +201,24 @@ class ApplicationSubmissionListener implements ShouldQueue
         $application->invoice()->save($invoice);
 
         return;
+    }
+
+    protected function getSubject($application)
+    {
+        $type = $application->application_type;
+
+        switch ($type) {
+            case Application::type['CON']:
+                $subject = 'New Membership Conversion';
+                break;
+            case Application::type['ADD']:
+                $subject = 'New Membership Addition';
+                break;
+            default:
+                $subject = 'New Membership Application';
+                break;
+        }
+
+        return $subject;
     }
 }

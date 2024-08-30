@@ -104,6 +104,18 @@ trait ApplicationTraits
         ];
     }
 
+    public function eSuccessLetterDetails($application_id)
+    {
+
+        return [];
+    }
+
+    public function eMemberAgreementDetails($application_id)
+    {
+
+        return [];
+    }
+
     public function report_table()
     {
         $pdf = Pdf::loadHTML('<h1>Test</h1>');

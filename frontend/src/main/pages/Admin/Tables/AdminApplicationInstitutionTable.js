@@ -1418,7 +1418,7 @@ const UpdateAgreement = ({ updateParentParent, tabItem, positions, closeModel })
             Institution Name
           </label>
           <div className="form-control-wrap">
-            <input type="text" id="institution_name" className="form-control" {...register('institution_name', { required: "This Field is required" })} defaultValue={tabItem?.basic_details?.companyName} />
+            <input type="text" id="institution_name" className="form-control" {...register('institution_name', { required: "This Field is required" })} defaultValue={tabItem?.eMemberAgreement?.companyName} />
             {errors.institution_name && <span className="invalid">{errors.institution_name.message}</span>}
           </div>
         </div>
@@ -1427,18 +1427,18 @@ const UpdateAgreement = ({ updateParentParent, tabItem, positions, closeModel })
             Institution Address
           </label>
           <div className="form-control-wrap">
-            <input type="text" id="institution_address" className="form-control" {...register('institution_address', { required: "This Field is required" })} defaultValue={tabItem?.basic_details?.registeredOfficeAddress} />
+            <input type="text" id="institution_address" className="form-control" {...register('institution_address', { required: "This Field is required" })} defaultValue={tabItem?.eMemberAgreement?.registeredOfficeAddress} />
             {errors.institution_address && <span className="invalid">{errors.institution_address.message}</span>}
           </div>
         </div>
 
-        {tabItem?.basic_details?.rcNumber && <>
+        {tabItem?.eMemberAgreement?.rcNumber && <>
           <div className="form-group">
             <label className="form-label" htmlFor="institution_rc_number">
               Institution RC Number
             </label>
             <div className="form-control-wrap">
-              <input type="text" id="institution_rc_number" className="form-control" {...register('institution_rc_number', { required: "This Field is required" })} defaultValue={tabItem?.basic_details?.rcNumber} />
+              <input type="text" id="institution_rc_number" className="form-control" {...register('institution_rc_number', { required: "This Field is required" })} defaultValue={tabItem?.eMemberAgreement?.rcNumber} />
               {errors.institution_rc_number && <span className="invalid">{errors.institution_rc_number.message}</span>}
             </div>
           </div>
@@ -1450,7 +1450,7 @@ const UpdateAgreement = ({ updateParentParent, tabItem, positions, closeModel })
           </label>
           <div className="form-control-wrap">
             <input type="hidden" {...register('date', { required: "This Field is required" })} value={date} />
-            <DatePicker selected={date} onChange={(date) => toggleDate(date)} className="form-control date-picker" id="date" maxDate={new Date()} />
+            <DatePicker selected={date} onChange={(date) => toggleDate(date)} className="form-control date-picker" id="date" maxDate={new Date(tabItem?.eMemberAgreement?.date)} />
             {errors.date && <span className="invalid">{errors.date.message}</span>}
           </div>
         </div>
@@ -1599,7 +1599,7 @@ const UpdateESuccessLetter = ({ updateParentParent, tabItem, positions, closeMod
             Institution Name
           </label>
           <div className="form-control-wrap">
-            <input type="text" id="institution_name" className="form-control" {...register('institution_name', { required: "This Field is required" })} defaultValue={tabItem?.basic_details?.companyName} />
+            <input type="text" id="institution_name" className="form-control" {...register('institution_name', { required: "This Field is required" })} defaultValue={tabItem?.eSuccess?.companyName} />
             {errors.institution_name && <span className="invalid">{errors.institution_name.message}</span>}
           </div>
         </div>
@@ -1608,7 +1608,7 @@ const UpdateESuccessLetter = ({ updateParentParent, tabItem, positions, closeMod
             Institution Address
           </label>
           <div className="form-control-wrap">
-            <input type="text" id="institution_address" className="form-control" {...register('institution_address', { required: "This Field is required" })} defaultValue={tabItem?.basic_details?.registeredOfficeAddress} />
+            <input type="text" id="institution_address" className="form-control" {...register('institution_address', { required: "This Field is required" })} defaultValue={tabItem?.eSuccess?.registeredOfficeAddress} />
             {errors.institution_address && <span className="invalid">{errors.institution_address.message}</span>}
           </div>
         </div>
@@ -1619,7 +1619,7 @@ const UpdateESuccessLetter = ({ updateParentParent, tabItem, positions, closeMod
               Member Name
             </label>
             <div className="form-control-wrap">
-              <input type="text" id="member_name" className="form-control" {...register('member_name', { required: "This Field is required" })} defaultValue={tabItem?.applicant_name} />
+              <input type="text" id="member_name" className="form-control" {...register('member_name', { required: "This Field is required" })} defaultValue={tabItem?.eSuccess?.applicant_name} />
               {errors.member_name && <span className="invalid">{errors.member_name.message}</span>}
             </div>
           </div>

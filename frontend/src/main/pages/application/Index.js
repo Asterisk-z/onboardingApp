@@ -1269,7 +1269,7 @@ const Form = () => {
             <div className="flex flex-col justify-content-center align-items-center p-3">
                 <div>
                     <BlockTitle tag="h2" className="text-center">
-                        Thank you for completing the Membership Application Form.
+                        Thank you for completing the Membership Application Form. Kindly proceed to Preview and Submit your Application.
                     </BlockTitle>
                     <BlockContent className="text-center">
                         <Button color="primary" onClick={(ev) => navigate(`${process.env.PUBLIC_URL}/application_preview/${$application_details.uuid}`)}>

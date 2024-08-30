@@ -72,6 +72,22 @@ class ApplicationResource extends JsonResource
                 'authorisedShareCapital' => $this->authorisedShareCapital,
             ],
 
+            // "eSuccess" => $this->eSuccessLetterDetails($application),
+            // "eMemberAgreement" => $this->eMemberAgreementDetails($application),
+
+            'eSuccess' => [
+                "companyName" => $application->eSuccess ? $application->eSuccess->name : $this->companyName,
+                "registeredOfficeAddress" => $application->eSuccess ? $application->eSuccess->address : $this->registeredOfficeAddress,
+                "applicant_name" => $application->eSuccess ? $application->eSuccess->rc_number : $application->applicant->full_name,
+            ],
+
+            'eMemberAgreement' => [
+                "companyName" => $application->agreement ? $application->agreement->name : $this->companyName,
+                "registeredOfficeAddress" => $application->agreement ? $application->agreement->address : $this->registeredOfficeAddress,
+                "rcNumber" => $application->agreement ? $application->agreement->rc_number : $this->rcNumber,
+                "date" => $application->agreement ? $application->agreement->date : now(),
+            ],
+
             "primary_contact_details" => [
                 'applicationPrimaryContactEmailAddress' => $this->applicationPrimaryContactEmailAddress,
                 'applicationPrimaryContactName' => $this->applicationPrimaryContactName,

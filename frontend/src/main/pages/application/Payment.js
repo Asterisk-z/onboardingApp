@@ -6,7 +6,7 @@ import Head from "layout/head/Head";
 import Content from "layout/content/Content";
 import { BlockContent, BlockTitle, Icon } from "components/Component";
 import { Steps, Step } from "react-step-builder";
-import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge,  Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, CardBody, CardTitle, CardText } from "reactstrap";
+import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge, Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, CardBody, CardTitle, CardText } from "reactstrap";
 import { HeaderLogo } from "pages/components/HeaderLogo";
 import DatePicker from "react-datepicker";
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
@@ -22,7 +22,7 @@ import Swal from "sweetalert2";
 
 
 const Payment = () => {
-    
+
 
 
   const dispatch = useDispatch();
@@ -37,17 +37,17 @@ const Payment = () => {
   // console.log(paymentStatus)
 
   // if (paymentStatus) {
-    Swal.fire({
-      title: "Payment Successful",
-      text: "Continue Application!",
-      icon: "success",
-      showCancelButton: false,
-      confirmButtonText: "Ok",
-    }).then((result) => {
+  Swal.fire({
+    title: "Payment Successful",
+    text: "Continue Application!",
+    icon: "success",
+    showCancelButton: false,
+    confirmButtonText: "OK",
+  }).then((result) => {
 
-        navigate(`${process.env.PUBLIC_URL}/dashboard`)
-      
-    });
+    navigate(`${process.env.PUBLIC_URL}/dashboard`)
+
+  });
   // }
 
 
