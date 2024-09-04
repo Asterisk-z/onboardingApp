@@ -104,7 +104,7 @@ const FinalForm = ({ setModalFinalForm, event_id, event_registrations }) => {
                 </div>
                 <div className="form-group">
                     <Button color="primary" type="submit" size="lg">
-                        {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Create"}
+                        {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Send"}
                     </Button>
                 </div>
             </form>
@@ -237,7 +237,7 @@ const AdminEvents = ({ drawer }) => {
                                                 <div className="toggle-expand-content" >
                                                     <ul className="nk-block-tools g-3">
 
-                                                        {(authUser.is_admin_meg() && $event && $event_registrations?.report?.length > 0 && ($event.is_event_completed == 0)) && <>
+                                                        {((authUser.is_admin_meg() || authUser.is_admin_md()) && $event && $event_registrations?.report?.length > 0 && ($event.is_event_completed == 0)) && <>
                                                             <li className="nk-block-tools-opt">
                                                                 <a href={$event?.preview_certificate} target="_blank">
                                                                     <Button color="primary">
@@ -245,7 +245,7 @@ const AdminEvents = ({ drawer }) => {
                                                                     </Button>
                                                                 </a>
                                                             </li>
-                                                            {($event.is_sent_for_signing == 0) && <>
+                                                            {($event.is_sent_for_signing == 0 && authUser.is_admin_meg()) && <>
                                                                 <li className="nk-block-tools-opt">
                                                                     {/* {!$membersGuide && */}
                                                                     <Button color="primary">
@@ -254,8 +254,8 @@ const AdminEvents = ({ drawer }) => {
                                                                     {/* } */}
                                                                 </li>
                                                             </>}
-
-                                                            {($event.is_sent_for_signing == 1 && (!$event.signed_by)) && <>
+                                                            {/*  */}
+                                                            {($event.is_sent_for_signing == 1 && (!$event.signed_by) && authUser.is_admin_md()) && <>
                                                                 <li className="nk-block-tools-opt">
                                                                     {/* {!$membersGuide && */}
                                                                     <Button color="primary">
@@ -265,12 +265,12 @@ const AdminEvents = ({ drawer }) => {
                                                                 </li>
                                                             </>}
 
-
-                                                            {($event.signed_by && ($event.cert_signature) && ($event.is_event_completed == 0)) && <>
+                                                            {/* {authUser.is_admin_meg()} */}
+                                                            {($event.signed_by && ($event.cert_signature) && ($event.is_event_completed == 0) && authUser.is_admin_meg()) && <>
                                                                 <li className="nk-block-tools-opt">
                                                                     {/* {!$membersGuide && */}
                                                                     <Button color="primary">
-                                                                        <span onClick={toggleFinalForm}>Send Certificate and Presentation</span>
+                                                                        <span onClick={toggleFinalForm}>Send to qualified ARs</span>
                                                                     </Button>
                                                                     {/* } */}
                                                                 </li>
@@ -311,7 +311,7 @@ const AdminEvents = ({ drawer }) => {
                                             </div>
                                             <div className="form-group">
                                                 <Button color="primary" type="submit" size="lg">
-                                                    {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Create"}
+                                                    {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Upload"}
                                                 </Button>
                                             </div>
                                         </form>

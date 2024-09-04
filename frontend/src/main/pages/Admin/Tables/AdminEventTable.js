@@ -301,7 +301,7 @@ const AdminEventTable = ({ data, pagination, actions, className, selectableRows,
         },
         {
             name: "Interests",
-            selector: (row) => `${row.registrations_count} Users`,
+            selector: (row) => `${row.registrations_count} User(s)`,
             sortable: true,
             width: "auto",
             wrap: true

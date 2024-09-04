@@ -408,11 +408,15 @@ Route::middleware(['auth', 'activeAuth'])->group(function () {
             Route::get('/preview-certificate/{event}', [EventController::class, 'certificateSample'])->name('preview.certificate');
 
             Route::post('/send-for-certificate-signing/{eventID}', [EventController::class, 'sendCertificateForSigning']);
-            Route::post('/sign-certificate/{eventID}', [EventController::class, 'signCertificate']);
             Route::post('/send-certificates/{eventID}', [EventController::class, 'sendCertificates']);
 
         });
-        Route::middleware('authRole:' . Role::MEG . ',' . Role::FSD)->group(function () {
+
+        Route::middleware('authRole:' . Role::MD)->group(function () {
+            Route::post('/sign-certificate/{eventID}', [EventController::class, 'signCertificate']);
+        });
+
+        Route::middleware('authRole:' . Role::MEG . ',' . Role::FSD . ',' . Role::MD)->group(function () {
             Route::get('/registrations/{event}', [EventController::class, 'eventRegistrations']);
             Route::post('/registration-update-status/{eventReg}', [EventController::class, 'approveEventRegistration']);
         });

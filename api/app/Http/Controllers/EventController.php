@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\EventNotificationUtility;
 use App\Helpers\ResponseStatusCodes;
+use App\Helpers\Utility;
 use App\Http\Requests\Education\AddEventRequest;
 use App\Http\Requests\Education\UpdateEventRequest;
 use App\Http\Resources\Education\EventBasicResource;
@@ -17,10 +18,13 @@ use App\Models\Education\EventInvitePosition;
 use App\Models\Education\EventNotification;
 use App\Models\Education\EventNotificationDates;
 use App\Models\Education\EventRegistration;
+use App\Models\Role;
 use App\Models\User;
+use App\Notifications\InfoNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\Rule;
 
 class EventController extends Controller
@@ -494,7 +498,13 @@ class EventController extends Controller
 
     public function eventRegistrations(Request $request, Event $event)
     {
-        $records = EventRegistration::with(['user', 'event'])->where('is_del', 0)->where('event_id', $event->id)->latest()->get();
+        $records = EventRegistration::with(['user', 'event'])->where('is_del', 0)->where('event_id', $event->id);
+
+        if (auth()->user()->role_id == Role::MD) {
+            $records = $records->where('status', 'Registered');
+        }
+
+        $records = $records->latest()->get();
 
         return successResponse('Successful', ['report' => EventRegistrationWithEventResource::collection($records), 'report_url' => route('downloadReport', ['education_report'])]);
     }
@@ -595,6 +605,16 @@ class EventController extends Controller
             $event->is_sent_for_signing = true;
             $event->save();
 
+            $MDs = Utility::getUsersByCategory(Role::MD);
+
+            $message = "<p>
+                Please be informed that there are event certificate(s) ready for signing.
+            </p>";
+
+            $subject = "Event Certificate For Signing";
+
+            Notification::send($MDs, new InfoNotification($message, $subject));
+
             $logMessage = "Sent for certificate signin the Event: {$event->name}";
             logAction($request->user()->email, 'Event Certificate', $logMessage, $request->ip());
         }
@@ -619,7 +639,17 @@ class EventController extends Controller
             $event->save();
 
             $logMessage = "{$request->user()->email} Signed {$event->name} Event certificate";
-            logAction($request->user()->email, 'Delete Event', $logMessage, $request->ip());
+            logAction($request->user()->email, 'Signed Event', $logMessage, $request->ip());
+
+            $MDs = Utility::getUsersByCategory(Role::MEG);
+
+            $message = "<p>
+                Please be informed that there are event certificate has been signed.
+            </p>";
+
+            $subject = "Event Certificate For Signed";
+
+            Notification::send($MDs, new InfoNotification($message, $subject));
 
             return successResponse("Signature Updated Successfully", []);
 

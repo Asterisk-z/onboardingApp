@@ -77,7 +77,7 @@ class ApplicationSubmissionListener implements ShouldQueue
                 'subject' => $subject,
                 'content' => "Thank you for your interest in the $categoryName of FMDQ Securities Exchange Limited.
                         We are currently reviewing your application and will provide feedback within three (3) business
-                        days",
+                        days.",
             ];
         }
 
@@ -102,7 +102,7 @@ class ApplicationSubmissionListener implements ShouldQueue
             'name' => 'Team',
             'subject' => $subject,
             'content' => "A new applicant, $name, has successfully submitted
-                            an application on the MROIS Portal as $categoryNameWithPronoun",
+                            an application on the MROIS Portal as $categoryNameWithPronoun.",
         ];
 
         Utility::emailHelper($emailD, $tos);
@@ -115,7 +115,7 @@ class ApplicationSubmissionListener implements ShouldQueue
             'name' => 'Team',
             'subject' => 'New Membership Application: Concession Confirmation',
             'content' => "A new applicant, $name, has successfully submitted an application as $categoryNameWithPronoun
-             on the MROIS Portal. Kindly grant a concession (where applicable)",
+             on the MROIS Portal. Kindly grant a concession (where applicable).",
         ];
 
         Utility::emailHelper($emailC, $to, $ccs);
