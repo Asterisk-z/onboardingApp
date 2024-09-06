@@ -2,10 +2,12 @@
 
 namespace App\Http\Resources;
 
+use App\Traits\CompetencyTraits;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ComptencyResource extends JsonResource
 {
+    use CompetencyTraits;
     /**
      * Transform the resource into an array.
      *
@@ -25,11 +27,13 @@ class ComptencyResource extends JsonResource
             'comment' => $this->comment,
             'created_at' => $this->created_at,
             'evidence_file' => $this->evidence_file,
+            'physical_file' => $this->physical_file,
             'framework_id' => $this->framework_id,
             'framework' => $this->framework,
             'institution_id' => $this->institution_id,
             'is_competent' => $this->is_competent,
             'status' => $this->status,
+            'arPercentage' => $this->arPercentageCoverage($this->ar),
         ];
 
     }

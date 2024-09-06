@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Helpers\MailContents;
 use App\Helpers\ResponseStatusCodes;
 use App\Helpers\Utility;
+use App\Http\Resources\CompetencyFrameworkResource;
+use App\Http\Resources\CompetencyFrameworkARResource;
 use App\Http\Resources\ComptencyResource;
 use App\Models\Competency;
 use App\Models\CompetencyFramework;
@@ -23,7 +25,7 @@ class CompetencyController extends Controller
     public function listAll()
     {
         $competencies = CompetencyFramework::orderBy('created_at', 'DESC')->get();
-        return successResponse('Successful', $competencies);
+        return successResponse('Successful', CompetencyFrameworkResource::collection($competencies));
     }
 
     //
@@ -85,9 +87,10 @@ class CompetencyController extends Controller
 
         $ar_ids = Competency::where('framework_id', $id)->where('status', 'approved')->pluck('ar_id');
 
-        $ars = User::where('position_id', $competency->position)->whereIn('id', $ar_ids)->with(['institution', 'position', 'competency_response'])->get()->toArray();
+        $ars = User::whereIn('id', $ar_ids)->with(['institution', 'position', 'competency_response'])->get()->toArray();
+        // $ars = User::where('position_id', $competency->position)->whereIn('id', $ar_ids)->with(['institution', 'position', 'competency_response'])->get()->toArray();
 
-        return successResponse('successful', $ars);
+        return successResponse('successful', CompetencyFrameworkARResource::collection($ars));
     }
 
     //
@@ -101,9 +104,11 @@ class CompetencyController extends Controller
 
         $ar_ids = Competency::where('framework_id', $id)->where('status', 'approved')->pluck('ar_id');
 
-        $ars = User::where('position_id', $competency->position)->whereNotIn('id', $ar_ids)->with(['institution', 'position', 'competency_response'])->get()->toArray();
+        $position_ids = Position::whereIn('position_group_id', $competency->position)->pluck('id');
 
-        return successResponse('successful', $ars);
+        $ars = User::whereIn('position_id', $position_ids)->whereNotIn('id', $ar_ids)->with(['institution', 'position', 'competency_response'])->get()->toArray();
+
+        return successResponse('successful', CompetencyFrameworkARResource::collection($ars));
     }
 
     //
@@ -275,6 +280,24 @@ class CompetencyController extends Controller
         logAction($cco->email, 'Competency Update', $logMessage, $request->ip());
 
         return successResponse('Competency status updated', $competencies);
+    }
+
+    public function megCopyCompetency(Request $request): JsonResponse
+    {
+
+        $request->validate([
+            "evidence" => "required|mimes:jpeg,png,jpg,pdf",
+            'competency_id' => 'required',
+        ]);
+
+        if (!$competency = Competency::find(request('competency_id'))) {
+            return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'Does not exist');
+        }
+
+        $competency->physical_copy = $request->hasFile('evidence') ? $request->file('evidence')->storePublicly('evidence', 'public') : null;
+        $competency->save();
+
+        return successResponse('Competency file updated', $competency);
     }
 
     //

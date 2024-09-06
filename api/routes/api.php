@@ -223,6 +223,7 @@ Route::middleware(['auth', 'activeAuth'])->group(function () {
             Route::post('/update/{id}', [CompetencyController::class, 'update']);
             Route::post('/update-status/{id}', [CompetencyController::class, 'updateStatus']);
             Route::post('/update-competency-status', [CompetencyController::class, 'megStatusCompetency']);
+            Route::post('/update-competency-copy', [CompetencyController::class, 'megCopyCompetency']);
         });
         // fees and dues
         Route::group(['prefix' => 'meg/fees-and-dues'], function () {

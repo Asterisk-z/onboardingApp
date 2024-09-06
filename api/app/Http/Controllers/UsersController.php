@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\MailContents;
 use App\Helpers\ResponseStatusCodes;
 use App\Helpers\Utility;
+use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegistrationRequest;
 use App\Http\Resources\UserResource;
 use App\Models\Application;
@@ -26,12 +27,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class UsersController extends Controller
 {
-    public function login(Request $request): JsonResponse
+    public function login(LoginRequest $request): JsonResponse
     {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|string',
-        ]);
+        $request->authenticate();
+
+        // $request->validate([
+        //     'email' => 'required|email',
+        //     'password' => 'required|string',
+        // ]);
 
         if (!$user = User::where('email', $request->email)->first()) {
             logAction($request->email, 'Failed Login', 'Failed Login - Incorrect Email', $request->ip());

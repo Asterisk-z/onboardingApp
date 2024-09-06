@@ -6,14 +6,19 @@ class EventMailContents
 
     public static function certificateARSubject(string $eventName): string
     {
-        return "$eventName Certificate";
+        return "Certificate $eventName event";
     }
 
     public static function certificateARBody(string $eventName): string
     {
 
         $message = "<p>
-                Please be find attached your certificate of participation for <b>$eventName</b>.
+                Following the conclusion of the <b>$eventName</b> (the “Event”), FMDQ Securities
+                Exchange Limited is pleased to present the
+                attached certificate to you for attending the
+                Event. Attached also are the slides
+                presented.</br>
+                Thank you once again for your participation.
             </p>";
 
         return $message;

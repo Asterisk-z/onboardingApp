@@ -644,7 +644,7 @@ class EventController extends Controller
             $MDs = Utility::getUsersByCategory(Role::MEG);
 
             $message = "<p>
-                Please be informed that there are event certificate has been signed.
+                Please be informed that the event certificate(s) have been signed by MD, FMDQX
             </p>";
 
             $subject = "Event Certificate For Signed";

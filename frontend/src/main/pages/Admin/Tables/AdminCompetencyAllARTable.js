@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux";
 import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge, Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, CardBody, CardTitle } from "reactstrap";
 import { DataTablePagination } from "components/Component";
 import moment from "moment";
-import { updateMEGStatusCompetency, loadOverAllCompliantArs } from "redux/stores/competency/competencyStore";
+import { updateMEGStatusCompetency, loadOverAllCompliantArs, updateMEGCompetencyCopy } from "redux/stores/competency/competencyStore";
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 import Swal from "sweetalert2";
 
@@ -82,6 +82,70 @@ const Export = ({ data }) => {
 };
 
 
+const UploadCopyForm = (props) => {
+
+  const dispatch = useDispatch();
+  const competency = props.competency
+  const closeModel = props.closeModel
+
+  const [evidenceFile, setEvidenceFile] = useState([]);
+
+  const { register, handleSubmit, formState: { errors }, resetField } = useForm();
+  const [loading, setLoading] = useState(false);
+
+  const handleFormSubmit = async () => {
+
+    const formData = new FormData();
+    formData.append('competency_id', competency.id)
+    if (evidenceFile) formData.append('evidence', evidenceFile)
+
+    try {
+      setLoading(true);
+
+      const resp = await dispatch(updateMEGCompetencyCopy(formData));
+
+      if (resp.payload?.message == "success") {
+        setTimeout(() => {
+          closeModel(false)
+          setLoading(false);
+          resetField('comment')
+          resetField('evidence')
+          dispatch(loadOverAllCompliantArs());
+        }, 1000);
+      } else {
+        setLoading(false);
+      }
+
+    } catch (error) {
+      setLoading(false);
+    }
+  };
+
+
+  const handleFileChange = (event) => {
+    setEvidenceFile(event.target.files[0]);
+  };
+
+  return (<>
+    <form onSubmit={handleSubmit(handleFormSubmit)} className="is-alter" encType="multipart/form-data">
+      <div className="form-group">
+        <label className="form-label" htmlFor="email">
+          Physical Document
+        </label>
+        <div className="form-control-wrap">
+          <input type="file" accept=".jpg,.jpeg,.png,.pdf" id="evidence" className="form-control"  {...register('evidence', { required: true })} onChange={handleFileChange} />
+          {errors.evidence && <p className="invalid">{`${errors.evidence.message}`}</p>}
+        </div>
+      </div>
+      <div className="form-group">
+        <Button color="primary" type="submit" size="lg">
+          {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Upload Physical Document"}
+        </Button>
+      </div>
+    </form>
+  </>);
+}
+
 const ActionTab = (props) => {
 
   const aUser = useUser();
@@ -94,7 +158,10 @@ const ActionTab = (props) => {
   const toggleForm = () => setModalForm(!modalForm);
 
   const [sendDeficiency, setSendDeficiency] = useState(false);
+  const [uploadCopy, setUploadCopy] = useState(false);
   const toggleSendDeficiency = () => setSendDeficiency(!sendDeficiency);
+  const toggleUploadCopies = () => setUploadCopy(!uploadCopy);
+
 
   const competency = props.competency
   const framework = props.competency?.framework
@@ -184,6 +251,14 @@ const ActionTab = (props) => {
                       </td>
                     </tr>
                   </>}
+                  {competency?.physical_file && <>
+                    <tr>
+                      <td>Physical Copy</td>
+                      <td className="text-capitalize">
+                        <a target="_blank" href={competency?.physical_file} className="btn btn-secondary"> View Copy</a>
+                      </td>
+                    </tr>
+                  </>}
                   {competency?.comment && <>
                     <tr>
                       <td>Comment</td>
@@ -194,7 +269,8 @@ const ActionTab = (props) => {
                 </tbody>
               </table>
               <div className="text-center">
-                <Button className="btn btn-success btn-sm " onClick={toggleSendDeficiency} color="primary"  >Send Deficiency</Button>
+                <Button className="btn btn-success btn-sm mx-2" onClick={toggleSendDeficiency} color="primary"  >Send Deficiency</Button>
+                <Button className="btn btn-primary btn-sm mx-2" onClick={toggleUploadCopies} color="primary"  >Upload Copy</Button>
               </div>
             </div>
           </>}
@@ -291,11 +367,27 @@ const ActionTab = (props) => {
           <span className="sub-text">Update Competency</span>
         </ModalFooter>
       </Modal>
+
+
+
+      <Modal isOpen={uploadCopy} toggle={toggleUploadCopies} size="lg">
+        <ModalHeader toggle={toggleUploadCopies} close={<button className="close" onClick={toggleUploadCopies}><Icon name="cross" /></button>}>
+          Upload Document
+        </ModalHeader>
+        <ModalBody>
+          <UploadCopyForm closeModel={setUploadCopy} competency={competency} />
+        </ModalBody>
+        <ModalFooter className="bg-light">
+          <span className="sub-text">Update Competency</span>
+        </ModalFooter>
+      </Modal>
+
     </>
 
 
   );
 };
+
 
 const AdminCompetencyARTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState }) => {
   const complainColumn = [
@@ -337,6 +429,13 @@ const AdminCompetencyARTable = ({ data, pagination, actions, className, selectab
     {
       name: "Competency Description",
       selector: (row) => { return (<>{`${row?.framework?.description}`}</>) },
+      sortable: true,
+      width: "auto",
+      wrap: true
+    },
+    {
+      name: "Total Percentage",
+      selector: (row) => row?.arPercentage,
       sortable: true,
       width: "auto",
       wrap: true

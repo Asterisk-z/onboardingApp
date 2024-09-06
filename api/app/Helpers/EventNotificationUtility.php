@@ -31,7 +31,9 @@ class EventNotificationUtility
             ]);
         }
 
-        Notification::send($eventReg->user, new InfoNotification($message, $subject, [], $attachment));
+        $MEGs = Utility::getUsersEmailByCategory(Role::MEG);
+
+        Notification::send($eventReg->user, new InfoNotification($message, $subject, $MEGs, $attachment));
     }
 
     public static function pendingPaymentEventRegistration(EventRegistration $eventReg)

@@ -362,6 +362,13 @@ const AdminCompetencyTable = ({ data, pagination, actions, className, selectable
             wrap: true
         },
         {
+            name: "Total Percentage",
+            selector: (row) => row?.arPercentage,
+            sortable: true,
+            width: "auto",
+            wrap: true
+        },
+        {
             name: "Date Created",
             selector: (row) => moment(row.created_at).format('MMM. D, YYYY HH:mm'),
             sortable: true,

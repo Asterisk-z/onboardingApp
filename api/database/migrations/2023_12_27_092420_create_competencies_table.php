@@ -21,6 +21,7 @@ class CreateCompetenciesTable extends Migration
             $table->string('is_competent');
             $table->string('evidence')->nullable();
             $table->string('cco_id')->nullable();
+            $table->string('physical_copy')->nullable();
             $table->string('status');
             $table->timestamps();
         });

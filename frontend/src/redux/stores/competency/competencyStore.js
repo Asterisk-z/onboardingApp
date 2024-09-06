@@ -200,6 +200,28 @@ export const updateMEGStatusCompetency = createAsyncThunk(
   }
 );
 
+export const updateMEGCompetencyCopy = createAsyncThunk(
+  "competency/updateMEGCompetencyCopy",
+  async (values) => {
+
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `meg/competency-framework/update-competency-copy`,
+        data: values,
+      });
+      return successHandler(data, data.message);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
 export const loadCCOArCompetency = createAsyncThunk(
   "competency/loadCCOArCompetency",
   async (arg) => {
@@ -438,6 +460,21 @@ const competencyStore = createSlice({
     });
 
 
+
+    // ====== builders for updateMEGCompetencyCopy ======
+
+    builder.addCase(updateMEGCompetencyCopy.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(updateMEGCompetencyCopy.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+
+    builder.addCase(updateMEGCompetencyCopy.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
 
     // ====== builders for updateMEGStatusCompetency ======
 

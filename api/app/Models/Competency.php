@@ -11,7 +11,7 @@ class Competency extends Model
     protected $table = 'competencies';
     protected $guarded = [];
     protected $with = ['ar', 'cco'];
-    protected $appends = ['evidence_file'];
+    protected $appends = ['evidence_file', 'physical_file'];
 
     public function ar()
     {
@@ -31,6 +31,11 @@ class Competency extends Model
     public function getEvidenceFileAttribute()
     {
         return $this->evidence ? config('app.url') . '/storage/app/public/' . $this->evidence : null;
+    }
+
+    public function getPhysicalFileAttribute()
+    {
+        return $this->evidence ? config('app.url') . '/storage/app/public/' . $this->physical_copy : null;
     }
 
 }

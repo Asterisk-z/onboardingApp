@@ -227,7 +227,7 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
                                     </tr>
                                     <tr>
                                         <td>Event Date </td>
-                                        <td className="text-capitalize">{`${moment(tabItem.date).format("MMM D, YYYY")}`}</td>
+                                        <td className="text-capitalize">{`${moment(`${tabItem.date} ${tabItem.time}`).format("MMM D, YYYY LT")}`}</td>
                                     </tr>
                                     <tr>
                                         <td>Annual</td>
@@ -280,7 +280,7 @@ const AdminEventTable = ({ data, pagination, actions, className, selectableRows,
         },
         {
             name: "Event Date",
-            selector: (row) => moment(row.date).format("MMM D, YYYY"),
+            selector: (row) => `${moment(`${row.date} ${row.time}`).format("MMM D, YYYY LT")}`,
             sortable: true,
             width: "auto",
             wrap: true

@@ -302,7 +302,7 @@ const Form = () => {
 
               {!$user_application?.application?.proof_of_payment || $user_application?.application?.status_description == 'FSD DECLINED PAYMENT' || $user_application?.application?.status_description == 'MBG DECLINED PAYMENT' ? <>
                 <a className="btn btn-primary mx-1" href={$invoice_download} target="_blank"> View Invoice </a>
-                <a className="btn btn-primary mx-1" href="#" onClick={() => setModalView(true)} >Make Payment </a>
+                <a className="btn btn-primary mx-1" onClick={() => setModalView(true)} >Make Payment </a>
               </> : <>
                 {/* { ?
                       <><a className="btn btn-primary mx-1" href="#" onClick={toggleView} >Make Payment </a></> : */}

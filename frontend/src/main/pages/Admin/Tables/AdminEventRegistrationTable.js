@@ -260,7 +260,7 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
                                     </tr>
                                     <tr>
                                         <td>Date </td>
-                                        <td className="text-capitalize">{`${tabItem?.event.date}`}</td>
+                                        <td className="text-capitalize">{`${moment(`${tabItem?.event.date} ${tabItem?.event.time}`).format("MMM D, YYYY LT")}`}</td>
                                     </tr>
                                     <tr>
                                         <td>Annual</td>
@@ -275,7 +275,7 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
                                             <td>Evidence Of Payment </td>
                                             <td className="text-capitalize">
                                                 <a href={tabItem?.evidence_of_payment_url} target="_blank">
-                                                    <Button color="primary" size="sm">view Evidence</Button>
+                                                    <Button color="primary" size="sm">View Evidence</Button>
                                                 </a>
                                             </td>
                                         </tr>
@@ -366,8 +366,8 @@ const AdminEventRegistrationTable = ({ data, pagination, actions, className, sel
             wrap: true
         },
         {
-            name: "Date",
-            selector: (row) => moment(row.event.date).format("MMM D, YYYY"),
+            name: "Event Date",
+            selector: (row) => moment(`${row.event.date} ${row.event.time}`).format("MMM D, YYYY LT"),
             sortable: true,
             width: "auto",
             wrap: true
