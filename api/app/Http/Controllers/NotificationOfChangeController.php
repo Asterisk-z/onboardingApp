@@ -218,7 +218,7 @@ class NotificationOfChangeController extends Controller
 
                 // $path = config('app.url') . '/storage/' . $notify_request->meg_document;
                 if ($notify_request->meg_document) {
-                    $path = config('app.url') . '/storage/app/public/' . $notify_request->meg_document;
+                    $path = config('app.url') . '' . config('app.storage_path') . '' . $notify_request->meg_document;
                     $attachment = [
                         'saved_path' => $path,
                         'name' => 'notification-of-change-document' . pathinfo($path, PATHINFO_EXTENSION),

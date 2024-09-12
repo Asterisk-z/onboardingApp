@@ -1,11 +1,13 @@
 <?php
 
+use App\Helpers\EventNotificationUtility;
 use App\Helpers\MailContents;
 use App\Helpers\Utility;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\MembershipApplicationController;
 use App\Http\Controllers\SystemController;
 use App\Models\Application;
+use App\Models\Education\EventRegistration;
 use App\Models\MembershipCategory;
 use App\Models\Role;
 use App\Models\User;
@@ -38,8 +40,16 @@ Route::get('/', function () {
 
     // }
     // dd($mailgroup);
+    // return view('agreement.afs');
 
-    return view('agreement.afs');
+    // dd(Event::all());
+    // dd(EventRegistration::all());
+
+    $event = EventRegistration::where('certificate_path', '!=', null)->first();
+    // dd($event);
+    EventNotificationUtility::certificate($event);
+
+    return view('welcome');
 });
 Route::get('/mail', function () {
     $displayName = "sfksfjsff";

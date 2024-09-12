@@ -91,6 +91,8 @@ class InfoNotification extends Notification implements ShouldQueue
         }
 
         if ($this->attachment) {
+            logger('$this->attachment');
+            logger($this->attachment);
             if (in_array("saved_path", $this->attachment) && in_array("name", $this->attachment)) {
                 $mail = $mail->attach($this->attachment['saved_path'], [
                     'as' => $this->attachment['name'],

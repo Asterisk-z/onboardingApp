@@ -20,19 +20,22 @@ class EventNotificationUtility
 
         $attachment = [
             [
-                'saved_path' => config('app.url') . '/storage/app/public/event_certs/' . $eventReg->certificate_path,
+                'saved_path' => config('app.url') . '' . config('app.storage_path') . 'event_certs/' . $eventReg->certificate_path,
                 'name' => Str::slug($eventReg->event->name) . '-certificate.pdf',
             ],
         ];
         if ($eventReg->event->presentation) {
             array_push($attachment, [
-                'saved_path' => config('app.url') . '/storage/app/public/' . $eventReg->event->presentation,
+                'saved_path' => config('app.url') . '' . config('app.storage_path') . '' . $eventReg->event->presentation,
                 'name' => Str::slug($eventReg->event->name) . '-presentation.pdf',
             ]);
         }
 
         $MEGs = Utility::getUsersEmailByCategory(Role::MEG);
-
+        logger($MEGs);
+        logger($attachment);
+        logger($eventReg->user);
+        logger($eventReg->toArray());
         Notification::send($eventReg->user, new InfoNotification($message, $subject, $MEGs, $attachment));
     }
 
