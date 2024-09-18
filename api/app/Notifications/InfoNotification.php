@@ -77,6 +77,10 @@ class InfoNotification extends Notification implements ShouldQueue
                 $displayName = "RLG";
             }
 
+            if ($user->role_id == Role::MD) {
+                $displayName = "MD";
+            }
+
             if ($user->role_id == Role::HELPDESK) {
                 $displayName = "HELP DESK";
             }
@@ -91,17 +95,18 @@ class InfoNotification extends Notification implements ShouldQueue
         }
 
         if ($this->attachment) {
-            logger('$this->attachment');
-            logger($this->attachment);
+
             if (in_array("saved_path", $this->attachment) && in_array("name", $this->attachment)) {
                 $mail = $mail->attach($this->attachment['saved_path'], [
                     'as' => $this->attachment['name'],
+                    // 'mime' => 'application/pdf',
                 ]);
             } else {
                 foreach ($this->attachment as $attachment) {
                     if (in_array("saved_path", $attachment) && in_array("name", $attachment)) {
                         $mail = $mail->attach($attachment['saved_path'], [
                             'as' => $attachment['name'],
+                            // 'mime' => 'application/pdf',
                         ]);
                     }
                 }

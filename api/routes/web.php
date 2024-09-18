@@ -1,14 +1,14 @@
 <?php
 
-use App\Helpers\EventNotificationUtility;
+// use App\Helpers\EventNotificationUtility;
 use App\Helpers\MailContents;
 use App\Helpers\Utility;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\MembershipApplicationController;
 use App\Http\Controllers\SystemController;
 use App\Models\Application;
-use App\Models\Education\EventRegistration;
-use App\Models\MembershipCategory;
+// use App\Models\Education\EventRegistration;
+// use App\Models\MembershipCategory;
 use App\Models\Role;
 use App\Models\User;
 // use Dompdf\Dompdf;
@@ -45,9 +45,8 @@ Route::get('/', function () {
     // dd(Event::all());
     // dd(EventRegistration::all());
 
-    $event = EventRegistration::where('certificate_path', '!=', null)->first();
-    // dd($event);
-    EventNotificationUtility::certificate($event);
+    // $event = EventRegistration::where('certificate_path', '!=', null)->first();
+    // EventNotificationUtility::certificate($event);
 
     return view('welcome');
 });

@@ -35,7 +35,7 @@ class Competency extends Model
 
     public function getPhysicalFileAttribute()
     {
-        return $this->evidence ? config('app.url') . '/storage/app/public/' . $this->physical_copy : null;
+        return $this->physical_copy ? config('app.url') . '/storage/app/public/' . $this->physical_copy : null;
     }
 
 }

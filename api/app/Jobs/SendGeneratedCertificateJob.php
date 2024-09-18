@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Helpers\EventNotificationUtility;
 use App\Models\Education\EventRegistration;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -35,7 +34,7 @@ class SendGeneratedCertificateJob implements ShouldQueue
     {
         $id = $this->eventReg->id;
         if (!$this->eventReg->certificate_path) {
-            logger("Cannot send certificate. Cert path not specified ($id)");
+            // logger("Cannot send certificate. Cert path not specified ($id)");
             return;
         }
 

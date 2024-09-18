@@ -32,10 +32,7 @@ class EventNotificationUtility
         }
 
         $MEGs = Utility::getUsersEmailByCategory(Role::MEG);
-        logger($MEGs);
-        logger($attachment);
-        logger($eventReg->user);
-        logger($eventReg->toArray());
+
         Notification::send($eventReg->user, new InfoNotification($message, $subject, $MEGs, $attachment));
     }
 

@@ -1,6 +1,6 @@
 {
     "name": "MROIS DEV",
-   "homepage": "http://localhost:3000/frontend/",
+    "homepage": "https://adgtest.fmdqgroup.com/newmroisdev/frontend/",
     "version": "1.7.1",
     "private": true,
     "dependencies": {

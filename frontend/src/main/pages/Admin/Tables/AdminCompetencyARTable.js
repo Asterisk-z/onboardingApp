@@ -111,7 +111,7 @@ const ActionTab = (props) => {
 const AdminCompetencyARTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState }) => {
   const complainColumn = [
     {
-      name: "UID",
+      name: "S/N",
       selector: (row, index) => ++index,
       sortable: true,
       width: "100px",
