@@ -4,12 +4,13 @@ import Logo from "../../images/fmdq/FMDQ-Logo.png";
 import Head from "../../layout/head/Head";
 import { Block, BlockContent, BlockDes, BlockHead, BlockTitle, Button, Icon, PreviewCard } from "../../components/Component";
 import { Form, Spinner, Alert, Modal, ModalBody, ModalFooter } from "reactstrap";
-import {} from "reactstrap"
+import { } from "reactstrap"
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { useNavigate } from 'react-router-dom';
 import { loginUser } from "./../../redux/stores/authenticate/authStore";
+import Outlink from "main/auth/Outlink"
 
 
 const Login = () => {
@@ -22,42 +23,42 @@ const Login = () => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  
+
   const { register, handleSubmit, formState: { errors } } = useForm();
-  
-  const handleProceed = () => navigate(process.env.PUBLIC_URL+'/form');
-  
+
+  const handleProceed = () => navigate(process.env.PUBLIC_URL + '/form');
+
 
   const handleFormSubmit = async (formData) => {
     setLoading(true);
-    
-      try {
-        setLoading(true);
-        
-        const resp = await dispatch(loginUser(formData));
-  
-        if (resp.payload?.message == "success") {
-              localStorage.getItem('reset-password-email')
-              setTimeout(() => {
-                
-                window.location.href = `${process.env.PUBLIC_URL}/dashboard`
-                setLoading(false);
-              }, 1000);
-          
-          setLoading(false);
-        } else {
-          
-          setLoading(false);
-        }
-      } catch (error) {
-        
-        setLoading(false);
-        // console.log(error)
+
+    try {
+      setLoading(true);
+
+      const resp = await dispatch(loginUser(formData));
+
+      if (resp.payload?.message == "success") {
+        localStorage.getItem('reset-password-email')
         setTimeout(() => {
-          setError("Cannot login with credentials");
+
+          window.location.href = `${process.env.PUBLIC_URL}/dashboard`
           setLoading(false);
         }, 1000);
+
+        setLoading(false);
+      } else {
+
+        setLoading(false);
       }
+    } catch (error) {
+
+      setLoading(false);
+      // console.log(error)
+      setTimeout(() => {
+        setError("Cannot login with credentials");
+        setLoading(false);
+      }, 1000);
+    }
   };
 
 
@@ -69,7 +70,7 @@ const Login = () => {
           <BlockHead>
             <BlockContent>
               <div className="logo-div">
-                <img className="logo" src={Logo} alt="fmdq logo"/>
+                <img className="logo" src={Logo} alt="fmdq logo" />
                 <h4>Member Regulation and Oversight Information System (MROIS)</h4>
               </div>
               <BlockTitle tag="h4">Log In</BlockTitle>
@@ -90,7 +91,7 @@ const Login = () => {
                 </label>
               </div>
               <div className="form-control-wrap">
-                <input 
+                <input
                   type="email"
                   {...register('email', { required: "This field is required" })}
                   placeholder="Enter your email address or username"
@@ -130,7 +131,7 @@ const Login = () => {
               </div>
             </div>
             <div className="form-group">
-              <Button type="submit" size="lg" className="btn-block"  color="primary">
+              <Button type="submit" size="lg" className="btn-block" color="primary">
                 {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Log in"}
               </Button>
             </div>
@@ -138,6 +139,9 @@ const Login = () => {
           <div className="form-note-s2 text-center pt-4">
             New on MROIS? <Link to={`${process.env.PUBLIC_URL}/privacy-policy`}>Sign Up</Link>
           </div>
+
+          <Outlink />
+
         </PreviewCard>
       </Block>
     </div>

@@ -313,25 +313,28 @@ const Homepage = () => {
                 </div>
               </Card>
             </Col>
-            <Col xxl="3" sm="6">
-              <Card className="color3">
-                <div className="nk-ecwg nk-ecwg6">
-                  <div className="card-inner">
-                    <div className="card-title-group">
-                      <div className="card-title">
-                        <h6 className="title">{"Messages"}</h6>
+            {false && <>
+              <Col xxl="3" sm="6">
+                <Card className="color3">
+                  <div className="nk-ecwg nk-ecwg6">
+                    <div className="card-inner">
+                      <div className="card-title-group">
+                        <div className="card-title">
+                          <h6 className="title">{"Messages"}</h6>
+                        </div>
                       </div>
-                    </div>
-                    <div className="data">
-                      <div className="data-group">
-                        <div className="amount">{"0"}</div>
-                        {/* <div><Button color="secondary">View</Button></div> */}
+                      <div className="data">
+                        <div className="data-group">
+                          <div className="amount">{"0"}</div>
+                          {/* <div><Button color="secondary">View</Button></div> */}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </Card>
-            </Col>
+                </Card>
+              </Col>
+            </>}
+
 
           </Row>
         </Block>

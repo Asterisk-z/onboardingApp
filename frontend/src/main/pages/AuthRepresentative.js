@@ -259,7 +259,7 @@ const AuthRepresentative = ({ drawer }) => {
                 </BlockHead>
                 <Modal isOpen={modelForSearchAR} toggle={toggleModelForSearch} size="xl">
                     <ModalHeader toggle={toggleModelForSearch} close={<button className="close" onClick={toggleModelForSearch}><Icon name="cross" /></button>}>
-                        Authorised Representative already exist
+                        Authorised Representative already exists
                     </ModalHeader>
                     <ModalBody>
                         <p>Do you want to transfer Authorised Representative?</p>

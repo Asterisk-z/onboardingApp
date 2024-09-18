@@ -132,7 +132,7 @@ class ESuccessLetter
             'address' => "<p><i><b>$date</b></i></p>
                             <p><i><b>$designation({$this->regId})</b></i></p>
                             <p><i><b>$address</b></i></p>",
-            'title' => "<p><b>APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED DEALING MEMBER (BANKS) CATEGORY</b></p>",
+            'title' => "<p><b>APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED DEALING MEMBER (BANK) CATEGORY</b></p>",
             'body' => "<p  style='text-align: justify;text-justify: inter-word;'>
                             Having reviewed your application for the Dealing Member (Bank) (DMB)
                             category of FMDQ Securities Exchange Limited (“FMDQ Exchange”),
@@ -200,7 +200,7 @@ class ESuccessLetter
             'address' => "<p><i><b>$date</b></i></p>
                             <p><i><b>$designation({$this->regId})</b></i></p>
                             <p><i><b>$address</b></i></p>",
-            'title' => "<p><b>APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED DEALING MEMBER (BANKS) CATEGORY</b></p>",
+            'title' => "<p><b>APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED DEALING MEMBER (BANK) CATEGORY</b></p>",
             'body' => "<p  style='text-align: justify;text-justify: inter-word;'>
                             Having reviewed your application for the Dealing Member (Bank) (DMB) category of FMDQ Securities Exchange Limited ('FMDQ Exchange'),
                             we are pleased to inform you that your application is successful, and $companyName ($companyName)
@@ -260,10 +260,10 @@ class ESuccessLetter
                             <p><i><b>$designation({$this->regId})</b></i></p>
                             <p><i><b>$address</b></i></p>",
             'title' => "<p><b>
-                            APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED DEALING MEMBER (SPECIALISTS) CATEGORY
+                            APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED DEALING MEMBER (SPECIALIST) CATEGORY
                         </b></p>",
             'body' => "<p  style='text-align: justify;text-justify: inter-word;'>
-                            Having reviewed your application for the Dealing Member (Specialists) category of FMDQ Securities Exchange Limited ('FMDQ Exchange'),
+                            Having reviewed your application for the Dealing Member (Specialist) category of FMDQ Securities Exchange Limited ('FMDQ Exchange'),
                             we are pleased to inform you that your application is successful, and $companyName will now be profiled on the FMDQ e-Knowledge module.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>

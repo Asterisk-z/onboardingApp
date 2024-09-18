@@ -4,11 +4,12 @@ import { useNavigate } from "react-router-dom";
 import DatePicker from "react-datepicker"
 import { useForm } from "react-hook-form";
 import { Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner } from "reactstrap";
-import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, MultiDatePicker, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
+import { Block, BlockHead, BlockHeadContent, BlockTitle, Icon, Button, Row, Col, BlockBetween, RSelect, BlockDes, BackTo, PreviewCard, ReactDataTable } from "components/Component";
 import { loadAllActiveCategories } from "redux/stores/memberCategory/category";
 import { loadAllCategoryPositions } from "redux/stores/positions/positionStore";
 import { megCreateEvent } from "redux/stores/education/eventStore";
 import Content from "layout/content/Content";
+import MultiDatePicker from "main/pages/Components/EventDatePicker";
 import Head from "layout/head/Head";
 import moment from "moment";
 
@@ -91,20 +92,19 @@ const AdminEvents = ({ drawer }) => {
         if (unregistered_remainders) {
             // moment(values.eventDate).format('YYYY-MM-DD')
             let dates = unregistered_remainders.map((item) => moment(item).format('YYYY-MM-DD')).toString()
-            // console.log(unregistered_remainders.map((item) => moment(item).format('YYYY-MM-DD')))
             setUnregisteredDate(dates)
-            // setUnregisteredDate(unregistered_remainders.toString())
             setValue('unregistered_remainders', dates)
         }
 
     };
 
     const update_registered_remainders = (registered_remainders) => {
+
         if (registered_remainders) {
             let dates = registered_remainders.map((item) => moment(item).format('YYYY-MM-DD')).toString()
             setRegisteredDate(dates)
-            // setRegisteredDate(registered_remainders.toString())
             setValue('registered_remainders', dates)
+            console.log(dates)
         }
     };
 
@@ -114,9 +114,6 @@ const AdminEvents = ({ drawer }) => {
         dispatch(loadAllCategoryPositions({ 'category_ids': category }));
     };
 
-    const updateRegisteredFrequency = (value) => {
-        console.log(value.target.value)
-    };
 
     const toggleEventDate = (value) => {
         setUnregisteredDate("")
@@ -124,6 +121,16 @@ const AdminEvents = ({ drawer }) => {
         setValue('unregistered_remainders', '')
         setValue('registered_remainders', '')
         setEventDate(value)
+    };
+
+    const updateRegisteredFrequency = (value) => {
+        setRegisteredFrequency(value)
+        toggleEventDate(eventDate)
+    };
+
+    const updateUnRegisteredFrequency = (value) => {
+        setUnregisteredFrequency(value)
+        toggleEventDate(eventDate)
     };
 
 
@@ -309,7 +316,7 @@ const AdminEvents = ({ drawer }) => {
                                                     <div className="form-control-wrap">
                                                         <div className="form-control-select">
                                                             {/* <select className="form-control form-select" {...register('registered_remainder_frequency')} id="registered_remainder_frequency" onChange={(value) => updateRegisteredFrequency(value)} > */}
-                                                            <select className="form-control form-select" {...register('registered_remainder_frequency')} id="registered_remainder_frequency" onChange={(value) => setRegisteredFrequency(value.target.value)} >
+                                                            <select className="form-control form-select" {...register('registered_remainder_frequency')} id="registered_remainder_frequency" onChange={(value) => updateRegisteredFrequency(value.target.value)} >
                                                                 <option value="">Select Frequency</option>
                                                                 <option value=''>None</option>
                                                                 <option value='Daily'>Daily</option>
@@ -331,7 +338,7 @@ const AdminEvents = ({ drawer }) => {
                                                         {/* {getValues('registered_remainder_frequency')} */}
                                                         <input type="hidden" {...register('registered_remainders')} value={registeredDate} />
                                                         {/* <input type="hidden" {...register('registered_remainders', { required: "This Field is required" })} value={registeredDate} /> */}
-                                                        <MultiDatePicker nameAttr='registered_remainders' changeAction={update_registered_remainders} max={eventDate} />
+                                                        <MultiDatePicker nameAttr='registered_remainders' changeAction={update_registered_remainders} max={eventDate} reminderType={registeredFrequency} />
                                                         {errors.registered_remainders && <span className="invalid">{"This Field is required"}</span>}
                                                     </div>
                                                 </div>
@@ -344,7 +351,7 @@ const AdminEvents = ({ drawer }) => {
                                                     </label>
                                                     <div className="form-control-wrap">
                                                         <div className="form-control-select">
-                                                            <select className="form-control form-select" {...register('unregistered_remainder_frequency')} id="unregistered_remainder_frequency" onChange={(value) => setUnregisteredFrequency(value.target.value)} >
+                                                            <select className="form-control form-select" {...register('unregistered_remainder_frequency')} id="unregistered_remainder_frequency" onChange={(value) => updateUnRegisteredFrequency(value.target.value)} >
                                                                 <option value="">Select Frequency</option>
                                                                 <option value=''>None</option>
                                                                 <option value='Daily'>Daily</option>
@@ -358,6 +365,7 @@ const AdminEvents = ({ drawer }) => {
                                             </Col>
 
 
+
                                             <Col md='6'>
                                                 <div className="form-group">
                                                     <label className="form-label" htmlFor="date">
@@ -367,7 +375,7 @@ const AdminEvents = ({ drawer }) => {
                                                         {/* {getValues('unregistered_remainder_frequency')} */}
                                                         <input type="hidden" {...register('unregistered_remainders')} value={unregisteredDate} />
                                                         {/* <input type="hidden" {...register('unregistered_remainders', { required: "This Field is required" })} value={unregisteredDate} /> */}
-                                                        <MultiDatePicker nameAttr='unregistered_remainders' changeAction={update_unregistered_remainders} max={eventDate}
+                                                        <MultiDatePicker nameAttr='unregistered_remainders' changeAction={update_unregistered_remainders} max={eventDate} reminderType={unregisteredFrequency}
                                                         // properties={{ 'readOnly': (!unregisteredFrequency || unregisteredFrequency == 'none') ? true : false }} 
                                                         />
                                                         {errors.unregistered_remainders && <span className="invalid">{'This Field is required'}</span>}

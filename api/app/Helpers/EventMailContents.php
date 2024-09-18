@@ -174,7 +174,7 @@ class EventMailContents
     {
 
         $message = "<p>
-                Please be informed that there is a new registration for $eventName event fee pending approval.
+                Please be informed that there is a new registration for $eventName pending approval.
             </p>";
 
         return $message;

@@ -181,39 +181,41 @@ const ActionTab = ({ updateParentParent, tabItem }) => {
       <div className="toggle-expand-content" style={{ display: "block" }}>
         <ul className="nk-block-tools g-3">
           <li className="nk-block-tools-opt">
-            <UncontrolledDropdown direction="right">
-              <DropdownToggle className="dropdown-toggle btn btn-sm" color="secondary">Action</DropdownToggle>
+            {!['1', '2', 1, 2].includes(tabItem.id) && <>
+              <UncontrolledDropdown direction="right">
+                <DropdownToggle className="dropdown-toggle btn btn-sm" color="secondary">Action</DropdownToggle>
 
-              <DropdownMenu>
-                <ul className="link-list-opt">
-                  {(!['1', '2'].includes(tabItem.id)) && <>
+                <DropdownMenu>
+                  <ul className="link-list-opt">
                     <li size="xs">
                       <DropdownItem tag="a" onClick={toggleForm} >
                         <Icon name="eye"></Icon>
                         <span>Edit</span>
                       </DropdownItem>
                     </li>
-                  </>}
-                  {(!tabItem.active) ? <>
-                    <li size="xs">
-                      <DropdownItem tag="a" onClick={(e) => askAction('open')} >
-                        <Icon name="eye"></Icon>
-                        <span>Activate</span>
-                      </DropdownItem>
-                    </li></> : <>
-                    <li size="xs">
-                      <DropdownItem tag="a" onClick={(e) => askAction('close')} >
-                        <Icon name="eye"></Icon>
-                        <span>Deactivate</span>
-                      </DropdownItem>
-                    </li>
-                  </>
-                  }
+
+                    {(!tabItem.active) ? <>
+                      <li size="xs">
+                        <DropdownItem tag="a" onClick={(e) => askAction('open')} >
+                          <Icon name="eye"></Icon>
+                          <span>Activate</span>
+                        </DropdownItem>
+                      </li></> : <>
+                      <li size="xs">
+                        <DropdownItem tag="a" onClick={(e) => askAction('close')} >
+                          <Icon name="eye"></Icon>
+                          <span>Deactivate</span>
+                        </DropdownItem>
+                      </li>
+                    </>
+                    }
 
 
-                </ul>
-              </DropdownMenu>
-            </UncontrolledDropdown>
+                  </ul>
+                </DropdownMenu>
+              </UncontrolledDropdown>
+            </>}
+
           </li>
 
         </ul>

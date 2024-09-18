@@ -353,7 +353,7 @@
                             <p>BETWEEN</p>
                             <p>FMDQ SECURITIES EXCHANGE LIMITED</p>
                             <p>AND</p>
-                            <p>{{ $details->name }}</p>
+                            <p style="text-transform: uppercase;">{{ $details->name }}</p>
                         </div>
                     </div>
                 </div>

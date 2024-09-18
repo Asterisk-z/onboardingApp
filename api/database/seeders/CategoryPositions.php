@@ -20,7 +20,7 @@ class CategoryPositions extends Seeder
         //
         MembershipCategoryPostition::query()->truncate();
 
-        $membership_category = 'Dealing Member (Banks)';
+        $membership_category = 'Dealing Member (Bank)';
         $rows = [["name" => "Group Managing Director"],
             ["name" => "Managing Director/CEO", "is_compulsory" => true, "email" => "dmbceos@fmdqgroup.com"],
             ["name" => "Supervising Director", "email" => "dmsds@fmdqgroup.com"],
@@ -107,7 +107,7 @@ class CategoryPositions extends Seeder
             }
 
         }
-        $membership_category = 'Dealing Member (Specialists)';
+        $membership_category = 'Dealing Member (Specialist)';
 
         $rows = [
             ["name" => "Managing Director/CEO", "is_compulsory" => true, "email" => "DMSCEOsActivated@fmdqgroup.com"],

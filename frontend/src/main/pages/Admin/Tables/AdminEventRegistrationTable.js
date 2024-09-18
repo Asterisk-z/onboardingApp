@@ -346,7 +346,14 @@ const AdminEventRegistrationTable = ({ data, pagination, actions, className, sel
         },
         {
             name: "Registrant",
-            selector: (row) => { return (<><p>{`${row.user.firstName} ${row.user.lastName}`}<br />{`${row.user.email}`}</p></>) },
+            selector: (row) => { return (<><p>{`${row.user.firstName} ${row.user.lastName}`}</p></>) },
+            sortable: true,
+            width: "auto",
+            wrap: true
+        },
+        {
+            name: "Email",
+            selector: (row) => { return (<><p>{`${row.user.email}`}</p></>) },
             sortable: true,
             width: "auto",
             wrap: true

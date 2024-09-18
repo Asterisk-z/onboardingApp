@@ -354,7 +354,7 @@
                             <p>BETWEEN</p>
                             <p>FMDQ SECURITIES EXCHANGE LIMITED</p>
                             <p>AND</p>
-                            <p>{{ $details->name }}</p>
+                            <p style="text-transform: uppercase;">{{ $details->name }}</p>
                         </div>
                     </div>
                 </div>
@@ -467,7 +467,7 @@
                 <div class="page-border-one">
                     <div class="page-border-two" style="padding-top: 20px;align-items: flex-start;">
                         <div class="content" style="text-align: justify;">
-                            <p><strong>THIS DEALING MEMBERSHIP AGREEMENT</strong> is made the <span class="user-input uTwo"></span> day of <span class="user-input uTwo"></span>20<span class="user-input uTwo"> </span></p><br>
+                            <p><strong>THIS REGISTRATION MEMBER (LISTINGS) </strong> is made the <span class="user-input uTwo"></span> day of <span class="user-input uTwo"></span>20<span class="user-input uTwo"> </span></p><br>
                             <p><strong>BETWEEN</strong></p><br>
                             <p><strong>FMDQ SECURITIES EXCHANGE LIMITED (RC. NO. 1617162)</strong>, a company incorporated under the laws of the Federal Republic of Nigeria with its principal place of business at Exchange Place, 35, Idowu Taylor Street, Victoria Island, Lagos, (hereinafter called <strong>“FMDQ Exchange”</strong> which expressionshall where the context so admits shall include its successors and assigns) of the first part.</p><br>
                             <p>AND</p><br>
