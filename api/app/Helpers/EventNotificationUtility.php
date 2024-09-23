@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Jobs\EventCompletionJob;
 use App\Models\Education\Event;
 use App\Models\Education\EventRegistration;
 use App\Models\Role;
@@ -15,8 +16,6 @@ class EventNotificationUtility
 
     public static function certificate(EventRegistration $eventReg)
     {
-        $message = EventMailContents::certificateARBody($eventReg->event->name);
-        $subject = EventMailContents::certificateARSubject($eventReg->event->name);
 
         $attachment = [
             [
@@ -31,9 +30,20 @@ class EventNotificationUtility
             ]);
         }
 
+        $message = EventMailContents::certificateARBody($eventReg->event->name, $attachment);
+        $subject = EventMailContents::certificateARSubject($eventReg->event->name);
+
         $MEGs = Utility::getUsersEmailByCategory(Role::MEG);
 
-        Notification::send($eventReg->user, new InfoNotification($message, $subject, $MEGs, $attachment));
+        $emailData = [
+            'name' => $eventReg->user->first_name,
+            'subject' => $subject,
+            'content' => $message,
+        ];
+
+        EventCompletionJob::dispatch($eventReg, $emailData, $MEGs, $attachment);
+
+        // Notification::send($eventReg->user, new InfoNotification($message, $subject, $MEGs, $attachment));
     }
 
     public static function pendingPaymentEventRegistration(EventRegistration $eventReg)

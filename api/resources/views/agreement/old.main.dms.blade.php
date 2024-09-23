@@ -7,347 +7,344 @@
     <meta name="description" content="Emulating real sheets of paper in web documents (using HTML and CSS)">
     <title>Sheets of Paper</title>
     <style>
+        html,
+        body {
+            /* Reset the document's margin values */
+            margin: 0;
+            /* Reset the document's padding values */
+            padding: 0;
+            /* Use the platform's native font as the default */
+            font-family: "Roboto", -apple-system, "San Francisco", "Segoe UI", "Helvetica Neue", sans-serif;
+            /* Define a reasonable base font size */
+            font-size: 12pt;
+
+            /* Styles for better appearance on screens only -- are reset to defaults in print styles later */
+
+            /* Use a non-white background color to make the content areas stick out from the full page box */
+            background-color: #eee;
+        }
+
+        /* Styles that are shared by all elements */
+        * {
+            /* Include the content box as well as padding and border for precise definitions */
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+        }
+
+        .page {
+            /* Styles for better appearance on screens only -- are reset to defaults in print styles later */
+
+            /* Divide single pages with some space and center all pages horizontally */
+            margin: 1cm auto;
+            /* Define a white paper background that sticks out from the darker overall background */
+            background: #fff;
+            /* Show a drop shadow beneath each page */
+            box-shadow: 0 4px 5px rgba(75, 75, 75, 0.2);
+            /* Override outline from user agent stylesheets */
+            outline: 0;
+        }
+
+        /* Defines a class for manual page breaks via inserted .page-break element */
+        div.page-break {
+            page-break-after: always;
+        }
+
+        /* Simulates the behavior of manual page breaks from `print` mode in `screen` mode */
+        @media screen {
+
+            /* Renders the border and shadow at the bottom of the upper virtual page */
+            div.page-break::before {
+                content: "";
+                display: block;
+                /* Give a sufficient height to this element so that its drop shadow is properly rendered */
+                height: 0.8cm;
+                /* Offset the negative extra margin at the left of the non-pseudo element */
+                margin-left: 0.5cm;
+                /* Offset the negative extra margin at the right of the non-pseudo element */
+                margin-right: 0.5cm;
+                /* Make the bottom area appear as a part of the page margins of the upper virtual page */
+                background-color: #fff;
+                /* Show a drop shadow beneath the upper virtual page */
+                box-shadow: 0 6px 5px rgba(75, 75, 75, 0.2);
+            }
+
+            /* Renders the empty space as a divider between the two virtual pages that are actually two parts of the same page */
+            div.page-break {
+                display: block;
+                /* Assign the intended height plus the height of the pseudo element */
+                height: 1.8cm;
+                /* Apply a negative margin at the left to offset the page margins of the page plus some negative extra margin to paint over the border and shadow of the page */
+                margin-left: -2.5cm;
+                /* Apply a negative margin at the right to offset the page margins of the page plus some negative extra margin to paint over the border and shadow of the page */
+                margin-right: -2.5cm;
+                /* Create the bottom page margin on the upper virtual page (minus the height of the pseudo element) */
+                margin-top: 1.2cm;
+                /* Create the top page margin on the lower virtual page */
+                margin-bottom: 2cm;
+                /* Let this page appear as empty space between the virtual pages */
+                background: #eee;
+            }
+        }
+
+        /* For top-level headings only */
+        h1 {
+            /* Force page breaks after */
+            page-break-before: always;
+        }
+
+        /* For all headings */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            /* Avoid page breaks immediately */
+            page-break-after: avoid;
+        }
+
+        /* For all paragraph tags */
+        p {
+            /* Reset the margin so that the text starts and ends at the expected marks */
+            margin: 0;
+        }
+
+        /* For adjacent paragraph tags */
+        p+p {
+            /* Restore the spacing between the paragraphs */
+            margin-top: 0.5cm;
+        }
+
+        /* For links in the document */
+        a {
+            /* Prevent colorization or decoration */
+            text-decoration: none;
+            color: black;
+        }
+
+        /* For tables in the document */
+        table {
+            /* Avoid page breaks inside */
+            page-break-inside: avoid;
+        }
+
+        /* Use CSS Paged Media to switch from continuous documents to sheet-like documents with separate pages */
+        @page {
+            /* You can only change the size, margins, orphans, widows and page breaks here */
+
+            /* Require that at least this many lines of a paragraph must be left at the bottom of a page */
+            orphans: 4;
+            /* Require that at least this many lines of a paragraph must be left at the top of a new page */
+            widows: 2;
+        }
+
+        /* When the document is actually printed */
         @media print {
 
             html,
             body {
-                /* Reset the document's margin values */
-                margin: 0;
-                /* Reset the document's padding values */
-                padding: 0;
-                /* Use the platform's native font as the default */
-                font-family: "Roboto", -apple-system, "San Francisco", "Segoe UI", "Helvetica Neue", sans-serif;
-                /* Define a reasonable base font size */
-                font-size: 16px;
-
-                /* Styles for better appearance on screens only -- are reset to defaults in print styles later */
-
-                /* Use a non-white background color to make the content areas stick out from the full page box */
-                background-color: #eee;
-            }
-
-            /* Styles that are shared by all elements */
-            * {
-                /* Include the content box as well as padding and border for precise definitions */
-                box-sizing: border-box;
-                -moz-box-sizing: border-box;
+                /* Reset the document's background color */
+                background-color: #fff;
             }
 
             .page {
-                /* Styles for better appearance on screens only -- are reset to defaults in print styles later */
+                /* Reset all page styles that have been for better screen appearance only */
+                /* Break cascading by using the !important rule */
+                /* These resets are absolute must-haves for the print styles and the specificity may be higher elsewhere */
+                width: initial !important;
+                min-height: initial !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                border: initial !important;
+                border-radius: initial !important;
+                background: initial !important;
+                box-shadow: initial !important;
 
-                /* Divide single pages with some space and center all pages horizontally */
-                margin: 2px auto;
-                /* Define a white paper background that sticks out from the darker overall background */
-                background: #fff;
-                /* Show a drop shadow beneath each page */
-                box-shadow: 0 4px 5px rgba(75, 75, 75, 0.2);
-                /* Override outline from user agent stylesheets */
-                outline: 0;
-            }
-
-            /* Defines a class for manual page breaks via inserted .page-break element */
-            div.page-break {
+                /* Force page breaks after each .page element of the document */
                 page-break-after: always;
             }
-
-            /* Simulates the behavior of manual page breaks from `print` mode in `screen` mode */
-            @media screen {
-
-                /* Renders the border and shadow at the bottom of the upper virtual page */
-                div.page-break::before {
-                    content: "";
-                    display: block;
-                    /* Give a sufficient height to this element so that its drop shadow is properly rendered */
-                    height: 0.8px;
-                    /* Offset the negative extra margin at the left of the non-pseudo element */
-                    margin-left: 0.5px;
-                    /* Offset the negative extra margin at the right of the non-pseudo element */
-                    margin-right: 0.5px;
-                    /* Make the bottom area appear as a part of the page margins of the upper virtual page */
-                    background-color: #fff;
-                    /* Show a drop shadow beneath the upper virtual page */
-                    box-shadow: 0 6px 5px rgba(75, 75, 75, 0.2);
-                }
-
-                /* Renders the empty space as a divider between the two virtual pages that are actually two parts of the same page */
-                div.page-break {
-                    display: block;
-                    /* Assign the intended height plus the height of the pseudo element */
-                    height: 1.8px;
-                    /* Apply a negative margin at the left to offset the page margins of the page plus some negative extra margin to paint over the border and shadow of the page */
-                    margin-left: -2.5px;
-                    /* Apply a negative margin at the right to offset the page margins of the page plus some negative extra margin to paint over the border and shadow of the page */
-                    margin-right: -2.5px;
-                    /* Create the bottom page margin on the upper virtual page (minus the height of the pseudo element) */
-                    margin-top: 1.2px;
-                    /* Create the top page margin on the lower virtual page */
-                    margin-bottom: 2px;
-                    /* Let this page appear as empty space between the virtual pages */
-                    background: #eee;
-                }
-            }
-
-            /* For top-level headings only */
-            h1 {
-                /* Force page breaks after */
-                page-break-before: always;
-            }
-
-            /* For all headings */
-            h1,
-            h2,
-            h3,
-            h4,
-            h5,
-            h6 {
-                /* Avoid page breaks immediately */
-                page-break-after: avoid;
-            }
-
-            /* For all paragraph tags */
-            p {
-                /* Reset the margin so that the text starts and ends at the expected marks */
-                margin: 0;
-            }
-
-            /* For adjacent paragraph tags */
-            p+p {
-                /* Restore the spacing between the paragraphs */
-                margin-top: 0.5px;
-            }
-
-            /* For links in the document */
-            a {
-                /* Prevent colorization or decoration */
-                text-decoration: none;
-                color: black;
-            }
-
-            /* For tables in the document */
-            table {
-                /* Avoid page breaks inside */
-                page-break-inside: avoid;
-            }
-
-            /* Use CSS Paged Media to switch from continuous documents to sheet-like documents with separate pages */
-            @page {
-                /* You can only change the size, margins, orphans, widows and page breaks here */
-
-                /* Require that at least this many lines of a paragraph must be left at the bottom of a page */
-                orphans: 4;
-                /* Require that at least this many lines of a paragraph must be left at the top of a new page */
-                widows: 2;
-            }
-
-            /* When the document is actually printed */
-            @media print {
-
-                html,
-                body {
-                    /* Reset the document's background color */
-                    background-color: #fff;
-                }
-
-                .page {
-                    /* Reset all page styles that have been for better screen appearance only */
-                    /* Break cascading by using the !important rule */
-                    /* These resets are absolute must-haves for the print styles and the specificity may be higher elsewhere */
-                    width: initial !important;
-                    min-height: initial !important;
-                    margin: 0 !important;
-                    padding: 0 !important;
-                    border: initial !important;
-                    border-radius: initial !important;
-                    background: initial !important;
-                    box-shadow: initial !important;
-
-                    /* Force page breaks after each .page element of the document */
-                    page-break-after: always;
-                }
-            }
+        }
 
 
-            .page {
-                /* Styles for better appearance on screens only -- are reset to defaults in print styles later */
+        .page {
+            /* Styles for better appearance on screens only -- are reset to defaults in print styles later */
 
-                /* Reflect the paper width in the screen rendering (must match size from @page rule) */
-                width: 800px;
-                /* Reflect the paper height in the screen rendering (must match size from @page rule) */
-                min-height: 29.7px;
+            /* Reflect the paper width in the screen rendering (must match size from @page rule) */
+            width: 21cm;
+            /* Reflect the paper height in the screen rendering (must match size from @page rule) */
+            min-height: 29.7cm;
 
-                /* Reflect the actual page margin/padding on paper in the screen rendering (must match margin from @page rule) */
-                padding-left: 0.5px;
-                padding-top: 0.5px;
-                padding-right: 0.5px;
-                padding-bottom: 0.5px;
-            }
+            /* Reflect the actual page margin/padding on paper in the screen rendering (must match margin from @page rule) */
+            padding-left: 0.5cm;
+            padding-top: 0.5cm;
+            padding-right: 0.5cm;
+            padding-bottom: 0.5cm;
+        }
 
-            /* Use CSS Paged Media to switch from continuous documents to sheet-like documents with separate pages */
-            @page {
-                /* You can only change the size, margins, orphans, widows and page breaks here */
+        /* Use CSS Paged Media to switch from continuous documents to sheet-like documents with separate pages */
+        @page {
+            /* You can only change the size, margins, orphans, widows and page breaks here */
 
-                /* Paper size and page orientation */
-                size: A4 portrait;
+            /* Paper size and page orientation */
+            size: A4 portrait;
 
-                /* Margin per single side of the page */
-                margin-left: 0.5px;
-                margin-top: 0.5px;
-                margin-right: 0.5px;
-                margin-bottom: 0.5px;
-            }
+            /* Margin per single side of the page */
+            margin-left: 0.5cm;
+            margin-top: 0.5cm;
+            margin-right: 0.5cm;
+            margin-bottom: 0.5cm;
+        }
 
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-            body {
-                box-sizing: border-box;
-                font-family: 'Calibri', 'Segoe UI', 'Candara', 'Arial', sans-serif;
-            }
+        body {
+            box-sizing: border-box;
+            font-family: 'Calibri', 'Segoe UI', 'Candara', 'Arial', sans-serif;
+        }
 
-            .whole {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 30px;
-            }
+        .whole {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
 
-            .page-container {
-                height: 1100px;
-                /* padding: 20px; */
-            }
+        .page-container {
+            height: 1100px;
+            /* padding: 20px; */
+        }
 
-            .page-border-one {
-                /* border: 1px solid #1d326d; */
-                height: 100%;
-                /* padding: 2px; */
-            }
+        .page-border-one {
+            /* border: 1px solid #1d326d; */
+            height: 100%;
+            /* padding: 2px; */
+        }
 
-            .page-border-two {
-                /* border: 1px solid #1d326d; */
-                height: 100%;
-                /* padding: 20px; */
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                padding-top: 200px;
-            }
+        .page-border-two {
+            /* border: 1px solid #1d326d; */
+            height: 100%;
+            /* padding: 20px; */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 200px;
+        }
 
-            /* section{
+        /* section{
         width: 100vw;
         display: flex;
         justify-content: center;
         } */
-            .title-page {
-                width: 70%;
-                height: 55%;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-between;
-                align-items: center;
-            }
+        .title-page {
+            width: 70%;
+            height: 55%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-            .content {
-                padding: 30px 30px;
-                width: 100%;
-            }
+        .content {
+            padding: 30px 30px;
+            width: 100%;
+        }
 
-            .toc-item {
-                display: flex;
-                justify-content: space-between;
-            }
+        .toc-item {
+            display: flex;
+            justify-content: space-between;
+        }
 
-            .user-input {
-                border-bottom: 1px solid black;
-                display: inline-flex;
-            }
+        .user-input {
+            border-bottom: 1px solid black;
+            display: inline-flex;
+        }
 
-            .uOne {
-                width: 160px;
-            }
+        .uOne {
+            width: 160px;
+        }
 
-            .uTwo {
-                width: 80px;
-            }
+        .uTwo {
+            width: 80px;
+        }
 
-            .dictionary {
-                display: flex;
-                gap: 30px;
-            }
+        .dictionary {
+            display: flex;
+            gap: 30px;
+        }
 
-            .whole-signatory {
-                display: flex;
-                justify-content: space-between;
-            }
+        .whole-signatory {
+            display: flex;
+            justify-content: space-between;
+        }
 
-            .signatory-cont {
-                width: 250px;
-            }
+        .signatory-cont {
+            width: 250px;
+        }
 
-            .signatory {
-                border-bottom: 1px solid #000;
-                width: 250px;
-                display: inline-flex;
-            }
+        .signatory {
+            border-bottom: 1px solid #000;
+            width: 250px;
+            display: inline-flex;
+        }
 
-            .name-designation {
-                width: 250px;
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
-            }
+        .name-designation {
+            width: 250px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
 
-            .flex-space-btw {
-                display: flex;
-                justify-content: space-between;
-            }
+        .flex-space-btw {
+            display: flex;
+            justify-content: space-between;
+        }
 
-            .sub-dictionary {
-                display: flex;
-                align-items: baseline;
-                gap: 10px;
-                /* justify-content: space-between; */
-            }
+        .sub-dictionary {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            /* justify-content: space-between; */
+        }
 
-            .definition {
-                width: 450px;
-            }
+        .definition {
+            width: 450px;
+        }
 
-            .term {
-                width: 150px;
-            }
+        .term {
+            width: 150px;
+        }
 
-            .ml-20 {
-                margin-left: 20px;
-            }
+        .ml-20 {
+            margin-left: 20px;
+        }
 
-            .ml-30 {
-                margin-left: 30px;
-            }
+        .ml-30 {
+            margin-left: 30px;
+        }
 
-            .ml-40 {
-                margin-left: 40px;
-            }
+        .ml-40 {
+            margin-left: 40px;
+        }
 
-            .ml-60 {
-                margin-left: 60px;
-            }
+        .ml-60 {
+            margin-left: 60px;
+        }
 
-            .dmb-no {
-                display: flex;
-                justify-content: flex-end;
-                padding-right: 0.5cm;
-            }
+        .dmb-no {
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 0.5cm;
         }
 
     </style>
 </head>
 <body class="document">
     <div class="page" contenteditable="false">
-        {{-- <section class="page-one">
+        <section class="page-one">
             <div class="page-container">
                 <div class="page-border-one">
                     <div class="page-border-two">
@@ -357,15 +354,15 @@
                             <p>FMDQ SECURITIES EXCHANGE LIMITED</p>
                             <p>AND</p>
                             <p style="text-transform: uppercase;">{{ $details->name }}</p>
-    </div>
-    </div>
-    </div>
-    </div>
-    <div class="dmb-no">1</div>
-    </section> --}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="dmb-no">1</div>
+        </section>
     </div>
     <div class="page" contenteditable="false">
-        {{-- <section class="page-two">
+        <section class="page-two">
             <div class="page-container">
                 <div class="page-border-one">
                     <div class="page-border-two" style="padding-top: 20px;align-items: flex-start;">
@@ -422,10 +419,10 @@
                 </div>
             </div>
             <div class="dmb-no">2</div>
-        </section>  --}}
+        </section>
     </div>
     <div class="page" contenteditable="false">
-        {{-- <section class="page-three">
+        <section class="page-three">
             <div class="page-container">
                 <div class="page-border-one">
                     <div class="page-border-two" style="padding-top: 20px;align-items: flex-start;">
@@ -435,34 +432,34 @@
                             <p><strong>FMDQ SECURITIES EXCHANGE LIMITED (RC. NO. 1617162)</strong>, a company incorporated under the laws of the Federal Republic of Nigeria with its principal place of business at 35 Idowu Taylor Street, Victoria Island, Lagos, (hereinafter called <strong>“FMDQ Exchange”</strong> which expression shall where the context so admits include its successors and assigns) of the first part.</p><br>
                             <p>AND</p><br>
                             <p>{{ $details->name }} (RC NO. {{ $details->rc_number }}),, <br>a company incorporated under the laws of the Federal Republic of Nigeria with its registered office at {{ $details->address }} (the “Member” which expression shall where the context so admits include its successors and assigns) of the second part.</p><br>
-        <p><strong>BACKGROUND</strong></p><br>
-        <ol type="A" style="margin-left: 20px;">
-            <li>FMDQ Securities Exchange Limited (“FMDQ Exchange” or the “Exchange”) is a securities exchange and self-regulatory organisation (“SRO”) licensed and regulated by the Securities and Exchange Commission (“SEC” or the “Commission”).</li><br>
-            <li>The Exchange provides a Platform for the listing, quotation, noting, registration, trading, order execution, and trade reporting of fixed income, currency, and derivative products, inter alia. </li><br>
-            <li>The Member has indicated interest in becoming a Dealing Member (Specialist) of the Exchange with a view to actively participating in Trading Activities on the Exchange. </li><br>
-            <li> By executing this Agreement, the Member agrees to be bound by the Rules (as defined below).</li>
-        </ol><br>
-        <p><strong>AGREED TERMS</strong></p><br>
-        <ol style="margin-left: 20px;">
-            <li><strong>Definitions and Interpretation</strong><br><br>
-                <div class="dictionary">
-                    <p>1.1</p>
-                    <div>The following definitions shall apply in this Agreement: <br><br>
-                        <p><strong>Agreement:</strong> this Dealing Membership Agreement, as may be revised, updated and/or amended from time to time.</p> <br>
-                        <p><strong>Applicable Law:</strong> any law, statute, code, ordinance, decree, rule or regulation (including rules and regulations of self-regulatory organisations) as may relate to the activities of the Member(as may be revised, updated and/or amended from time to time).</p>
+                            <p><strong>BACKGROUND</strong></p><br>
+                            <ol type="A" style="margin-left: 20px;">
+                                <li>FMDQ Securities Exchange Limited (“FMDQ Exchange” or the “Exchange”) is a securities exchange and self-regulatory organisation (“SRO”) licensed and regulated by the Securities and Exchange Commission (“SEC” or the “Commission”).</li><br>
+                                <li>The Exchange provides a Platform for the listing, quotation, noting, registration, trading, order execution, and trade reporting of fixed income, currency, and derivative products, inter alia. </li><br>
+                                <li>The Member has indicated interest in becoming a Dealing Member (Specialist) of the Exchange with a view to actively participating in Trading Activities on the Exchange. </li><br>
+                                <li> By executing this Agreement, the Member agrees to be bound by the Rules (as defined below).</li>
+                            </ol><br>
+                            <p><strong>AGREED TERMS</strong></p><br>
+                            <ol style="margin-left: 20px;">
+                                <li><strong>Definitions and Interpretation</strong><br><br>
+                                    <div class="dictionary">
+                                        <p>1.1</p>
+                                        <div>The following definitions shall apply in this Agreement: <br><br>
+                                            <p><strong>Agreement:</strong> this Dealing Membership Agreement, as may be revised, updated and/or amended from time to time.</p> <br>
+                                            <p><strong>Applicable Law:</strong> any law, statute, code, ordinance, decree, rule or regulation (including rules and regulations of self-regulatory organisations) as may relate to the activities of the Member(as may be revised, updated and/or amended from time to time).</p>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ol>
+                        </div>
                     </div>
                 </div>
-            </li>
-        </ol>
-    </div>
-    </div>
-    </div>
-    </div>
-    <div class="dmb-no">3</div>
-    </section> --}}
+            </div>
+            <div class="dmb-no">3</div>
+        </section>
     </div>
     <div class="page" contenteditable="false">
-        {{-- <section class="page-four">
+        <section class="page-four">
             <div class="page-container">
                 <div class="page-border-one">
                     <div class="page-border-two" style="padding-top: 20px;align-items: flex-start;">
@@ -489,10 +486,10 @@
                 </div>
             </div>
             <div class="dmb-no">4</div>
-        </section>  --}}
+        </section>
     </div>
     <div class="page" contenteditable="false">
-        {{-- <section class="page-five">
+        <section class="page-five">
             <div class="page-container">
                 <div class="page-border-one">
                     <div class="page-border-two" style="padding-top: 20px;align-items: flex-start;">
@@ -525,10 +522,10 @@
                 </div>
             </div>
             <div class="dmb-no">5</div>
-        </section>  --}}
+        </section>
     </div>
     <div class="page" contenteditable="false">
-        {{-- <section class="page-six">
+        <section class="page-six">
             <div class="page-container">
                 <div class="page-border-one">
                     <div class="page-border-two" style="padding-top: 20px;align-items: flex-start;">
@@ -591,10 +588,10 @@
                 </div>
             </div>
             <div class="dmb-no">6</div>
-        </section>  --}}
+        </section>
     </div>
     <div class="page" contenteditable="false">
-        {{-- <section class="page-seven">
+        <section class="page-seven">
             <div class="page-container">
                 <div class="page-border-one">
                     <div class="page-border-two" style="padding-top: 20px;align-items: flex-start;">
@@ -619,10 +616,10 @@
                 </div>
             </div>
             <div class="dmb-no">7</div>
-        </section>  --}}
+        </section>
     </div>
     <div class="page" contenteditable="false">
-        {{-- <section class="page-eight">
+        <section class="page-eight">
             <div class="page-container">
                 <div class="page-border-one">
                     <div class="page-border-two" style="padding-top: 20px;align-items: flex-start;">
@@ -680,10 +677,10 @@
                 </div>
             </div>
             <div class="dmb-no">8</div>
-        </section>  --}}
+        </section>
     </div>
     <div class="page" contenteditable="false">
-        {{-- <section class="page-nine">
+        <section class="page-nine">
             <div class="page-container">
                 <div class="page-border-one">
                     <div class="page-border-two" style="padding-top: 20px;align-items: flex-start;">
@@ -744,10 +741,10 @@
                 </div>
             </div>
             <div class="dmb-no">9</div>
-        </section>  --}}
+        </section>
     </div>
     <div class="page" contenteditable="false">
-        {{-- <section class="page-ten">
+        <section class="page-ten">
             <div class="page-container">
                 <div class="page-border-one">
                     <div class="page-border-two" style="padding-top: 20px;align-items: flex-start;">
@@ -783,31 +780,31 @@
                             <div>
                                 <p>Signed for and on behalf of the within-named</p>
                                 <p><strong>{{ $details->name }}</strong></p>
-    </div><br><br><br><br>
-    <div class="whole-signatory">
-        <div class="signatory-cont">
-            <span class="signatory"></span>
-        </div>
-        <div class="signatory-cont">
-            <span class="signatory"></span>
-        </div>
-    </div><br>
-    <div class="whole-name-designation flex-space-btw">
-        <div class="name-designation">
-            <div><Strong>Name: </Strong><span></span></div>
-            <div><Strong>Designation: </Strong><span></span></div>
-        </div>
-        <div class="name-designation">
-            <div><Strong>Name: </Strong><span></span></div>
-            <div><Strong>Designation: </Strong><span></span></div>
-        </div>
-    </div><br>
-    </div>
-    </div>
-    </div>
-    </div>
-    <div class="dmb-no">10</div>
-    </section> --}}
+                            </div><br><br><br><br>
+                            <div class="whole-signatory">
+                                <div class="signatory-cont">
+                                    <span class="signatory"></span>
+                                </div>
+                                <div class="signatory-cont">
+                                    <span class="signatory"></span>
+                                </div>
+                            </div><br>
+                            <div class="whole-name-designation flex-space-btw">
+                                <div class="name-designation">
+                                    <div><Strong>Name: </Strong><span></span></div>
+                                    <div><Strong>Designation: </Strong><span></span></div>
+                                </div>
+                                <div class="name-designation">
+                                    <div><Strong>Name: </Strong><span></span></div>
+                                    <div><Strong>Designation: </Strong><span></span></div>
+                                </div>
+                            </div><br>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="dmb-no">10</div>
+        </section>
     </div>
     <script type="text/javascript">
         // window.print();

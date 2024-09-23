@@ -9,7 +9,7 @@ class EventMailContents
         return "Certificate $eventName event";
     }
 
-    public static function certificateARBody(string $eventName): string
+    public static function certificateARBody(string $eventName, $attachment): string
     {
 
         $message = "<p>

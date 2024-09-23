@@ -25,6 +25,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use NumberFormatter;
+// use Rmunate\Utilities\SpellNumber;
 use Symfony\Component\HttpFoundation\Response;
 
 class MembershipApplicationController extends Controller
@@ -707,10 +708,17 @@ class MembershipApplicationController extends Controller
 
         $f = new NumberFormatter("en", NumberFormatter::SPELLOUT);
 
+        $total = ceil($total);
+        $vat = ceil($vat);
+
+        $grandTotal = $total + $vat;
         $amountDue = number_format($total + $vat, 2);
         $amountInWords = $f->format($total + $vat);
         $total = number_format($total, 2);
         $vat = number_format($vat, 2);
+
+        // $amountInWords = SpellNumber::value($grandTotal)->locale('en')->currency('Naira')->fraction('Kobo')->toMoney();
+        // dd($spellOut, $amountInWords);
 
         // $pdfC = view('letter')->render();
         // return PDF::loadHTML($pdfC)->download('letter.pdf');
