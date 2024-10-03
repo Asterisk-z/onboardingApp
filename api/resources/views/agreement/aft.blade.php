@@ -4,295 +4,80 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="Emulating real sheets of paper in web documents (using HTML and CSS)">
-    <title>Sheets of Paper</title>
+    <title>DMS</title>
     <style>
-        html,
-        body {
-            /* Reset the document's margin values */
-            margin: 0;
-            /* Reset the document's padding values */
-            padding: 0;
-            /* Use the platform's native font as the default */
-            font-family: "Roboto", -apple-system, "San Francisco", "Segoe UI", "Helvetica Neue", sans-serif;
-            /* Define a reasonable base font size */
-            font-size: 12pt;
-
-            /* Styles for better appearance on screens only -- are reset to defaults in print styles later */
-
-            /* Use a non-white background color to make the content areas stick out from the full page box */
-            background-color: #eee;
-        }
-
-        /* Styles that are shared by all elements */
-        * {
-            /* Include the content box as well as padding and border for precise definitions */
-            box-sizing: border-box;
-            -moz-box-sizing: border-box;
-        }
-
-        .page {
-            /* Styles for better appearance on screens only -- are reset to defaults in print styles later */
-
-            /* Divide single pages with some space and center all pages horizontally */
-            margin: 1cm auto;
-            /* Define a white paper background that sticks out from the darker overall background */
-            background: #fff;
-            /* Show a drop shadow beneath each page */
-            box-shadow: 0 4px 5px rgba(75, 75, 75, 0.2);
-            /* Override outline from user agent stylesheets */
-            outline: 0;
-        }
-
-        /* Defines a class for manual page breaks via inserted .page-break element */
-        div.page-break {
+        .page-break {
             page-break-after: always;
         }
 
-        /* Simulates the behavior of manual page breaks from `print` mode in `screen` mode */
-        @media screen {
-
-            /* Renders the border and shadow at the bottom of the upper virtual page */
-            div.page-break::before {
-                content: "";
-                display: block;
-                /* Give a sufficient height to this element so that its drop shadow is properly rendered */
-                height: 0.8cm;
-                /* Offset the negative extra margin at the left of the non-pseudo element */
-                margin-left: 0.5cm;
-                /* Offset the negative extra margin at the right of the non-pseudo element */
-                margin-right: 0.5cm;
-                /* Make the bottom area appear as a part of the page margins of the upper virtual page */
-                background-color: #fff;
-                /* Show a drop shadow beneath the upper virtual page */
-                box-shadow: 0 6px 5px rgba(75, 75, 75, 0.2);
-            }
-
-            /* Renders the empty space as a divider between the two virtual pages that are actually two parts of the same page */
-            div.page-break {
-                display: block;
-                /* Assign the intended height plus the height of the pseudo element */
-                height: 1.8cm;
-                /* Apply a negative margin at the left to offset the page margins of the page plus some negative extra margin to paint over the border and shadow of the page */
-                margin-left: -2.5cm;
-                /* Apply a negative margin at the right to offset the page margins of the page plus some negative extra margin to paint over the border and shadow of the page */
-                margin-right: -2.5cm;
-                /* Create the bottom page margin on the upper virtual page (minus the height of the pseudo element) */
-                margin-top: 1.2cm;
-                /* Create the top page margin on the lower virtual page */
-                margin-bottom: 2cm;
-                /* Let this page appear as empty space between the virtual pages */
-                background: #eee;
-            }
+        table.gTable {
+            width: 100%;
+            font-weight: lighter;
         }
 
-        /* For top-level headings only */
-        h1 {
-            /* Force page breaks after */
-            page-break-before: always;
+        table.gTable tr td {
+            text-transform: uppercase;
+            text-align: center;
         }
 
-        /* For all headings */
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            /* Avoid page breaks immediately */
-            page-break-after: avoid;
+        table.gTable,
+        table.gTable>tbody>tr,
+        table.gTable>tbody>tr>td {
+            padding-top: 50px;
+            padding-bottom: 50px;
         }
 
-        /* For all paragraph tags */
-        p {
-            /* Reset the margin so that the text starts and ends at the expected marks */
-            margin: 0;
-        }
-
-        /* For adjacent paragraph tags */
-        p+p {
-            /* Restore the spacing between the paragraphs */
-            margin-top: 0.5cm;
-        }
-
-        /* For links in the document */
-        a {
-            /* Prevent colorization or decoration */
-            text-decoration: none;
-            color: black;
-        }
-
-        /* For tables in the document */
-        table {
-            /* Avoid page breaks inside */
-            page-break-inside: avoid;
-        }
-
-        /* Use CSS Paged Media to switch from continuous documents to sheet-like documents with separate pages */
-        @page {
-            /* You can only change the size, margins, orphans, widows and page breaks here */
-
-            /* Require that at least this many lines of a paragraph must be left at the bottom of a page */
-            orphans: 4;
-            /* Require that at least this many lines of a paragraph must be left at the top of a new page */
-            widows: 2;
-        }
-
-        /* When the document is actually printed */
-        @media print {
-
-            html,
-            body {
-                /* Reset the document's background color */
-                background-color: #fff;
-            }
-
-            .page {
-                /* Reset all page styles that have been for better screen appearance only */
-                /* Break cascading by using the !important rule */
-                /* These resets are absolute must-haves for the print styles and the specificity may be higher elsewhere */
-                width: initial !important;
-                min-height: initial !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                border: initial !important;
-                border-radius: initial !important;
-                background: initial !important;
-                box-shadow: initial !important;
-
-                /* Force page breaks after each .page element of the document */
-                page-break-after: always;
-            }
-        }
-
-
-        .page {
-            /* Styles for better appearance on screens only -- are reset to defaults in print styles later */
-
-            /* Reflect the paper width in the screen rendering (must match size from @page rule) */
-            width: 21cm;
-            /* Reflect the paper height in the screen rendering (must match size from @page rule) */
-            min-height: 29.7cm;
-
-            /* Reflect the actual page margin/padding on paper in the screen rendering (must match margin from @page rule) */
-            padding-left: 0.5cm;
-            padding-top: 0.5cm;
-            padding-right: 0.5cm;
-            padding-bottom: 0.5cm;
-        }
-
-        /* Use CSS Paged Media to switch from continuous documents to sheet-like documents with separate pages */
-        @page {
-            /* You can only change the size, margins, orphans, widows and page breaks here */
-
-            /* Paper size and page orientation */
-            size: A4 portrait;
-
-            /* Margin per single side of the page */
-            margin-left: 0.5cm;
-            margin-top: 0.5cm;
-            margin-right: 0.5cm;
-            margin-bottom: 0.5cm;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            box-sizing: border-box;
-            font-family: 'Calibri', 'Segoe UI', 'Candara', 'Arial', sans-serif;
-        }
-
-        .whole {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 30px;
-        }
-
-        .page-container {
-            height: 1100px;
-            /* padding: 20px; */
-        }
-
-        .page-border-one {
-            /* border: 1px solid #1d326d; */
-            height: 100%;
-            /* padding: 2px; */
-        }
-
-        .page-border-two {
-            /* border: 1px solid #1d326d; */
-            height: 100%;
-            /* padding: 20px; */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 200px;
-        }
-
-        /* section{
-        width: 100vw;
-        display: flex;
-        justify-content: center;
-        } */
-        .title-page {
-            width: 70%;
-            height: 55%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .content {
-            padding: 30px 30px;
+        table.p2Table {
             width: 100%;
         }
 
-        .toc-item {
-            display: flex;
-            justify-content: space-between;
+        table.p2Table th,
+        table.p2Table td {
+            text-align: left;
+            padding: 2px;
+            font-weight: lighter;
+            font-size: 14px;
         }
 
-        .user-input {
-            border-bottom: 1px solid black;
-            display: inline-flex;
+        table.p2Table tr,
+        table.p2Table td {
+            width: 100%;
         }
 
-        .uOne {
-            width: 160px;
+        .padding-20>p,
+        .padding-20>h4 {
+            padding-left: 30px;
+            padding-right: 30px;
         }
 
-        .uTwo {
-            width: 80px;
+        .agreedTerm ol {
+            list-style: none;
+            counter-reset: num;
         }
 
-        .dictionary {
-            display: flex;
-            gap: 30px;
+        .agreedTerm ol li {
+            counter-increment: num;
         }
 
-        .whole-signatory {
-            display: flex;
-            justify-content: space-between;
+        .agreedTerm ol li::before {
+            content: "1."counter(num);
         }
 
-        .signatory-cont {
-            width: 250px;
+        .agreedTerm ol li span {
+            margin-left: 20px;
         }
 
-        .signatory {
-            border-bottom: 1px solid #000;
-            width: 250px;
-            display: inline-flex;
+        .nonAgency ol {
+            list-style: none !important;
         }
+
+        .nonAgency ol li::before {
+            content: "";
+        }
+
 
         .name-designation {
-            width: 250px;
+            width: 200px;
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -303,710 +88,793 @@
             justify-content: space-between;
         }
 
-        .sub-dictionary {
+        .whole-signatory {
             display: flex;
-            align-items: baseline;
-            gap: 10px;
-            /* justify-content: space-between; */
+            justify-content: space-between;
         }
 
-        .definition {
-            width: 450px;
+        .signatory-cont {
+            width: 200px;
         }
 
-        .term {
-            width: 150px;
-        }
-
-        .ml-20 {
-            margin-left: 20px;
-        }
-
-        .ml-30 {
-            margin-left: 30px;
-        }
-
-        .ml-40 {
-            margin-left: 40px;
-        }
-
-        .ml-60 {
-            margin-left: 60px;
-        }
-
-        .dmb-no {
-            display: flex;
-            justify-content: flex-end;
-            padding-right: 0.5cm;
+        .signatory {
+            border-bottom: 1px solid #000;
+            width: 200px;
+            display: inline-flex;
         }
 
     </style>
 </head>
-<body class="document">
-    <div class="page" contenteditable="false">
-        <section class="page-one">
-            <div class="page-container">
-                <div class="page-border-one">
-                    <div class="page-border-two">
-                        <img src="assets/FMDQ-Logo 2.svg" alt="logo">
-                        <div class="title">
-                            <div class="title-item">
-                                <strong>FMDQ SECURITIES EXCHANGE LIMITED</strong>
-                                <p>FX TRADING (CORPORATE) MEMBERSHIP APPLICATION FORM</p>
-                            </div>
-                        </div>
-                        <div class="title" style="width: 25%; padding: 5px;">
-                            <div class="title-item">
-                                <strong>MAY 2021</strong>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
-    <div class="page" contenteditable="false">
-        <section class="page-two">
-            <div class="page-container">
-                <div class="page-border-one">
-                    <div class="content-page-border-two">
-                        <div class="top-logo">
-                            <img src="assets/FMDQ-Logo 4.svg" alt="small-logo">
-                        </div>
-                        <div class="content">
-                            <div style="border: 1px solid black;">
-                                <table class="table-one">
-                                    <tr style="background: #1d326d;color: white;">
-                                        <th colspan="4" style="text-align: center;">
-                                            <p>FMDQ SECURITIES EXCHANGE LIMITED</p>
-                                            <p>FX TRADING CORPORATES APPLICATION FORM</p>
-                                        </th>
-                                    </tr>
-                                    <tr style="height: 20px;background: #BFBFBF;">
-                                        <td colspan="4" style="text-align: center;"><strong>APPLICANT
-                                                INFORMATION</strong></td>
-                                    </tr>
-                                    <tr style="height: 40px;">
-                                        <td style="width: 30%;">Name of Corporate Body:</td>
-                                        <td colspan="3" style="width: 70%;padding-right: 10px;"></td>
-                                    </tr>
-                                    <tr style="height: 40px;">
-                                        <td>RC Number:</td>
-                                        <td colspan="3"></td>
-                                    </tr>
-                                    <tr style="height: 40px;">
-                                        <td>Registered Office Address:</td>
-                                        <td colspan="3"></td>
-                                    </tr>
-                                    <tr style="height: 40px;">
-                                        <td>Date of Incorporation:</td>
-                                        <td colspan="3"></td>
-                                    </tr>
-                                    <tr style="height: 40px;">
-                                        <td>Place of Incorporation:</td>
-                                        <td colspan="3"></td>
-                                    </tr>
-                                    <tr style="height: 40px;">
-                                        <td>Nature of Business:</td>
-                                        <td colspan="3"></td>
-                                    </tr>
-                                    <tr style="height: 40px;">
-                                        <td>Company Telephone Number(s):</td>
-                                        <td colspan="3"></td>
-                                    </tr>
-                                    <tr style="height: 40px;">
-                                        <td>Company Email Address:</td>
-                                        <td colspan="3"></td>
-                                    </tr>
-                                    <tr style="height: 40px;">
-                                        <td>Company Website Address:</td>
-                                        <td colspan="3"></td>
-                                    </tr>
-                                </table>
-                                <table>
-                                    <tr style="height: 27px;background: #1d326d;color: white;">
-                                        <th colspan="2">KEY OFFICERS</th>
-                                    </tr>
-                                    <tr style="height: 27px;">
-                                        <td colspan="2">MANAGING DIRECTOR/CHIEF EXECUTIVE OFFICER (MD/CEO)</td>
-                                    </tr>
-                                    <tr style="height: 27px;">
-                                        <td colspan="2">Name: </td>
-                                    </tr>
-                                    <tr style="height: 27px;">
-                                        <td style="width: 50%;">Email:</td>
-                                        <td>Telephone/Mobile No.:</td>
-                                    </tr>
-                                    <tr style="height: 27px;">
-                                        <td colspan="2">TREASURER/CHIEF FINANCIAL OFFICER</td>
-                                    </tr>
-                                    <tr style="height: 27px;">
-                                        <td colspan="2">Name: </td>
-                                    </tr>
-                                    <tr style="height: 27px;">
-                                        <td>Email:</td>
-                                        <td>Telephone/Mobile No.:</td>
-                                    </tr>
-                                    <tr style="height: 27px;">
-                                        <td colspan="2">CHIEF COMPLIANCE OFFICER</td>
-                                    </tr>
-                                    <tr style="height: 27px;">
-                                        <td colspan="2">Name: </td>
-                                    </tr>
-                                    <tr style="height: 27px;">
-                                        <td>Email:</td>
-                                        <td>Telephone/Mobile No.:</td>
-                                    </tr>
-                                    <tr style="height: 27px;">
-                                        <th colspan="2" style="border-top: none;background: #1d326d;color: white;">
-                                            SUPPORTING DOCUMENTS<sup>1</sup> (TICK IF ENCLOSED)</th>
-                                    </tr>
-                                </table>
-                                <table>
-                                    <tr style="height: 27px;">
-                                        <td style="width: 70%;padding-right: 10px;">
-                                            Company Profile
-                                            <ul style="list-style-type: square;margin-left: 20px;">
-                                                <li>Company Overview</li>
-                                                <li>Details of Business Services</li>
-                                                <li>Profile of Board of Directors and Executive Management</li>
-                                                <li>Details of Technology Infrastructure</li>
-                                            </ul>
-                                        </td>
-                                        <td style="width: 30%;"></td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <div class="pageNo-DocName">
-                                <div class="pageNo" style="text-align: center;">1</div>
-                                <div class="DocName" style="font-size: 13px;"><strong><i>FX Trading Corporates
-                                            Membership Application Form </i></strong></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
-    <div class="page" contenteditable="false">
-        <section class="page-three">
-            <div class="page-container">
-                <div class="page-border-one">
-                    <div class="content-page-border-two">
-                        <div class="top-logo">
-                            <img src="assets/FMDQ-Logo 4.svg" alt="small-logo">
-                        </div>
-                        <div class="content">
-                            <div>
-                                <table style="border-top: none;">
-                                    <tr style="height: 27px;">
-                                        <td style="width: 70%;padding-right: 10px;">Certificate of Incorporation</td>
-                                        <td style="width: 30%;"></td>
-                                    </tr>
-                                    <tr style="height: 27px;">
-                                        <td style="width: 70%;padding-right: 10px;">Memorandum and Articles of
-                                            Association or other equivalent documentation</td>
-                                        <td style="width: 30%;"></td>
-                                    </tr>
-                                    <tr style="height: 27px;">
-                                        <td style="width: 70%;padding-right: 10px;">Particulars of Directors or other
-                                            equivalent documentation (e.g. CAC Form 7 for Nigerian Companies)</td>
-                                        <td style="width: 30%;"></td>
-                                    </tr>
-                                    <tr style="height: 27px;">
-                                        <td style="width: 70%;padding-right: 10px;">Particulars of Shareholders or other
-                                            equivalent documentation (e.g. CAC Form 2 for Nigerian Private Limited
-                                            Companies)</td>
-                                        <td style="width: 30%;"></td>
-                                    </tr>
-                                    <tr style="height: 27px;">
-                                        <td style="width: 70%;padding-right: 10px;">Most recent one (1) year audited
-                                            financial statements, not exceeding eighteen (18) months from the previous
-                                            financial year end</td>
-                                        <td style="width: 30%;"></td>
-                                    </tr>
-                                    <tr style="height: 27px;">
-                                        <td style="width: 70%;padding-right: 10px;">List of Authorised Representatives
-                                            <sup>1</sup> (stating their designations). The following are the minimum
-                                            required Authorised Representatives to be provided:
-                                            <ul style="list-style-type: square;margin-left: 20px;">
-                                                <li>Managing Director/CEO</li>
-                                                <li>Treasurer/Chief Financial Officer (as applicable)</li>
-                                                <li>Chief Compliance Officer</li>
-                                                <li>Primary Contact(s)</li>
-                                            </ul>
-                                        </td>
-                                        <td style="width: 30%;"></td>
-                                    </tr>
-                                    <tr style="height: 27px;">
-                                        <td style="width: 70%;padding-right: 10px;">Evidence of Payment of Onboarding
-                                            Fee</td>
-                                        <td style="width: 30%;"></td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2">
-                                            <p style="margin: 20px 0;"><strong><i>Email submission of documents MUST be
-                                                        made to <span><a href="" style="color: blue;">meg@fmdqgroup.com</a></span></i></strong>
-                                            </p>
-                                            <p style="margin-bottom: 20px;">Physical copies may be sent to :</p>
-                                            <p style="margin-bottom: 20px;">
-                                                Member Regulation Group <br>
-                                                FMDQ Securities Exchange Limited <br>
-                                                Exchange Place <br>
-                                                35 Idowu Taylor Street <br>
-                                                Victoria Island <br>
-                                                Lagos <br>
-                                                Nigeria <br>
-                                            </p>
-                                            <p style="margin-bottom: 50px;"><strong><i>Attention: Member Regulation
-                                                        Group</i></strong></p>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <div class="pageNo-DocName">
-                                <div class="reference">
-                                    <div class="top-line"></div>
-                                    <sup>1</sup>Authorised Representatives are persons authorised by the Member to
-                                    perform activities on its behalf on FMDQ Securities Exchange Limited (‘FMDQ
-                                    Exchange’ or ‘the Exchange’)
-                                </div><br>
+<body>
+    <div style="width: 700px;  box-sizing: border-box;">
+        <div class="page">
+            <table class="gTable">
+                <tbody>
+                    <tr>
+                        <td>DEALING MEMBERSHIP AGREEMENT</td>
+                    </tr>
+                    <tr>
+                        <td>BETWEEN</td>
+                    </tr>
+                    <tr>
+                        <td>FMDQ SECURITIES EXCHANGE LIMITED</td>
+                    </tr>
+                    <tr>
+                        <td>AND</td>
+                    </tr>
+                    <tr>
+                        <td>{{ $details->name }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="page-break"></div>
+        </div>
+        <div class="page">
+            <h4>Table of Contents</h4>
+            <table class="p2Table">
+                <tr>
+                    <td>1. Definitions and Interpretation ................................................................................................................................ 3</td>
+                </tr>
+                <tr>
+                    <td>2. Non-Agency Relationship....................................................................................................................................... 5</td>
+                </tr>
+                <tr>
+                    <td>3. Transaction Fees .................................................................................................................................................... 5</td>
+                </tr>
+                <tr>
+                    <td>4. Membership Dues ................................................................................................................................................. 5</td>
+                </tr>
+                <tr>
+                    <td>5. Members Obligations .............................................................................................................................................. 5</td>
+                </tr>
+                <tr>
+                    <td>6. Termination of Membership .................................................................................................................................... 7</td>
+                </tr>
+                <tr>
+                    <td>7. Assignment of Trade Data Rights ........................................................................................................................... 7</td>
+                </tr>
+                <tr>
+                    <td>8. Limitation of Liability ............................................................................................................................................. 7</td>
+                </tr>
+                <tr>
+                    <td>9. Notices ..................................................................................................................................................................... 7</td>
+                </tr>
+                <tr>
+                    <td>10. Binding Agreement ............................................................................................................................................... 7</td>
+                </tr>
+                <tr>
+                    <td>11. Non-Waiver ........................................................................................................................................................... 8</td>
+                </tr>
+                <tr>
+                    <td>12. Severability ........................................................................................................................................................... 8</td>
+                </tr>
+                <tr>
+                    <td>13. Governing Law ................................................................................................................................................... 8</td>
+                </tr>
+                <tr>
+                    <td>14. Dispute Resolution ............................................................................................................................................... 8</td>
+                </tr>
+            </table>
+            <div class="page-break"></div>
+        </div>
+        <div class="page">
+            <h4>THIS DEALING MEMBERSHIP AGREEMENT is dated {{ formatDate($details->updated_at) }}</h4>
 
-                                <div class="pageNo" style="text-align: center;">2</div>
-                                <div class="DocName" style="font-size: 13px;"><strong><i>FX Trading Corporates
-                                            Membership Application Form </i></strong></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
-    <div class="page" contenteditable="false">
-        <section class="page-four">
-            <div class="page-container">
-                <div class="page-border-one">
-                    <div class="content-page-border-two">
-                        <div class="top-logo">
-                            <img src="assets/FMDQ-Logo 4.svg" alt="small-logo">
-                        </div>
-                        <div class="content">
+            <table class="p2Table">
+                <tr>
+                    <td>
+                        <h4>PARTIES</h4>
+                        <p>
+                            <strong>FMDQ SECURITIES EXCHANGE LIMITED (RC. NO. 1617162)</strong>, a company incorporated under
+                            the laws of the Federal Republic of Nigeria with its principal place of business at 35 Idowu Taylor
+                            Street, Victoria Island, Lagos, (hereinafter called <strong>“FMDQ Exchange”</strong> which expression shall where
+                            the context so admits include its successors and assigns) of the first part.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4>AND</h4>
+                        <p>
+                            {{ $details->name }} (RC NO. {{ $details->rc_number }}), </br>
+                            a company incorporated under the laws of the Federal Republic of Nigeria with its registered office at
+                            {{ $details->address }} (the <strong>“Member”</strong> which expression shall where the context so admits
+                            include its successors and assigns) of the second part.
+                        </p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="padding-20 background">
+                        <h4>(1) BACKGROUND</h4>
+                        <ol type="A" style="margin-left: 20px;">
+                            <li>FMDQ Securities Exchange Limited (<strong>“FMDQ Exchange”</strong> or the <strong>“Exchange”</strong>) is a securities
+                                exchange and self-regulatory organisation (<strong>“SRO”</strong>) licensed and regulated by the Securities
+                                and Exchange Commission (<strong>“SEC”</strong> or the <strong>“Commission”</strong>).</li><br>
+                            <li>The Exchange provides a Platform for the listing, quotation, noting, registration, trading, order execution, and trade reporting of fixed income, currency, and derivative products, inter alia. </li><br>
+                            <li>The Member has indicated interest in becoming a Dealing Member (Specialist) of the Exchange with a view to actively participating in Trading Activities on the Exchange. </li><br>
+                            <li> By executing this Agreement, the Member agrees to be bound by the Rules (as defined below).</li>
+                        </ol><br>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class=" padding-20 agreedTerm" style="">
+                        <h4> AGREED TERMS</h4>
+                        <h4>1. Definitions and Interpretation</h4>
+                        <ol type="A" style="margin-left: 20px;">
+                            <li>
+                                The following definitions shall apply in this Agreement:<br><br>
+                                <span><strong>Agreement:</strong> this Dealing Membership Agreement, as may be revised, updated and/or amended
+                                    from time to time.</span>
+                                <br><br>
+                                <span><strong>Applicable Law:</strong> any law, statute, code, ordinance, decree, rule or regulation (including rules
+                                    and regulations of self-regulatory organisations) as may relate to the activities of the Member
+                                    (as may be revised, updated and/or amended from time to time).</span>
+                                <br><br>
+                                <span><strong>Authorised Representative:</strong> means an employee, or such other person as may be authorised
+                                    by the Member to perform activities on its behalf on the Exchange. Authorised Representatives
+                                    include but are not limited to treasurers, dealers, compliance officers, treasury operations staff,
+                                    treasury sales staff, risk officers and control & audit staff.</span>
+                                <br><br>
+
+                                <span><strong>Broker:</strong> an individual or body corporate that arranges transactions between a buyer and a seller
+                                    of a Product in return for a fee or commission upon due execution of a trade/deal.
+                                </span>
+                                <div class="page-break"></div>
+                                <span><strong>Business Day:</strong> a day (other than a Saturday, Sunday or Federal Government of Nigeria declared
+                                    public holiday) on which banks are open for business in Nigeria.</span><br><br>
+                                <span><strong>Dealing Member (Bank):</strong> a bank which has been admitted to trade on the Platform (as defined
+                                    below). Dealing Member (Banks) shall serve as liquidity providers to Dealing Members
+                                    (Specialists) on the Platform.</span><br><br>
+                                <span><strong>Dealing Member (Specialist) or DMS:</strong> an investment banking firm, securities dealing firm or
+                                    experienced fixed income dealer permitted to engage in Trading Activities (as defined below)
+                                    on the Platform of the Exchange pursuant to terms of this Agreement and the Rules (defined
+                                    below).</span><br><br>
+                                <span><strong>Insider Trading:</strong> trading done by an individual or body corporate or group of individuals or
+                                    bodies corporate who, being in possession of some confidential and price sensitive information
+                                    not generally available to the public, utilising such information to buy or sell securities for the
+                                    benefit of themselves or any other individual or body corporate.</span><br><br>
+                                <span><strong>Market:</strong> the market for Products (as defined below) tradable or traded on the FMDQ Exchange
+                                    Platform.</span><br><br>
+                                <span><strong>National Assembly:</strong> the National Assembly of the Federal Republic of Nigeria.</span><br><br>
+                                <span><strong>Platform:</strong> the FMDQ Exchange organised market place for listing, registration, quotation,
+                                    noting, trading, order execution, and trade reporting of fixed income, currency and derivative
+                                    products, inter alia.</span><br><br>
+                                <span><strong>Product:</strong> any instrument, security, currency, or other contract admitted by FMDQ Exchange
+                                    for trading on the Platform.</span><br><br>
+                                <span><strong>Member:</strong> an individual or body corporate with demonstrable and recognised expertise,
+                                    experience and knowledge in trading in one or more of the Products traded on the Platform as
+                                    a Dealing Member (Specialist) (as defined above).</span><br><br>
+                                <span><strong> Rules:</strong> rules, guidelines, bulletins, agreements and such other regulation relating to the Member
+                                    as may be issued by the Exchange in its capacity as an SRO and advised to the Member from
+                                    time to time.
+                                    SEC Rules:</strong> rules and regulations issued by the SEC pursuant to the Investments and Securities
+                                    Act 2007.</span><br><br>
+                                <span><strong>System:</strong> the electronic trading programme around which the Platform is organised that allows
+                                    the Proposed Member to submit trade-related data and fulfil contractual obligations leading up
+                                    to the clearing and settlement of executed trades.</span><br><br>
+                                <span><strong>Trading Activities:</strong> trading amongst Dealing Member (Specialists) and/or Dealing Member
+                                    (Banks) in specific products advised by FMDQ Exchange.</span><br><br>
+                                <span><strong>Year:</strong> a calendar year.</span><br><br>
+                            </li><br>
+
+                            <li>
+                                Interpretation:<br><br>
+
+                                <span>1.2.1. Words importing the singular number only shall include the plural and vice-versa and
+                                    words importing the feminine gender only shall include the masculine gender and vice versa
+                                    5
+                                    and words importing persons shall include corporations, associations, partnerships and
+                                    governments (whether federal, state or local), and the words “written” or “in writing” shall
+                                    include printing, engraving, lithography or other means of visible reproduction.
+                                </span>
+                                <br><br>
+
+                                <span>1.2.2. A reference to “Party” or “Parties” shall mean a party or parties to this Agreement.</span><br><br>
+                                <span>1.2.3. The words “hereof,” “herein,” “hereby,” “hereto” and similar words refer to this entire
+                                    Agreement and not any Clause, Schedule or other subdivision of this Agreement.</span><br><br>
+                                <span>1.2.4. Defined terms appearing in this Agreement in upper case shall be given their meaning
+                                    as defined, while the same terms appearing in lower case shall be interpreted in accordance
+                                    with their plain English meaning.</span><br><br>
+                                <div class="page-break"></div>
+
+                                <span>1.2.5. References to any liability shall include actual, contingent, present or future liabilities.</span><br><br>
+                                <span>1.2.6. A reference to FMDQ Exchange or the Member herein shall include reference to their
+                                    respective successors and assigns.</span><br><br>
+                                <span>1.2.7. Any money payable under this Agreement on a day that falls on a public holiday shall
+                                    be paid on the next Business Day.</span><br><br>
+
+                            </li><br>
+                        </ol><br>
+
+
+                        <div class="nonAgency">
+                            <h4>2. Non-Agency Relationship</h4>
+                            <ol>
+                                <li>
+                                    <table>
+                                        <tr>
+                                            <td style="width: 10px; vertical-align: top;">2.1</td>
+                                            <td style="vertical-align: top;">
+                                                The Member shall not hold itself out to any individual or body corporate as being an agent of or otherwise representing or having the power in any way to act for or bind the Exchange unless expressly authorised in writing.
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </li>
+                                <li>
+                                    <table>
+                                        <tr>
+                                            <td style="width: 10px; vertical-align: top;">2.2</td>
+                                            <td style="vertical-align: top;">
+                                                The Member shall act as a principal in all its Trading Activities on the Platform without
+                                                limitation, when trading, clearing or settling and be responsible to other Dealing Member
+                                                (Specialists), Dealing Member (Banks) and the Exchange as a principal.
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </li>
+
+                            </ol>
+
+                            <h4>3. Transaction Fees</h4>
+                            <ol>
+                                <li>
+                                    <table>
+                                        <tr>
+                                            <td style="width: 10px; vertical-align: top;">3.1</td>
+                                            <td style="vertical-align: top;">
+                                                The Proposed Member hereby agrees that:
+                                                <ol>
+                                                    <li>
+                                                        <table>
+                                                            <tr>
+                                                                <td style="width: 10px; vertical-align: top;">3.1.1</td>
+                                                                <td style="vertical-align: top;">
+                                                                    The Exchange shall charge and revise transaction fees at rates to be determined and
+                                                                    agreed for transactions conducted on the Platform.
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </li>
+
+                                                    <li>
+                                                        <table>
+                                                            <tr>
+                                                                <td style="width: 10px; vertical-align: top;">3.1.2</td>
+                                                                <td style="vertical-align: top;">
+                                                                    It shall execute a Direct Debit Mandate authorising its bank to make periodic payments
+                                                                    of transaction fees payable to FMDQ Exchange in the manner described in the form advised by
+                                                                    FMDQ Exchange. Whenever transaction fees are revised by FMDQ Exchange and duly
+                                                                    communicated to the Proposed Member, the Proposed Member shall be required to execute
+                                                                    another Direct Debit Mandate to supersede the one previously executed.
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </li>
+                                                </ol>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </li>
+
+                            </ol>
+                            <h4>2. Non-Agency Relationship</h4>
+                            <ol>
+                                <li>
+                                    <table>
+                                        <tr>
+                                            <td style="width: 10px; vertical-align: top;">2.1</td>
+                                            <td style="vertical-align: top;">
+                                                The Member shall not hold itself out to any individual or body corporate as being an agent of or otherwise representing or having the power in any way to act for or bind the Exchange unless expressly authorised in writing.
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </li>
+                                <li>
+                                    <table>
+                                        <tr>
+                                            <td style="width: 10px; vertical-align: top;">2.2</td>
+                                            <td style="vertical-align: top;">
+                                                The Member shall act as a principal in all its Trading Activities on the Platform without
+                                                limitation, when trading, clearing or settling and be responsible to other Dealing Member
+                                                (Specialists), Dealing Member (Banks) and the Exchange as a principal.
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </li>
+
+                            </ol>
+
+                            <h4>4. Membership Dues</h4>
+                            <ol>
+                                <li>
+                                    <table>
+                                        <tr>
+                                            <td style="width: 10px; vertical-align: top;">4.1.</td>
+                                            <td style="vertical-align: top;">
+                                                The Proposed Member undertakes to pay membership dues to FMDQ Exchange at a rate to be
+                                                determined and agreed with FMDQ Exchange. The membership dues shall be payable
+                                                immediately upon execution of this Agreement.
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </li>
+                                <li>
+                                    <table>
+                                        <tr>
+                                            <td style="width: 10px; vertical-align: top;">4.2</td>
+                                            <td style="vertical-align: top;">
+                                                The Proposed Member shall execute a Direct Debit Mandate authorising its bank to make
+                                                payment of subsequent membership dues payable to FMDQ Exchange in the manner described
+                                                in the form advised by FMDQ Exchange. Whenever membership dues are revised by FMDQ
+                                                Exchange and duly communicated to the Proposed Member, the Proposed Member shall be
+                                                required to execute another Direct Debit Mandate to supersede the one previously executed.
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </li>
+                                <li>
+                                    <table>
+                                        <tr>
+                                            <td style="width: 10px; vertical-align: top;">4.3</td>
+                                            <td style="vertical-align: top;">
+                                                No fees shall remain outstanding against the Member.
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </li>
+
+
+                            </ol>
+                            <div class="page-break"></div>
+
+                            <h4>5. Member’s Obligations</h4>
+                            <ol>
+                                <li>
+                                    <table>
+                                        <tr>
+                                            <td style="width: 10px; vertical-align: top;">5.1.</td>
+                                            <td style="vertical-align: top;">
+                                                The Member undertakes to:
+                                                <ol>
+                                                    <li>5.1.1. Abide by the Exchange’s Rules, the SEC Rules, and such other Applicable Laws.</li><br>
+                                                    <li>5.1.2. Pay the fees, dues, and other applicable charges as set out in this Agreement or as
+                                                        prescribed by FMDQ Exchange according to the conditions established by FMDQ Exchange
+                                                        and duly communicated to the Member.</li><br>
+                                                    <li>5.1.3. Comply with the technical requirements of the relevant trading System(s) and/or any
+                                                        other information technology system or network operated and advised by FMDQ Exchange.</li><br>
+                                                    <li>5.1.4. Comply with such market standards, capacity requirements, capital or credit line
+                                                        requirements as may be determined by FMDQ Exchange from time to time and accepts that the
+                                                        Membership of the Exchange may be terminated for failure to meet the aforementioned.</li><br>
+                                                    <li>5.1.5. Notify FMDQ Exchange of any facts or circumstances which may affect its Trading
+                                                        Activities on the Platform.</li><br>
+                                                    <li>5.1.6. Notify FMDQ Exchange immediately in writing of any material changes to the
+                                                        information submitted during its membership application, including in particular (but not
+                                                        limited to) those in respect of the Members authorisation or permission to conduct trading in
+                                                        Products.</li><br>
+                                                    <li>5.1.7. Ensure that any quotes given by any of its Authorised Representatives are correct and
+                                                        firm (may be acted upon by the counterparty to whom the quote was given).</li><br>
+                                                    <li>5.1.8. Ensure that it does not transact or conclude any trades with a Broker (either domestic
+                                                        or offshore) either directly or indirectly in relation to the Products traded on the FMDQ
+                                                        Exchange Platform unless such Broker is duly licenced by FMDQ Exchange.</li><br>
+                                                    <li>5.1.9. Prevent the operation of any account that serves as brokerage settlement accounts, for
+                                                        the Products traded on the FMDQ Exchange Platform by/for any individual or body corporate
+                                                        that is not licenced by FMDQ Exchange and/or registered with the Commission to carry out a
+                                                        trading or brokerage function but still brokers any of the Products.</li><br>
+                                                    <li>5.1.10. Maintain and take all necessary steps to ensure its Authorised Representatives maintain
+                                                        the highest level of professional and ethical conduct in all its dealings with other Dealing
+                                                        Member (Specialists), Dealing Member (Banks) and the Exchange and in respect of all its
+                                                        activities on the Platform.</li><br>
+                                                    <li>5.1.11. Take reasonable steps to ensure that its Authorised Representatives do not participate
+                                                        in any form of Insider Trading in relation to its Trading Activities conducted on the Exchange,
+                                                        or knowingly or by gross negligence assist any individual or body corporate to participate in
+                                                        any such Insider Trading.</li><br>
+                                                    <li>5.1.12. Maintain and preserve all recordings of phone conversations, text messages and emails, based on which any transaction on the Platform was conducted, for a period not less than
+                                                        six (6) years or such other period as may be advised by FMDQ Exchange.</li><br>
+                                                    <li>5.1.13. Report all trade data in respect of Products traded by the Member on the Platform in
+                                                        the manner prescribed and at the intervals advised by FMDQ Exchange.</li><br>
+
+
+                                                </ol>
+
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </li>
+
+                            </ol>
+                            <div class="page-break"></div>
+
+                            <h4>6. Termination of Membership</h4>
+                            <ol>
+                                <li>
+                                    <table>
+                                        <tr>
+                                            <td style="width: 10px; vertical-align: top;">6.1.</td>
+                                            <td style="vertical-align: top;">
+                                                Membership of the Exchange shall be terminated where the Member:
+                                                <ol>
+                                                    <li>
+                                                        <table>
+                                                            <tr>
+                                                                <td style="width: 10px; vertical-align: top;">6.1.1.</td>
+                                                                <td style="vertical-align: top;">
+                                                                    gives the Exchange fourteen (14) days’ notice in writing of its intention to terminate its
+                                                                    membership of the Exchange. Consequently, the membership of the Exchange shall be terminated:
+                                                                    <ol>
+                                                                        <li>
+                                                                            <table>
+                                                                                <tr>
+                                                                                    <td style="width: 10px; vertical-align: top;">6.1.1.1.</td>
+                                                                                    <td style="vertical-align: top;">
+                                                                                        at the expiration of the fourteen (14) days’ notice.
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </li>
+                                                                        <li>
+                                                                            <table>
+                                                                                <tr>
+                                                                                    <td style="width: 10px; vertical-align: top;">6.1.1.2.</td>
+                                                                                    <td style="vertical-align: top;">
+                                                                                        when all trades to which the Member is a counterparty have been delivered,
+                                                                                        settled and/or cleared on the agreed settlement dates; and
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </li>
+                                                                        <li>
+                                                                            <table>
+                                                                                <tr>
+                                                                                    <td style="width: 10px; vertical-align: top;">6.1.1.3.</td>
+                                                                                    <td style="vertical-align: top;">
+                                                                                        when all fees and such other payments due and payable to FMDQ Exchange
+                                                                                        have been delivered and settled.
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </li>
+
+                                                                    </ol>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </li>
+                                                    <li>
+                                                        <table>
+                                                            <tr>
+                                                                <td style="width: 10px; vertical-align: top;">6.1.2.</td>
+                                                                <td style="vertical-align: top;">
+                                                                    defaults under this Agreement.
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </li>
+                                                    <li>
+                                                        <table>
+                                                            <tr>
+                                                                <td style="width: 10px; vertical-align: top;">6.1.3.</td>
+                                                                <td style="vertical-align: top;">
+                                                                    violates any provisions of the Rules.
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </li>
+                                                    <li>
+                                                        <table>
+                                                            <tr>
+                                                                <td style="width: 10px; vertical-align: top;">6.1.4.</td>
+                                                                <td style="vertical-align: top;">
+                                                                    fails to meet the capacity requirements, minimum capital requirements and such other
+                                                                    market standards as may be advised by FMDQ Exchange from time to time having been given
+                                                                    reasonable time to remedy such deficiencies.
+
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </li>
+
+
+                                                </ol>
+
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </li>
+                                <li>
+                                    <table>
+                                        <tr>
+                                            <td style="width: 10px; vertical-align: top;">6.2.</td>
+                                            <td style="vertical-align: top;">
+                                                All applicable disciplinary actions to be taken against the Members for violations of this
+                                                Agreement and the Rules shall be as prescribed in the Rules.
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </li>
+
+
+                            </ol>
+
+                            <h4>7. Assignment of Trade Data Rights </h4>
+                            <ol>
+                                <li>
+                                    <table>
+                                        <tr>
+                                            <td style="width: 10px; vertical-align: top;">7.1.</td>
+                                            <td style="vertical-align: top;">
+                                                The Member hereby agrees to assign to FMDQ Exchange all rights to the trade data acquired
+                                                during the performance of its Trading Activities and other transactions with Dealing Member
+                                                (Banks), other Dealing Member (Specialists) and clients.
+
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </li>
+                            </ol>
+
+                            <h4>8. Limitation of Liability </h4>
+                            <ol>
+                                <li>
+                                    <table>
+                                        <tr>
+                                            <td style="width: 10px; vertical-align: top;">8.1.</td>
+                                            <td style="vertical-align: top;">
+                                                In no event will FMDQ Exchange have any obligation or liability (whether in tort, contract,
+                                                warranty or otherwise and notwithstanding any fault, negligence, product liability, or strict
+                                                liability), for any indirect, incidental, special, or consequential damages, including but not
+                                                limited to, lost revenue, loss of profits or business interruption losses, sustained or arising from
+                                                or related to activities, trading or otherwise, carried out on the Exchange. This section shall
+                                                survive the termination of this Agreement.
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </li>
+                            </ol>
+                            <h4>9. Notices </h4>
+                            <ol>
+                                <li>
+                                    <table>
+                                        <tr>
+                                            <td style="width: 10px; vertical-align: top;">9.1.</td>
+                                            <td style="vertical-align: top;">
+                                                For the purpose of this provision, notices shall be conveyed via letters, emails, electronic
+                                                broadcasts and/or via the market bulletin segment on the FMDQ Exchange website.
+
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </li>
+                            </ol>
+                            <h4>10. Binding Agreement </h4>
+                            <ol>
+                                <li>
+                                    <table>
+                                        <tr>
+                                            <td style="width: 10px; vertical-align: top;">10.1.</td>
+                                            <td style="vertical-align: top;">
+                                                Notwithstanding any contrary agreement, both Parties agrees that this Agreement constitutes a
+                                                legal, valid, and binding agreement which shall be enforceable against it in accordance with its
+                                                terms.
+
+
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </li>
+                            </ol>
+                            <h4>11. Non-Waiver </h4>
+                            <ol>
+                                <li>
+                                    <table>
+                                        <tr>
+                                            <td style="width: 10px; vertical-align: top;">11.1.</td>
+                                            <td style="vertical-align: top;">
+                                                No failure or delay by FMDQ Exchange to exercise any right, power or privilege hereunder
+                                                shall operate as a waiver thereof nor shall any single or partial exercise of any right, power or
+                                                privilege preclude any other or further exercise thereof, or the exercise of any other rights,
+                                                power or privilege as herein provided.
+
+
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </li>
+                            </ol>
+                            <div class="page-break"></div>
+
+                            <h4>12. Severability </h4>
+                            <ol>
+                                <li>
+                                    <table>
+                                        <tr>
+                                            <td style="width: 10px; vertical-align: top;">12.1.</td>
+                                            <td style="vertical-align: top;">
+                                                If any provision of this Agreement is declared by any judicial or other competent authority to
+                                                be void or otherwise unenforceable, that provision shall be severed from this Agreement and
+                                                the remaining provisions shall remain in force and effect. Provided that the Parties shall
+                                                thereafter amend this Agreement in such reasonable manner to achieve, without illegality, the
+                                                intention of the Parties, with respect to the severed provision.
+
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </li>
+                            </ol>
+                            <h4>13. Governing Law</h4>
+                            <ol>
+                                <li>
+                                    <table>
+                                        <tr>
+                                            <td style="width: 10px; vertical-align: top;">13.1.</td>
+                                            <td style="vertical-align: top;">
+                                                This Agreement shall be governed by Nigerian law.
+
+
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </li>
+                            </ol>
+                            <h4>14. Dispute Resolution </h4>
+                            <ol>
+                                <li>
+                                    <table>
+                                        <tr>
+                                            <td style="width: 10px; vertical-align: top;">14.1.</td>
+                                            <td style="vertical-align: top;">
+                                                In the event of any dispute arising out of or under this Agreement, the Parties shall within five
+                                                (5) Business Days from the date the dispute arose, engage in an amicable settlement of the dispute
+                                                by mutual negotiation.
+
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </li>
+
+                                <li>
+                                    <table>
+                                        <tr>
+                                            <td style="width: 10px; vertical-align: top;">14.2.</td>
+                                            <td style="vertical-align: top;">
+                                                Where the dispute is not resolved by mutual negotiation, the Parties shall in compliance with
+                                                the provisions of the Investment and Securities Act 2007, refer the matter to the Investment and
+                                                Securities Tribunal for resolution.
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </li>
+                            </ol>
+
+                            <h4>IN WITNESS WHEREOF the Parties have caused their authorised representatives to execute this
+                                Agreement in the manner below, the day and year first above written </h4><br>
+
+                            <h4>Signed for and on behalf of the within-named <br>
+                                FMDQ SECURITIES EXCHANGE LIMITED:</h4>
+
                             <table>
-                                <tr style="background: #1d326d;color: white;text-align: center;">
-                                    <th>APPLICANT DECLARATION</th>
-                                </tr>
                                 <tr>
-                                    <td style="padding: 0 20px;">
-                                        By submitting this application to become FX Trading Corporates of FMDQ
-                                        Securities Exchange Limited: <br><br>
-                                        <ul style="margin-left: 20px;">
-                                            <li>I/We declare that the information provided is complete and accurate and
-                                                we
-                                                agree, if approved, to comply with and be bound by all FMDQ Exchange
-                                                Rules, Guidelines and such other regulation as may be in force from time
-                                                to time</li> <br>
-                                            <li>I/We shall notify FMDQ Exchange of any additional information which is
-                                                relevant to the application and of any significant changes in the
-                                                information provided in this application which occur after the date of
-                                                submission of the application</li> <br>
-                                            <li>I/We understand that misleading or attempting to mislead representatives
-                                                of FMDQ Exchange during the application process shall render this
-                                                application null and void</li> <br>
-                                            <li>I/We agree that any entity within the FMDQ Group may have access to the
-                                                information contained herein for marketing porposes</li>
-                                        </ul>
+                                    <td style="width: 250px; vertical-align: bottom;">
+                                        <div class="">
+                                            <div class="signatory-cont">
+                                                <br>
+                                                <br>
+                                                <br>
+                                                <br>
+                                                <br>
+                                                <br>
+                                                <span class="signatory"></span>
+                                            </div>
+                                            <div class="name-designation">
+                                                <div><Strong>Name: </Strong><span></span></div>
+                                                <div><Strong>Designation: </Strong><span></span></div>
+                                            </div>
+                                        </div>
+
                                     </td>
-                                </tr>
-                                <tr style="height: 100px;vertical-align: top;">
-                                    <td style="padding: 0 20px;">Signature :</td>
-                                </tr>
-                                <tr style="background: #1d326d;color: white;text-align: center;">
-                                    <td>FEE PAYMENT INFORMATION</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-left: 10px;">
-                                        <p>
-                                            Accepted Modes of Payment: Cheque/Bank Draft/Online Transfer <br><br>
-                                            <i>All cheques are payable to "<strong>FMDQ SECURITIES EXCHANGE
-                                                    LIMITED</strong>"</i><br><br>
-                                            <strong>Account Details:</strong><br><br>
-                                        </p>
-                                        <table style="width: 40%;">
-                                            <tr>
-                                                <td>Bank</td>
-                                                <td>Access Bank PLC</td>
-                                            </tr>
-                                            <tr>
-                                                <td>account Name</td>
-                                                <td>FMDQ Holdings PLC</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Account Number</td>
-                                                <td>0689977404</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Sort Code</td>
-                                                <td>044151106</td>
-                                            </tr>
-                                        </table>
-                                        <p>
-                                            In the case of online transfers, kindly specify payment reference in the
-                                            format below: <br><br>
-                                            <strong>"FMDQ Exchange/ (Category of Membership)/ (Company or Individual
-                                                Name)/ (Payment Date: DD.MM.YYYY)"</strong><br><br>
-                                            For example: FMDQ Exchange/Affiliate Member (Fixed Income)/OANDO/31.03.2021
-                                        </p>
+                                    <td style="width: 250px; vertical-align: top;">
+                                        <div class="">
+                                            <div class="signatory-cont">
+                                                <br>
+                                                <br>
+                                                <br>
+                                                <br>
+                                                <br>
+                                                <br>
+                                                <span class="signatory"></span>
+                                            </div>
+                                            <div class="name-designation">
+                                                <div><Strong>Name: </Strong><span></span></div>
+                                                <div><Strong>Designation: </Strong><span></span></div>
+                                            </div>
+                                        </div>
+
+
                                     </td>
                                 </tr>
                             </table>
+
+
+                            <h4>Signed for and on behalf of the within-named <br>
+                                {{ $details->name }}:</h4>
+
+                            <table>
+                                <tr>
+                                    <td style="width: 250px; vertical-align: bottom;">
+                                        <div class="">
+                                            <div class="signatory-cont">
+                                                <br>
+                                                <br>
+                                                <br>
+                                                <br>
+                                                <br>
+                                                <br>
+                                                <span class="signatory"></span>
+                                            </div>
+                                            <div class="name-designation">
+                                                <div><Strong>Name: </Strong><span></span></div>
+                                                <div><Strong>Designation: </Strong><span></span></div>
+                                            </div>
+                                        </div>
+
+                                    </td>
+                                    <td style="width: 250px; vertical-align: top;">
+                                        <div class="">
+                                            <div class="signatory-cont">
+                                                <br>
+                                                <br>
+                                                <br>
+                                                <br>
+                                                <br>
+                                                <br>
+                                                <span class="signatory"></span>
+                                            </div>
+                                            <div class="name-designation">
+                                                <div><Strong>Name: </Strong><span></span></div>
+                                                <div><Strong>Designation: </Strong><span></span></div>
+                                            </div>
+                                        </div>
+
+
+                                    </td>
+                                </tr>
+                            </table>
+
                         </div>
-                        <div class="pageNo-DocName">
-                            <div class="pageNo" style="text-align: center;">3</div>
-                            <div class="DocName" style="font-size: 13px;"><strong><i>FX Trading Corporates Membership
-                                        Application Form</i></strong></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+
+
+
+
+                    </td>
+                </tr>
+
+
+            </table>
+
+
+        </div>
     </div>
-    <div class="page" contenteditable="false">
-        <section class="page-five">
-            <div class="page-container">
-                <div class="page-border-one">
-                    <div class="content-page-border-two">
-                        <div class="top-logo">
-                            <img src="assets/FMDQ-Logo 4.svg" alt="small-logo">
-                        </div>
-                        <div class="content">
-                            <div>
-                                <table>
-                                    <tr style="height: 27px;">
-                                        <th colspan="2" style="border-top: none;background: #1d326d;color: white;">
-                                            THOMSON REUTERS REQUIREMENTS - TICK IF PROVIDED</th>
-                                    </tr>
-                                    <tr style="height: 27px;">
-                                        <td style="width: 70%;padding: 0 10px;">Completed Thomson Reuters Contract/Form
-                                        </td>
-                                        <td style="width: 30%;"></td>
-                                    </tr>
-                                    <tr style="height: 27px;">
-                                        <td style="width: 70%;padding: 0 10px;">Certificate of Incorporation</td>
-                                        <td style="width: 30%;"></td>
-                                    </tr>
-                                    <tr style="height: 27px;">
-                                        <td style="width: 70%;padding: 0 10px;">Memorandum and Articles of Association
-                                            or other equivalent documentation
-                                        </td>
-                                        <td style="width: 30%;"></td>
-                                    </tr>
-                                    <tr style="height: 27px;">
-                                        <td style="width: 70%;padding: 0 10px;">Particulars of Directors or other
-                                            equivalent documentation (e.g. CAC Form 7 for Nigerian companies)</td>
-                                        <td style="width: 30%;"></td>
-                                    </tr>
-                                    <tr style="height: 27px;">
-                                        <td style="width: 70%;padding: 0 10px;">Evidence of regulatory status from a
-                                            financial regulator</td>
-                                        <td style="width: 30%;"></td>
-                                    </tr>
-                                    <tr style="height: 27px;">
-                                        <td style="width: 70%;padding: 0 10px;">Certified company ownership structure
-                                        </td>
-                                        <td style="width: 30%;"></td>
-                                    </tr>
-                                    <tr style="height: 27px;">
-                                        <td style="width: 70%;padding: 0 10px;">Names and contact details of the FX
-                                            traders</td>
-                                        <td style="width: 30%;"></td>
-                                    </tr>
-                                    <tr style="height: 27px;">
-                                        <td style="width: 70%;padding: 0 10px;">Public Internet Protocol (IP) address
-                                            and Internet Service Provider (ISP)
-                                        </td>
-                                        <td style="width: 30%;"></td>
-                                    </tr>
-                                    <tr style="height: 27px;">
-                                        <td style="width: 70%;padding: 0 10px;">Thomson Reuters account ID (for existing
-                                            Thomson Reuters clients)</td>
-                                        <td style="width: 30%;"></td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="2" style="padding: 0 10px;">
-                                            <p><strong><i>In addition to the above, please note the following:
-                                                    </i></strong></p><br>
-                                            <ul style="list-style-type: square;margin-left: 20px;">
-                                                <li><strong>Document Certification</strong><br>
-                                                    Personal Identity documents and Corporate documents need to be
-                                                    certified by a solicitor (lawyer), a qualified accountant or a
-                                                    notary public, using the following language: “I, [name of certifying
-                                                    person] a [position] have seen the original document from which this
-                                                    copy was produced and I can confirm that it appears to me to be a
-                                                    genuine document.” [signed & dated]
-                                                </li><br>
-                                                <li><strong>Document Format</strong><br>
-                                                    All documents must be current and identity documents must be valid
-                                                </li><br>
-                                            </ul>
-                                            <p><strong><i>All Thomson Reuters application requirements MUST BE forwarded
-                                                        via email to</i></strong></p>
-                                            <p><strong><i><span style="color: #0A6AC8;">samuel.ngadi@thomsonreuters.com</span>
-                                                        and <span style="color: #0A6AC8;">
-                                                            uche.nneji@thomsonreuters.com</span></i></strong></p><br>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <div class="pageNo-DocName">
-                                <div class="pageNo" style="text-align: center;">4</div>
-                                <div class="DocName" style="font-size: 13px;"><strong><i>FX Trading Corporates
-                                            Membership Application Form</i></strong></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
-    <div class="page" contenteditable="false">
-        <section class="page-six">
-            <div class="page-container">
-                <div class="page-border-one">
-                    <div class="content-page-border-two">
-                        <div class="top-logo">
-                            <img src="assets/FMDQ-Logo 4.svg" alt="small-logo">
-                        </div>
-                        <div class="content">
-                            <div>
-                                <div class="content-header" style="text-align: center;"><strong>FMDQ SECURITIES EXCHANGE
-                                        LIMITED FX TRADING CORPORATES AGREEMENT</strong></div>
-                                <p>
-                                    We/I <span class="user-input one"></span> on this
-                                    <span class="user-input two"></span> day of <span class="user-input three"></span>20<span class="user-input four"></span> hereby
-                                    agree
-                                    to be an FX Trading Corporate on FMDQ Securities Exchange Limited (“FMDQ Exchange”
-                                    or
-                                    the “Exchange”), a Securities Exchange organised under the laws of the Federal
-                                    Republic
-                                    of Nigeria (together, the “Parties”), subject to the terms and conditions below.
-                                </p><br>
-                                <div class="content-header sub-header"><strong>AS AN FX TRADING CORPORATE OF FMDQ WE
-                                        UNDERTAKE TO: </strong></div>
-                                <ol>
-                                    <li>Abide by all the FMDQ Exchange Rules, Guidelines, Bulletins and such other
-                                        regulation as FMDQ Exchange may introduce to the market from time to time </li>
-                                    <li>Abide by the provisions of the Foreign Exchange (Monitoring and Miscellaneous
-                                        Provisions) Act 2004 and all Circulars issued by the Central Bank of Nigeria
-                                        (CBN)
-                                        from time to time</li>
-                                    <li>Use the FMDQ Thomson Reuters FX Trading System strictly for the purpose of
-                                        engaging
-                                        in FX trading activities with CBN FX Authorised Dealers</li>
-                                    <li>Ensure that all our Authorised Representatives<sup>2</sup> act in good faith in
-                                        respect of all our affairs with FMDQ Exchange and in relation to all activities
-                                        as a
-                                        Member on FMDQ Exchange</li>
-                                    <li>Notify FMDQ Exchange immediately in writing of any material changes to the
-                                        information submitted during the course of our membership application</li>
-                                    <li>Notify FMDQ Exchange of any facts or circumstances which may affect the legal
-                                        form
-                                        of our organisation and any such occurrences that may affect our FX Trading
-                                        Corporate membership status on the Exchange</li>
-                                    <li>Promptly pay the annual subscription fee and other charges, where applicable, as
-                                        may
-                                        be prescribed by the Exchange </li>
-                                </ol><br>
-                                <div class="content-header sub-header"><strong>WE UNDERSTAND THAT:</strong></div>
-                                <ol start="8">
-                                    <li>This membership category of FMDQ Exchange only grants the FX market Authorised
-                                        participants access to the FMDQ Thomson Reuters FX Trading System strictly for
-                                        the
-                                        purpose of engaging in FX trading activities with CBN FX Authorised Dealers</li>
-                                    <li>This membership category does not confer upon us participatory rights as a full
-                                        Member of the Exchange, but only allows us to engage in FX trading as outlined
-                                        above
-                                    </li>
-                                    <li>In accessing the data and information provided via this portal, we agree that we
-                                        will not, without the prior written consent of the Exchange, sell, licence,
-                                        sub-licence, distribute, lease or otherwise transfer or allow the transfer of
-                                        the
-                                        data or information, or any backup copy, to third parties, or use the data and
-                                        information in any manner inconsistent with the rights granted by way of the
-                                        aforesaid access. Where the data or information is disseminated, or used in a
-                                        manner
-                                        that is prohibited, FMDQ Exchange reserves the right to penalise erring entities
-                                        in
-                                        line with provisions laid down in its rules
-                                    </li>
-                                </ol><br>
-                            </div>
-                            <div class="pageNo-DocName">
-                                <div class="reference">
-                                    <div class="top-line"></div>
-                                    <sup>2</sup> Authorised Representatives are persons authorised by the Member to make
-                                    representations to FMDQ Exchange on its behalf in respect of its membership on the
-                                    FMDQ
-                                    Exchange platform
-                                </div><br>
 
-                                <div class="pageNo" style="text-align: center;">5</div>
-                                <div class="DocName" style="font-size: 13px;"><strong><i>FX Trading Corporates Membership Application Form</i></strong></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-        </section>
-    </div>
-    <div class="page" contenteditable="false">
-        <section class="page-seven">
-            <div class="page-container">
-                <div class="page-border-one">
-                    <div class="content-page-border-two">
-                        <div class="top-logo">
-                            <img src="assets/FMDQ-Logo 4.svg" alt="small-logo">
-                        </div>
-                        <div class="content" style="display: block;">
-                            <ol start="11">
-                                <li>Payment of the annual subscription fee supports Affiliate Membership on the
-                                    Exchange. Therefore, FMDQ Exchange shall send a reminder via email, not less than
-                                    thirty (30) days before the end of the subscription period to confirm and validate
-                                    renewal of membership towards a new susbscription period. In the event that no
-                                    payment in respect of the annual subscription fee is made and received by the end of
-                                    the current subscription period, Affiliate Membership on the Exchange shall be
-                                    terminated and access to relevant portals restricted. The Exchange is at the
-                                    discretion to revise the subscription fee for the succeeding twelve (12) month
-                                    period by providing written notice to the Member not less than thirty (30) days
-                                    prior to the beginning of such twelve (12) month period</li><br>
-                            </ol>
-                            <p>The Parties have caused their Authorised Signatories to execute this Agreement in the
-                                manner below, the day and year first above written</p><br>
-                            <p>Signed for and on behalf of </p><br>
-                            <p><strong>FMDQ SECURITIES EXCHANGE LIMITED:</strong></p><br><br><br><br><br>
-                            <div class="whole-signatory">
-                                <div class="signatory-cont">
-                                    <span class="signatory"></span>
-                                    <div style="text-align: center;"><strong>Authorised Signatory</strong></div>
-                                </div>
-                                <div class="signatory-cont">
-                                    <span class="signatory"></span>
-                                    <div style="text-align: center;"><strong>Authorised Signatory</strong></div>
-                                </div>
-                            </div>
-                            <div class="whole-name-designation flex-space-btw">
-                                <div class="name-designation">
-                                    <div><Strong>Name: </Strong><span></span></div>
-                                    <div><Strong>Designation: </Strong><span></span></div>
-                                </div>
-                                <div class="name-designation">
-                                    <div><Strong>Name: </Strong><span></span></div>
-                                    <div><Strong>Designation: </Strong><span></span></div>
-                                </div>
-                            </div><br><br>
-                            <p>Signed for and on behalf of</p>
-                            <p>the aforementioned <strong> FX Trading (Corporate)</strong></p><br><br><br>
-                            <div class="whole-signatory">
-                                <div class="signatory-cont">
-                                    <span class="signatory"></span>
-                                    <div style="text-align: center;"><strong>Authorised Signatory</strong></div>
-                                </div>
-                                <div class="signatory-cont">
-                                    <span class="signatory"></span>
-                                    <div style="text-align: center;"><strong>Authorised Signatory</strong></div>
-                                </div>
-                            </div>
-                            <div class="whole-name-designation flex-space-btw">
-                                <div class="name-designation">
-                                    <div><Strong>Name: </Strong><span></span></div>
-                                    <div><Strong>Designation: </Strong><span></span></div>
-                                </div>
-                                <div class="name-designation">
-                                    <div><Strong>Name: </Strong><span></span></div>
-                                    <div><Strong>Designation: </Strong><span></span></div>
-                                </div>
-                            </div><br><br>
-                        </div>
-                        <div class="pageNo-DocName">
-                            <div class="pageNo" style="text-align: center;">6</div>
-                            <div class="DocName" style="font-size: 13px;"><strong><i>FX Trading Corporates Membership Application Form</i></strong></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div>
-    <script type="text/javascript">
-        // window.print();
-
-        var Config = {};
-        Config.pixelsPerInch = 96;
-        Config.pageHeightInCentimeter = 29.7; // must match 'min-height' from 'css/sheets-of-paper-*.css' being used
-        Config.pageMarginBottomInCentimeter = 2; // must match 'padding-bottom' and 'margin-bottom' from 'css/sheets-of-paper-*.css' being used
-
-        window.addEventListener("DOMContentLoaded", function() {
-            applyPageBreaks();
-        });
-
-
-        /* Applies any manual page breaks in preview mode (screen, non-print) where CSS Paged Media is not fully supported */
-        function applyManualPageBreaks() {
-            var docs, pages, snippets;
-            docs = document.querySelectorAll(".document");
-
-            for (var d = docs.length - 1; d >= 0; d--) {
-                pages = docs[d].querySelectorAll(".page");
-
-                for (var p = pages.length - 1; p >= 0; p--) {
-                    snippets = pages[p].children;
-
-                    for (var s = snippets.length - 1; s >= 0; s--) {
-                        if (snippets[s].classList.contains("page-break")) {
-                            pages[p].insertAdjacentHTML("afterend", "<div class=\"page\" contenteditable=\"true\"></div>");
-
-                            for (var n = snippets.length - 1; n > s; n--) {
-                                pages[p].nextElementSibling.insertBefore(snippets[n], pages[p].nextElementSibling.firstChild);
-                            }
-
-                            snippets[s].remove();
-                        }
-                    }
-                }
-            }
-        }
-
-        /* Applies (where necessary) automatic page breaks in preview mode (screen, non-print) where CSS Paged Media is not fully supported */
-        function applyAutomaticPageBreaks(pixelsPerInch, pageHeightInCentimeter, pageMarginBottomInCentimeter) {
-            var inchPerCentimeter = 0.393701;
-            var pageHeightInInch = pageHeightInCentimeter * inchPerCentimeter;
-            var pageHeightInPixels = Math.ceil(pageHeightInInch * pixelsPerInch);
-            var pageMarginBottomInInch = pageMarginBottomInCentimeter * inchPerCentimeter;
-            var pageMarginBottomInPixels = Math.ceil(pageMarginBottomInInch * pixelsPerInch);
-            var docs, pages, snippets, pageCoords, snippetCoords;
-            docs = document.querySelectorAll(".document");
-
-            for (var d = docs.length - 1; d >= 0; d--) {
-                pages = docs[d].querySelectorAll(".page");
-
-                for (var p = 0; p < pages.length; p++) {
-                    if (pages[p].clientHeight > pageHeightInPixels) {
-                        pages[p].insertAdjacentHTML("afterend", "<div class=\"page\" contenteditable=\"true\"></div>");
-                        pageCoords = pages[p].getBoundingClientRect();
-                        snippets = pages[p].querySelectorAll("h1, h2, h3, h4, h5, h6, p, ul, ol");
-
-                        for (var s = snippets.length - 1; s >= 0; s--) {
-                            snippetCoords = snippets[s].getBoundingClientRect();
-
-                            if ((snippetCoords.bottom - pageCoords.top + pageMarginBottomInPixels) > pageHeightInPixels) {
-                                pages[p].nextElementSibling.insertBefore(snippets[s], pages[p].nextElementSibling.firstChild);
-                            }
-                        }
-
-                        pages = docs[d].querySelectorAll(".page");
-                    }
-                }
-            }
-        }
-
-    </script>
 </body>
 
 </html>

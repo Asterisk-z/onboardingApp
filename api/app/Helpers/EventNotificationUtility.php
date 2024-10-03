@@ -42,8 +42,6 @@ class EventNotificationUtility
         ];
 
         EventCompletionJob::dispatch($eventReg, $emailData, $MEGs, $attachment);
-
-        // Notification::send($eventReg->user, new InfoNotification($message, $subject, $MEGs, $attachment));
     }
 
     public static function pendingPaymentEventRegistration(EventRegistration $eventReg)

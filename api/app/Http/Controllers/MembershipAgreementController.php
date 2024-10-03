@@ -8,8 +8,9 @@ use App\Models\Application;
 use App\Models\MemberAgreement;
 use App\Models\MemberESuccessLetter;
 use App\Models\User;
-use Illuminate\Support\Facades\Storage;
-use PDF;
+
+// use Illuminate\Support\Facades\Storage;
+// use PDF;
 
 class MembershipAgreementController extends Controller
 {
@@ -36,24 +37,26 @@ class MembershipAgreementController extends Controller
         //     return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         // }
 
-        $applicant = User::find($application->submitted_by);
+        // $applicant = User::find($application->submitted_by);
 
-        if (!$details = MemberAgreement::where('application_id', $application->id)->first()) {
-            return "error";
-        }
+        // if (!$details = MemberAgreement::where('application_id', $application->id)->first()) {
+        //     return "error";
+        // }
 
         $membershipCategory = $application->membershipCategory;
 
         if (!$details = MemberAgreement::where('application_id', $application->id)->first()) {
             return "error";
         }
-        logger($membershipCategory->code);
-        $pdf = PDF::loadView('agreement.' . $membershipCategory->code, compact('details'));
-        Storage::put('public/agreement/e_membership_agreement' . $application->id . '.pdf', $pdf->output());
-        $application->membership_agreement = 'agreement/e_membership_agreement' . $application->id . '.pdf';
-        $application->save();
+        // // logger($membershipCategory->code);
+        // $pdf = PDF::loadView('agreement.' . $membershipCategory->code, compact('details'));
+        // // $pdf = PDF::loadView('agreement.dmb', compact('details'));
+        // Storage::put('public/agreement/e_membership_agreement' . $application->id . '.pdf', $pdf->output());
+        // $application->membership_agreement = 'agreement/e_membership_agreement' . $application->id . '.pdf';
+        // $application->save();
 
         return view('agreement.' . $membershipCategory->code, ['details' => $details]);
+        // return view('agreement.dmb', ['details' => $details]);
 
     }
 

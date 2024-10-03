@@ -268,14 +268,14 @@ const TransferAuthRepresentative = ({ drawer }) => {
                                                                     <td>Nationality</td>
                                                                     <td className="text-capitalize">{`${$user.nationality.toLowerCase()}`}</td>
                                                                 </tr>
-                                                                <tr>
+                                                                {/* <tr>
                                                                     <td>Role</td>
-                                                                    <td className="text-capitalize">{`${user.role.name ? user.role.name.split(' ')[0] + ' ' + user.role.name.split(' ')[1].toLowerCase() : ''}`}</td>
-                                                                </tr>
-                                                                <tr>
+                                                                    <td className="text-capitalize">{`${user.role?.name ? user.role?.name.split(' ')[0] + ' ' + user.role?.name.split(' ')[1].toLowerCase() : ''}`}</td>
+                                                                </tr> */}
+                                                                {/* <tr>
                                                                     <td>Position</td>
                                                                     <td className="text-capitalize">{`${$user.position.name.toLowerCase()}`}</td>
-                                                                </tr>
+                                                                </tr> */}
                                                                 <tr>
                                                                     <td>Status</td>
                                                                     <td className="text-capitalize">{`${$user.approval_status.toLowerCase()}`}</td>
@@ -284,10 +284,10 @@ const TransferAuthRepresentative = ({ drawer }) => {
                                                                     <td>RegID</td>
                                                                     <td className="text-capitalize">{`${$user.regId}`}</td>
                                                                 </tr>
-                                                                <tr>
+                                                                {/* <tr>
                                                                     <td>Institution</td>
                                                                     <td className="text-capitalize">{`${$user.institution?.name?.toLowerCase()}`}</td>
-                                                                </tr>
+                                                                </tr> */}
 
                                                             </tbody>
                                                         </table>
