@@ -153,7 +153,9 @@
                         </i>
                     </div>
                     <div style="float: right;">
-                        <img style="width: 250px;" src="{{ public_path('assets/invoice/img/e_success_logo.png') }}" alt="fmdq logo">
+                        <img style="width: 250px;" src="{{ asset('assets/invoice/img/e_success_logo.png') }}" alt="fmdq logo">
+                        {{-- <img style="width: 250px;" src="{{ public_path('assets/invoice/img/e_success_logo.png') }}" alt="fmdq logo"> --}}
+
                     </div>
                 </div>
                 <br><br>
@@ -163,7 +165,7 @@
 
                     {!! $content['title'] !!}
                     {!! $content['body'] !!}
-                    
+
                 </div>
             </div>
         </div>

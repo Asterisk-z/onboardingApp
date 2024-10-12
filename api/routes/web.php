@@ -2,6 +2,7 @@
 
 // use App\Helpers\EventNotificationUtility;
 
+use App\Helpers\ESuccessLetter;
 use App\Helpers\EventNotificationUtility;
 use App\Helpers\MailContents;
 use App\Helpers\Utility;
@@ -48,8 +49,11 @@ Route::get('/', function () {
     // dd(Event::all());
     // dd(EventRegistration::all());
 
-return view('welcome');
+    $application = Application::find(1);
 
+    (new ESuccessLetter)->generate($application);
+
+    return view('welcome');
 
     $event = EventRegistration::where('certificate_path', '!=', null)->first();
     EventNotificationUtility::certificate($event);

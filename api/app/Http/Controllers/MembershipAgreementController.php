@@ -7,10 +7,8 @@ use App\Helpers\Utility;
 use App\Models\Application;
 use App\Models\MemberAgreement;
 use App\Models\MemberESuccessLetter;
-use App\Models\User;
-
-// use Illuminate\Support\Facades\Storage;
-// use PDF;
+use Illuminate\Support\Facades\Storage;
+use PDF;
 
 class MembershipAgreementController extends Controller
 {
@@ -50,13 +48,13 @@ class MembershipAgreementController extends Controller
         }
         // // logger($membershipCategory->code);
         // $pdf = PDF::loadView('agreement.' . $membershipCategory->code, compact('details'));
-        // // $pdf = PDF::loadView('agreement.dmb', compact('details'));
-        // Storage::put('public/agreement/e_membership_agreement' . $application->id . '.pdf', $pdf->output());
-        // $application->membership_agreement = 'agreement/e_membership_agreement' . $application->id . '.pdf';
-        // $application->save();
+        $pdf = PDF::loadView('agreement.aft', compact('details'));
+        Storage::put('public/agreement/e_membership_agreement' . $application->id . '.pdf', $pdf->output());
+        $application->membership_agreement = 'agreement/e_membership_agreement' . $application->id . '.pdf';
+        $application->save();
 
-        return view('agreement.' . $membershipCategory->code, ['details' => $details]);
-        // return view('agreement.dmb', ['details' => $details]);
+        // return view('agreement.' . $membershipCategory->code, ['details' => $details]);
+        return view('agreement.aft', ['details' => $details]);
 
     }
 

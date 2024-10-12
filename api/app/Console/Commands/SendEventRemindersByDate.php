@@ -6,10 +6,7 @@ use App\Helpers\EventNotificationUtility;
 use App\Models\Education\Event;
 use App\Models\Education\EventNotificationDates;
 use Illuminate\Console\Command;
-use Illuminate\Support\Carbon;
-
 use Illuminate\Support\Facades\Log;
-
 
 class SendEventRemindersByDate extends Command
 {
@@ -53,7 +50,9 @@ class SendEventRemindersByDate extends Command
 
         foreach ($dates as $item) {
             $event = $item->event;
-
+            if (!$event) {
+                continue;
+            }
             if ($item->type == 'Registered') {
                 // notify registered
                 EventNotificationUtility::reminderNotification($event);
@@ -69,8 +68,6 @@ class SendEventRemindersByDate extends Command
             ]);
         }
 
-
-
         $this->log([
             'dates_count' => count($dates),
             'registered_count' => $registered_count,
@@ -79,9 +76,6 @@ class SendEventRemindersByDate extends Command
 
         return 0;
     }
-
-
-
 
     private function log(array $data)
     {
@@ -92,4 +86,3 @@ class SendEventRemindersByDate extends Command
         }
     }
 }
-
