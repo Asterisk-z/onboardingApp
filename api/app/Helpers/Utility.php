@@ -302,6 +302,7 @@ class Utility
 
                 //SUPPORTING DOCUMENTS
                 DB::raw("MAX(CASE WHEN application_fields.name = 'CompanyOverview' THEN application_field_uploads.uploaded_file END) AS CompanyOverview"),
+                DB::raw("MAX(CASE WHEN application_fields.name = 'CompanyLogo' THEN application_field_uploads.uploaded_file END) AS CompanyLogo"),
                 DB::raw("MAX(CASE WHEN application_fields.name = 'certificateOfIncorporation' THEN application_field_uploads.uploaded_file END) AS certificateOfIncorporation"),
                 DB::raw("MAX(CASE WHEN application_fields.name = 'memorandumAndArticlesOfAssociation' THEN application_field_uploads.uploaded_file END) AS memorandumAndArticlesOfAssociation"),
                 DB::raw("MAX(CASE WHEN application_fields.name = 'particularsOfDirectors' THEN application_field_uploads.uploaded_file END) AS particularsOfDirectors"),
@@ -448,6 +449,7 @@ class Utility
 
                 //SUPPORTING DOCUMENTS
                 DB::raw("MAX(CASE WHEN application_fields.name = 'CompanyOverview' THEN application_field_uploads.uploaded_file END) AS CompanyOverview"),
+                DB::raw("MAX(CASE WHEN application_fields.name = 'CompanyLogo' THEN application_field_uploads.uploaded_file END) AS CompanyLogo"),
                 DB::raw("MAX(CASE WHEN application_fields.name = 'certificateOfIncorporation' THEN application_field_uploads.uploaded_file END) AS certificateOfIncorporation"),
                 DB::raw("MAX(CASE WHEN application_fields.name = 'memorandumAndArticlesOfAssociation' THEN application_field_uploads.uploaded_file END) AS memorandumAndArticlesOfAssociation"),
                 DB::raw("MAX(CASE WHEN application_fields.name = 'particularsOfDirectors' THEN application_field_uploads.uploaded_file END) AS particularsOfDirectors"),
@@ -507,6 +509,8 @@ class Utility
     {
         $body = [];
 
+        $hasMailingGroup = false;
+
         foreach ($users as $user) {
             $firstname = $user->first_name;
             $lastname = $user->last_name;
@@ -518,6 +522,8 @@ class Utility
             ])->first();
             $group_mail = $mailgroup->groupMail ? $mailgroup->groupMail->email : '';
 
+            $hasMailingGroup = $hasMailingGroup && $group_mail ? true : false;
+
             $body[] = [$category->name, $position->name, $group_mail, $firstname, $lastname, $fullname, $user->email];
 
         }
@@ -527,7 +533,7 @@ class Utility
             "body" => $body,
         ];
 
-        if (count($body)) {
+        if (count($body) && $hasMailingGroup) {
             //FMDQ Help Desk Cc MEG
             $HelpDesk = Utility::getUsersByCategory(Role::HELPDESK);
             $Meg = Utility::getUsersEmailByCategory(Role::MEG);
@@ -1319,5 +1325,11 @@ class Utility
         $anList = ['Associate', 'Affiliate'];
         $pronoun = (in_array($catList[0], $anList)) ? "an" : "a";
         return "$pronoun $categoryName";
+    }
+
+    public static function categoryNameFromWebsite($categoryName)
+    {
+        $list = ['(Individual)', '(Corporate)'];
+        return str_replace($list, ' ', $categoryName);
     }
 }

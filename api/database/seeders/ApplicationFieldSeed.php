@@ -180,6 +180,7 @@ class ApplicationFieldSeed extends Seeder
                 "parent_id" => isset($field['parent_id']) ? $field['parent_id'] : null,
             ]);
         }
+
         $product = ApplicationField::where('category', '1')->where('name', 'productOfInterest')->first();
 
         $fields = [
@@ -564,7 +565,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '1',
                 "name" => 'treasureDisciplinary',
-                "description" => 'The Treasure',
+                "description" => 'The Treasurer',
                 "type" => 'select',
                 "required" => 0,
                 "page" => '3',
@@ -2300,7 +2301,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '3',
                 "name" => 'treasureDisciplinary',
-                "description" => 'The Treasure',
+                "description" => 'The Treasurer',
                 "type" => 'select',
                 "required" => 0,
                 "page" => '3',
@@ -3212,7 +3213,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '4',
                 "name" => 'treasureDisciplinary',
-                "description" => 'The Treasure',
+                "description" => 'The Treasurer',
                 "type" => 'select',
                 "required" => 0,
                 "page" => '3',
@@ -4206,7 +4207,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '5',
                 "name" => 'treasureDisciplinary',
-                "description" => 'The Treasure',
+                "description" => 'The Treasurer',
                 "type" => 'select',
                 "required" => 0,
                 "page" => '3',
@@ -4809,7 +4810,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'custodianInformationAddress',
                 "description" => 'Custodian Address',
                 "type" => 'text',
-                "required" => 1,
+                "required" => 0,
                 "page" => '2',
             ],
             [
@@ -4817,7 +4818,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'custodianInformationTelephone',
                 "description" => 'Custodian Telephone',
                 "type" => 'number',
-                "required" => 1,
+                "required" => 0,
                 "page" => '2',
             ],
             [
@@ -4825,7 +4826,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'custodianInformationMobileNumberOfContact',
                 "description" => 'Custodian Mobile Number Of Contact',
                 "type" => 'number',
-                "required" => 1,
+                "required" => 0,
                 "page" => '2',
             ],
 

@@ -1804,7 +1804,8 @@ const UploadConcession = ({ updateParentParent, tabItem, positions, closeModel }
 };
 
 
-const AdminInstitutionTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState, allApplications }) => {
+const AdminInstitutionTable = ({ data, pagination, actions, className, selectableRows, expandableRows, updateParent, parentState, allApplications, $active_categories, $institutions }) => {
+
   const complainColumn = [
     {
       name: "SN",
@@ -1873,7 +1874,9 @@ const AdminInstitutionTable = ({ data, pagination, actions, className, selectabl
     if (searchText !== "") {
       defaultData = data.filter((item) => {
         // return item.name.toLowerCase().includes(searchText.toLowerCase());
-        return (Object.values(item).join('').toLowerCase()).includes(searchText.toLowerCase())
+        let tableSet = [item.internal.category_name, item.basic_details.companyName, item.internal.status]
+        // return (Object.values(item).join('').toLowerCase()).includes(searchText.toLowerCase())
+        return (tableSet.join('').toLowerCase()).includes(searchText.toLowerCase())
       });
       setTableData(defaultData);
     } else {
@@ -1898,79 +1901,152 @@ const AdminInstitutionTable = ({ data, pagination, actions, className, selectabl
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // const renderer = ({ hours, minutes, seconds, completed }) => {
-  //         if (completed) {
+
+  const [loading, setLoading] = useState(false);
+
+  const { register, handleSubmit, formState: { errors }, resetField, setValue, getValues } = useForm();
+
+  let filteredApplication = data;
+
+  const handleFormSubmit = async (values) => {
+
+    if (values?.institution) {
+      filteredApplication = filteredApplication.filter((item) => item.internal.institution_id == values?.institution)
+    }
+    if (values?.category) {
+      filteredApplication = filteredApplication.filter((item) => item?.internal?.category_id == values?.category)
+    }
+
+    setTableData(filteredApplication)
+
+  };
 
   return (
-    <div className={`dataTables_wrapper dt-bootstrap4 no-footer ${className ? className : ""}`}>
-      <Row className={`justify-between g-2 ${actions ? "with-export" : ""}`}>
-        <Col className="col-7 text-start" sm="4">
-          <div id="DataTables_Table_0_filter" className="dataTables_filter">
-            <label>
-              <input
-                type="search"
-                className="form-control form-control-sm"
-                placeholder="Search by name"
-                onChange={(ev) => setSearchText(ev.target.value)}
-              />
-            </label>
-          </div>
-        </Col>
-        <Col className="col-5 text-end" sm="8">
-          <div className="datatable-filter">
+    <>
+      <div>
+        <form onSubmit={handleSubmit(handleFormSubmit)} className="is-alter" encType="multipart/form-data">
+          <Row>
 
-            <div className="d-flex justify-content-end g-2">
-              {actions && <Export data={data} />}
-              <div className="dataTables_length" id="DataTables_Table_0_length">
-                <label>
-                  <span className="d-none d-sm-inline-block">Show</span>
-                  <div className="form-control-select">
-                    {" "}
-                    <select
-                      name="DataTables_Table_0_length"
-                      className="custom-select custom-select-sm form-control form-control-sm"
-                      onChange={(e) => setRowsPerPage(e.target.value)}
-                      value={rowsPerPageS}
-                    >
-                      <option value="10">10</option>
-                      <option value="25">25</option>
-                      <option value="40">40</option>
-                      <option value="50">50</option>
-                    </select>{" "}
-                  </div>
+            <Col md={'6'}>
+              <div className="form-group">
+                <label className="form-label" htmlFor="category">
+                  Category
                 </label>
+                <div className="form-control-wrap">
+                  <div className="form-control-select">
+                    <select className="form-control form-select" {...register('category')}>
+                      <option value=''>All</option>
+                      {$active_categories && $active_categories.map((active_category, index) =>
+                        <option key={`activeCategory${index}`} value={active_category.id}>{active_category.name}</option>
+                      )}
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </Col>
+
+            <Col md={'6'}>
+              <div className="form-group">
+                <label className="form-label" htmlFor="institution">
+                  Institution
+                </label>
+                <div className="form-control-wrap">
+                  <div className="form-control-select">
+                    <select className="form-control form-select" {...register('institution')}>
+                      <option value=''>All</option>
+                      {$institutions && $institutions.map((institution, index) =>
+                        institution?.name &&
+                        <option key={`activeInstitution${index}`} value={institution.id}>{institution.name}</option>
+                      )}
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </Col>
+
+            <Col md={'12'} className="">
+
+              <div className="form-group float-end m-5">
+                <Button color="primary" type="submit" size="lg">
+                  {loading ? (<span><Spinner size="sm" color="light" /> Processing...</span>) : "Filter Report"}
+                </Button>
+              </div>
+            </Col>
+          </Row>
+
+        </form>
+      </div>
+      <div className={`dataTables_wrapper dt-bootstrap4 no-footer ${className ? className : ""}`}>
+        <Row className={`justify-between g-2 ${actions ? "with-export" : ""}`}>
+          <Col className="col-7 text-start" sm="4">
+            <div id="DataTables_Table_0_filter" className="dataTables_filter">
+              <label>
+                <input
+                  type="search"
+                  className="form-control form-control-sm"
+                  placeholder="Search by name"
+                  onChange={(ev) => setSearchText(ev.target.value)}
+                />
+              </label>
+            </div>
+          </Col>
+          <Col className="col-5 text-end" sm="8">
+            <div className="datatable-filter">
+
+              <div className="d-flex justify-content-end g-2">
+                {actions && <Export data={data} />}
+                <div className="dataTables_length" id="DataTables_Table_0_length">
+                  <label>
+                    <span className="d-none d-sm-inline-block">Show</span>
+                    <div className="form-control-select">
+                      {" "}
+                      <select
+                        name="DataTables_Table_0_length"
+                        className="custom-select custom-select-sm form-control form-control-sm"
+                        onChange={(e) => setRowsPerPage(e.target.value)}
+                        value={rowsPerPageS}
+                      >
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="40">40</option>
+                        <option value="50">50</option>
+                      </select>{" "}
+                    </div>
+                  </label>
+                </div>
               </div>
             </div>
-          </div>
-        </Col>
-      </Row>
-      <DataTable
-        data={tableData}
-        columns={complainColumn}
-        className={className + ' customMroisDatatable'} id='customMroisDatatable'
-        selectableRows={selectableRows}
-        expandableRows={mobileView}
-        noDataComponent={<div className="p-2">There are no records found</div>}
-        sortIcon={
-          <div>
-            <span>&darr;</span>
-            <span>&uarr;</span>
-          </div>
-        }
-        pagination={pagination}
-        paginationComponent={({ currentPage, rowsPerPage, rowCount, onChangePage, onChangeRowsPerPage }) => (
-          <DataTablePagination
-            customItemPerPage={rowsPerPageS}
-            itemPerPage={rowsPerPage}
-            totalItems={rowCount}
-            paginate={onChangePage}
-            currentPage={currentPage}
-            onChangeRowsPerPage={onChangeRowsPerPage}
-            setRowsPerPage={setRowsPerPage}
-          />
-        )}
-      ></DataTable>
-    </div>
+          </Col>
+        </Row>
+        <DataTable
+          data={tableData}
+          columns={complainColumn}
+          className={className + ' customMroisDatatable'} id='customMroisDatatable'
+          selectableRows={selectableRows}
+          expandableRows={mobileView}
+          noDataComponent={<div className="p-2">There are no records found</div>}
+          sortIcon={
+            <div>
+              <span>&darr;</span>
+              <span>&uarr;</span>
+            </div>
+          }
+          pagination={pagination}
+          paginationComponent={({ currentPage, rowsPerPage, rowCount, onChangePage, onChangeRowsPerPage }) => (
+            <DataTablePagination
+              customItemPerPage={rowsPerPageS}
+              itemPerPage={rowsPerPage}
+              totalItems={rowCount}
+              paginate={onChangePage}
+              currentPage={currentPage}
+              onChangeRowsPerPage={onChangeRowsPerPage}
+              setRowsPerPage={setRowsPerPage}
+            />
+          )}
+        ></DataTable>
+      </div>
+    </>
+
   );
 
   //         } else {

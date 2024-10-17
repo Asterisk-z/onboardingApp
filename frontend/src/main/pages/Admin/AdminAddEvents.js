@@ -90,12 +90,10 @@ const AdminEvents = ({ drawer }) => {
 
     const update_unregistered_remainders = (unregistered_remainders) => {
         if (unregistered_remainders) {
-            // moment(values.eventDate).format('YYYY-MM-DD')
             let dates = unregistered_remainders.map((item) => moment(item).format('YYYY-MM-DD')).toString()
             setUnregisteredDate(dates)
             setValue('unregistered_remainders', dates)
         }
-
     };
 
     const update_registered_remainders = (registered_remainders) => {
@@ -104,7 +102,6 @@ const AdminEvents = ({ drawer }) => {
             let dates = registered_remainders.map((item) => moment(item).format('YYYY-MM-DD')).toString()
             setRegisteredDate(dates)
             setValue('registered_remainders', dates)
-            console.log(dates)
         }
     };
 
@@ -114,12 +111,13 @@ const AdminEvents = ({ drawer }) => {
         dispatch(loadAllCategoryPositions({ 'category_ids': category }));
     };
 
-
     const toggleEventDate = (value) => {
         setUnregisteredDate("")
         setRegisteredDate("")
         setValue('unregistered_remainders', '')
         setValue('registered_remainders', '')
+        // update_unregistered_remainders('')
+        // update_registered_remainders('')
         setEventDate(value)
     };
 
@@ -132,7 +130,6 @@ const AdminEvents = ({ drawer }) => {
         setUnregisteredFrequency(value)
         toggleEventDate(eventDate)
     };
-
 
     const checking = () => {
 

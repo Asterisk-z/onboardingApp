@@ -195,9 +195,9 @@ class MailContents
         make payment and upload evidence of payment (if applicable) to complete your registration.</p>";
     }
 
-    public static function concessionSubject(): string
+    public static function concessionSubject($applicationType): string
     {
-        return "New Membership Application: Concession Confirmation";
+        return "New Membership $applicationType : Concession Confirmation";
     }
 
     public static function concessionMail($companyName): string
@@ -226,19 +226,19 @@ class MailContents
     {
         $url = config("app.front_end_url");
 
-        return "<p>Please be informed that {$company_name} has initiated Membership Addition</p>";
+        return "<p>Please be informed that {$company_name} has initiated a Membership Addition.</p>";
     }
-    public static function paymentSubject(): string
+    public static function paymentSubject($applicationType): string
     {
-        return "Membership Application Payment Notification";
+        return "Membership $applicationType Payment Notification";
     }
 
-    public static function paymentMail($user): string
+    public static function paymentMail($name): string
     {
         $url = config("app.front_end_url");
 
         return "<p>Kindly log on to the <a href=$url>MROIS Portal</a> to
-        review the payment upload information for the Applicant, {$user->first_name} {$user->last_name}.</p>";
+        review the payment upload information for the Applicant, {$name}.</p>";
     }
 
     public static function approvedPaymentSubject(): string
@@ -246,14 +246,14 @@ class MailContents
         return "Payment Confirmation by FSD";
     }
 
-    public static function approvedPaymentMail($user): string
+    public static function approvedPaymentMail($name): string
     {
         $url = config("app.front_end_url");
 
-        return "<p>FSD has confirmed payment for {$user->first_name} {$user->last_name}.
+        return "<p>FSD has confirmed payment for {$name}.
 
         <p>Kindly log on to the <a href=$url>MROIS Portal</a> to
-        review and approve payment</p>
+        review and approve payment.</p>
 
         </p>";
     }
@@ -326,7 +326,7 @@ class MailContents
     public static function meG2ApprovalMail($companyName, $categoryName): string
     {
         $url = config("app.front_end_url");
-        return "<p>Kindly be informed that {$companyName} Application Report for {$categoryName} Categories has been approved.</p>
+        return "<p>Kindly be informed that {$companyName} Application Report for the {$categoryName} Category has been approved.</p>
         <p>Kindly log on to <a href=$url>MROIS Portal</a> to proceed with the Application.</p>";
     }
 
@@ -392,6 +392,7 @@ class MailContents
     public static function helpdeskupdateMail($companyName, $categoryName): string
     {
         $url = "https://fmdqgroup.com/exchange/Membership/";
+        $categoryName = Utility::categoryNameFromWebsite($categoryName);
         return "<p>Kindly add $companyName to the $categoryName Register on FMDQ Exchange Website.
                 The page link is as stated below:</p>
         <p><a href=$url>https://fmdqgroup.com/exchange/Membership/</a></p>";

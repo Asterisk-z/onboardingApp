@@ -162,6 +162,7 @@ class ApplicationResource extends JsonResource
 
             "supporting_document" => [
                 'CompanyOverview' => $this->CompanyOverview ? config('app.url') . '/storage/' . $this->CompanyOverview : null,
+                'companyLogo' => $this->CompanyLogo ? config('app.url') . '/storage/' . $this->CompanyLogo : null,
                 'certificateOfIncorporation' => $this->certificateOfIncorporation ? config('app.url') . '/storage/' . $this->certificateOfIncorporation : null,
                 'memorandumAndArticlesOfAssociation' => $this->memorandumAndArticlesOfAssociation ? config('app.url') . '/storage/' . $this->memorandumAndArticlesOfAssociation : null,
                 'particularsOfDirectors' => $this->particularsOfDirectors ? config('app.url') . '/storage/' . $this->particularsOfDirectors : null,

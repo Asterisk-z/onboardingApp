@@ -43,7 +43,7 @@ const Form = () => {
         if ($application_details && !$application_details?.disclosure_stage && !showDisclosureModal) {
 
             Swal.fire({
-                title: "Declaration of prior disclosure?",
+                title: "Declaration of prior disclosure",
                 text: "You won't be able to revert this!",
                 icon: "warning",
                 showCancelButton: true,

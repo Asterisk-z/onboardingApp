@@ -66,6 +66,8 @@ class ApplicationSubmissionListener implements ShouldQueue
         $contactEmail = $data->uploaded_field ? $data->uploaded_field : $data->uploaded_file;
         $contactEmail = filter_var($contactEmail, FILTER_VALIDATE_EMAIL) ? $contactEmail : '';
 
+        $companyName = getApplicationFieldValue($user, $application, 'companyName');
+
         $name = $user->first_name . ' ' . $user->last_name;
         $categoryName = $membershipCategory->name;
 
@@ -97,12 +99,12 @@ class ApplicationSubmissionListener implements ShouldQueue
         $tos = array_merge($Meg, $Mbg, $fsd);
 
         $categoryNameWithPronoun = Utility::categoryNameWithPronoun($categoryName);
-
+        $applicationType = applicationType($application, true);
         $emailD = [
             'name' => 'Team',
             'subject' => $subject,
-            'content' => "A new applicant, $name, has successfully submitted
-                            an application on the MROIS Portal as $categoryNameWithPronoun.",
+            'content' => "A new applicant, $companyName, has successfully submitted
+                            $applicationType on the MROIS Portal as $categoryNameWithPronoun.",
         ];
 
         Utility::emailHelper($emailD, $tos);
@@ -114,7 +116,7 @@ class ApplicationSubmissionListener implements ShouldQueue
         $emailC = [
             'name' => 'Team',
             'subject' => 'New Membership Application: Concession Confirmation',
-            'content' => "A new applicant, $name, has successfully submitted an application as $categoryNameWithPronoun
+            'content' => "A new applicant, $companyName, has successfully submitted $applicationType as $categoryNameWithPronoun
              on the MROIS Portal. Kindly grant a concession (where applicable).",
         ];
 

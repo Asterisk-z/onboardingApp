@@ -95,6 +95,7 @@ class Application extends Model
             'e_success_letter' => ($this->e_success_letter) ? config('app.url') . '/storage/app/public/' . $this->e_success_letter : null,
             'completed_at' => $this->completed_at,
             'disclosure_stage' => $this->disclosure_stage,
+            'logo' => $this->companyLogo(),
             'step' => $this->step,
             'all_ar_uploaded' => $this->all_ar_uploaded,
             'created_at' => $this->created_at,
@@ -188,6 +189,13 @@ class Application extends Model
             return $uuid;
         }
         $this->createUuid();
+    }
+
+    public function companyLogo()
+    {
+        $applicationLogoField = ApplicationField::where('name', 'CompanyLogo')->where('category', $this->membership_category_id)->first();
+        $applicationLogoUpload = $applicationLogoField ? ApplicationFieldUpload::where('application_id', $this->id)->where('application_field_id', $applicationLogoField->id)->first() : null;
+        return $applicationLogoUpload ? $applicationLogoUpload->file_path : null;
     }
 
 }

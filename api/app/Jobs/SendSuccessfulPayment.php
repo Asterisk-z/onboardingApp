@@ -122,7 +122,9 @@ class SendSuccessfulPayment implements ShouldQueue
             ],
         ];
 
-        Notification::send($FSDs, new InfoNotification(MailContents::paymentMail($user), MailContents::paymentSubject(), $CCs, $attachment));
+        $companyName = getApplicationFieldValue($user, $application, 'companyName');
+        $applicationType = applicationType($application);
+        Notification::send($FSDs, new InfoNotification(MailContents::paymentMail($companyName), MailContents::paymentSubject($applicationType), $CCs, $attachment));
 
     }
 }

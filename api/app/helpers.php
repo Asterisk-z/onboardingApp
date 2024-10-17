@@ -1,9 +1,12 @@
 <?php
 
 use App\Helpers\ResponseStatusCodes;
+use App\Models\Application;
+use App\Models\ApplicationField;
 use App\Models\Audit;
 use App\Models\FmdqBankAccount;
 use App\Models\InvoiceContent;
+use App\Models\User;
 use Illuminate\Support\Str;
 use PHPOpenSourceSaver\JWTAuth\JWTGuard;
 use Symfony\Component\HttpFoundation\Response;
@@ -136,5 +139,49 @@ if (!function_exists('generateReference')) {
         $paymentReference = $dateTime->format('YmdHis') . $uniqueId;
 
         return $paymentReference;
+    }
+}
+if (!function_exists('applicationType')) {
+    function applicationType($application, $withPronoun = false)
+    {
+        $type = $application->application_type;
+
+        switch ($type) {
+
+            case Application::type['CON']:
+                $pronoun = $withPronoun ? 'a' : '';
+                $subject = "$pronoun Conversion";
+                break;
+            case Application::type['ADD']:
+                $pronoun = $withPronoun ? 'a' : '';
+                $subject = "$pronoun Addition";
+                break;
+            default:
+                $pronoun = $withPronoun ? "an" : "";
+                $subject = "$pronoun Application";
+                break;
+        }
+
+        return $subject;
+
+    }
+}
+
+if (!function_exists('getApplicationFieldValue')) {
+    function getApplicationFieldValue(User $user, Application $application, $application_field)
+    {
+
+        $data = ApplicationField::where('name', $application_field)
+            ->join('application_field_uploads', function ($join) use ($application) {
+                $join->on('application_fields.id', '=', 'application_field_uploads.application_field_id')
+                    ->where('application_field_uploads.application_id', '=', $application->id);
+            })
+            ->select('application_field_uploads.*')
+            ->first();
+
+        $name = $user->first_name . ' ' . $user->last_name;
+        $companyName = $data->uploaded_field ? $data->uploaded_field : $data->uploaded_file;
+        $companyName = $companyName ? $companyName : $name;
+        return $companyName;
     }
 }

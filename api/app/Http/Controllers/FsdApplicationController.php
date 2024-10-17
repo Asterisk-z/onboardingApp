@@ -143,7 +143,10 @@ class FsdApplicationController extends Controller
             $MEGs = Utility::getUsersEmailByCategory(Role::MEG);
             $FSDs = Utility::getUsersEmailByCategory(Role::FSD);
             $CCs = array_merge($FSDs, $MEGs);
-            Notification::send($MBGs, new InfoNotification(MailContents::approvedPaymentMail($applicant), MailContents::approvedPaymentSubject(), $CCs));
+
+            $companyName = getApplicationFieldValue($user, $application, 'companyName');
+
+            Notification::send($MBGs, new InfoNotification(MailContents::approvedPaymentMail($companyName), MailContents::approvedPaymentSubject(), $CCs));
             logAction($user->email, 'FSD Approved', "FSD has approved applicant payment", $request->ip());
         }
 

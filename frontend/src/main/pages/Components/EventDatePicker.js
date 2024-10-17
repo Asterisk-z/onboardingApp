@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import DatePicker, { DateObject } from "react-multi-date-picker"
 import DatePanel from "react-multi-date-picker/plugins/date_panel"
 // import moment from "moment";
@@ -7,6 +7,7 @@ import DatePanel from "react-multi-date-picker/plugins/date_panel"
 const MultiDatePicker = ({ id, nameAttr, changeAction, max = "", properties, reminderType = null }) => {
 
   const [values, setValues] = useState([])
+  const refValues = useRef([])
   const [inputName, setInputName] = useState(nameAttr)
 
   const today = new Date()
@@ -19,12 +20,20 @@ const MultiDatePicker = ({ id, nameAttr, changeAction, max = "", properties, rem
   const maxTomorrow = new Date(max)
   maxTomorrow.setDate(maxTomorrow.getDate() + 1)
 
+  const refreshPosition = () => refValues.current.refreshPosition()
+
+  useEffect(() => {
+    refValues.current.refreshPosition()
+    setValues([])
+  }, [reminderType])
+
   return (
     <React.Fragment>
       <DatePicker inputClass="form-control" containerClassName="custom-container"
         multiple
         value={values}
         format="DD/MM/YYYY"
+        ref={refValues}
         name={inputName}
         id={id}
         disabled={!['Monthly', 'Weekly'].includes(reminderType)}

@@ -151,7 +151,12 @@ class ApplicationProcessController extends Controller
         $application->status()->save($status);
 
         $Meg = Utility::getUsersByCategory(Role::MEG);
-        Notification::send($Meg, new InfoNotification(MailContents::megAdditionRequestMail($data->company_name), MailContents::megAdditionRequestTitle()));
+        $Mbg = Utility::getUsersEmailByCategory(Role::MBG);
+        $Fsd = Utility::getUsersEmailByCategory(Role::FSD);
+
+        $ccs = array_merge($Mbg, $Fsd);
+
+        Notification::send($Meg, new InfoNotification(MailContents::megAdditionRequestMail($data->company_name), MailContents::megAdditionRequestTitle(), $ccs));
 
         logAction(auth()->user()->email, 'Addition Request Sent', "Addition Request Sent {$data->company_name}.", $request->ip());
 

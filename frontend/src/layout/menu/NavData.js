@@ -31,10 +31,10 @@ const navData = [{
       text: "Manage Complaint",
       link: "/admin-complaint",
     },
-    {
-      text: "Manage Complaint Type",
-      link: "/admin-complaint-type",
-    },
+      // {
+      //   text: "Manage Complaint Type",
+      //   link: "/admin-complaint-type",
+      // },
     ],
   },
   {

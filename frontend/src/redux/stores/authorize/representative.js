@@ -103,7 +103,7 @@ export const cancelMailNotication = createAsyncThunk(
     //       url: `ar/add`,
     //       data: values,
     //     });
-    return successHandler([], "Update Canceled");
+    return successHandler([], "Update Cancelled");
     // return successHandler(data, data.message);
     //   } catch (error) {
     //     return errorHandler(error, true);

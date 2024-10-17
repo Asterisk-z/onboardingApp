@@ -505,7 +505,7 @@ class ESuccessLetter
                             <p><i><b>$designation({$this->regId})</b></i></p>
                             <p><i><b>$address</b></i></p>",
             'title' => "<p><b>
-                           APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED REGISTRATION MEMBER (LISTINGS & QUOTATIONS) CATEGORIES
+                           APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED REGISTRATION MEMBER (LISTINGS & QUOTATIONS) CATEGORY
                         </b></p>",
             'body' => "<p  style='text-align: justify;text-justify: inter-word;'>
                             Having reviewed your application for the Registration Member (Listings & Quotations)

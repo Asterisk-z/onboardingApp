@@ -8,6 +8,8 @@ import { loadMBGInstitutionApplications, loadFSDInstitutionApplications, loadMEG
 import Content from "layout/content/Content";
 import Head from "layout/head/Head";
 import AdminApplicationInstitutionTable from './Tables/AdminApplicationInstitutionTable'
+import { loadAllActiveInstitutions } from 'redux/stores/institution/institutionStore'
+import { loadAllActiveCategories } from 'redux/stores/memberCategory/category'
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 
 
@@ -24,7 +26,12 @@ const AdminProcessInstitutions = ({ drawer }) => {
         setParentState(newState);
     };
 
+    const [loading, setLoading] = useState(false);
+
     const all_institutions = useSelector((state) => state?.applicationProcess?.all_institutions) || null;
+    const active_categories = useSelector((state) => state?.category?.list) || null;
+    const institutions = useSelector((state) => state?.institutions?.list) || null;
+
     useEffect(() => {
         if (authUser.is_admin_meg()) {
             dispatch(loadMEGInstitutionApplications());
@@ -38,9 +45,17 @@ const AdminProcessInstitutions = ({ drawer }) => {
         if (authUser.is_admin_mbg()) {
             dispatch(loadMBGInstitutionApplications());
         }
+        dispatch(loadAllActiveInstitutions());
+        dispatch(loadAllActiveCategories());
     }, [dispatch, parentState]);
 
     const $all_institutions = all_institutions ? JSON.parse(all_institutions) : null;
+    const $active_categories = active_categories ? JSON.parse(active_categories) : null;
+    const $institutions = institutions ? JSON.parse(institutions) : null;
+
+
+
+
 
     return (
         <React.Fragment>
@@ -72,19 +87,13 @@ const AdminProcessInstitutions = ({ drawer }) => {
                 </BlockHead>
                 <Block size="lg">
                     <Card className="card-bordered card-preview">
+
                         <Content>
 
                             <Block size="xl">
-                                <BlockHead>
-                                    <BlockHeadContent>
-                                        <BlockTitle tag="h4">Institutions Applications</BlockTitle>
-                                        {/* <p>{institutions}</p> */}
-                                        {/* {<p>{parentState}</p>} */}
-                                    </BlockHeadContent>
-                                </BlockHead>
 
                                 <PreviewCard>
-                                    {$all_institutions && <AdminApplicationInstitutionTable updateParent={updateParentState} parentState={parentState} data={$all_institutions} allApplications={false} expandableRows pagination actions />}
+                                    {$all_institutions && <AdminApplicationInstitutionTable updateParent={updateParentState} parentState={parentState} data={$all_institutions} allApplications={false} $active_categories={$active_categories} $institutions={$institutions} expandableRows pagination actions />}
                                 </PreviewCard>
                             </Block>
 

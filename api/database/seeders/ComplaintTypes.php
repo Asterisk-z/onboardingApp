@@ -17,8 +17,8 @@ class ComplaintTypes extends Seeder
         $types = [
             ["name" => "System Related"],
             ["name" => "Non-System Related"],
-            ["name" => "Inaccurate Remittance"],
-            ["name" => "Indiscipline"],
+            // ["name" => "Inaccurate Remittance"],
+            // ["name" => "Indiscipline"],
         ];
 
         foreach ($types as $type) {

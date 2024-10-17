@@ -49,7 +49,7 @@ class MembershipApplicationController extends Controller
         $user = $request->user();
         $data = [];
         $application = Application::where(['uuid' => $request->application_uuid])->first();
-        $application_requirements = ApplicationFieldUpload::where('application_id', $application->id)->with('field')->get();
+        $application_requirements = ApplicationFieldUpload::where('application_id', $application->id)->with('field')->orderBy('application_field_id', 'desc')->get();
 
         $data = [
             'application' => $application,
@@ -71,7 +71,7 @@ class MembershipApplicationController extends Controller
             $application = Application::where(['institution_id' => $application->institution_id, 'application_type_status' => Application::typeStatus['ASC']])->first();
 
         }
-        $application_requirements = ApplicationFieldUpload::where('application_id', $application->id)->with('field')->get();
+        $application_requirements = ApplicationFieldUpload::where('application_id', $application->id)->with('field')->orderBy('application_field_id', 'desc')->get();
 
         $data = [
             'application' => $application,
@@ -778,11 +778,14 @@ class MembershipApplicationController extends Controller
 
         logAction($user->email, 'Proof of payment uploaded', "Applicant successfully uploaded proof of payment.", $request->ip());
 
+        $companyName = getApplicationFieldValue($user, $application, 'companyName');
+
         $MBGs = Utility::getUsersEmailByCategory(Role::MBG);
         $MEGs = Utility::getUsersEmailByCategory(Role::MEG);
         $FSDs = Utility::getUsersByCategory(Role::FSD);
         $CCs = array_merge($MBGs, $MEGs);
-        Notification::send($FSDs, new InfoNotification(MailContents::paymentMail($user), MailContents::paymentSubject(), $CCs));
+        $applicationType = applicationType($application);
+        Notification::send($FSDs, new InfoNotification(MailContents::paymentMail($companyName), MailContents::paymentSubject($applicationType), $CCs));
 
         return successResponse("Payment has been processed and under review");
     }

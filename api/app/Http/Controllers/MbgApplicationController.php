@@ -185,7 +185,8 @@ class MbgApplicationController extends Controller
             $MBGs = Utility::getUsersEmailByCategory(Role::MBG);
             $FSDs = Utility::getUsersByCategory(Role::FSD);
             $CCs = array_merge($MBGs, $MEGs);
-            Notification::send($FSDs, new InfoNotification(MailContents::concessionMail($apllication_details->company_name), MailContents::concessionSubject(), $CCs));
+            $applicationType = applicationType($application);
+            Notification::send($FSDs, new InfoNotification(MailContents::concessionMail($apllication_details->company_name), MailContents::concessionSubject($applicationType), $CCs));
         }
 
         return successResponse("Application Updated Successfully");

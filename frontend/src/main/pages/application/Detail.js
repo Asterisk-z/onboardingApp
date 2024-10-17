@@ -453,7 +453,7 @@ const Form = () => {
 
   }
 
-  console.log($application_details)
+  // console.log($application_details)
 
   return <>
     <Head title="Form" />
@@ -465,8 +465,17 @@ const Form = () => {
           <div style={{ 'margin': '0px 10px !important' }}>
             <div style={styles.card}>
               <div style={styles.color}>
-                {$application_details && <h3>{`${$application_details.membership_category.name} Application Detail`} </h3>}
+
+
                 {/* <p>Pending Approval</p> */}
+                {$application_details && <>
+                  <CardTitle tag="h5" className="text-center">
+                    <h3 className="my-3">{`${$application_details.membership_category.name} Application Detail`} </h3>
+                    {$application_details.logo && <img src={$application_details.logo} className="rounded-xl" style={{ height: '200px', width: '200px', borderRadius: '100%' }} />}
+                  </CardTitle>
+                </>}
+
+
 
                 {$application_details?.completed_at && <>
                   <table className="table table-striped table-bordered table-hover">

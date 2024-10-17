@@ -106,17 +106,17 @@ Route::middleware(['auth', 'activeAuth'])->group(function () {
             Route::get('/all_institutions', [ApplicationProcessController::class, 'all_institutions']);
         });
 
+// institutions
+        Route::group(['prefix' => 'institution'], function () {
+            Route::get('/list', [InstitutionController::class, 'listInstitution']);
+        });
+
     });
 
     Route::middleware('authRole:' . Role::STAKEHOLDER . ',' . Role::MEG)->group(function () {
 
         Route::group(['prefix' => 'report/ar'], function () {
             Route::get('/list', [ARController::class, 'listReportMEG']);
-        });
-
-        // institutions
-        Route::group(['prefix' => 'institution'], function () {
-            Route::get('/list', [InstitutionController::class, 'listInstitution']);
         });
 
         Route::group(['prefix' => 'report/application'], function () {
