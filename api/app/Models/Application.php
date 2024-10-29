@@ -95,6 +95,7 @@ class Application extends Model
             'e_success_letter' => ($this->e_success_letter) ? config('app.url') . '/storage/app/public/' . $this->e_success_letter : null,
             'completed_at' => $this->completed_at,
             'disclosure_stage' => $this->disclosure_stage,
+            'disclosure_status' => $this->disclosure_status,
             'logo' => $this->companyLogo(),
             'step' => $this->step,
             'all_ar_uploaded' => $this->all_ar_uploaded,

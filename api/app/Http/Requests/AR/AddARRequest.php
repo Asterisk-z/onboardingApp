@@ -31,7 +31,18 @@ class AddARRequest extends FormRequest
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'middle_name' => 'nullable|string',
-            'position_id' => 'required|exists:positions,id',
+            'position_id' => [
+                'required',
+                'exists:positions,id',
+                function ($attribute, $value, $fail) {
+                    if (User::where('position_id', $value)->where('institution_id', auth()->user()->institution_id)->where('member_status', 'active')->exists()) {
+
+                            // if (!Position::where('id', request('position_id'))->where('can_be_authorizer', true)->where('is_del', false)->exists()) {
+                                $fail('Another User has the same position.');
+                            // }
+
+                    }
+                }],
             'nationality' => 'required|exists:nationalities,code',
             'category_id' => 'required|exists:membership_categories,id',
             'role_id' => [

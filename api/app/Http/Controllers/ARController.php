@@ -117,7 +117,7 @@ class ARController extends Controller
         $validated['created_by'] = $request->user()->id;
         $validated['img'] = $request->hasFile('img') ? $request->file('img')->storePublicly('users', 'public') : null;
         $validated['mandate_form'] = $request->hasFile('mandate_form') ? $request->file('mandate_form')->storePublicly('mandate', 'public') : null;
-
+        // return "tes";
         $user = User::create($validated);
 
         $regID = $user->createRegIDAr();

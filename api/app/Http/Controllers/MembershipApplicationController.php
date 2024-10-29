@@ -638,7 +638,7 @@ class MembershipApplicationController extends Controller
         $errorMsg = "Unable to complete your request at this point.";
 
         if ($application->submitted_by != $user->id || $application->disclosure_stage) {
-            logger('here222');
+            // logger('here222');
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
@@ -647,7 +647,9 @@ class MembershipApplicationController extends Controller
 
         $application->save();
 
-        return successResponse("Disclosure completed you can continue application");
+        $successMsg = $request->status == 'accept' ? "Prior Disclosure Accepted. Kindly continue" : "Prior Disclosure rejected. Kindly continue";
+
+        return successResponse($successMsg);
 
     }
 

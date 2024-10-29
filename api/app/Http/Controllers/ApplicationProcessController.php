@@ -76,12 +76,18 @@ class ApplicationProcessController extends Controller
             Application::where('membership_category_id', request('new_category'))->where('institution_id', auth()->user()->institution_id)->whereIn('application_type_status', [Application::typeStatus['ASP'], Application::typeStatus['ASC']])->exists()) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, "Institution has a pending request for this membership category");
         }
+
         $institution = Institution::find(auth()->user()->institution_id);
         $old_category = MembershipCategory::find(request('old_category'));
+        $new_category = MembershipCategory::find(request('new_category'));
         // $data = Application::where('applications.id', auth()->user()->application[0]->id);
         $data = Application::where('applications.id', $institution->application[0]->id);
         $data = Utility::applicationDetails($data);
         $data = $data->first();
+
+        if (!$this->canAddCategory($new_category)) {
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, "Institution can not initiate request at this moment");
+        }
 
         $status = new Status();
         $status->office = Application::office['AP'];
@@ -127,6 +133,13 @@ class ApplicationProcessController extends Controller
         if (Application::where('membership_category_id', request('new_category'))->where('institution_id', auth()->user()->institution_id)->whereIn('application_type_status', [Application::typeStatus['ASP'], Application::typeStatus['ASC']])->exists()) {
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, "Institution has a pending request for this membership category");
         }
+
+        $new_category = MembershipCategory::find(request('new_category'));
+
+        if (!$this->canAddCategory($new_category)) {
+            return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, "Institution can not initiate request at this moment");
+        }
+
         $institution = Institution::find(auth()->user()->institution_id);
         // $data = Application::where('applications.id', auth()->user()->application[0]->id);
         $data = Application::where('applications.id', $institution->application[0]->id);
@@ -162,5 +175,24 @@ class ApplicationProcessController extends Controller
 
         return successResponse("You have started the addition process");
 
+    }
+
+    protected function canAddCategory(MembershipCategory $category)
+    {
+        $rml_rmq_application = Application::where('membership_category_id', MembershipCategory::CATEGORIES['REGISTRATION_MEMBER_LISTINGS_QUOTATIONS'])->where('institution_id', auth()->user()->institution_id)->exists();
+        $rmlq_application = Application::whereIn('membership_category_id', [MembershipCategory::CATEGORIES['REGISTRATION_MEMBER_LISTINGS'], MembershipCategory::CATEGORIES['REGISTRATION_MEMBER_QUOTATIONS']])->where('institution_id', auth()->user()->institution_id)->exists();
+        $newCategory = $category;
+
+        if (($rml_rmq_application &&
+            in_array($newCategory->id, [MembershipCategory::CATEGORIES['REGISTRATION_MEMBER_LISTINGS'], MembershipCategory::CATEGORIES['REGISTRATION_MEMBER_QUOTATIONS']]))) {
+            return false;
+        }
+
+        if (($rmlq_application &&
+            in_array($newCategory->id, [MembershipCategory::CATEGORIES['REGISTRATION_MEMBER_LISTINGS_QUOTATIONS']]))) {
+            return false;
+        }
+
+        return true;
     }
 }

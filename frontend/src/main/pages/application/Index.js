@@ -38,6 +38,9 @@ const Form = () => {
 
     const $application_details = application_details ? JSON.parse(application_details) : null;
 
+    const [unChangeableField, setUnChangeableField] = useState(["companyName", "rcNumber", "dateOfIncorporation", "placeOfIncorporation"]);
+
+
     useEffect(() => {
 
         if ($application_details && !$application_details?.disclosure_stage && !showDisclosureModal) {
@@ -257,9 +260,9 @@ const Form = () => {
                                     return (
                                         <Col md="6" key={`${field.name}${index}`}>
                                             <div className="form-group">
-                                                <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
+                                                <label className="form-label text-capitalize" htmlFor="company-name">{field.description}{$application_details?.disclosure_status}</label>
                                                 <div className="form-control-wrap">
-                                                    <input type="text" id={field.name} className="form-control" {...register(field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field} />
+                                                    <input type="text" id={field.name} className="form-control" {...register(field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field} readOnly={($application_details?.disclosure_status && unChangeableField.includes(field.name) && field?.field_value?.uploaded_field)} />
                                                     {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
                                                 </div>
                                             </div>
@@ -271,7 +274,7 @@ const Form = () => {
                                             <div className="form-group">
                                                 <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
                                                 <div className="form-control-wrap">
-                                                    <input type="url" placeholder="http://example.com" id={field.name} className="form-control" {...register(field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field} />
+                                                    <input type="url" placeholder="http://example.com" id={field.name} className="form-control" {...register(field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field} readOnly={($application_details?.disclosure_status && unChangeableField.includes(field.name) && field?.field_value?.uploaded_field)} />
                                                     {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
                                                 </div>
                                             </div>
@@ -286,7 +289,7 @@ const Form = () => {
                                                 <div className="form-control-wrap">
 
                                                     <input type="hidden" {...register(field.name, { required: 'This field is required' })} value={field?.field_value?.uploaded_field} />
-                                                    <DatePicker selected={field?.field_value?.uploaded_field ? new Date(field?.field_value?.uploaded_field) : ""} id={field.name} onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": e, "field_type": field.type })} className="form-control date-picker" />
+                                                    <DatePicker selected={field?.field_value?.uploaded_field ? new Date(field?.field_value?.uploaded_field) : ""} id={field.name} onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": e, "field_type": field.type })} className="form-control date-picker" readOnly={($application_details?.disclosure_status && unChangeableField.includes(field.name) && field?.field_value?.uploaded_field)} />
                                                     {/* <DatePicker selected={field?.field_value?.uploaded_field ? new Date(field?.field_value?.uploaded_field) : ""} id={field.name} onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": moment(e).format('YYYY-MM-DD'), "field_type": field.type })} className="form-control date-picker" /> */}
                                                     {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
                                                 </div>
@@ -311,7 +314,7 @@ const Form = () => {
                                             <div className="form-group">
                                                 <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
                                                 <div className="form-control-wrap">
-                                                    <input type="number" id={field.name} className="form-control" {...register(field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field} />
+                                                    <input type="number" id={field.name} className="form-control" {...register(field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field} readOnly={($application_details?.disclosure_status && unChangeableField.includes(field.name) && field?.field_value?.uploaded_field)} />
                                                     {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
                                                 </div>
                                             </div>
@@ -338,12 +341,12 @@ const Form = () => {
                                         //     </div>
                                         // </div>
                                         <Col md="6" key={`${field.name}${index}`}>
-                                            <div className="form-group">
+                                            <div className="form-group">readOnly
                                                 <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
                                                 <div className="form-control-wrap">
 
                                                     <div className="form-control-select" >
-                                                        <select className="form-control form-select" type="select" name={field.name} id={field.name} {...register(field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field}>
+                                                        <select className="form-control form-select" type="select" name={field.name} id={field.name} {...register(field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field} readOnly={($application_details?.disclosure_status && unChangeableField.includes(field.name) && field?.field_value?.uploaded_field)}>
                                                             <option value=''>Select Option</option>
                                                             {field.field_options && field.field_options.map((option, index) => (
                                                                 <option key={`${option.option_value}${index}`} value={option.option_value}>{option.option_name}</option>
