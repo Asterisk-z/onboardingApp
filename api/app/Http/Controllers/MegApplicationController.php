@@ -95,6 +95,7 @@ class MegApplicationController extends Controller
         if ($request->status == 'approve') {
 
             Utility::applicationStatusHelper($application, Application::statuses['MAMR'], Application::office['MEG'], Application::office['MEG2'], $request->comment);
+            Utility::applicationTimestamp($application, 'MRAD');
             $application = $application->refresh();
             $application->meg_review_stage = 1;
             $application->save();
@@ -207,6 +208,7 @@ class MegApplicationController extends Controller
         Utility::notifyApplicantAndContact($request->application_id, $applicant, $emailData, $Meg, $attachment);
 
         Utility::applicationStatusHelper($application, Application::statuses['MSMA'], Application::office['MEG'], Application::office['AP']);
+        Utility::applicationTimestamp($application, 'MSAA');
 
         logAction($user->email, 'MEG Sent Agreement', "MEG Send membership agreement to applicant", $request->ip());
 
@@ -242,6 +244,7 @@ class MegApplicationController extends Controller
         // logger('test1');
         logAction($user->email, 'Membership agreement uploaded by MEG', "Executed membership agreement uploaded by MEG.", $request->ip());
         Utility::applicationStatusHelper($application, Application::statuses['MEM'], Application::office['MEG'], Application::office['MEG2']);
+        Utility::applicationTimestamp($application, 'MUSA');
 
         (new ESuccessLetter)->generate($application);
         // logger('test2');

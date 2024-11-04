@@ -67,6 +67,7 @@ class CheckAllRequiredArListener implements ShouldQueue
                         //send meg mail
 
                         Utility::applicationStatusHelper($application, Application::statuses['AUARA'], Application::office['AP'], Application::office['MEG']);
+                        Utility::applicationTimestamp($application, 'AAAA');
 
                         $applicant = User::find($application->submitted_by);
                         $name = $applicant->first_name . ' ' . $applicant->last_name;

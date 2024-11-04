@@ -107,6 +107,7 @@ class SendSuccessfulPayment implements ShouldQueue
         $pdf->save($filepath);
 
         Utility::applicationStatusHelper($application, Application::statuses['PPU'], Application::office['AP'], Application::office['FSD']);
+        Utility::applicationTimestamp($application, 'AMP');
 
         logAction($user->email, 'Proof of payment uploaded', "Applicant successfully uploaded proof of payment.", $this->ipAddress);
 

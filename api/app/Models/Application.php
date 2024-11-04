@@ -99,6 +99,7 @@ class Application extends Model
             'logo' => $this->companyLogo(),
             'step' => $this->step,
             'all_ar_uploaded' => $this->all_ar_uploaded,
+            'application_type' => $this->application_type,
             'created_at' => $this->created_at,
             'reg_id' => $this->reg_id,
             'applicant_email' => $this->applicant ? $this->applicant->email : "",

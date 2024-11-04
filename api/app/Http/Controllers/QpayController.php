@@ -31,7 +31,7 @@ class QpayController extends Controller
 
         $ref = $request->newRef;
 
-        logger($ref);
+        // logger($ref);
 
         $refArr = explode('_', $ref);
         $reference = $refArr[1];

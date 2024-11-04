@@ -49,7 +49,7 @@ class MembershipApplicationController extends Controller
         $user = $request->user();
         $data = [];
         $application = Application::where(['uuid' => $request->application_uuid])->first();
-        $application_requirements = ApplicationFieldUpload::where('application_id', $application->id)->with('field')->orderBy('application_field_id', 'desc')->get();
+        $application_requirements = ApplicationFieldUpload::where('application_id', $application->id)->with('field')->orderBy('application_field_id', 'ASC')->get();
 
         $data = [
             'application' => $application,
@@ -463,6 +463,7 @@ class MembershipApplicationController extends Controller
         }
 
         Utility::applicationStatusHelper($application, Application::statuses['AS'], Application::office['AP'], Application::office['MBG']);
+        Utility::applicationTimestamp($application, 'ACA');
 
         $this->updateInstitution($request);
 
@@ -773,6 +774,8 @@ class MembershipApplicationController extends Controller
         ]);
 
         Utility::applicationStatusHelper($application, Application::statuses['PPU'], Application::office['AP'], Application::office['FSD']);
+        Utility::applicationTimestamp($application, 'AMP');
+
         $application->proof_of_payment = $proof->id;
         $application->save();
 
@@ -862,6 +865,7 @@ class MembershipApplicationController extends Controller
 
         logAction($user->email, 'Membership agreement uploaded by applicant', "Executed membership agreement uploaded by applicant.", $request->ip());
         Utility::applicationStatusHelper($application, Application::statuses['AEM'], Application::office['AP'], Application::office['AP']);
+        Utility::applicationTimestamp($application, 'AUA');
 
         return successResponse("Agreement uploaded successfully");
     }

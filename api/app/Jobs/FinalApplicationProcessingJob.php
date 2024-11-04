@@ -118,6 +118,8 @@ class FinalApplicationProcessingJob implements ShouldQueue
 
         Utility::applicationStatusHelper($application, Application::statuses['MPC'], Application::office['MEG2'], Application::office['AP']);
 
+        Utility::applicationTimestamp($application, 'M2EL');
+
         $application->e_success_letter_send = 1;
         $application->completed_at = now();
         $application->application_type_status = Application::typeStatus['ASC'];

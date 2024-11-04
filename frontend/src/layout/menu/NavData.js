@@ -89,14 +89,19 @@ const navData = [{
     icon: "tile-thumb-fill",
     text: "Report",
     active: false,
-    subMenu: [{
-      text: "Membership Application",
-      link: "/admin-application-report",
-    },
-    {
-      text: "Authorised Representatives Reports",
-      link: "/admin-representatives-report",
-    },
+    subMenu: [
+      {
+        text: "Application Process Report",
+        link: "/admin-application-process-report",
+      },
+      {
+        text: "Membership Application",
+        link: "/admin-application-report",
+      },
+      {
+        text: "Authorised Representatives Reports",
+        link: "/admin-representatives-report",
+      },
     ],
   },
   {

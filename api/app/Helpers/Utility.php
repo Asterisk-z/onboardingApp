@@ -5,6 +5,7 @@ use App\Http\Resources\ApplicationResource;
 use App\Mail\FinalApplicationMail;
 use App\Mail\NotificationMail;
 use App\Models\Application;
+use App\Models\ApplicationProcessTimestamp;
 use App\Models\Education\EventRegistration;
 use App\Models\Invoice;
 use App\Models\MembershipCategoryPostition;
@@ -496,6 +497,16 @@ class Utility
         $application->save();
 
         $application->status()->save($status);
+
+        return;
+    }
+
+    public static function applicationTimestamp(Application $application, $actionCompleted)
+    {
+
+        $process = ApplicationProcessTimestamp::updateOrCreate(['application_id' => $application->id], [
+            ApplicationProcessTimestamp::STEPS[$actionCompleted] => now(),
+        ]);
 
         return;
     }

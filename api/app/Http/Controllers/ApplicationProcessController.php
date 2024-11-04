@@ -6,6 +6,7 @@ use App\Helpers\MailContents;
 use App\Helpers\Utility;
 use App\Http\Resources\ApplicationResource;
 use App\Models\Application;
+use App\Models\ApplicationProcessTimestamp;
 use App\Models\Institution;
 use App\Models\MembershipCategory;
 use App\Models\Role;
@@ -53,6 +54,13 @@ class ApplicationProcessController extends Controller
         $data = $data->get();
 
         return successResponse("Here you go", ['report' => ApplicationResource::collection($data), 'report_url' => route('downloadReport', ['application_report'])]);
+    }
+
+    public function timestamp(Request $request)
+    {
+        $data = ApplicationProcessTimestamp::orderBy('created_at', 'desc')->get();
+        return successResponse("Here you go", $data);
+        // return successResponse("Here you go", ['report' => $data, 'report_url' => route('downloadReport', ['application_report'])]);
     }
 
     public function get_application(Request $request)
@@ -107,6 +115,10 @@ class ApplicationProcessController extends Controller
 
         $application->status()->save($status);
 
+        ApplicationProcessTimestamp::create([
+            'application_id' => $application->id,
+        ]);
+
         $Meg = Utility::getUsersByCategory(Role::MEG);
         $categoryNameWithPronoun = Utility::categoryNameWithPronoun($old_category->name);
 
@@ -159,6 +171,10 @@ class ApplicationProcessController extends Controller
             'office_to_perform_next_action' => Application::office['AP'],
             'application_type' => Application::type['ADD'],
             'application_type_status' => Application::typeStatus['ASP'],
+        ]);
+
+        ApplicationProcessTimestamp::create([
+            'application_id' => $application->id,
         ]);
 
         $application->status()->save($status);

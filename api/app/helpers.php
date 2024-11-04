@@ -185,3 +185,26 @@ if (!function_exists('getApplicationFieldValue')) {
         return $companyName;
     }
 }
+
+if (!function_exists('getInstitutionFieldValue')) {
+    function getInstitutionFieldValue(Application $application, $application_field)
+    {
+
+        $data = ApplicationField::where('name', $application_field)
+            ->join('application_field_uploads', function ($join) use ($application) {
+                $join->on('application_fields.id', '=', 'application_field_uploads.application_field_id')
+                    ->where('application_field_uploads.application_id', '=', $application->id);
+            })
+            ->select('application_field_uploads.*')
+            ->first();
+
+        $name = $application->applicant->first_name . ' ' . $application->applicant->last_name;
+        $companyName = false;
+        if ($data) {
+            $companyName = $data->uploaded_field ? $data->uploaded_field : $data->uploaded_file;
+        }
+
+        $companyName = $companyName ? $companyName : $name;
+        return $companyName;
+    }
+}

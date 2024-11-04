@@ -9,6 +9,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegistrationRequest;
 use App\Http\Resources\UserResource;
 use App\Models\Application;
+use App\Models\ApplicationProcessTimestamp;
 use App\Models\Institution;
 use App\Models\InstitutionMembership;
 use App\Models\MembershipCategory;
@@ -18,7 +19,6 @@ use App\Models\Status;
 use App\Models\User;
 use App\Notifications\InfoNotification;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
@@ -127,6 +127,10 @@ class UsersController extends Controller
         ]);
 
         $application->status()->save($status);
+
+        ApplicationProcessTimestamp::create([
+            'application_id' => $application->id,
+        ]);
 
         $user->getRegID();
 

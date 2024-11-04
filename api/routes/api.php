@@ -121,6 +121,7 @@ Route::middleware(['auth', 'activeAuth'])->group(function () {
 
         Route::group(['prefix' => 'report/application'], function () {
             Route::get('/all_institution', [ApplicationProcessController::class, 'all_institution_report']);
+            Route::get('/process', [ApplicationProcessController::class, 'timestamp']);
         });
     });
 

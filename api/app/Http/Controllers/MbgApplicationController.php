@@ -163,6 +163,7 @@ class MbgApplicationController extends Controller
         }
 
         Utility::applicationStatusHelper($application, $status, Application::office['MBG'], Application::office['AP']);
+        Utility::applicationTimestamp($application, 'MCC');
 
         $application = $application->refresh();
         $application->concession_stage = true;
@@ -282,6 +283,7 @@ class MbgApplicationController extends Controller
 
         if ($request->status == 'approve') {
             Utility::applicationStatusHelper($application, Application::statuses['MAFR'], Application::office['MBG'], Application::office['MEG'], $request->comment);
+            Utility::applicationTimestamp($application, 'MAP');
             $application = $application->refresh();
             $application->mbg_review_stage = 1;
             $application->save();

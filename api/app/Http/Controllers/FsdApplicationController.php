@@ -135,6 +135,7 @@ class FsdApplicationController extends Controller
 
         if ($request->status == 'approve') {
             Utility::applicationStatusHelper($application, Application::statuses['FAP'], Application::office['FSD'], Application::office['MBG'], $request->comment);
+            Utility::applicationTimestamp($application, 'FVP');
             $application->amount_received_by_fsd = $request->amount_received;
             $application->fsd_review_stage = 1;
             $application->save();

@@ -139,6 +139,7 @@ class Meg2ApplicationController extends Controller
         $application->save();
 
         Utility::applicationStatusHelper($application, Application::statuses['M2AMR'], Application::office['MEG2'], Application::office['MEG']);
+        Utility::applicationTimestamp($application, 'MAAD');
 
         logAction($user->email, 'MEG2 Approval', "MEG2 Approved MEG Review", $request->ip());
 
@@ -178,6 +179,8 @@ class Meg2ApplicationController extends Controller
         }
 
         Utility::applicationStatusHelper($application, Application::statuses['M2AEL'], Application::office['MEG2'], Application::office['AP']);
+        Utility::applicationTimestamp($application, 'M2EL');
+
         logAction($user->email, 'MEG2 Approval Of e-SUCCESS', "MEG2 Approved e-SUCCESS letter for sending", $request->ip());
 
         FinalApplicationProcessingJob::dispatch($request->application_id, true);

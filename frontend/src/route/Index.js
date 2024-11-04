@@ -83,6 +83,7 @@ import AdminAddEvents from "main/pages/Admin/AdminAddEvents"
 import AdminEvents from "main/pages/Admin/AdminEvents"
 import AdminEventRegistrations from "main/pages/Admin/AdminEventRegistrations"
 import AdminRepresentativeReport from "main/pages/Admin/AdminRepresentativeReport"
+import AdminApplicationProcessReport from "main/pages/Admin/AdminApplicationProcessReport"
 import AdminApplicationReport from "main/pages/Admin/AdminApplicationReport"
 import AdminApplications from "main/pages/Admin/AdminApplications"
 import AdminAllApplications from "main/pages/Admin/AdminAllApplications"
@@ -241,6 +242,7 @@ const Router = () => {
         <Route path="admin-event-registration/:event_id" element={<AdminEventRegistrations />}></Route>
         <Route path="admin-representatives-report" element={<AdminRepresentativeReport />}></Route>
         <Route path="admin-application-report" element={<AdminApplicationReport />}></Route>
+        <Route path="admin-application-process-report" element={<AdminApplicationProcessReport />}></Route>
         <Route path="admin-applications" element={<AdminApplications />}></Route>
         <Route path="admin-all-applications" element={<AdminAllApplications />}></Route>
         <Route path="admin-creation-request" element={<AdminCreationRequest />}></Route>
