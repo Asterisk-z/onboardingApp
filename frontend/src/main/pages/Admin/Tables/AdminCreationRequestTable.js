@@ -156,7 +156,7 @@ const ActionTab = ({ updateParentParent, request }) => {
 
                     const formData = new FormData();
                     formData.append('ar_request_id', ar_request_id);
-                    formData.append('status', 'approved');
+                    formData.append('status', 'treated');
                     const resp = dispatch(mbgReviewArCreationRequest(formData));
 
                     setTimeout(() => {
@@ -208,7 +208,7 @@ const ActionTab = ({ updateParentParent, request }) => {
 
                     const formData = new FormData();
                     formData.append('ar_request_id', ar_request_id);
-                    formData.append('status', 'approved');
+                    formData.append('status', 'treated');
                     const resp = dispatch(msgReviewArCreationRequest(formData));
 
                     setTimeout(() => {
@@ -260,7 +260,7 @@ const ActionTab = ({ updateParentParent, request }) => {
                 <ModalBody className="modal-body-xl">
                     {ars && <>
                         <div>
-                            <h6 className="title">Authorize Representative </h6>
+                            <h6 className="title">Authorised Representatives </h6>
                             <table className="table table-striped table-bordered table-hover">
                                 <thead>
                                     <tr>
@@ -284,14 +284,14 @@ const ActionTab = ({ updateParentParent, request }) => {
                     </>}
                     {(authUser.is_admin_msg() && request.is_mbg_approved && request.is_pending) && <>
                         <div className="float-end">
-                            <button className="btn btn-sm btn-primary m-2" onClick={(e) => askAction('msgApprove')}>Approve</button>
+                            <button className="btn btn-sm btn-primary m-2" onClick={(e) => askAction('msgApprove')}>Treat</button>
                             <button className="btn btn-sm btn-warning m-2" onClick={(e) => askAction('msgReject')}>Reject</button>
                         </div>
                     </>}
 
                     {(authUser.is_admin_mbg() && request.is_mbg_pending) && <>
                         <div className="float-end">
-                            <button className="btn btn-sm btn-primary m-2" onClick={(e) => askAction('mbgApprove')}>Approve</button>
+                            <button className="btn btn-sm btn-primary m-2" onClick={(e) => askAction('mbgApprove')}>Treat</button>
                             <button className="btn btn-sm btn-warning m-2" onClick={(e) => askAction('mbgReject')}>Reject</button>
                         </div>
                     </>}
@@ -322,6 +322,20 @@ const AdminCreationRequestTable = ({ data, pagination, actions, className, selec
         {
             name: "System",
             selector: (row) => row.system.name,
+            sortable: true,
+            width: "auto",
+            wrap: true
+        },
+        {
+            name: "Institution",
+            selector: (row) => row.institution_name,
+            sortable: true,
+            width: "auto",
+            wrap: true
+        },
+        {
+            name: "Category",
+            selector: (row) => row.category_name,
             sortable: true,
             width: "auto",
             wrap: true

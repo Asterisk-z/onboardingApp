@@ -35,9 +35,9 @@ class EventMailContents
         $message = "<p>
                 Please be informed that your $eventName registration payment was declined.
             </p>
-            <p>
+            <pre>
                 <b>Reason:</b> $reason
-            </p>
+            </pre>
 
             <p>
                For further clarification, kindly contact Membership & Subscriptions Group on +234 20-1-700-8555
@@ -69,9 +69,9 @@ class EventMailContents
     public static function eventDeletedBody(string $eventName, string $eventDate, string $reason): string
     {
         $date = formatDate($eventDate);
-        $message = "<p>
+        $message = "<pre>
                 Please be informed that the $eventName which was scheduled  to hold on $date has been cancelled due to <br/> $reason.
-            </p>";
+            </pre>";
 
         return $message;
     }

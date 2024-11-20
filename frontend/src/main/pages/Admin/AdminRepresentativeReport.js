@@ -100,6 +100,12 @@ const AdminRepresentativeReport = ({ drawer }) => {
 
     const copyToClipboard = () => setCopied(true);
 
+    const [reportUrl, setReportUrl] = useState('');
+
+    useEffect(() => {
+        setReportUrl(`${$ar_users?.report_url}?startDate=${getValues('start_date')}&endDate=${getValues('end_date')}&institution=${getValues('institution')}&category=${getValues('category')}&position=${getValues('position')}`)
+    }, [tableData, getValues(), $ar_users])
+
     return (
         <React.Fragment>
             <Head title="Authorised Representatives Reports"></Head>
@@ -277,7 +283,7 @@ const AdminRepresentativeReport = ({ drawer }) => {
                                 </BlockHead>
 
                                 <PreviewCard>
-                                    {$ar_users && <AdminRepresentativeReportTable updateParent={updateParentState} parentState={parentState} data={tableData || $ar_users?.report} reportUrl={$ar_users?.report_url} expandableRows pagination actions />}
+                                    {$ar_users && <AdminRepresentativeReportTable updateParent={updateParentState} parentState={parentState} data={tableData || $ar_users?.report} reportUrl={reportUrl} expandableRows pagination actions />}
                                 </PreviewCard>
                             </Block>
 

@@ -77,7 +77,7 @@ class ApplicationSubmissionListener implements ShouldQueue
             $emailData = [
                 'name' => $name,
                 'subject' => $subject,
-                'content' => "Thank you for your interest in the $categoryName of FMDQ Securities Exchange Limited.
+                'content' => "Thank you for your interest in the $categoryName category of FMDQ Securities Exchange Limited.
                         We are currently reviewing your application and will provide feedback within three (3) business
                         days.",
             ];

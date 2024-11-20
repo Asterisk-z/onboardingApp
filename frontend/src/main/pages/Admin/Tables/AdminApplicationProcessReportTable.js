@@ -78,12 +78,12 @@ const Export = ({ data, reportUrl }) => {
           <button className="btn btn-secondary buttons-excel buttons-html5" title="Export To Excel" type="button" onClick={() => exportExcel()}>
             <span>Excel</span>
           </button>{" "}
-          <a href={reportUrl} target="_blank">
+          {/* <a href={reportUrl} target="_blank">
             <button className="btn btn-secondary buttons-pdf buttons-html5" type="button" title="Export To PDF">
               <span>PDF</span>
             </button>
           </a>
-          {" "}
+          {" "} */}
         </div>
       </div>
       <Modal isOpen={modal} className="modal-dialog-centered text-center" size="sm">
@@ -220,7 +220,7 @@ const AdminApplicationReportTable = ({ data, pagination, actions, className, sel
     },
     {
       name: "Application Type",
-      selector: (row) => { return (<>{`${row.application_type}`}</>) },
+      selector: (row) => { return (<><span className="text-capitalize">{`${row.application_type}`}</span></>) },
       sortable: true,
       width: "200px",
       wrap: true

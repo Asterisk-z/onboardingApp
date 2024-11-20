@@ -186,9 +186,11 @@ class ARController extends Controller
     public function update(UpdateARRequest $request, User $ARUser)
     {
         $validated = $request->validated();
-        $validated['img'] = $request->hasFile('img') ? $request->file('img')->storePublicly('users', 'public') : $ARUser->img;
         $authoriserID = $validated['ar_authoriser_id'];
 
+        if ($authoriserID == $ARUser->id) {
+            return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'The AR being edited can not be used as the authoriser');
+        }
         if ($authoriserID == $ARUser->id) {
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'The AR being edited can not be used as the authoriser');
         }
@@ -209,6 +211,13 @@ class ARController extends Controller
             }
         }
 
+        if ($ARUser->position_id != $request->position_id) {
+            if (User::where('position_id', $request->position_id)->where('institution_id', auth()->user()->institution_id)->where('member_status', 'active')->exists()) {
+                return errorResponse(ResponseStatusCodes::BAD_REQUEST, 'Another User has the same position.');
+            }
+        }
+
+        $validated['img'] = $request->hasFile('img') ? $request->file('img')->storePublicly('users', 'public') : $ARUser->img;
         unset($validated['ar_authoriser_id']);
 
         // if position_id is set, add to json
@@ -722,7 +731,9 @@ class ARController extends Controller
 
     public function getArCreationRequest(Request $request)
     {
-        return successResponse("Here you go", ArCreationRequest::where('submitted_by', auth()->user()->id)->get());
+
+        $ar_creation_request = ArCreationRequest::where('submitted_by', auth()->user()->id)->orderBy('created_at', 'DESC')->get();
+        return successResponse("Here you go", $ar_creation_request);
     }
 
     public function arCreationRequest(Request $request)

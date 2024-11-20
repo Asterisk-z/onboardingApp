@@ -35,14 +35,14 @@ class Application extends Model
         'MAFR' => 'MBG APPROVED PAYMENT',
         'MDD' => "MEG DECLINED DOCUMENT",
         'MDMR' => "MEG DECLINED MBG REVIEW",
-        'MAMR' => "MEG APPROVED MBG REVIEW",
+        'MAMR' => "APPLICATION REPORT UPLOADED", //"MEG APPROVED MBG REVIEW",
         'M2DMR' => "MEG2 DECLINED MEG REVIEW",
         'M2AMR' => "MEG2 APPROVED MEG REVIEW",
         'M2AEL' => "MEG2 APPROVED E-SUCCESS LETTER",
         'MSMA' => "MEG SENT MEMBERSHIP AGREEMENT",
         'AEM' => "MEMBERSHIP AGREEMENT EXECUTED BY APPLICANT",
         'AUARA' => "APPLICANT UPLOADED ALL REQUIRED ARS",
-        'MEM' => "MEMBERSHIP AGREEMENT EXECUTED BY MEG",
+        'MEM' => "EXECUTED MEMBERSHIP AGREEMENT UPLOADED BY MEG", //"MEMBERSHIP AGREEMENT EXECUTED BY MEG",
         'ARD' => "APPLICANT REUPLOADED DOCUMENT",
         'MAA' => "MEG APPROVE APPLICATION",
         'RMA' => "REQUIRE MEG APPROVAL",
@@ -76,6 +76,7 @@ class Application extends Model
 
     public function toArray()
     {
+
         return [
             'id' => $this->id,
             'uuid' => $this->uuid,
@@ -95,6 +96,8 @@ class Application extends Model
             'e_success_letter' => ($this->e_success_letter) ? config('app.url') . '/storage/app/public/' . $this->e_success_letter : null,
             'completed_at' => $this->completed_at,
             'disclosure_stage' => $this->disclosure_stage,
+            'disclosure_link' => route('disclosure_link', $this->uuid),
+            'disclosure_content' => !$this->disclosure_stage ? disclosureContent($this->uuid) : "",
             'disclosure_status' => $this->disclosure_status,
             'logo' => $this->companyLogo(),
             'step' => $this->step,

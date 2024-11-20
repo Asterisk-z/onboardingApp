@@ -3,11 +3,11 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import { toast } from "react-toastify";
-import "App.css"
 import 'react-loading-skeleton/dist/skeleton.css'
 import "./assets/scss/dashlite.scss";
 import "./assets/scss/style-email.scss";
 
+import "App.css"
 import axios from "axios";
 import { Provider } from "react-redux";
 

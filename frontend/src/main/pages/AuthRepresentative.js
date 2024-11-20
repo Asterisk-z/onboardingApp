@@ -197,7 +197,7 @@ const AuthRepresentative = ({ drawer }) => {
                 const resp = dispatch(cancelMailNotication(formData));
 
                 // props.updateParentParent(Math.random())
-                setModalViewUpdate(false)
+                // setModalViewUpdate(false)
             }
         });
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\DisclosureLetter;
 use App\Helpers\ESuccessLetter;
 use App\Helpers\Utility;
 use App\Models\Application;
@@ -63,6 +64,7 @@ class MembershipAgreementController extends Controller
 
         $uuid = request('uuid');
         $application = Application::where('uuid', $uuid)->first();
+        $application = Application::where('id', 1)->first();
 
         $membershipCategory = $application->membershipCategory;
 
@@ -77,6 +79,21 @@ class MembershipAgreementController extends Controller
         $content = (new ESuccessLetter())->generate($application, true);
 
         return view('success.e-letter', ['content' => $content]);
+
+    }
+
+    public function previewDisclosure($uuid)
+    {
+
+        $uuid = request('uuid');
+
+        if (!$application = Application::where('uuid', $uuid)->first()) {
+            return "error";
+        }
+
+        $content = (new DisclosureLetter())->generate($application, true);
+
+        return view('mails.disclosure-letter', ['content' => $content]);
 
     }
 

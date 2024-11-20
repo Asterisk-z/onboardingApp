@@ -171,7 +171,7 @@ class UserSeeder extends Seeder
         //     ]);
         // }
 
-        // $roles = ['chidiebere.enibe@fmdqgroup.com', 'oyime.jemitola@fmdqgroup.com', 'adeoluwa.owolabi@fmdqgroup.com', 'rafiqat.abaniwonda@fmdqgroup.com', 'elizabeth.lamina@fmdqgroup.com'];
+        // $roles = ['chidiebere.enibe@fmdqgroup.com', 'oyime.ibitoye@fmdqgroup.com', 'adeoluwa.owolabi@fmdqgroup.com', 'rafiqat.abaniwonda@fmdqgroup.com', 'elizabeth.lamina@fmdqgroup.com'];
         // $roleId = ['2', '3', '4', '8', '1'];
 
         // foreach ($roles as $index => $role) {

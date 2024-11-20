@@ -345,7 +345,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '1',
                 "name" => 'bankDetailMobileNumberOfAccountManager',
-                "description" => 'Bank Mobile No. of Account Manager',
+                "description" => 'Mobile No. of Account Manager',
                 "type" => 'number',
                 "required" => 1,
                 "page" => '2',
@@ -353,7 +353,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '1',
                 "name" => 'bankDetailEmailAddressOfAccountManager',
-                "description" => 'Bank Email Address of Account Manager',
+                "description" => 'Email address of account manager',
                 "type" => 'email',
                 "required" => 1,
                 "page" => '2',
@@ -361,7 +361,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '1',
                 "name" => 'bankDetailTypeOfAccount',
-                "description" => 'Bank Type of Account',
+                "description" => 'Type of account',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '2',
@@ -1138,7 +1138,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '2',
                 "name" => 'bankDetailMobileNumberOfAccountManagerOne',
-                "description" => 'Bank Mobile No. of Account Manager 1',
+                "description" => 'Mobile No. of Account Manager 1',
                 "type" => 'number',
                 "required" => 1,
                 "page" => '2',
@@ -1146,7 +1146,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '2',
                 "name" => 'bankDetailEmailAddressOfAccountManagerOne',
-                "description" => 'Bank Email Address of Account Manager 1',
+                "description" => 'Email address of account manager 1',
                 "type" => 'email',
                 "required" => 1,
                 "page" => '2',
@@ -1154,7 +1154,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '2',
                 "name" => 'bankDetailTypeOfAccountOne',
-                "description" => 'Bank Type of Account 1',
+                "description" => 'Type of account 1',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '2',
@@ -1187,7 +1187,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '2',
                 "name" => 'bankDetailMobileNumberOfAccountManagerTwo',
-                "description" => 'Bank Mobile No. of Account Manager 2',
+                "description" => 'Mobile No. of Account Manager 2',
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
@@ -1195,7 +1195,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '2',
                 "name" => 'bankDetailEmailAddressOfAccountManagerTwo',
-                "description" => 'Bank Email Address of Account Manager 2',
+                "description" => 'Email address of account manager 2',
                 "type" => 'email',
                 "required" => 0,
                 "page" => '2',
@@ -1203,7 +1203,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '2',
                 "name" => 'bankDetailTypeOfAccountTwo',
-                "description" => 'Bank Type of Account 2',
+                "description" => 'Type of account 2',
                 "type" => 'text',
                 "required" => 0,
                 "page" => '2',
@@ -1986,7 +1986,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '3',
                 "name" => 'bankDetailMobileNumberOfAccountManagerOne',
-                "description" => 'Bank Mobile No. of Account Manager 1',
+                "description" => 'Mobile No. of Account Manager 1',
                 "type" => 'number',
                 "required" => 1,
                 "page" => '2',
@@ -1994,7 +1994,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '3',
                 "name" => 'bankDetailEmailAddressOfAccountManagerOne',
-                "description" => 'Bank Email Address of Account Manager 1',
+                "description" => 'Email address of account manager 1',
                 "type" => 'email',
                 "required" => 1,
                 "page" => '2',
@@ -2002,7 +2002,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '3',
                 "name" => 'bankDetailTypeOfAccountOne',
-                "description" => 'Bank Type of Account 1',
+                "description" => 'Type of account 1',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '2',
@@ -2035,7 +2035,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '3',
                 "name" => 'bankDetailMobileNumberOfAccountManagerTwo',
-                "description" => 'Bank Mobile No. of Account Manager 2',
+                "description" => 'Mobile No. of Account Manager 2',
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
@@ -2043,7 +2043,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '3',
                 "name" => 'bankDetailEmailAddressOfAccountManagerTwo',
-                "description" => 'Bank Email Address of Account Manager 2',
+                "description" => 'Email address of account manager 2',
                 "type" => 'email',
                 "required" => 0,
                 "page" => '2',
@@ -2051,7 +2051,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '3',
                 "name" => 'bankDetailTypeOfAccountTwo',
-                "description" => 'Bank Type of Account 2',
+                "description" => 'Type of account 2',
                 "type" => 'text',
                 "required" => 0,
                 "page" => '2',
@@ -2545,7 +2545,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '3',
                 "name" => 'evidenceOfMinimumShareholder',
-                "description" => 'Evidence of minimum shareholders’ funds of N500,000,000.00 (Five Hundred Million Naira) only	',
+                "description" => 'Evidence of minimum shareholders’ funds of NGN500,000,000.00 (Five Hundred Million Naira) only	',
                 "type" => 'file',
                 "required" => 1,
                 "page" => '4',
@@ -2898,7 +2898,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '4',
                 "name" => 'bankDetailMobileNumberOfAccountManagerOne',
-                "description" => 'Bank Mobile No. of Account Manager 1',
+                "description" => 'Mobile No. of Account Manager 1',
                 "type" => 'number',
                 "required" => 1,
                 "page" => '2',
@@ -2906,7 +2906,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '4',
                 "name" => 'bankDetailEmailAddressOfAccountManagerOne',
-                "description" => 'Bank Email Address of Account Manager 1',
+                "description" => 'Email address of account manager 1',
                 "type" => 'email',
                 "required" => 1,
                 "page" => '2',
@@ -2914,7 +2914,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '4',
                 "name" => 'bankDetailTypeOfAccountOne',
-                "description" => 'Bank Type of Account 1',
+                "description" => 'Type of account 1',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '2',
@@ -2947,7 +2947,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '4',
                 "name" => 'bankDetailMobileNumberOfAccountManagerTwo',
-                "description" => 'Bank Mobile No. of Account Manager 2',
+                "description" => 'Mobile No. of Account Manager 2',
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
@@ -2955,7 +2955,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '4',
                 "name" => 'bankDetailEmailAddressOfAccountManagerTwo',
-                "description" => 'Bank Email Address of Account Manager 2',
+                "description" => 'Email address of account manager 2',
                 "type" => 'email',
                 "required" => 0,
                 "page" => '2',
@@ -2963,7 +2963,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '4',
                 "name" => 'bankDetailTypeOfAccountTwo',
-                "description" => 'Bank Type of Account 2',
+                "description" => 'Type of account 2',
                 "type" => 'text',
                 "required" => 0,
                 "page" => '2',
@@ -3375,7 +3375,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '4',
                 "name" => 'letterOfExpressionOfInterest',
-                "description" => 'Letter of Expression of Interest to be a Associate Member (Inter-Dealer Brokers) of FMDQ Exchange',
+                "description" => 'Letter of Expression of Interest to be an Associate Member (Inter-Dealer Brokers) of FMDQ Exchange',
                 "type" => 'file',
                 "required" => 1,
                 "page" => '4',
@@ -3892,7 +3892,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '5',
                 "name" => 'bankDetailMobileNumberOfAccountManagerOne',
-                "description" => 'Bank Mobile No. of Account Manager 1',
+                "description" => 'Mobile No. of Account Manager 1',
                 "type" => 'number',
                 "required" => 1,
                 "page" => '2',
@@ -3900,7 +3900,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '5',
                 "name" => 'bankDetailEmailAddressOfAccountManagerOne',
-                "description" => 'Bank Email Address of Account Manager 1',
+                "description" => 'Email address of account manager 1',
                 "type" => 'email',
                 "required" => 1,
                 "page" => '2',
@@ -3908,7 +3908,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '5',
                 "name" => 'bankDetailTypeOfAccountOne',
-                "description" => 'Bank Type of Account 1',
+                "description" => 'Type of account 1',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '2',
@@ -3941,7 +3941,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '5',
                 "name" => 'bankDetailMobileNumberOfAccountManagerTwo',
-                "description" => 'Bank Mobile No. of Account Manager 2',
+                "description" => 'Mobile No. of Account Manager 2',
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
@@ -3949,7 +3949,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '5',
                 "name" => 'bankDetailEmailAddressOfAccountManagerTwo',
-                "description" => 'Bank Email Address of Account Manager 2',
+                "description" => 'Email address of account manager 2',
                 "type" => 'email',
                 "required" => 0,
                 "page" => '2',
@@ -3957,7 +3957,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '5',
                 "name" => 'bankDetailTypeOfAccountTwo',
-                "description" => 'Bank Type of Account 2',
+                "description" => 'Type of account 2',
                 "type" => 'text',
                 "required" => 0,
                 "page" => '2',
@@ -4369,7 +4369,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '5',
                 "name" => 'letterOfExpressionOfInterest',
-                "description" => 'Letter of Expression of Interest to be a Associate Member (Client) of FMDQ Exchange',
+                "description" => 'Letter of Expression of Interest to be an Associate Member (Client) of FMDQ Exchange',
                 "type" => 'file',
                 "required" => 1,
                 "page" => '4',
@@ -4439,14 +4439,14 @@ class ApplicationFieldSeed extends Seeder
             //     "page" => '4',
             // ],
 
-            [
-                "category" => '5',
-                "name" => 'stockbrokingLicense',
-                "description" => 'Nigerian Exchange Group (NGX) Stockbroking Licence (for NGX-licenced stockbrokers only)',
-                "type" => 'file',
-                "required" => 1,
-                "page" => '4',
-            ],
+            // [
+            //     "category" => '5',
+            //     "name" => 'stockbrokingLicense',
+            //     "description" => 'Nigerian Exchange Group (NGX) Stockbroking Licence (for NGX-licenced stockbrokers only)',
+            //     "type" => 'file',
+            //     "required" => 1,
+            //     "page" => '4',
+            // ],
             // [
             //     "category" => '5',
             //     "name" => 'thomsonReutersContractForm',
@@ -4727,7 +4727,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '6',
                 "name" => 'bankDetailMobileNumberOfAccountManagerOne',
-                "description" => 'Bank Mobile No. of Account Manager 1',
+                "description" => 'Mobile No. of Account Manager 1',
                 "type" => 'number',
                 "required" => 1,
                 "page" => '2',
@@ -4735,7 +4735,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '6',
                 "name" => 'bankDetailEmailAddressOfAccountManagerOne',
-                "description" => 'Bank Email Address of Account Manager 1',
+                "description" => 'Email address of account manager 1',
                 "type" => 'email',
                 "required" => 1,
                 "page" => '2',
@@ -4743,7 +4743,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '6',
                 "name" => 'bankDetailTypeOfAccountOne',
-                "description" => 'Bank Type of Account 1',
+                "description" => 'Type of account 1',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '2',
@@ -4776,7 +4776,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '6',
                 "name" => 'bankDetailMobileNumberOfAccountManagerTwo',
-                "description" => 'Bank Mobile No. of Account Manager 2',
+                "description" => 'Mobile No. of Account Manager 2',
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
@@ -4784,7 +4784,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '6',
                 "name" => 'bankDetailEmailAddressOfAccountManagerTwo',
-                "description" => 'Bank Email Address of Account Manager 2',
+                "description" => 'Email address of account manager 2',
                 "type" => 'email',
                 "required" => 0,
                 "page" => '2',
@@ -4792,7 +4792,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '6',
                 "name" => 'bankDetailTypeOfAccountTwo',
-                "description" => 'Bank Type of Account 2',
+                "description" => 'Type of account 2',
                 "type" => 'text',
                 "required" => 0,
                 "page" => '2',
@@ -5221,14 +5221,6 @@ class ApplicationFieldSeed extends Seeder
             ],
             [
                 "category" => '6',
-                "name" => 'evidenceOfPaymentOfApplicationFee',
-                "description" => 'Evidence of payment of application fee and membership dues" and "Detailed resumes of SEC-registered sponsored individuals [if applicable]',
-                "type" => 'file',
-                "required" => 0,
-                "page" => '4',
-            ],
-            [
-                "category" => '6',
                 "name" => 'resumeOfSecIndividual',
                 "description" => 'Detailed resumes of SEC-registered sponsored individuals [if applicable]',
                 "type" => 'file',
@@ -5524,7 +5516,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '7',
                 "name" => 'bankDetailMobileNumberOfAccountManagerOne',
-                "description" => 'Bank Mobile No. of Account Manager 1',
+                "description" => 'Mobile No. of Account Manager 1',
                 "type" => 'number',
                 "required" => 1,
                 "page" => '2',
@@ -5532,7 +5524,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '7',
                 "name" => 'bankDetailEmailAddressOfAccountManagerOne',
-                "description" => 'Bank Email Address of Account Manager 1',
+                "description" => 'Email address of account manager 1',
                 "type" => 'email',
                 "required" => 1,
                 "page" => '2',
@@ -5540,7 +5532,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '7',
                 "name" => 'bankDetailTypeOfAccountOne',
-                "description" => 'Bank Type of Account 1',
+                "description" => 'Type of account 1',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '2',
@@ -5573,7 +5565,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '7',
                 "name" => 'bankDetailMobileNumberOfAccountManagerTwo',
-                "description" => 'Bank Mobile No. of Account Manager 2',
+                "description" => 'Mobile No. of Account Manager 2',
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
@@ -5581,7 +5573,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '7',
                 "name" => 'bankDetailEmailAddressOfAccountManagerTwo',
-                "description" => 'Bank Email Address of Account Manager 2',
+                "description" => 'Email address of account manager 2',
                 "type" => 'email',
                 "required" => 0,
                 "page" => '2',
@@ -5589,7 +5581,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '7',
                 "name" => 'bankDetailTypeOfAccountTwo',
-                "description" => 'Bank Type of Account 2',
+                "description" => 'Type of account 2',
                 "type" => 'text',
                 "required" => 0,
                 "page" => '2',
@@ -6263,7 +6255,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '8',
                 "name" => 'bankDetailMobileNumberOfAccountManagerOne',
-                "description" => 'Bank Mobile No. of Account Manager 1',
+                "description" => 'Mobile No. of Account Manager 1',
                 "type" => 'number',
                 "required" => 1,
                 "page" => '2',
@@ -6271,7 +6263,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '8',
                 "name" => 'bankDetailEmailAddressOfAccountManagerOne',
-                "description" => 'Bank Email Address of Account Manager 1',
+                "description" => 'Email address of account manager 1',
                 "type" => 'email',
                 "required" => 1,
                 "page" => '2',
@@ -6279,7 +6271,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '8',
                 "name" => 'bankDetailTypeOfAccountOne',
-                "description" => 'Bank Type of Account 1',
+                "description" => 'Type of account 1',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '2',
@@ -6312,7 +6304,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '8',
                 "name" => 'bankDetailMobileNumberOfAccountManagerTwo',
-                "description" => 'Bank Mobile No. of Account Manager 2',
+                "description" => 'Mobile No. of Account Manager 2',
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
@@ -6320,7 +6312,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '8',
                 "name" => 'bankDetailEmailAddressOfAccountManagerTwo',
-                "description" => 'Bank Email Address of Account Manager 2',
+                "description" => 'Email address of account manager 2',
                 "type" => 'email',
                 "required" => 0,
                 "page" => '2',
@@ -6328,7 +6320,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '8',
                 "name" => 'bankDetailTypeOfAccountTwo',
-                "description" => 'Bank Type of Account 2',
+                "description" => 'Type of account 2',
                 "type" => 'text',
                 "required" => 0,
                 "page" => '2',
@@ -6971,7 +6963,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '9',
                 "name" => 'bankDetailMobileNumberOfAccountManager',
-                "description" => 'Bank Mobile No. of Account Manager',
+                "description" => 'Mobile No. of Account Manager',
                 "type" => 'number',
                 "required" => 1,
                 "page" => '2',
@@ -6979,7 +6971,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '9',
                 "name" => 'bankDetailEmailAddressOfAccountManager',
-                "description" => 'Bank Email Address of Account Manager',
+                "description" => 'Email address of account manager',
                 "type" => 'email',
                 "required" => 1,
                 "page" => '2',
@@ -6987,7 +6979,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '9',
                 "name" => 'bankDetailTypeOfAccount',
-                "description" => 'Bank Type of Account',
+                "description" => 'Type of account',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '2',
@@ -7314,7 +7306,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '10',
                 "name" => 'bankDetailMobileNumberOfAccountManager',
-                "description" => 'Bank Mobile No. of Account Manager',
+                "description" => 'Mobile No. of Account Manager',
                 "type" => 'number',
                 "required" => 1,
                 "page" => '2',
@@ -7322,7 +7314,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '10',
                 "name" => 'bankDetailEmailAddressOfAccountManager',
-                "description" => 'Bank Email Address of Account Manager',
+                "description" => 'Email address of account manager',
                 "type" => 'email',
                 "required" => 1,
                 "page" => '2',
@@ -7330,7 +7322,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '10',
                 "name" => 'bankDetailTypeOfAccount',
-                "description" => 'Bank Type of Account',
+                "description" => 'Type of account',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '2',
@@ -7625,7 +7617,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '11',
                 "name" => 'bankDetailMobileNumberOfAccountManager',
-                "description" => 'Bank Mobile No. of Account Manager',
+                "description" => 'Mobile No. of Account Manager',
                 "type" => 'number',
                 "required" => 1,
                 "page" => '2',
@@ -7633,7 +7625,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '11',
                 "name" => 'bankDetailEmailAddressOfAccountManager',
-                "description" => 'Bank Email Address of Account Manager',
+                "description" => 'Email address of account manager',
                 "type" => 'email',
                 "required" => 1,
                 "page" => '2',
@@ -7641,7 +7633,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '11',
                 "name" => 'bankDetailTypeOfAccount',
-                "description" => 'Bank Type of Account',
+                "description" => 'Type of account',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '2',
@@ -8043,7 +8035,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '12',
                 "name" => 'bankDetailMobileNumberOfAccountManager',
-                "description" => 'Bank Mobile No. of Account Manager',
+                "description" => 'Mobile No. of Account Manager',
                 "type" => 'number',
                 "required" => 1,
                 "page" => '2',
@@ -8051,7 +8043,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '12',
                 "name" => 'bankDetailEmailAddressOfAccountManager',
-                "description" => 'Bank Email Address of Account Manager',
+                "description" => 'Email address of account manager',
                 "type" => 'email',
                 "required" => 1,
                 "page" => '2',
@@ -8059,7 +8051,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '12',
                 "name" => 'bankDetailTypeOfAccount',
-                "description" => 'Bank Type of Account',
+                "description" => 'Type of account',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '2',
@@ -8427,7 +8419,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '13',
                 "name" => 'bankDetailMobileNumberOfAccountManager',
-                "description" => 'Bank Mobile No. of Account Manager',
+                "description" => 'Mobile No. of Account Manager',
                 "type" => 'number',
                 "required" => 1,
                 "page" => '2',
@@ -8435,7 +8427,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '13',
                 "name" => 'bankDetailEmailAddressOfAccountManager',
-                "description" => 'Bank Email Address of Account Manager',
+                "description" => 'Email address of account manager',
                 "type" => 'email',
                 "required" => 1,
                 "page" => '2',
@@ -8443,7 +8435,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '13',
                 "name" => 'bankDetailTypeOfAccount',
-                "description" => 'Bank Type of Account',
+                "description" => 'Type of account',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '2',
@@ -8739,7 +8731,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '14',
                 "name" => 'bankDetailMobileNumberOfAccountManager',
-                "description" => 'Bank Mobile No. of Account Manager',
+                "description" => 'Mobile No. of Account Manager',
                 "type" => 'number',
                 "required" => 1,
                 "page" => '2',
@@ -8747,7 +8739,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '14',
                 "name" => 'bankDetailEmailAddressOfAccountManager',
-                "description" => 'Bank Email Address of Account Manager',
+                "description" => 'Email address of account manager',
                 "type" => 'email',
                 "required" => 1,
                 "page" => '2',
@@ -8755,7 +8747,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '14',
                 "name" => 'bankDetailTypeOfAccount',
-                "description" => 'Bank Type of Account',
+                "description" => 'Type of account',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '2',
@@ -9314,7 +9306,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '15',
                 "name" => 'bankDetailMobileNumberOfAccountManagerOne',
-                "description" => 'Bank Mobile No. of Account Manager 1',
+                "description" => 'Mobile No. of Account Manager 1',
                 "type" => 'number',
                 "required" => 1,
                 "page" => '2',
@@ -9322,7 +9314,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '15',
                 "name" => 'bankDetailEmailAddressOfAccountManagerOne',
-                "description" => 'Bank Email Address of Account Manager 1',
+                "description" => 'Email address of account manager 1',
                 "type" => 'email',
                 "required" => 1,
                 "page" => '2',
@@ -9330,7 +9322,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '15',
                 "name" => 'bankDetailTypeOfAccountOne',
-                "description" => 'Bank Type of Account 1',
+                "description" => 'Type of account 1',
                 "type" => 'text',
                 "required" => 1,
                 "page" => '2',
@@ -9362,7 +9354,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '15',
                 "name" => 'bankDetailMobileNumberOfAccountManagerTwo',
-                "description" => 'Bank Mobile No. of Account Manager 2',
+                "description" => 'Mobile No. of Account Manager 2',
                 "type" => 'number',
                 "required" => 0,
                 "page" => '2',
@@ -9370,7 +9362,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '15',
                 "name" => 'bankDetailEmailAddressOfAccountManagerTwo',
-                "description" => 'Bank Email Address of Account Manager 2',
+                "description" => 'Email address of account manager 2',
                 "type" => 'email',
                 "required" => 0,
                 "page" => '2',
@@ -9378,7 +9370,7 @@ class ApplicationFieldSeed extends Seeder
             [
                 "category" => '15',
                 "name" => 'bankDetailTypeOfAccountTwo',
-                "description" => 'Bank Type of Account 2',
+                "description" => 'Type of account 2',
                 "type" => 'text',
                 "required" => 0,
                 "page" => '2',

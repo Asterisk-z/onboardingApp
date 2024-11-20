@@ -525,7 +525,7 @@ class Utility
         foreach ($users as $user) {
             $firstname = $user->first_name;
             $lastname = $user->last_name;
-            $fullname = $user->first_name . " " . $user->last_name . " " . $user->middle_name;
+            $fullname = $user->first_name . " " . $user->middle_name . " " . $user->last_name;
             $position = Position::find($user->position_id);
             $mailgroup = MembershipCategoryPostition::where([
                 'category_id' => $category->id,
@@ -659,8 +659,25 @@ class Utility
     }
     public static function representativeReport()
     {
+
         $query = User::whereNotNull('institution_id');
         $query = $query->whereIn('role_id', [Role::ARAUTHORISER, Role::ARINPUTTER]);
+
+        if (request('startDate')) {
+            $query = $query->where('created_at', '>', Carbon::create(request('startDate')));
+        }
+        if (request('endDate')) {
+            $query = $query->where('created_at', '<', Carbon::create(request('endDate')));
+        }
+        if (request('institution')) {
+            $query = $query->where('institution_id', request('institution'));
+        }
+        if (request('category')) {
+            $query = $query->where('category_id', request('category'));
+        }
+        if (request('position')) {
+            $query = $query->where('position_id', request('position'));
+        }
 
         $users = $query->latest()->get();
         $table = "<table>

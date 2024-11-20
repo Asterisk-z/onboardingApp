@@ -72,7 +72,7 @@ class MailContents
 
     public static function newMembershipSignupMail($name, $category): string
     {
-        return "<p>A new applicant, $name, has successfully signed up on the FMDQX MROIS Portal</p>";
+        return "<p>A new applicant, $name, has successfully signed up on the FMDQX MROIS Portal.</p>";
     }
 
     public static function newBroadcastMessageSubject(): string
@@ -115,7 +115,7 @@ class MailContents
     {
         $url = config("app.front_end_url");
         return "<p>Please be informed that the {$ar_reg} Of {$ar_name} has been sanction for an infraction. <br>
-        Kindly log on to the <a href=$url>MROIS Portal</a>
+        Kindly login to <a href=$url>MROIS Portal</a>
                     to view change </p>";
     }
 
@@ -266,7 +266,7 @@ class MailContents
     public static function mbgPaymentRejectedMail($companyName, $reason): string
     {
         return "<p>Please be informed that MBG rejected the FSD review for {$companyName}
-                <p>Reason: {$reason}</p>
+                <pre>Reason: {$reason}</pre>
 
                 </p>";
     }
@@ -297,7 +297,7 @@ class MailContents
     {
         $url = config("app.front_end_url");
         return "<p>Please be informed E-Success letter has been generated for
-        {$companyName}. Kindly log on to <a href=$url>MROIS Portal</a> to approve the application report.</p>";
+        {$companyName}. Kindly log on to <a href=$url>MROIS Portal</a> to approve the success letter.</p>";
     }
 
     public static function megReportValidationMail($companyName): string
@@ -315,7 +315,8 @@ class MailContents
     public static function memberAgreementMail($applicant): string
     {
         $url = config("app.front_end_url");
-        return "<p>Kindly login to the <a href=$url>MROIS Portal</a> to view the latest update concerning agreement review.</p>";
+
+        return "<p>Kindly login to the <a href=$url>MROIS Portal</a> to view the latest update concerning FMDQ Membership Agreement - {$applicant} review.</p>";
     }
 
     public static function meG2ApprovalSubject(): string
@@ -326,7 +327,7 @@ class MailContents
     public static function meG2ApprovalMail($companyName, $categoryName): string
     {
         $url = config("app.front_end_url");
-        return "<p>Kindly be informed that {$companyName} Application Report for the {$categoryName} Category has been approved.</p>
+        return "<p>Kindly be informed that {$companyName} Application Report for the {$categoryName} category has been approved.</p>
         <p>Kindly log on to <a href=$url>MROIS Portal</a> to proceed with the Application.</p>";
     }
 
@@ -374,7 +375,7 @@ class MailContents
 
     public static function msgProfilingSubject($categoryName): string
     {
-        return "Profiling Request:$categoryName";
+        return "Profiling Request: $categoryName";
     }
 
     public static function msgProfilingMail($categoryName): string
@@ -441,6 +442,19 @@ class MailContents
         Kindly log on to the <a href=$url>MROIS Portal</a> to create profile";
     }
 
+    public static function mbgRejectProfileArSystemSubject($system): string
+    {
+        return "Authorised Representative Profiling on the {$system} Rejected";
+    }
+
+    public static function mbgRejectProfileArSystemMail($system): string
+    {
+        $url = config("app.front_end_url");
+        return "<p>Please be informed that MBG has rejected
+        the creation of some ARs profile on the $system.
+        Kindly log on to the <a href=$url>MROIS Portal</a> to view";
+    }
+
     public static function arNotificationOfChangeSubject($request_id, $subject): string
     {
         return "New FMDQX MROIS Notification of Change {$request_id}:{$subject}";
@@ -461,13 +475,13 @@ class MailContents
         return "MROIS Notification of Change";
     }
 
-    public static function megNotificationOfChangeMail(User $user): string
+    public static function megNotificationOfChangeMail(User $user, $institution_name): string
     {
         $url = config("app.front_end_url");
         $ar_id = $user->getRegID();
         $memberName = $user->full_name;
         return "<p>Please be informed that a notification of change has been made
-        by the`$ar_id` of '$memberName'.
+        by the $ar_id of $institution_name.
         Kindly login to the <a href=$url>MROIS Portal</a>  to view change.";
     }
 
@@ -503,10 +517,10 @@ class MailContents
     public static function arNotificationOfChangeRejectMail($request_id, $reason): string
     {
         $url = config("app.front_end_url");
-        return "<p>Please be informed that the notification of change  `$request_id`.
+        return "<pre>Please be informed that the notification of change  `$request_id`.
         has been rejected.
         <br>
-        Reason: $reason ";
+        Reason: $reason </pre>";
     }
 
     public static function newStakeHolderRequestSubject(): string

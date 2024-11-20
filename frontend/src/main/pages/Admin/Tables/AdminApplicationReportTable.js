@@ -762,46 +762,48 @@ const ActionTab = (props) => {
               </table>
             </CardBody>
 
-            <CardBody className="card-inner">
-              <CardTitle tag="h5">{`Payment Information`}</CardTitle>
+            {institution?.latest_evidence && <>
+              <CardBody className="card-inner">
+                <CardTitle tag="h5">{`Payment Information`}</CardTitle>
 
-              <table className="table table-striped table-bordered table-hover">
-                <thead>
-                  <tr>
-                    <th scope="col">S/N</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Value</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>Invoice Number</td>
-                    <td className="text-capitalize">{`${institution?.payment_information?.invoice_number}`}</td>
-                  </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>Payment Reference</td>
-                    <td className="text-capitalize">{`${institution?.payment_information?.reference}`}</td>
-                  </tr>
-                  <tr>
-                    <td>3</td>
-                    <td>Date of Payment</td>
-                    <td className="text-capitalize">{`${institution?.payment_information?.date_paid}`}</td>
-                  </tr>
-                  <tr>
-                    <td>4</td>
-                    <td>Amount Paid</td>
-                    <td className="text-capitalize">{`${institution?.payment_details?.total}`}</td>
-                  </tr>
-                  <tr>
-                    <td>5</td>
-                    <td>Concession Amount</td>
-                    <td className="text-capitalize">{`${institution?.payment_details?.concession_amount}`}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </CardBody>
+                <table className="table table-striped table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">S/N</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>1</td>
+                      <td>Invoice Number</td>
+                      <td className="text-capitalize">{`${institution?.payment_information?.invoice_number}`}</td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>Payment Reference</td>
+                      <td className="text-capitalize">{`${institution?.payment_information?.reference}`}</td>
+                    </tr>
+                    <tr>
+                      <td>3</td>
+                      <td>Date of Payment</td>
+                      <td className="text-capitalize">{`${institution?.payment_information?.date_paid}`}</td>
+                    </tr>
+                    <tr>
+                      <td>4</td>
+                      <td>Amount Paid</td>
+                      <td className="text-capitalize">{`${institution?.payment_details?.total}`}</td>
+                    </tr>
+                    <tr>
+                      <td>5</td>
+                      <td>Concession Amount</td>
+                      <td className="text-capitalize">{`${institution?.payment_details?.concession_amount}`}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </CardBody>
+            </>}
 
           </Card>
         </ModalBody>

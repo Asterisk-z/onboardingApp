@@ -6,7 +6,7 @@ import Head from "layout/head/Head";
 import Content from "layout/content/Content";
 import { BlockContent, BlockTitle, Icon, OverlineTitle } from "components/Component";
 import { Steps, Step, StepsProvider, useSteps } from "react-step-builder";
-import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge, Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, Label, CardBody, CardTitle } from "reactstrap";
+import { Col, Row, Button, Dropdown, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Badge, Modal, ModalHeader, ModalBody, ModalFooter, Card, Spinner, CardBody, CardTitle, CardText } from "reactstrap";
 import { HeaderLogo } from "pages/components/HeaderLogo";
 import DatePicker from "react-datepicker";
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
@@ -40,71 +40,109 @@ const Form = () => {
 
     const [unChangeableField, setUnChangeableField] = useState(["companyName", "rcNumber", "dateOfIncorporation", "placeOfIncorporation"]);
 
+    const [modalDisclosureStageView, setModalDisclosureStageView] = useState(false);
+    const [showDisclosureForm, setShowDisclosureForm] = useState(false);
+
+    const toggleDisclosureStageView = () => setModalDisclosureStageView(!modalDisclosureStageView);
+    const toggleDisclosureForm = () => setShowDisclosureForm(!showDisclosureForm);
 
     useEffect(() => {
 
         if ($application_details && !$application_details?.disclosure_stage && !showDisclosureModal) {
+            setModalDisclosureStageView(true)
+            // Swal.fire({
+            //     title: "Declaration of prior disclosure",
+            //     text: "You won't be able to revert this!",
+            //     icon: "warning",
+            //     showCancelButton: true,
+            //     confirmButtonText: "Accept",
+            //     cancelButtonText: "Reject",
+            //     allowOutsideClick: false
+            // }).then((result) => {
+            //     if (result.isConfirmed) {
 
-            Swal.fire({
-                title: "Declaration of prior disclosure",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Accept",
-                cancelButtonText: "Reject",
-                allowOutsideClick: false
-            }).then((result) => {
-                if (result.isConfirmed) {
+            //         Swal.close()
+            //         uploadDisclosure('accept')
 
-                    Swal.close()
-                    uploadDisclosure('accept')
+            //         // navigate(`${process.env.PUBLIC_URL}/application_disclosure/${$application_details.uuid}`)
 
-                    // navigate(`${process.env.PUBLIC_URL}/application_disclosure/${$application_details.uuid}`)
+            //         // const postValues = new Object();
+            //         // postValues.application_id = $application_details?.id;
+            //         // postValues.status = 'accept';
+            //         // const resp = dispatch(UpdateDisclosure(postValues));
+            //         // setParentState(Math.random());
+            //         // setTimeout(() => {
+            //         //     window.location.reload();
+            //         // }, 4000)
+            //         // setShowDisclosureModal(true)
 
-                    // const postValues = new Object();
-                    // postValues.application_id = $application_details?.id;
-                    // postValues.status = 'accept';
-                    // const resp = dispatch(UpdateDisclosure(postValues));
-                    // setParentState(Math.random());
-                    // setTimeout(() => {
-                    //     window.location.reload();
-                    // }, 4000)
-                    // setShowDisclosureModal(true)
+            //     } else {
+            //         Swal.close()
+            //         uploadDisclosure('reject')
+            //         // const postValues = new Object();
+            //         // postValues.application_id = $application_details?.id;
+            //         // postValues.status = 'reject';
+            //         // const resp = dispatch(UpdateDisclosure(postValues));
+            //         // setParentState(Math.random());
+            //         // setTimeout(() => {
+            //         //     window.location.reload();
+            //         // }, 4000)
+            //         // setShowDisclosureModal(true)
+            //     }
+            // });
 
-                } else {
-                    Swal.close()
-                    uploadDisclosure('reject')
-                    // const postValues = new Object();
-                    // postValues.application_id = $application_details?.id;
-                    // postValues.status = 'reject';
-                    // const resp = dispatch(UpdateDisclosure(postValues));
-                    // setParentState(Math.random());
-                    // setTimeout(() => {
-                    //     window.location.reload();
-                    // }, 4000)
-                    // setShowDisclosureModal(true)
-                }
-            });
-
+        } else {
+            setModalDisclosureStageView(false)
+            setShowDisclosureForm(false)
         }
     }, [dispatch, $application_details]);
 
-    const uploadDisclosure = async (value) => {
+    const uploadDisclosure = async (value, file = null) => {
 
-        const postValues = new Object();
-        postValues.application_id = $application_details?.id;
-        postValues.status = value;
-        const resp = await dispatch(UpdateDisclosure(postValues));
+        // const postValues = new Object();
+        // postValues.application_id = $application_details?.id;
+        // postValues.status = value;
+        const formData = new FormData();
+        formData.append('application_id', $application_details?.id)
+        formData.append('status', value)
+        if (file) {
+            formData.append('document', file)
+        }
+        const resp = await dispatch(UpdateDisclosure(formData));
         if (resp) {
             // window.location.reload();
+            setModalDisclosureStageView(false)
+            setShowDisclosureForm(false)
             setShowDisclosureModal(true)
             dispatch(fetchApplication({ "application_uuid": application_uuid }));
-            console.log(resp)
         }
         // setParentState(Math.random());
         // setTimeout(() => {
         //     window.location.reload();
         // }, 4000)
+
+    }
+
+
+
+    const actionDisclosure = async (action) => {
+
+        if (action == 'reject') {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                allowOutsideClick: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.close()
+                    uploadDisclosure('reject')
+                }
+            });
+        }
 
     }
 
@@ -1272,7 +1310,8 @@ const Form = () => {
             <div className="flex flex-col justify-content-center align-items-center p-3">
                 <div>
                     <BlockTitle tag="h2" className="text-center">
-                        Thank you for completing the Membership Application Form. Kindly proceed to Preview and Submit your Application.
+                        {/* Thank you for completing the Membership Application Form. Kindly proceed to Preview and Submit your Application. */}
+                        Your Application has been submitted and is under review. You will be notified of any feedback soon
                     </BlockTitle>
                     <BlockContent className="text-center">
                         <Button color="primary" onClick={(ev) => navigate(`${process.env.PUBLIC_URL}/application_preview/${$application_details.uuid}`)}>
@@ -1342,6 +1381,21 @@ const Form = () => {
         before: Header
     };
 
+
+    const { reset, register, handleSubmit, formState: { errors }, setValue, clearErrors } = useForm();
+
+    const [disclosureFile, setDisclosureFile] = useState([]);
+    const handleFileChange = (event) => {
+        setDisclosureFile(event.target.files[0]);
+        setValue('signedDisclosureLetter', event.target.files[0])
+    };
+    const submitForm = async (data) => {
+
+        uploadDisclosure('accept', disclosureFile)
+        // props.next()
+
+    };
+
     return <>
         <Head title="Form" />
         <HeaderLogo />
@@ -1356,6 +1410,135 @@ const Form = () => {
 
                                 {/* <p>Please fill forms to complete your application</p> */}
                             </div>
+
+                            <Modal isOpen={modalDisclosureStageView} toggle={toggleDisclosureStageView} size="lg">
+                                <ModalHeader toggle={toggleDisclosureStageView} close={<button className="close" onClick={toggleDisclosureStageView}><Icon name="cross" /></button>}>
+                                    Declaration of prior disclosure letter
+                                </ModalHeader>
+                                <ModalBody>
+                                    {/* {!uploadView ? <> */}
+                                    <Row className="gy-5">
+                                        <Col md='12'>
+                                            <Card className="card-bordered">
+                                                <CardBody className="card-inner">
+                                                    {/* {$application_details?.disclosure_content && <>
+                                                        {`${$application_details?.disclosure_content?.body}`}
+                                                    </>} */}
+
+                                                    {!showDisclosureForm && <>
+
+                                                        <p>Declaration of prior disclosure letter</p>
+                                                        <p>{moment().format('MMM. D, YYYY HH:mm')}</p>
+
+                                                        <p>DECLARATION OF PRIOR DISCLOSURE – [NAME OF MEMBER]</p>
+
+                                                        <p>
+                                                            With reference to [Name of Member’s] application for membership in the FMDQ Securities Exchange Limited (“FMDQ Exchange” or the “Exchange”) [Name of New Membership Category] membership category, we declare as follows:
+                                                        </p>
+                                                        {/* <p> */}
+                                                        <ol className="">
+                                                            <li>1. The required documents/disclosures for onboarding as a [Name of Previous Membership Category] have previously been provided to the Exchange.</li><br />
+                                                            <li>2. The referenced documents/disclosures remain valid and subsisting and no amendment/alteration or material change has occurred, and no amendment has been made to the document(s) previously filed with and/or disclosure(s) made to the Exchange.</li><br />
+                                                            <li>3. Where there is an amendment/alteration or material change in the documents/disclosures provided above, we shall upload the valid and subsisting documentation when completing the Application Form.</li><br />
+                                                        </ol>
+                                                        {/* </p> */}
+                                                        <p><strong>Yours faithfully,</strong></p>
+                                                        <p><strong>FOR: [Name of Member]</strong></p>
+                                                        <br />
+                                                        <br />
+                                                        <br />
+                                                        <br />
+                                                        <br />
+                                                        <p><strong>__________________________</strong></p>
+                                                        <p><strong>[Authorised Signatory]</strong></p>
+
+                                                        {/* </CardText> */}
+                                                        <Button color="primary" onClick={() => setShowDisclosureForm(true)} className="mx-2">Accept</Button>
+                                                        <Button color="warning" onClick={() => actionDisclosure('reject')} className="mx-2" >Reject</Button>
+                                                    </>}
+
+                                                    {showDisclosureForm && <>
+                                                        <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
+
+                                                            <h3>Disclosure Letter</h3>
+                                                            <p>the Declaration of Prior Disclosure should be downloaded and reproduced on your institution’s letterhead</p>
+                                                            <ul>
+                                                                <li>
+                                                                    {$application_details?.disclosure_link && <a href={$application_details?.disclosure_link} target="_blank" className="btn btn-primary">Download  Disclosure Letter</a>}
+                                                                </li>
+                                                            </ul>
+                                                            <Row className="gy-4">
+                                                                <Col md="12" key={`'disclosure`}>
+                                                                    <div className="form-group">
+                                                                        <label className="form-label text-capitalize" htmlFor="company-name">Upload Signed Disclosure Letter</label>
+                                                                        <div className="form-control-wrap">
+                                                                            <div className="input-group">
+                                                                                <input type="file" accept=".jpg,.jpeg,.png,.pdf" id="signedDisclosureLetter" className="form-control" onChange={handleFileChange} />
+
+                                                                                <div className="input-group-append">
+                                                                                    <input type="hidden" {...register('signedDisclosureLetter', { required: 'This field is required' })} onChange={handleFileChange} />
+                                                                                    {/* {field.field_value?.file_path && <a href={field.field_value.file_path} target="_blank" className="btn btn-primary" > View File</a>} */}
+                                                                                </div>
+                                                                            </div>
+                                                                            {errors['signedDisclosureLetter'] && <span className="invalid">{errors['signedDisclosureLetter'].message}</span>}
+                                                                        </div>
+                                                                    </div>
+
+                                                                </Col>
+
+
+
+                                                                <Col size="12">
+
+
+                                                                </Col>
+
+
+                                                            </Row>
+                                                            <div className="actions clearfix">
+                                                                <ul>
+                                                                    <li>
+                                                                        <Button color="primary" type="submit" onClick={(e) => { }}>
+                                                                            Submit
+                                                                        </Button>
+                                                                    </li>
+                                                                    <li>
+                                                                        <Button color="warning" onClick={() => setShowDisclosureForm(false)}>
+                                                                            Cancel
+                                                                        </Button>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+
+
+                                                        </form>
+                                                    </>}
+                                                </CardBody>
+                                            </Card>
+                                        </Col>
+                                    </Row>
+                                    {/* </> : <>
+                                        <Row className="gy-5">
+                                            <Col md='12'>
+                                                <Card className="card-bordered">
+                                                    <CardBody className="card-inner">
+                                                        <CardTitle tag="h5">Payment by Transfer</CardTitle>
+                                                        {$user_application && <>
+                                                            <PayWithTransfer tabItem={$user_application} updateParentParent={setParentState} closeModel={toggleView} toggleMethod={toggleUploadView} />
+                                                        </>}
+
+
+                                                    </CardBody>
+                                                </Card>
+                                            </Col>
+                                        </Row>
+                                    </>} */}
+                                </ModalBody>
+                                <ModalFooter className="bg-light">
+                                    <span className="sub-text">View Institutions</span>
+                                </ModalFooter>
+                            </Modal>
+
                             <div className="nk-wizard nk-wizard-simple is-alter wizard clearfix">
                                 <Steps config={config} >
                                     <Step component={ApplicantInformation} />
@@ -1371,7 +1554,7 @@ const Form = () => {
                 </div>
             </Content>
 
-        </Content>
+        </Content >
     </>;
 };
 // type="submit"

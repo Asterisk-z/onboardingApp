@@ -478,6 +478,7 @@ Route::get('report-download/{data}/{key?}', [SystemController::class, 'report'])
 
 Route::get('member-agreement/{uuid}', [MembershipAgreementController::class, 'preview'])->name('agreementPreview');
 Route::get('success-letter/{uuid}', [MembershipAgreementController::class, 'previewLetter'])->name('eSuccessPreview');
+Route::get('disclosure/{uuid}', [MembershipAgreementController::class, 'previewDisclosure'])->name('disclosure_link');
 
 Route::group(['prefix' => 'webhook'], function () {
     Route::group(['prefix' => 'qpay/payment'], function () {

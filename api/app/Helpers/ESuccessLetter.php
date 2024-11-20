@@ -38,6 +38,7 @@ class ESuccessLetter
             $this->grade = $dohData->grade;
             $this->division = $dohData->division;
             // $this->signature = "https://adgtest.fmdqgroup.com/newmroisdev/frontend/static/media/FMDQ-Logo.e1becb58179845481667.png";
+            // $this->signature = $dohData->signature ? config('app.url') . '/storage/' . $dohData->signature : null;
             $this->signature = $dohData->signature ? config('app.url') . '/storage/app/public/' . $dohData->signature : null;
 
         }
@@ -174,7 +175,7 @@ class ESuccessLetter
                             <b>FMDQ Securities Exchange Limited</b>
                         </p>
                         <p style='width: 100px; height: 30px; position: relative;'>
-                            <img stye='width: 100%; height: 100%; position: absolute; top: 0; left: 0;' src='" . $this->signature . "' alt='Signature Image'>
+                            <img style='width: 100px; height: 80px;' src='" . $this->signature . "' alt='Signature Image'>
                         </p>
                         <p >
                             <i><b>{$this->name}</b></i> <br />
@@ -233,7 +234,7 @@ class ESuccessLetter
                             <b>FMDQ Securities Exchange Limited</b>
                         </p>
                         <p style=width: 100px; height: 30px; position: relative;'>
-                            <img stye='width: 100%; height: 100%; position: absolute; top: 0; left: 0;' src='" . $this->signature . "' alt='Signature Image'>
+                            <img style='width: 100px; height: 80px;' src='" . $this->signature . "' alt='Signature Image'>
                         </p>
                         <p >
                             <i><b>{$this->name}</b></i> <br />
@@ -294,7 +295,7 @@ class ESuccessLetter
                             <b>FMDQ Securities Exchange Limited</b>
                         </p>
                         <p style=width: 100px; height: 30px; position: relative;'>
-                            <img stye='width: 100%; height: 100%; position: absolute; top: 0; left: 0;' src='" . $this->signature . "' alt='Signature Image'>
+                            <img style='width: 100px; height: 80px;' src='" . $this->signature . "' alt='Signature Image'>
                         </p>
                         <p >
                             <i><b>{$this->name}</b></i> <br />
@@ -355,7 +356,7 @@ class ESuccessLetter
                             <b>FMDQ Securities Exchange Limited</b>
                         </p>
                         <p style=width: 100px; height: 30px; position: relative;'>
-                            <img stye='width: 100%; height: 100%; position: absolute; top: 0; left: 0;' src='" . $this->signature . "' alt='Signature Image'>
+                            <img style='width: 100px; height: 80px;' src='" . $this->signature . "' alt='Signature Image'>
                         </p>
                         <p >
                             <i><b>{$this->name}</b></i> <br />
@@ -417,7 +418,7 @@ class ESuccessLetter
                             <b>FMDQ Securities Exchange Limited</b>
                         </p>
                         <p style=width: 100px; height: 30px; position: relative;'>
-                            <img stye='width: 100%; height: 100%; position: absolute; top: 0; left: 0;' src='" . $this->signature . "' alt='Signature Image'>
+                            <img style='width: 100px; height: 80px;' src='" . $this->signature . "' alt='Signature Image'>
                         </p>
                         <p >
                             <i><b>{$this->name}</b></i> <br />
@@ -479,7 +480,7 @@ class ESuccessLetter
                             <b>FMDQ Securities Exchange Limited</b>
                         </p>
                         <p style=width: 100px; height: 30px; position: relative;'>
-                            <img stye='width: 100%; height: 100%; position: absolute; top: 0; left: 0;' src='" . $this->signature . "' alt='Signature Image'>
+                            <img style='width: 100px; height: 80px;' src='" . $this->signature . "' alt='Signature Image'>
                         </p>
                         <p >
                             <i><b>{$this->name}</b></i> <br />
@@ -542,7 +543,7 @@ class ESuccessLetter
                             <b>FMDQ Securities Exchange Limited</b>
                         </p>
                         <p style=width: 100px; height: 30px; position: relative;'>
-                            <img stye='width: 100%; height: 100%; position: absolute; top: 0; left: 0;' src='" . $this->signature . "' alt='Signature Image'>
+                            <img style='width: 100px; height: 80px;' src='" . $this->signature . "' alt='Signature Image'>
                         </p>
                         <p >
                             <i><b>{$this->name}</b></i> <br />
@@ -603,7 +604,7 @@ class ESuccessLetter
                             <b>FMDQ Securities Exchange Limited</b>
                         </p>
                         <p style=width: 100px; height: 30px; position: relative;'>
-                            <img stye='width: 100%; height: 100%; position: absolute; top: 0; left: 0;' src='" . $this->signature . "' alt='Signature Image'>
+                            <img style='width: 100px; height: 80px;' src='" . $this->signature . "' alt='Signature Image'>
                         </p>
                         <p >
                             <i><b>{$this->name}</b></i> <br />
@@ -665,7 +666,7 @@ class ESuccessLetter
                             <b>FMDQ Securities Exchange Limited</b>
                         </p>
                         <p style=width: 100px; height: 30px; position: relative;'>
-                            <img stye='width: 100%; height: 100%; position: absolute; top: 0; left: 0;' src='" . $this->signature . "' alt='Signature Image'>
+                            <img style='width: 100px; height: 80px;' src='" . $this->signature . "' alt='Signature Image'>
                         </p>
                         <p >
                             <i><b>{$this->name}</b></i> <br />
@@ -727,7 +728,7 @@ class ESuccessLetter
                             <b>FMDQ Securities Exchange Limited</b>
                         </p>
                         <p style=width: 100px; height: 30px; position: relative;'>
-                            <img stye='width: 100%; height: 100%; position: absolute; top: 0; left: 0;' src='" . $this->signature . "' alt='Signature Image'>
+                            <img style='width: 100px; height: 80px;' src='" . $this->signature . "' alt='Signature Image'>
                         </p>
                         <p >
                             <i><b>{$this->name}</b></i> <br />
@@ -790,7 +791,7 @@ class ESuccessLetter
                             <b>FMDQ Securities Exchange Limited</b>
                         </p>
                         <p style=width: 100px; height: 30px; position: relative;'>
-                            <img stye='width: 100%; height: 100%; position: absolute; top: 0; left: 0;' src='" . $this->signature . "' alt='Signature Image'>
+                            <img style='width: 100px; height: 80px;' src='" . $this->signature . "' alt='Signature Image'>
                         </p>
                         <p >
                             <i><b>{$this->name}</b></i> <br />
@@ -851,7 +852,7 @@ class ESuccessLetter
                             <b>FMDQ Securities Exchange Limited</b>
                         </p>
                         <p style=width: 100px; height: 30px; position: relative;'>
-                            <img stye='width: 100%; height: 100%; position: absolute; top: 0; left: 0;' src='" . $this->signature . "' alt='Signature Image'>
+                            <img style='width: 100px; height: 80px;' src='" . $this->signature . "' alt='Signature Image'>
                         </p>
                         <p >
                             <i><b>{$this->name}</b></i> <br />

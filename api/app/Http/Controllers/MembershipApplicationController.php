@@ -565,6 +565,7 @@ class MembershipApplicationController extends Controller
         $request->validate([
             'status' => 'required|in:accept,reject',
             'application_id' => 'required',
+            "document" => "required_if:status,accept|mimes:jpeg,png,jpg,pdf|max:5048",
         ]);
 
         $user = $request->user();
@@ -645,6 +646,7 @@ class MembershipApplicationController extends Controller
 
         $application->disclosure_stage = 1;
         $application->disclosure_status = $request->status == 'accept' ? 1 : 0;
+        $application->disclosure_signed = $request->hasFile('document') ? $request->file('document')->storePublicly('disclosure', 'public') : null;
 
         $application->save();
 

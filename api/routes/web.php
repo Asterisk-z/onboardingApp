@@ -2,7 +2,6 @@
 
 // use App\Helpers\EventNotificationUtility;
 
-use App\Helpers\ESuccessLetter;
 use App\Helpers\EventNotificationUtility;
 use App\Helpers\MailContents;
 use App\Helpers\Utility;
@@ -49,9 +48,9 @@ Route::get('/', function () {
     // dd(Event::all());
     // dd(EventRegistration::all());
 
-    $application = Application::find(1);
+    // $application = Application::find(1);
 
-    (new ESuccessLetter)->generate($application);
+    // (new ESuccessLetter)->generate($application);
 
     return view('welcome');
 

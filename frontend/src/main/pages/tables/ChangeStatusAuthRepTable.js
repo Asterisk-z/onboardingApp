@@ -202,7 +202,14 @@ const ChangeStatusAuthRepTable = ({ data, pagination, actions, className, select
         },
         {
             name: "Name",
-            selector: (row) => { return (<><p>{`${row.ar.firstName} ${row.ar.lastName}`}<br />{`${row.ar.email}`}</p></>) },
+            selector: (row) => { return (<><p>{`${row.ar.firstName} ${row.ar.lastName}`}</p></>) },
+            sortable: true,
+            width: "auto",
+            wrap: true,
+        },
+        {
+            name: "Email",
+            selector: (row) => { return (<><p>{`${row.ar.email}`}</p></>) },
             sortable: true,
             width: "auto",
             wrap: true,
@@ -216,7 +223,7 @@ const ChangeStatusAuthRepTable = ({ data, pagination, actions, className, select
         },
         {
             name: "Request Reason",
-            selector: (row) => { return (<><p className="text-capitalize">{`${row.request_reason}`}</p></>) },
+            selector: (row) => { return (<><p className="text">{`${row.request_reason}`}</p></>) },
             sortable: true,
             width: "auto",
             wrap: true,

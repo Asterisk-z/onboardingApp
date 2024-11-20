@@ -29,12 +29,19 @@ class ArCreationRequest extends Model
             "system" => $this->system,
             "system_name" => $this->system->name,
             "ars" => $this->ars,
+            "institution_name" => $this->user->institution->name,
+            "category_name" => $this->user->category->name,
         ];
     }
 
     public function system()
     {
         return $this->belongsTo(FmdqSystems::class, 'system_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'submitted_by');
     }
 
     public function ars()

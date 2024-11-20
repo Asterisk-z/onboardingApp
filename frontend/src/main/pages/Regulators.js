@@ -53,11 +53,11 @@ const Regulators = ({ drawer }) => {
                                 <PreviewCard>
                                     <Row className="g-gs">
                                         {$regulators && $regulators.map((regulator, index) =>
-                                            <Col lg="3" key={index}>
+                                            <Col lg="3" key={index} className={'regulatorCard'}>
                                                 <Card className="card-bordered gold">
                                                     <CardBody className="card-inner">
-                                                        <CardTitle tag="h5">{regulator.name}</CardTitle>
-                                                        <CardText className="h-15 overflow-auto">
+                                                        <CardTitle tag="h5" className="regulatorCard-h-12">{regulator.name}</CardTitle>
+                                                        <CardText className="regulatorCard-h-10 overflow-auto">
                                                             {regulator?.brief}
                                                         </CardText>
                                                         <CardLink href={regulator.url} target="_blank" className="btn btn-primary" color="primary">Go to Website</CardLink>

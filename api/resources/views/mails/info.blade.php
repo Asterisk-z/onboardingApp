@@ -12,6 +12,10 @@
             color: #000;
         }
 
+        pre {
+            font-family: Arial, sans-serif !important;
+        }
+
         /* Wrapper for the email content */
         .email-wrapper {
             max-width: 600px;
@@ -70,7 +74,7 @@
             <p>Dear {{$displayName}},</p>
             <p>{!! $info !!}</p>
             <p>Thank You.</p>
-            <p style="margin-top: -15px;">FMDQ Securities Exchange</p>
+            <p style="margin-top: -8px;">FMDQ Securities Exchange</p>
         </div>
         <div class="footer">
             &copy; {{date('Y')}} FMDQ Group. All rights reserved.

@@ -72,7 +72,7 @@ class MemberCategoryController extends Controller
 
         $position_ids = MembershipCategoryPostition::whereIn('membership_category_postitions.category_id', $request->category_ids)
             ->rightJoin('positions', 'positions.id', '=', 'membership_category_postitions.position_id')
-            ->select('positions.*', 'membership_category_postitions.is_compulsory')
+        // ->select('positions.*', 'membership_category_postitions.is_compulsory')
             ->orderBy('membership_category_postitions.is_compulsory')->get();
 
         return successResponse('Here you go', $position_ids);

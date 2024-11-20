@@ -39,11 +39,11 @@ class SystemController extends Controller
 
             $dataTable = $tableData;
 
-            // dd($tableData);
+            $title = str_replace('_', ' ', $data);
 
-            $pdf->loadView('report', compact('dataTable'))->setPaper(array(0, 0, 800, 480));
+            $pdf->loadView('report', compact('dataTable', 'title'))->setPaper(array(0, 0, 800, 480));
 
-            return $pdf->download('report.pdf');
+            return $pdf->download("$data.pdf");
         }
 
     }

@@ -20,6 +20,7 @@ class AddFeeApplication extends Migration
             $table->tinyInteger('concession_stage')->after('concession_file')->default(0);
             $table->tinyInteger('disclosure_status')->after('concession_stage')->nullable();
             $table->tinyInteger('disclosure_stage')->after('concession_stage')->default(0);
+            $table->string('disclosure_signed')->after('concession_stage')->nullable();
             $table->bigInteger('invoice_id')->after('concession_stage')->nullable();
             $table->bigInteger('proof_of_payment')->after('invoice_id')->nullable();
             $table->double('amount_received_by_fsd', 20, 2)->after('proof_of_payment')->nullable();

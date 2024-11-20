@@ -1,5 +1,6 @@
 <?php
 
+use App\Helpers\DisclosureLetter;
 use App\Helpers\ResponseStatusCodes;
 use App\Models\Application;
 use App\Models\ApplicationField;
@@ -206,5 +207,15 @@ if (!function_exists('getInstitutionFieldValue')) {
 
         $companyName = $companyName ? $companyName : $name;
         return $companyName;
+    }
+}
+
+if (!function_exists('disclosureContent')) {
+    function disclosureContent($application_uuid)
+    {
+
+        $application = Application::where('uuid', $application_uuid)->first();
+
+        return (new DisclosureLetter())->generate($application, true);
     }
 }

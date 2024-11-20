@@ -282,7 +282,15 @@ input.checkingBox {
     width: 25px;
     height: 25px;
 }
-.h-15 {
+.regulatorCard-h-10 {
     height:  100px;
 
+}
+.regulatorCard-h-12 {
+    height:  120px;
+    align-content: end;
+}
+
+.regulatorCard {
+    height: inherit;
 }

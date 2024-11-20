@@ -19,8 +19,8 @@ class NotificationOfChangeController extends Controller
     public function send(Request $request)
     {
         $data = $request->validate([
-            'subject' => ['required', 'string', 'max:60'],
-            'summary' => ['required', 'string', 'max:200'],
+            'subject' => ['required', 'string', 'max:200'],
+            'summary' => ['required', 'string', 'max:500'],
             'ar_authoriser_id' => ['required', 'integer', 'exists:users,id'],
             'regulatory_status' => ['required', 'string', 'in:yes,no'],
             'regulatory_approval' => ['required_if:regulatory_status,yes', 'file'],
@@ -83,7 +83,8 @@ class NotificationOfChangeController extends Controller
 
         $MEGs = Utility::getUsersByCategory(Role::MEG);
         if (count($MEGs)) {
-            Notification::send($MEGs, new InfoNotification(MailContents::megNotificationOfChangeMail($user), MailContents::megNotificationOfChangeSubject()));
+            $institution_name = $user->institution ? $user->institution->name : '';
+            Notification::send($MEGs, new InfoNotification(MailContents::megNotificationOfChangeMail($user, $institution_name), MailContents::megNotificationOfChangeSubject()));
         }
 
         return successResponse('Notification Of Change status sent to authoriser', []);

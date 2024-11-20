@@ -2,7 +2,6 @@
 
 namespace App\Mail;
 
-use App\Helpers\ESuccessLetter;
 use App\Models\Application;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -41,7 +40,6 @@ class FinalApplicationMail extends Mailable
 
         $mail = $this->view('mails.info', compact('user', 'info', 'displayName'))->subject($subject);
 
-        //$content = ESuccessLetter::generate($this->application);
         if ($this->attachment) {
             foreach ($this->attachment as $attachment) {
                 $mail->attach($attachment['saved_path'], ['as' => $attachment['name'], 'mime' => 'application/pdf']);

@@ -75,8 +75,8 @@ class MegApplicationController extends Controller
             $emailData = [
                 'name' => $companyName,
                 'subject' => 'MROIS Application Rejected - Incomplete Documentation',
-                'content' => "<p>Please be informed that we could not continue with your application because of the following:
-                        <p>Reason: {$request->comment}</p></p>",
+                'content' => "<pre>Please be informed that we could not continue with your application because of the following: </br>
+                        Reason: {$request->comment}</pre>",
             ];
             $Meg = Utility::getUsersEmailByCategory(Role::MEG);
             Utility::notifyApplicantAndContact($request->application_id, $applicant, $emailData, $Meg);

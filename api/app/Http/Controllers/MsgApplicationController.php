@@ -10,13 +10,14 @@ class MsgApplicationController extends Controller
 {
     public function arCreationRequest(Request $request)
     {
-        return successResponse("Here you go", ArCreationRequest::all());
+        $ar_creation_request = ArCreationRequest::orderBy('created_at', 'DESC')->get();
+        return successResponse("Here you go", $ar_creation_request);
     }
 
     public function reviewArSystemCreationRequest(Request $request)
     {
         $request->validate([
-            'status' => 'required|in:approved,rejected',
+            'status' => 'required|in:treated,rejected',
             'ar_request_id' => 'required|exists:ar_creation_requests,id',
         ]);
 
@@ -29,12 +30,12 @@ class MsgApplicationController extends Controller
         $user = $request->user();
 
         switch ($request->status) {
-            case 'approved':
+            case 'treated':
                 $ar_creation_request->msg_status = ucfirst($request->status);
                 $ar_creation_request->status = 'Treated';
                 $ar_creation_request->save();
 
-                logAction($user->email, 'AR CREATION REQUEST', "AR creation request on FMDQ system was approved by MSG", $request->ip());
+                logAction($user->email, 'AR CREATION REQUEST', "AR creation request on FMDQ system was treated by MSG", $request->ip());
                 break;
 
             case 'rejected':

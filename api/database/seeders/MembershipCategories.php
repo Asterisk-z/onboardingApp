@@ -46,7 +46,7 @@ class MembershipCategories extends Seeder
             ],
             [
                 "code" => "amc",
-                "name" => "Associate Member (Clients)",
+                "name" => "Associate Member (Client)",
                 "application_fee" => 335937.5,
                 "membership_dues" => 671875,
                 "membership_agreement" => config('app.url') . '/assets/membership_agreement/amc.pdf',

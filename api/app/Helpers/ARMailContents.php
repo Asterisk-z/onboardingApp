@@ -51,9 +51,7 @@ class ARMailContents
         $link = env("APP_FRONTEND_URL");
         $company = $ARUser->institution->name ?? "Undefined";
         $message = "<p>
-                    Please be informed that $company has added a new Authorised Representative.
-                </p>
-                <p>
+                    Please be informed that $company has added a new Authorised Representative.<br/>
                     Kindly login to the <a href='" . $link . "'>MROIS Portal</a> to approve or reject
                 </p>";
 
@@ -120,7 +118,7 @@ class ARMailContents
         <p>
             Record: <br>        </p>
 
-                          <table className='table table-striped table-bordered table-hover' style='padding: 10px; text-align: left;'>
+                          <table className='table table-striped table-bordered table-hover' style='padding: 10px;border: 1px solid black; border-collapse: collapse; text-align: left;'>
                               <thead>
                                   <tr>
                                       <th scope='col'></th>
@@ -130,34 +128,34 @@ class ARMailContents
                               </thead>
                               <tbody>
                                   <tr>
-                                      <td  style='padding: 5px;'>First Name</td>
-                                      <td  style='padding: 5px;' className='text-capitalize'>" . $basicData['firstName'] . "</td>
-                                      <td  style='padding: 5px;' className='text-capitalize'>" . $updateFields['first_name'] . "</td>
+                                      <td  style='padding: 5px;border: 1px solid black; border-collapse: collapse;'>First Name</td>
+                                      <td  style='padding: 5px;border: 1px solid black; border-collapse: collapse;' className='text-capitalize'>" . $basicData['firstName'] . "</td>
+                                      <td  style='padding: 5px;border: 1px solid black; border-collapse: collapse;' className='text-capitalize'>" . $updateFields['first_name'] . "</td>
                                   </tr>
                                   <tr>
-                                      <td  style='padding: 5px;'>Last Name</td>
-                                      <td  style='padding: 5px;' className='text-capitalize'>" . $basicData['lastName'] . "</td>
-                                      <td  style='padding: 5px;' className='text-capitalize'>" . $updateFields['last_name'] . "</td>
+                                      <td  style='padding: 5px;border: 1px solid black; border-collapse: collapse;'>Last Name</td>
+                                      <td  style='padding: 5px;border: 1px solid black; border-collapse: collapse;' className='text-capitalize'>" . $basicData['lastName'] . "</td>
+                                      <td  style='padding: 5px;border: 1px solid black; border-collapse: collapse;' className='text-capitalize'>" . $updateFields['last_name'] . "</td>
                                   </tr>
                                   <tr>
-                                      <td  style='padding: 5px;'>Middle Name</td>
-                                      <td  style='padding: 5px;' className='text-capitalize'>" . $basicData['middleName'] . "</td>
-                                      <td  style='padding: 5px;' className='text-capitalize'>" . $updateFields['middle_name'] . "</td>
+                                      <td  style='padding: 5px;border: 1px solid black; border-collapse: collapse;'>Middle Name</td>
+                                      <td  style='padding: 5px;border: 1px solid black; border-collapse: collapse;' className='text-capitalize'>" . $basicData['middleName'] . "</td>
+                                      <td  style='padding: 5px;border: 1px solid black; border-collapse: collapse;' className='text-capitalize'>" . $updateFields['middle_name'] . "</td>
                                   </tr>
                                   <tr>
-                                      <td  style='padding: 5px;'>Email</td>
-                                      <td  style='padding: 5px;' className='text-capitalize'>" . $basicData['email'] . "</td>
-                                      <td  style='padding: 5px;' className='text-capitalize'>" . $updateFields['email'] . "</td>
+                                      <td  style='padding: 5px;border: 1px solid black; border-collapse: collapse;'>Email</td>
+                                      <td  style='padding: 5px;border: 1px solid black; border-collapse: collapse;' className='text-capitalize'>" . $basicData['email'] . "</td>
+                                      <td  style='padding: 5px;border: 1px solid black; border-collapse: collapse;' className='text-capitalize'>" . $updateFields['email'] . "</td>
                                   </tr>
                                   <tr>
-                                      <td  style='padding: 5px;'>Phone</td>
-                                      <td  style='padding: 5px;' className='text-capitalize'>" . $basicData['phone'] . "</td>
-                                      <td  style='padding: 5px;' className='text-capitalize'>" . $updateFields['phone'] . "</td>
+                                      <td  style='padding: 5px;border: 1px solid black; border-collapse: collapse;'>Phone</td>
+                                      <td  style='padding: 5px;border: 1px solid black; border-collapse: collapse;' className='text-capitalize'>" . $basicData['phone'] . "</td>
+                                      <td  style='padding: 5px;border: 1px solid black; border-collapse: collapse;' className='text-capitalize'>" . $updateFields['phone'] . "</td>
                                   </tr>
                                   <tr>
-                                      <td  style='padding: 5px;'>Role</td>
-                                      <td  style='padding: 5px;' className='text-capitalize'>" . $basicData['role'] . "</td>
-                                      <td  style='padding: 5px;' className='text-capitalize'>" . $updateFields['role']['name'] . "</td>
+                                      <td  style='padding: 5px;border: 1px solid black; border-collapse: collapse;'>Role</td>
+                                      <td  style='padding: 5px;border: 1px solid black; border-collapse: collapse;' className='text-capitalize'>" . $basicData['role'] . "</td>
+                                      <td  style='padding: 5px;border: 1px solid black; border-collapse: collapse;' className='text-capitalize'>" . $updateFields['role']['name'] . "</td>
                                   </tr>
                               </tbody>
                           </table>
@@ -179,7 +177,7 @@ class ARMailContents
             </p>
 
             <p>
-                The AR details is given below:
+                The AR details are given below:
                 <br>
                 Surname: $ARUser->last_name <br>
                 First Name: $ARUser->first_name <br>
@@ -229,9 +227,9 @@ class ARMailContents
                 Please be informed that the transfer of AR $regID was declined.
             </p>
 
-            <p>
+            <pre>
                 Reason: $reason
-            </p>";
+            </pre>";
 
         return $message;
     }

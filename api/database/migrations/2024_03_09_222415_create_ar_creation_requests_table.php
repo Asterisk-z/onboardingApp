@@ -18,9 +18,9 @@ class CreateArCreationRequestsTable extends Migration
             $table->foreignId('system_id')->constrained('fmdq_systems')->onDelete('cascade');
             $table->foreignId('submitted_by')->constrained('users')->onDelete('cascade');
             $table->string('next_office');
-            $table->string('mbg_status')->default('Pending')->comment('Approve, Reject');
-            $table->string('msg_status')->default('Pending')->comment('Approve, Reject');
-            $table->string('status')->default('Pending')->comment('Treated, Rejected, Pending');
+            $table->enum('mbg_status', ['Treated, Rejected, Pending'])->default('Pending');
+            $table->enum('msg_status', ['Treated, Rejected, Pending'])->default('Pending');
+            $table->enum('status', ['Treated, Rejected, Pending'])->default('Pending');
             $table->timestamps();
         });
     }

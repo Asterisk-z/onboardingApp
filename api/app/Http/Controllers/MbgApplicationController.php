@@ -231,7 +231,7 @@ class MbgApplicationController extends Controller
                 'name' => $name,
                 'subject' => 'Membership Application Payment Declined',
                 'content' => "Please be informed that your payment as {$categoryNameWithPronoun} was declined.
-                        <p>Reason: {$request->comment}</p>
+                        <pre>Reason: {$request->comment}</pre>
                         <p>For further clarification, kindly contact Membership & Subscriptions Group on +234 20-1-700-8555</p>",
             ];
 
@@ -304,13 +304,14 @@ class MbgApplicationController extends Controller
 
     public function arCreationRequest(Request $request)
     {
-        return successResponse("Here you go", ArCreationRequest::all());
+        $ar_creation_request = ArCreationRequest::orderBy('created_at', 'DESC')->get();
+        return successResponse("Here you go", $ar_creation_request);
     }
 
     public function reviewArSystemCreationRequest(Request $request)
     {
         $request->validate([
-            'status' => 'required|in:approved,rejected',
+            'status' => 'required|in:treated,rejected',
             'ar_request_id' => 'required|exists:ar_creation_requests,id',
         ]);
 
@@ -324,7 +325,7 @@ class MbgApplicationController extends Controller
         $user = $request->user();
 
         switch ($request->status) {
-            case 'approved':
+            case 'treated':
                 $ar_creation_request->mbg_status = ucfirst($request->status);
                 $ar_creation_request->next_office = 'MSG';
                 $ar_creation_request->save();
@@ -335,12 +336,20 @@ class MbgApplicationController extends Controller
                 $CCs = array_merge($MBGs, $MEGs);
                 Notification::send($MSGs, new InfoNotification(MailContents::mbgApproveProfileArSystemMail($system->name), MailContents::profileArSystemSubject($system->name), $CCs));
 
-                logAction($user->email, 'AR CREATION REQUEST', "AR creation request on FMDQ system was approved by MBG", $request->ip());
+                logAction($user->email, 'AR CREATION REQUEST', "AR creation request on FMDQ system was treated by MBG", $request->ip());
                 break;
 
             case 'rejected':
                 $ar_creation_request->mbg_status = ucfirst($request->status);
                 $ar_creation_request->save();
+
+                $MBGs = Utility::getUsersEmailByCategory(Role::MBG);
+                $MEGs = Utility::getUsersEmailByCategory(Role::MEG);
+                $MSGs = Utility::getUsersEmailByCategory(Role::MSG);
+                $CCs = array_merge($MSGs, $MEGs, $MBGs);
+
+                $applicant = $ar_creation_request->user;
+                $applicant->notify(new InfoNotification(MailContents::mbgRejectProfileArSystemMail($system->name), MailContents::mbgRejectProfileArSystemSubject($system->name), $CCs));
 
                 logAction($user->email, 'AR CREATION REQUEST', "AR creation request on FMDQ system was rejected by MBG", $request->ip());
 

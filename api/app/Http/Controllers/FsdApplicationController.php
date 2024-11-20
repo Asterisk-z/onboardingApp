@@ -76,7 +76,7 @@ class FsdApplicationController extends Controller
             'comment' => 'required|string',
             'amount_received' => 'required_if:status,approve',
         ]);
-
+        // logger($request->all());
         $user = $request->user();
         $application = Application::find($request->application_id);
 
@@ -109,7 +109,7 @@ class FsdApplicationController extends Controller
                 'name' => $name,
                 'subject' => 'Membership Application Payment Declined',
                 'content' => "Please be informed that your payment for application as {$categoryNameWithPronoun} was declined.
-                        <p>Reason: {$request->comment}</p>
+                        <pre>Reason: {$request->comment}</pre>
                         <p>For further clarification, kindly contact Membership & Subscriptions Group on +234 20-1-700-8555</p>",
             ];
 
