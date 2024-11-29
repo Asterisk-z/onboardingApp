@@ -38,7 +38,7 @@ const Export = ({ data, reportUrl }) => {
       // "Website": item?.basic_details?.corporateWebsiteAddress,
       // "Type": item?.internal?.application_type,
       // "Status": item?.internal?.status_description,
-      // "Sign-on date": moment(item?.internal?.createdAt).format('MMM. D, YYYY HH:mm')
+      // "Sign-on date": moment(item?.internal?.createdAt).format('MMM. D, YYYY LT')
     })
   });
 
@@ -219,7 +219,7 @@ const AdminApplicationReportTable = ({ data, pagination, actions, className, sel
       wrap: true
     },
     {
-      name: "Application Type",
+      name: "Type",
       selector: (row) => { return (<><span className="text-capitalize">{`${row.application_type}`}</span></>) },
       sortable: true,
       width: "200px",
@@ -227,88 +227,96 @@ const AdminApplicationReportTable = ({ data, pagination, actions, className, sel
     },
     {
       name: "Applicant Submission",
-      selector: (row) => { return (<>{`${row.applicant_completed_application ? moment(row.applicant_completed_application).format('MMM. D, YYYY HH:mm') : 'Not Done'}`}</>) },
+      selector: (row) => { return (<>{`${row.applicant_completed_application ? moment(row.applicant_completed_application).format('MMM. D, YYYY LT') : 'Not Done'}`}</>) },
       sortable: true,
       width: "200px",
       wrap: true
     },
     {
       name: "MBG Concession",
-      selector: (row) => { return (<>{`${row.mbg_completed_concession ? moment(row.mbg_completed_concession).format('MMM. D, YYYY HH:mm') : 'Not Done'}`}</>) },
+      selector: (row) => { return (<>{`${row.mbg_completed_concession ? moment(row.mbg_completed_concession).format('MMM. D, YYYY LT') : 'Not Done'}`}</>) },
       sortable: true,
       width: "200px",
       wrap: true
     },
     {
       name: "Applicant Payment",
-      selector: (row) => { return (<>{`${row.applicant_made_payment ? moment(row.applicant_made_payment).format('MMM. D, YYYY HH:mm') : 'Not Done'}`}</>) },
+      selector: (row) => { return (<>{`${row.applicant_made_payment ? moment(row.applicant_made_payment).format('MMM. D, YYYY LT') : 'Not Done'}`}</>) },
       sortable: true,
       width: "200px",
       wrap: true
     },
     {
       name: "FSD Validation",
-      selector: (row) => { return (<>{`${row.fsd_validated_payment ? moment(row.fsd_validated_payment).format('MMM. D, YYYY HH:mm') : 'Not Done'}`}</>) },
+      selector: (row) => { return (<>{`${row.fsd_validated_payment ? moment(row.fsd_validated_payment).format('MMM. D, YYYY LT') : 'Not Done'}`}</>) },
       sortable: true,
       width: "200px",
       wrap: true
     },
     {
       name: "MBG Approval",
-      selector: (row) => { return (<>{`${row.mbg_approve_payment ? moment(row.mbg_approve_payment).format('MMM. D, YYYY HH:mm') : 'Not Done'}`}</>) },
+      selector: (row) => { return (<>{`${row.mbg_approve_payment ? moment(row.mbg_approve_payment).format('MMM. D, YYYY LT') : 'Not Done'}`}</>) },
       sortable: true,
       width: "200px",
       wrap: true
     },
     {
       name: "MEG Review",
-      selector: (row) => { return (<>{`${row.meg_review_application_document ? moment(row.meg_review_application_document).format('MMM. D, YYYY HH:mm') : 'Not Done'}`}</>) },
+      selector: (row) => { return (<>{`${row.meg_review_application_document ? moment(row.meg_review_application_document).format('MMM. D, YYYY LT') : 'Not Done'}`}</>) },
       sortable: true,
       width: "200px",
       wrap: true
     },
     {
       name: "MEG2 Review",
-      selector: (row) => { return (<>{`${row.meg2_approve_application_document ? moment(row.meg2_approve_application_document).format('MMM. D, YYYY HH:mm') : 'Not Done'}`}</>) },
+      selector: (row) => { return (<>{`${row.meg2_approve_application_document ? moment(row.meg2_approve_application_document).format('MMM. D, YYYY LT') : 'Not Done'}`}</>) },
       sortable: true,
       width: "200px",
       wrap: true
     },
     {
       name: "MEG Agreement",
-      selector: (row) => { return (<>{`${row.meg_send_agreement_to_applicant ? moment(row.meg_send_agreement_to_applicant).format('MMM. D, YYYY HH:mm') : 'Not Done'}`}</>) },
+      selector: (row) => { return (<>{`${row.meg_send_agreement_to_applicant ? moment(row.meg_send_agreement_to_applicant).format('MMM. D, YYYY LT') : 'Not Done'}`}</>) },
       sortable: true,
       width: "200px",
       wrap: true
     },
     {
       name: "Applicant Agreement",
-      selector: (row) => { return (<>{`${row.applicant_upload_agreement ? moment(row.applicant_upload_agreement).format('MMM. D, YYYY HH:mm') : 'Not Done'}`}</>) },
+      selector: (row) => { return (<>{`${row.applicant_upload_agreement ? moment(row.applicant_upload_agreement).format('MMM. D, YYYY LT') : 'Not Done'}`}</>) },
       sortable: true,
       width: "200px",
       wrap: true
     },
     {
       name: "Applicant AR Addition",
-      selector: (row) => { return (<>{`${row.applicant_added_all_ar ? moment(row.applicant_added_all_ar).format('MMM. D, YYYY HH:mm') : 'Not Done'}`}</>) },
+      selector: (row) => { return (<>{`${row.applicant_added_all_ar ? moment(row.applicant_added_all_ar).format('MMM. D, YYYY LT') : 'Not Done'}`}</>) },
       sortable: true,
       width: "200px",
       wrap: true
     },
     {
       name: "MEG Agreement Execution",
-      selector: (row) => { return (<>{`${row.meg_upload_signed_agreement ? moment(row.meg_upload_signed_agreement).format('MMM. D, YYYY HH:mm') : 'Not Done'}`}</>) },
+      selector: (row) => { return (<>{`${row.meg_upload_signed_agreement ? moment(row.meg_upload_signed_agreement).format('MMM. D, YYYY LT') : 'Not Done'}`}</>) },
       sortable: true,
       width: "200px",
       wrap: true
     },
     {
       name: "MEG2 ESuccess Letter",
-      selector: (row) => { return (<>{`${row.meg2_send_esuccess_letter ? moment(row.meg2_send_esuccess_letter).format('MMM. D, YYYY HH:mm') : 'Not Done'}`}</>) },
+      selector: (row) => { return (<>{`${row.meg2_send_esuccess_letter ? moment(row.meg2_send_esuccess_letter).format('MMM. D, YYYY LT') : 'Not Done'}`}</>) },
       sortable: true,
       width: "200px",
       wrap: true
     },
+    {
+      name: "Average TAT",
+      selector: (row) => { return (<>{`${row.average_time_taken ? row.average_time_taken : 'Not Applicable'}`}</>) },
+      sortable: true,
+      width: "200px",
+      wrap: true
+    },
+
   ];
 
   const [tableData, setTableData] = useState(data);

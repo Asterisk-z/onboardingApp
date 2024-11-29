@@ -1231,7 +1231,8 @@ const Form = () => {
                                             <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
                                             <div className="form-control-wrap">
                                                 <div className="input-group">
-                                                    <input type="file" accept=".jpg,.jpeg,.png,.pdf" id={field.name} className="form-control" onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.files[0], "field_type": field.type })} />
+                                                    <input type="file" accept=".jpg,.jpeg,.png,.pdf" id={field.name} className="form-control" onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.files[0], "field_type": field.type })} style={{ display: field.field_value?.file_path ? 'none' : 'block' }} />
+                                                    <label for={field.name} className="form-control" style={{ display: field.field_value?.file_path ? 'block' : 'none' }} >Document Uploaded</label>
 
                                                     <div className="input-group-append">
                                                         <input type="hidden" {...register(field.name, { required: 'This field is required' })} value={field.field_value?.file_path ? field.field_value?.file_path : ''} />

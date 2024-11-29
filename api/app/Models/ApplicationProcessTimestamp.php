@@ -46,7 +46,7 @@ class ApplicationProcessTimestamp extends Model
             'applicant_added_all_ar' => $this->applicant_added_all_ar ?? false,
             'meg_upload_signed_agreement' => $this->meg_upload_signed_agreement ?? false,
             'meg2_send_esuccess_letter' => $this->meg2_send_esuccess_letter ?? false,
-            // 'meg2_send_esuccess_letter' => $this->meg2_send_esuccess_letter ?? false,
+            'average_time_taken' => $this->meg2_send_esuccess_letter ? average_tat($this->applicant_completed_application, $this->meg2_send_esuccess_letter) : false,
         ];
     }
 

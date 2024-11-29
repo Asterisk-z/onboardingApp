@@ -8,6 +8,7 @@ use App\Models\Audit;
 use App\Models\FmdqBankAccount;
 use App\Models\InvoiceContent;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 use PHPOpenSourceSaver\JWTAuth\JWTGuard;
 use Symfony\Component\HttpFoundation\Response;
@@ -209,7 +210,6 @@ if (!function_exists('getInstitutionFieldValue')) {
         return $companyName;
     }
 }
-
 if (!function_exists('disclosureContent')) {
     function disclosureContent($application_uuid)
     {
@@ -217,5 +217,21 @@ if (!function_exists('disclosureContent')) {
         $application = Application::where('uuid', $application_uuid)->first();
 
         return (new DisclosureLetter())->generate($application, true);
+    }
+}
+
+if (!function_exists('average_tat')) {
+    function average_tat($from_date, $to_date)
+    {
+        $total_days = (Carbon::create($to_date))->diffInDays(Carbon::create($from_date));
+        $total_hours = (Carbon::create($to_date))->diffInHours(Carbon::create($from_date));
+        $total_minutes = (Carbon::create($to_date))->diffInMinutes(Carbon::create($from_date));
+        $minutes_in_an_hour = 60;
+        $hours_in_a_day = 24;
+
+        $hours_left = $total_hours - ($hours_in_a_day * $total_days);
+        $minutes_left = $total_minutes - ($minutes_in_an_hour * $total_hours);
+
+        return "$total_days Day(s), $hours_left Hour(s) $minutes_left min(s)";
     }
 }

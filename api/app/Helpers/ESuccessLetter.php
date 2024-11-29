@@ -129,9 +129,9 @@ class ESuccessLetter
 
         $url = config("app.front_end_url");
 
+        // <p><i><b>$date</b></i></p>
         return [
-            'address' => "<p><i><b>$date</b></i></p>
-                            <p><i><b>$designation({$this->regId})</b></i></p>
+            'address' => "<p><i><b>$designation({$this->regId})</b></i></p>
                             <p><i><b>$address</b></i></p>",
             'title' => "<p><b>APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED DEALING MEMBER (BANK) CATEGORY</b></p>",
             'body' => "<p  style='text-align: justify;text-justify: inter-word;'>
@@ -197,9 +197,9 @@ class ESuccessLetter
 
         $url = config("app.front_end_url");
 
+        // <p><i><b>$date</b></i></p>
         return [
-            'address' => "<p><i><b>$date</b></i></p>
-                            <p><i><b>$designation({$this->regId})</b></i></p>
+            'address' => "<p><i><b>$designation({$this->regId})</b></i></p>
                             <p><i><b>$address</b></i></p>",
             'title' => "<p><b>APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED DEALING MEMBER (BANK) CATEGORY</b></p>",
             'body' => "<p  style='text-align: justify;text-justify: inter-word;'>
@@ -256,9 +256,9 @@ class ESuccessLetter
 
         $url = config("app.front_end_url");
 
+        // <p><i><b>$date</b></i></p>
         return [
-            'address' => "<p><i><b>$date</b></i></p>
-                            <p><i><b>$designation({$this->regId})</b></i></p>
+            'address' => "<p><i><b>$designation({$this->regId})</b></i></p>
                             <p><i><b>$address</b></i></p>",
             'title' => "<p><b>
                             APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED DEALING MEMBER (SPECIALIST) CATEGORY
@@ -317,9 +317,9 @@ class ESuccessLetter
 
         $url = config("app.front_end_url");
 
+        // <p><i><b>$date</b></i></p>
         return [
-            'address' => "<p><i><b>$date</b></i></p>
-                            <p><i><b>$designation({$this->regId})</b></i></p>
+            'address' => "<p><i><b>$designation({$this->regId})</b></i></p>
                             <p><i><b>$address</b></i></p>",
             'title' => "<p><b>
                             APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED ASSOCIATE MEMBER (CLIENTS) CATEGORY
@@ -378,9 +378,9 @@ class ESuccessLetter
 
         $url = config("app.front_end_url");
 
+        // <p><i><b>$date</b></i></p>
         return [
-            'address' => "<p><i><b>$date</b></i></p>
-                            <p><i><b>$designation({$this->regId})</b></i></p>
+            'address' => "<p><i><b>$designation({$this->regId})</b></i></p>
                             <p><i><b>$address</b></i></p>",
             'title' => "<p><b>
                            APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED ASSOCIATE MEMBER (INTER-DEALER BROKERS) CATEGORY
@@ -440,9 +440,9 @@ class ESuccessLetter
 
         $url = config("app.front_end_url");
 
+        // <p><i><b>$date</b></i></p>
         return [
-            'address' => "<p><i><b>$date</b></i></p>
-                            <p><i><b>$designation({$this->regId})</b></i></p>
+            'address' => "<p><i><b>$designation({$this->regId})</b></i></p>
                             <p><i><b>$address</b></i></p>",
             'title' => "<p><b>
                            APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED ASSOCIATE MEMBER (BROKERS) CATEGORY
@@ -501,9 +501,9 @@ class ESuccessLetter
         $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
+        // <p><i><b>$date</b></i></p>
         return [
-            'address' => "<p><i><b>$date</b></i></p>
-                            <p><i><b>$designation({$this->regId})</b></i></p>
+            'address' => "<p><i><b>$designation({$this->regId})</b></i></p>
                             <p><i><b>$address</b></i></p>",
             'title' => "<p><b>
                            APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED REGISTRATION MEMBER (LISTINGS & QUOTATIONS) CATEGORY
@@ -564,9 +564,9 @@ class ESuccessLetter
 
         $url = config("app.front_end_url");
 
+        // <p><i><b>$date</b></i></p>
         return [
-            'address' => "<p><i><b>$date</b></i></p>
-                            <p><i><b>$designation({$this->regId})</b></i></p>
+            'address' => "<p><i><b>$designation({$this->regId})</b></i></p>
                             <p><i><b>$address</b></i></p>",
             'title' => "<p><b>
                            APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED REGISTRATION MEMBER (LISTINGS) CATEGORY
@@ -625,9 +625,9 @@ class ESuccessLetter
 
         $url = config("app.front_end_url");
 
+        // <p><i><b>$date</b></i></p>
         return [
-            'address' => "<p><i><b>$date</b></i></p>
-                            <p><i><b>$designation({$this->regId})</b></i></p>
+            'address' => "<p><i><b>$designation({$this->regId})</b></i></p>
                             <p><i><b>$address</b></i></p>",
             'title' => "<p><b>
                            APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED REGISTRATION MEMBER (QUOTATIONS) CATEGORY
@@ -687,9 +687,9 @@ class ESuccessLetter
 
         $url = config("app.front_end_url");
 
+        // <p><i><b>$date</b></i></p>
         return [
-            'address' => "<p><i><b>$date</b></i></p>
-                            <p><i><b>$designation({$this->regId})</b></i></p>
+            'address' => "<p><i><b>$designation({$this->regId})</b></i></p>
                             <p><i><b>$address</b></i></p>",
             'title' => "<p><b>
                            APPLICATION FOR THE FMDQ SECURITIES EXCHANGE AFFILIATE MEMBER (FIXED INCOME) CATEGORY
@@ -750,9 +750,9 @@ class ESuccessLetter
 
         $url = config("app.front_end_url");
 
+        // <p><i><b>$date</b></i></p>
         return [
-            'address' => "<p><i><b>$date</b></i></p>
-                            <p><i><b>$designation({$this->regId})</b></i></p>
+            'address' => "<p><i><b>$designation({$this->regId})</b></i></p>
                             <p><i><b>$address</b></i></p>",
             'title' => "<p><b>
                            APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED AFFILIATE MEMBER (STANDARD) CATEGORY
@@ -813,9 +813,9 @@ class ESuccessLetter
 
         $url = config("app.front_end_url");
 
+        // <p><i><b>$date</b></i></p>
         return [
-            'address' => "<p><i><b>$date</b></i></p>
-                            <p><i><b>$designation({$this->regId})</b></i></p>
+            'address' => "<p><i><b>$designation({$this->regId})</b></i></p>
                             <p><i><b>$address</b></i></p>",
             'title' => "<p><b>
                             APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED AFFILIATE MEMBER (STANDARD) CATEGORY
