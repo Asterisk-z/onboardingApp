@@ -138,7 +138,7 @@ class ESuccessLetter
                             Having reviewed your application for the Dealing Member (Bank) (DMB)
                             category of FMDQ Securities Exchange Limited (“FMDQ Exchange”),
                             we are pleased to inform you that your application is successful, and
-                            $companyName ($companyName) will now be profiled on the applicable modules on the
+                            <span style='text-transform: uppercase;'>$companyName ($companyName)</span> will now be profiled on the applicable modules on the
                             'FMDQ e-Markets portal' and e-Fixings (Real Time) sub-module, under the e-Benchmarks module.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
@@ -156,14 +156,14 @@ class ESuccessLetter
                             <li>Designation</li>
                         </ul>
                         <p style='text-align: justify;text-justify: inter-word;'>
-                            Please note that $companyName will be required to notify FMDQ Exchange prior to commencement of Two-way quote (2-WQ) trading activities for
-                            the necessary introduction of $companyName to the 2-WQ Market as an FMDQ Exchange DMB and for the profiling of its Authorised Dealers on
+                            Please note that <span style='text-transform: uppercase;'>$companyName</span> will be required to notify FMDQ Exchange prior to commencement of Two-way quote (2-WQ) trading activities for
+                            the necessary introduction of <span style='text-transform: uppercase;'>$companyName</span> to the 2-WQ Market as an FMDQ Exchange DMB and for the profiling of its Authorised Dealers on
                             FMDQ Exchange's recognised trading systems – FMDQ E-Bond Trading System & Refinitiv Foreign Exchange Trading system for Fixed Income and FX Trading Activities, respectively.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             Further to the above, please note that the Investments and Securities Act 2007 requires all capital market operators to complete
                             registration with the Securities and Exchange Commission ('SEC' or the 'Commission') under the relevant functions they perform
-                            and to this effect, $companyName will be required to complete registration with the Commission as an 'FMDQ Dealer'
+                            and to this effect, <span style='text-transform: uppercase;'>$companyName</span> will be required to complete registration with the Commission as an 'FMDQ Dealer'
                             no later than 'Six months from the approval date'.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
@@ -204,7 +204,7 @@ class ESuccessLetter
             'title' => "<p><b>APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED DEALING MEMBER (BANK) CATEGORY</b></p>",
             'body' => "<p  style='text-align: justify;text-justify: inter-word;'>
                             Having reviewed your application for the Dealing Member (Bank) (DMB) category of FMDQ Securities Exchange Limited ('FMDQ Exchange'),
-                            we are pleased to inform you that your application is successful, and $companyName ($companyName)
+                            we are pleased to inform you that your application is successful, and <span style='text-transform: uppercase;'>$companyName ($companyName)</span>
                             will now be profiled on the applicable modules on the 'FMDQ e-Markets portal' and e-Fixings (Real Time) sub-module, under the e-Benchmarks module.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
@@ -220,8 +220,8 @@ class ESuccessLetter
                             <li>Designation</li>
                         </ul>
                         <p style='text-align: justify;text-justify: inter-word;'>
-                        Please note that $companyName will be required to notify FMDQ Exchange prior to commencement of Two-way quote (2-WQ)
-                        trading activities for the necessary introduction of $companyName to the 2-WQ Market as an FMDQ Exchange DMB and for
+                        Please note that <span style='text-transform: uppercase;'>$companyName</span> will be required to notify FMDQ Exchange prior to commencement of Two-way quote (2-WQ)
+                        trading activities for the necessary introduction of <span style='text-transform: uppercase;'>$companyName</span> to the 2-WQ Market as an FMDQ Exchange DMB and for
                         the profiling of its Authorised Dealers on FMDQ Exchange's recognised trading systems – FMDQ E-Bond Trading System & Refinitiv
                         Foreign Exchange Trading system for Fixed Income and FX Trading Activities, respectively.
                         </p>
@@ -265,7 +265,7 @@ class ESuccessLetter
                         </b></p>",
             'body' => "<p  style='text-align: justify;text-justify: inter-word;'>
                             Having reviewed your application for the Dealing Member (Specialist) category of FMDQ Securities Exchange Limited ('FMDQ Exchange'),
-                            we are pleased to inform you that your application is successful, and $companyName will now be profiled on the FMDQ e-Knowledge module.
+                            we are pleased to inform you that your application is successful, and <span style='text-transform: uppercase;'>$companyName</span> will now be profiled on the FMDQ e-Knowledge module.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             To gain access to e-Knowledge on the e-Markets portal, kindly update the details of a maximum of four (4)
@@ -284,7 +284,7 @@ class ESuccessLetter
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             Attached for your records, is a copy of the executed FMDQ Exchange Membership Agreement
-                            between $companyName and FMDQ SECURITIES EXCHANGE LIMITED for the above-mentioned membership category.
+                            between <span style='text-transform: uppercase;'>$companyName</span> and FMDQ SECURITIES EXCHANGE LIMITED for the above-mentioned membership category.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             We thank you for your unwavering support and look forward to continuing a mutually beneficial relationship between our organisations.
@@ -326,7 +326,7 @@ class ESuccessLetter
                         </b></p>",
             'body' => "<p  style='text-align: justify;text-justify: inter-word;'>
                            Having reviewed your application for the Associate Member (Clients) membership category of FMDQ Securities Exchange Limited ('FMDQ Exchange'),
-                           we are pleased to inform you that your application is successful, and $companyName will now be profiled on the applicable modules on the 'FMDQ e-Markets portal'.
+                           we are pleased to inform you that your application is successful, and <span style='text-transform: uppercase;'>$companyName</span> will now be profiled on the applicable modules on the 'FMDQ e-Markets portal'.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             To gain access to the applicable modules on the FMDQ e-Markets portal, kindly update the details of a maximum of two (2)
@@ -345,7 +345,7 @@ class ESuccessLetter
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                            Attached for your records, is a copy of the executed FMDQ Exchange Membership Agreement
-                           between $companyName and FMDQ SECURITIES EXCHANGE LIMITED for the above-mentioned membership category.
+                           between <span style='text-transform: uppercase;'>$companyName</span> and FMDQ SECURITIES EXCHANGE LIMITED for the above-mentioned membership category.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             We thank you for your unwavering support and look forward to continuing a mutually beneficial relationship between our organisations.
@@ -388,7 +388,7 @@ class ESuccessLetter
             'body' => "<p  style='text-align: justify;text-justify: inter-word;'>
                             Having reviewed your application for the Associate Member (Inter-Dealer Brokers) membership category of
                             FMDQ Securities Exchange Limited (FMDQ Exchange), we are pleased to inform you that your application is successful,
-                            and $companyName will now be profiled on the applicable modules on the 'FMDQ e-Markets portal'.
+                            and <span style='text-transform: uppercase;'>$companyName</span> will now be profiled on the applicable modules on the 'FMDQ e-Markets portal'.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                            To gain access to the applicable modules on the FMDQ e-Markets portal, kindly update the details of a maximum of two (2)
@@ -407,7 +407,7 @@ class ESuccessLetter
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             Attached for your records, is a copy of the executed FMDQ Exchange Membership Agreement
-                            between $companyName and FMDQ SECURITIES EXCHANGE LIMITED for the above-mentioned membership category.
+                            between <span style='text-transform: uppercase;'>$companyName</span> and FMDQ SECURITIES EXCHANGE LIMITED for the above-mentioned membership category.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             We thank you for your unwavering support and look forward to continuing a mutually beneficial relationship between our organisations.
@@ -450,7 +450,7 @@ class ESuccessLetter
             'body' => "<p  style='text-align: justify;text-justify: inter-word;'>
                             Having reviewed your application for the Associate Member (Brokers) membership category of
                              FMDQ Securities Exchange Limited (FMDQ Exchange), we are pleased to inform you that your application is successful,
-                             and $companyName will now be profiled on the applicable modules on the 'FMDQ e-Markets portal'.
+                             and <span style='text-transform: uppercase;'>$companyName</span> will now be profiled on the applicable modules on the 'FMDQ e-Markets portal'.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             To gain access to the applicable modules on the FMDQ e-Markets portal, kindly update the details of
@@ -469,7 +469,7 @@ class ESuccessLetter
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             Attached for your records, is a copy of the executed FMDQ Exchange Membership
-                            Agreement between $companyName and FMDQ SECURITIES EXCHANGE LIMITED for the above-mentioned membership category.
+                            Agreement between <span style='text-transform: uppercase;'>$companyName</span> and FMDQ SECURITIES EXCHANGE LIMITED for the above-mentioned membership category.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             We thank you for your unwavering support and look forward to continuing a mutually beneficial relationship between our organisations.
@@ -511,7 +511,7 @@ class ESuccessLetter
             'body' => "<p  style='text-align: justify;text-justify: inter-word;'>
                             Having reviewed your application for the Registration Member (Listings & Quotations)
                             categories of FMDQ Securities Exchange Limited (“FMDQ Exchange”),
-                            we are pleased to inform you that your application is successful, and $companyName
+                            we are pleased to inform you that your application is successful, and <span style='text-transform: uppercase;'>$companyName</span>
                             will now be profiled on the applicable modules on the “FMDQ e-Markets portal”.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
@@ -532,7 +532,7 @@ class ESuccessLetter
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             Attached for your records, are copies of the executed FMDQ Exchange Membership Agreement
-                            between $companyName and FMDQ SECURITIES EXCHANGE LIMITED for the above-mentioned membership categories.
+                            between <span style='text-transform: uppercase;'>$companyName</span> and FMDQ SECURITIES EXCHANGE LIMITED for the above-mentioned membership categories.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             We thank you for your unwavering support and look forward to continuing a mutually beneficial relationship between our organisations.
@@ -573,7 +573,7 @@ class ESuccessLetter
                         </b></p>",
             'body' => "<p  style='text-align: justify;text-justify: inter-word;'>
                             Having reviewed your application for the Registration Member (Listings) category of FMDQ Securities Exchange Limited (“FMDQ Exchange”),
-                             we are pleased to inform you that your application is successful, and $companyName
+                             we are pleased to inform you that your application is successful, and <span style='text-transform: uppercase;'>$companyName</span>
                              will now be profiled on the applicable modules on the “FMDQ e-Markets portal”.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
@@ -593,7 +593,7 @@ class ESuccessLetter
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             Attached for your records, is a copy of the executed FMDQ Exchange Membership
-                            Agreement between $companyName and FMDQ SECURITIES EXCHANGE LIMITED for the above-mentioned membership category.
+                            Agreement between <span style='text-transform: uppercase;'>$companyName</span> and FMDQ SECURITIES EXCHANGE LIMITED for the above-mentioned membership category.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             We thank you for your unwavering support and look forward to continuing a mutually beneficial relationship between our organisations.
@@ -635,7 +635,7 @@ class ESuccessLetter
             'body' => "<p  style='text-align: justify;text-justify: inter-word;'>
                            Having reviewed your application for the Registration Member (Quotations) category of
                            FMDQ Securities Exchange Limited (“FMDQ Exchange”), we are pleased to inform you that your
-                           application is successful, and $companyName will now be profiled on the applicable modules on the “FMDQ e-Markets portal”.
+                           application is successful, and <span style='text-transform: uppercase;'>$companyName</span> will now be profiled on the applicable modules on the “FMDQ e-Markets portal”.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             To gain access to the FMDQ e-Markets portal, kindly update the details of a maximum of two (2)
@@ -655,7 +655,7 @@ class ESuccessLetter
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             Attached for your records, is a copy of the executed FMDQ Exchange
-                            Membership Agreement between $companyName and FMDQ SECURITIES EXCHANGE LIMITED for the above-mentioned membership category.
+                            Membership Agreement between <span style='text-transform: uppercase;'>$companyName</span> and FMDQ SECURITIES EXCHANGE LIMITED for the above-mentioned membership category.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             We thank you for your unwavering support and look forward to continuing a mutually beneficial relationship between our organisations.
@@ -697,7 +697,7 @@ class ESuccessLetter
             'body' => "<p  style='text-align: justify;text-justify: inter-word;'>
                            Having reviewed your application for the Affiliate Member (Fixed Income) category of
                            FMDQ Securities Exchange Limited (“FMDQ Exchange”), we are pleased to inform you that your
-                           application is successful, and $companyName will now be profiled on the FMDQ e-Knowledge module.
+                           application is successful, and <span style='text-transform: uppercase;'>$companyName</span> will now be profiled on the FMDQ e-Knowledge module.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             To gain access to the e-knowledge on the e-Markets portal, kindly update the details
@@ -717,7 +717,7 @@ class ESuccessLetter
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                            Attached for your records, is a copy of the executed FMDQ Exchange Membership Agreement
-                           between $companyName and FMDQ SECURITIES EXCHANGE LIMITED for the above-mentioned membership category.
+                           between <span style='text-transform: uppercase;'>$companyName</span> and FMDQ SECURITIES EXCHANGE LIMITED for the above-mentioned membership category.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                            We thank you for your unwavering support and look forward to continuing a mutually beneficial relationship between our organisations
@@ -760,7 +760,7 @@ class ESuccessLetter
             'body' => "<p  style='text-align: justify;text-justify: inter-word;'>
                            Having reviewed your application for the Affiliate Member (Standard) category of FMDQ Securities
                            Exchange Limited (“FMDQ Exchange”), we are pleased to inform you that your application is successful,
-                            and $companyName will now be profiled on the FMDQ e-Knowledge module of the e-Markets portal.
+                            and <span style='text-transform: uppercase;'>$companyName</span> will now be profiled on the FMDQ e-Knowledge module of the e-Markets portal.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             To gain access to the e-knowledge on the e-Markets portal, kindly update the details of a
@@ -780,7 +780,7 @@ class ESuccessLetter
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                            Attached for your records, is a copy of the executed FMDQ Exchange Membership
-                           Agreement between $companyName and FMDQ SECURITIES EXCHANGE LIMITED for the above-mentioned membership category.
+                           Agreement between <span style='text-transform: uppercase;'>$companyName</span> and FMDQ SECURITIES EXCHANGE LIMITED for the above-mentioned membership category.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             We thank you for your unwavering support and look forward to continuing a mutually beneficial relationship between our organisations.
@@ -823,7 +823,7 @@ class ESuccessLetter
             'body' => "<p  style='text-align: justify;text-justify: inter-word;'>
                           Having reviewed your application for the Affiliate Member (Standard) category of FMDQ Securities Exchange
                            Limited (“FMDQ Exchange”), we are pleased to inform you that your application is successful, and
-                           $companyName will now be profiled on the FMDQ e-Knowledge module of the e-Markets portal.
+                           <span style='text-transform: uppercase;'>$companyName</span> will now be profiled on the FMDQ e-Knowledge module of the e-Markets portal.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                             To gain access to the e-knowledge on the e-Markets portal,
@@ -841,7 +841,7 @@ class ESuccessLetter
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                            Attached for your records, is a copy of the executed FMDQ Exchange Membership
-                           Agreement between $companyName and FMDQ SECURITIES EXCHANGE LIMITED for the above-mentioned membership category.
+                           Agreement between <span style='text-transform: uppercase;'>$companyName</span> and FMDQ SECURITIES EXCHANGE LIMITED for the above-mentioned membership category.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
                            We thank you for your unwavering support and look forward to continuing a mutually beneficial relationship between our organisations.
