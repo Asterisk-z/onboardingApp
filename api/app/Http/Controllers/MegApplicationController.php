@@ -200,7 +200,8 @@ class MegApplicationController extends Controller
 
         $attachment = [
             [
-                "name" => Utility::getFileName("{$membershipCategory->name} Membership Agreement", $membershipCategory->membership_agreement),
+                "name" => Utility::getFileName("FMDQ Membership Agreement - {$data->company_name}", $membershipCategory->membership_agreement),
+                // "name" => Utility::getFileName("FMDQ Membership Agreement - {$membershipCategory->name}", $membershipCategory->membership_agreement),
                 "saved_path" => $path,
             ],
         ];

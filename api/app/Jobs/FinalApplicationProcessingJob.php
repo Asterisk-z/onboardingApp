@@ -17,6 +17,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Notification;
+use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
 
 class FinalApplicationProcessingJob implements ShouldQueue
 {
@@ -62,6 +63,14 @@ class FinalApplicationProcessingJob implements ShouldQueue
             return;
         }
 
+        $pdfMerger = PDFMerger::init();
+
+        $pdfMerger->addPDF(storage_path('/app/public/' . $application->meg_executed_membership_agreement), 'all');
+        $pdfMerger->addPDF(storage_path('/app/public/' . $application->e_success_letter), 'all');
+
+        $pdfMerger->merge();
+        $pdfMerger->save(storage_path("/app/public/agreement_and_letter/member{$application->id}.pdf"));
+
         //SEND APPLICANT MAIL
         $emailData = [
             'name' => $companyName,
@@ -71,13 +80,17 @@ class FinalApplicationProcessingJob implements ShouldQueue
 
         $attachment = [
             [
-                "name" => Utility::getFileName("{$companyName} Membership Agreement", $application->meg_executed_membership_agreement),
-                "saved_path" => config('app.url') . '' . config('app.storage_path') . '' . $application->meg_executed_membership_agreement,
+                "name" => Utility::getFileName("FMDQ Membership Agreement and E-Success Letter - {$companyName} ", $application->meg_executed_membership_agreement),
+                "saved_path" => config('app.url') . '' . config('app.storage_path') . "agreement_and_letter/member{$application->id}.pdf",
             ],
-            [
-                "name" => Utility::getFileName("{$companyName} E-Success Letter", $application->e_success_letter),
-                "saved_path" => config('app.url') . '' . config('app.storage_path') . '' . $application->e_success_letter,
-            ],
+            // [
+            //     "name" => Utility::getFileName("{$companyName} Membership Agreement", $application->meg_executed_membership_agreement),
+            //     "saved_path" => config('app.url') . '' . config('app.storage_path') . '' . $application->meg_executed_membership_agreement,
+            // ],
+            // [
+            //     "name" => Utility::getFileName("{$companyName} E-Success Letter", $application->e_success_letter),
+            //     "saved_path" => config('app.url') . '' . config('app.storage_path') . '' . $application->e_success_letter,
+            // ],
         ];
 
         // CC email addresses

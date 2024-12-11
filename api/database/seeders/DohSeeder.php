@@ -26,7 +26,7 @@ class DohSeeder extends Seeder
 
         foreach ($dataSet as $data) {
 
-            if (DohSignature::where('name', $data['name'])->exist()) {
+            if (DohSignature::where('name', $data['name'])->exists()) {
                 return;
             }
 

@@ -933,7 +933,12 @@ const AdminApplicationReportTable = ({ data, pagination, actions, className, sel
     if (searchText !== "") {
       defaultData = data.filter((item) => {
         // return item.name.toLowerCase().includes(searchText.toLowerCase());
-        return (Object.values(item).join('').toLowerCase()).includes(searchText.toLowerCase())
+
+        // let tableSet = [item.internal.category_name, item.basic_details.companyName, item.internal.status]
+        let tableSet = [item.reg_id, item.basic_details.companyName, item.internal.category_name, item.basic_details.registeredOfficeAddress, item.basic_details.companyTelephoneNumber, item.basic_details.companyEmailAddress, item.basic_details.corporateWebsiteAddress, item.internal.application_type, item.internal.status_description]
+        // // return (Object.values(item).join('').toLowerCase()).includes(searchText.toLowerCase())
+        return (tableSet.join('').toLowerCase()).includes(searchText.toLowerCase())
+        // return (Object.values(item).join('').toLowerCase()).includes(searchText.toLowerCase())
       });
       setTableData(defaultData);
     } else {

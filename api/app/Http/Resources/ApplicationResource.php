@@ -221,6 +221,10 @@ class ApplicationResource extends JsonResource
 
             "report_table" => $this->report_table(),
 
+            'proof_of_payment' => $application->proof_of_payment,
+
+            'status_description' => $application->status_description,
+
             "download_link" => route('downloadReport', ['institution_application_report', $application->uuid]),
 
         ];

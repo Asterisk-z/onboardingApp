@@ -59,7 +59,7 @@
         }
 
         ul {
-            list-style-type: none;
+            list-style-type: disc;
         }
 
         .sn ol {
@@ -145,15 +145,16 @@
             <div style="width: 100%; padding: 10px 20px; font-size: 14px">
                 <div style="display: flex; align-items: center; justify-content: space-between; ">
                     <div style="color: #969698; float: left;">
-                        <i>
-                            <h3 style="margin: 0;">
-                                FMDQ SECURITIES EXCHANGE LIMITED <br>
-                                <span style="font-size: 13px; float: right;">RC:1617162</span>
-                            </h3>
-                        </i>
+                        {{-- <i>--}}
+                        <h3 style="margin: 0; color:#23346a;">
+                            FMDQ SECURITIES EXCHANGE LIMITED <br>
+                            <span style="font-size: 13px; float: right;">RC:1617162</span>
+                        </h3>
+                        {{-- </i>--}}
                     </div>
                     <div style="float: right;">
-                        <img style="width: 250px;" src="{{ asset('assets/invoice/img/e_success_logo.png') }}" alt="fmdq logo">
+                        <img style="width: 250px;" src="{{ asset('assets/invoice/img/logo.png') }}" alt="fmdq logo">
+                        {{-- <img style="width: 250px;" src="{{ asset('assets/invoice/img/e_success_logo.png') }}" alt="fmdq logo"> --}}
                         {{-- <img style="width: 250px;" src="{{ public_path('assets/invoice/img/e_success_logo.png') }}" alt="fmdq logo"> --}}
 
                     </div>

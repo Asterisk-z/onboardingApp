@@ -94,6 +94,9 @@ const ActionTab = (props) => {
 
     const navigate = useNavigate();
 
+    const buttonText = !tabItem?.proof_of_payment || tabItem?.status_description == 'FSD DECLINED PAYMENT' || tabItem?.status_description == 'MBG DECLINED PAYMENT' ? "View Invoice" : "Basic Information"
+
+
 
     return (
         <>
@@ -101,9 +104,8 @@ const ActionTab = (props) => {
                 {tabItem.internal?.show_form == 1 ? <>
                     <button className="btn btn-sm btn-secondary" color="secondary" onClick={(ev) => navigate(`${process.env.PUBLIC_URL}/application/${tabItem.internal?.application_uuid}`)}>Continue Application</button>
                 </> : <>
-
                     <button className="btn btn-sm btn-secondary" color="secondary" onClick={(ev) => navigate(`${process.env.PUBLIC_URL}/application_detail/${tabItem.internal?.application_uuid}`)} >
-                        Basic Information
+                        {buttonText}
                     </button>
                 </>}
             </>}

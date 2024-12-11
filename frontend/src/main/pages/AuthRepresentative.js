@@ -183,7 +183,7 @@ const AuthRepresentative = ({ drawer }) => {
     const cancelUpdate = (event) => {
         Swal.fire({
             title: "Are you sure?",
-            html: "By selecting 'No Update,' you are indicating that there are no new changes to report.With this selection, <br/> <br/>you will not receive further reminders regarding updates until your next interaction or update submission. Please click 'Confirm' to proceed or 'Cancel' to return to the previous screen.",
+            html: "By selecting 'No Update,' you are indicating that there are no new changes to report. <br/> <br/>With this selection, you will not receive further reminders regarding updates until your next interaction or update submission.  <br/> <br/>Please click 'Confirm' to proceed or 'Cancel' to return to the previous screen.",
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Confirm!",

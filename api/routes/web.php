@@ -31,6 +31,51 @@ use Illuminate\Support\Str;
 
 Route::get('/', function () {
 
+    $application = Application::find(1);
+
+    $data = Application::where('applications.id', '1');
+    $data = Utility::applicationDetails($data);
+    $data = $data->first();
+
+    $categoryName = $data->category_name;
+    $companyName = $data->company_name;
+    $companyEmail = $data->company_email;
+    $primaryContactEmail = $data->primary_contact_email;
+
+    $applicant = User::find($application->submitted_by);
+
+    $emailData = [
+        'name' => $companyName,
+        'subject' => MailContents::SuccessfulApplicationSubject(),
+        'content' => MailContents::SuccessfulApplicationMail($categoryName),
+    ];
+
+    $toEmails = [$applicant->email, $companyEmail];
+
+    if ($primaryContactEmail) {
+        array_push($toEmails, $primaryContactEmail);
+    }
+
+    $Meg = Utility::getUsersEmailByCategory(Role::MEG);
+    $Mbg = Utility::getUsersEmailByCategory(Role::MBG);
+    $big = Utility::getUsersEmailByCategory(Role::BIG);
+    $ccEmails = array_merge($Meg, $Mbg, $big);
+
+    $attachment = [
+        [
+            "name" => Utility::getFileName("{$companyName} Membership Agreement", $application->meg_executed_membership_agreement),
+            "saved_path" => config('app.url') . '' . config('app.storage_path') . '' . $application->meg_executed_membership_agreement,
+        ],
+        [
+            "name" => Utility::getFileName("{$companyName} E-Success Letter", $application->e_success_letter),
+            "saved_path" => config('app.url') . '' . config('app.storage_path') . '' . $application->e_success_letter,
+        ],
+    ];
+
+    Utility::notifyApplicantFinal($application->id, $emailData, $toEmails, $ccEmails, $attachment);
+
+    dd($application);
+
     // $invoice = Invoice::all();
     // dd(str_pad(count($invoice) + 1, 3, '0', STR_PAD_LEFT));
 

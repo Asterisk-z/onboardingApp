@@ -50,46 +50,6 @@ const Form = () => {
 
         if ($application_details && !$application_details?.disclosure_stage && !showDisclosureModal) {
             setModalDisclosureStageView(true)
-            // Swal.fire({
-            //     title: "Declaration of prior disclosure",
-            //     text: "You won't be able to revert this!",
-            //     icon: "warning",
-            //     showCancelButton: true,
-            //     confirmButtonText: "Accept",
-            //     cancelButtonText: "Reject",
-            //     allowOutsideClick: false
-            // }).then((result) => {
-            //     if (result.isConfirmed) {
-
-            //         Swal.close()
-            //         uploadDisclosure('accept')
-
-            //         // navigate(`${process.env.PUBLIC_URL}/application_disclosure/${$application_details.uuid}`)
-
-            //         // const postValues = new Object();
-            //         // postValues.application_id = $application_details?.id;
-            //         // postValues.status = 'accept';
-            //         // const resp = dispatch(UpdateDisclosure(postValues));
-            //         // setParentState(Math.random());
-            //         // setTimeout(() => {
-            //         //     window.location.reload();
-            //         // }, 4000)
-            //         // setShowDisclosureModal(true)
-
-            //     } else {
-            //         Swal.close()
-            //         uploadDisclosure('reject')
-            //         // const postValues = new Object();
-            //         // postValues.application_id = $application_details?.id;
-            //         // postValues.status = 'reject';
-            //         // const resp = dispatch(UpdateDisclosure(postValues));
-            //         // setParentState(Math.random());
-            //         // setTimeout(() => {
-            //         //     window.location.reload();
-            //         // }, 4000)
-            //         // setShowDisclosureModal(true)
-            //     }
-            // });
 
         } else {
             setModalDisclosureStageView(false)
@@ -144,6 +104,10 @@ const Form = () => {
             });
         }
 
+    }
+
+    const formatLabel = (label) => {
+        return `${label.toUpperCase().substring(0, 1)}${label.toLowerCase().substring(1)}`
     }
 
 
@@ -298,7 +262,7 @@ const Form = () => {
                                     return (
                                         <Col md="6" key={`${field.name}${index}`}>
                                             <div className="form-group">
-                                                <label className="form-label text-capitalize" htmlFor="company-name">{field.description}{$application_details?.disclosure_status}</label>
+                                                <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
                                                 <div className="form-control-wrap">
                                                     <input type="text" id={field.name} className="form-control" {...register(field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field} readOnly={($application_details?.disclosure_status && unChangeableField.includes(field.name) && field?.field_value?.uploaded_field)} />
                                                     {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
@@ -310,7 +274,7 @@ const Form = () => {
                                     return (
                                         <Col md="6" key={`${field.name}${index}`}>
                                             <div className="form-group">
-                                                <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
+                                                <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
                                                 <div className="form-control-wrap">
                                                     <input type="url" placeholder="http://example.com" id={field.name} className="form-control" {...register(field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field} readOnly={($application_details?.disclosure_status && unChangeableField.includes(field.name) && field?.field_value?.uploaded_field)} />
                                                     {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
@@ -323,7 +287,7 @@ const Form = () => {
                                     return (
                                         <Col md="6" key={`${field.name}${index}`}>
                                             <div className="form-group">
-                                                <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
+                                                <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
                                                 <div className="form-control-wrap">
 
                                                     <input type="hidden" {...register(field.name, { required: 'This field is required' })} value={field?.field_value?.uploaded_field} />
@@ -338,7 +302,7 @@ const Form = () => {
                                     return (
                                         <Col md="6" key={`${field.name}${index}`}>
                                             <div className="form-group">
-                                                <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
+                                                <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
                                                 <div className="form-control-wrap">
                                                     <input type="text" id={field.name} className="form-control" {...register(field.name, { required: 'This field is required', pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: "Invalid email address" }, })} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field} />
                                                     {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
@@ -350,7 +314,7 @@ const Form = () => {
                                     return (
                                         <Col md="6" key={`${field.name}${index}`}>
                                             <div className="form-group">
-                                                <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
+                                                <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
                                                 <div className="form-control-wrap">
                                                     <input type="number" id={field.name} className="form-control" {...register(field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field} readOnly={($application_details?.disclosure_status && unChangeableField.includes(field.name) && field?.field_value?.uploaded_field)} />
                                                     {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
@@ -379,8 +343,8 @@ const Form = () => {
                                         //     </div>
                                         // </div>
                                         <Col md="6" key={`${field.name}${index}`}>
-                                            <div className="form-group">readOnly
-                                                <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
+                                            <div className="form-group">
+                                                <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
                                                 <div className="form-control-wrap">
 
                                                     <div className="form-control-select" >
@@ -530,7 +494,7 @@ const Form = () => {
                                 return (
                                     <Col md="6" key={`${field.name}${index}`}>
                                         <div className="form-group">
-                                            <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
+                                            <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
                                             <div className="form-control-wrap">
                                                 <input type="text" id={field.name} className="form-control" {...register(field.name, { required: (field.required ? 'This field is required' : false) })} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field} />
                                                 {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
@@ -543,7 +507,7 @@ const Form = () => {
                                 return (
                                     <Col md="6" key={`${field.name}${index}`}>
                                         <div className="form-group">
-                                            <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
+                                            <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
                                             <div className="form-control-wrap">
                                                 <DatePicker selected={field?.field_value?.uploaded_field ? new Date(field?.field_value?.uploaded_field) : new Date()}  {...register(field.name, { required: (field.required ? 'This field is required' : false) })} id={field.name} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e, "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field} className="form-control date-picker" />
                                                 {/* <DatePicker selected={field?.field_value?.uploaded_field ? new Date(field?.field_value?.uploaded_field) : new Date()}  {...register(field.name, { required: ( field.required ? 'This field is required' : false) })} id={field.name} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": moment(e).format('YYYY-MM-DD'), "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field} className="form-control date-picker" /> */}
@@ -556,7 +520,7 @@ const Form = () => {
                                 return (
                                     <Col md="6" key={`${field.name}${index}`}>
                                         <div className="form-group">
-                                            <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
+                                            <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
                                             <div className="form-control-wrap">
                                                 <input type="text" id={field.name} className="form-control" {...register(field.name, { required: (field.required ? 'This field is required' : false), pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: "Invalid email address" }, })} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field} />
                                                 {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
@@ -568,7 +532,7 @@ const Form = () => {
                                 return (
                                     <Col md="6" key={`${field.name}${index}`}>
                                         <div className="form-group">
-                                            <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
+                                            <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
                                             <div className="form-control-wrap">
                                                 <input type="number" id={field.name} className="form-control" {...register(field.name, { required: (field.required ? 'This field is required' : false) })} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field ? field?.field_value?.uploaded_field : ''} />
                                                 {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
@@ -580,7 +544,7 @@ const Form = () => {
                                 return (
                                     <Col md="6" key={`${field.name}${index}`}>
                                         <div className="form-group">
-                                            <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
+                                            <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
                                             <div className="form-control-wrap">
 
                                                 <div className="form-control-select" >
@@ -609,7 +573,7 @@ const Form = () => {
                                     <div key={`${field.name}${index}`}>
                                         <Col md="12">
                                             <div className="form-group">
-                                                <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
+                                                <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
                                                 <div className="form-control-wrap">
                                                     <ul className="custom-control-group gy-4">
                                                         {field.field_options && field.field_options.map((option, index) => (
@@ -637,7 +601,7 @@ const Form = () => {
                                                         return (
                                                             <Col md="6" key={`${child_field.name}${index}`}>
                                                                 <div className="form-group">
-                                                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
+                                                                    <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
                                                                     <div className="form-control-wrap">
                                                                         <input type="number" id={child_field.name} className="form-control"  {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
@@ -652,7 +616,7 @@ const Form = () => {
                                                         return (
                                                             <Col md="6" key={`${child_field.name}${index}`}>
                                                                 <div className="form-group">
-                                                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
+                                                                    <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
                                                                     <div className="form-control-wrap">
                                                                         <input type="number" id={child_field.name} className="form-control"  {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
@@ -667,7 +631,7 @@ const Form = () => {
                                                         return (
                                                             <Col md="6" key={`${child_field.name}${index}`}>
                                                                 <div className="form-group">
-                                                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
+                                                                    <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
                                                                     <div className="form-control-wrap">
                                                                         <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
@@ -682,7 +646,7 @@ const Form = () => {
                                                         return (
                                                             <Col md="6" key={`${child_field.name}${index}`}>
                                                                 <div className="form-group">
-                                                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
+                                                                    <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
                                                                     <div className="form-control-wrap">
                                                                         <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
@@ -697,7 +661,7 @@ const Form = () => {
                                                         return (
                                                             <Col md="6" key={`${child_field.name}${index}`}>
                                                                 <div className="form-group">
-                                                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
+                                                                    <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
                                                                     <div className="form-control-wrap">
                                                                         <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
@@ -712,7 +676,7 @@ const Form = () => {
                                                         return (
                                                             <Col md="6" key={`${child_field.name}${index}`}>
                                                                 <div className="form-group">
-                                                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
+                                                                    <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
                                                                     <div className="form-control-wrap">
                                                                         <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
@@ -727,7 +691,7 @@ const Form = () => {
                                                         return (
                                                             <Col md="6" key={`${child_field.name}${index}`}>
                                                                 <div className="form-group">
-                                                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
+                                                                    <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
                                                                     <div className="form-control-wrap">
                                                                         <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
@@ -742,7 +706,7 @@ const Form = () => {
                                                         return (
                                                             <Col md="6" key={`${child_field.name}${index}`}>
                                                                 <div className="form-group">
-                                                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
+                                                                    <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
                                                                     <div className="form-control-wrap">
                                                                         <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
@@ -757,7 +721,7 @@ const Form = () => {
                                                         return (
                                                             <Col md="6" key={`${child_field.name}${index}`}>
                                                                 <div className="form-group">
-                                                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
+                                                                    <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
                                                                     <div className="form-control-wrap">
                                                                         <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
@@ -772,7 +736,7 @@ const Form = () => {
                                                         return (
                                                             <Col md="6" key={`${child_field.name}${index}`}>
                                                                 <div className="form-group">
-                                                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
+                                                                    <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
                                                                     <div className="form-control-wrap">
                                                                         <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
@@ -787,7 +751,7 @@ const Form = () => {
                                                         return (
                                                             <Col md="6" key={`${child_field.name}${index}`}>
                                                                 <div className="form-group">
-                                                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
+                                                                    <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
                                                                     <div className="form-control-wrap">
                                                                         <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
@@ -802,7 +766,7 @@ const Form = () => {
                                                         return (
                                                             <Col md="6" key={`${child_field.name}${index}`}>
                                                                 <div className="form-group">
-                                                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
+                                                                    <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
                                                                     <div className="form-control-wrap">
                                                                         <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
@@ -817,7 +781,7 @@ const Form = () => {
                                                         return (
                                                             <Col md="6" key={`${child_field.name}${index}`}>
                                                                 <div className="form-group">
-                                                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
+                                                                    <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
                                                                     <div className="form-control-wrap">
                                                                         <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
@@ -832,7 +796,7 @@ const Form = () => {
                                                         return (
                                                             <Col md="6" key={`${child_field.name}${index}`}>
                                                                 <div className="form-group">
-                                                                    <label className="form-label text-capitalize" htmlFor="company-name">{`${child_field.description}`}</label>
+                                                                    <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
                                                                     <div className="form-control-wrap">
                                                                         <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
                                                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
@@ -978,7 +942,7 @@ const Form = () => {
                                                 return (
                                                     <Col md="12" key={`${child_field.name}${index}`}>
                                                         <div className="form-group">
-                                                            <label className="form-label text-capitalize" htmlFor="company-name">{child_field.description}</label>
+                                                            <label className="form-label" htmlFor="company-name">{formatLabel(child_field.description)}</label>
                                                             <div className="form-control-wrap">
 
                                                                 <div className="form-control-select" >
@@ -1102,7 +1066,7 @@ const Form = () => {
                                 return (
                                     <Col md="12" key={`${field.name}${index}`}>
                                         <div className="form-group">
-                                            <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
+                                            <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
                                             <div className="form-control-wrap">
                                                 <div className="input-group">
                                                     <input type="file" accept="..jpg,.jpeg,.png,.pdf" id={field.name} className="form-control" onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.files[0], "field_type": field.type })} style={{ display: field.field_value?.file_path ? 'none' : 'block' }} />
@@ -1228,7 +1192,7 @@ const Form = () => {
                                 return (
                                     <Col md="12" key={`${field.name}${index}`}>
                                         <div className="form-group">
-                                            <label className="form-label text-capitalize" htmlFor="company-name">{field.description}</label>
+                                            <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
                                             <div className="form-control-wrap">
                                                 <div className="input-group">
                                                     <input type="file" accept=".jpg,.jpeg,.png,.pdf" id={field.name} className="form-control" onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.files[0], "field_type": field.type })} style={{ display: field.field_value?.file_path ? 'none' : 'block' }} />

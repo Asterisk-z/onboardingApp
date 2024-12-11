@@ -92,7 +92,6 @@ if (!function_exists('prettifyJson')) {
         return nl2br($formattedJson);
     }
 }
-
 if (!function_exists('formatDate')) {
     function formatDate($inputDate)
     {
@@ -103,6 +102,22 @@ if (!function_exists('formatDate')) {
         try {
             $dateTime = new DateTime($inputDate);
             return $dateTime->format('M. j, Y');
+        } catch (\Throwable $th) {
+            return $inputDate;
+        }
+    }
+}
+
+if (!function_exists('formatDateLong')) {
+    function formatDateLong($inputDate)
+    {
+        if (!$inputDate) {
+            return '';
+        }
+
+        try {
+            $dateTime = new DateTime($inputDate);
+            return $dateTime->format('F j, Y');
         } catch (\Throwable $th) {
             return $inputDate;
         }

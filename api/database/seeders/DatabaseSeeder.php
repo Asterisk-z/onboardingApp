@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ReasonSeeder::class);
         $this->call(AccountDetailsSeeder::class);
         $this->call(FmdqSystemSeeder::class);
+        $this->call(DohSeeder::class);
         $this->call(CompetencyFrameworkSeed::class);
     }
 }
