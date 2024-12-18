@@ -200,7 +200,7 @@ const UserMenu = ({ sidebarToggle, mobileView }) => {
 
 
   useEffect(() => {
-    if (authUser?.user_data?.institution?.application[0].completed_at) {
+    if (authUser?.user_data?.is_application_completed) {
 
       if (authUser?.is_position_cco() && authUser?.is_ar_authorizer()) {
 

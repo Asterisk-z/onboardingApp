@@ -53,7 +53,7 @@ const Login = () => {
     } catch (error) {
 
       setLoading(false);
-      // console.log(error)
+      console.log(error)
       setTimeout(() => {
         setError("Cannot login with credentials");
         setLoading(false);

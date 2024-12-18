@@ -7,6 +7,7 @@ use App\Helpers\ResponseStatusCodes;
 use App\Helpers\Utility;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegistrationRequest;
+use App\Http\Resources\AuthUserResource;
 use App\Http\Resources\UserResource;
 use App\Models\Application;
 use App\Models\ApplicationProcessTimestamp;
@@ -70,11 +71,11 @@ class UsersController extends Controller
                 'token' => $token,
                 'expires_in' => config('jwt.ttl') * 60,
             ],
-            'user' => UserResource::make($user),
+            'user' => AuthUserResource::make($user),
         ];
 
         logAction(auth()->user()->email, 'Successful Login', 'Login Successfull', $request->ip());
-
+        // logger($data);
         return successResponse('Login Successful', $data);
     }
 

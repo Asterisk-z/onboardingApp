@@ -144,7 +144,8 @@ const Homepage = () => {
                         </BlockHeadContent>
 
                         <BlockHeadContent>
-                            {authUser?.user_data?.institution?.application[0].completed_at && <>
+                            {authUser?.user_data?.is_application_completed && <>
+                                {/* {authUser?.user_data?.institution?.application[0].completed_at && <> */}
                                 <div className="toggle-wrap nk-block-tools-toggle">
                                     <div className="toggle-expand-content" style={{ display: true ? "block" : "none" }}>
                                         <ul className="nk-block-tools g-3">
