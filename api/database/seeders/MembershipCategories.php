@@ -21,6 +21,7 @@ class MembershipCategories extends Seeder
                 "name" => "Dealing Member (Bank)",
                 "application_fee" => 24187500,
                 "membership_dues" => 2150000,
+                "max_ar" => 5,
                 "membership_agreement" => config('app.url') . '/assets/membership_agreement/dmb.pdf',
             ],
             [
@@ -28,6 +29,7 @@ class MembershipCategories extends Seeder
                 "name" => "Dealing Member (Specialist)",
                 "application_fee" => 537500,
                 "membership_dues" => 268750,
+                "max_ar" => 4,
                 "membership_agreement" => config('app.url') . '/assets/membership_agreement/dms.pdf',
             ],
             [
@@ -35,6 +37,7 @@ class MembershipCategories extends Seeder
                 "name" => "Associate Member (Brokers)",
                 "application_fee" => 1343750,
                 "membership_dues" => 671875,
+                "max_ar" => 2,
                 "membership_agreement" => config('app.url') . '/assets/membership_agreement/amb.pdf',
             ],
             [
@@ -42,6 +45,7 @@ class MembershipCategories extends Seeder
                 "name" => "Associate Member (Inter-Dealer Brokers)",
                 "application_fee" => 10750000,
                 "membership_dues" => 671875,
+                "max_ar" => 2,
                 "membership_agreement" => config('app.url') . '/assets/membership_agreement/ami.pdf',
             ],
             [
@@ -49,6 +53,7 @@ class MembershipCategories extends Seeder
                 "name" => "Associate Member (Client)",
                 "application_fee" => 335937.5,
                 "membership_dues" => 671875,
+                "max_ar" => 2,
                 "membership_agreement" => config('app.url') . '/assets/membership_agreement/amc.pdf',
             ],
             [
@@ -56,6 +61,7 @@ class MembershipCategories extends Seeder
                 "name" => "Registration Member (Listings)",
                 "application_fee" => 1679687.5,
                 "membership_dues" => 671875,
+                "max_ar" => 2,
                 "membership_agreement" => config('app.url') . '/assets/membership_agreement/rml.pdf',
             ],
             [
@@ -63,6 +69,7 @@ class MembershipCategories extends Seeder
                 "name" => "Registration Member (Quotations)",
                 "application_fee" => 1679687.5,
                 "membership_dues" => 671875,
+                "max_ar" => 2,
                 "membership_agreement" => config('app.url') . '/assets/membership_agreement/rmq.pdf',
             ],
             [
@@ -70,6 +77,7 @@ class MembershipCategories extends Seeder
                 "name" => "Registration Member (Listings & Quotations)",
                 "application_fee" => 1679687.5,
                 "membership_dues" => 671875,
+                "max_ar" => 2,
                 "membership_agreement" => config('app.url') . '/assets/membership_agreement/lnq.pdf',
             ],
             [
@@ -77,6 +85,7 @@ class MembershipCategories extends Seeder
                 "name" => "Affiliate Member - Standard (Individual)",
                 "application_fee" => 134375,
                 "membership_dues" => 0,
+                "max_ar" => 4,
                 "membership_agreement" => config('app.url') . '/assets/membership_agreement/afs.pdf',
             ],
             [
@@ -84,6 +93,7 @@ class MembershipCategories extends Seeder
                 "name" => "Affiliate Member - Standard (Corporate)",
                 "application_fee" => 671875,
                 "membership_dues" => 0,
+                "max_ar" => 4,
                 "membership_agreement" => config('app.url') . '/assets/membership_agreement/afc.pdf',
             ],
             [
@@ -91,6 +101,7 @@ class MembershipCategories extends Seeder
                 "name" => "Affiliate Member (Foreign Exchange Trading)",
                 "application_fee" => 335937.5,
                 "membership_dues" => 161250,
+                "max_ar" => 4,
                 "membership_agreement" => config('app.url') . '/assets/membership_agreement/aft.pdf',
             ],
             [
@@ -98,6 +109,7 @@ class MembershipCategories extends Seeder
                 "name" => "Affiliate Member (Fixed Income)",
                 "application_fee" => 1612500,
                 "membership_dues" => 0,
+                "max_ar" => 4,
                 "membership_agreement" => config('app.url') . '/assets/membership_agreement/afi.pdf',
             ],
             [
@@ -105,6 +117,7 @@ class MembershipCategories extends Seeder
                 "name" => "Affiliate Member (Regulator)",
                 "application_fee" => 69875,
                 "membership_dues" => 8000000,
+                "max_ar" => 4,
                 "membership_agreement" => config('app.url') . '/assets/membership_agreement/afr.pdf',
             ],
             [
@@ -112,6 +125,7 @@ class MembershipCategories extends Seeder
                 "name" => "Foreign Exchange (Corporates)",
                 "application_fee" => 0,
                 "membership_dues" => 161250,
+                "max_ar" => 5,
                 "membership_agreement" => config('app.url') . '/assets/membership_agreement/aec.pdf',
             ],
             [
@@ -119,6 +133,7 @@ class MembershipCategories extends Seeder
                 "name" => "Dealing Member (Non-Bank Financial Institutions)",
                 "application_fee" => 16125000,
                 "membership_dues" => 2150000,
+                "max_ar" => 5,
                 "membership_agreement" => config('app.url') . '/assets/membership_agreement/dms.pdf',
             ],
         ];

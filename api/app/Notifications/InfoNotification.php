@@ -65,6 +65,10 @@ class InfoNotification extends Notification implements ShouldQueue
                 $displayName = "MEG";
             }
 
+            if ($user->role_id == Role::MEG2) {
+                $displayName = "MEG Level2";
+            }
+
             if ($user->role_id == Role::FSD) {
                 $displayName = "FSD";
             }
@@ -84,6 +88,7 @@ class InfoNotification extends Notification implements ShouldQueue
             if ($user->role_id == Role::HELPDESK) {
                 $displayName = "HELP DESK";
             }
+
         }
 
         $mail = (new MailMessage)

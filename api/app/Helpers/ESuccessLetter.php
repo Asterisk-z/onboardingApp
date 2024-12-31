@@ -494,7 +494,8 @@ class ESuccessLetter
         $address = $this->address;
         $companyName = $this->companyName;
 
-        // $url = config("app.front_end_u<p><i><b>$designation({$this->regId})</b></i></p>rl");
+        $url = config("app.front_end_url");
+        // <p><i><b>$designation({$this->regId})</b></i></p>
         return [
             'address' => "<p>$date</p>
                             <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address</span></p>",
@@ -739,7 +740,7 @@ class ESuccessLetter
         $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
-// <p><i><b>$designation({$this->regId})</b></i></p>
+        // <p><i><b>$designation({$this->regId})</b></i></p>
         return [
             'address' => "<p>$date</p>
                             <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address</span></p>",
@@ -784,7 +785,7 @@ class ESuccessLetter
                         </p>
                         <p >
                             <i><b>{$this->name}</b></i> <br />
-<i><b>{$this->grade}</b></i> <br />
+                            <i><b>{$this->grade}</b></i> <br />
                             <i><b>{$this->division}</b></i>
                         </p>
 
@@ -801,7 +802,7 @@ class ESuccessLetter
         $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
-// <p><i><b>$designation({$this->regId})</b></i></p>
+        // <p><i><b>$designation({$this->regId})</b></i></p>
         return [
             'address' => "<p>$date</p>
                             <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address</span></p>",
@@ -844,7 +845,7 @@ class ESuccessLetter
                         </p>
                         <p >
                             <i><b>{$this->name}</b></i> <br />
-<i><b>{$this->grade}</b></i> <br />
+            <i><b>{$this->grade}</b></i> <br />
                             <i><b>{$this->division}</b></i>
                         </p>
 

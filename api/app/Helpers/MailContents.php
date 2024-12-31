@@ -115,7 +115,7 @@ class MailContents
     {
         $url = config("app.front_end_url");
         return "<p>Please be informed that the {$ar_reg} Of {$ar_name} has been sanction for an infraction. <br>
-        Kindly login to <a href=$url>MROIS Portal</a>
+        Kindly login to <a href=$url>Notification of Change link</a>
                     to view change </p>";
     }
 

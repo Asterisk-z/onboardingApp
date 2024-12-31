@@ -342,6 +342,14 @@ const AdminListARTable = ({ data, pagination, actions, className, selectableRows
       wrap: true
     },
     {
+      name: "AR Status",
+      // selector: (row) => { return (<><Badge color="success" className="text-uppercase">{`${row.approval_status}`}</Badge></>) },
+      selector: (row) => { return (<><Badge color="success" className="text-uppercase">{`${row.is_active == '1' ? 'Active' : 'Deactivated'}`}</Badge></>) },
+      sortable: true,
+      width: "auto",
+      wrap: true
+    },
+    {
       name: "Role",
       selector: (row) => { return (<><Badge color="success">{`${row.role.name}`}</Badge></>) },
       sortable: true,

@@ -33,11 +33,11 @@ class AuthUserResource extends JsonResource
             'regId' => $this->reg_id,
             'img' => $this->img ? config('app.url') . '/storage/app/public/' . $this->img : null,
             'mandate_form' => $this->mandate_form ? config('app.url') . '/storage/app/public/' . $this->mandate_form : null,
-            'institution' => [
+            'institution' => $this->institution ? [
                 "id" => $this->institution->id,
                 "name" => $this->institution->name,
                 "category" => $this->institution->membershipCategories,
-            ],
+            ] : null,
             'is_active' => $this->is_active,
             'createdAt' => $this->created_at,
             'is_application_completed' => isset($this->institution->application[0]) ? ($this->institution->application[0])->completed_at : false,

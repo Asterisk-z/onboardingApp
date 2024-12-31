@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, forwardRef } from "react";
+import React, { useState, useRef, useEffect, Suspense } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -251,6 +251,11 @@ const Form = () => {
 
 
         return (
+            // <Suspense fallback={
+            //     <div className="text-center">
+            //         <Spinner />
+            //     </div>
+            // }>
             <div>
                 {fields && <>
                     <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
@@ -381,7 +386,7 @@ const Form = () => {
                 </>}
 
             </div>
-
+            // {/* </Suspense> */ }
         );
     };
 
@@ -1505,6 +1510,8 @@ const Form = () => {
                             </Modal>
 
                             <div className="nk-wizard nk-wizard-simple is-alter wizard clearfix">
+
+
                                 <Steps config={config} >
                                     <Step component={ApplicantInformation} />
                                     <Step component={TradingDetail} />

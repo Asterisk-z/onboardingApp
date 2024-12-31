@@ -28,6 +28,7 @@ class SystemController extends Controller
         }
 
         if ($data == 'representation_report') {
+            $data == 'Authorised_Representatives_Report';
             $tableData = Utility::representativeReport();
         }
 

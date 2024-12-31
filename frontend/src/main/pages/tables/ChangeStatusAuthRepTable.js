@@ -139,12 +139,13 @@ const ActionTab = (props) => {
                 <ul className="nk-block-tools g-3">
                     <li className="nk-block-tools-opt">
                         <UncontrolledDropdown direction="right">
-                            <DropdownToggle className="dropdown-toggle btn btn-xs" color="secondary">Action</DropdownToggle>
+                            {ar_user.approval_status == 'pending' && <>
+                                <DropdownToggle className="dropdown-toggle btn btn-xs" color="secondary">Action</DropdownToggle>
 
-                            <DropdownMenu>
-                                <ul className="link-list-opt">
+                                <DropdownMenu>
+                                    <ul className="link-list-opt">
 
-                                    {/* <li size="xs">
+                                        {/* <li size="xs">
                                           <DropdownItem tag="a" href="#links" onClick={toggleForm} >
                                               <Icon name="eye"></Icon>
                                               <span>View AR</span>
@@ -158,25 +159,27 @@ const ActionTab = (props) => {
                                               <span>View Update AR</span>
                                           </DropdownItem>
                                       </li> */}
-                                    <li size="xs">
-                                        <DropdownItem tag="a" href="#links" onClick={(e) => askAction('approve')} >
-                                            <Icon name="eye"></Icon>
-                                            <span>Approve</span>
-                                        </DropdownItem>
-                                    </li>
-                                    <li size="xs">
-                                        <DropdownItem tag="a" href="#links" onClick={(e) => askAction('decline')} >
-                                            <Icon name="eye"></Icon>
-                                            <span>Decline</span>
-                                        </DropdownItem>
-                                    </li>
+                                        <li size="xs">
+                                            <DropdownItem tag="a" href="#links" onClick={(e) => askAction('approve')} >
+                                                <Icon name="eye"></Icon>
+                                                <span>Approve</span>
+                                            </DropdownItem>
+                                        </li>
+                                        <li size="xs">
+                                            <DropdownItem tag="a" href="#links" onClick={(e) => askAction('decline')} >
+                                                <Icon name="eye"></Icon>
+                                                <span>Decline</span>
+                                            </DropdownItem>
+                                        </li>
 
 
 
 
 
-                                </ul>
-                            </DropdownMenu>
+                                    </ul>
+                                </DropdownMenu>
+                            </>}
+
                         </UncontrolledDropdown>
                     </li>
 
@@ -198,6 +201,13 @@ const ChangeStatusAuthRepTable = ({ data, pagination, actions, className, select
             selector: (row, index) => ++index,
             sortable: true,
             width: "120px",
+            wrap: true,
+        },
+        {
+            name: "Institution",
+            selector: (row) => { return (<><p>{`${row.ar?.institution?.name} `}</p></>) },
+            sortable: true,
+            width: "auto",
             wrap: true,
         },
         {

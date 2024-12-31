@@ -31,6 +31,7 @@ use Illuminate\Support\Str;
 
 Route::get('/', function () {
 
+    return view('welcome');
     $application = Application::find(1);
 
     $data = Application::where('applications.id', '1');
@@ -46,33 +47,11 @@ Route::get('/', function () {
 
     $emailData = [
         'name' => $companyName,
-        'subject' => MailContents::SuccessfulApplicationSubject(),
-        'content' => MailContents::SuccessfulApplicationMail($categoryName),
+        'subject' => 'MROIS Application Rejected - Incomplete Documentation',
+        'content' => "<pre>Please be informed that we could not continue with your application because of the following: </br></br>Reason: fskdfjsdf sdkfjfksdf skfjsdkf skfjsdkfjsdkf jkfsdfksjfkdjfksjfsk</pre>",
     ];
-
-    $toEmails = [$applicant->email, $companyEmail];
-
-    if ($primaryContactEmail) {
-        array_push($toEmails, $primaryContactEmail);
-    }
-
     $Meg = Utility::getUsersEmailByCategory(Role::MEG);
-    $Mbg = Utility::getUsersEmailByCategory(Role::MBG);
-    $big = Utility::getUsersEmailByCategory(Role::BIG);
-    $ccEmails = array_merge($Meg, $Mbg, $big);
-
-    $attachment = [
-        [
-            "name" => Utility::getFileName("{$companyName} Membership Agreement", $application->meg_executed_membership_agreement),
-            "saved_path" => config('app.url') . '' . config('app.storage_path') . '' . $application->meg_executed_membership_agreement,
-        ],
-        [
-            "name" => Utility::getFileName("{$companyName} E-Success Letter", $application->e_success_letter),
-            "saved_path" => config('app.url') . '' . config('app.storage_path') . '' . $application->e_success_letter,
-        ],
-    ];
-
-    Utility::notifyApplicantFinal($application->id, $emailData, $toEmails, $ccEmails, $attachment);
+    Utility::notifyApplicantAndContact($application->id, $applicant, $emailData, $Meg);
 
     dd($application);
 

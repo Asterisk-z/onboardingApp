@@ -37,14 +37,26 @@ class AddARRequest extends FormRequest
                 function ($attribute, $value, $fail) {
                     if (User::where('position_id', $value)->where('institution_id', auth()->user()->institution_id)->where('member_status', 'active')->exists()) {
 
-                            // if (!Position::where('id', request('position_id'))->where('can_be_authorizer', true)->where('is_del', false)->exists()) {
-                                $fail('Another User has the same position.');
-                            // }
+                        // if (!Position::where('id', request('position_id'))->where('can_be_authorizer', true)->where('is_del', false)->exists()) {
+                        $fail('Another User has the same position.');
+                        // }
 
                     }
                 }],
             'nationality' => 'required|exists:nationalities,code',
-            'category_id' => 'required|exists:membership_categories,id',
+            'category_id' => [
+                'required',
+                'exists:membership_categories,id',
+                // function ($attribute, $value, $fail) {
+                //     $total_ars = User::where('category_id', $value)->where('institution_id', auth()->user()->institution_id)->where('member_status', 'active')->count();
+                //     $max_ar = (MembershipCategory::find($value))->max_ar;
+                //     if ($total_ars >= $max_ar) {
+
+                //         $fail('Available Authorised Representative Slot is full');
+
+                //     }
+                // }
+            ],
             'role_id' => [
                 'required',
                 'in:' . Role::ARAUTHORISER . ',' . Role::ARINPUTTER,

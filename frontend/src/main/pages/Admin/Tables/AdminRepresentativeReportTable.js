@@ -35,7 +35,7 @@ const Export = ({ data, reportUrl }) => {
     })
   });
 
-  const fileName = "data";
+  const fileName = "Authorised_Representatives_Report";
 
   const exportCSV = () => {
     const exportType = exportFromJSON.types.csv;
@@ -279,7 +279,9 @@ const AdminListARTable = ({ data, pagination, actions, className, selectableRows
     if (searchText !== "") {
       defaultData = data.filter((item) => {
         // return item.name.toLowerCase().includes(searchText.toLowerCase());
-        return (Object.values(item).join('').toLowerCase()).includes(searchText.toLowerCase())
+        let tableSet = [item.lastName, item.firstName, item.institution?.name, item.category?.name, item.position?.name, item.email, item.phone, item.createdAt];
+        // return (Object.values(item).join('').toLowerCase()).includes(searchText.toLowerCase())
+        return (tableSet.join('').toLowerCase()).includes(searchText.toLowerCase())
       });
       setTableData(defaultData);
     } else {
