@@ -699,7 +699,7 @@ class ARController extends Controller
         } else {
 
             // Activate or deactivate the user
-            $ARUser->is_active = ($record->request_type == ARDeactivationRequest::REQUEST_TYPE_ACTIVATE) ? 1 : 0;
+            $ARUser->is_active = ($record->request_type == ARDeactivationRequest::REQUEST_TYPE_ACTIVATE) ? '1' : '0';
             // $ARUser->member_status = ($record->request_type == ARDeactivationRequest::REQUEST_TYPE_ACTIVATE) ? "active" : "suspended";
             $ARUser->save();
 

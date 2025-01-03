@@ -116,7 +116,7 @@ class MailContents
         $url = config("app.front_end_url");
         return "<p>Please be informed that the {$ar_reg} Of {$ar_name} has been sanction for an infraction. <br>
         Kindly login to <a href=$url>Notification of Change link</a>
-                    to view change </p>";
+                    to view change. </p>";
     }
 
     public static function submitCompetencySubject(): string
@@ -431,7 +431,7 @@ class MailContents
         $url = config("app.front_end_url");
         return "<p>Please be informed that $name has requested
         the creation of some ARs profile on the $system.
-        Kindly log on to the <a href=$url>MROIS Portal</a> to approve or reject the request";
+        Kindly log on to the <a href=$url>MROIS Portal</a> to approve or reject the request.";
     }
 
     public static function mbgApproveProfileArSystemMail($system): string
@@ -439,7 +439,7 @@ class MailContents
         $url = config("app.front_end_url");
         return "<p>Please be informed that MBG has requested
         the creation of some ARs profile on the $system.
-        Kindly log on to the <a href=$url>MROIS Portal</a> to create profile";
+        Kindly log on to the <a href=$url>MROIS Portal</a> to create profile.";
     }
 
     public static function mbgRejectProfileArSystemSubject($system): string
@@ -452,7 +452,7 @@ class MailContents
         $url = config("app.front_end_url");
         return "<p>Please be informed that MBG has rejected
         the creation of some ARs profile on the $system.
-        Kindly log on to the <a href=$url>MROIS Portal</a> to view";
+        Kindly log on to the <a href=$url>MROIS Portal</a> to view.";
     }
 
     public static function arNotificationOfChangeSubject($request_id, $subject): string

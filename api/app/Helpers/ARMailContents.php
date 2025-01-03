@@ -52,7 +52,7 @@ class ARMailContents
         $company = $ARUser->institution->name ?? "Undefined";
         $message = "<p>
                     Please be informed that $company has added a new Authorised Representative.<br/>
-                    Kindly login to the <a href='" . $link . "'>MROIS Portal</a> to approve or reject
+                    Kindly login to the <a href='" . $link . "'>MROIS Portal</a> to approve or reject.
                 </p>";
 
         return $message;

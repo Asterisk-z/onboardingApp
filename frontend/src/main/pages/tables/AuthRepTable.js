@@ -841,7 +841,8 @@ const AuthRepTable = ({ data, pagination, actions, className, selectableRows, ex
         },
         {
             name: "AR Status",
-            selector: (row) => { return (<><Badge color="success" className="text-uppercase">{`${row.is_active == '1' ? 'Active' : 'Deactivated'}`}</Badge></>) },
+            // selector: (row) => { return (<><Badge color="success" className="text-uppercase">{`${[1, '1'].includes(row.is_active) ? 'Active' : 'Deactivated'}`}</Badge></>) },
+            selector: (row) => { return (<><Badge color="success" className="text-uppercase">{`${[1, '1', 'TRUE', true].includes(row.is_active) ? `Active` : `Deactivated`}`}</Badge></>) },
             sortable: true,
             width: "auto",
             wrap: true
