@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { errorHandler, successHandler } from "utils/Functions";
 import queryGenerator from "utils/QueryGenerator";
-const initialState = { all: null, list: null, user_application: null, application_details: null, initial_application: null, all_fields: null, overall_fields: null, preview: [], list_extra: {}, status_list: null, transfer_list: null, user: null, total: null, error: "", loading: false };
+const initialState = { all: null, list: null, user_application: null, application_details: null, initial_application: null, all_fields: null, overall_fields: null, preview: [], list_extra: {}, status_list: null, transfer_list: null, user: null, total: null, error: "", loading: false, loadingPageFields: false };
 
 
 export const fetchApplication = createAsyncThunk(
@@ -405,11 +405,11 @@ const applicationStore = createSlice({
     // ====== builders for loadPageFields ======
 
     builder.addCase(loadPageFields.pending, (state) => {
-      state.loading = true;
+      state.loadingPageFields = true;
     });
 
     builder.addCase(loadPageFields.fulfilled, (state, action) => {
-      state.loading = false;
+      state.loadingPageFields = false;
       // state.list = action.payload?.data?.data?.categories;
       // state.list = JSON.stringify(action.payload?.data?.data);
 
@@ -425,7 +425,7 @@ const applicationStore = createSlice({
     });
 
     builder.addCase(loadPageFields.rejected, (state, action) => {
-      state.loading = false;
+      state.loadingPageFields = false;
       state.error = action.payload.message;
     });
 

@@ -103,7 +103,9 @@ const AdminRepresentativeReport = ({ drawer }) => {
     const [reportUrl, setReportUrl] = useState('');
 
     useEffect(() => {
-        setReportUrl(`${$ar_users?.report_url}?startDate=${getValues('start_date')}&endDate=${getValues('end_date')}&institution=${getValues('institution')}&category=${getValues('category')}&position=${getValues('position')}`)
+        let start_date = moment(getValues('start_date')).isValid() ? moment(getValues('start_date')).format('YYYY-MM-DD') : '';
+        let end_date = moment(getValues('end_date')).isValid() ? moment(getValues('end_date')).format('YYYY-MM-DD') : '';
+        setReportUrl(`${$ar_users?.report_url}?startDate=${start_date}&endDate=${end_date}&institution=${getValues('institution')}&category=${getValues('category')}&position=${getValues('position')}`)
     }, [tableData, getValues(), $ar_users])
 
     return (

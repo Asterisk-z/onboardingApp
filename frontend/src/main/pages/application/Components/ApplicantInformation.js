@@ -176,12 +176,10 @@ const Form = () => {
         const updatedApplicationFields = useSelector((state) => state?.application?.all_fields) || null;
         const loadingPageFields = useSelector((state) => state?.application?.loadingPageFields) || null;
         const [applicationFields, setApplicationFields] = useState(overall_fields?.basic);
-        // const [updatedApplicationFieldsValue, setUpdatedApplicationFieldsValue] = useState(updatedApplicationFields);
 
         const fieldSectionData = useRef(null);
 
-        // let fields = updatedApplicationFields ? (updatedApplicationFields[0]?.page == 1 ? updatedApplicationFields : applicationFields) : applicationFields
-        let fields = applicationFields
+        let fields = updatedApplicationFields ? (updatedApplicationFields[0]?.page == 1 ? updatedApplicationFields : applicationFields) : applicationFields
 
         const submitForm = async (data) => {
 
@@ -257,23 +255,21 @@ const Form = () => {
 
 
         useEffect(() => {
-
-            if (updatedApplicationFields) {
-                if (updatedApplicationFields[0]?.page == 1) {
-
-                    // console.log("ApplicantInformation")
-                    // console.log(loadingPageFields)
-                    // console.log(updatedApplicationFields)
-                    // console.log(applicationFields)
-                    fields = updatedApplicationFields
-                }
-            }
-
+            console.log("ApplicantInformation")
+            console.log(loadingPageFields)
+            console.log(updatedApplicationFields)
+            console.log(applicationFields)
+            fieldSectionData.current = applicationFields
         }, [updatedApplicationFields, applicationFields]);
 
         return (
-
+            // <Suspense fallback={
+            //     <div className="text-center">
+            //         <Spinner />
+            //     </div>
+            // }>
             <div>
+                {loadingPageFields}
                 {fields && <>
                     <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
                         {/* <h3>Applicant Information</h3> */}
@@ -448,8 +444,7 @@ const Form = () => {
         const loadingPageFields = useSelector((state) => state?.application?.loadingPageFields) || null;
         const [applicationFields, setApplicationFields] = useState(overall_fields?.trade);
 
-        // let fields = updatedApplicationFields ? (updatedApplicationFields[0]?.page == 2 ? updatedApplicationFields : applicationFields) : applicationFields
-        let fields = applicationFields
+        let fields = updatedApplicationFields ? (updatedApplicationFields[0]?.page == 2 ? updatedApplicationFields : applicationFields) : applicationFields
 
         const submitForm = async (data) => {
 
@@ -509,21 +504,11 @@ const Form = () => {
         }
 
 
-
         useEffect(() => {
-
-            if (updatedApplicationFields) {
-                if (updatedApplicationFields[0]?.page == 2) {
-
-                    // console.log("TradingDetail")
-                    // console.log(loadingPageFields)
-                    // console.log(updatedApplicationFields)
-                    // console.log(applicationFields)
-                    fields = updatedApplicationFields
-                }
-            }
-
-        }, [updatedApplicationFields, applicationFields]);
+            console.log("TradingDetail")
+            console.log(updatedApplicationFields)
+            console.log(applicationFields)
+        }, [updatedApplicationFields]);
 
         return (
             <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
@@ -933,8 +918,7 @@ const Form = () => {
         const loadingPageFields = useSelector((state) => state?.application?.loadingPageFields) || null;
         const [applicationFields, setApplicationFields] = useState(overall_fields?.disciplinary);
 
-        // let fields = updatedApplicationFields ? (updatedApplicationFields[0]?.page == 3 ? updatedApplicationFields : applicationFields) : applicationFields
-        let fields = applicationFields
+        let fields = updatedApplicationFields ? (updatedApplicationFields[0]?.page == 3 ? updatedApplicationFields : applicationFields) : applicationFields
 
         const submitForm = async (data) => {
 
@@ -952,21 +936,11 @@ const Form = () => {
             props.prev()
         }
 
-
         useEffect(() => {
-
-            if (updatedApplicationFields) {
-                if (updatedApplicationFields[0]?.page == 3) {
-
-                    // console.log("DisciplinaryHistory")
-                    // console.log(loadingPageFields)
-                    // console.log(updatedApplicationFields)
-                    // console.log(applicationFields)
-                    fields = updatedApplicationFields
-                }
-            }
-
-        }, [updatedApplicationFields, applicationFields]);
+            console.log("DisciplinaryHistory")
+            console.log(updatedApplicationFields)
+            console.log(applicationFields)
+        }, [updatedApplicationFields]);
 
         return (
             <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
@@ -1101,8 +1075,7 @@ const Form = () => {
         const loadingPageFields = useSelector((state) => state?.application?.loadingPageFields) || null;
         const [applicationFields, setApplicationFields] = useState(overall_fields?.document);
 
-        // let fields = updatedApplicationFields ? (updatedApplicationFields[0]?.page == 4 ? updatedApplicationFields : applicationFields) : applicationFields
-        let fields = applicationFields
+        let fields = updatedApplicationFields ? (updatedApplicationFields[0]?.page == 4 ? updatedApplicationFields : applicationFields) : applicationFields
 
         const submitForm = async (data) => {
 
@@ -1117,21 +1090,11 @@ const Form = () => {
             props.prev()
         }
 
-
         useEffect(() => {
-
-            if (updatedApplicationFields) {
-                if (updatedApplicationFields[0]?.page == 4) {
-
-                    // console.log("SupportingDocuments")
-                    // console.log(loadingPageFields)
-                    // console.log(updatedApplicationFields)
-                    // console.log(applicationFields)
-                    fields = updatedApplicationFields
-                }
-            }
-
-        }, [updatedApplicationFields, applicationFields]);
+            console.log("SupportingDocuments")
+            console.log(updatedApplicationFields)
+            console.log(applicationFields)
+        }, [updatedApplicationFields]);
 
         return (
             <form className="content clearfix" onSubmit={handleSubmit(submitForm)} encType="multipart/form-data">
@@ -1241,8 +1204,7 @@ const Form = () => {
         const loadingPageFields = useSelector((state) => state?.application?.loadingPageFields) || null;
         const [applicationFields, setApplicationFields] = useState(overall_fields?.declaration);
 
-        // let fields = updatedApplicationFields ? (updatedApplicationFields[0]?.page == 5 ? updatedApplicationFields : applicationFields) : applicationFields
-        let fields = applicationFields
+        let fields = updatedApplicationFields ? (updatedApplicationFields[0]?.page == 5 ? updatedApplicationFields : applicationFields) : applicationFields
 
         const submitForm = async (data) => {
 
@@ -1256,22 +1218,6 @@ const Form = () => {
             props.prev()
         }
 
-
-
-        useEffect(() => {
-
-            if (updatedApplicationFields) {
-                if (updatedApplicationFields[0]?.page == 5) {
-
-                    // console.log("ApplicationDeclaration")
-                    // console.log(loadingPageFields)
-                    // console.log(updatedApplicationFields)
-                    // console.log(applicationFields)
-                    fields = updatedApplicationFields
-                }
-            }
-
-        }, [updatedApplicationFields, applicationFields]);
 
         return (
             <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
