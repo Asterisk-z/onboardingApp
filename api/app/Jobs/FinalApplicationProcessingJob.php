@@ -65,8 +65,8 @@ class FinalApplicationProcessingJob implements ShouldQueue
 
         $pdfMerger = PDFMerger::init();
 
-        $pdfMerger->addPDF(storage_path('/app/public/' . $application->meg_executed_membership_agreement), 'all');
         $pdfMerger->addPDF(storage_path('/app/public/' . $application->e_success_letter), 'all');
+        $pdfMerger->addPDF(storage_path('/app/public/' . $application->meg_executed_membership_agreement), 'all');
 
         $pdfMerger->merge();
         $pdfMerger->save(storage_path("/app/public/agreement_and_letter/member{$application->id}.pdf"));

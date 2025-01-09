@@ -664,10 +664,10 @@ class Utility
         $query = $query->whereIn('role_id', [Role::ARAUTHORISER, Role::ARINPUTTER]);
 
         if (request('startDate')) {
-            $query = $query->where('created_at', '>', Carbon::create(request('startDate')));
+            $query = $query->where('created_at', '>', Carbon::parse(request('startDate')));
         }
         if (request('endDate')) {
-            $query = $query->where('created_at', '<', Carbon::create(request('endDate')));
+            $query = $query->where('created_at', '<', Carbon::parse(request('endDate')));
         }
         if (request('institution')) {
             $query = $query->where('institution_id', request('institution'));
