@@ -100,13 +100,13 @@ const ActionTab = (props) => {
 
     return (
         <>
-            {aUser?.user_data?.id == tabItem.internal?.submitted_by && <>
+            {(aUser?.user_data?.id == tabItem.internal?.submitted_by) && <>
                 {tabItem.internal?.show_form == 1 ? <>
                     <button className="btn btn-sm btn-secondary" color="secondary" onClick={(ev) => navigate(`${process.env.PUBLIC_URL}/application/${tabItem.internal?.application_uuid}`)}>Continue Application</button>
                 </> : <>
-                    <button className="btn btn-sm btn-secondary" color="secondary" onClick={(ev) => navigate(`${process.env.PUBLIC_URL}/application_detail/${tabItem.internal?.application_uuid}`)} >
+                    {tabItem?.internal?.concession_stage == 1 && <button className="btn btn-sm btn-secondary" color="secondary" onClick={(ev) => navigate(`${process.env.PUBLIC_URL}/application_detail/${tabItem.internal?.application_uuid}`)} >
                         {buttonText}
-                    </button>
+                    </button>}
                 </>}
             </>}
 

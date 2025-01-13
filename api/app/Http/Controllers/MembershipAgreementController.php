@@ -48,14 +48,14 @@ class MembershipAgreementController extends Controller
             return "error";
         }
         // // logger($membershipCategory->code);
-        // $pdf = PDF::loadView('agreement.' . $membershipCategory->code, compact('details'));
-        $pdf = PDF::loadView('agreement.aft', compact('details'));
+        $pdf = PDF::loadView('agreement.' . $membershipCategory->code, compact('details'));
+        // $pdf = PDF::loadView('agreement.rml', compact('details'));
         Storage::put('public/agreement/e_membership_agreement' . $application->id . '.pdf', $pdf->output());
         $application->membership_agreement = 'agreement/e_membership_agreement' . $application->id . '.pdf';
         $application->save();
 
-        // return view('agreement.' . $membershipCategory->code, ['details' => $details]);
-        return view('agreement.aft', ['details' => $details]);
+        return view('agreement.' . $membershipCategory->code, ['details' => $details]);
+        // return view('agreement.rml', ['details' => $details]);
 
     }
 
@@ -64,7 +64,6 @@ class MembershipAgreementController extends Controller
 
         $uuid = request('uuid');
         $application = Application::where('uuid', $uuid)->first();
-        $application = Application::where('id', 1)->first();
 
         $membershipCategory = $application->membershipCategory;
 
