@@ -19,8 +19,9 @@ class DohSeeder extends Seeder
             [
                 'user_id' => 2,
                 'name' => 'Ebenezer Nwoji',
+                'division' => 'Market Oversight',
                 'grade' => 'Senior Vice President',
-                'signature' => 'signature/uH0JVwew5FtnkSbocpYz1xgDqPVFsxESacfeSORl.jpg',
+                'signature' => 'signature/signed.jpg',
             ],
         ];
 
