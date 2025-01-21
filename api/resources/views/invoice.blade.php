@@ -125,7 +125,8 @@
 
                     @endphp
 
-                    @if($name != "vat" && $name != "concession" && ! $invoiceContent->parent_id)
+                    @if($name != "vat" && ! $invoiceContent->parent_id)
+                    {{-- @if($name != "vat" && $name != "concession" && ! $invoiceContent->parent_id)  --}}
                     <tr style="height: 70px;">
                         <td style="text-align: center;">
                             {{$i}}
@@ -149,8 +150,11 @@
                             $subTotal += $invoiceContent->value;
                             }
                             @endphp
+
                             <p style="text-align: center;">{{formatNumber($invoiceContent->value)}}</p>
+
                             @foreach($children as $child)
+
                             @php
                             if($child->type == 'credit'){
                             $subTotal -= $child->value;
@@ -161,10 +165,16 @@
                             }
                             @endphp
                             <p style="text-align: center;">({{formatNumber($child->value)}})</p>
+
                             @endforeach
+
                             @endif
                         </td>
                         <td style="text-align: center;">
+                            @if($invoiceContent->type == 'credit')
+                            {{ "-" }}
+                            @endif
+
                             @if($hasChildren == false)
                             {{formatNumber($invoiceContent->value)}}
                             @endif
@@ -173,28 +183,28 @@
                             @endif
                         </td>
                     </tr>
-                    @endif
                     @php
                     $i++;
                     @endphp
+                    @endif
                     @endforeach
 
                     <tr style="text-align: right;font-weight: 700;">
                         <td></td>
-                        <td>Total</td>
-                        <td></td>
+                        <td colspan="2">Total</td>
+                        {{-- <td></td>  --}}
                         <td>{{$total}}</td>
                     </tr>
                     <tr style="text-align: right;font-weight: 700;">
                         <td></td>
-                        <td>VAT</td>
-                        <td></td>
+                        <td colspan="2">VAT</td>
+                        {{-- <td></td>  --}}
                         <td>{{$vat}}</td>
                     </tr>
                     <tr style="text-align: right;font-weight: 700;">
                         <td></td>
-                        <td>Amount Due</td>
-                        <td></td>
+                        <td colspan="2">Amount Due</td>
+                        {{-- <td></td>  --}}
                         <td>{{$amountDue}}</td>
                     </tr>
                 </table>

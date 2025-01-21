@@ -11,7 +11,7 @@ import { HeaderLogo } from "pages/components/HeaderLogo";
 import DatePicker from "react-datepicker";
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 import { loadPageFields, loadAllFields, loadExtra, uploadField, fetchApplication, submitPage, updateStep } from "redux/stores/membership/applicationStore";
-import { UpdateDisclosure } from "redux/stores/membership/applicationProcessStore";
+import { UpdateDisclosure, fetchApplicationDisclosureContent } from "redux/stores/membership/applicationProcessStore";
 import moment from 'moment';
 import Swal from "sweetalert2";
 
@@ -32,11 +32,14 @@ const Form = () => {
     const [showDisclosureModal, setShowDisclosureModal] = useState(false);
 
     const application_details = useSelector((state) => state?.application?.application_details) || null;
+    const application_disclosure_details = useSelector((state) => state?.applicationProcess?.application_disclosure_details) || null;
+
     useEffect(() => {
         dispatch(fetchApplication({ "application_uuid": application_uuid }));
     }, [dispatch]);
 
     const $application_details = application_details ? JSON.parse(application_details) : null;
+    const $application_disclosure_details = application_disclosure_details ? JSON.parse(application_disclosure_details) : null;
 
     const [unChangeableField, setUnChangeableField] = useState(["companyName", "rcNumber", "dateOfIncorporation", "placeOfIncorporation"]);
 
@@ -49,8 +52,8 @@ const Form = () => {
     useEffect(() => {
 
         if ($application_details && !$application_details?.disclosure_stage && !showDisclosureModal) {
+            dispatch(fetchApplicationDisclosureContent({ "application_uuid": application_uuid }));
             setModalDisclosureStageView(true)
-
         } else {
             setModalDisclosureStageView(false)
             setShowDisclosureForm(false)
@@ -82,8 +85,6 @@ const Form = () => {
         // }, 4000)
 
     }
-
-
 
     const actionDisclosure = async (action) => {
 
@@ -1488,25 +1489,26 @@ const Form = () => {
                                                         {`${$application_details?.disclosure_content?.body}`}
                                                     </>} */}
 
-                                                    {!showDisclosureForm && <>
-
+                                                    {(!showDisclosureForm && $application_disclosure_details) && <>
+                                                        {/* {application_disclosure_details} */}
                                                         <p>Declaration of prior disclosure letter</p>
-                                                        <p>{moment().format('MMM. D, YYYY HH:mm')}</p>
+                                                        <p>{moment().format('MMM. D, YYYY')}</p>
+                                                        {/* <p>{moment().format('MMM. D, YYYY HH:mm')}</p> */}
 
-                                                        <p>DECLARATION OF PRIOR DISCLOSURE – [NAME OF MEMBER]</p>
+                                                        <p className="text-uppercase">DECLARATION OF PRIOR DISCLOSURE – [{$application_disclosure_details.member_name}]</p>
 
                                                         <p>
-                                                            With reference to [Name of Member’s] application for membership in the FMDQ Securities Exchange Limited (“FMDQ Exchange” or the “Exchange”) [Name of New Membership Category] membership category, we declare as follows:
+                                                            With reference to [{$application_disclosure_details.member_name}’s] application for membership in the FMDQ Securities Exchange Limited (“FMDQ Exchange” or the “Exchange”) [{$application_disclosure_details.membership_category_name} Category] membership category, we declare as follows:
                                                         </p>
                                                         {/* <p> */}
                                                         <ol className="">
-                                                            <li>1. The required documents/disclosures for onboarding as a [Name of Previous Membership Category] have previously been provided to the Exchange.</li><br />
+                                                            <li>1. The required documents/disclosures for onboarding as a {$application_disclosure_details.previous_membership_category} Category have previously been provided to the Exchange.</li><br />
                                                             <li>2. The referenced documents/disclosures remain valid and subsisting and no amendment/alteration or material change has occurred, and no amendment has been made to the document(s) previously filed with and/or disclosure(s) made to the Exchange.</li><br />
                                                             <li>3. Where there is an amendment/alteration or material change in the documents/disclosures provided above, we shall upload the valid and subsisting documentation when completing the Application Form.</li><br />
                                                         </ol>
                                                         {/* </p> */}
                                                         <p><strong>Yours faithfully,</strong></p>
-                                                        <p><strong>FOR: [Name of Member]</strong></p>
+                                                        <p className="text-uppercase"><strong>FOR: [{$application_disclosure_details.member_name}]</strong></p>
                                                         <br />
                                                         <br />
                                                         <br />
@@ -1515,6 +1517,9 @@ const Form = () => {
                                                         <p><strong>__________________________</strong></p>
                                                         <p><strong>[Authorised Signatory]</strong></p>
 
+                                                        <br />
+                                                        <br />
+                                                        {/* <p>The Declaration of Prior Disclosure should be downloaded and reproduced on your institution’s letterhead</p> */}
                                                         {/* </CardText> */}
                                                         <Button color="primary" onClick={() => setShowDisclosureForm(true)} className="mx-2">Accept</Button>
                                                         <Button color="warning" onClick={() => actionDisclosure('reject')} className="mx-2" >Reject</Button>
@@ -1524,7 +1529,7 @@ const Form = () => {
                                                         <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
 
                                                             <h3>Disclosure Letter</h3>
-                                                            <p>the Declaration of Prior Disclosure should be downloaded and reproduced on your institution’s letterhead</p>
+                                                            <p>The Declaration of Prior Disclosure should be downloaded and reproduced on your institution’s letterhead</p>
                                                             <ul>
                                                                 <li>
                                                                     {$application_details?.disclosure_link && <a href={$application_details?.disclosure_link} target="_blank" className="btn btn-primary">Download  Disclosure Letter</a>}

@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { errorHandler, successHandler } from "utils/Functions";
 import queryGenerator from "utils/QueryGenerator";
-const initialState = { all_institutions: null, all_institution_report: null, process_report: null, all: null, list: null, latest_evidence: null, invoice_download: null, all_fields: null, list_extra: {}, status_list: null, transfer_list: null, user: null, total: null, error: "", loading: false };
+const initialState = { all_institutions: null, application_disclosure_details: null, all_institution_report: null, process_report: null, all: null, list: null, latest_evidence: null, invoice_download: null, all_fields: null, list_extra: {}, status_list: null, transfer_list: null, user: null, total: null, error: "", loading: false };
 
 export const loadApplications = createAsyncThunk(
   "applicationProcess/loadApplications",
@@ -91,6 +91,19 @@ export const UpdateDisclosure = createAsyncThunk(
       return successHandler(data, data.message);
     } catch (error) {
       return errorHandler(error, true);
+    }
+  }
+);
+
+export const fetchApplicationDisclosureContent = createAsyncThunk(
+  "applicationProcess/fetchApplicationDisclosureContent",
+  async (values) => {
+
+    try {
+      const { data } = await axios.get(`membership/application/get_application_disclosure/${values.application_uuid}`);
+      return successHandler(data);
+    } catch (error) {
+      return errorHandler(error);
     }
   }
 );
@@ -601,6 +614,23 @@ const applicationProcess = createSlice({
     },
   },
   extraReducers: (builder) => {
+
+
+    // ====== builders for fetchApplicationDisclosureContent ======
+
+    builder.addCase(fetchApplicationDisclosureContent.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(fetchApplicationDisclosureContent.fulfilled, (state, action) => {
+      state.loading = false;
+      state.application_disclosure_details = JSON.stringify(action.payload?.data?.data);
+    });
+
+    builder.addCase(fetchApplicationDisclosureContent.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
 
     // ====== builders for loadApplications ======
 

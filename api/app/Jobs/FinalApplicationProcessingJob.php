@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Jobs;
 
 use App\Helpers\MailContents;
@@ -7,6 +6,7 @@ use App\Helpers\Utility;
 use App\Models\Application;
 use App\Models\Institution;
 use App\Models\InstitutionMembership;
+use App\Models\MembershipCategory;
 use App\Models\Role;
 use App\Models\User;
 use App\Notifications\InfoNotification;
@@ -33,7 +33,7 @@ class FinalApplicationProcessingJob implements ShouldQueue
     public function __construct($applicationID, $force = false)
     {
         $this->applicationID = $applicationID;
-        $this->force = $force;
+        $this->force         = $force;
     }
 
     /**
@@ -44,9 +44,9 @@ class FinalApplicationProcessingJob implements ShouldQueue
     public function handle()
     {
         $application = Application::find($this->applicationID);
-        $applicant = User::find($application->submitted_by);
+        $applicant   = User::find($application->submitted_by);
 
-        if (!$application->meg2_review_stage || !$application->is_meg_executed_membership_agreement || !$application->is_applicant_executed_membership_agreement || $application->completed_at) {
+        if (! $application->meg2_review_stage || ! $application->is_meg_executed_membership_agreement || ! $application->is_applicant_executed_membership_agreement || $application->completed_at) {
             return;
         }
 
@@ -54,9 +54,9 @@ class FinalApplicationProcessingJob implements ShouldQueue
         $data = Utility::applicationDetails($data);
         $data = $data->first();
 
-        $categoryName = $data->category_name;
-        $companyName = $data->company_name;
-        $companyEmail = $data->company_email;
+        $categoryName        = $data->category_name;
+        $companyName         = $data->company_name;
+        $companyEmail        = $data->company_email;
         $primaryContactEmail = $data->primary_contact_email;
 
         if ($application->e_success_letter_send) {
@@ -73,14 +73,14 @@ class FinalApplicationProcessingJob implements ShouldQueue
 
         //SEND APPLICANT MAIL
         $emailData = [
-            'name' => $companyName,
+            'name'    => $companyName,
             'subject' => MailContents::SuccessfulApplicationSubject(),
             'content' => MailContents::SuccessfulApplicationMail($categoryName),
         ];
 
         $attachment = [
             [
-                "name" => Utility::getFileName("FMDQ Membership Agreement and E-Success Letter - {$companyName} ", $application->meg_executed_membership_agreement),
+                "name"       => Utility::getFileName("FMDQ Membership Agreement and E-Success Letter - {$companyName} ", $application->meg_executed_membership_agreement),
                 "saved_path" => config('app.url') . '' . config('app.storage_path') . "agreement_and_letter/member{$application->id}.pdf",
             ],
             // [
@@ -94,13 +94,13 @@ class FinalApplicationProcessingJob implements ShouldQueue
         ];
 
         // CC email addresses
-        $Meg = Utility::getUsersEmailByCategory(Role::MEG);
-        $Mbg = Utility::getUsersEmailByCategory(Role::MBG);
-        $big = Utility::getUsersEmailByCategory(Role::BIG);
+        $Meg      = Utility::getUsersEmailByCategory(Role::MEG);
+        $Mbg      = Utility::getUsersEmailByCategory(Role::MBG);
+        $big      = Utility::getUsersEmailByCategory(Role::BIG);
         $ccEmails = array_merge($Meg, $Mbg, $big);
 
         if (stripos($categoryName, "Registration Member") !== false) {
-            $blg = Utility::getUsersEmailByCategory(Role::BLG);
+            $blg      = Utility::getUsersEmailByCategory(Role::BLG);
             $ccEmails = array_merge($ccEmails, $blg);
         }
 
@@ -112,7 +112,7 @@ class FinalApplicationProcessingJob implements ShouldQueue
             $old_application->application_type_status = Application::typeStatus['ASN'];
             $old_application->save();
 
-            $institution = InstitutionMembership::where('institution_id', $application->institution_id)->where('membership_category_id', $application->old_membership_category_id)->first();
+            $institution                         = InstitutionMembership::where('institution_id', $application->institution_id)->where('membership_category_id', $application->old_membership_category_id)->first();
             $institution->membership_category_id = $application->membership_category_id;
             $institution->save();
 
@@ -121,10 +121,10 @@ class FinalApplicationProcessingJob implements ShouldQueue
         if ($application->application_type == Application::type['ADD']) {
 
             InstitutionMembership::updateOrCreate([
-                'institution_id' => $application->institution_id,
+                'institution_id'         => $application->institution_id,
                 'membership_category_id' => $application->membership_category_id,
             ], [
-                'institution_id' => $application->institution_id,
+                'institution_id'         => $application->institution_id,
                 'membership_category_id' => $application->membership_category_id,
             ]);
         }
@@ -133,8 +133,8 @@ class FinalApplicationProcessingJob implements ShouldQueue
 
         Utility::applicationTimestamp($application, 'M2EL');
 
-        $application->e_success_letter_send = 1;
-        $application->completed_at = now();
+        $application->e_success_letter_send   = 1;
+        $application->completed_at            = now();
         $application->application_type_status = Application::typeStatus['ASC'];
         $application->save();
 
@@ -147,25 +147,32 @@ class FinalApplicationProcessingJob implements ShouldQueue
         Utility::notifyApplicantFinal($application->id, $emailData, $toEmails, $ccEmails, $attachment);
 
         //Send MSG CC MEG'
-        $Msg = Utility::getUsersByCategory(Role::MSG);
-        $Meg = Utility::getUsersEmailByCategory(Role::MEG);
+        $Msg  = Utility::getUsersByCategory(Role::MSG);
+        $Meg  = Utility::getUsersEmailByCategory(Role::MEG);
         $data = [
             "header" => ["Name", "Membership Category", "Company email address"],
-            "body" => [
+            "body"   => [
                 [$companyName, $categoryName, $companyEmail],
             ],
         ];
 
         Notification::send($Msg, new InfoTableNotification(MailContents::msgProfilingMail($categoryName), MailContents::msgProfilingSubject($categoryName), $data, $Meg));
 
-        //FMDQ Help Desk Cc MEG
-        $HelpDesk = Utility::getUsersByCategory(Role::HELPDESK);
-        $Meg = Utility::getUsersEmailByCategory(Role::MEG);
-        Notification::send($HelpDesk, new InfoNotification(MailContents::helpdeskupdateMail($companyName, $categoryName), MailContents::helpdeskupdateSubject($categoryName), $Meg));
+        if (! in_array($application->membership_category_id, [
+            MembershipCategory::CATEGORIES['AFFILIATE_MEMBER_STANDARD_INDIVIDUAL'],
+            MembershipCategory::CATEGORIES['AFFILIATE_MEMBER_STANDARD_CORPORATE'],
+            MembershipCategory::CATEGORIES['AFFILIATE_MEMBER_FOREIGN_EXCHANGE_TRADING'],
+            MembershipCategory::CATEGORIES['AFFILIATE_MEMBER_FIXED_INCOME'],
+            MembershipCategory::CATEGORIES['AFFILIATE_MEMBER_REGULATOR']])) {
+            //FMDQ Help Desk Cc MEG
+            $HelpDesk = Utility::getUsersByCategory(Role::HELPDESK);
+            $Meg      = Utility::getUsersEmailByCategory(Role::MEG);
+            Notification::send($HelpDesk, new InfoNotification(MailContents::helpdeskupdateMail($companyName, $categoryName), MailContents::helpdeskupdateSubject($categoryName), $Meg));
+        }
 
         //TODO::SEND SECOND MAIL TO HELPDESK
-        $institution = Institution::find($application->institution_id);
-        $membershipCategory = $application->membershipCategory;
+        $institution         = Institution::find($application->institution_id);
+        $membershipCategory  = $application->membershipCategory;
         $compulsoryPositions = $membershipCategory->positions()->where('is_compulsory', 1)->pluck('position_id')->toArray();
 
         $keyofficers = User::whereIn('position_id', $compulsoryPositions)->where('institution_id', $institution->id)->get();

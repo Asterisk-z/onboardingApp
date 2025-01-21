@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Helpers\EventNotificationUtility;
@@ -30,11 +29,11 @@ use Illuminate\Validation\Rule;
 class EventController extends Controller
 {
 
-    protected $certPaperSize = array(0, 0, 800, 480);
+    protected $certPaperSize = [0, 0, 800, 480];
 
     public function view($eventId)
     {
-        if (!$event = Event::find($eventId)) {
+        if (! $event = Event::find($eventId)) {
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, "Record not found");
         }
         return successResponse('Successful', EventResource::make($event));
@@ -60,7 +59,7 @@ class EventController extends Controller
         }
 
         // Filter for past events
-        if (!$request->show_past_events || $request->show_past_events == "0" || $request->show_past_events == "false" && !($request->from_date || $request->to_date)) {
+        if (! $request->show_past_events || $request->show_past_events == "0" || $request->show_past_events == "false" && ! ($request->from_date || $request->to_date)) {
             // Filter for events with a date greater than or equal to today
             $query->whereDate('date', '>=', Carbon::today());
         }
@@ -80,13 +79,13 @@ class EventController extends Controller
         $imagePath = null;
 
         if ($request->hasFile('img')) {
-            $image = $request->file('img');
+            $image     = $request->file('img');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
             $imagePath = $image->storeAs('event_images', $imageName, 'public');
         }
 
         // validate the notification dates
-        $validRegisteredDates = [];
+        $validRegisteredDates   = [];
         $validUnregisteredDates = [];
 
         // split $validated['unregistered_remainder_dates'] by comma.
@@ -116,26 +115,26 @@ class EventController extends Controller
 
         unset($validated['registered_remainder_dates'], $validated['unregistered_remainder_dates'], $validated['img']);
 
-        $validated['image'] = $imagePath;
+        $validated['image']   = $imagePath;
         $validated['user_id'] = $request->user()->id;
 
         $event = Event::create($validated);
 
-        if (!empty($validRegisteredDates)) {
+        if (! empty($validRegisteredDates)) {
             collect($validRegisteredDates)->each(function ($notificationDate) use ($event) {
                 EventNotificationDates::create([
-                    'type' => 'Registered',
-                    'event_id' => $event->id,
+                    'type'          => 'Registered',
+                    'event_id'      => $event->id,
                     'reminder_date' => $notificationDate,
                 ]);
             });
         }
 
-        if (!empty($validUnregisteredDates)) {
+        if (! empty($validUnregisteredDates)) {
             collect($validUnregisteredDates)->each(function ($notificationDate) use ($event) {
                 EventNotificationDates::create([
-                    'type' => 'Unregistered',
-                    'event_id' => $event->id,
+                    'type'          => 'Unregistered',
+                    'event_id'      => $event->id,
                     'reminder_date' => $notificationDate,
                 ]);
             });
@@ -159,7 +158,7 @@ class EventController extends Controller
 
         // Store the image
         if (isset($validated['img']) && $request->hasFile('img')) {
-            $image = $request->file('img');
+            $image     = $request->file('img');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
             $imagePath = $image->storeAs('event_images', $imageName, 'public');
 
@@ -190,11 +189,11 @@ class EventController extends Controller
             // clear the existing records
             EventNotificationDates::where('type', 'Registered')->where('event_id', $event->id)->delete();
 
-            if (!empty($validRegisteredDates)) {
+            if (! empty($validRegisteredDates)) {
                 collect($validRegisteredDates)->each(function ($notificationDate) use ($event) {
                     EventNotificationDates::create([
-                        'type' => 'Registered',
-                        'event_id' => $event->id,
+                        'type'          => 'Registered',
+                        'event_id'      => $event->id,
                         'reminder_date' => $notificationDate,
                     ]);
                 });
@@ -219,11 +218,11 @@ class EventController extends Controller
 
             EventNotificationDates::where('type', 'Unregistered')->where('event_id', $event->id)->delete();
 
-            if (!empty($validUnregisteredDates)) {
+            if (! empty($validUnregisteredDates)) {
                 collect($validUnregisteredDates)->each(function ($notificationDate) use ($event) {
                     EventNotificationDates::create([
-                        'type' => 'Unregistered',
-                        'event_id' => $event->id,
+                        'type'          => 'Unregistered',
+                        'event_id'      => $event->id,
                         'reminder_date' => $notificationDate,
                     ]);
                 });
@@ -256,7 +255,7 @@ class EventController extends Controller
     public function updateInvitePositions(Request $request, Event $event)
     {
         $request->validate([
-            'positions' => 'required|array', // Ensure 'positions' is present and is an array
+            'positions'   => 'required|array', // Ensure 'positions' is present and is an array
             'positions.*' => [
                 'integer',
                 Rule::exists('positions', 'id'), // Ensure each position ID exists in the 'positions' table
@@ -279,18 +278,18 @@ class EventController extends Controller
         $existingPositions = $event->invitePosition()->pluck('position_id')->toArray();
 
         // Determine positions to add and positions to remove
-        $positionToUpdate = array_intersect($positions, $existingPositions);
-        $positionsToAdd = array_diff($positions, $existingPositions);
+        $positionToUpdate  = array_intersect($positions, $existingPositions);
+        $positionsToAdd    = array_diff($positions, $existingPositions);
         $positionsToRemove = array_diff($existingPositions, $positions);
 
         $newPositionToAdd = [];
         // Create new records for positions to add
         foreach ($positionsToAdd as $positionId) {
             $newPositionToAdd[] = [
-                'event_id' => $event->id,
+                'event_id'    => $event->id,
                 'position_id' => $positionId,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at'  => now(),
+                'updated_at'  => now(),
             ];
         }
 
@@ -319,7 +318,7 @@ class EventController extends Controller
 
         if (count($positionsToRemove)) {
             $eventName = $event->name;
-            $users = User::whereIn('position_id', $positionsToRemove)->get();
+            $users     = User::whereIn('position_id', $positionsToRemove)->get();
             EventNotificationUtility::eventUninvited($users, $eventName);
         }
 
@@ -329,7 +328,7 @@ class EventController extends Controller
     public function delete(Request $request, $eventID)
     {
         // did not inject the model so even already deleted records can return success
-        $event = Event::find($eventID);
+        $event  = Event::find($eventID);
         $reason = $request->reason;
         if ($event) {
 
@@ -414,19 +413,19 @@ class EventController extends Controller
         $imagePath = null;
 
         if (isset($request->evidence_of_payment_img) && $request->hasFile('evidence_of_payment_img')) {
-            $image = $request->file('evidence_of_payment_img');
+            $image     = $request->file('evidence_of_payment_img');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
             $imagePath = $image->storeAs('event_pop', $imageName, 'public');
         }
 
-        if ($event->fee > 0 && !$imagePath) {
+        if ($event->fee > 0 && ! $imagePath) {
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, "Evidence of payment is required");
         }
 
         $eventReg = EventRegistration::create([
-            'user_id' => $request->user()->id,
-            'event_id' => $event->id,
-            'status' => ($event->fee > 0) ? EventRegistration::STATUS_PENDING : EventRegistration::STATUS_APPROVED,
+            'user_id'             => $request->user()->id,
+            'event_id'            => $event->id,
+            'status'              => ($event->fee > 0) ? EventRegistration::STATUS_PENDING : EventRegistration::STATUS_APPROVED,
             'evidence_of_payment' => $imagePath,
         ]);
 
@@ -459,12 +458,12 @@ class EventController extends Controller
         $imagePath = null;
 
         if (isset($request->evidence_of_payment_img) && $request->hasFile('evidence_of_payment_img')) {
-            $image = $request->file('evidence_of_payment_img');
+            $image     = $request->file('evidence_of_payment_img');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
             $imagePath = $image->storeAs('event_pop', $imageName, 'public');
         }
 
-        if (!$imagePath) {
+        if (! $imagePath) {
             return errorResponse(ResponseStatusCodes::BAD_REQUEST, "Evidence of payment is required");
         }
 
@@ -519,7 +518,7 @@ class EventController extends Controller
         $oldStatus = $eventReg->status;
 
         //Change approved status to registered
-        $eventReg->status = ($request->status == "Approved") ? EventRegistration::STATUS_APPROVED : EventRegistration::STATUS_DECLINED;
+        $eventReg->status       = ($request->status == "Approved") ? EventRegistration::STATUS_APPROVED : EventRegistration::STATUS_DECLINED;
         $eventReg->admin_remark = $request->reason;
         $eventReg->save();
 
@@ -532,11 +531,14 @@ class EventController extends Controller
 
     public function certificateSample(Event $event)
     {
-        $name = "John Doe";
+        // dd(EventRegistration::all());
+        $applicant = $event->registrations->first();
+        // dd(($event->registrations->first())->user->full_name);
+        $name       = $applicant ? $applicant->user->full_name : "John Doe";
         $isDownload = false;
 
-        $eventName = $event->name;
-        $eventDate = $event->date;
+        $eventName      = $event->name;
+        $eventDate      = $event->date;
         $cert_signature = $event->cert_signature ? config('app.url') . '/storage/app/public/' . $event->cert_signature : null;
 
         return view('mails.certificate', compact('event', 'name', 'isDownload', 'cert_signature'));
@@ -544,11 +546,11 @@ class EventController extends Controller
 
     public function certificateSamplePreview(Event $event)
     {
-        $name = "John Doe";
+        $name       = "John Doe";
         $isDownload = true;
 
-        $eventName = $event->name;
-        $eventDate = $event->date;
+        $eventName      = $event->name;
+        $eventDate      = $event->date;
         $cert_signature = $event->cert_signature ? config('app.url') . '/storage/app/public/' . $event->cert_signature : null;
 
         return view('mails.certificate', compact('event', 'name', 'isDownload', 'cert_signature'));
@@ -556,13 +558,13 @@ class EventController extends Controller
 
     public function certificateSampleDownload(Event $event)
     {
-        $name = "John Doe";
+        $name       = "John Doe";
         $isDownload = true;
 
         $pdf = App::make('dompdf.wrapper');
 
-        $eventName = $event->name;
-        $eventDate = $event->date;
+        $eventName      = $event->name;
+        $eventDate      = $event->date;
         $cert_signature = $event->cert_signature ? config('app.url') . '/storage/app/public/' . $event->cert_signature : null;
 
         $pdf->loadView('mails.certificate', compact('event', 'name', 'isDownload', 'cert_signature'))->setPaper($this->certPaperSize);
@@ -573,18 +575,18 @@ class EventController extends Controller
     public function sendCertificates(Request $request, Event $event)
     {
         $request->validate([
-            'presentation' => 'sometimes|mimes:pdf|max:2048',
-            'event_registrations' => 'required|array',
+            'presentation'          => 'sometimes|mimes:pdf|max:2048',
+            'event_registrations'   => 'required|array',
             'event_registrations.*' => [
                 'integer',
                 Rule::exists('event_registrations', 'id'), // Ensure each  ID exists in the 'EventRegistration' table
             ],
         ]);
-        $event = Event::find(request('eventID'));
+        $event        = Event::find(request('eventID'));
         $presentation = $request->hasFile('presentation') ? $request->file('presentation')->storePublicly('event_presentation', 'public') : null;
 
         $event->is_event_completed = true;
-        $event->presentation = $presentation;
+        $event->presentation       = $presentation;
         $event->save();
 
         $requestedIDs = $request->input('event_registrations');
@@ -635,7 +637,7 @@ class EventController extends Controller
             $signature = $request->hasFile('signature') ? $request->file('signature')->storePublicly('event_signature', 'public') : null;
 
             $event->cert_signature = $signature;
-            $event->signed_by = auth()->user()->id;
+            $event->signed_by      = auth()->user()->id;
             $event->save();
 
             $logMessage = "{$request->user()->email} Signed {$event->name} Event certificate";

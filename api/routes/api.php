@@ -369,6 +369,7 @@ Route::middleware(['auth', 'activeAuth'])->group(function () {
         Route::group(['prefix' => 'membership/application'], function () {
             Route::get('/', [MembershipApplicationController::class, 'application']);
             Route::get('/get_application/{application_uuid}', [ApplicationProcessController::class, 'get_application']);
+            Route::get('/get_application_disclosure/{application_uuid}', [ApplicationProcessController::class, 'get_application_disclosure']);
             Route::get('/all-fields', [MembershipApplicationController::class, 'getAllFields']);
             Route::get('/fields', [MembershipApplicationController::class, 'getField']);
             Route::post('/submitPage', [MembershipApplicationController::class, 'submitPage']);
