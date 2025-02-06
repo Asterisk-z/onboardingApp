@@ -623,7 +623,7 @@ const Form = () => {
 
                                                             <li key={`${option.option_value}${index}`}>
                                                                 <div className="custom-control custom-checkbox custom-control-pro no-control checked">
-                                                                    <input type="checkbox" className="custom-control-input" name="btnCheck" id={`btnCheck${index}`} defaultChecked={checkedBoxes[option.option_value] ? true : false} onChange={(e) => checkedValues({ 'option_value': option.option_value, "field_value": e.target.checked, "option_name": option.option_name })} />
+                                                                    <input type="checkbox" className="custom-control-input" name="btnCheck" id={`btnCheck${index}`} defaultChecked={checkedBoxes[option.option_value] ? true : false} onChange={(e) => checkedValues({ 'option_value': option.option_value, "field_value": e.target.checked, "option_name": option.option_name })} {...register("btnCheck", { required: 'This field is required' })} />
                                                                     <label className="custom-control-label" htmlFor={`btnCheck${index}`}>
                                                                         {option.option_name}
                                                                     </label>
@@ -1149,7 +1149,7 @@ const Form = () => {
                                             <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
                                             <div className="form-control-wrap">
                                                 <div className="input-group">
-                                                    <input type="file" accept="..jpg,.jpeg,.png,.pdf" id={field.name} className="form-control" onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.files[0], "field_type": field.type })} style={{ display: field.field_value?.file_path ? 'none' : 'block' }} />
+                                                    <input type="file" accept={`${field.name == 'CompanyLogo' ? '.jpg,.jpeg,.png' : '.jpg,.jpeg,.png,.pdf'}`} id={field.name} className="form-control" onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.files[0], "field_type": field.type })} style={{ display: field.field_value?.file_path ? 'none' : 'block' }} />
                                                     <label for={field.name} className="form-control" style={{ display: field.field_value?.file_path ? 'block' : 'none' }} >Document Uploaded</label>
 
                                                     <div className="input-group-append">
@@ -1375,7 +1375,8 @@ const Form = () => {
                 <div>
                     <BlockTitle tag="h2" className="text-center">
                         {/* Thank you for completing the Membership Application Form. Kindly proceed to Preview and Submit your Application. */}
-                        Your Application has been submitted and is under review. You will be notified of any feedback soon
+                        {/* Your Application has been submitted and is under review. You will be notified of any feedback soon */}
+                        Thank you for completing the Membership Application Form. Kindly proceed to Preview and Submit your Application.
                     </BlockTitle>
                     <BlockContent className="text-center">
                         <Button color="primary" onClick={(ev) => navigate(`${process.env.PUBLIC_URL}/application_preview/${$application_details.uuid}`)}>

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Helpers;
 
 use App\Models\Application;
@@ -9,33 +8,33 @@ use PDF;
 
 class ESuccessLetter
 {
-    protected $name = null;
-    protected $grade = null;
-    protected $division = null;
-    protected $signature = null;
-    protected $regId = null;
+    protected $name        = null;
+    protected $grade       = null;
+    protected $division    = null;
+    protected $signature   = null;
+    protected $regId       = null;
     protected $designation = null;
-    protected $address = null;
+    protected $address     = null;
     protected $companyName = null;
 
     public function generate(Application $application, $preview = false)
     {
-        $content = null;
-        $category = $application->membership_category_id;
-        $applicant = $application->applicant;
+        $content     = null;
+        $category    = $application->membership_category_id;
+        $applicant   = $application->applicant;
         $this->regId = $applicant->reg_id;
 
-        $data = Application::where('applications.id', $application->id);
+        $data             = Application::where('applications.id', $application->id);
         $application_data = Utility::applicationDetails($data);
         $application_data = $application_data->first();
 
         $this->designation = $application->eSuccess ? $application->eSuccess->designation : $this->designation;
-        $this->address = $application->eSuccess ? $application->eSuccess->address : $this->address;
+        $this->address     = $application->eSuccess ? $application->eSuccess->address : $this->address;
         $this->companyName = $application->eSuccess ? $application->eSuccess->companyName : $this->companyName;
 
         if ($dohData = DohSignature::latest()->first()) {
-            $this->name = $dohData->name;
-            $this->grade = $dohData->grade;
+            $this->name     = $dohData->name;
+            $this->grade    = $dohData->grade;
             $this->division = $dohData->division;
             // $this->signature = "https://adgtest.fmdqgroup.com/newmroisdev/frontend/static/media/FMDQ-Logo.e1becb58179845481667.png";
             // $this->signature = $dohData->signature ? config('app.url') . '/storage/' . $dohData->signature : null;
@@ -122,9 +121,9 @@ class ESuccessLetter
 
     protected function dmbWithoutSECLicenseLetterContent($application)
     {
-        $date = formatDateLong(now());
+        $date        = formatDateLong(now());
         $designation = $this->designation;
-        $address = $this->address;
+        $address     = $this->address;
         $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
@@ -132,10 +131,10 @@ class ESuccessLetter
         return [
             'address' => "<p>$date</p>
                             <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address</span></p>",
-            'title' => "<p><b>APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED DEALING MEMBER (BANK) CATEGORY</b></p>",
-            'body' => "<p  style='text-align: justify;text-justify: inter-word;'>
+            'title'   => "<p><b>APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED DEALING MEMBER (BANK) CATEGORY</b></p>",
+            'body'    => "<p  style='text-align: justify;text-justify: inter-word;'>
                             Having reviewed your application for the Dealing Member (Bank) (DMB)
-                            category of FMDQ Securities Exchange Limited (“FMDQ Exchange”),
+                            category of FMDQ Securities Exchange Limited (<strong>“FMDQ Exchange”</strong>),
                             we are pleased to inform you that your application is successful, and
                             <span style='text-transform: uppercase;font-weight:bolder;'>$companyName ($companyName)</span> will now be profiled on the applicable modules on the
                             'FMDQ e-Markets portal' and e-Fixings (Real Time) sub-module, under the e-Benchmarks module.
@@ -189,9 +188,9 @@ class ESuccessLetter
     protected function dmbWithSECLicenseLetterContent($application)
     {
 
-        $date = formatDateLong(now());
+        $date        = formatDateLong(now());
         $designation = $this->designation;
-        $address = $this->address;
+        $address     = $this->address;
         $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
@@ -199,8 +198,8 @@ class ESuccessLetter
         return [
             'address' => "<p>$date</p>
                             <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address</span></p>",
-            'title' => "<p><b>APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED DEALING MEMBER (BANK) CATEGORY</b></p>",
-            'body' => "<p  style='text-align: justify;text-justify: inter-word;'>
+            'title'   => "<p><b>APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED DEALING MEMBER (BANK) CATEGORY</b></p>",
+            'body'    => "<p  style='text-align: justify;text-justify: inter-word;'>
                             Having reviewed your application for the Dealing Member (Bank) (DMB) category of FMDQ Securities Exchange Limited ('FMDQ Exchange'),
                             we are pleased to inform you that your application is successful, and <span style='text-transform: uppercase;font-weight:bolder;'>$companyName ($companyName)</span>
                             will now be profiled on the applicable modules on the 'FMDQ e-Markets portal' and e-Fixings (Real Time) sub-module, under the e-Benchmarks module.
@@ -247,9 +246,9 @@ class ESuccessLetter
     protected function dmsLetterContent($application)
     {
 
-        $date = formatDateLong(now());
+        $date        = formatDateLong(now());
         $designation = $this->designation;
-        $address = $this->address;
+        $address     = $this->address;
         $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
@@ -257,10 +256,10 @@ class ESuccessLetter
         return [
             'address' => "<p>$date</p>
                             <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address</span></p>",
-            'title' => "<p><b>
+            'title'   => "<p><b>
                             APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED DEALING MEMBER (SPECIALISTS) CATEGORY
                         </b></p>",
-            'body' => "<p  style='text-align: justify;text-justify: inter-word;'>
+            'body'    => "<p  style='text-align: justify;text-justify: inter-word;'>
                             Having reviewed your application for the Dealing Member (Specialists) category of FMDQ Securities Exchange Limited ('FMDQ Exchange'),
                             we are pleased to inform you that your application is successful, and <span style='text-transform: capitalize;'>$companyName</span> will now be profiled on the FMDQ e-Knowledge module.
                         </p>
@@ -307,9 +306,9 @@ class ESuccessLetter
     protected function amcLetterContent($application)
     {
 
-        $date = formatDateLong(now());
+        $date        = formatDateLong(now());
         $designation = $this->designation;
-        $address = $this->address;
+        $address     = $this->address;
         $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
@@ -317,10 +316,10 @@ class ESuccessLetter
         return [
             'address' => "<p>$date</p>
                             <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address</span></p>",
-            'title' => "<p><b>
+            'title'   => "<p><b>
                             APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED ASSOCIATE MEMBER (CLIENTS) CATEGORY
                         </b></p>",
-            'body' => "<p  style='text-align: justify;text-justify: inter-word;'>
+            'body'    => "<p  style='text-align: justify;text-justify: inter-word;'>
                            Having reviewed your application for the Associate Member (Clients) membership category of FMDQ Securities Exchange Limited ('FMDQ Exchange'),
                            we are pleased to inform you that your application is successful, and <span style='text-transform: capitalize;'>$companyName</span> will now be profiled on the applicable modules on the 'FMDQ e-Markets portal'.
                         </p>
@@ -367,9 +366,9 @@ class ESuccessLetter
     protected function amiLetterContent($application)
     {
 
-        $date = formatDateLong(now());
+        $date        = formatDateLong(now());
         $designation = $this->designation;
-        $address = $this->address;
+        $address     = $this->address;
         $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
@@ -377,10 +376,10 @@ class ESuccessLetter
         return [
             'address' => "<p>$date</p>
                             <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address</span></p>",
-            'title' => "<p><b>
+            'title'   => "<p><b>
                            APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED ASSOCIATE MEMBER (INTER-DEALER BROKERS) CATEGORY
                         </b></p>",
-            'body' => "<p  style='text-align: justify;text-justify: inter-word;'>
+            'body'    => "<p  style='text-align: justify;text-justify: inter-word;'>
                             Having reviewed your application for the Associate Member (Inter-Dealer Brokers) membership category of
                             FMDQ Securities Exchange Limited (FMDQ Exchange), we are pleased to inform you that your application is successful,
                             and <span style='text-transform: capitalize;'>$companyName</span> will now be profiled on the applicable modules on the 'FMDQ e-Markets portal'.
@@ -428,9 +427,9 @@ class ESuccessLetter
     protected function ambLetterContent($application)
     {
 
-        $date = formatDateLong(now());
+        $date        = formatDateLong(now());
         $designation = $this->designation;
-        $address = $this->address;
+        $address     = $this->address;
         $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
@@ -438,10 +437,10 @@ class ESuccessLetter
         return [
             'address' => "<p>$date</p>
                             <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address</span></p>",
-            'title' => "<p><b>
+            'title'   => "<p><b>
                            APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED ASSOCIATE MEMBER (BROKERS) CATEGORY
                         </b></p>",
-            'body' => "<p  style='text-align: justify;text-justify: inter-word;'>
+            'body'    => "<p  style='text-align: justify;text-justify: inter-word;'>
                             Having reviewed your application for the Associate Member (Brokers) membership category of
                              FMDQ Securities Exchange Limited (FMDQ Exchange), we are pleased to inform you that your application is successful,
                              and <span style='text-transform: capitalize;'>$companyName</span> will now be profiled on the applicable modules on the 'FMDQ e-Markets portal'.
@@ -489,9 +488,9 @@ class ESuccessLetter
     protected function rmmLetterContent($application)
     {
 
-        $date = formatDateLong(now());
+        $date        = formatDateLong(now());
         $designation = $this->designation;
-        $address = $this->address;
+        $address     = $this->address;
         $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
@@ -499,12 +498,12 @@ class ESuccessLetter
         return [
             'address' => "<p>$date</p>
                             <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address</span></p>",
-            'title' => "<p><b>
+            'title'   => "<p><b>
                            APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED REGISTRATION MEMBER (LISTINGS & QUOTATIONS) CATEGORY
                         </b></p>",
-            'body' => "<p  style='text-align: justify;text-justify: inter-word;'>
+            'body'    => "<p  style='text-align: justify;text-justify: inter-word;'>
                             Having reviewed your application for the Registration Member (Listings & Quotations)
-                            categories of FMDQ Securities Exchange Limited (“FMDQ Exchange”),
+                            categories of FMDQ Securities Exchange Limited (<strong>“FMDQ Exchange”</strong>),
                             we are pleased to inform you that your application is successful, and <span style='text-transform: capitalize;'>$companyName</span>
                             will now be profiled on the applicable modules on the “FMDQ e-Markets portal”.
                         </p>
@@ -551,9 +550,9 @@ class ESuccessLetter
 
     protected function rmlLetterContent($application)
     {
-        $date = formatDateLong(now());
+        $date        = formatDateLong(now());
         $designation = $this->designation;
-        $address = $this->address;
+        $address     = $this->address;
         $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
@@ -561,11 +560,11 @@ class ESuccessLetter
         return [
             'address' => "<p>$date</p>
                             <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address</span></p>",
-            'title' => "<p><b>
+            'title'   => "<p><b>
                            APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED REGISTRATION MEMBER (LISTINGS) CATEGORY
                         </b></p>",
-            'body' => "<p  style='text-align: justify;text-justify: inter-word;'>
-                            Having reviewed your application for the Registration Member (Listings) category of FMDQ Securities Exchange Limited (“FMDQ Exchange”),
+            'body'    => "<p  style='text-align: justify;text-justify: inter-word;'>
+                            Having reviewed your application for the Registration Member (Listings) category of FMDQ Securities Exchange Limited (<strong>“FMDQ Exchange”</strong>),
                              we are pleased to inform you that your application is successful, and <span style='text-transform: capitalize;'>$companyName</span>
                              will now be profiled on the applicable modules on the “FMDQ e-Markets portal”.
                         </p>
@@ -611,9 +610,9 @@ class ESuccessLetter
 
     protected function rmqLetterContent($application)
     {
-        $date = formatDateLong(now());
+        $date        = formatDateLong(now());
         $designation = $this->designation;
-        $address = $this->address;
+        $address     = $this->address;
         $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
@@ -621,12 +620,12 @@ class ESuccessLetter
         return [
             'address' => "<p>$date</p>
                             <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address</span></p>",
-            'title' => "<p><b>
+            'title'   => "<p><b>
                            APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED REGISTRATION MEMBER (QUOTATIONS) CATEGORY
                         </b></p>",
-            'body' => "<p  style='text-align: justify;text-justify: inter-word;'>
+            'body'    => "<p  style='text-align: justify;text-justify: inter-word;'>
                            Having reviewed your application for the Registration Member (Quotations) category of
-                           FMDQ Securities Exchange Limited (“FMDQ Exchange”), we are pleased to inform you that your
+                           FMDQ Securities Exchange Limited (<strong>“FMDQ Exchange”</strong>), we are pleased to inform you that your
                            application is successful, and <span style='text-transform: capitalize;'>$companyName</span> will now be profiled on the applicable modules on the “FMDQ e-Markets portal”.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
@@ -672,9 +671,9 @@ class ESuccessLetter
 
     protected function affLetterContent($application)
     {
-        $date = formatDateLong(now());
+        $date        = formatDateLong(now());
         $designation = $this->designation;
-        $address = $this->address;
+        $address     = $this->address;
         $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
@@ -682,12 +681,12 @@ class ESuccessLetter
         return [
             'address' => "<p>$date</p>
                             <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address</span></p>",
-            'title' => "<p><b>
+            'title'   => "<p><b>
                            APPLICATION FOR THE FMDQ SECURITIES EXCHANGE AFFILIATE MEMBER (FIXED INCOME) CATEGORY
                         </b></p>",
-            'body' => "<p  style='text-align: justify;text-justify: inter-word;'>
+            'body'    => "<p  style='text-align: justify;text-justify: inter-word;'>
                            Having reviewed your application for the Affiliate Member (Fixed Income) category of
-                           FMDQ Securities Exchange Limited (“FMDQ Exchange”), we are pleased to inform you that your
+                           FMDQ Securities Exchange Limited (<strong>“FMDQ Exchange”</strong>), we are pleased to inform you that your
                            application is successful, and <span style='text-transform: capitalize;'>$companyName</span> will now be profiled on the FMDQ e-Knowledge module.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
@@ -734,9 +733,9 @@ class ESuccessLetter
     protected function afcLetterContent($application)
     {
 
-        $date = formatDateLong(now());
+        $date        = formatDateLong(now());
         $designation = $this->designation;
-        $address = $this->address;
+        $address     = $this->address;
         $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
@@ -744,12 +743,12 @@ class ESuccessLetter
         return [
             'address' => "<p>$date</p>
                             <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address</span></p>",
-            'title' => "<p><b>
+            'title'   => "<p><b>
                            APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED AFFILIATE MEMBER (STANDARD) CATEGORY
                         </b></p>",
-            'body' => "<p  style='text-align: justify;text-justify: inter-word;'>
+            'body'    => "<p  style='text-align: justify;text-justify: inter-word;'>
                            Having reviewed your application for the Affiliate Member (Standard) category of FMDQ Securities
-                           Exchange Limited (“FMDQ Exchange”), we are pleased to inform you that your application is successful,
+                           Exchange Limited (<strong>“FMDQ Exchange”</strong>), we are pleased to inform you that your application is successful,
                             and <span style='text-transform: capitalize;'>$companyName</span> will now be profiled on the FMDQ e-Knowledge module of the e-Markets portal.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
@@ -796,9 +795,9 @@ class ESuccessLetter
     protected function afiLetterContent($application)
     {
 
-        $date = formatDateLong(now());
+        $date        = formatDateLong(now());
         $designation = $this->designation;
-        $address = $this->address;
+        $address     = $this->address;
         $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
@@ -806,12 +805,12 @@ class ESuccessLetter
         return [
             'address' => "<p>$date</p>
                             <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address</span></p>",
-            'title' => "<p><b>
+            'title'   => "<p><b>
                             APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED AFFILIATE MEMBER (STANDARD) CATEGORY
                         </b></p>",
-            'body' => "<p  style='text-align: justify;text-justify: inter-word;'>
+            'body'    => "<p  style='text-align: justify;text-justify: inter-word;'>
                           Having reviewed your application for the Affiliate Member (Standard) category of FMDQ Securities Exchange
-                           Limited (“FMDQ Exchange”), we are pleased to inform you that your application is successful, and
+                           Limited (<strong>“FMDQ Exchange”</strong>), we are pleased to inform you that your application is successful, and
                            <span style='text-transform: uppercase;'>$companyName</span> will now be profiled on the FMDQ e-Knowledge module of the e-Markets portal.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>

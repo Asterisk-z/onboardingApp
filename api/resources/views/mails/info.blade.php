@@ -7,7 +7,7 @@
     <title>MROIS</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: Arial, sans-serif !important;
             line-height: 1.6;
             color: #000;
         }

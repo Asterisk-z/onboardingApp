@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Listeners;
 
 use App\Events\ApplicationSubmissionEvent;
@@ -35,9 +34,9 @@ class ApplicationSubmissionListener implements ShouldQueue
      */
     public function handle(ApplicationSubmissionEvent $event)
     {
-        $user = $event->user;
-        $application = $event->application;
-        $institution = $event->institution;
+        $user               = $event->user;
+        $application        = $event->application;
+        $institution        = $event->institution;
         $membershipCategory = $event->membershipCategory;
 
         //Generate Bill and create Invoice
@@ -68,14 +67,14 @@ class ApplicationSubmissionListener implements ShouldQueue
 
         $companyName = getApplicationFieldValue($user, $application, 'companyName');
 
-        $name = $user->first_name . ' ' . $user->last_name;
+        $name         = $user->first_name . ' ' . $user->last_name;
         $categoryName = $membershipCategory->name;
 
         $subject = $this->getSubject($application);
 
         if ($application) {
             $emailData = [
-                'name' => $name,
+                'name'    => $name,
                 'subject' => $subject,
                 'content' => "Thank you for your interest in the $categoryName category of FMDQ Securities Exchange Limited.
                         We are currently reviewing your application and will provide feedback within three (3) business
@@ -87,7 +86,7 @@ class ApplicationSubmissionListener implements ShouldQueue
         $toEmails = [$user->email, $companyEmail, $contactEmail];
 
         // CC email addresses
-        $Meg = Utility::getUsersEmailByCategory(Role::MEG);
+        $Meg      = Utility::getUsersEmailByCategory(Role::MEG);
         $ccEmails = $Meg;
 
         Utility::emailHelper($emailData, $toEmails, $ccEmails);
@@ -99,24 +98,26 @@ class ApplicationSubmissionListener implements ShouldQueue
         $tos = array_merge($Meg, $Mbg, $fsd);
 
         $categoryNameWithPronoun = Utility::categoryNameWithPronoun($categoryName);
-        $applicationType = applicationType($application);
+        $applicationType         = applicationType($application);
+        $applicationTypeText     = $application->application_type == Application::type['APP'] ? "" : " an application for ";
+
         $emailD = [
-            'name' => 'Team',
+            'name'    => 'Team',
             'subject' => $subject,
-            'content' => "A new applicant, $companyName, has successfully submitted  an application for
+            'content' => "A new applicant, $companyName, has successfully submitted  $applicationTypeText
                             a Membership $applicationType on the MROIS Portal as $categoryNameWithPronoun.",
         ];
 
         Utility::emailHelper($emailD, $tos);
 
         //SEND EMAIL TO MBG cc MEG and MBG for concession
-        $to = $Mbg;
+        $to  = $Mbg;
         $ccs = array_merge($Meg, $fsd);
 
         $emailC = [
-            'name' => 'Team',
+            'name'    => 'Team',
             'subject' => 'New Membership Application: Concession Confirmation',
-            'content' => "A new applicant, $companyName, has successfully submitted  an application for a Membership $applicationType as $categoryNameWithPronoun
+            'content' => "A new applicant, $companyName, has successfully submitted  $applicationTypeText a Membership $applicationType as $categoryNameWithPronoun
              on the MROIS Portal. Kindly grant a concession (where applicable).",
         ];
 
@@ -125,7 +126,7 @@ class ApplicationSubmissionListener implements ShouldQueue
 
     protected function generateApplicationBill($user, $application, $membershipCategory, $institution)
     {
-        $year = Carbon::now()->format('Y');
+        $year               = Carbon::now()->format('Y');
         $discounted_percent = $discounted_amount = $vat = $total = 0;
 
         $application_fee = $membershipCategory->application_fee;
@@ -134,31 +135,31 @@ class ApplicationSubmissionListener implements ShouldQueue
         $application_month = Carbon::now()->format('m');
         if ($discounted = MonthlyDiscount::where('month', $application_month)->first()) {
             $discounted_percent = $discounted->discounted_percent ?? 0;
-            $discounted_amount = 0.01 * $discounted_percent * $membership_dues;
+            $discounted_amount  = 0.01 * $discounted_percent * $membership_dues;
         }
 
         $total = $application_fee + $membership_dues - $discounted_amount;
 
         if ($tax = SystemSetting::where('name', 'tax')->first()) {
             $tax_val = $tax->value ?? 0;
-            $vat = (0.01 * $tax_val) * $total;
+            $vat     = (0.01 * $tax_val) * $total;
         }
 
         //Create Invoice
         $invoice = Invoice::create([
             'invoice_number' => InvoiceGenerator::generateInvoiceNumber(),
-            'reference' => InvoiceGenerator::generateInvoiceReference(),
+            'reference'      => InvoiceGenerator::generateInvoiceReference(),
         ]);
 
         //Create Invoice content
         if ($application_fee) {
             InvoiceContent::create([
-                "invoice_id" => $invoice->id,
-                "name" => "{$membershipCategory->name} - Commercial (National) - Application Fee (Non-Refundable)",
-                "value" => $application_fee,
+                "invoice_id"  => $invoice->id,
+                "name"        => "{$membershipCategory->name} - Commercial (National) - Application Fee (Non-Refundable)",
+                "value"       => $application_fee,
                 "is_discount" => 0,
-                "parent_id" => null,
-                "type" => "debit",
+                "parent_id"   => null,
+                "type"        => "debit",
             ]);
         }
 
@@ -166,34 +167,34 @@ class ApplicationSubmissionListener implements ShouldQueue
 
         if ($membership_dues) {
             $due = InvoiceContent::create([
-                "invoice_id" => $invoice->id,
-                "name" => "{$membershipCategory->name} - {$year} Membership Dues",
-                "value" => $membership_dues,
+                "invoice_id"  => $invoice->id,
+                "name"        => "{$membershipCategory->name} - {$year} Membership Dues",
+                "value"       => $membership_dues,
                 "is_discount" => 0,
-                "parent_id" => null,
-                "type" => "debit",
+                "parent_id"   => null,
+                "type"        => "debit",
             ]);
         }
 
         if ($discounted_amount && $due) {
             InvoiceContent::create([
-                "invoice_id" => $invoice->id,
-                "name" => "{$discounted_percent}% Discount on {$year} Membership Dues",
-                "value" => $discounted_amount,
+                "invoice_id"  => $invoice->id,
+                "name"        => "{$discounted_percent}% Discount on {$year} Membership Dues",
+                "value"       => $discounted_amount,
                 "is_discount" => 1,
-                "parent_id" => $due->id,
-                "type" => "credit",
+                "parent_id"   => $due->id,
+                "type"        => "credit",
             ]);
         }
 
         if ($vat) {
             InvoiceContent::create([
-                "invoice_id" => $invoice->id,
-                "name" => "VAT",
-                "value" => $vat,
+                "invoice_id"  => $invoice->id,
+                "name"        => "VAT",
+                "value"       => $vat,
                 "is_discount" => 0,
-                "parent_id" => null,
-                "type" => "debit",
+                "parent_id"   => null,
+                "type"        => "debit",
             ]);
         }
 

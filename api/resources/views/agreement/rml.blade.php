@@ -136,80 +136,80 @@
 
             <table class="p2Table">
                 <tr>
-                    <td>1. Definitions and Interpretation ................................................................................................................................ 3</td>
+                    <td>1. Definitions and Interpretation ..................................................................................................................................... 3</td>
                 </tr>
                 <tr>
-                    <td>2. Market Standards....................................................................................................................................... 8</td>
+                    <td>2. Market Standards......................................................................................................................................................... 8</td>
                 </tr>
                 <tr>
-                    <td>3. Non-Agency Relationship ............................................................................................................................................. 9</td>
+                    <td>3. Non-Agency Relationship ........................................................................................................................................... 9</td>
                 </tr>
                 <tr>
-                    <td>4. Disclosure Requirements ............................................................................................................................................... 9</td>
+                    <td>4. Disclosure Requirements ............................................................................................................................................. 9</td>
                 </tr>
                 <tr>
-                    <td>5. Anti-Money Laundering .............................................................................................................................................. 10</td>
+                    <td>5. Anti-Money Laundering ............................................................................................................................................. 10</td>
                 </tr>
                 <tr>
-                    <td>6. Examination of Documents .................................................................................................................................... 10</td>
+                    <td>6. Examination of Documents ........................................................................................................................................ 10</td>
                 </tr>
                 <tr>
-                    <td>7. Fees ........................................................................................................................... 11</td>
+                    <td>7. Fees ............................................................................................................................................................................. 11</td>
                 </tr>
                 <tr>
-                    <td>8. Rules and Guidelines ............................................................................................................................................. 11</td>
+                    <td>8. Rules and Guidelines .................................................................................................................................................. 11</td>
                 </tr>
                 <tr>
-                    <td>9. Code of Conduct ................................................................................................................................................................ 12</td>
+                    <td>9. Code of Conduct ......................................................................................................................................................... 12</td>
                 </tr>
                 <tr>
-                    <td>10. Member’s Obligations ............................................................................................................................................... 14</td>
+                    <td>10. Member’s Obligations .............................................................................................................................................. 14</td>
                 </tr>
 
                 <tr>
-                    <td>11. Discipline of the Member ............................................................................................................................................... 15</td>
+                    <td>11. Discipline of the Member ......................................................................................................................................... 15</td>
                 </tr>
                 <tr>
-                    <td>12. Termination of Membership ............................................................................................................................................ 15</td>
+                    <td>12. Termination of Membership ..................................................................................................................................... 15</td>
                 </tr>
                 <tr>
-                    <td>13. Reporting Requirements .................................................................................................................................................. 16</td>
+                    <td>13. Reporting Requirements ........................................................................................................................................... 16</td>
                 </tr>
                 <tr>
-                    <td>14. Willingness to Promote FMDQ Exchange ..................................................................................................................... 17</td>
+                    <td>14. Willingness to Promote FMDQ Exchange ................................................................................................................ 17</td>
                 </tr>
                 <tr>
-                    <td>15. Confidentiality and Data Protection ............................................................................................................................... 17</td>
+                    <td>15. Confidentiality and Data Protection .......................................................................................................................... 17</td>
                 </tr>
                 <tr>
                     <td>16. Limitation of Liability ............................................................................................................................................... 18</td>
                 </tr>
                 <tr>
-                    <td>17. Indemnity ............................................................................................................................................... 18</td>
+                    <td>17. Indemnity ................................................................................................................................................................... 18</td>
                 </tr>
                 <tr>
-                    <td>18. Notices ............................................................................................................................................... 19</td>
+                    <td>18. Notices ....................................................................................................................................................................... 19</td>
                 </tr>
                 <tr>
-                    <td>19. Binding Agreement ............................................................................................................................................... 19</td>
+                    <td>19. Binding Agreement .................................................................................................................................................... 19</td>
                 </tr>
                 <tr>
-                    <td>20. Non-Waiver ............................................................................................................................................... 20</td>
+                    <td>20. Non-Waiver ................................................................................................................................................................ 20</td>
                 </tr>
                 <tr>
-                    <td>21. Severability ............................................................................................................................................... 20</td>
+                    <td>21. Severability ................................................................................................................................................................ 20</td>
                 </tr>
                 <tr>
-                    <td>22. Governing Law ............................................................................................................................................... 20</td>
+                    <td>22. Governing Law .......................................................................................................................................................... 20</td>
                 </tr>
                 <tr>
-                    <td>23. Dispute Resolution ............................................................................................................................................... 20</td>
+                    <td>23. Dispute Resolution ..................................................................................................................................................... 20</td>
                 </tr>
                 <tr>
-                    <td>24. Amendment ............................................................................................................................................... 20</td>
+                    <td>24. Amendment ................................................................................................................................................................. 20</td>
                 </tr>
                 <tr>
-                    <td>25. Execution ............................................................................................................................................... 20</td>
+                    <td>25. Execution .................................................................................................................................................................... 20</td>
                 </tr>
 
             </table>
@@ -235,8 +235,7 @@
                     <td>
                         <h4>AND</h4>
                         <p>
-                            {{ $details->name }} (RC NO. {{ $details->rc_number }}), </br>
-                            a company incorporated under the laws of the Federal Republic of Nigeria with its registered office at
+                            {{ $details->name }} (RC NO. {{ $details->rc_number }}), a company incorporated under the laws of the Federal Republic of Nigeria with its registered office at
                             {{ $details->address }} (the <strong>“Member”</strong> which expression shall where the context so admits
                             include its successors and assigns) of the second part.
                         </p>
@@ -338,12 +337,52 @@
                                             <td style="width: 200px !important; vertical-align: top;"><strong>“Confidential Information”</strong></td>
                                             <td style="width: 350px; vertical-align: top;">
                                                 means any information, communication or data, about any of the Parties or their respective affairs or business in any form, whether oral, written, graphic, or electromagnetic, including all plans, proposals, forecasts, technical processes, methodologies, know-how, information about technological or organisational systems, customers, personnel, business activities, marketing, financial research or development activities, databases, Intellectual Property Rights, the terms and conditions of this Agreement and other information in relation to it, whether or not it is specifically marked confidential but excluding any information, which:
-                                                <ol>
-                                                    <li> was already known to the Recipient at the time of its disclosure to the Recipient and is not subject to confidentiality restrictions;</li>
-                                                    <li>is in the public domain at the date of its disclosure to the Recipient or thereafter enters the public domain through no fault of the Recipient (but only after it becomes part of the public domain); or</li>
-                                                    <li>is independently developed by the Recipient without use or reference to the Disclosing Party’s confidential information, as shown by documents and other competent evidence in the receiving Party’s possession; or</li>
-                                                    <li>is required by law or regulation to be disclosed by the Recipient, provided that the Recipient, where it is reasonable in the circumstances and to the extent permitted by law or regulation, shall promptly give the Disclosing Party written notice of such requirement prior to any disclosure so that the Disclosing Party may seek a protective order or other appropriate relief;</li>
-                                                </ol>
+                                                <div class="nonAgency">
+                                                    <ol>
+                                                        <li>
+                                                            <table>
+                                                                <tr>
+                                                                    <td style="width: 10px; vertical-align: top;">1.1</td>
+                                                                    <td style="vertical-align: top;">
+                                                                        was already known to the Recipient at the time of its disclosure to the Recipient and is not subject to confidentiality restrictions;
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </li>
+                                                        <li>
+                                                            <table>
+                                                                <tr>
+                                                                    <td style="width: 10px; vertical-align: top;">1.2</td>
+                                                                    <td style="vertical-align: top;">
+                                                                        is in the public domain at the date of its disclosure to the Recipient or thereafter enters the public domain through no fault of the Recipient (but only after it becomes part of the public domain); or
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </li>
+                                                        <li>
+                                                            <table>
+                                                                <tr>
+                                                                    <td style="width: 10px; vertical-align: top;">1.3</td>
+                                                                    <td style="vertical-align: top;">
+                                                                        is independently developed by the Recipient without use or reference to the Disclosing Party’s confidential information, as shown by documents and other competent evidence in the receiving Party’s possession; or
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </li>
+                                                        <li>
+                                                            <table>
+                                                                <tr>
+                                                                    <td style="width: 10px; vertical-align: top;">1.4</td>
+                                                                    <td style="vertical-align: top;">
+                                                                        is required by law or regulation to be disclosed by the Recipient, provided that the Recipient, where it is reasonable in the circumstances and to the extent permitted by law or regulation, shall promptly give the Disclosing Party written notice of such requirement prior to any disclosure so that the Disclosing Party may seek a protective order or other appropriate relief;
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </li>
+
+                                                    </ol>
+                                                </div>
+
                                             </td>
                                         </tr>
                                         <tr>
@@ -2236,7 +2275,7 @@
 
 
                             <h4>Signed for and on behalf of the within-named <br>
-                                {{ $details->name }}:</h4>
+                                <span style="text-transform: uppercase;">{{ $details->name }}</span>:</h4>
 
                             <table>
                                 <tr>

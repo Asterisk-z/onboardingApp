@@ -1306,7 +1306,7 @@
 
 
                             <h4>Signed for and on behalf of the within-named <br>
-                                {{ $details->name }}:</h4>
+                                <span style="text-transform: uppercase;">{{ $details->name }}</span>:</h4>
 
                             <table>
                                 <tr>

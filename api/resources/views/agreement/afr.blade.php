@@ -196,8 +196,7 @@
                     <td>
                         <h4>AND</h4>
                         <p>
-                            {{ $details->name }} (RC NO. {{ $details->rc_number }}), </br>
-                            a company incorporated under the laws of the Federal Republic of Nigeria with its registered office at
+                            {{ $details->name }} (RC NO. {{ $details->rc_number }}), a company incorporated under the laws of the Federal Republic of Nigeria with its registered office at
                             {{ $details->address }} (the <strong>“Member”</strong> which expression shall where the context so admits
                             include its successors and assigns) of the second part.
                         </p>
@@ -816,7 +815,7 @@
 
 
                             <h4>Signed for and on behalf of the within-named <br>
-                                {{ $details->name }}:</h4>
+                                <span style="text-transform: uppercase;">{{ $details->name }}</span>:</h4>
 
                             <table>
                                 <tr>

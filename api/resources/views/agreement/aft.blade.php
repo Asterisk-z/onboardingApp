@@ -266,7 +266,7 @@
                             <p>
                                 Signed for and on behalf of
                                 the aforementioned <br>
-                                <strong> FX Trading (Corporate): {{ $details->name }} </strong></p>
+                                <strong> FX Trading (Corporate): <span style="text-transform: uppercase;">{{ $details->name }}</span> </strong></p>
 
 
 

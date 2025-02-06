@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Helpers;
 
 use App\Models\User;
@@ -13,7 +12,7 @@ class MailContents
 
     public static function signupMail($email, $date, $signature): string
     {
-        $url = config("app.front_end_url") . "/set/password?signature=" . $signature . "&email=" . $email;
+        $url  = config("app.front_end_url") . "/set/password?signature=" . $signature . "&email=" . $email;
         $date = formatDate($date);
         return "<p>Your account has been successfully created.</p>
         <p>Your login details are as follows:</p>
@@ -114,7 +113,7 @@ class MailContents
     public static function newMegSanctionMessage($ar_reg, $ar_name): string
     {
         $url = config("app.front_end_url");
-        return "<p>Please be informed that the {$ar_reg} Of {$ar_name} has been sanction for an infraction. <br>
+        return "<p>Please be informed that the {$ar_reg} of {$ar_name} has been issued sanction for an infraction. <br>
         Kindly login to <a href=$url>Notification of Change link</a>
                     to view change. </p>";
     }
@@ -392,7 +391,7 @@ class MailContents
 
     public static function helpdeskupdateMail($companyName, $categoryName): string
     {
-        $url = "https://fmdqgroup.com/exchange/Membership/";
+        $url          = "https://fmdqgroup.com/exchange/Membership/";
         $categoryName = Utility::categoryNameFromWebsite($categoryName);
         return "<p>Kindly add $companyName to the $categoryName Register on FMDQ Exchange Website.
                 The page link is as stated below:</p>
@@ -462,7 +461,7 @@ class MailContents
 
     public static function arNotificationOfChangeMail(User $user, $request_id): string
     {
-        $url = config("app.front_end_url");
+        $url   = config("app.front_end_url");
         $ar_id = $user->getRegID();
         return "<p>Please be informed that a notification of change has been
         made by an AR of your Institution with AR ID `$ar_id`.
@@ -477,8 +476,8 @@ class MailContents
 
     public static function megNotificationOfChangeMail(User $user, $institution_name): string
     {
-        $url = config("app.front_end_url");
-        $ar_id = $user->getRegID();
+        $url        = config("app.front_end_url");
+        $ar_id      = $user->getRegID();
         $memberName = $user->full_name;
         return "<p>Please be informed that a notification of change has been made
         by the $ar_id of $institution_name.

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Helpers\DisclosureLetter;
@@ -17,7 +16,7 @@ class MembershipAgreementController extends Controller
     public function preview($uuid)
     {
 
-        $uuid = request('uuid');
+        $uuid        = request('uuid');
         $application = Application::where('uuid', $uuid)->first();
 
         $membershipCategory = $application->membershipCategory;
@@ -44,25 +43,26 @@ class MembershipAgreementController extends Controller
 
         $membershipCategory = $application->membershipCategory;
 
-        if (!$details = MemberAgreement::where('application_id', $application->id)->first()) {
+        if (! $details = MemberAgreement::where('application_id', $application->id)->first()) {
             return "error";
         }
+        // // dd($application->id);
         // // logger($membershipCategory->code);
-        $pdf = PDF::loadView('agreement.' . $membershipCategory->code, compact('details'));
-        // $pdf = PDF::loadView('agreement.rml', compact('details'));
+        // $pdf = PDF::loadView('agreement.' . $membershipCategory->code, compact('details'));
+        $pdf = PDF::loadView('agreement.rml', compact('details'));
         Storage::put('public/agreement/e_membership_agreement' . $application->id . '.pdf', $pdf->output());
         $application->membership_agreement = 'agreement/e_membership_agreement' . $application->id . '.pdf';
         $application->save();
 
-        return view('agreement.' . $membershipCategory->code, ['details' => $details]);
-        // return view('agreement.rml', ['details' => $details]);
+        // return view('agreement.' . $membershipCategory->code, ['details' => $details]);
+        return view('agreement.rml', ['details' => $details]);
 
     }
 
     public function previewLetter($uuid)
     {
 
-        $uuid = request('uuid');
+        $uuid        = request('uuid');
         $application = Application::where('uuid', $uuid)->first();
 
         $membershipCategory = $application->membershipCategory;
@@ -71,7 +71,7 @@ class MembershipAgreementController extends Controller
         $data = Utility::applicationDetails($data);
         $data = $data->first();
 
-        if (!$detail = MemberESuccessLetter::where('application_id', $application->id)->first()) {
+        if (! $detail = MemberESuccessLetter::where('application_id', $application->id)->first()) {
             return "error";
         }
 
@@ -86,7 +86,7 @@ class MembershipAgreementController extends Controller
 
         $uuid = request('uuid');
 
-        if (!$application = Application::where('uuid', $uuid)->first()) {
+        if (! $application = Application::where('uuid', $uuid)->first()) {
             return "error";
         }
 

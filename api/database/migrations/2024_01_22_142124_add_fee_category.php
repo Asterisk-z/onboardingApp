@@ -17,6 +17,7 @@ class AddFeeCategory extends Migration
             $table->double('application_fee', 20, 2)->after('name')->default(0);
             $table->double('membership_dues', 20, 2)->after('application_fee')->default(0);
             $table->integer('max_ar')->after('application_fee')->default(0);
+            $table->string('singular_name')->after('name');
         });
     }
 

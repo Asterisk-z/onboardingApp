@@ -267,7 +267,7 @@
                             <p>
                                 Signed for and on behalf of
                                 the aforementioned <br>
-                                <strong>d Affiliate Member (Fixed Income): {{ $details->name }} </strong></p>
+                                <strong>d Affiliate Member (Fixed Income): <span style="text-transform: uppercase;">{{ $details->name }}</span> </strong></p>
 
 
                             <table>
