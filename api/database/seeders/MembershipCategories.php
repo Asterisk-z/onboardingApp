@@ -156,6 +156,7 @@ class MembershipCategories extends Seeder
         foreach ($membershipCategories as $category) {
             MembershipCategory::updateOrCreate(['code' => $category['code']], [
                 "name"                 => $category['name'],
+                "singular_name"        => $category['singular_name'],
                 "application_fee"      => $category['application_fee'],
                 "membership_dues"      => $category['membership_dues'],
                 "membership_agreement" => $category["membership_agreement"],
