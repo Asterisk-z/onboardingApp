@@ -160,7 +160,8 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'productOfInterest',
                 "description" => 'Product Of Interest',
                 "type" => 'checkbox',
-                "required" => 1,
+                // "required" => 1,
+                "required" => 0,
                 "page" => '2',
             ],
         ];
@@ -1025,7 +1026,8 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'productOfInterest',
                 "description" => 'Product Of Interest',
                 "type" => 'checkbox',
-                "required" => 1,
+                // "required" => 1,
+                "required" => 0,
                 "page" => '2',
             ],
         ];
@@ -1819,7 +1821,8 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'productOfInterest',
                 "description" => 'Product Of Interest',
                 "type" => 'checkbox',
-                "required" => 1,
+                // "required" => 1,
+                "required" => 0,
                 "page" => '2',
             ],
         ];
@@ -2731,7 +2734,8 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'productOfInterest',
                 "description" => 'Product Of Interest',
                 "type" => 'checkbox',
-                "required" => 1,
+                // "required" => 1,
+                "required" => 0,
                 "page" => '2',
             ],
         ];
@@ -3725,7 +3729,8 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'productOfInterest',
                 "description" => 'Product Of Interest',
                 "type" => 'checkbox',
-                "required" => 1,
+                // "required" => 1,
+                "required" => 0,
                 "page" => '2',
             ],
         ];
@@ -9130,7 +9135,8 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'productOfInterest',
                 "description" => 'Product Of Interest',
                 "type" => 'checkbox',
-                "required" => 1,
+                // "required" => 1,
+                "required" => 0,
                 "page" => '2',
             ],
         ];

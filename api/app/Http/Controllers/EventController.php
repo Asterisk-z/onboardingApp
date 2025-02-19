@@ -546,7 +546,9 @@ class EventController extends Controller
 
     public function certificateSamplePreview(Event $event)
     {
-        $name       = "John Doe";
+        $applicant = $event->registrations->first();
+        $name       = $applicant ? $applicant->user->full_name : "John Doe";
+
         $isDownload = true;
 
         $eventName      = $event->name;
@@ -558,7 +560,8 @@ class EventController extends Controller
 
     public function certificateSampleDownload(Event $event)
     {
-        $name       = "John Doe";
+        $applicant = $event->registrations->first();
+        $name       = $applicant ? $applicant->user->full_name : "John Doe";
         $isDownload = true;
 
         $pdf = App::make('dompdf.wrapper');
@@ -649,7 +652,7 @@ class EventController extends Controller
                 Please be informed that the event certificate(s) have been signed by MD, FMDQX
             </p>";
 
-            $subject = "Event Certificate For Signed";
+            $subject = "Event Executed  Event Certificates";
 
             Notification::send($MDs, new InfoNotification($message, $subject));
 

@@ -17,6 +17,7 @@ use App\Models\User;
 // use Dompdf\Dompdf;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
+use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +31,18 @@ use Illuminate\Support\Str;
  */
 
 Route::get('/', function () {
+
+
+        $oMerger = PDFMerger::init();
+
+
+    // $oMerger->addPDF(storage_path('/app/public/' .$application->meg_executed_membership_agreement), 'all', 'P');
+    // $oMerger->addPDF(storage_path('/app/public/' .$application->e_success_letter), 'all', 'P');
+    $oMerger->addPDF('./new_file.pdf', 'all', 'P');
+    $oMerger->addPDF('./new_file.pdf', 'all', 'P');
+
+    $oMerger->merge('P');
+    $oMerger->save('./memberx4.pdf');
 
     return view('welcome');
     $application = Application::find(1);

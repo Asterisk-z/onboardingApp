@@ -23,6 +23,7 @@ use App\Services\FactoryService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Events\ArAddedEvent;
 use Illuminate\Support\Facades\Notification;
 use NumberFormatter;
 // use Rmunate\Utilities\SpellNumber;
@@ -868,6 +869,8 @@ class MembershipApplicationController extends Controller
         logAction($user->email, 'Membership agreement uploaded by applicant', "Executed membership agreement uploaded by applicant.", $request->ip());
         Utility::applicationStatusHelper($application, Application::statuses['AEM'], Application::office['AP'], Application::office['AP']);
         Utility::applicationTimestamp($application, 'AUA');
+        //Serves a different purpose
+        event(new ArAddedEvent($request->user()->institution_id, $user));
 
         return successResponse("Agreement uploaded successfully");
     }

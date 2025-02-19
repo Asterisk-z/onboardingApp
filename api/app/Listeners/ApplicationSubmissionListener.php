@@ -127,7 +127,7 @@ class ApplicationSubmissionListener implements ShouldQueue
     protected function generateApplicationBill($user, $application, $membershipCategory, $institution)
     {
         $year               = Carbon::now()->format('Y');
-        $discounted_percent = $discounted_amount = $vat = $total = 0;
+        $discounted_percent = $discounted_amount = $vat = $total = $other_discount_amount = 0;
 
         $application_fee = $membershipCategory->application_fee;
         $membership_dues = $membershipCategory->membership_dues;
@@ -138,7 +138,15 @@ class ApplicationSubmissionListener implements ShouldQueue
             $discounted_amount  = 0.01 * $discounted_percent * $membership_dues;
         }
 
-        $total = $application_fee + $membership_dues - $discounted_amount;
+        
+        if($membershipCategory->id == MembershipCategory::CATEGORIES['REGISTRATION_MEMBER_LISTINGS_QUOTATIONS'] 
+            && in_array($application->old_membership_category_id, [MembershipCategory::CATEGORIES['REGISTRATION_MEMBER_LISTINGS'], MembershipCategory::CATEGORIES['REGISTRATION_MEMBER_QUOTATIONS']])) {
+
+            $other_discount_amount = 0.5 * $membership_dues;
+
+        }
+
+        $total = $application_fee + $membership_dues - $discounted_amount - $other_discount_amount;
 
         if ($tax = SystemSetting::where('name', 'tax')->first()) {
             $tax_val = $tax->value ?? 0;
@@ -153,9 +161,10 @@ class ApplicationSubmissionListener implements ShouldQueue
 
         //Create Invoice content
         if ($application_fee) {
+            $membershipCategoryFeeName = Utility::membershipCategoryFeeName($membershipCategory);
             InvoiceContent::create([
                 "invoice_id"  => $invoice->id,
-                "name"        => "{$membershipCategory->name} - Commercial (National) - Application Fee (Non-Refundable)",
+                "name"        => "{$membershipCategoryFeeName} - Application Fee (Non-Refundable)",
                 "value"       => $application_fee,
                 "is_discount" => 0,
                 "parent_id"   => null,
@@ -183,6 +192,17 @@ class ApplicationSubmissionListener implements ShouldQueue
                 "value"       => $discounted_amount,
                 "is_discount" => 1,
                 "parent_id"   => $due->id,
+                "type"        => "credit",
+            ]);
+        }
+        
+
+        if ($other_discount_amount > 0) {
+            InvoiceContent::create([
+                "invoice_id"  => $invoice->id,
+                "name"        => "50% Discount on Membership Dues",
+                "value"       => $other_discount_amount,
+                "is_discount" => 1,
                 "type"        => "credit",
             ]);
         }

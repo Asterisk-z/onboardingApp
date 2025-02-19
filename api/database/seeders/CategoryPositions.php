@@ -20,7 +20,7 @@ class CategoryPositions extends Seeder
         //
         MembershipCategoryPostition::query()->truncate();
 
-        $membership_category = 'Dealing Member (Bank)';
+        $membership_category = 'Dealing Member (Banks)';
         $rows = [["name" => "Group Managing Director"],
             ["name" => "Managing Director/CEO", "is_compulsory" => true, "email" => "dmbceos@fmdqgroup.com"],
             ["name" => "Supervising Director", "email" => "dmsds@fmdqgroup.com"],

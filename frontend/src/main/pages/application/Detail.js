@@ -470,7 +470,7 @@ const Form = () => {
                 {/* <p>Pending Approval</p> */}
                 {$application_details && <>
                   <CardTitle tag="h5" className="text-center">
-                    <h3 className="my-3">{`${$application_details.membership_category.name} Application Detail`} </h3>
+                    <h3 className="my-3">{`${$application_details.membership_category.name} Application Details`} </h3>
                     {$application_details.logo && <img src={$application_details.logo} className="rounded-xl" style={{ height: '200px', width: '200px', borderRadius: '100%' }} />}
                   </CardTitle>
                 </>}

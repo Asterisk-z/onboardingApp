@@ -1496,10 +1496,10 @@ const Form = () => {
                                                         <p>{moment().format('MMM. D, YYYY')}</p>
                                                         {/* <p>{moment().format('MMM. D, YYYY HH:mm')}</p> */}
 
-                                                        <p className="text-uppercase">DECLARATION OF PRIOR DISCLOSURE – [{$application_disclosure_details.member_name}]</p>
+                                                        <p className="text-uppercase">DECLARATION OF PRIOR DISCLOSURE – {$application_disclosure_details.member_name}</p>
 
                                                         <p>
-                                                            With reference to [{$application_disclosure_details.member_name}’s] application for membership in the FMDQ Securities Exchange Limited (“FMDQ Exchange” or the “Exchange”) [{$application_disclosure_details.membership_category_name} Category] membership category, we declare as follows:
+                                                            With reference to {$application_disclosure_details.member_name}’s application for membership in the FMDQ Securities Exchange Limited (“FMDQ Exchange” or the “Exchange”) {$application_disclosure_details.membership_category_name} membership category, we declare as follows:
                                                         </p>
                                                         {/* <p> */}
                                                         <ol className="">

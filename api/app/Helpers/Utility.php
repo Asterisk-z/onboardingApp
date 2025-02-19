@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
+use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 use Illuminate\Support\Str;
 
 class Utility
@@ -215,7 +217,8 @@ class Utility
                 'applications.member_agreement_send AS member_agreement_send',
                 'applications.all_ar_uploaded AS all_ar_uploaded',
                 'membership_categories.id AS category_id',
-                'membership_categories.name AS category_name',
+                'membership_categories.singular_name AS category_name',
+                'membership_categories.name AS main_category_name',
 
                 DB::raw("MAX(CASE WHEN application_fields.name = 'companyName' THEN application_field_uploads.uploaded_field END) AS company_name"),
                 DB::raw("MAX(CASE WHEN application_fields.name = 'companyEmailAddress' THEN application_field_uploads.uploaded_field END) AS company_email"),
@@ -362,7 +365,8 @@ class Utility
                 'applications.member_agreement_send AS member_agreement_send',
                 'applications.all_ar_uploaded AS all_ar_uploaded',
                 'membership_categories.id AS category_id',
-                'membership_categories.name AS category_name',
+                'membership_categories.singular_name AS category_name',
+                'membership_categories.name AS main_category_name',
 
                 DB::raw("MAX(CASE WHEN application_fields.name = 'companyName' THEN application_field_uploads.uploaded_field END) AS company_name"),
                 DB::raw("MAX(CASE WHEN application_fields.name = 'companyEmailAddress' THEN application_field_uploads.uploaded_field END) AS company_email"),
@@ -1355,9 +1359,40 @@ class Utility
         return "$pronoun $categoryName";
     }
 
+    public static function membershipCategoryFeeName($membershipCategory)
+    {
+        $catList = explode(' ', $membershipCategory->name);
+        $anList = ['Dealing'];
+        $categoryName = (in_array($catList[0], $anList)) ? "{$membershipCategory->name}  - Commercial (National)" : "{$membershipCategory->name}";
+        return "$categoryName";
+    }
+
     public static function categoryNameFromWebsite($categoryName)
     {
         $list = ['(Individual)', '(Corporate)'];
         return str_replace($list, ' ', $categoryName);
+    }
+
+    public static function updatePdfVersion($pdfPath)
+    {
+ 
+      try {
+    
+        $process = new Process(['./convertPDF.bat', $pdfPath, $pdfPath]);
+
+        $process->setTimeout(60);
+        $process->run();
+        
+        if (!$process->isSuccessful()) {
+            throw new ProcessFailedException($process);
+        }
+        
+        
+        return $pdfPath;
+    } catch (\Exception $e) {
+        echo $e->getMessage();
+        return false;
+    }
+
     }
 }

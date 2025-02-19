@@ -650,7 +650,7 @@ const ActionTab = (props) => {
                                     <tr>
                                         <td>5</td>
                                         <td>Date of Incorporation</td>
-                                        <td className="text-capitalize">{`${institution?.basic_details?.dateOfIncorporation ?? ''}`}</td>
+                                        <td className="text-capitalize">{`${institution?.basic_details?.dateOfIncorporation ? moment(institution?.basic_details?.dateOfIncorporation).format('MMM. D, YYYY') : ''}`}</td>
                                     </tr>
                                     <tr>
                                         <td>6</td>
@@ -675,12 +675,12 @@ const ActionTab = (props) => {
                                     <tr>
                                         <td>10</td>
                                         <td>Company Email Address</td>
-                                        <td className="text-capitalize">{`${institution?.basic_details?.companyEmailAddress ?? ''}`}</td>
+                                        <td className="text-lowercase">{`${institution?.basic_details?.companyEmailAddress ?? ''}`}</td>
                                     </tr>
                                     <tr>
                                         <td>11</td>
                                         <td>Company Website Address</td>
-                                        <td className="text-capitalize">{`${institution?.basic_details?.corporateWebsiteAddress ?? ''}`}</td>
+                                        <td className="text-lowercase">{`${institution?.basic_details?.corporateWebsiteAddress ?? ''}`}</td>
                                     </tr>
                                     <tr>
                                         <td>12</td>

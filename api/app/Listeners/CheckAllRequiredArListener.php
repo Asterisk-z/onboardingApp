@@ -6,6 +6,7 @@ use App\Events\ArAddedEvent;
 use App\Helpers\MailContents;
 use App\Helpers\Utility;
 use App\Models\Application;
+use App\Models\MembershipCategory;
 use App\Models\Role;
 use App\Models\Status;
 use App\Models\User;
@@ -37,7 +38,7 @@ class CheckAllRequiredArListener implements ShouldQueue
         $arPosition = $newAr->position_id;
         $institutionId = $event->institutionId;
 
-        $applications = Application::where('institution_id', $institutionId)->get();
+        $applications = Application::where('institution_id', $institutionId)->whereIn('typeStatus', [Application::typeStatus['ASP'], Application::typeStatus['ASC']])->get();
 
         foreach ($applications as $application) {
 
@@ -54,7 +55,7 @@ class CheckAllRequiredArListener implements ShouldQueue
 
             //All required ar are not yet updated
             if ($application->membership_agreement && $application->is_applicant_executed_membership_agreement && !$application->all_ar_uploaded) {
-
+                $status = Status::find($application->status);
                 //check if he completetes the required
                 if (count(array_diff($compulsoryPositions, $uploadedPositions)) === 0) {
                     //update all_ar_uploaded
@@ -62,7 +63,6 @@ class CheckAllRequiredArListener implements ShouldQueue
                     $application->save();
 
                     // if he complete, to be double sure confirm status and that meg has not being sent mail alredy
-                    $status = Status::find($application->status);
                     if ($status->status === Application::statuses['AEM'] && !$application->is_sent_meg_mebership_agreement) {
                         //send meg mail
 
@@ -70,9 +70,14 @@ class CheckAllRequiredArListener implements ShouldQueue
                         Utility::applicationTimestamp($application, 'AAAA');
 
                         $applicant = User::find($application->submitted_by);
-                        $name = $applicant->first_name . ' ' . $applicant->last_name;
+
+                        $data = Application::where('applications.id', $application->id);
+                        $data = Utility::applicationDetails($data);
+                        $data = $data->first();
+
+                        $companyName         = $data->company_name;
                         $MEGs = Utility::getUsersByCategory(Role::MEG);
-                        Notification::send($MEGs, new InfoNotification(MailContents::applicantUploadAgreementMail($name), MailContents::applicantUploadAgreementSubject()));
+                        Notification::send($MEGs, new InfoNotification(MailContents::applicantUploadAgreementMail($companyName), MailContents::applicantUploadAgreementSubject()));
 
                         //Update since we have now sent agreement
                         $application->is_sent_meg_mebership_agreement = 1;
@@ -80,7 +85,39 @@ class CheckAllRequiredArListener implements ShouldQueue
                     }
                 }
 
+
+                if ($status->status === Application::statuses['AEM']  && !$application->is_sent_meg_mebership_agreement && in_array($application->membership_category_id, [
+                    MembershipCategory::CATEGORIES['AFFILIATE_MEMBER_STANDARD_INDIVIDUAL'],
+                    MembershipCategory::CATEGORIES['AFFILIATE_MEMBER_STANDARD_CORPORATE'],
+                    MembershipCategory::CATEGORIES['AFFILIATE_MEMBER_FOREIGN_EXCHANGE_TRADING'],
+                    MembershipCategory::CATEGORIES['AFFILIATE_MEMBER_FIXED_INCOME'],
+                    MembershipCategory::CATEGORIES['AFFILIATE_MEMBER_REGULATOR']])) {
+
+
+                        Utility::applicationStatusHelper($application, Application::statuses['AUARA'], Application::office['AP'], Application::office['MEG']);
+                        Utility::applicationTimestamp($application, 'AAAA');
+
+                        $applicant = User::find($application->submitted_by);
+
+                        $data = Application::where('applications.id', $application->id);
+                        $data = Utility::applicationDetails($data);
+                        $data = $data->first();
+
+                        $companyName         = $data->company_name;
+                        $MEGs = Utility::getUsersByCategory(Role::MEG);
+                        Notification::send($MEGs, new InfoNotification(MailContents::applicantUploadAgreementMail($companyName), MailContents::applicantUploadAgreementSubject()));
+
+                        //Update since we have now sent agreement
+                        $application->is_sent_meg_mebership_agreement = 1;
+                        $application->all_ar_uploaded = 1;
+                        $application->save();
+                }
+
+
             }
+
+
+
 
         }
 

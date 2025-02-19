@@ -202,6 +202,29 @@ const AuthRepresentative = ({ drawer }) => {
         });
     }
 
+
+    // const noARUpdateUpdate = (event) => {
+    //     Swal.fire({
+    //         title: "Are you sure?",
+    //         html: "By selecting 'No New AR Update', you are indicating that there are no new changes to report. <br/> <br/>With this selection, you will not receive further reminders regarding updates until your next interaction or update submission.  <br/> <br/>Please click 'Confirm' to proceed or 'Cancel' to return to the previous screen.",
+    //         icon: "warning",
+    //         showCancelButton: true,
+    //         confirmButtonText: "Confirm!",
+    //         cancelButtonText: "Cancel!",
+    //     }).then((result) => {
+    //         if (result.isConfirmed) {
+
+    //             const formData = new FormData();
+    //             formData.append('user_id', ar_user.id);
+    //             // formData.append('action', 'decline');
+    //             const resp = dispatch(noArUpdateNotication(formData));
+
+    //             // props.updateParentParent(Math.random())
+    //             // setModalViewUpdate(false)
+    //         }
+    //     });
+    // }
+
     const gotoRoute = (value) => {
         setModelForSearchAR(false)
         navigate(value)
@@ -233,6 +256,11 @@ const AuthRepresentative = ({ drawer }) => {
                                                 <span onClick={cancelUpdate}>No Update</span>
                                             </Button>
                                         </li>
+                                        {/* <li className="nk-block-tools-opt">
+                                            <Button color="primary">
+                                                <span onClick={noARUpdateUpdate}>No New AR Update</span>
+                                            </Button>
+                                        </li> */}
                                         {/* </>} */}
                                         {authUser.is_ar_authorizer() && <>
                                             <li className="nk-block-tools-opt">

@@ -65,8 +65,10 @@ class FinalApplicationProcessingJob implements ShouldQueue
 
         $pdfMerger = PDFMerger::init();
 
-        $pdfMerger->addPDF(storage_path('/app/public/' . $application->e_success_letter), 'all');
-        $pdfMerger->addPDF(storage_path('/app/public/' . $application->meg_executed_membership_agreement), 'all');
+        $pdfMerger->addPDF(Utility::updatePdfVersion(storage_path('/app/public/' .$application->meg_executed_membership_agreement)), 'all', 'P');
+        $pdfMerger->addPDF(Utility::updatePdfVersion(storage_path('/app/public/' .$application->e_success_letter)), 'all', 'P');
+        // $pdfMerger->addPDF(storage_path('/app/public/' . $application->e_success_letter), 'all');
+        // $pdfMerger->addPDF(storage_path('/app/public/' . $application->meg_executed_membership_agreement), 'all');
 
         $pdfMerger->merge();
         $pdfMerger->save(storage_path("/app/public/agreement_and_letter/member{$application->id}.pdf"));
@@ -100,8 +102,8 @@ class FinalApplicationProcessingJob implements ShouldQueue
         $ccEmails = array_merge($Meg, $Mbg, $big);
 
         if (stripos($categoryName, "Registration Member") !== false) {
-            $blg      = Utility::getUsersEmailByCategory(Role::BLG);
-            $ccEmails = array_merge($ccEmails, $blg);
+            $rlg      = Utility::getUsersEmailByCategory(Role::RLG);
+            $ccEmails = array_merge($ccEmails, $rlg);
         }
 
         // CONVERT INSTITUTION CATEGORY
