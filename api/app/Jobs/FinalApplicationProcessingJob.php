@@ -54,7 +54,8 @@ class FinalApplicationProcessingJob implements ShouldQueue
         $data = Utility::applicationDetails($data);
         $data = $data->first();
 
-        $categoryName        = $data->category_name;
+        $categoryName        = $data->main_category_name;
+        $singlarCategoryName        = $data->main_category_name;
         $companyName         = $data->company_name;
         $companyEmail        = $data->company_email;
         $primaryContactEmail = $data->primary_contact_email;

@@ -111,6 +111,29 @@ export const cancelMailNotication = createAsyncThunk(
   }
 );
 
+export const noArUpdateNotication = createAsyncThunk(
+  "arUsers/noArUpdateNotication",
+  async (values) => {
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `membership/application/no-ar-update`,
+        data: values,
+      });
+      return successHandler([], "Success");
+      // return successHandler(data, data.message);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
+  }
+);
+
+
 export const userUpdateUserAR = createAsyncThunk(
   "arUsers/userUpdateUserAR",
   async (values) => {

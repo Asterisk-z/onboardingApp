@@ -38,7 +38,7 @@ class CheckAllRequiredArListener implements ShouldQueue
         $arPosition = $newAr->position_id;
         $institutionId = $event->institutionId;
 
-        $applications = Application::where('institution_id', $institutionId)->whereIn('typeStatus', [Application::typeStatus['ASP'], Application::typeStatus['ASC']])->get();
+        $applications = Application::where('institution_id', $institutionId)->whereIn('application_type_status', [Application::typeStatus['ASP'], Application::typeStatus['ASC']])->get();
 
         foreach ($applications as $application) {
 

@@ -24,6 +24,7 @@ class Role extends Model
     const HELPDESK = 10;
     const STAKEHOLDER = 11;
     const MD = 12;
+    const RLG = 13;
 
     public function toArray()
     {

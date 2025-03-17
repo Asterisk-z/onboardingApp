@@ -524,7 +524,7 @@ class Utility
     {
         $body = [];
 
-        $hasMailingGroup = false;
+        $groupmails = [];
 
         foreach ($users as $user) {
             $firstname = $user->first_name;
@@ -535,9 +535,14 @@ class Utility
                 'category_id' => $category->id,
                 'position_id' => $position->id,
             ])->first();
-            $group_mail = $mailgroup->groupMail ? $mailgroup->groupMail->email : '';
 
-            $hasMailingGroup = $hasMailingGroup && $group_mail ? true : false;
+
+            $group_mail = $mailgroup->groupMail ? $mailgroup->groupMail->email : '';
+            if($mailgroup->groupMail) {
+              array_push($groupmails, $group_mail);
+            }
+
+            // $hasMailingGroup = $hasMailingGroup && $group_mail ? true : $hasMailingGroup;
 
             $body[] = [$category->name, $position->name, $group_mail, $firstname, $lastname, $fullname, $user->email];
 
@@ -548,7 +553,9 @@ class Utility
             "body" => $body,
         ];
 
-        if (count($body) && $hasMailingGroup) {
+
+        // if (count($body) && $hasMailingGroup) {
+        if (count($body) > 0 && count($groupmails) > 0) {
             //FMDQ Help Desk Cc MEG
             $HelpDesk = Utility::getUsersByCategory(Role::HELPDESK);
             $Meg = Utility::getUsersEmailByCategory(Role::MEG);
@@ -557,6 +564,7 @@ class Utility
 
         return true;
     }
+
 
     public static function getTotalFromInvoice(Invoice $invoice)
     {
@@ -1375,19 +1383,19 @@ class Utility
 
     public static function updatePdfVersion($pdfPath)
     {
- 
+
       try {
-    
+
         $process = new Process(['./convertPDF.bat', $pdfPath, $pdfPath]);
 
         $process->setTimeout(60);
         $process->run();
-        
+
         if (!$process->isSuccessful()) {
             throw new ProcessFailedException($process);
         }
-        
-        
+
+
         return $pdfPath;
     } catch (\Exception $e) {
         echo $e->getMessage();

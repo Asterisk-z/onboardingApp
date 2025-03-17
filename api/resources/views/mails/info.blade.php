@@ -10,10 +10,12 @@
             font-family: Arial, sans-serif !important;
             line-height: 1.6;
             color: #000;
+            font-size: 16px !important;
         }
 
         pre {
             font-family: Arial, sans-serif !important;
+            font-size: 16px !important;
         }
 
         /* Wrapper for the email content */

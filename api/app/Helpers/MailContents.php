@@ -295,7 +295,7 @@ class MailContents
     public static function meg2EsuccessMail($companyName): string
     {
         $url = config("app.front_end_url");
-        return "<p>Please be informed E-Success letter has been generated for
+        return "<p>Please be informed that the E-Success letter has been generated for
         {$companyName}. Kindly log on to <a href=$url>MROIS Portal</a> to approve the success letter.</p>";
     }
 
@@ -329,6 +329,21 @@ class MailContents
         return "<p>Kindly be informed that {$companyName} Application Report for the {$categoryName} category has been approved.</p>
         <p>Kindly log on to <a href=$url>MROIS Portal</a> to proceed with the Application.</p>";
     }
+
+
+
+    public static function noArUpdateSubject(): string
+    {
+        return "Authorised Representative - No Update";
+    }
+
+    public static function noArUpdateMail($companyName): string
+    {
+        $url = config("app.front_end_url");
+        return "<p>Kindly be informed that {$companyName}  has skipped the update authorised representative step.</p>
+        <p>Kindly log on to <a href=$url>MROIS Portal</a> to proceed with the Application.</p>";
+    }
+
 
     public static function applicantUploadAgreementSubject(): string
     {

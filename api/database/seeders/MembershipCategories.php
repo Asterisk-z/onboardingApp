@@ -26,7 +26,7 @@ class MembershipCategories extends Seeder
             ],
             [
                 "code"                 => "dms",
-                "name"                 => "Dealing Member (Specialist)",
+                "name"                 => "Dealing Member (Specialists)",
                 "singular_name"        => "Dealing Member (Specialist)",
                 "application_fee"      => 22500000,
                 "membership_dues"      => 250000,
@@ -54,7 +54,7 @@ class MembershipCategories extends Seeder
             ],
             [
                 "code"                 => "amc",
-                "name"                 => "Associate Member (Client)",
+                "name"                 => "Associate Member (Clients)",
                 "singular_name"        => "Associate Member (Client)",
                 "application_fee"      => 5000000,
                 "membership_dues"      => 1250000,

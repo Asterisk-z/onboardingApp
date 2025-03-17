@@ -24,6 +24,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Events\ArAddedEvent;
+use App\Models\Status;
 use Illuminate\Support\Facades\Notification;
 use NumberFormatter;
 // use Rmunate\Utilities\SpellNumber;
@@ -484,6 +485,13 @@ class MembershipApplicationController extends Controller
         $applicant = User::find($application->submitted_by);
         $applicantName = $applicant->first_name . " " . $applicant->last_name;
 
+        $data = Application::where('applications.id', $application->id);
+        $data = Utility::applicationDetails($data);
+        $data = $data->first();
+
+        $companyName = $data->company_name;
+
+
         $errorMsg = "Unable to complete your request at this point.";
 
         if (strtolower($application->currentStatus()) != strtolower(Application::statuses['MDD'])) {
@@ -534,7 +542,7 @@ class MembershipApplicationController extends Controller
 
         logAction($user->email, 'Application re-uploaded', 'Membership application has been re-uploaded successfully.', $request->ip());
         $MEGs = Utility::getUsersByCategory(Role::MEG);
-        Notification::send($MEGs, new InfoNotification(MailContents::documentReuploadMail($applicantName), MailContents::documentReuploadSubject()));
+        Notification::send($MEGs, new InfoNotification(MailContents::documentReuploadMail($companyName), MailContents::documentReuploadSubject()));
 
         return successResponse("Your Application has been submitted and is under review. You will be notified of any feedback soon");
     }
@@ -873,5 +881,43 @@ class MembershipApplicationController extends Controller
         event(new ArAddedEvent($request->user()->institution_id, $user));
 
         return successResponse("Agreement uploaded successfully");
+    }
+
+    public function noArUpdate(Request $request)
+    {
+        $request->validate([
+            'application_uuid' => 'required|exists:applications,uuid',
+        ]);
+        $application = Application::where('uuid', request('application_uuid'))->first();
+        $status = Status::find($application->status);
+        $MEGs = Utility::getUsersByCategory(Role::MEG);
+
+        // logger($application->id);
+
+        $data = Application::where('applications.id', $application->id);
+        $data = Utility::applicationDetails($data);
+        $data = $data->first();
+
+        // logger($data);
+        $companyName = $data->company_name;
+        // $companyName = "fsfs";
+
+        if ($status->status === Application::statuses['AEM']  || $status->status === Application::statuses['AUARA'] ) {
+
+            Utility::applicationStatusHelper($application, Application::statuses['AUARA'], Application::office['AP'], Application::office['MEG']);
+            Utility::applicationTimestamp($application, 'AAAA');
+
+            Notification::send($MEGs, new InfoNotification(MailContents::applicantUploadAgreementMail($companyName), MailContents::applicantUploadAgreementSubject()));
+
+            //Update since we have now sent agreement
+            $application->is_sent_meg_mebership_agreement = 1;
+            $application->all_ar_uploaded = 1;
+            $application->save();
+
+        }
+
+        Notification::send($MEGs, new InfoNotification(MailContents::noArUpdateMail($companyName), MailContents::noArUpdateSubject()));
+
+        return successResponse("No Update Notification Sent successfully");
     }
 }

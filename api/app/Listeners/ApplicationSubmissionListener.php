@@ -11,6 +11,7 @@ use App\Models\InvoiceContent;
 use App\Models\MonthlyDiscount;
 use App\Models\Role;
 use App\Models\SystemSetting;
+use App\Models\MembershipCategory;
 use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -138,12 +139,8 @@ class ApplicationSubmissionListener implements ShouldQueue
             $discounted_amount  = 0.01 * $discounted_percent * $membership_dues;
         }
 
-        
-        if($membershipCategory->id == MembershipCategory::CATEGORIES['REGISTRATION_MEMBER_LISTINGS_QUOTATIONS'] 
-            && in_array($application->old_membership_category_id, [MembershipCategory::CATEGORIES['REGISTRATION_MEMBER_LISTINGS'], MembershipCategory::CATEGORIES['REGISTRATION_MEMBER_QUOTATIONS']])) {
-
+        if ($application->application_type == Application::type['ADD']) {
             $other_discount_amount = 0.5 * $membership_dues;
-
         }
 
         $total = $application_fee + $membership_dues - $discounted_amount - $other_discount_amount;
@@ -195,7 +192,7 @@ class ApplicationSubmissionListener implements ShouldQueue
                 "type"        => "credit",
             ]);
         }
-        
+
 
         if ($other_discount_amount > 0) {
             InvoiceContent::create([

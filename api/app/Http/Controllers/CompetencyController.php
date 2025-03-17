@@ -31,8 +31,8 @@ class CompetencyController extends Controller
     //
     public function listActive()
     {
+        $competencies = CompetencyFramework::where('is_del', 0)->orderBy('created_at', 'DESC')->get()->toArray();
         // $competencies = CompetencyFramework::where('is_del', 0)->where('position', auth()->user()->position->position_group_id)->where('member_category', auth()->user()->category_id)->orderBy('created_at', 'DESC')->get()->toArray();
-        $competencies = CompetencyFramework::where('is_del', 0)->where('position', auth()->user()->position->position_group_id)->orderBy('created_at', 'DESC')->get()->toArray();
         return successResponse('Successful', $competencies);
     }
 

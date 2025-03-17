@@ -389,6 +389,7 @@ Route::middleware(['auth', 'activeAuth'])->group(function () {
             Route::post('/upload-membership-agreement', [MembershipApplicationController::class, 'uploadMemberAgreement']);
             Route::post('/conversion-request', [ApplicationProcessController::class, 'conversionRequest']);
             Route::post('/addition-request', [ApplicationProcessController::class, 'additionRequest']);
+            Route::post('/no-ar-update', [MembershipApplicationController::class, 'noArUpdate']);
         });
     });
     //
