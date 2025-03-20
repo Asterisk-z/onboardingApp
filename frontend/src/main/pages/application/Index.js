@@ -22,13 +22,9 @@ const Form = () => {
 
     const { application_uuid } = useParams();
 
-    const authUser = useUser();
-    const authUserUpdate = useUserUpdate();
-
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const [parentState, setParentState] = useState('0')
     const [showDisclosureModal, setShowDisclosureModal] = useState(false);
 
     const application_details = useSelector((state) => state?.application?.application_details) || null;
@@ -135,115 +131,67 @@ const Form = () => {
     }, [application_details]);
 
 
+    // const [tableData, setTableData] = useState($process_report?.report);
+    let $overall_fields = overall_fields;
+
+    const uploadedValue = (field) => {
+        if (field.type == 'date') {
+            return field?.field_value?.uploaded_field ? new Date(field?.field_value?.uploaded_field) : "";
+        }
+        return field?.field_value?.uploaded_field ? field?.field_value?.uploaded_field : "";
+    }
+
+
+
     const ApplicantInformation = (props) => {
 
-        useEffect(() => {
-            if ($application_details) {
-                dispatch(updateStep({ "application_id": $application_details?.id, "step": 1 }));
-            }
-        }, [dispatch]);
 
         const { reset, register, handleSubmit, formState: { errors }, setValue, clearErrors } = useForm();
 
+        const applicationFields = $overall_fields?.basic;
+
+        let fields = applicationFields
+
+        const uploadFieldValue = (values) => {
+            fields = fields.map((item) => ((item.name == values.field_name && item.type == values.field_type) ? { ...item, field_value: { ...item.field_value, "uploaded_field": values.field_value } } : item))
+            $overall_fields = { ...$overall_fields, basic: fields };
+        }
 
 
         const onInputChange = async (values) => {
-
             if (!values.field_value || !values.field_name || !values.field_type) return
             setValue(values.field_name, values.field_value)
             clearErrors(values.field_name)
-            const postValues = new Object();
-            postValues.field_name = values.field_name;
-            postValues.field_value = values.field_value;
-            postValues.field_type = values.field_type;
-            postValues.application_id = $application_details?.id;
-            postValues.category_id = $application_details?.membership_category?.id;
-
-            try {
-
-                const resp = await dispatch(uploadField(postValues));
-
-                if (resp.payload?.message == "success") {
-                    dispatch(loadPageFields({ "page": "1", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
-                } else {
-
-                }
-
-            } catch (error) {
-
-            }
+            uploadFieldValue(values);
         };
 
         const updatedApplicationFields = useSelector((state) => state?.application?.all_fields) || null;
-        const loadingPageFields = useSelector((state) => state?.application?.loadingPageFields) || null;
-        const [applicationFields, setApplicationFields] = useState(overall_fields?.basic);
-        // const [updatedApplicationFieldsValue, setUpdatedApplicationFieldsValue] = useState(updatedApplicationFields);
-
-        const fieldSectionData = useRef(null);
-
-        // let fields = updatedApplicationFields ? (updatedApplicationFields[0]?.page == 1 ? updatedApplicationFields : applicationFields) : applicationFields
-        let fields = applicationFields
 
         const submitForm = async (data) => {
 
-            let field_value = Object.values(data)
-            let field_name = Object.keys(data)
+            let fieldValues = [];
 
-            let list = [];
+            fields.forEach((fieldItem) => {
 
-            for (let index = 0; index < field_value.length; index++) {
-                let inputField = field_name[index];
-                let inputValue = field_value[index];
-                let field = applicationFields.filter((item) => item.name == inputField);
-
-                if (field) {
-                    let fieldItem = field[0] ? field[0] : null;
-
-
-                    if (fieldItem?.name == inputField) {
-
-                        const postValue = new Object();
-                        postValue.field_name = inputField;
-                        postValue.field_value = inputValue;
-                        postValue.field_type = fieldItem.type;
-
-                        list.push(postValue)
-
-                    }
+                if (fieldItem.field_value.uploaded_field) {
+                    const postValue = new Object();
+                    postValue.field_name = fieldItem.name;
+                    postValue.field_value = fieldItem.field_value.uploaded_field;
+                    postValue.field_type = fieldItem.type;
+                    fieldValues.push(postValue)
                 }
-
-            }
-            // for (let index = 0; index < applicationFields.length; index++) {
-            //   let field = applicationFields[index];
-            //   let inputField = field_name[index];
-            //   let inputValue = field_value[index];
-            //   if (field.name == inputField) {
-
-            //     const postValue = new Object();
-            //     postValue.field_name = inputField;
-            //     postValue.field_value = inputValue;
-            //     postValue.field_type = field.type;
-
-            //     list.push(postValue)
-
-            //   }
-            // }
-
+            })
 
             try {
 
                 const postValues = new Object();
                 postValues.application_id = $application_details?.id;
                 postValues.category_id = $application_details?.membership_category?.id;
-                postValues.fields = list;
-                const resp = await dispatch(submitPage(postValues));
-
-                if (resp.payload?.message == "success") {
-                    dispatch(loadPageFields({ "page": "1", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
-                }
-
+                postValues.fields = fieldValues;
 
                 props.next()
+                await dispatch(submitPage(postValues));
+
             } catch (error) {
 
             }
@@ -251,8 +199,7 @@ const Form = () => {
         };
 
         const goBack = () => {
-            dispatch(loadPageFields({ "page": "1", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
-            // dispatch(loadAllFields({ "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
+            // dispatch(loadPageFields({ "page": "1", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
             props.prev()
         }
 
@@ -287,7 +234,12 @@ const Form = () => {
                                             <div className="form-group">
                                                 <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
                                                 <div className="form-control-wrap">
-                                                    <input type="text" id={field.name} className="form-control" {...register(field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field} readOnly={($application_details?.disclosure_status && unChangeableField.includes(field.name) && field?.field_value?.uploaded_field)} />
+                                                    <input type="text" id={field.name} className="form-control"
+                                                        {...register(field.name, { required: 'This field is required' })}
+                                                        onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
+                                                        onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
+                                                        defaultValue={uploadedValue(field)}
+                                                        readOnly={($application_details?.disclosure_status && unChangeableField.includes(field.name) && field?.field_value?.uploaded_field)} />
                                                     {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
                                                 </div>
                                             </div>
@@ -299,7 +251,12 @@ const Form = () => {
                                             <div className="form-group">
                                                 <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
                                                 <div className="form-control-wrap">
-                                                    <input type="url" placeholder="http://example.com" id={field.name} className="form-control" {...register(field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field} readOnly={($application_details?.disclosure_status && unChangeableField.includes(field.name) && field?.field_value?.uploaded_field)} />
+                                                    <input type="url" placeholder="http://example.com" id={field.name} className="form-control"
+                                                        {...register(field.name, { required: 'This field is required' })}
+                                                        onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
+                                                        onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
+                                                        defaultValue={uploadedValue(field)}
+                                                        readOnly={($application_details?.disclosure_status && unChangeableField.includes(field.name) && field?.field_value?.uploaded_field)} />
                                                     {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
                                                 </div>
                                             </div>
@@ -313,9 +270,11 @@ const Form = () => {
                                                 <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
                                                 <div className="form-control-wrap">
 
-                                                    <input type="hidden" {...register(field.name, { required: 'This field is required' })} value={field?.field_value?.uploaded_field} />
-                                                    <DatePicker selected={field?.field_value?.uploaded_field ? new Date(field?.field_value?.uploaded_field) : ""} id={field.name} onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": e, "field_type": field.type })} className="form-control date-picker" readOnly={($application_details?.disclosure_status && unChangeableField.includes(field.name) && field?.field_value?.uploaded_field)} />
-                                                    {/* <DatePicker selected={field?.field_value?.uploaded_field ? new Date(field?.field_value?.uploaded_field) : ""} id={field.name} onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": moment(e).format('YYYY-MM-DD'), "field_type": field.type })} className="form-control date-picker" /> */}
+                                                    <input type="hidden" {...register(field.name, { required: 'This field is required' })} value={uploadedValue(field)} />
+                                                    <DatePicker selected={uploadedValue(field)}
+                                                        id={field.name} onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": e, "field_type": field.type })}
+                                                        className="form-control date-picker"
+                                                        readOnly={($application_details?.disclosure_status && unChangeableField.includes(field.name) && field?.field_value?.uploaded_field)} />
                                                     {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
                                                 </div>
                                             </div>
@@ -327,7 +286,11 @@ const Form = () => {
                                             <div className="form-group">
                                                 <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
                                                 <div className="form-control-wrap">
-                                                    <input type="text" id={field.name} className="form-control" {...register(field.name, { required: 'This field is required', pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: "Invalid email address" }, })} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field} />
+                                                    <input type="text" id={field.name} className="form-control"
+                                                        {...register(field.name, { required: 'This field is required', pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: "Invalid email address" }, })}
+                                                        onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
+                                                        onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
+                                                        defaultValue={uploadedValue(field)} />
                                                     {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
                                                 </div>
                                             </div>
@@ -339,7 +302,12 @@ const Form = () => {
                                             <div className="form-group">
                                                 <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
                                                 <div className="form-control-wrap">
-                                                    <input type="number" id={field.name} className="form-control" {...register(field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field} readOnly={($application_details?.disclosure_status && unChangeableField.includes(field.name) && field?.field_value?.uploaded_field)} />
+                                                    <input type="number" id={field.name} className="form-control"
+                                                        {...register(field.name, { required: 'This field is required' })}
+                                                        onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
+                                                        onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
+                                                        defaultValue={uploadedValue(field)}
+                                                        readOnly={($application_details?.disclosure_status && unChangeableField.includes(field.name) && field?.field_value?.uploaded_field)} />
                                                     {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
                                                 </div>
                                             </div>
@@ -347,31 +315,18 @@ const Form = () => {
                                     )
                                 } else if (field.type == 'select') {
                                     return (
-                                        // <div className="form-group w-50">
-                                        //     <div className="form-label">
-                                        //         <label htmlFor="category">Membership Category<span style={{color:'red'}}> *</span>:</label>
-                                        //     </div>
-                                        //     <div className="form-control-wrap">
-                                        //         <div className="form-control-select">
-                                        //             <select className="form-control form-select" style={{width: '100%'}}  {...register('category', { required: true })}  onChange={updatePosition}>
-                                        //                 <option value="">Select A Category</option>
-                                        //                 {$categories && $categories?.map((category) => (
-                                        //                     <option key={category.id} value={category.id}>
-                                        //                         {category.name}
-                                        //                     </option>
-                                        //                 ))}
-                                        //             </select>
-                                        //             {errors.category && <p className="invalid">Category field is required</p>}
-                                        //         </div>
-                                        //     </div>
-                                        // </div>
                                         <Col md="6" key={`${field.name}${index}`}>
                                             <div className="form-group">
                                                 <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
                                                 <div className="form-control-wrap">
 
                                                     <div className="form-control-select" >
-                                                        <select className="form-control form-select" type="select" name={field.name} id={field.name} {...register(field.name, { required: 'This field is required' })} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field} readOnly={($application_details?.disclosure_status && unChangeableField.includes(field.name) && field?.field_value?.uploaded_field)}>
+                                                        <select className="form-control form-select" type="select" name={field.name} id={field.name}
+                                                            {...register(field.name, { required: 'This field is required' })}
+                                                            onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
+                                                            onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
+                                                            defaultValue={uploadedValue(field)}
+                                                            readOnly={($application_details?.disclosure_status && unChangeableField.includes(field.name) && field?.field_value?.uploaded_field)}>
                                                             <option value=''>Select Option</option>
                                                             {field.field_options && field.field_options.map((option, index) => (
                                                                 <option key={`${option.option_value}${index}`} value={option.option_value}>{option.option_name}</option>
@@ -409,93 +364,90 @@ const Form = () => {
     };
 
     const TradingDetail = (props) => {
-        useEffect(() => {
-            if ($application_details) {
-                dispatch(updateStep({ "application_id": $application_details?.id, "step": 2 }));
-            }
-        }, [dispatch]);
 
         const { reset, register, handleSubmit, formState: { errors }, setValue, clearErrors } = useForm();
 
-        const onInputChange = async (values) => {
+        const applicationFields = $overall_fields?.trade;
 
+        let fields = applicationFields
+
+        const uploadFieldValue = (values) => {
+            fields = fields.map((item) => {
+                if (item.name == values.field_name && item.type == values.field_type) {
+                    return { ...item, field_value: { ...item.field_value, "uploaded_field": values.field_value } };
+                }
+
+
+                if (item.child_fields.length > 0) {
+
+                    let childUpdated = false;
+
+                    const updatedChildFields = item.child_fields.map((childItem) => {
+                        if (childItem.name == values.field_name && childItem.type == values.field_type) {
+                            childUpdated = true;
+                            return { ...childItem, field_value: { ...childItem.field_value, "uploaded_field": values.field_value } };
+                        }
+                        return childItem;
+                    });
+
+                    if (childUpdated) {
+                        return { ...item, child_fields: updatedChildFields };
+                    }
+
+                }
+
+                return item
+            })
+
+
+            $overall_fields = { ...$overall_fields, trade: fields };
+
+        }
+
+        const onInputChange = async (values = false) => {
             if (!values.field_value || !values.field_name || !values.field_type) return
             setValue(values.field_name, values.field_value)
             clearErrors(values.field_name)
-            const postValues = new Object();
-            postValues.field_name = values.field_name;
-            postValues.field_value = values.field_value;
-            postValues.field_type = values.field_type;
-            postValues.application_id = $application_details?.id;
-            postValues.category_id = $application_details?.membership_category?.id;
-
-            try {
-
-                const resp = await dispatch(uploadField(postValues));
-
-                if (resp.payload?.message == "success") {
-                    dispatch(loadPageFields({ "page": "2", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
-                } else {
-
-                }
-
-            } catch (error) {
-
-            }
+            uploadFieldValue(values);
         };
 
-
         const updatedApplicationFields = useSelector((state) => state?.application?.all_fields) || null;
-        const loadingPageFields = useSelector((state) => state?.application?.loadingPageFields) || null;
-        const [applicationFields, setApplicationFields] = useState(overall_fields?.trade);
-
-        // let fields = updatedApplicationFields ? (updatedApplicationFields[0]?.page == 2 ? updatedApplicationFields : applicationFields) : applicationFields
-        let fields = applicationFields
 
         const submitForm = async (data) => {
 
-            let field_value = Object.values(data)
-            let field_name = Object.keys(data)
+            let fieldValues = [];
 
-            let list = [];
+            fields.forEach((fieldItem) => {
 
-            for (let index = 0; index < field_value.length; index++) {
-                let inputField = field_name[index];
-                let inputValue = field_value[index];
-                let field = applicationFields.filter((item) => item.name == inputField);
+                if (fieldItem.field_value.uploaded_field) {
+                    const postValue = new Object();
+                    postValue.field_name = fieldItem.name;
+                    postValue.field_value = fieldItem.field_value.uploaded_field;
+                    postValue.field_type = fieldItem.type;
 
-                if (field) {
-                    let fieldItem = field[0] ? field[0] : null;
-
-
-                    if (fieldItem?.name == inputField) {
-
-                        const postValue = new Object();
-                        postValue.field_name = inputField;
-                        postValue.field_value = inputValue;
-                        postValue.field_type = fieldItem.type;
-
-                        list.push(postValue)
-
-                    }
+                    fieldValues.push(postValue)
                 }
+                fieldItem.child_fields.forEach((fieldChildItem) => {
+                    if (fieldChildItem.field_value.uploaded_field) {
+                        const postValue = new Object();
+                        postValue.field_name = fieldChildItem.name;
+                        postValue.field_value = fieldChildItem.field_value.uploaded_field;
+                        postValue.field_type = fieldChildItem.type;
 
-            }
+                        fieldValues.push(postValue)
+                    }
+                });
 
+            })
 
             try {
 
                 const postValues = new Object();
                 postValues.application_id = $application_details?.id;
                 postValues.category_id = $application_details?.membership_category?.id;
-                postValues.fields = list;
-                const resp = await dispatch(submitPage(postValues));
-
-                if (resp.payload?.message == "success") {
-                    dispatch(loadPageFields({ "page": "2", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
-                }
-
+                postValues.fields = fieldValues;
                 props.next()
+                const resp = await dispatch(submitPage(postValues));
             } catch (error) {
 
             }
@@ -503,23 +455,13 @@ const Form = () => {
         };
 
         const goBack = () => {
-
-            // dispatch(loadAllFields({ "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
-            dispatch(loadPageFields({ "page": "1", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
             props.prev()
         }
-
-
 
         useEffect(() => {
 
             if (updatedApplicationFields) {
                 if (updatedApplicationFields[0]?.page == 2) {
-
-                    // console.log("TradingDetail")
-                    // console.log(loadingPageFields)
-                    // console.log(updatedApplicationFields)
-                    // console.log(applicationFields)
                     fields = updatedApplicationFields
                 }
             }
@@ -539,21 +481,11 @@ const Form = () => {
                                         <div className="form-group">
                                             <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
                                             <div className="form-control-wrap">
-                                                <input type="text" id={field.name} className="form-control" {...register(field.name, { required: (field.required ? 'This field is required' : false) })} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field} />
-                                                {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
-                                            </div>
-                                        </div>
-                                    </Col>
-                                )
-                            } else if (field.type == 'date') {
-
-                                return (
-                                    <Col md="6" key={`${field.name}${index}`}>
-                                        <div className="form-group">
-                                            <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
-                                            <div className="form-control-wrap">
-                                                <DatePicker selected={field?.field_value?.uploaded_field ? new Date(field?.field_value?.uploaded_field) : new Date()}  {...register(field.name, { required: (field.required ? 'This field is required' : false) })} id={field.name} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e, "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field} className="form-control date-picker" />
-                                                {/* <DatePicker selected={field?.field_value?.uploaded_field ? new Date(field?.field_value?.uploaded_field) : new Date()}  {...register(field.name, { required: ( field.required ? 'This field is required' : false) })} id={field.name} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": moment(e).format('YYYY-MM-DD'), "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field} className="form-control date-picker" /> */}
+                                                <input type="text" id={field.name} className="form-control"
+                                                    {...register(field.name, { required: (field.required ? 'This field is required' : false) })}
+                                                    onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
+                                                    onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
+                                                    defaultValue={uploadedValue(field)} />
                                                 {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
                                             </div>
                                         </div>
@@ -565,7 +497,11 @@ const Form = () => {
                                         <div className="form-group">
                                             <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
                                             <div className="form-control-wrap">
-                                                <input type="text" id={field.name} className="form-control" {...register(field.name, { required: (field.required ? 'This field is required' : false), pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: "Invalid email address" }, })} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field} />
+                                                <input type="text" id={field.name} className="form-control"
+                                                    {...register(field.name, { required: (field.required ? 'This field is required' : false), pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: "Invalid email address" }, })}
+                                                    onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
+                                                    onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
+                                                    defaultValue={uploadedValue(field)} />
                                                 {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
                                             </div>
                                         </div>
@@ -577,7 +513,11 @@ const Form = () => {
                                         <div className="form-group">
                                             <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
                                             <div className="form-control-wrap">
-                                                <input type="number" id={field.name} className="form-control" {...register(field.name, { required: (field.required ? 'This field is required' : false) })} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field ? field?.field_value?.uploaded_field : ''} />
+                                                <input type="number" id={field.name} className="form-control"
+                                                    {...register(field.name, { required: (field.required ? 'This field is required' : false) })}
+                                                    onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
+                                                    onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
+                                                    defaultValue={uploadedValue(field) ? field?.field_value?.uploaded_field : ''} />
                                                 {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
                                             </div>
                                         </div>
@@ -591,7 +531,11 @@ const Form = () => {
                                             <div className="form-control-wrap">
 
                                                 <div className="form-control-select" >
-                                                    <select className="form-control form-select" type="select" name={field.name} id={field.name} {...register(field.name, { required: (field.required ? 'This field is required' : false) })} onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })} defaultValue={field?.field_value?.uploaded_field}>
+                                                    <select className="form-control form-select" type="select" name={field.name} id={field.name}
+                                                        {...register(field.name, { required: (field.required ? 'This field is required' : false) })}
+                                                        onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
+                                                        onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
+                                                        defaultValue={uploadedValue(field)}>
                                                         <option value=''>Select Option</option>
                                                         {field.field_options && field.field_options.map((option, index) => (
                                                             <option key={`${option.option_value}${index}`} value={option.option_value}>{option.option_name}</option>
@@ -622,8 +566,12 @@ const Form = () => {
                                                         {field.field_options && field.field_options.map((option, index) => (
 
                                                             <li key={`${option.option_value}${index}`}>
-                                                                <div className="custom-control custom-checkbox custom-control-pro no-control checked">
-                                                                    <input type="checkbox" className="custom-control-input" name="btnCheck" id={`btnCheck${index}`} defaultChecked={checkedBoxes[option.option_value] ? true : false} onChange={(e) => checkedValues({ 'option_value': option.option_value, "field_value": e.target.checked, "option_name": option.option_name })} {...register("btnCheck", { required: 'This field is required' })} />
+                                                                <div className="custom-control custom-checkbox custom-control-pro no-control ">
+                                                                    <input type="checkbox" className="custom-control-input" name="btnCheck" id={`btnCheck${index}`}
+                                                                        defaultChecked={checkedBoxes[option.option_value] ? true : false}
+                                                                        onChange={(e) => checkedValues({ 'option_value': option.option_value, "field_value": e.target.checked, "option_name": option.option_name })}
+                                                                        onClick={(e) => checkedValues({ 'option_value': option.option_value, "field_value": e.target.checked, "option_name": option.option_name })}
+                                                                        {...register("btnCheck", { required: 'This field is required' })} />
                                                                     <label className="custom-control-label" htmlFor={`btnCheck${index}`}>
                                                                         {option.option_name}
                                                                     </label>
@@ -646,7 +594,11 @@ const Form = () => {
                                                                 <div className="form-group">
                                                                     <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
                                                                     <div className="form-control-wrap">
-                                                                        <input type="number" id={child_field.name} className="form-control"  {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                                                        <input type="number" id={child_field.name} className="form-control"
+                                                                            {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
+                                                                            onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type }, 'checkbox')}
+                                                                            onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type }, 'checkbox')}
+                                                                            defaultValue={child_field?.field_value?.uploaded_field} />
                                                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                                                     </div>
                                                                 </div>
@@ -661,7 +613,11 @@ const Form = () => {
                                                                 <div className="form-group">
                                                                     <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
                                                                     <div className="form-control-wrap">
-                                                                        <input type="number" id={child_field.name} className="form-control"  {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                                                        <input type="number" id={child_field.name} className="form-control"
+                                                                            {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
+                                                                            onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                            onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                            defaultValue={child_field?.field_value?.uploaded_field} />
                                                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                                                     </div>
                                                                 </div>
@@ -676,7 +632,11 @@ const Form = () => {
                                                                 <div className="form-group">
                                                                     <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
                                                                     <div className="form-control-wrap">
-                                                                        <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                                                        <input type="number" id={child_field.name} className="form-control"
+                                                                            {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
+                                                                            onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                            onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                            defaultValue={child_field?.field_value?.uploaded_field} />
                                                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                                                     </div>
                                                                 </div>
@@ -691,7 +651,11 @@ const Form = () => {
                                                                 <div className="form-group">
                                                                     <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
                                                                     <div className="form-control-wrap">
-                                                                        <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                                                        <input type="number" id={child_field.name} className="form-control"
+                                                                            {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
+                                                                            onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                            onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                            defaultValue={child_field?.field_value?.uploaded_field} />
                                                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                                                     </div>
                                                                 </div>
@@ -706,7 +670,11 @@ const Form = () => {
                                                                 <div className="form-group">
                                                                     <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
                                                                     <div className="form-control-wrap">
-                                                                        <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                                                        <input type="number" id={child_field.name} className="form-control"
+                                                                            {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
+                                                                            onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                            onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                            defaultValue={child_field?.field_value?.uploaded_field} />
                                                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                                                     </div>
                                                                 </div>
@@ -721,7 +689,11 @@ const Form = () => {
                                                                 <div className="form-group">
                                                                     <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
                                                                     <div className="form-control-wrap">
-                                                                        <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                                                        <input type="number" id={child_field.name} className="form-control"
+                                                                            {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
+                                                                            onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                            onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                            defaultValue={child_field?.field_value?.uploaded_field} />
                                                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                                                     </div>
                                                                 </div>
@@ -736,7 +708,11 @@ const Form = () => {
                                                                 <div className="form-group">
                                                                     <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
                                                                     <div className="form-control-wrap">
-                                                                        <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                                                        <input type="number" id={child_field.name} className="form-control"
+                                                                            {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
+                                                                            onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                            onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                            defaultValue={child_field?.field_value?.uploaded_field} />
                                                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                                                     </div>
                                                                 </div>
@@ -751,7 +727,11 @@ const Form = () => {
                                                                 <div className="form-group">
                                                                     <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
                                                                     <div className="form-control-wrap">
-                                                                        <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                                                        <input type="number" id={child_field.name} className="form-control"
+                                                                            {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
+                                                                            onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                            onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                            defaultValue={child_field?.field_value?.uploaded_field} />
                                                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                                                     </div>
                                                                 </div>
@@ -766,7 +746,11 @@ const Form = () => {
                                                                 <div className="form-group">
                                                                     <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
                                                                     <div className="form-control-wrap">
-                                                                        <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                                                        <input type="number" id={child_field.name} className="form-control"
+                                                                            {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
+                                                                            onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                            onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                            defaultValue={child_field?.field_value?.uploaded_field} />
                                                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                                                     </div>
                                                                 </div>
@@ -781,7 +765,11 @@ const Form = () => {
                                                                 <div className="form-group">
                                                                     <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
                                                                     <div className="form-control-wrap">
-                                                                        <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                                                        <input type="number" id={child_field.name} className="form-control"
+                                                                            {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
+                                                                            onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                            onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                            defaultValue={child_field?.field_value?.uploaded_field} />
                                                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                                                     </div>
                                                                 </div>
@@ -796,7 +784,11 @@ const Form = () => {
                                                                 <div className="form-group">
                                                                     <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
                                                                     <div className="form-control-wrap">
-                                                                        <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                                                        <input type="number" id={child_field.name} className="form-control"
+                                                                            {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
+                                                                            onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                            onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                            defaultValue={child_field?.field_value?.uploaded_field} />
                                                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                                                     </div>
                                                                 </div>
@@ -811,7 +803,11 @@ const Form = () => {
                                                                 <div className="form-group">
                                                                     <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
                                                                     <div className="form-control-wrap">
-                                                                        <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                                                        <input type="number" id={child_field.name} className="form-control"
+                                                                            {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
+                                                                            onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                            onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                            defaultValue={child_field?.field_value?.uploaded_field} />
                                                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                                                     </div>
                                                                 </div>
@@ -826,7 +822,11 @@ const Form = () => {
                                                                 <div className="form-group">
                                                                     <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
                                                                     <div className="form-control-wrap">
-                                                                        <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                                                        <input type="number" id={child_field.name} className="form-control"
+                                                                            {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
+                                                                            onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                            onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                            defaultValue={child_field?.field_value?.uploaded_field} />
                                                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                                                     </div>
                                                                 </div>
@@ -841,7 +841,11 @@ const Form = () => {
                                                                 <div className="form-group">
                                                                     <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
                                                                     <div className="form-control-wrap">
-                                                                        <input type="number" id={child_field.name} className="form-control" {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })} onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field} />
+                                                                        <input type="number" id={child_field.name} className="form-control"
+                                                                            {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
+                                                                            onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                            onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                            defaultValue={child_field?.field_value?.uploaded_field} />
                                                                         {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
                                                                     </div>
                                                                 </div>
@@ -895,61 +899,97 @@ const Form = () => {
             }
         }, [dispatch]);
 
-
-
         const { reset, register, handleSubmit, formState: { errors }, setValue, clearErrors } = useForm();
 
+        const applicationFields = $overall_fields?.disciplinary;
+
+        let fields = applicationFields
+
+        const uploadFieldValue = (values) => {
+
+            fields = fields.map((item) => {
+                if (item.name == values.field_name && item.type == values.field_type) {
+                    return { ...item, field_value: { ...item.field_value, "uploaded_field": values.field_value } };
+                }
+
+
+                if (item.child_fields.length > 0) {
+                    let childUpdated = false;
+                    const updatedChildFields = item.child_fields.map((childItem) => {
+                        if (childItem.name == values.field_name && childItem.type == values.field_type) {
+                            childUpdated = true;
+                            return { ...childItem, field_value: { ...childItem.field_value, "uploaded_field": values.field_value } };
+                        }
+                        return childItem;
+                    });
+
+                    if (childUpdated) {
+                        return { ...item, child_fields: updatedChildFields };
+                    }
+
+                }
+                return item
+            })
+
+            $overall_fields = { ...$overall_fields, disciplinary: fields };
+
+        }
 
         const onInputChange = async (values) => {
 
             if (!values.field_value || !values.field_name || !values.field_type) return
             setValue(values.field_name, values.field_value)
             clearErrors(values.field_name)
-            const postValues = new Object();
-            postValues.field_name = values.field_name;
-            postValues.field_value = values.field_value;
-            postValues.field_type = values.field_type;
-            postValues.application_id = $application_details?.id;
-            postValues.category_id = $application_details?.membership_category?.id;
+            uploadFieldValue(values);
 
-            try {
-
-                const resp = await dispatch(uploadField(postValues));
-
-                if (resp.payload?.message == "success") {
-                    dispatch(loadPageFields({ "page": "3", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
-                } else {
-
-                }
-
-            } catch (error) {
-
-            }
         };
 
-
-
-
         const updatedApplicationFields = useSelector((state) => state?.application?.all_fields) || null;
-        const loadingPageFields = useSelector((state) => state?.application?.loadingPageFields) || null;
-        const [applicationFields, setApplicationFields] = useState(overall_fields?.disciplinary);
-
-        // let fields = updatedApplicationFields ? (updatedApplicationFields[0]?.page == 3 ? updatedApplicationFields : applicationFields) : applicationFields
-        let fields = applicationFields
 
         const submitForm = async (data) => {
 
 
+            let fieldValues = [];
 
-            dispatch(loadPageFields({ "page": "4", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
-            props.next()
+            fields.forEach((fieldItem) => {
+
+                if (fieldItem.field_value.uploaded_field) {
+                    const postValue = new Object();
+                    postValue.field_name = fieldItem.name;
+                    postValue.field_value = fieldItem.field_value.uploaded_field;
+                    postValue.field_type = fieldItem.type;
+
+                    fieldValues.push(postValue)
+                }
+                fieldItem.child_fields.forEach((fieldChildItem) => {
+                    if (fieldChildItem.field_value.uploaded_field) {
+                        const postValue = new Object();
+                        postValue.field_name = fieldChildItem.name;
+                        postValue.field_value = fieldChildItem.field_value.uploaded_field;
+                        postValue.field_type = fieldChildItem.type;
+
+                        fieldValues.push(postValue)
+                    }
+                });
+
+            })
+
+            try {
+
+                const postValues = new Object();
+                postValues.application_id = $application_details?.id;
+                postValues.category_id = $application_details?.membership_category?.id;
+                postValues.fields = fieldValues;
+                props.next()
+                const resp = await dispatch(submitPage(postValues));
+
+            } catch (error) {
+
+            }
 
         };
 
         const goBack = () => {
-
-            // dispatch(loadAllFields({ "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
-            dispatch(loadPageFields({ "page": "2", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
             props.prev()
         }
 
@@ -959,10 +999,6 @@ const Form = () => {
             if (updatedApplicationFields) {
                 if (updatedApplicationFields[0]?.page == 3) {
 
-                    // console.log("DisciplinaryHistory")
-                    // console.log(loadingPageFields)
-                    // console.log(updatedApplicationFields)
-                    // console.log(applicationFields)
                     fields = updatedApplicationFields
                 }
             }
@@ -986,7 +1022,7 @@ const Form = () => {
                                             <div className="form-control-wrap">
 
                                                 {/* <div className="form-control-select" >
-                                        <select className="form-control form-select" type="select" name={field.name} id={field.name} {...register(field.name, { required: 'This field is required' })} onChange={(e) => onInputChange({'field_name' : field.name, "field_value" : e.target.value, "field_type" : field.type})} defaultValue={field?.field_value?.uploaded_field}> 
+                                        <select className="form-control form-select" type="select" name={field.name} id={field.name} {...register(field.name, { required: 'This field is required' })} onChange={(e) => onInputChange({'field_name' : field.name, "field_value" : e.target.value, "field_type" : field.type})} defaultValue={uploadedValue(field)}> 
                                             <option>Select Option</option>
                                             {field.field_options && field.field_options.map((option, index) => (
                                                 <option key={index} value={option.option_value}>{option.option_name}</option>
@@ -1067,54 +1103,92 @@ const Form = () => {
         const { reset, register, handleSubmit, formState: { errors }, setValue, clearErrors } = useForm();
 
 
+        const applicationFields = $overall_fields?.document;
+
+        let fields = applicationFields
+
+        const uploadFieldValue = (values) => {
+
+            fields = fields.map((item) => {
+                if (item.name == values.field_name && item.type == values.field_type) {
+                    return { ...item, field_value: { ...item.field_value, "uploaded_file": values.field_value, "file_path": URL.createObjectURL(values.field_value), "uploaded_field": values.field_value } };
+                }
+
+
+                if (item.child_fields.length > 0) {
+                    let childUpdated = false;
+                    const updatedChildFields = item.child_fields.map((childItem) => {
+                        if (childItem.name == values.field_name && childItem.type == values.field_type) {
+                            childUpdated = true;
+                            return { ...childItem, field_value: { ...childItem.field_value, "uploaded_file": values.field_value, "file_path": URL.createObjectURL(values.field_value), "uploaded_field": values.field_value } };
+                        }
+                        return childItem;
+                    });
+
+                    if (childUpdated) {
+                        return { ...item, child_fields: updatedChildFields };
+                    }
+
+                }
+                return item
+            })
+            $overall_fields = { ...$overall_fields, document: fields };
+        }
+
         const onInputChange = async (values) => {
 
             if (!values.field_value || !values.field_name || !values.field_type) return
             setValue(values.field_name, values.field_value)
             clearErrors(values.field_name)
-            const postValues = new Object();
-            postValues.field_name = values.field_name;
-            postValues.field_value = values.field_value;
-            postValues.field_type = values.field_type;
-            postValues.application_id = $application_details?.id;
-            postValues.category_id = $application_details?.membership_category?.id;
+            uploadFieldValue(values);
+
+        };
+
+        const updatedApplicationFields = useSelector((state) => state?.application?.all_fields) || null;
+
+        const submitForm = async (data) => {
+
+            let fieldValues = [];
+
+            fields.forEach((fieldItem) => {
+
+                if (fieldItem.field_value.uploaded_field) {
+                    const postValue = new Object();
+                    postValue.field_name = fieldItem.name;
+                    postValue.field_value = fieldItem.field_value.uploaded_field;
+                    postValue.field_type = fieldItem.type;
+
+                    fieldValues.push(postValue)
+                }
+                fieldItem.child_fields.forEach((fieldChildItem) => {
+                    if (fieldChildItem.field_value.uploaded_field) {
+                        const postValue = new Object();
+                        postValue.field_name = fieldChildItem.name;
+                        postValue.field_value = fieldChildItem.field_value.uploaded_field;
+                        postValue.field_type = fieldChildItem.type;
+
+                        fieldValues.push(postValue)
+                    }
+                });
+
+            })
 
             try {
 
-                const resp = await dispatch(uploadField(postValues));
-
-                if (resp.payload?.message == "success") {
-                    dispatch(loadPageFields({ "page": "4", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
-                } else {
-
-                }
+                const postValues = new Object();
+                postValues.application_id = $application_details?.id;
+                postValues.category_id = $application_details?.membership_category?.id;
+                postValues.fields = fieldValues;
+                props.next()
+                const resp = await dispatch(submitPage(postValues));
 
             } catch (error) {
 
             }
-        };
-
-
-
-
-
-        const updatedApplicationFields = useSelector((state) => state?.application?.all_fields) || null;
-        const loadingPageFields = useSelector((state) => state?.application?.loadingPageFields) || null;
-        const [applicationFields, setApplicationFields] = useState(overall_fields?.document);
-
-        // let fields = updatedApplicationFields ? (updatedApplicationFields[0]?.page == 4 ? updatedApplicationFields : applicationFields) : applicationFields
-        let fields = applicationFields
-
-        const submitForm = async (data) => {
-
-            dispatch(loadPageFields({ "page": "5", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
-            props.next()
 
         };
 
         const goBack = () => {
-            // dispatch(loadAllFields({ "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
-            dispatch(loadPageFields({ "page": "3", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
             props.prev()
         }
 
@@ -1123,11 +1197,6 @@ const Form = () => {
 
             if (updatedApplicationFields) {
                 if (updatedApplicationFields[0]?.page == 4) {
-
-                    // console.log("SupportingDocuments")
-                    // console.log(loadingPageFields)
-                    // console.log(updatedApplicationFields)
-                    // console.log(applicationFields)
                     fields = updatedApplicationFields
                 }
             }
@@ -1150,7 +1219,7 @@ const Form = () => {
                                             <div className="form-control-wrap">
                                                 <div className="input-group">
                                                     <input type="file" accept={`${field.name == 'CompanyLogo' ? '.jpg,.jpeg,.png' : '.jpg,.jpeg,.png,.pdf'}`} id={field.name} className="form-control" onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.files[0], "field_type": field.type })} style={{ display: field.field_value?.file_path ? 'none' : 'block' }} />
-                                                    <label for={field.name} className="form-control" style={{ display: field.field_value?.file_path ? 'block' : 'none' }} >Document Uploaded</label>
+                                                    <label htmlFor={field.name} className="form-control" style={{ display: field.field_value?.file_path ? 'block' : 'none' }} >Document Uploaded</label>
 
                                                     <div className="input-group-append">
                                                         <input type="hidden" {...register(field.name, { required: (field.required ? 'This field is required' : false) })} value={field.field_value?.file_path ? field.field_value?.file_path : ''} />
@@ -1210,11 +1279,45 @@ const Form = () => {
         }, [dispatch, $application_details]);
 
 
-        const onInputChange = async (values) => {
+        const applicationFields = $overall_fields?.declaration;
 
+        let fields = applicationFields
+
+        const uploadFieldValue = (values) => {
+
+            fields = fields.map((item) => {
+                if (item.name == values.field_name && item.type == values.field_type) {
+                    return { ...item, field_value: { ...item.field_value, "uploaded_file": values.field_value, "file_path": URL.createObjectURL(values.field_value), "uploaded_field": values.field_value } };
+                }
+
+
+                if (item.child_fields.length > 0) {
+                    let childUpdated = false;
+                    const updatedChildFields = item.child_fields.map((childItem) => {
+                        if (childItem.name == values.field_name && childItem.type == values.field_type) {
+                            childUpdated = true;
+                            return { ...childItem, field_value: { ...childItem.field_value, "uploaded_file": values.field_value, "file_path": URL.createObjectURL(values.field_value), "uploaded_field": values.field_value } };
+                        }
+                        return childItem;
+                    });
+
+                    if (childUpdated) {
+                        return { ...item, child_fields: updatedChildFields };
+                    }
+
+                }
+                return item
+            })
+            $overall_fields = { ...$overall_fields, declaration: fields };
+        }
+
+
+
+        const onInputChange = async (values) => {
             if (!values.field_value || !values.field_name || !values.field_type) return
             setValue(values.field_name, values.field_value)
             clearErrors(values.field_name)
+            uploadFieldValue(values);
             const postValues = new Object();
             postValues.field_name = values.field_name;
             postValues.field_value = values.field_value;
@@ -1226,12 +1329,6 @@ const Form = () => {
 
                 const resp = await dispatch(uploadField(postValues));
 
-                if (resp.payload?.message == "success") {
-                    dispatch(loadPageFields({ "page": "5", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
-                } else {
-
-                }
-
             } catch (error) {
 
             }
@@ -1239,11 +1336,7 @@ const Form = () => {
 
 
         const updatedApplicationFields = useSelector((state) => state?.application?.all_fields) || null;
-        const loadingPageFields = useSelector((state) => state?.application?.loadingPageFields) || null;
-        const [applicationFields, setApplicationFields] = useState(overall_fields?.declaration);
 
-        // let fields = updatedApplicationFields ? (updatedApplicationFields[0]?.page == 5 ? updatedApplicationFields : applicationFields) : applicationFields
-        let fields = applicationFields
 
         const submitForm = async (data) => {
 
@@ -1252,8 +1345,6 @@ const Form = () => {
         };
 
         const goBack = () => {
-            // dispatch(loadAllFields({ "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
-            dispatch(loadPageFields({ "page": "4", "category": $application_details?.membership_category?.id, "application_id": $application_details?.id }));
             props.prev()
         }
 
@@ -1295,7 +1386,7 @@ const Form = () => {
                                             <div className="form-control-wrap">
                                                 <div className="input-group">
                                                     <input type="file" accept=".jpg,.jpeg,.png,.pdf" id={field.name} className="form-control" onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.files[0], "field_type": field.type })} style={{ display: field.field_value?.file_path ? 'none' : 'block' }} />
-                                                    <label for={field.name} className="form-control" style={{ display: field.field_value?.file_path ? 'block' : 'none' }} >Document Uploaded</label>
+                                                    <label htmlFor={field.name} className="form-control" style={{ display: field.field_value?.file_path ? 'block' : 'none' }} >Document Uploaded</label>
 
                                                     <div className="input-group-append">
                                                         <input type="hidden" {...register(field.name, { required: 'This field is required' })} value={field.field_value?.file_path ? field.field_value?.file_path : ''} />
@@ -1607,19 +1698,21 @@ const Form = () => {
                                     <span className="sub-text">View Institutions</span>
                                 </ModalFooter>
                             </Modal>
+                            {$overall_fields &&
+                                <div className="nk-wizard nk-wizard-simple is-alter wizard clearfix">
 
-                            <div className="nk-wizard nk-wizard-simple is-alter wizard clearfix">
 
+                                    <Steps config={config} >
+                                        <Step component={ApplicantInformation} />
+                                        <Step component={TradingDetail} />
+                                        <Step component={DisciplinaryHistory} />
+                                        <Step component={SupportingDocuments} />
+                                        <Step component={ApplicationDeclaration} />
+                                        <Step component={ApplicationCompleted} />
+                                    </Steps>
+                                </div>
+                            }
 
-                                <Steps config={config} >
-                                    <Step component={ApplicantInformation} />
-                                    <Step component={TradingDetail} />
-                                    <Step component={DisciplinaryHistory} />
-                                    <Step component={SupportingDocuments} />
-                                    <Step component={ApplicationDeclaration} />
-                                    <Step component={ApplicationCompleted} />
-                                </Steps>
-                            </div>
                         </div>
                     </div>
                 </div>

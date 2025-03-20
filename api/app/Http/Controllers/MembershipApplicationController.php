@@ -359,11 +359,11 @@ class MembershipApplicationController extends Controller
 
                     $attachment = null;
 
-                    // if ($field['field_type']->hasFile('field_value')) {
-                    //     $attachment = $request->file('field_value')->storePublicly('application', 'public');
-                    // }
+                    if (is_file($field['field_value'])) {
+                        $attachment = $field['field_value']->storePublicly('application', 'public');
+                    }
                     $data['uploaded_field'] = null;
-                    // $data = ['uploaded_file' => $attachment];
+                    $data = ['uploaded_file' => $attachment];
                 }
 
                 $upload_action = ApplicationFieldUpload::updateOrCreate(
