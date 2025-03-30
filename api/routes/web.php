@@ -10,6 +10,7 @@ use App\Http\Controllers\MembershipApplicationController;
 use App\Http\Controllers\SystemController;
 use App\Models\Application;
 use App\Models\Education\EventRegistration;
+use App\Models\MembershipCategory;
 // use App\Models\Education\EventRegistration;
 // use App\Models\MembershipCategory;
 use App\Models\Role;
@@ -32,6 +33,11 @@ use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
 
 Route::get('/', function () {
 
+    return "Yes";
+        $membershipCategory = MembershipCategory::where('id', '1')->first();
+        $membershipCategory = Utility::membershipCategoryLicense($membershipCategory);
+
+        dd($membershipCategory);
 
         $oMerger = PDFMerger::init();
 

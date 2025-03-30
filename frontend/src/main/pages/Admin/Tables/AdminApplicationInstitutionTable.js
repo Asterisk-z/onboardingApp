@@ -109,7 +109,10 @@ const ActionTab = (props) => {
     const toggleSignedAgreement = () => setSignedAgreement(!signedAgreement);
     const toggleUpdateMemberAgreement = () => setUpdateMemberAgreement(!updateMemberAgreement);
     const toggleUpdateMemberESuccessLetter = () => setUpdateMemberESuccessLetter(!updateMemberESuccessLetter);
-    const togglePaymentView = () => setModalPaymentView(!modalPaymentView);
+    const togglePaymentView = () => {
+        setModalPaymentView(!modalPaymentView)
+        if (!modalPaymentView) setShowConcession(modalPaymentView)
+    };
 
     const toggleConcession = () => {
         if (!showConcession) {
@@ -119,7 +122,7 @@ const ActionTab = (props) => {
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonText: "Yes",
-                cancelButtonText: "No",
+                cancelButtonText: "No Concession",
                 allowOutsideClick: false
             }).then((result) => {
                 if (result.isConfirmed) {
@@ -534,7 +537,7 @@ const ActionTab = (props) => {
                 <ModalBody>
                     {(institution.internal.concession_stage != '1') ? <>
                         {!showConcession && <>
-                            <Button onClick={toggleConcession} >Upload Concession</Button>
+                            <Button onClick={toggleConcession} >Concession</Button>
                         </>}
                     </> :
                         (institution?.latest_evidence?.proof) ? <>
@@ -627,71 +630,142 @@ const ActionTab = (props) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Company Name</td>
-                                        <td className="text-capitalize">{`${institution?.basic_details?.companyName ?? ''}`}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>RC Number</td>
-                                        <td className="text-capitalize">{`${institution?.basic_details?.rcNumber ?? ''}`}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Registered Office Address</td>
-                                        <td className="text-capitalize">{`${institution?.basic_details?.registeredOfficeAddress ?? ''}`}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>Town/City</td>
-                                        <td className="text-capitalize">{`${institution?.basic_details?.placeOfIncorporation ?? ''}`}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>5</td>
-                                        <td>Date of Incorporation</td>
-                                        <td className="text-capitalize">{`${institution?.basic_details?.dateOfIncorporation ? moment(institution?.basic_details?.dateOfIncorporation).format('MMM. D, YYYY') : ''}`}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>6</td>
-                                        <td>Place of Incorporation</td>
-                                        <td className="text-capitalize">{`${institution?.basic_details?.placeOfIncorporation ?? ''}`}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>7</td>
-                                        <td>Nature of Business</td>
-                                        <td className="text-capitalize">{`${institution?.basic_details?.natureOfBusiness ?? ''}`}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>8</td>
-                                        <td>Company Primary Telephone Number</td>
-                                        <td className="text-capitalize">{`${institution?.basic_details?.companyTelephoneNumber ?? ''}`}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>9</td>
-                                        <td>Company Secondary Telephone Number</td>
-                                        <td className="text-capitalize">{`${institution?.basic_details?.companyTelephoneNumber ?? ''}`}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>10</td>
-                                        <td>Company Email Address</td>
-                                        <td className="text-lowercase">{`${institution?.basic_details?.companyEmailAddress ?? ''}`}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>11</td>
-                                        <td>Company Website Address</td>
-                                        <td className="text-lowercase">{`${institution?.basic_details?.corporateWebsiteAddress ?? ''}`}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>12</td>
-                                        <td>Authorised Share Capital</td>
-                                        <td className="text-capitalize">{`${institution?.basic_details?.authorisedShareCapital ?? ''}`}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>13</td>
-                                        <td>Authorised Share Capital Currency</td>
-                                        <td className="text-capitalize">{`${institution?.basic_details?.authorisedShareCapitalCurrency ?? ''}`}</td>
-                                    </tr>
+                                    {institution?.bank_details?.companyName && <>
+                                        <tr>
+                                            <td></td>
+                                            <td>Company Name</td>
+                                            <td className="text-capitalize">{`${institution?.basic_details?.companyName ?? ''}`}</td>
+                                        </tr>
+                                    </>}
+
+                                    {institution?.bank_details?.applicationPrimaryContactName && <>
+                                        <tr>
+                                            <td></td>
+                                            <td>Company Name</td>
+                                            <td className="text-capitalize">{`${institution?.basic_details?.applicationPrimaryContactName ?? ''}`}</td>
+                                        </tr>
+                                    </>}
+                                    {institution?.bank_details?.individualModeOfIdentification && <>
+                                        <tr>
+                                            <td></td>
+                                            <td>Company Name</td>
+                                            <td className="text-capitalize">{`${institution?.basic_details?.individualModeOfIdentification ?? ''}`}</td>
+                                        </tr>
+                                    </>}
+                                    {institution?.bank_details?.individualResidentialAddress && <>
+                                        <tr>
+                                            <td></td>
+                                            <td>Company Name</td>
+                                            <td className="text-capitalize">{`${institution?.basic_details?.individualResidentialAddress ?? ''}`}</td>
+                                        </tr>
+                                    </>}
+                                    {institution?.bank_details?.applicationPrimaryContactTelephone && <>
+                                        <tr>
+                                            <td></td>
+                                            <td>Company Name</td>
+                                            <td className="text-capitalize">{`${institution?.basic_details?.applicationPrimaryContactTelephone ?? ''}`}</td>
+                                        </tr>
+                                    </>}
+                                    {institution?.bank_details?.applicationPrimaryContactEmailAddress && <>
+                                        <tr>
+                                            <td></td>
+                                            <td>Company Name</td>
+                                            <td className="text-capitalize">{`${institution?.basic_details?.applicationPrimaryContactEmailAddress ?? ''}`}</td>
+                                        </tr>
+                                    </>}
+                                    {institution?.bank_details?.reasonForSeekingMembership && <>
+                                        <tr>
+                                            <td></td>
+                                            <td>Company Name</td>
+                                            <td className="text-capitalize">{`${institution?.basic_details?.reasonForSeekingMembership ?? ''}`}</td>
+                                        </tr>
+                                    </>}
+
+
+                                    {institution?.bank_details?.rcNumber && <>
+                                        <tr>
+                                            <td></td>
+                                            <td>RC Number</td>
+                                            <td className="text-capitalize">{`${institution?.basic_details?.rcNumber ?? ''}`}</td>
+                                        </tr>
+                                    </>}
+                                    {institution?.bank_details?.registeredOfficeAddress && <>
+                                        <tr>
+                                            <td></td>
+                                            <td>Registered Office Address</td>
+                                            <td className="text-capitalize">{`${institution?.basic_details?.registeredOfficeAddress ?? ''}`}</td>
+                                        </tr>
+                                    </>}
+                                    {institution?.bank_details?.placeOfIncorporation && <>
+                                        <tr>
+                                            <td></td>
+                                            <td>Town/City</td>
+                                            <td className="text-capitalize">{`${institution?.basic_details?.placeOfIncorporation ?? ''}`}</td>
+                                        </tr>
+                                    </>}
+                                    {institution?.bank_details?.dateOfIncorporation && <>
+                                        <tr>
+                                            <td></td>
+                                            <td>Date of Incorporation</td>
+                                            <td className="text-capitalize">{`${institution?.basic_details?.dateOfIncorporation ? moment(institution?.basic_details?.dateOfIncorporation).format('MMM. D, YYYY') : ''}`}</td>
+                                        </tr>
+                                    </>}
+                                    {institution?.bank_details?.placeOfIncorporation && <>
+                                        <tr>
+                                            <td></td>
+                                            <td>Place of Incorporation</td>
+                                            <td className="text-capitalize">{`${institution?.basic_details?.placeOfIncorporation ?? ''}`}</td>
+                                        </tr>
+                                    </>}
+                                    {institution?.bank_details?.natureOfBusiness && <>
+                                        <tr>
+                                            <td></td>
+                                            <td>Nature of Business</td>
+                                            <td className="text-capitalize">{`${institution?.basic_details?.natureOfBusiness ?? ''}`}</td>
+                                        </tr>
+                                    </>}
+                                    {institution?.bank_details?.companyTelephoneNumber && <>
+                                        <tr>
+                                            <td></td>
+                                            <td>Company Primary Telephone Number</td>
+                                            <td className="text-capitalize">{`${institution?.basic_details?.companyTelephoneNumber ?? ''}`}</td>
+                                        </tr>
+                                    </>}
+                                    {institution?.bank_details?.companyTelephoneNumber && <>
+                                        <tr>
+                                            <td></td>
+                                            <td>Company Secondary Telephone Number</td>
+                                            <td className="text-capitalize">{`${institution?.basic_details?.companyTelephoneNumber ?? ''}`}</td>
+                                        </tr>
+                                    </>}
+                                    {institution?.bank_details?.companyEmailAddress && <>
+                                        <tr>
+                                            <td></td>
+                                            <td>Company Email Address</td>
+                                            <td className="text-lowercase">{`${institution?.basic_details?.companyEmailAddress ?? ''}`}</td>
+                                        </tr>
+                                    </>}
+                                    {institution?.bank_details?.corporateWebsiteAddress && <>
+                                        <tr>
+                                            <td></td>
+                                            <td>Company Website Address</td>
+                                            <td className="text-lowercase">{`${institution?.basic_details?.corporateWebsiteAddress ?? ''}`}</td>
+                                        </tr>
+                                    </>}
+                                    {institution?.bank_details?.authorisedShareCapital && <>
+                                        <tr>
+                                            <td></td>
+                                            <td>Authorised Share Capital</td>
+                                            <td className="text-capitalize">{`${institution?.basic_details?.authorisedShareCapital ?? ''}`}</td>
+                                        </tr>
+                                    </>}
+                                    {institution?.bank_details?.authorisedShareCapitalCurrency && <>
+                                        <tr>
+                                            <td></td>
+                                            <td>Authorised Share Capital Currency</td>
+                                            <td className="text-capitalize">{`${institution?.basic_details?.authorisedShareCapitalCurrency ?? ''}`}</td>
+                                        </tr>
+                                    </>}
 
                                 </tbody>
                             </table>
@@ -1418,7 +1492,7 @@ const UpdateAgreement = ({ updateParentParent, tabItem, positions, closeModel })
 
                 <div className="form-group">
                     <label className="form-label" htmlFor="institution_name">
-                        Institution Name
+                        Applicant Name
                     </label>
                     <div className="form-control-wrap">
                         <input type="text" id="institution_name" className="form-control" {...register('institution_name', { required: "This Field is required" })} defaultValue={tabItem?.eMemberAgreement?.companyName} />
@@ -1427,7 +1501,7 @@ const UpdateAgreement = ({ updateParentParent, tabItem, positions, closeModel })
                 </div>
                 <div className="form-group">
                     <label className="form-label" htmlFor="institution_address">
-                        Institution Address
+                        Applicant Address
                     </label>
                     <div className="form-control-wrap">
                         <input type="text" id="institution_address" className="form-control" {...register('institution_address', { required: "This Field is required" })} defaultValue={tabItem?.eMemberAgreement?.registeredOfficeAddress} />
@@ -1438,7 +1512,7 @@ const UpdateAgreement = ({ updateParentParent, tabItem, positions, closeModel })
                 {tabItem?.eMemberAgreement?.rcNumber && <>
                     <div className="form-group">
                         <label className="form-label" htmlFor="institution_rc_number">
-                            Institution RC Number
+                            Applicant RC Number
                         </label>
                         <div className="form-control-wrap">
                             <input type="text" id="institution_rc_number" className="form-control" {...register('institution_rc_number', { required: "This Field is required" })} defaultValue={tabItem?.eMemberAgreement?.rcNumber} />
@@ -1616,7 +1690,7 @@ const UpdateESuccessLetter = ({ updateParentParent, tabItem, positions, closeMod
                     </div>
                 </div>
 
-                {tabItem?.basic_details?.rcNumber && <>
+                {(tabItem?.basic_details?.rcNumber || true) && <>
                     <div className="form-group">
                         <label className="form-label" htmlFor="member_name">
                             Member Name

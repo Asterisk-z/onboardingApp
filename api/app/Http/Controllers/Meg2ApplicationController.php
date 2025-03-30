@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Events\ESuccessLetterEvent;
 use App\Helpers\ESuccessLetter;
 use App\Helpers\MailContents;
 use App\Helpers\Utility;
@@ -60,7 +61,7 @@ class Meg2ApplicationController extends Controller
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg . "1");
         }
 
-        MemberESuccessLetter::updateOrCreate(["application_id" => $application->id], [
+        $agreement = MemberESuccessLetter::updateOrCreate(["application_id" => $application->id], [
             "application_id" => $application->id,
             "companyName"    => request('name'),
             "address"        => request('address'),
@@ -68,6 +69,8 @@ class Meg2ApplicationController extends Controller
         ]);
 
         logAction($user->email, 'MEG Level 2 Updated E-Success Letter', "MEG Level 2 updated membership agreement details", $request->ip());
+
+        event(new ESuccessLetterEvent($agreement));
 
         return successResponse("E-Success Letter has been updated successfully.");
     }

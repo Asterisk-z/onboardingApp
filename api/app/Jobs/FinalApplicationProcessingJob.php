@@ -66,8 +66,10 @@ class FinalApplicationProcessingJob implements ShouldQueue
 
         $pdfMerger = PDFMerger::init();
 
-        $pdfMerger->addPDF(Utility::updatePdfVersion(storage_path('/app/public/' .$application->meg_executed_membership_agreement)), 'all', 'P');
-        $pdfMerger->addPDF(Utility::updatePdfVersion(storage_path('/app/public/' .$application->e_success_letter)), 'all', 'P');
+        $pdfMerger->addPDF(Utility::updatePdfVersion($application->meg_executed_membership_agreement), 'all', 'P');
+        $pdfMerger->addPDF(Utility::updatePdfVersion($application->e_success_letter), 'all', 'P');
+        // $pdfMerger->addPDF(Utility::updatePdfVersion(storage_path('/app/public/' .$application->meg_executed_membership_agreement)), 'all', 'P');
+        // $pdfMerger->addPDF(Utility::updatePdfVersion(storage_path('/app/public/' .$application->e_success_letter)), 'all', 'P');
         // $pdfMerger->addPDF(storage_path('/app/public/' . $application->e_success_letter), 'all');
         // $pdfMerger->addPDF(storage_path('/app/public/' . $application->meg_executed_membership_agreement), 'all');
 
@@ -141,10 +143,14 @@ class FinalApplicationProcessingJob implements ShouldQueue
         $application->application_type_status = Application::typeStatus['ASC'];
         $application->save();
 
-        $toEmails = [$applicant->email, $companyEmail];
+        $toEmails = [$applicant->email];
 
         if ($primaryContactEmail) {
             array_push($toEmails, $primaryContactEmail);
+        }
+
+        if ($companyEmail) {
+            array_push($toEmails, $companyEmail);
         }
 
         Utility::notifyApplicantFinal($application->id, $emailData, $toEmails, $ccEmails, $attachment);

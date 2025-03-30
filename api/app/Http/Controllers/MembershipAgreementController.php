@@ -1,6 +1,8 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Events\ESuccessLetterEvent;
+use App\Events\MembershipAgreementLetterEvent;
 use App\Helpers\DisclosureLetter;
 use App\Helpers\ESuccessLetter;
 use App\Helpers\Utility;
@@ -46,13 +48,14 @@ class MembershipAgreementController extends Controller
         if (! $details = MemberAgreement::where('application_id', $application->id)->first()) {
             return "error";
         }
-        // // dd($application->id);
-        // // logger($membershipCategory->code);
-        $pdf = PDF::loadView('agreement.' . $membershipCategory->code, compact('details'));
-        // $pdf = PDF::loadView('agreement.rml', compact('details'));
-        Storage::put('public/agreement/e_membership_agreement' . $application->id . '.pdf', $pdf->output());
-        $application->membership_agreement = 'agreement/e_membership_agreement' . $application->id . '.pdf';
-        $application->save();
+        // // // dd($application->id);
+        // // // logger($membershipCategory->code);
+        // $pdf = PDF::loadView('agreement.' . $membershipCategory->code, compact('details'));
+        // Storage::put('public/agreement/e_membership_agreement' . $application->id . '.pdf', $pdf->output());
+        // $application->membership_agreement = 'agreement/e_membership_agreement' . $application->id . '.pdf';
+        // $application->save();
+
+        event(new MembershipAgreementLetterEvent($details));
 
         return view('agreement.' . $membershipCategory->code, ['details' => $details]);
         // return view('agreement.rml', ['details' => $details]);

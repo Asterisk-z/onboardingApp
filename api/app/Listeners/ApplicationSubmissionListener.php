@@ -52,7 +52,7 @@ class ApplicationSubmissionListener implements ShouldQueue
             ->select('application_field_uploads.*')
             ->first();
 
-        $companyEmail = $data->uploaded_field ? $data->uploaded_field : $data->uploaded_file;
+        $companyEmail = $data ? ($data->uploaded_field ? $data->uploaded_field : $data->uploaded_file) : "";
         $companyEmail = filter_var($companyEmail, FILTER_VALIDATE_EMAIL) ? $companyEmail : '';
 
         $data = ApplicationField::where('name', 'applicationPrimaryContactEmailAddress')
@@ -130,6 +130,8 @@ class ApplicationSubmissionListener implements ShouldQueue
         $year               = Carbon::now()->format('Y');
         $discounted_percent = $discounted_amount = $vat = $total = $other_discount_amount = 0;
 
+        $membershipCategory = Utility::membershipCategoryLicense($membershipCategory, $application);
+
         $application_fee = $membershipCategory->application_fee;
         $membership_dues = $membershipCategory->membership_dues;
 
@@ -158,10 +160,10 @@ class ApplicationSubmissionListener implements ShouldQueue
 
         //Create Invoice content
         if ($application_fee) {
-            $membershipCategoryFeeName = Utility::membershipCategoryFeeName($membershipCategory);
+
             InvoiceContent::create([
                 "invoice_id"  => $invoice->id,
-                "name"        => "{$membershipCategoryFeeName} - Application Fee (Non-Refundable)",
+                "name"        => "{$membershipCategory->name} - Application Fee (Non-Refundable)",
                 "value"       => $application_fee,
                 "is_discount" => 0,
                 "parent_id"   => null,

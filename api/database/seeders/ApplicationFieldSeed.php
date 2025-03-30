@@ -6832,81 +6832,82 @@ class ApplicationFieldSeed extends Seeder
         //AFFILIATE MEMBER (STANDARD) CATEGORY
 
         $fields = [
+            // [
+            //     "category" => '9',
+            //     "name" => 'companyName',
+            //     "description" => 'Name of Body Corporate',
+            //     "type" => 'text',
+            //     "required" => 1,
+            //     "page" => '1',
+            // ],
+            // [
+            //     "category" => '9',
+            //     "name" => 'rcNumber',
+            //     "description" => 'RC Number',
+            //     "type" => 'text',
+            //     "required" => 1,
+            //     "page" => '1',
+            // ],
+            // [
+            //     "category" => '9',
+            //     "name" => 'registeredOfficeAddress',
+            //     "description" => 'Registered Office Address',
+            //     "type" => 'text',
+            //     "required" => 1,
+            //     "page" => '1',
+            // ],
+            // [
+            //     "category" => '9',
+            //     "name" => 'dateOfIncorporation',
+            //     "description" => 'Date of Incorporation',
+            //     "type" => 'date',
+            //     "required" => 1,
+            //     "page" => '1',
+            // ],
+            // [
+            //     "category" => '9',
+            //     "name" => 'placeOfIncorporation',
+            //     "description" => 'Place of Incorporation',
+            //     "type" => 'text',
+            //     "required" => 1,
+            //     "page" => '1',
+            // ],
+            // [
+            //     "category" => '9',
+            //     "name" => 'natureOfBusiness',
+            //     "description" => 'Nature of Business',
+            //     "type" => 'text',
+            //     "required" => 1,
+            //     "page" => '1',
+            // ],
+            // [
+            //     "category" => '9',
+            //     "name" => 'companyTelephoneNumber',
+            //     "description" => 'Company Telephone/Mobile Number',
+            //     "type" => 'number',
+            //     "required" => 1,
+            //     "page" => '1',
+            // ],
+            // [
+            //     "category" => '9',
+            //     "name" => 'companyEmailAddress',
+            //     "description" => 'Company Email Address',
+            //     "type" => 'email',
+            //     "required" => 1,
+            //     "page" => '1',
+            // ],
+            // [
+            //     "category" => '9',
+            //     "name" => 'corporateWebsiteAddress',
+            //     "description" => 'Corporate Website Address',
+            //     "type" => 'url',
+            //     "required" => 1,
+            //     "page" => '1',
+            // ],
             [
                 "category" => '9',
                 "name" => 'companyName',
-                "description" => 'Name of Body Corporate',
-                "type" => 'text',
-                "required" => 1,
-                "page" => '1',
-            ],
-            [
-                "category" => '9',
-                "name" => 'rcNumber',
-                "description" => 'RC Number',
-                "type" => 'text',
-                "required" => 1,
-                "page" => '1',
-            ],
-            [
-                "category" => '9',
-                "name" => 'registeredOfficeAddress',
-                "description" => 'Registered Office Address',
-                "type" => 'text',
-                "required" => 1,
-                "page" => '1',
-            ],
-            [
-                "category" => '9',
-                "name" => 'dateOfIncorporation',
-                "description" => 'Date of Incorporation',
-                "type" => 'date',
-                "required" => 1,
-                "page" => '1',
-            ],
-            [
-                "category" => '9',
-                "name" => 'placeOfIncorporation',
-                "description" => 'Place of Incorporation',
-                "type" => 'text',
-                "required" => 1,
-                "page" => '1',
-            ],
-            [
-                "category" => '9',
-                "name" => 'natureOfBusiness',
-                "description" => 'Nature of Business',
-                "type" => 'text',
-                "required" => 1,
-                "page" => '1',
-            ],
-            [
-                "category" => '9',
-                "name" => 'companyTelephoneNumber',
-                "description" => 'Company Telephone/Mobile Number',
-                "type" => 'number',
-                "required" => 1,
-                "page" => '1',
-            ],
-            [
-                "category" => '9',
-                "name" => 'companyEmailAddress',
-                "description" => 'Company Email Address',
-                "type" => 'email',
-                "required" => 1,
-                "page" => '1',
-            ],
-            [
-                "category" => '9',
-                "name" => 'corporateWebsiteAddress',
-                "description" => 'Corporate Website Address',
-                "type" => 'url',
-                "required" => 1,
-                "page" => '1',
-            ],
-            [
-                "category" => '9',
-                "name" => 'IndividualTitle',
+                // "name" => 'IndividualTitle',
                 "description" => 'Individual Title',
                 "type" => 'text',
                 "required" => 1,
@@ -6922,7 +6923,7 @@ class ApplicationFieldSeed extends Seeder
             ],
             [
                 "category" => '9',
-                "name" => 'IndividualModeOfIdentification',
+                "name" => 'individualModeOfIdentification',
                 "description" => 'Individual Mode Of Identification',
                 "type" => 'text',
                 "required" => 1,
@@ -6930,7 +6931,7 @@ class ApplicationFieldSeed extends Seeder
             ],
             [
                 "category" => '9',
-                "name" => 'IndividualResidentialAddress',
+                "name" => 'individualResidentialAddress',
                 "description" => 'Individual Residential Address',
                 "type" => 'text',
                 "required" => 1,
@@ -6986,7 +6987,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'bankDetailName',
                 "description" => 'Bank Name ',
                 "type" => 'text',
-                "required" => 1,
+                "required" => 0,
                 "page" => '2',
             ],
             [
@@ -6994,7 +6995,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'bankDetailAddress',
                 "description" => 'Bank Address ',
                 "type" => 'text',
-                "required" => 1,
+                "required" => 0,
                 "page" => '2',
             ],
             [
@@ -7002,7 +7003,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'bankDetailTelephone',
                 "description" => 'Bank Telephone ',
                 "type" => 'number',
-                "required" => 1,
+                "required" => 0,
                 "page" => '2',
             ],
             [
@@ -7010,7 +7011,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'bankDetailMobileNumberOfAccountManager',
                 "description" => 'Mobile No. of Account Manager',
                 "type" => 'number',
-                "required" => 1,
+                "required" => 0,
                 "page" => '2',
             ],
             [
@@ -7018,7 +7019,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'bankDetailEmailAddressOfAccountManager',
                 "description" => 'Email address of account manager',
                 "type" => 'email',
-                "required" => 1,
+                "required" => 0,
                 "page" => '2',
             ],
             [
@@ -7026,18 +7027,18 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'bankDetailTypeOfAccount',
                 "description" => 'Type of account',
                 "type" => 'text',
-                "required" => 1,
+                "required" => 0,
                 "page" => '2',
             ],
 
-            [
-                "category" => '9',
-                "name" => 'companyDisciplinary',
-                "description" => 'The Company',
-                "type" => 'select',
-                "required" => 0,
-                "page" => '3',
-            ],
+            // [
+            //     "category" => '9',
+            //     "name" => 'companyDisciplinary',
+            //     "description" => 'The Company',
+            //     "type" => 'select',
+            //     "required" => 0,
+            //     "page" => '3',
+            // ],
         ];
 
         foreach ($fields as $field) {
@@ -7056,82 +7057,66 @@ class ApplicationFieldSeed extends Seeder
             ]);
         }
 
-        $fields = [
-            [
-                "category" => '9',
-                "name" => 'companyDisciplinaryOne',
-                "description" => 'Has the company or any of its affiliates , been denied registration or expelled from membership of any securities exchange, self-regulatory organisation (SRO) or associations?',
-                "type" => 'select',
-                "required" => 1,
-                "page" => '3',
-                "parent_id" => ApplicationField::where('category', '9')->where('name', 'companyDisciplinary')->first()->id,
-            ],
-            [
-                "category" => '9',
-                "name" => 'companyDisciplinaryTwo',
-                "description" => 'Has the company’s membership or that of any of its affiliates, in any of the institutions/associations     mentioned above, at any time been revoked, suspended, or withdrawn? ',
-                "type" => 'select',
-                "required" => 1,
-                "page" => '3',
-                "parent_id" => ApplicationField::where('category', '9')->where('name', 'companyDisciplinary')->first()->id,
-            ],
-            [
-                "category" => '9',
-                "name" => 'companyDisciplinaryThree',
-                "description" => 'Has the company or any of its affiliates ever been refused any Fidelity Bond? ',
-                "type" => 'select',
-                "required" => 1,
-                "page" => '3',
-                "parent_id" => ApplicationField::where('category', '9')->where('name', 'companyDisciplinary')->first()->id,
-            ],
-            [
-                "category" => '9',
-                "name" => 'companyDisciplinaryFour',
-                "description" => 'Has the company or any of its affiliates been subject to any winding up order/receivership arrangement?',
-                "type" => 'select',
-                "required" => 1,
-                "page" => '3',
-                "parent_id" => ApplicationField::where('category', '9')->where('name', 'companyDisciplinary')->first()->id,
-            ],
-        ];
+        // $fields = [
+        //     [
+        //         "category" => '9',
+        //         "name" => 'companyDisciplinaryOne',
+        //         "description" => 'Has the company or any of its affiliates , been denied registration or expelled from membership of any securities exchange, self-regulatory organisation (SRO) or associations?',
+        //         "type" => 'select',
+        //         "required" => 0,
+        //         "page" => '3',
+        //         "parent_id" => ApplicationField::where('category', '9')->where('name', 'companyDisciplinary')->first()->id,
+        //     ],
+        //     [
+        //         "category" => '9',
+        //         "name" => 'companyDisciplinaryTwo',
+        //         "description" => 'Has the company’s membership or that of any of its affiliates, in any of the institutions/associations     mentioned above, at any time been revoked, suspended, or withdrawn? ',
+        //         "type" => 'select',
+        //         "required" => 0,
+        //         "page" => '3',
+        //         "parent_id" => ApplicationField::where('category', '9')->where('name', 'companyDisciplinary')->first()->id,
+        //     ],
+        //     [
+        //         "category" => '9',
+        //         "name" => 'companyDisciplinaryThree',
+        //         "description" => 'Has the company or any of its affiliates ever been refused any Fidelity Bond? ',
+        //         "type" => 'select',
+        //         "required" => 0,
+        //         "page" => '3',
+        //         "parent_id" => ApplicationField::where('category', '9')->where('name', 'companyDisciplinary')->first()->id,
+        //     ],
+        //     [
+        //         "category" => '9',
+        //         "name" => 'companyDisciplinaryFour',
+        //         "description" => 'Has the company or any of its affiliates been subject to any winding up order/receivership arrangement?',
+        //         "type" => 'select',
+        //         "required" => 0,
+        //         "page" => '3',
+        //         "parent_id" => ApplicationField::where('category', '9')->where('name', 'companyDisciplinary')->first()->id,
+        //     ],
+        // ];
 
-        foreach ($fields as $field) {
-            if (ApplicationField::where('category', $field['category'])->where('name', $field['name'])->exists()) {
-                continue;
-            }
+        // foreach ($fields as $field) {
+        //     if (ApplicationField::where('category', $field['category'])->where('name', $field['name'])->exists()) {
+        //         continue;
+        //     }
 
-            ApplicationField::create([
-                "category" => $field['category'],
-                "name" => $field['name'],
-                "description" => $field['description'],
-                "type" => $field['type'],
-                "required" => $field['required'],
-                "page" => $field['page'],
-                "parent_id" => isset($field['parent_id']) ? $field['parent_id'] : null,
-            ]);
-        }
+        //     ApplicationField::create([
+        //         "category" => $field['category'],
+        //         "name" => $field['name'],
+        //         "description" => $field['description'],
+        //         "type" => $field['type'],
+        //         "required" => $field['required'],
+        //         "page" => $field['page'],
+        //         "parent_id" => isset($field['parent_id']) ? $field['parent_id'] : null,
+        //     ]);
+        // }
 
         $fields = [
             [
                 "category" => '9',
                 "name" => 'CompanyLogo',
-                "description" => 'Company Logo',
-                "type" => 'file',
-                "required" => 1,
-                "page" => '4',
-            ],
-            [
-                "category" => '9',
-                "name" => 'certificateOfIncorporation',
-                "description" => 'Certificate of Incorporation',
-                "type" => 'file',
-                "required" => 1,
-                "page" => '4',
-            ],
-            [
-                "category" => '9',
-                "name" => 'memorandumAndArticlesOfAssociation',
-                "description" => 'Memorandum and Articles of Association',
+                "description" => 'Logo',
                 "type" => 'file',
                 "required" => 1,
                 "page" => '4',
@@ -7247,63 +7232,6 @@ class ApplicationFieldSeed extends Seeder
                 "required" => 1,
                 "page" => '1',
             ],
-            [
-                "category" => '10',
-                "name" => 'IndividualTitle',
-                "description" => 'Individual Title',
-                "type" => 'text',
-                "required" => 1,
-                "page" => '1',
-            ],
-            [
-                "category" => '10',
-                "name" => 'applicationPrimaryContactName',
-                "description" => 'Individual Full Name',
-                "type" => 'text',
-                "required" => 1,
-                "page" => '1',
-            ],
-            [
-                "category" => '10',
-                "name" => 'IndividualModeOfIdentification',
-                "description" => 'Individual Mode Of Identification',
-                "type" => 'text',
-                "required" => 1,
-                "page" => '1',
-            ],
-            [
-                "category" => '10',
-                "name" => 'IndividualResidentialAddress',
-                "description" => 'Individual Residential Address',
-                "type" => 'text',
-                "required" => 1,
-                "page" => '1',
-            ],
-            [
-                "category" => '10',
-                "name" => 'applicationPrimaryContactTelephone',
-                "description" => 'Individual Telephone No.',
-                "type" => 'number',
-                "required" => 1,
-                "page" => '1',
-            ],
-            [
-                "category" => '10',
-                "name" => 'applicationPrimaryContactEmailAddress',
-                "description" => 'Individual Email',
-                "type" => 'email',
-                "required" => 1,
-                "page" => '1',
-            ],
-
-            [
-                "category" => '10',
-                "name" => 'reasonForSeekingMembership',
-                "description" => 'Reason For Seeking Membership',
-                "type" => 'select',
-                "required" => 1,
-                "page" => '1',
-            ],
         ];
 
         foreach ($fields as $field) {
@@ -7329,7 +7257,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'bankDetailName',
                 "description" => 'Bank Name ',
                 "type" => 'text',
-                "required" => 1,
+                "required" => 0,
                 "page" => '2',
             ],
             [
@@ -7337,7 +7265,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'bankDetailAddress',
                 "description" => 'Bank Address ',
                 "type" => 'text',
-                "required" => 1,
+                "required" => 0,
                 "page" => '2',
             ],
             [
@@ -7345,7 +7273,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'bankDetailTelephone',
                 "description" => 'Bank Telephone ',
                 "type" => 'number',
-                "required" => 1,
+                "required" => 0,
                 "page" => '2',
             ],
             [
@@ -7353,7 +7281,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'bankDetailMobileNumberOfAccountManager',
                 "description" => 'Mobile No. of Account Manager',
                 "type" => 'number',
-                "required" => 1,
+                "required" => 0,
                 "page" => '2',
             ],
             [
@@ -7361,7 +7289,7 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'bankDetailEmailAddressOfAccountManager',
                 "description" => 'Email address of account manager',
                 "type" => 'email',
-                "required" => 1,
+                "required" => 0,
                 "page" => '2',
             ],
             [
@@ -7369,18 +7297,18 @@ class ApplicationFieldSeed extends Seeder
                 "name" => 'bankDetailTypeOfAccount',
                 "description" => 'Type of account',
                 "type" => 'text',
-                "required" => 1,
+                "required" => 0,
                 "page" => '2',
             ],
 
-            [
-                "category" => '10',
-                "name" => 'companyDisciplinary',
-                "description" => 'The Company',
-                "type" => 'select',
-                "required" => 0,
-                "page" => '3',
-            ],
+            // [
+            //     "category" => '10',
+            //     "name" => 'companyDisciplinary',
+            //     "description" => 'The Company',
+            //     "type" => 'select',
+            //     "required" => 0,
+            //     "page" => '3',
+            // ],
         ];
 
         foreach ($fields as $field) {
@@ -7399,60 +7327,60 @@ class ApplicationFieldSeed extends Seeder
             ]);
         }
 
-        $fields = [
-            [
-                "category" => '10',
-                "name" => 'companyDisciplinaryOne',
-                "description" => 'Has the company or any of its affiliates , been denied registration or expelled from membership of any securities exchange, self-regulatory organisation (SRO) or associations?',
-                "type" => 'select',
-                "required" => 1,
-                "page" => '3',
-                "parent_id" => ApplicationField::where('category', '10')->where('name', 'companyDisciplinary')->first()->id,
-            ],
-            [
-                "category" => '10',
-                "name" => 'companyDisciplinaryTwo',
-                "description" => 'Has the company’s membership or that of any of its affiliates, in any of the institutions/associations     mentioned above, at any time been revoked, suspended, or withdrawn? ',
-                "type" => 'select',
-                "required" => 1,
-                "page" => '3',
-                "parent_id" => ApplicationField::where('category', '10')->where('name', 'companyDisciplinary')->first()->id,
-            ],
-            [
-                "category" => '10',
-                "name" => 'companyDisciplinaryThree',
-                "description" => 'Has the company or any of its affiliates ever been refused any Fidelity Bond? ',
-                "type" => 'select',
-                "required" => 1,
-                "page" => '3',
-                "parent_id" => ApplicationField::where('category', '10')->where('name', 'companyDisciplinary')->first()->id,
-            ],
-            [
-                "category" => '10',
-                "name" => 'companyDisciplinaryFour',
-                "description" => 'Has the company or any of its affiliates been subject to any winding up order/receivership arrangement?',
-                "type" => 'select',
-                "required" => 1,
-                "page" => '3',
-                "parent_id" => ApplicationField::where('category', '10')->where('name', 'companyDisciplinary')->first()->id,
-            ],
-        ];
+        // $fields = [
+        //     [
+        //         "category" => '10',
+        //         "name" => 'companyDisciplinaryOne',
+        //         "description" => 'Has the company or any of its affiliates , been denied registration or expelled from membership of any securities exchange, self-regulatory organisation (SRO) or associations?',
+        //         "type" => 'select',
+        //         "required" => 0,
+        //         "page" => '3',
+        //         "parent_id" => ApplicationField::where('category', '10')->where('name', 'companyDisciplinary')->first()->id,
+        //     ],
+        //     [
+        //         "category" => '10',
+        //         "name" => 'companyDisciplinaryTwo',
+        //         "description" => 'Has the company’s membership or that of any of its affiliates, in any of the institutions/associations     mentioned above, at any time been revoked, suspended, or withdrawn? ',
+        //         "type" => 'select',
+        //         "required" => 0,
+        //         "page" => '3',
+        //         "parent_id" => ApplicationField::where('category', '10')->where('name', 'companyDisciplinary')->first()->id,
+        //     ],
+        //     [
+        //         "category" => '10',
+        //         "name" => 'companyDisciplinaryThree',
+        //         "description" => 'Has the company or any of its affiliates ever been refused any Fidelity Bond? ',
+        //         "type" => 'select',
+        //         "required" => 0,
+        //         "page" => '3',
+        //         "parent_id" => ApplicationField::where('category', '10')->where('name', 'companyDisciplinary')->first()->id,
+        //     ],
+        //     [
+        //         "category" => '10',
+        //         "name" => 'companyDisciplinaryFour',
+        //         "description" => 'Has the company or any of its affiliates been subject to any winding up order/receivership arrangement?',
+        //         "type" => 'select',
+        //         "required" => 0,
+        //         "page" => '3',
+        //         "parent_id" => ApplicationField::where('category', '10')->where('name', 'companyDisciplinary')->first()->id,
+        //     ],
+        // ];
 
-        foreach ($fields as $field) {
-            if (ApplicationField::where('category', $field['category'])->where('name', $field['name'])->exists()) {
-                continue;
-            }
+        // foreach ($fields as $field) {
+        //     if (ApplicationField::where('category', $field['category'])->where('name', $field['name'])->exists()) {
+        //         continue;
+        //     }
 
-            ApplicationField::create([
-                "category" => $field['category'],
-                "name" => $field['name'],
-                "description" => $field['description'],
-                "type" => $field['type'],
-                "required" => $field['required'],
-                "page" => $field['page'],
-                "parent_id" => isset($field['parent_id']) ? $field['parent_id'] : null,
-            ]);
-        }
+        //     ApplicationField::create([
+        //         "category" => $field['category'],
+        //         "name" => $field['name'],
+        //         "description" => $field['description'],
+        //         "type" => $field['type'],
+        //         "required" => $field['required'],
+        //         "page" => $field['page'],
+        //         "parent_id" => isset($field['parent_id']) ? $field['parent_id'] : null,
+        //     ]);
+        // }
 
         $fields = [
             [
@@ -7475,14 +7403,6 @@ class ApplicationFieldSeed extends Seeder
                 "category" => '10',
                 "name" => 'memorandumAndArticlesOfAssociation',
                 "description" => 'Memorandum and Articles of Association',
-                "type" => 'file',
-                "required" => 1,
-                "page" => '4',
-            ],
-            [
-                "category" => '10',
-                "name" => 'modeOfIdentification',
-                "description" => 'Mode of Identification (Passport, Birth Certificate, Driver’s License, National Identification Card, Student Identification Card)',
                 "type" => 'file',
                 "required" => 1,
                 "page" => '4',
@@ -8285,7 +8205,7 @@ class ApplicationFieldSeed extends Seeder
             ]);
         }
 
-//AFFILIATE MEMBER (Regulator) CATEGORY
+        //AFFILIATE MEMBER (Regulator) CATEGORY
 
         $fields = [
             [
@@ -8378,7 +8298,7 @@ class ApplicationFieldSeed extends Seeder
             ],
             [
                 "category" => '13',
-                "name" => 'IndividualModeOfIdentification',
+                "name" => 'individualModeOfIdentification',
                 "description" => 'Individual Mode Of Identification',
                 "type" => 'text',
                 "required" => 1,
@@ -8386,7 +8306,7 @@ class ApplicationFieldSeed extends Seeder
             ],
             [
                 "category" => '13',
-                "name" => 'IndividualResidentialAddress',
+                "name" => 'individualResidentialAddress',
                 "description" => 'Individual Residential Address',
                 "type" => 'text',
                 "required" => 1,

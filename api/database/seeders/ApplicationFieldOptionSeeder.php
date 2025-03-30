@@ -19,20 +19,32 @@ class ApplicationFieldOptionSeeder extends Seeder
             [
                 "category" => "1",
                 "field_name" => "bankingLicense",
-                "option_name" => "International Banking Licence",
+                "option_name" => "Commercial-International/National Banking Licence",
                 "option_value" => "internationalBankingLicence",
             ],
             [
                 "category" => "1",
                 "field_name" => "bankingLicense",
-                "option_name" => "National Banking Licence",
-                "option_value" => "nationalBankingLicence",
+                "option_name" => "Commercial Merchant Banking Licence",
+                "option_value" => "merchantBankingLicence",
             ],
             [
                 "category" => "1",
                 "field_name" => "bankingLicense",
-                "option_name" => "Regional Banking Licence",
+                "option_name" => "Commercial Regional Banking Licence",
                 "option_value" => "regionalBankingLicence",
+            ],
+            [
+                "category" => "1",
+                "field_name" => "bankingLicense",
+                "option_name" => "Non-Interest Banking Licence",
+                "option_value" => "nonInterestBankingLicence",
+            ],
+            [
+                "category" => "1",
+                "field_name" => "bankingLicense",
+                "option_name" => "Motgage National/State Banking Licence",
+                "option_value" => "motgageBankingLicence",
             ],
             [
                 "category" => "1",
@@ -3922,66 +3934,66 @@ class ApplicationFieldOptionSeeder extends Seeder
                 "option_name" => "Other(s)",
                 "option_value" => "Other(s)",
             ],
-            [
-                "category" => "9",
-                "field_name" => "companyDisciplinary",
-                "option_name" => "Yes",
-                "option_value" => "yes",
-            ],
-            [
-                "category" => "9",
-                "field_name" => "companyDisciplinary",
-                "option_name" => "No",
-                "option_value" => "no",
-            ],
-            [
-                "category" => "9",
-                "field_name" => "companyDisciplinaryOne",
-                "option_name" => "Yes",
-                "option_value" => "yes",
-            ],
-            [
-                "category" => "9",
-                "field_name" => "companyDisciplinaryOne",
-                "option_name" => "No",
-                "option_value" => "no",
-            ],
-            [
-                "category" => "9",
-                "field_name" => "companyDisciplinaryTwo",
-                "option_name" => "Yes",
-                "option_value" => "yes",
-            ],
-            [
-                "category" => "9",
-                "field_name" => "companyDisciplinaryTwo",
-                "option_name" => "No",
-                "option_value" => "no",
-            ],
-            [
-                "category" => "9",
-                "field_name" => "companyDisciplinaryThree",
-                "option_name" => "Yes",
-                "option_value" => "yes",
-            ],
-            [
-                "category" => "9",
-                "field_name" => "companyDisciplinaryThree",
-                "option_name" => "No",
-                "option_value" => "no",
-            ],
-            [
-                "category" => "9",
-                "field_name" => "companyDisciplinaryFour",
-                "option_name" => "Yes",
-                "option_value" => "yes",
-            ],
-            [
-                "category" => "9",
-                "field_name" => "companyDisciplinaryFour",
-                "option_name" => "No",
-                "option_value" => "no",
-            ],
+            // [
+            //     "category" => "9",
+            //     "field_name" => "companyDisciplinary",
+            //     "option_name" => "Yes",
+            //     "option_value" => "yes",
+            // ],
+            // [
+            //     "category" => "9",
+            //     "field_name" => "companyDisciplinary",
+            //     "option_name" => "No",
+            //     "option_value" => "no",
+            // ],
+            // [
+            //     "category" => "9",
+            //     "field_name" => "companyDisciplinaryOne",
+            //     "option_name" => "Yes",
+            //     "option_value" => "yes",
+            // ],
+            // [
+            //     "category" => "9",
+            //     "field_name" => "companyDisciplinaryOne",
+            //     "option_name" => "No",
+            //     "option_value" => "no",
+            // ],
+            // [
+            //     "category" => "9",
+            //     "field_name" => "companyDisciplinaryTwo",
+            //     "option_name" => "Yes",
+            //     "option_value" => "yes",
+            // ],
+            // [
+            //     "category" => "9",
+            //     "field_name" => "companyDisciplinaryTwo",
+            //     "option_name" => "No",
+            //     "option_value" => "no",
+            // ],
+            // [
+            //     "category" => "9",
+            //     "field_name" => "companyDisciplinaryThree",
+            //     "option_name" => "Yes",
+            //     "option_value" => "yes",
+            // ],
+            // [
+            //     "category" => "9",
+            //     "field_name" => "companyDisciplinaryThree",
+            //     "option_name" => "No",
+            //     "option_value" => "no",
+            // ],
+            // [
+            //     "category" => "9",
+            //     "field_name" => "companyDisciplinaryFour",
+            //     "option_name" => "Yes",
+            //     "option_value" => "yes",
+            // ],
+            // [
+            //     "category" => "9",
+            //     "field_name" => "companyDisciplinaryFour",
+            //     "option_name" => "No",
+            //     "option_value" => "no",
+            // ],
         ];
 
         foreach ($fields as $field) {
@@ -3999,105 +4011,105 @@ class ApplicationFieldOptionSeeder extends Seeder
 
         // RGI
 
-        $fields = [
-            [
-                "category" => "10",
-                "field_name" => "reasonForSeekingMembership",
-                "option_name" => "Investor",
-                "option_value" => "Investor",
-            ],
-            [
-                "category" => "10",
-                "field_name" => "reasonForSeekingMembership",
-                "option_name" => "Research",
-                "option_value" => "Research",
-            ],
-            [
-                "category" => "10",
-                "field_name" => "reasonForSeekingMembership",
-                "option_name" => "Education",
-                "option_value" => "Education",
-            ],
-            [
-                "category" => "10",
-                "field_name" => "reasonForSeekingMembership",
-                "option_name" => "Other(s)",
-                "option_value" => "Other(s)",
-            ],
-            [
-                "category" => "10",
-                "field_name" => "companyDisciplinary",
-                "option_name" => "Yes",
-                "option_value" => "yes",
-            ],
-            [
-                "category" => "10",
-                "field_name" => "companyDisciplinary",
-                "option_name" => "No",
-                "option_value" => "no",
-            ],
-            [
-                "category" => "10",
-                "field_name" => "companyDisciplinaryOne",
-                "option_name" => "Yes",
-                "option_value" => "yes",
-            ],
-            [
-                "category" => "10",
-                "field_name" => "companyDisciplinaryOne",
-                "option_name" => "No",
-                "option_value" => "no",
-            ],
-            [
-                "category" => "10",
-                "field_name" => "companyDisciplinaryTwo",
-                "option_name" => "Yes",
-                "option_value" => "yes",
-            ],
-            [
-                "category" => "10",
-                "field_name" => "companyDisciplinaryTwo",
-                "option_name" => "No",
-                "option_value" => "no",
-            ],
-            [
-                "category" => "10",
-                "field_name" => "companyDisciplinaryThree",
-                "option_name" => "Yes",
-                "option_value" => "yes",
-            ],
-            [
-                "category" => "10",
-                "field_name" => "companyDisciplinaryThree",
-                "option_name" => "No",
-                "option_value" => "no",
-            ],
-            [
-                "category" => "10",
-                "field_name" => "companyDisciplinaryFour",
-                "option_name" => "Yes",
-                "option_value" => "yes",
-            ],
-            [
-                "category" => "10",
-                "field_name" => "companyDisciplinaryFour",
-                "option_name" => "No",
-                "option_value" => "no",
-            ],
-        ];
+        // $fields = [
+        //     [
+        //         "category" => "10",
+        //         "field_name" => "reasonForSeekingMembership",
+        //         "option_name" => "Investor",
+        //         "option_value" => "Investor",
+        //     ],
+        //     [
+        //         "category" => "10",
+        //         "field_name" => "reasonForSeekingMembership",
+        //         "option_name" => "Research",
+        //         "option_value" => "Research",
+        //     ],
+        //     [
+        //         "category" => "10",
+        //         "field_name" => "reasonForSeekingMembership",
+        //         "option_name" => "Education",
+        //         "option_value" => "Education",
+        //     ],
+        //     [
+        //         "category" => "10",
+        //         "field_name" => "reasonForSeekingMembership",
+        //         "option_name" => "Other(s)",
+        //         "option_value" => "Other(s)",
+        //     ],
+        //     [
+        //         "category" => "10",
+        //         "field_name" => "companyDisciplinary",
+        //         "option_name" => "Yes",
+        //         "option_value" => "yes",
+        //     ],
+        //     [
+        //         "category" => "10",
+        //         "field_name" => "companyDisciplinary",
+        //         "option_name" => "No",
+        //         "option_value" => "no",
+        //     ],
+        //     [
+        //         "category" => "10",
+        //         "field_name" => "companyDisciplinaryOne",
+        //         "option_name" => "Yes",
+        //         "option_value" => "yes",
+        //     ],
+        //     [
+        //         "category" => "10",
+        //         "field_name" => "companyDisciplinaryOne",
+        //         "option_name" => "No",
+        //         "option_value" => "no",
+        //     ],
+        //     [
+        //         "category" => "10",
+        //         "field_name" => "companyDisciplinaryTwo",
+        //         "option_name" => "Yes",
+        //         "option_value" => "yes",
+        //     ],
+        //     [
+        //         "category" => "10",
+        //         "field_name" => "companyDisciplinaryTwo",
+        //         "option_name" => "No",
+        //         "option_value" => "no",
+        //     ],
+        //     [
+        //         "category" => "10",
+        //         "field_name" => "companyDisciplinaryThree",
+        //         "option_name" => "Yes",
+        //         "option_value" => "yes",
+        //     ],
+        //     [
+        //         "category" => "10",
+        //         "field_name" => "companyDisciplinaryThree",
+        //         "option_name" => "No",
+        //         "option_value" => "no",
+        //     ],
+        //     [
+        //         "category" => "10",
+        //         "field_name" => "companyDisciplinaryFour",
+        //         "option_name" => "Yes",
+        //         "option_value" => "yes",
+        //     ],
+        //     [
+        //         "category" => "10",
+        //         "field_name" => "companyDisciplinaryFour",
+        //         "option_name" => "No",
+        //         "option_value" => "no",
+        //     ],
+        // ];
 
-        foreach ($fields as $field) {
-            if (ApplicationFieldOption::where('category', $field['category'])->where('field_name', $field['field_name'])->where('option_value', $field['option_value'])->exists()) {
-                continue;
-            }
+        // foreach ($fields as $field) {
+        //     if (ApplicationFieldOption::where('category', $field['category'])->where('field_name', $field['field_name'])->where('option_value', $field['option_value'])->exists()) {
+        //         continue;
+        //     }
 
-            ApplicationFieldOption::create([
-                "category" => $field['category'],
-                "field_name" => $field['field_name'],
-                "option_name" => $field['option_name'],
-                "option_value" => $field['option_value'],
-            ]);
-        }
+        //     ApplicationFieldOption::create([
+        //         "category" => $field['category'],
+        //         "field_name" => $field['field_name'],
+        //         "option_name" => $field['option_name'],
+        //         "option_value" => $field['option_value'],
+        //     ]);
+        // }
 
 // RGI
 
@@ -4917,19 +4929,6 @@ class ApplicationFieldOptionSeeder extends Seeder
                 "option_name" => "No",
                 "option_value" => "no",
             ],
-
-            // [
-            //     "category" => "15",
-            //     "field_name" => "bankingLicense",
-            //     "option_name" => "dede",
-            //     "option_value" => "dede",
-            // ],
-            // [
-            //     "category" => "15",
-            //     "field_name" => "bankingLicense",
-            //     "option_name" => "dede",
-            //     "option_value" => "dede",
-            // ],
         ];
 
         foreach ($fields as $field) {

@@ -4,10 +4,14 @@ namespace App\Providers;
 
 use App\Events\ApplicationSubmissionEvent;
 use App\Events\ArAddedEvent;
+use App\Events\ESuccessLetterEvent;
 use App\Events\FinalApplicationProcessingEvent;
+use App\Events\MembershipAgreementLetterEvent;
 use App\Listeners\ApplicationSubmissionListener;
 use App\Listeners\CheckAllRequiredArListener;
+use App\Listeners\ESuccessLetterListener;
 use App\Listeners\FinalApplicationProcessingListener;
+use App\Listeners\MembershipAgreementLetterListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -29,6 +33,12 @@ class EventServiceProvider extends ServiceProvider
         ],
         ArAddedEvent::class => [
             CheckAllRequiredArListener::class,
+        ],
+        MembershipAgreementLetterEvent::class => [
+            MembershipAgreementLetterListener::class,
+        ],
+        ESuccessLetterEvent::class => [
+            ESuccessLetterListener::class,
         ],
     ];
 

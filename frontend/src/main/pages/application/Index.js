@@ -469,411 +469,434 @@ const Form = () => {
         }, [updatedApplicationFields, applicationFields]);
 
         return (
-            <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
-                {fields && <>
-                    {/* <h3>Applicant Information</h3> */}
+            <>
+                {fields.length > 0 ?
+                    <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
+                        {fields && <>
+                            {/* <h3>Applicant Information</h3> */}
+                            <Row className="gy-4">
+                                {fields && fields.map((field, index) => {
+
+                                    if (field.type == 'text') {
+                                        return (
+                                            <Col md="6" key={`${field.name}${index}`}>
+                                                <div className="form-group">
+                                                    <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
+                                                    <div className="form-control-wrap">
+                                                        <input type="text" id={field.name} className="form-control"
+                                                            {...register(field.name, { required: (field.required ? 'This field is required' : false) })}
+                                                            onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
+                                                            onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
+                                                            defaultValue={uploadedValue(field)} />
+                                                        {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
+                                                    </div>
+                                                </div>
+                                            </Col>
+                                        )
+                                    } else if (field.type == 'email') {
+                                        return (
+                                            <Col md="6" key={`${field.name}${index}`}>
+                                                <div className="form-group">
+                                                    <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
+                                                    <div className="form-control-wrap">
+                                                        <input type="text" id={field.name} className="form-control"
+                                                            {...register(field.name, { required: (field.required ? 'This field is required' : false), pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: "Invalid email address" }, })}
+                                                            onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
+                                                            onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
+                                                            defaultValue={uploadedValue(field)} />
+                                                        {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
+                                                    </div>
+                                                </div>
+                                            </Col>
+                                        )
+                                    } else if (field.type == 'number') {
+                                        return (
+                                            <Col md="6" key={`${field.name}${index}`}>
+                                                <div className="form-group">
+                                                    <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
+                                                    <div className="form-control-wrap">
+                                                        <input type="number" id={field.name} className="form-control"
+                                                            {...register(field.name, { required: (field.required ? 'This field is required' : false) })}
+                                                            onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
+                                                            onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
+                                                            defaultValue={uploadedValue(field) ? field?.field_value?.uploaded_field : ''} />
+                                                        {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
+                                                    </div>
+                                                </div>
+                                            </Col>
+                                        )
+                                    } else if (field.type == 'select') {
+                                        return (
+                                            <Col md="6" key={`${field.name}${index}`}>
+                                                <div className="form-group">
+                                                    <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
+                                                    <div className="form-control-wrap">
+
+                                                        <div className="form-control-select" >
+                                                            <select className="form-control form-select" type="select" name={field.name} id={field.name}
+                                                                {...register(field.name, { required: (field.required ? 'This field is required' : false) })}
+                                                                onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
+                                                                onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
+                                                                defaultValue={uploadedValue(field)}>
+                                                                <option value=''>Select Option</option>
+                                                                {field.field_options && field.field_options.map((option, index) => (
+                                                                    <option key={`${option.option_value}${index}`} value={option.option_value}>{option.option_name}</option>
+                                                                ))}
+                                                            </select>
+                                                            {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </Col>
+                                        )
+                                    } else if (field.type == 'checkbox') {
+                                        const checkedBoxes = field.field_value?.uploaded_field ? JSON.parse(field.field_value?.uploaded_field) : {};
+                                        const checkedValues = (values) => {
+
+                                            checkedBoxes[values.option_value] = values.field_value
+
+                                            const field_value = JSON.stringify(checkedBoxes)
+                                            onInputChange({ 'field_name': field.name, "field_value": field_value, "field_type": field.type })
+                                        }
+                                        return (
+                                            <div key={`${field.name}${index}`}>
+                                                <Col md="12">
+                                                    <div className="form-group">
+                                                        <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
+                                                        <div className="form-control-wrap">
+                                                            <ul className="custom-control-group gy-4">
+                                                                {field.field_options && field.field_options.map((option, index) => (
+
+                                                                    <li key={`${option.option_value}${index}`}>
+                                                                        <div className="custom-control custom-checkbox custom-control-pro no-control ">
+                                                                            <input type="checkbox" className="custom-control-input" name="btnCheck" id={`btnCheck${index}`}
+                                                                                defaultChecked={checkedBoxes[option.option_value] ? true : false}
+                                                                                onChange={(e) => checkedValues({ 'option_value': option.option_value, "field_value": e.target.checked, "option_name": option.option_name })}
+                                                                                onClick={(e) => checkedValues({ 'option_value': option.option_value, "field_value": e.target.checked, "option_name": option.option_name })}
+                                                                                {...register("btnCheck", { required: 'This field is required' })} />
+                                                                            <label className="custom-control-label" htmlFor={`btnCheck${index}`}>
+                                                                                {option.option_name}
+                                                                            </label>
+                                                                        </div>
+                                                                    </li>
+                                                                ))}
+
+                                                            </ul>
+
+                                                            {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
+                                                        </div>
+                                                    </div>
+                                                    <Row>
+                                                        {field.child_fields && field.child_fields.map((child_field, index) => {
+
+                                                            if (checkedBoxes.bonds && child_field.name == 'MonthlyAverageValueOfTradesPerProductBonds') {
+
+                                                                return (
+                                                                    <Col md="6" key={`${child_field.name}${index}`}>
+                                                                        <div className="form-group">
+                                                                            <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
+                                                                            <div className="form-control-wrap">
+                                                                                <input type="number" id={child_field.name} className="form-control"
+                                                                                    {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
+                                                                                    onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type }, 'checkbox')}
+                                                                                    onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type }, 'checkbox')}
+                                                                                    defaultValue={child_field?.field_value?.uploaded_field} />
+                                                                                {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
+                                                                            </div>
+                                                                        </div>
+                                                                    </Col>
+                                                                )
+                                                            }
+
+                                                            if (checkedBoxes.treasuryBills && child_field.name == 'MonthlyAverageValueOfTradesPerProductTreasuryBills') {
+
+                                                                return (
+                                                                    <Col md="6" key={`${child_field.name}${index}`}>
+                                                                        <div className="form-group">
+                                                                            <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
+                                                                            <div className="form-control-wrap">
+                                                                                <input type="number" id={child_field.name} className="form-control"
+                                                                                    {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
+                                                                                    onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                                    onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                                    defaultValue={child_field?.field_value?.uploaded_field} />
+                                                                                {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
+                                                                            </div>
+                                                                        </div>
+                                                                    </Col>
+                                                                )
+
+                                                            }
+                                                            if (checkedBoxes.commercialPapers && child_field.name == 'MonthlyAverageValueOfTradesPerProductCommercialPaper') {
+
+                                                                return (
+                                                                    <Col md="6" key={`${child_field.name}${index}`}>
+                                                                        <div className="form-group">
+                                                                            <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
+                                                                            <div className="form-control-wrap">
+                                                                                <input type="number" id={child_field.name} className="form-control"
+                                                                                    {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
+                                                                                    onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                                    onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                                    defaultValue={child_field?.field_value?.uploaded_field} />
+                                                                                {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
+                                                                            </div>
+                                                                        </div>
+                                                                    </Col>
+                                                                )
+
+                                                            }
+                                                            if (checkedBoxes.moneyMarket && child_field.name == 'MonthlyAverageValueOfTradesPerProductMoneyMarket') {
+
+                                                                return (
+                                                                    <Col md="6" key={`${child_field.name}${index}`}>
+                                                                        <div className="form-group">
+                                                                            <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
+                                                                            <div className="form-control-wrap">
+                                                                                <input type="number" id={child_field.name} className="form-control"
+                                                                                    {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
+                                                                                    onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                                    onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                                    defaultValue={child_field?.field_value?.uploaded_field} />
+                                                                                {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
+                                                                            </div>
+                                                                        </div>
+                                                                    </Col>
+                                                                )
+
+                                                            }
+                                                            if (checkedBoxes.foreignExchange && child_field.name == 'MonthlyAverageValueOfTradesPerProductForeignExchange') {
+
+                                                                return (
+                                                                    <Col md="6" key={`${child_field.name}${index}`}>
+                                                                        <div className="form-group">
+                                                                            <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
+                                                                            <div className="form-control-wrap">
+                                                                                <input type="number" id={child_field.name} className="form-control"
+                                                                                    {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
+                                                                                    onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                                    onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                                    defaultValue={child_field?.field_value?.uploaded_field} />
+                                                                                {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
+                                                                            </div>
+                                                                        </div>
+                                                                    </Col>
+                                                                )
+
+                                                            }
+                                                            if (checkedBoxes.derivatives && child_field.name == 'MonthlyAverageValueOfTradesPerProductDerivatives') {
+
+                                                                return (
+                                                                    <Col md="6" key={`${child_field.name}${index}`}>
+                                                                        <div className="form-group">
+                                                                            <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
+                                                                            <div className="form-control-wrap">
+                                                                                <input type="number" id={child_field.name} className="form-control"
+                                                                                    {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
+                                                                                    onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                                    onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                                    defaultValue={child_field?.field_value?.uploaded_field} />
+                                                                                {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
+                                                                            </div>
+                                                                        </div>
+                                                                    </Col>
+                                                                )
+
+                                                            }
+                                                            if (checkedBoxes.others && child_field.name == 'MonthlyAverageValueOfTradesPerProductOthers') {
+
+                                                                return (
+                                                                    <Col md="6" key={`${child_field.name}${index}`}>
+                                                                        <div className="form-group">
+                                                                            <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
+                                                                            <div className="form-control-wrap">
+                                                                                <input type="number" id={child_field.name} className="form-control"
+                                                                                    {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
+                                                                                    onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                                    onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                                    defaultValue={child_field?.field_value?.uploaded_field} />
+                                                                                {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
+                                                                            </div>
+                                                                        </div>
+                                                                    </Col>
+                                                                )
+
+                                                            }
+                                                            if (checkedBoxes.bonds && child_field.name == 'AverageTradeSizePerTransactionBonds') {
+
+                                                                return (
+                                                                    <Col md="6" key={`${child_field.name}${index}`}>
+                                                                        <div className="form-group">
+                                                                            <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
+                                                                            <div className="form-control-wrap">
+                                                                                <input type="number" id={child_field.name} className="form-control"
+                                                                                    {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
+                                                                                    onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                                    onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                                    defaultValue={child_field?.field_value?.uploaded_field} />
+                                                                                {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
+                                                                            </div>
+                                                                        </div>
+                                                                    </Col>
+                                                                )
+
+                                                            }
+                                                            if (checkedBoxes.treasuryBills && child_field.name == 'AverageTradeSizePerTransactionTreasuryBills') {
+
+                                                                return (
+                                                                    <Col md="6" key={`${child_field.name}${index}`}>
+                                                                        <div className="form-group">
+                                                                            <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
+                                                                            <div className="form-control-wrap">
+                                                                                <input type="number" id={child_field.name} className="form-control"
+                                                                                    {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
+                                                                                    onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                                    onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                                    defaultValue={child_field?.field_value?.uploaded_field} />
+                                                                                {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
+                                                                            </div>
+                                                                        </div>
+                                                                    </Col>
+                                                                )
+
+                                                            }
+                                                            if (checkedBoxes.commercialPapers && child_field.name == 'AverageTradeSizePerTransactionCommercialPaper') {
+
+                                                                return (
+                                                                    <Col md="6" key={`${child_field.name}${index}`}>
+                                                                        <div className="form-group">
+                                                                            <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
+                                                                            <div className="form-control-wrap">
+                                                                                <input type="number" id={child_field.name} className="form-control"
+                                                                                    {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
+                                                                                    onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                                    onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                                    defaultValue={child_field?.field_value?.uploaded_field} />
+                                                                                {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
+                                                                            </div>
+                                                                        </div>
+                                                                    </Col>
+                                                                )
+
+                                                            }
+                                                            if (checkedBoxes.moneyMarket && child_field.name == 'AverageTradeSizePerTransactionMoneyMarket') {
+
+                                                                return (
+                                                                    <Col md="6" key={`${child_field.name}${index}`}>
+                                                                        <div className="form-group">
+                                                                            <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
+                                                                            <div className="form-control-wrap">
+                                                                                <input type="number" id={child_field.name} className="form-control"
+                                                                                    {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
+                                                                                    onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                                    onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                                    defaultValue={child_field?.field_value?.uploaded_field} />
+                                                                                {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
+                                                                            </div>
+                                                                        </div>
+                                                                    </Col>
+                                                                )
+
+                                                            }
+                                                            if (checkedBoxes.foreignExchange && child_field.name == 'AverageTradeSizePerTransactionForeignExchange') {
+
+                                                                return (
+                                                                    <Col md="6" key={`${child_field.name}${index}`}>
+                                                                        <div className="form-group">
+                                                                            <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
+                                                                            <div className="form-control-wrap">
+                                                                                <input type="number" id={child_field.name} className="form-control"
+                                                                                    {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
+                                                                                    onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                                    onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                                    defaultValue={child_field?.field_value?.uploaded_field} />
+                                                                                {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
+                                                                            </div>
+                                                                        </div>
+                                                                    </Col>
+                                                                )
+
+                                                            }
+                                                            if (checkedBoxes.derivatives && child_field.name == 'AverageTradeSizePerTransactionDerivatives') {
+
+                                                                return (
+                                                                    <Col md="6" key={`${child_field.name}${index}`}>
+                                                                        <div className="form-group">
+                                                                            <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
+                                                                            <div className="form-control-wrap">
+                                                                                <input type="number" id={child_field.name} className="form-control"
+                                                                                    {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
+                                                                                    onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                                    onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                                    defaultValue={child_field?.field_value?.uploaded_field} />
+                                                                                {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
+                                                                            </div>
+                                                                        </div>
+                                                                    </Col>
+                                                                )
+
+                                                            }
+                                                            if (checkedBoxes.others && child_field.name == 'AverageTradeSizePerTransactionOthers') {
+
+                                                                return (
+                                                                    <Col md="6" key={`${child_field.name}${index}`}>
+                                                                        <div className="form-group">
+                                                                            <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
+                                                                            <div className="form-control-wrap">
+                                                                                <input type="number" id={child_field.name} className="form-control"
+                                                                                    {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
+                                                                                    onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                                    onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
+                                                                                    defaultValue={child_field?.field_value?.uploaded_field} />
+                                                                                {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
+                                                                            </div>
+                                                                        </div>
+                                                                    </Col>
+                                                                )
+
+                                                            }
+
+                                                        })}
+                                                    </Row>
+
+
+                                                </Col>
+                                            </div>
+
+                                        )
+                                    }
+
+                                })}
+
+
+                            </Row>
+
+                            {fields?.length > 0 && <>
+                                <div className="actions clearfix">
+                                    <ul>
+                                        <li>
+                                            <Button color="primary" type="submit" onClick={(e) => { }}>
+                                                Next
+                                            </Button>
+                                        </li>
+                                        <li>
+                                            <Button color="primary" onClick={() => goBack()}>
+                                                Previous
+                                            </Button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </>}
+                        </>}
+                    </form>
+                    :
                     <Row className="gy-4">
-                        {fields && fields.map((field, index) => {
-
-                            if (field.type == 'text') {
-                                return (
-                                    <Col md="6" key={`${field.name}${index}`}>
-                                        <div className="form-group">
-                                            <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
-                                            <div className="form-control-wrap">
-                                                <input type="text" id={field.name} className="form-control"
-                                                    {...register(field.name, { required: (field.required ? 'This field is required' : false) })}
-                                                    onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
-                                                    onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
-                                                    defaultValue={uploadedValue(field)} />
-                                                {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
-                                            </div>
-                                        </div>
-                                    </Col>
-                                )
-                            } else if (field.type == 'email') {
-                                return (
-                                    <Col md="6" key={`${field.name}${index}`}>
-                                        <div className="form-group">
-                                            <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
-                                            <div className="form-control-wrap">
-                                                <input type="text" id={field.name} className="form-control"
-                                                    {...register(field.name, { required: (field.required ? 'This field is required' : false), pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: "Invalid email address" }, })}
-                                                    onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
-                                                    onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
-                                                    defaultValue={uploadedValue(field)} />
-                                                {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
-                                            </div>
-                                        </div>
-                                    </Col>
-                                )
-                            } else if (field.type == 'number') {
-                                return (
-                                    <Col md="6" key={`${field.name}${index}`}>
-                                        <div className="form-group">
-                                            <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
-                                            <div className="form-control-wrap">
-                                                <input type="number" id={field.name} className="form-control"
-                                                    {...register(field.name, { required: (field.required ? 'This field is required' : false) })}
-                                                    onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
-                                                    onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
-                                                    defaultValue={uploadedValue(field) ? field?.field_value?.uploaded_field : ''} />
-                                                {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
-                                            </div>
-                                        </div>
-                                    </Col>
-                                )
-                            } else if (field.type == 'select') {
-                                return (
-                                    <Col md="6" key={`${field.name}${index}`}>
-                                        <div className="form-group">
-                                            <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
-                                            <div className="form-control-wrap">
-
-                                                <div className="form-control-select" >
-                                                    <select className="form-control form-select" type="select" name={field.name} id={field.name}
-                                                        {...register(field.name, { required: (field.required ? 'This field is required' : false) })}
-                                                        onBlur={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
-                                                        onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.value, "field_type": field.type })}
-                                                        defaultValue={uploadedValue(field)}>
-                                                        <option value=''>Select Option</option>
-                                                        {field.field_options && field.field_options.map((option, index) => (
-                                                            <option key={`${option.option_value}${index}`} value={option.option_value}>{option.option_name}</option>
-                                                        ))}
-                                                    </select>
-                                                    {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Col>
-                                )
-                            } else if (field.type == 'checkbox') {
-                                const checkedBoxes = field.field_value?.uploaded_field ? JSON.parse(field.field_value?.uploaded_field) : {};
-                                const checkedValues = (values) => {
-
-                                    checkedBoxes[values.option_value] = values.field_value
-
-                                    const field_value = JSON.stringify(checkedBoxes)
-                                    onInputChange({ 'field_name': field.name, "field_value": field_value, "field_type": field.type })
-                                }
-                                return (
-                                    <div key={`${field.name}${index}`}>
-                                        <Col md="12">
-                                            <div className="form-group">
-                                                <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
-                                                <div className="form-control-wrap">
-                                                    <ul className="custom-control-group gy-4">
-                                                        {field.field_options && field.field_options.map((option, index) => (
-
-                                                            <li key={`${option.option_value}${index}`}>
-                                                                <div className="custom-control custom-checkbox custom-control-pro no-control ">
-                                                                    <input type="checkbox" className="custom-control-input" name="btnCheck" id={`btnCheck${index}`}
-                                                                        defaultChecked={checkedBoxes[option.option_value] ? true : false}
-                                                                        onChange={(e) => checkedValues({ 'option_value': option.option_value, "field_value": e.target.checked, "option_name": option.option_name })}
-                                                                        onClick={(e) => checkedValues({ 'option_value': option.option_value, "field_value": e.target.checked, "option_name": option.option_name })}
-                                                                        {...register("btnCheck", { required: 'This field is required' })} />
-                                                                    <label className="custom-control-label" htmlFor={`btnCheck${index}`}>
-                                                                        {option.option_name}
-                                                                    </label>
-                                                                </div>
-                                                            </li>
-                                                        ))}
-
-                                                    </ul>
-
-                                                    {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>}
-                                                </div>
-                                            </div>
-                                            <Row>
-                                                {field.child_fields && field.child_fields.map((child_field, index) => {
-
-                                                    if (checkedBoxes.bonds && child_field.name == 'MonthlyAverageValueOfTradesPerProductBonds') {
-
-                                                        return (
-                                                            <Col md="6" key={`${child_field.name}${index}`}>
-                                                                <div className="form-group">
-                                                                    <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
-                                                                    <div className="form-control-wrap">
-                                                                        <input type="number" id={child_field.name} className="form-control"
-                                                                            {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
-                                                                            onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type }, 'checkbox')}
-                                                                            onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type }, 'checkbox')}
-                                                                            defaultValue={child_field?.field_value?.uploaded_field} />
-                                                                        {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
-                                                                    </div>
-                                                                </div>
-                                                            </Col>
-                                                        )
-                                                    }
-
-                                                    if (checkedBoxes.treasuryBills && child_field.name == 'MonthlyAverageValueOfTradesPerProductTreasuryBills') {
-
-                                                        return (
-                                                            <Col md="6" key={`${child_field.name}${index}`}>
-                                                                <div className="form-group">
-                                                                    <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
-                                                                    <div className="form-control-wrap">
-                                                                        <input type="number" id={child_field.name} className="form-control"
-                                                                            {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
-                                                                            onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
-                                                                            onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
-                                                                            defaultValue={child_field?.field_value?.uploaded_field} />
-                                                                        {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
-                                                                    </div>
-                                                                </div>
-                                                            </Col>
-                                                        )
-
-                                                    }
-                                                    if (checkedBoxes.commercialPapers && child_field.name == 'MonthlyAverageValueOfTradesPerProductCommercialPaper') {
-
-                                                        return (
-                                                            <Col md="6" key={`${child_field.name}${index}`}>
-                                                                <div className="form-group">
-                                                                    <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
-                                                                    <div className="form-control-wrap">
-                                                                        <input type="number" id={child_field.name} className="form-control"
-                                                                            {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
-                                                                            onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
-                                                                            onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
-                                                                            defaultValue={child_field?.field_value?.uploaded_field} />
-                                                                        {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
-                                                                    </div>
-                                                                </div>
-                                                            </Col>
-                                                        )
-
-                                                    }
-                                                    if (checkedBoxes.moneyMarket && child_field.name == 'MonthlyAverageValueOfTradesPerProductMoneyMarket') {
-
-                                                        return (
-                                                            <Col md="6" key={`${child_field.name}${index}`}>
-                                                                <div className="form-group">
-                                                                    <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
-                                                                    <div className="form-control-wrap">
-                                                                        <input type="number" id={child_field.name} className="form-control"
-                                                                            {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
-                                                                            onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
-                                                                            onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
-                                                                            defaultValue={child_field?.field_value?.uploaded_field} />
-                                                                        {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
-                                                                    </div>
-                                                                </div>
-                                                            </Col>
-                                                        )
-
-                                                    }
-                                                    if (checkedBoxes.foreignExchange && child_field.name == 'MonthlyAverageValueOfTradesPerProductForeignExchange') {
-
-                                                        return (
-                                                            <Col md="6" key={`${child_field.name}${index}`}>
-                                                                <div className="form-group">
-                                                                    <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
-                                                                    <div className="form-control-wrap">
-                                                                        <input type="number" id={child_field.name} className="form-control"
-                                                                            {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
-                                                                            onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
-                                                                            onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
-                                                                            defaultValue={child_field?.field_value?.uploaded_field} />
-                                                                        {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
-                                                                    </div>
-                                                                </div>
-                                                            </Col>
-                                                        )
-
-                                                    }
-                                                    if (checkedBoxes.derivatives && child_field.name == 'MonthlyAverageValueOfTradesPerProductDerivatives') {
-
-                                                        return (
-                                                            <Col md="6" key={`${child_field.name}${index}`}>
-                                                                <div className="form-group">
-                                                                    <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
-                                                                    <div className="form-control-wrap">
-                                                                        <input type="number" id={child_field.name} className="form-control"
-                                                                            {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
-                                                                            onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
-                                                                            onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
-                                                                            defaultValue={child_field?.field_value?.uploaded_field} />
-                                                                        {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
-                                                                    </div>
-                                                                </div>
-                                                            </Col>
-                                                        )
-
-                                                    }
-                                                    if (checkedBoxes.others && child_field.name == 'MonthlyAverageValueOfTradesPerProductOthers') {
-
-                                                        return (
-                                                            <Col md="6" key={`${child_field.name}${index}`}>
-                                                                <div className="form-group">
-                                                                    <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
-                                                                    <div className="form-control-wrap">
-                                                                        <input type="number" id={child_field.name} className="form-control"
-                                                                            {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
-                                                                            onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
-                                                                            onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
-                                                                            defaultValue={child_field?.field_value?.uploaded_field} />
-                                                                        {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
-                                                                    </div>
-                                                                </div>
-                                                            </Col>
-                                                        )
-
-                                                    }
-                                                    if (checkedBoxes.bonds && child_field.name == 'AverageTradeSizePerTransactionBonds') {
-
-                                                        return (
-                                                            <Col md="6" key={`${child_field.name}${index}`}>
-                                                                <div className="form-group">
-                                                                    <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
-                                                                    <div className="form-control-wrap">
-                                                                        <input type="number" id={child_field.name} className="form-control"
-                                                                            {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
-                                                                            onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
-                                                                            onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
-                                                                            defaultValue={child_field?.field_value?.uploaded_field} />
-                                                                        {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
-                                                                    </div>
-                                                                </div>
-                                                            </Col>
-                                                        )
-
-                                                    }
-                                                    if (checkedBoxes.treasuryBills && child_field.name == 'AverageTradeSizePerTransactionTreasuryBills') {
-
-                                                        return (
-                                                            <Col md="6" key={`${child_field.name}${index}`}>
-                                                                <div className="form-group">
-                                                                    <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
-                                                                    <div className="form-control-wrap">
-                                                                        <input type="number" id={child_field.name} className="form-control"
-                                                                            {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
-                                                                            onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
-                                                                            onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
-                                                                            defaultValue={child_field?.field_value?.uploaded_field} />
-                                                                        {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
-                                                                    </div>
-                                                                </div>
-                                                            </Col>
-                                                        )
-
-                                                    }
-                                                    if (checkedBoxes.commercialPapers && child_field.name == 'AverageTradeSizePerTransactionCommercialPaper') {
-
-                                                        return (
-                                                            <Col md="6" key={`${child_field.name}${index}`}>
-                                                                <div className="form-group">
-                                                                    <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
-                                                                    <div className="form-control-wrap">
-                                                                        <input type="number" id={child_field.name} className="form-control"
-                                                                            {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
-                                                                            onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
-                                                                            onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
-                                                                            defaultValue={child_field?.field_value?.uploaded_field} />
-                                                                        {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
-                                                                    </div>
-                                                                </div>
-                                                            </Col>
-                                                        )
-
-                                                    }
-                                                    if (checkedBoxes.moneyMarket && child_field.name == 'AverageTradeSizePerTransactionMoneyMarket') {
-
-                                                        return (
-                                                            <Col md="6" key={`${child_field.name}${index}`}>
-                                                                <div className="form-group">
-                                                                    <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
-                                                                    <div className="form-control-wrap">
-                                                                        <input type="number" id={child_field.name} className="form-control"
-                                                                            {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
-                                                                            onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
-                                                                            onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
-                                                                            defaultValue={child_field?.field_value?.uploaded_field} />
-                                                                        {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
-                                                                    </div>
-                                                                </div>
-                                                            </Col>
-                                                        )
-
-                                                    }
-                                                    if (checkedBoxes.foreignExchange && child_field.name == 'AverageTradeSizePerTransactionForeignExchange') {
-
-                                                        return (
-                                                            <Col md="6" key={`${child_field.name}${index}`}>
-                                                                <div className="form-group">
-                                                                    <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
-                                                                    <div className="form-control-wrap">
-                                                                        <input type="number" id={child_field.name} className="form-control"
-                                                                            {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
-                                                                            onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
-                                                                            onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
-                                                                            defaultValue={child_field?.field_value?.uploaded_field} />
-                                                                        {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
-                                                                    </div>
-                                                                </div>
-                                                            </Col>
-                                                        )
-
-                                                    }
-                                                    if (checkedBoxes.derivatives && child_field.name == 'AverageTradeSizePerTransactionDerivatives') {
-
-                                                        return (
-                                                            <Col md="6" key={`${child_field.name}${index}`}>
-                                                                <div className="form-group">
-                                                                    <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
-                                                                    <div className="form-control-wrap">
-                                                                        <input type="number" id={child_field.name} className="form-control"
-                                                                            {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
-                                                                            onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
-                                                                            onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
-                                                                            defaultValue={child_field?.field_value?.uploaded_field} />
-                                                                        {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
-                                                                    </div>
-                                                                </div>
-                                                            </Col>
-                                                        )
-
-                                                    }
-                                                    if (checkedBoxes.others && child_field.name == 'AverageTradeSizePerTransactionOthers') {
-
-                                                        return (
-                                                            <Col md="6" key={`${child_field.name}${index}`}>
-                                                                <div className="form-group">
-                                                                    <label className="form-label" htmlFor="company-name">{`${formatLabel(child_field.description)}`}</label>
-                                                                    <div className="form-control-wrap">
-                                                                        <input type="number" id={child_field.name} className="form-control"
-                                                                            {...register(child_field.name, { required: (child_field.required ? 'This field is required' : false) })}
-                                                                            onBlur={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
-                                                                            onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })}
-                                                                            defaultValue={child_field?.field_value?.uploaded_field} />
-                                                                        {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
-                                                                    </div>
-                                                                </div>
-                                                            </Col>
-                                                        )
-
-                                                    }
-
-                                                })}
-                                            </Row>
-
-
-                                        </Col>
-                                    </div>
-
-                                )
-                            }
-
-                        })}
-
-
-                    </Row>
-
-                    {fields?.length > 0 && <>
+                        <h3>Trading Details</h3>
+                        <p>Not Applicable</p>
                         <div className="actions clearfix">
                             <ul>
                                 <li>
-                                    <Button color="primary" type="submit" onClick={(e) => { }}>
+                                    <Button color="primary" onClick={(e) => props.next()}>
                                         Next
                                     </Button>
                                 </li>
@@ -884,9 +907,8 @@ const Form = () => {
                                 </li>
                             </ul>
                         </div>
-                    </>}
-                </>}
-            </form>
+                    </Row>}
+            </>
         );
 
     };
@@ -1006,22 +1028,24 @@ const Form = () => {
         }, [updatedApplicationFields, applicationFields]);
 
         return (
-            <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
-                {fields && <>
+            <>
+                {fields.length > 0 ?
+                    <form className="content clearfix" onSubmit={handleSubmit(submitForm)}>
+                        {fields && <>
 
-                    <h3>Disciplinary History</h3>
-                    <p>The questions below relate to the company and the key officers listed above. Responses should cover material events which occurred in the past ten (10) years and should include events that have occurred anywhere in the world. If in doubt as to the materiality or relevance of the event, please disclose the event. If the answer to the any of the questions below is “YES”, the applicant is required to provide additional information/details in a separate sheet.</p>
-                    <Row className="gy-4">
-                        {fields && fields.map((field, index) => {
+                            <h3>Disciplinary History</h3>
+                            <p>The questions below relate to the company and the key officers listed above. Responses should cover material events which occurred in the past ten (10) years and should include events that have occurred anywhere in the world. If in doubt as to the materiality or relevance of the event, please disclose the event. If the answer to the any of the questions below is “YES”, the applicant is required to provide additional information/details in a separate sheet.</p>
+                            <Row className="gy-4">
+                                {fields && fields.map((field, index) => {
 
-                            if (field.type == 'select') {
-                                return (
-                                    <Col md="12" key={`${field.name}${index}`}>
-                                        <div className="form-group">
-                                            <label className="form-label text-uppercase font-black" htmlFor="company-name">{field.description}</label>
-                                            <div className="form-control-wrap">
+                                    if (field.type == 'select') {
+                                        return (
+                                            <Col md="12" key={`${field.name}${index}`}>
+                                                <div className="form-group">
+                                                    <label className="form-label text-uppercase font-black" htmlFor="company-name">{field.description}</label>
+                                                    <div className="form-control-wrap">
 
-                                                {/* <div className="form-control-select" >
+                                                        {/* <div className="form-control-select" >
                                         <select className="form-control form-select" type="select" name={field.name} id={field.name} {...register(field.name, { required: 'This field is required' })} onChange={(e) => onInputChange({'field_name' : field.name, "field_value" : e.target.value, "field_type" : field.type})} defaultValue={uploadedValue(field)}> 
                                             <option>Select Option</option>
                                             {field.field_options && field.field_options.map((option, index) => (
@@ -1030,53 +1054,74 @@ const Form = () => {
                                         </select>
                                     </div>
                                     {errors[field.name] && <span className="invalid">{errors[field.name].message}</span>} */}
-                                            </div>
-                                        </div>
+                                                    </div>
+                                                </div>
 
-                                        <Row className="gy-3">
-                                            {field.child_fields && field.child_fields.map((child_field, index) => {
+                                                <Row className="gy-3">
+                                                    {field.child_fields && field.child_fields.map((child_field, index) => {
 
-                                                return (
-                                                    <Col md="12" key={`${child_field.name}${index}`}>
-                                                        <div className="form-group">
-                                                            <label className="form-label" htmlFor="company-name">{formatLabel(child_field.description)}</label>
-                                                            <div className="form-control-wrap">
+                                                        return (
+                                                            <Col md="12" key={`${child_field.name}${index}`}>
+                                                                <div className="form-group">
+                                                                    <label className="form-label" htmlFor="company-name">{formatLabel(child_field.description)}</label>
+                                                                    <div className="form-control-wrap">
 
-                                                                <div className="form-control-select" >
-                                                                    {/* {child_field?.field_value?.uploaded_field} */}
-                                                                    <select className="form-control form-select" type="select" name={child_field.name} id={child_field.name} {...register(child_field.name, { required: 'This field is required' })} onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field}>
-                                                                        <option value=''>Select Option</option>
-                                                                        {child_field.field_options && child_field.field_options.map((option, index) => (
-                                                                            <option key={`${option.option_value}${index}`} value={option.option_value}>{option.option_name}</option>
-                                                                        ))}
-                                                                    </select>
-                                                                    {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
+                                                                        <div className="form-control-select" >
+                                                                            {/* {child_field?.field_value?.uploaded_field} */}
+                                                                            <select className="form-control form-select" type="select" name={child_field.name} id={child_field.name} {...register(child_field.name, { required: 'This field is required' })} onChange={(e) => onInputChange({ 'field_name': child_field.name, "field_value": e.target.value, "field_type": child_field.type })} defaultValue={child_field?.field_value?.uploaded_field}>
+                                                                                <option value=''>Select Option</option>
+                                                                                {child_field.field_options && child_field.field_options.map((option, index) => (
+                                                                                    <option key={`${option.option_value}${index}`} value={option.option_value}>{option.option_name}</option>
+                                                                                ))}
+                                                                            </select>
+                                                                            {errors[child_field.name] && <span className="invalid">{errors[child_field.name].message}</span>}
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                        </div>
 
-                                                    </Col>
-                                                )
+                                                            </Col>
+                                                        )
 
 
 
-                                            })}
-                                        </Row>
-                                    </Col>
+                                                    })}
+                                                </Row>
+                                            </Col>
 
-                                )
-                            }
+                                        )
+                                    }
 
-                        })}
+                                })}
 
 
-                    </Row>
+                            </Row>
 
-                    {fields?.length > 0 && <>
+                            {fields?.length > 0 && <>
+                                <div className="actions clearfix">
+                                    <ul>
+                                        <li>
+                                            <Button color="primary" type="submit" onClick={(e) => { }}>
+                                                Next
+                                            </Button>
+                                        </li>
+                                        <li>
+                                            <Button color="primary" onClick={() => goBack()}>
+                                                Previous
+                                            </Button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </>}
+                        </>}
+                    </form>
+                    :
+                    <Row className="gy-4">
+                        <h3>Disciplinary History</h3>
+                        <p>Not Applicable</p>
                         <div className="actions clearfix">
                             <ul>
                                 <li>
-                                    <Button color="primary" type="submit" onClick={(e) => { }}>
+                                    <Button color="primary" onClick={(e) => props.next()}>
                                         Next
                                     </Button>
                                 </li>
@@ -1087,9 +1132,9 @@ const Form = () => {
                                 </li>
                             </ul>
                         </div>
-                    </>}
-                </>}
-            </form>
+                    </Row>}
+
+            </>
         );
     };
 
@@ -1355,10 +1400,6 @@ const Form = () => {
             if (updatedApplicationFields) {
                 if (updatedApplicationFields[0]?.page == 5) {
 
-                    // console.log("ApplicationDeclaration")
-                    // console.log(loadingPageFields)
-                    // console.log(updatedApplicationFields)
-                    // console.log(applicationFields)
                     fields = updatedApplicationFields
                 }
             }

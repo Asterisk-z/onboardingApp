@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MembershipAgreementLetterEvent;
 use App\Helpers\EMemberAgreement;
 use App\Helpers\ESuccessLetter;
 use App\Helpers\MailContents;
@@ -120,7 +121,7 @@ class MegApplicationController extends Controller
             'application_id' => 'required|exists:applications,uuid',
             'name' => 'required',
             'address' => 'required',
-            'rc_number' => 'required',
+            'rc_number' => 'sometimes',
             'date' => 'required',
         ]);
 
@@ -137,7 +138,7 @@ class MegApplicationController extends Controller
             return errorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, $errorMsg);
         }
 
-        MemberAgreement::updateOrCreate(["application_id" => $application->id], [
+        $agreement = MemberAgreement::updateOrCreate(["application_id" => $application->id], [
             "application_id" => $application->id,
             "name" => request('name'),
             "address" => request('address'),
@@ -146,6 +147,8 @@ class MegApplicationController extends Controller
         ]);
 
         logAction($user->email, 'MEG Updated Agreement', "MEG updated membership agreement details", $request->ip());
+
+        event(new MembershipAgreementLetterEvent($agreement));
 
         return successResponse("Membership agreement has been updated successfully.");
     }

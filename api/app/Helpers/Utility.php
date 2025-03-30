@@ -6,6 +6,7 @@ use App\Mail\FinalApplicationMail;
 use App\Mail\NotificationMail;
 use App\Models\Application;
 use App\Models\ApplicationProcessTimestamp;
+use App\Models\BankingLicense;
 use App\Models\Education\EventRegistration;
 use App\Models\Invoice;
 use App\Models\MembershipCategoryPostition;
@@ -164,8 +165,12 @@ class Utility
         // Recipient email addresses
         $toEmails = [$applicant->email, $companyEmail];
 
-        if ($contactEmail) {
+        if ($companyEmail) {
             array_push($toEmails, $companyEmail);
+        }
+
+        if ($contactEmail) {
+            array_push($toEmails, $contactEmail);
         }
 
         return self::emailHelper($emailData, $toEmails, $ccs, $attachment);
@@ -241,6 +246,10 @@ class Utility
                 DB::raw("MAX(CASE WHEN application_fields.name = 'applicationPrimaryContactEmailAddress' THEN application_field_uploads.uploaded_field END) AS applicationPrimaryContactEmailAddress"),
                 DB::raw("MAX(CASE WHEN application_fields.name = 'applicationPrimaryContactName' THEN application_field_uploads.uploaded_field END) AS applicationPrimaryContactName"),
                 DB::raw("MAX(CASE WHEN application_fields.name = 'applicationPrimaryContactTelephone' THEN application_field_uploads.uploaded_field END) AS applicationPrimaryContactTelephone"),
+                DB::raw("MAX(CASE WHEN application_fields.name = 'individualModeOfIdentification' THEN application_field_uploads.uploaded_field END) AS individualModeOfIdentification"),
+                DB::raw("MAX(CASE WHEN application_fields.name = 'individualResidentialAddress' THEN application_field_uploads.uploaded_field END) AS individualResidentialAddress"),
+                DB::raw("MAX(CASE WHEN application_fields.name = 'reasonForSeekingMembership' THEN application_field_uploads.uploaded_field END) AS reasonForSeekingMembership"),
+
 
                 //BANK DETAILS
                 DB::raw("MAX(CASE WHEN application_fields.name = 'bankDetailName' THEN application_field_uploads.uploaded_field END) AS bankDetailName"),
@@ -309,9 +318,11 @@ class Utility
                 DB::raw("MAX(CASE WHEN application_fields.name = 'CompanyLogo' THEN application_field_uploads.uploaded_file END) AS CompanyLogo"),
                 DB::raw("MAX(CASE WHEN application_fields.name = 'certificateOfIncorporation' THEN application_field_uploads.uploaded_file END) AS certificateOfIncorporation"),
                 DB::raw("MAX(CASE WHEN application_fields.name = 'memorandumAndArticlesOfAssociation' THEN application_field_uploads.uploaded_file END) AS memorandumAndArticlesOfAssociation"),
+                DB::raw("MAX(CASE WHEN application_fields.name = 'modeOfIdentification' THEN application_field_uploads.uploaded_file END) AS modeOfIdentification"),
                 DB::raw("MAX(CASE WHEN application_fields.name = 'particularsOfDirectors' THEN application_field_uploads.uploaded_file END) AS particularsOfDirectors"),
                 DB::raw("MAX(CASE WHEN application_fields.name = 'particularsOfShareholders' THEN application_field_uploads.uploaded_file END) AS particularsOfShareholders"),
                 DB::raw("MAX(CASE WHEN application_fields.name = 'evidenceOfRegistration' THEN application_field_uploads.uploaded_file END) AS evidenceOfRegistration"),
+                DB::raw("MAX(CASE WHEN application_fields.name = 'evidenceOfRenewal' THEN application_field_uploads.uploaded_file END) AS evidenceOfRenewal"),
                 DB::raw("MAX(CASE WHEN application_fields.name = 'detailedResumesOfSEC' THEN application_field_uploads.uploaded_file END) AS detailedResumesOfSEC"),
                 DB::raw("MAX(CASE WHEN application_fields.name = 'evidenceOfCompliance' THEN application_field_uploads.uploaded_file END) AS evidenceOfCompliance"),
                 DB::raw("MAX(CASE WHEN application_fields.name = 'listOfAuthorisedRepresentatives' THEN application_field_uploads.uploaded_file END) AS listOfAuthorisedRepresentatives"),
@@ -337,6 +348,7 @@ class Utility
                 'applications.is_applicant_executed_membership_agreement', 'applications.all_ar_uploaded', 'applications.member_agreement_send', 'applications.e_success_letter_send',
                 'applications.e_success_letter', 'applications.meg_executed_membership_agreement', 'applications.status');
     }
+
 
     public static function applicationDetails($builder)
     {
@@ -389,6 +401,9 @@ class Utility
                 DB::raw("MAX(CASE WHEN application_fields.name = 'applicationPrimaryContactEmailAddress' THEN application_field_uploads.uploaded_field END) AS applicationPrimaryContactEmailAddress"),
                 DB::raw("MAX(CASE WHEN application_fields.name = 'applicationPrimaryContactName' THEN application_field_uploads.uploaded_field END) AS applicationPrimaryContactName"),
                 DB::raw("MAX(CASE WHEN application_fields.name = 'applicationPrimaryContactTelephone' THEN application_field_uploads.uploaded_field END) AS applicationPrimaryContactTelephone"),
+                DB::raw("MAX(CASE WHEN application_fields.name = 'individualModeOfIdentification' THEN application_field_uploads.uploaded_field END) AS individualModeOfIdentification"),
+                DB::raw("MAX(CASE WHEN application_fields.name = 'individualResidentialAddress' THEN application_field_uploads.uploaded_field END) AS individualResidentialAddress"),
+                DB::raw("MAX(CASE WHEN application_fields.name = 'reasonForSeekingMembership' THEN application_field_uploads.uploaded_field END) AS reasonForSeekingMembership"),
 
                 //BANK DETAILS
                 DB::raw("MAX(CASE WHEN application_fields.name = 'bankDetailName' THEN application_field_uploads.uploaded_field END) AS bankDetailName"),
@@ -457,9 +472,11 @@ class Utility
                 DB::raw("MAX(CASE WHEN application_fields.name = 'CompanyLogo' THEN application_field_uploads.uploaded_file END) AS CompanyLogo"),
                 DB::raw("MAX(CASE WHEN application_fields.name = 'certificateOfIncorporation' THEN application_field_uploads.uploaded_file END) AS certificateOfIncorporation"),
                 DB::raw("MAX(CASE WHEN application_fields.name = 'memorandumAndArticlesOfAssociation' THEN application_field_uploads.uploaded_file END) AS memorandumAndArticlesOfAssociation"),
+                DB::raw("MAX(CASE WHEN application_fields.name = 'modeOfIdentification' THEN application_field_uploads.uploaded_file END) AS modeOfIdentification"),
                 DB::raw("MAX(CASE WHEN application_fields.name = 'particularsOfDirectors' THEN application_field_uploads.uploaded_file END) AS particularsOfDirectors"),
                 DB::raw("MAX(CASE WHEN application_fields.name = 'particularsOfShareholders' THEN application_field_uploads.uploaded_file END) AS particularsOfShareholders"),
                 DB::raw("MAX(CASE WHEN application_fields.name = 'evidenceOfRegistration' THEN application_field_uploads.uploaded_file END) AS evidenceOfRegistration"),
+                DB::raw("MAX(CASE WHEN application_fields.name = 'evidenceOfRenewal' THEN application_field_uploads.uploaded_file END) AS evidenceOfRenewal"),
                 DB::raw("MAX(CASE WHEN application_fields.name = 'detailedResumesOfSEC' THEN application_field_uploads.uploaded_file END) AS detailedResumesOfSEC"),
                 DB::raw("MAX(CASE WHEN application_fields.name = 'evidenceOfCompliance' THEN application_field_uploads.uploaded_file END) AS evidenceOfCompliance"),
                 DB::raw("MAX(CASE WHEN application_fields.name = 'listOfAuthorisedRepresentatives' THEN application_field_uploads.uploaded_file END) AS listOfAuthorisedRepresentatives"),
@@ -736,7 +753,10 @@ class Utility
         $table = "";
 
         $application_datas = json_decode($application_datas->toJson());
-
+        // Missing
+        // individualModeOfIdentification
+        // individualResidentialAddress
+        // reasonForSeekingMembership
         foreach ($application_datas as $application_data) {
 
             $table = "
@@ -1367,12 +1387,45 @@ class Utility
         return "$pronoun $categoryName";
     }
 
-    public static function membershipCategoryFeeName($membershipCategory)
+
+    public static function membershipCategoryLicense($membershipCategory, $application)
     {
-        $catList = explode(' ', $membershipCategory->name);
-        $anList = ['Dealing'];
-        $categoryName = (in_array($catList[0], $anList)) ? "{$membershipCategory->name}  - Commercial (National)" : "{$membershipCategory->name}";
-        return "$categoryName";
+
+        $licenses = BankingLicense::licenses;
+
+        $licenseCategory = array_filter($licenses, function ($item) use (&$membershipCategory) {
+            return $item['category'] == $membershipCategory->id;
+        });
+
+        if (!count($licenseCategory) > 0) {
+          return $membershipCategory;
+        }
+
+        $data = Application::where('applications.id', $application->id);
+        $data = Utility::applicationDetails($data);
+        $data = $data->first();
+
+        $bankingLicense = $data->bankingLicense;
+
+        $licenseCategoryItem = array_filter($licenseCategory, function ($item) use ($bankingLicense) {
+            return $item['option_value'] == $bankingLicense;
+        });
+
+        if (!count($licenseCategoryItem) > 0) {
+          return $membershipCategory;
+        }
+
+        $licenseCategoryItem = $licenseCategoryItem[array_key_first($licenseCategoryItem)];
+
+        $option_name = str_replace('Banking Licence', ' ', $licenseCategoryItem['option_name']);
+
+        $name = $membershipCategory->name ." ". $option_name;
+
+        $membershipCategory->name =  $name;
+        $membershipCategory->application_fee = $licenseCategoryItem['application_fee'];
+        $membershipCategory->membership_dues = $licenseCategoryItem['membership_dues'];
+
+        return $membershipCategory;
     }
 
     public static function categoryNameFromWebsite($categoryName)
@@ -1381,12 +1434,17 @@ class Utility
         return str_replace($list, ' ', $categoryName);
     }
 
-    public static function updatePdfVersion($pdfPath)
+    public static function updatePdfVersion($pdfRelativePath)
     {
 
       try {
+        $pdfMainAbsolutePath = storage_path('/app/public/' .$pdfRelativePath);
+        return $pdfMainAbsolutePath;
+        $pdfUpdateAbsolutePath = storage_path('/app/public/convertedPdfType/' .$pdfRelativePath);
+        $process = new Process(['./convertPDF.bat', $pdfMainAbsolutePath, $pdfUpdateAbsolutePath]);
 
-        $process = new Process(['./convertPDF.bat', $pdfPath, $pdfPath]);
+        logger($pdfMainAbsolutePath);
+        logger($pdfUpdateAbsolutePath);
 
         $process->setTimeout(60);
         $process->run();
@@ -1396,7 +1454,7 @@ class Utility
         }
 
 
-        return $pdfPath;
+        return $pdfUpdateAbsolutePath;
     } catch (\Exception $e) {
         echo $e->getMessage();
         return false;
