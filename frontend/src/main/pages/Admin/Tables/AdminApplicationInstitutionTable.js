@@ -580,7 +580,7 @@ const ActionTab = (props) => {
 
                 </ModalBody>
                 <ModalFooter className="bg-light">
-                    <span className="sub-text">View Institutions</span>
+                    <span className="sub-text"> </span>
                 </ModalFooter>
             </Modal>
 
@@ -608,7 +608,7 @@ const ActionTab = (props) => {
                     </div>
                 </ModalBody>
                 <ModalFooter className="bg-light">
-                    <span className="sub-text">View Institutions</span>
+                    <span className="sub-text"> </span>
                 </ModalFooter>
             </Modal>
 
@@ -1342,7 +1342,7 @@ const ActionTab = (props) => {
                     </Card>
                 </ModalBody>
                 <ModalFooter className="bg-light">
-                    <span className="sub-text">View Institutions</span>
+                    <span className="sub-text"> </span>
                 </ModalFooter>
             </Modal>
 
@@ -1354,7 +1354,7 @@ const ActionTab = (props) => {
 
                 </ModalBody>
                 <ModalFooter className="bg-light">
-                    <span className="sub-text">View Institutions</span>
+                    <span className="sub-text"> </span>
                 </ModalFooter>
             </Modal>
 
@@ -1376,7 +1376,7 @@ const ActionTab = (props) => {
                     </Row>
                 </ModalBody>
                 <ModalFooter className="bg-light">
-                    <span className="sub-text">View Institutions</span>
+                    <span className="sub-text"> </span>
                 </ModalFooter>
             </Modal>
 
@@ -1398,7 +1398,7 @@ const ActionTab = (props) => {
                     </Row>
                 </ModalBody>
                 <ModalFooter className="bg-light">
-                    <span className="sub-text">View Institutions</span>
+                    <span className="sub-text"> </span>
                 </ModalFooter>
             </Modal>
 
@@ -1420,7 +1420,7 @@ const ActionTab = (props) => {
                     </Row>
                 </ModalBody>
                 <ModalFooter className="bg-light">
-                    <span className="sub-text">View Institutions</span>
+                    <span className="sub-text"> </span>
                 </ModalFooter>
             </Modal>
         </>
@@ -1673,7 +1673,7 @@ const UpdateESuccessLetter = ({ updateParentParent, tabItem, positions, closeMod
 
                 <div className="form-group">
                     <label className="form-label" htmlFor="institution_name">
-                        Institution Name
+                        Applicant Name
                     </label>
                     <div className="form-control-wrap">
                         <input type="text" id="institution_name" className="form-control" {...register('institution_name', { required: "This Field is required" })} defaultValue={tabItem?.eSuccess?.companyName} />
@@ -1682,7 +1682,7 @@ const UpdateESuccessLetter = ({ updateParentParent, tabItem, positions, closeMod
                 </div>
                 <div className="form-group">
                     <label className="form-label" htmlFor="institution_address">
-                        Institution Address
+                        Applicant Address
                     </label>
                     <div className="form-control-wrap">
                         <input type="text" id="institution_address" className="form-control" {...register('institution_address', { required: "This Field is required" })} defaultValue={tabItem?.eSuccess?.registeredOfficeAddress} />

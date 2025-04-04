@@ -255,7 +255,7 @@
                 <tr>
                     <td>
                         <h4>BETWEEN</h4>
-                        <p>
+                        <p  style="text-align: justify;">
                             <strong>FMDQ SECURITIES EXCHANGE LIMITED (RC. NO. 1617162)</strong>, a company incorporated under
                             the laws of the Federal Republic of Nigeria with its principal place of business at Exchange Place, 35,
                             Idowu Taylor Street, Victoria Island, Lagos, (hereinafter called <strong>“FMDQ Exchange”</strong> which expression
@@ -267,13 +267,13 @@
                 <tr>
                     <td>
                         <h4>AND</h4>
-                        <p>
+                        <p  style="text-align: justify;">
                             {{ $details->name }} (RC NO. {{ $details->rc_number }}), a company incorporated under the laws of the Federal
                             Republic of Nigeria with its registered office at {{ $details->address }}
                             (the <strong>“Member”</strong> which expression shall where the context so admits
                             include its successors and assigns) of the second part.
                         </p>
-                        <p>
+                        <p  style="text-align: justify;">
                             In this Agreement, FMDQ Exchange and the Member shall individually be referred to as a <strong>“Party”</strong> and
                             collectively be referred to as the <strong>“Parties”</strong>.
                         </p>
@@ -284,12 +284,12 @@
                     <td class="padding-20 background">
                         <h4>WHEREAS:</h4>
                         <ol type="A" style="margin-left: 20px;">
-                            <li>
+                            <li  style="text-align: justify;">
                                 FMDQ Exchange is licensed by the Securities and Exchange Commission <strong>(“SEC”)</strong> as a
                                 securities exchange and self-regulatory organisation with a Platform to enable the Member deal
                                 in Products and carry out trading activities.
                             </li><br>
-                            <li>The Member is a financial institution duly licensed by the Central Bank of Nigeria and has
+                            <li  style="text-align: justify;">The Member is a financial institution duly licensed by the Central Bank of Nigeria and has
                                 indicated interest in becoming a Dealing Member on the FMDQ Exchange Platform with a view
                                 to actively participating in trading activities on the said Platform. </li><br>
                             <li>The Member has agreed to be duly licenced by FMDQ Exchange as a Dealing Member. </li><br>
@@ -309,12 +309,12 @@
                                         <tbody>
                                             <tr>
                                                 <td style="width: 10px; vertical-align: top;">1.1.</td>
-                                                <td style="vertical-align: top;">
+                                                <td style="vertical-align: top; text-align: justify;">
                                                     Definitions
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td style="vertical-align: top;" colspan="2">
+                                                <td style="vertical-align: top; text-align: justify;" colspan="2">
                                                     In this Dealing Membership Agreement hereto, unlessthe context otherwise requires, the
                                                     following expressions shall have the meanings set out hereunder: -
                                                 </td>
@@ -427,27 +427,27 @@
                                                     specifically marked confidential but excluding any information,
                                                     which:
                                                     <ol>
-                                                        <li>
+                                                        <li  style="text-align: justify;">
                                                             (i) was already known to the Recipient at the time of its
                                                             disclosure to the Recipient and is not subject to
                                                             confidentiality restrictions;
                                                         </li>
 
-                                                        <li>
+                                                        <li  style="text-align: justify;">
                                                             (ii) is in the public domain at the date of its disclosure to
                                                             the Recipient or thereafter enters the public domain
                                                             through no fault of the Recipient (but only after it
                                                             becomes part of the public domain); or
 
                                                         </li>
-                                                        <li>
+                                                        <li  style="text-align: justify;">
                                                             (iii) is independently developed by the Recipient without
                                                             use or reference to the Disclosing Party’s confidential
                                                             information, as shown by documents and other
                                                             competent evidence in the receiving Party’s possession;
 
                                                         </li>
-                                                        <li>
+                                                        <li  style="text-align: justify;">
                                                             (iv) is required by law or regulation to be disclosed by the
                                                             Recipient, provided that the Recipient, where it is
                                                             reasonable in the circumstances,shall promptly give the
@@ -702,15 +702,13 @@
                         </div>
                     </td>
                 </tr>
-
-                {{-- fdfdfdfdfdfd  --}}
-
+ 
                 <tr style="display: none;">
                     <td class=" padding-20 agreedTerm" style="">
                         <h4> AGREED TERMS</h4>
                         <h4>1. Definitions and Interpretation</h4>
                         <ol type="A" style="margin-left: 20px;">
-                            <li>
+                            <li  style="text-align: justify;">
                                 The following definitions shall apply in this Agreement:<br><br>
                                 <span><strong>Agreement:</strong> this Dealing Membership Agreement, as may be revised, updated and/or amended
                                     from time to time.</span>
@@ -766,7 +764,7 @@
                                 <span><strong>Year:</strong> a calendar year.</span><br><br>
                             </li><br>
 
-                            <li>
+                            <li style="text-align: justify;">
                                 Interpretation:<br><br>
 
                                 <span>1.2.1. Words importing the singular number only shall include the plural and vice-versa and
@@ -803,7 +801,7 @@
                                     <table>
                                         <tr>
                                             <td style="width: 10px; vertical-align: top;">2.1</td>
-                                            <td style="vertical-align: top;">
+                                            <td style="vertical-align: top; text-align: justify;">
                                                 The Member shall not hold itself out to any individual or body corporate as being an agent of or otherwise representing or having the power in any way to act for or bind the Exchange unless expressly authorised in writing.
                                             </td>
                                         </tr>
@@ -813,7 +811,7 @@
                                     <table>
                                         <tr>
                                             <td style="width: 10px; vertical-align: top;">2.2</td>
-                                            <td style="vertical-align: top;">
+                                            <td style="vertical-align: top; text-align: justify;">
                                                 The Member shall act as a principal in all its Trading Activities on the Platform without
                                                 limitation, when trading, clearing or settling and be responsible to other Dealing Member
                                                 (Specialists), Dealing Member (Banks) and the Exchange as a principal.
@@ -830,14 +828,14 @@
                                     <table>
                                         <tr>
                                             <td style="width: 10px; vertical-align: top;">3.1</td>
-                                            <td style="vertical-align: top;">
+                                            <td style="vertical-align: top; text-align: justify;">
                                                 The Proposed Member hereby agrees that:
                                                 <ol>
                                                     <li>
                                                         <table>
                                                             <tr>
                                                                 <td style="width: 10px; vertical-align: top;">3.1.1</td>
-                                                                <td style="vertical-align: top;">
+                                                                <td style="vertical-align: top; text-align: justify;">
                                                                     The Exchange shall charge and revise transaction fees at rates to be determined and
                                                                     agreed for transactions conducted on the Platform.
                                                                 </td>
@@ -849,7 +847,7 @@
                                                         <table>
                                                             <tr>
                                                                 <td style="width: 10px; vertical-align: top;">3.1.2</td>
-                                                                <td style="vertical-align: top;">
+                                                                <td style="vertical-align: top; text-align: justify;">
                                                                     It shall execute a Direct Debit Mandate authorising its bank to make periodic payments
                                                                     of transaction fees payable to FMDQ Exchange in the manner described in the form advised by
                                                                     FMDQ Exchange. Whenever transaction fees are revised by FMDQ Exchange and duly
@@ -872,7 +870,7 @@
                                     <table>
                                         <tr>
                                             <td style="width: 10px; vertical-align: top;">2.1</td>
-                                            <td style="vertical-align: top;">
+                                            <td style="vertical-align: top; text-align: justify;">
                                                 The Member shall not hold itself out to any individual or body corporate as being an agent of or otherwise representing or having the power in any way to act for or bind the Exchange unless expressly authorised in writing.
                                             </td>
                                         </tr>
@@ -882,7 +880,7 @@
                                     <table>
                                         <tr>
                                             <td style="width: 10px; vertical-align: top;">2.2</td>
-                                            <td style="vertical-align: top;">
+                                            <td style="vertical-align: top; text-align: justify;">
                                                 The Member shall act as a principal in all its Trading Activities on the Platform without
                                                 limitation, when trading, clearing or settling and be responsible to other Dealing Member
                                                 (Specialists), Dealing Member (Banks) and the Exchange as a principal.
@@ -899,7 +897,7 @@
                                     <table>
                                         <tr>
                                             <td style="width: 10px; vertical-align: top;">4.1.</td>
-                                            <td style="vertical-align: top;">
+                                            <td style="vertical-align: top; text-align: justify;">
                                                 The Proposed Member undertakes to pay membership dues to FMDQ Exchange at a rate to be
                                                 determined and agreed with FMDQ Exchange. The membership dues shall be payable
                                                 immediately upon execution of this Agreement.
@@ -911,7 +909,7 @@
                                     <table>
                                         <tr>
                                             <td style="width: 10px; vertical-align: top;">4.2</td>
-                                            <td style="vertical-align: top;">
+                                            <td style="vertical-align: top; text-align: justify;">
                                                 The Proposed Member shall execute a Direct Debit Mandate authorising its bank to make
                                                 payment of subsequent membership dues payable to FMDQ Exchange in the manner described
                                                 in the form advised by FMDQ Exchange. Whenever membership dues are revised by FMDQ
@@ -925,7 +923,7 @@
                                     <table>
                                         <tr>
                                             <td style="width: 10px; vertical-align: top;">4.3</td>
-                                            <td style="vertical-align: top;">
+                                            <td style="vertical-align: top; text-align: justify;">
                                                 No fees shall remain outstanding against the Member.
                                             </td>
                                         </tr>
@@ -942,44 +940,44 @@
                                     <table>
                                         <tr>
                                             <td style="width: 10px; vertical-align: top;">5.1.</td>
-                                            <td style="vertical-align: top;">
+                                            <td style="vertical-align: top; text-align: justify;">
                                                 The Member undertakes to:
                                                 <ol>
-                                                    <li>5.1.1. Abide by the Exchange’s Rules, the SEC Rules, and such other Applicable Laws.</li><br>
-                                                    <li>5.1.2. Pay the fees, dues, and other applicable charges as set out in this Agreement or as
+                                                    <li  style="text-align: justify;">5.1.1. Abide by the Exchange’s Rules, the SEC Rules, and such other Applicable Laws.</li><br>
+                                                    <li  style="text-align: justify;">5.1.2. Pay the fees, dues, and other applicable charges as set out in this Agreement or as
                                                         prescribed by FMDQ Exchange according to the conditions established by FMDQ Exchange
                                                         and duly communicated to the Member.</li><br>
-                                                    <li>5.1.3. Comply with the technical requirements of the relevant trading System(s) and/or any
+                                                    <li  style="text-align: justify;">5.1.3. Comply with the technical requirements of the relevant trading System(s) and/or any
                                                         other information technology system or network operated and advised by FMDQ Exchange.</li><br>
-                                                    <li>5.1.4. Comply with such market standards, capacity requirements, capital or credit line
+                                                    <li  style="text-align: justify;">5.1.4. Comply with such market standards, capacity requirements, capital or credit line
                                                         requirements as may be determined by FMDQ Exchange from time to time and accepts that the
                                                         Membership of the Exchange may be terminated for failure to meet the aforementioned.</li><br>
-                                                    <li>5.1.5. Notify FMDQ Exchange of any facts or circumstances which may affect its Trading
+                                                    <li  style="text-align: justify;">5.1.5. Notify FMDQ Exchange of any facts or circumstances which may affect its Trading
                                                         Activities on the Platform.</li><br>
-                                                    <li>5.1.6. Notify FMDQ Exchange immediately in writing of any material changes to the
+                                                    <li  style="text-align: justify;">5.1.6. Notify FMDQ Exchange immediately in writing of any material changes to the
                                                         information submitted during its membership application, including in particular (but not
                                                         limited to) those in respect of the Members authorisation or permission to conduct trading in
                                                         Products.</li><br>
-                                                    <li>5.1.7. Ensure that any quotes given by any of its Authorised Representatives are correct and
+                                                    <li  style="text-align: justify;">5.1.7. Ensure that any quotes given by any of its Authorised Representatives are correct and
                                                         firm (may be acted upon by the counterparty to whom the quote was given).</li><br>
-                                                    <li>5.1.8. Ensure that it does not transact or conclude any trades with a Broker (either domestic
+                                                    <li  style="text-align: justify;">5.1.8. Ensure that it does not transact or conclude any trades with a Broker (either domestic
                                                         or offshore) either directly or indirectly in relation to the Products traded on the FMDQ
                                                         Exchange Platform unless such Broker is duly licenced by FMDQ Exchange.</li><br>
-                                                    <li>5.1.9. Prevent the operation of any account that serves as brokerage settlement accounts, for
+                                                    <li  style="text-align: justify;">5.1.9. Prevent the operation of any account that serves as brokerage settlement accounts, for
                                                         the Products traded on the FMDQ Exchange Platform by/for any individual or body corporate
                                                         that is not licenced by FMDQ Exchange and/or registered with the Commission to carry out a
                                                         trading or brokerage function but still brokers any of the Products.</li><br>
-                                                    <li>5.1.10. Maintain and take all necessary steps to ensure its Authorised Representatives maintain
+                                                    <li  style="text-align: justify;">5.1.10. Maintain and take all necessary steps to ensure its Authorised Representatives maintain
                                                         the highest level of professional and ethical conduct in all its dealings with other Dealing
                                                         Member (Specialists), Dealing Member (Banks) and the Exchange and in respect of all its
                                                         activities on the Platform.</li><br>
-                                                    <li>5.1.11. Take reasonable steps to ensure that its Authorised Representatives do not participate
+                                                    <li  style="text-align: justify;">5.1.11. Take reasonable steps to ensure that its Authorised Representatives do not participate
                                                         in any form of Insider Trading in relation to its Trading Activities conducted on the Exchange,
                                                         or knowingly or by gross negligence assist any individual or body corporate to participate in
                                                         any such Insider Trading.</li><br>
-                                                    <li>5.1.12. Maintain and preserve all recordings of phone conversations, text messages and emails, based on which any transaction on the Platform was conducted, for a period not less than
+                                                    <li  style="text-align: justify;">5.1.12. Maintain and preserve all recordings of phone conversations, text messages and emails, based on which any transaction on the Platform was conducted, for a period not less than
                                                         six (6) years or such other period as may be advised by FMDQ Exchange.</li><br>
-                                                    <li>5.1.13. Report all trade data in respect of Products traded by the Member on the Platform in
+                                                    <li  style="text-align: justify;">5.1.13. Report all trade data in respect of Products traded by the Member on the Platform in
                                                         the manner prescribed and at the intervals advised by FMDQ Exchange.</li><br>
 
 
@@ -999,14 +997,14 @@
                                     <table>
                                         <tr>
                                             <td style="width: 10px; vertical-align: top;">6.1.</td>
-                                            <td style="vertical-align: top;">
+                                            <td style="vertical-align: top; text-align: justify;">
                                                 Membership of the Exchange shall be terminated where the Member:
                                                 <ol>
                                                     <li>
                                                         <table>
                                                             <tr>
                                                                 <td style="width: 10px; vertical-align: top;">6.1.1.</td>
-                                                                <td style="vertical-align: top;">
+                                                                <td style="vertical-align: top; text-align: justify;">
                                                                     gives the Exchange fourteen (14) days’ notice in writing of its intention to terminate its
                                                                     membership of the Exchange. Consequently, the membership of the Exchange shall be terminated:
                                                                     <ol>
@@ -1014,7 +1012,7 @@
                                                                             <table>
                                                                                 <tr>
                                                                                     <td style="width: 10px; vertical-align: top;">6.1.1.1.</td>
-                                                                                    <td style="vertical-align: top;">
+                                                                                    <td style="vertical-align: top; text-align: justify;">
                                                                                         at the expiration of the fourteen (14) days’ notice.
                                                                                     </td>
                                                                                 </tr>
@@ -1024,7 +1022,7 @@
                                                                             <table>
                                                                                 <tr>
                                                                                     <td style="width: 10px; vertical-align: top;">6.1.1.2.</td>
-                                                                                    <td style="vertical-align: top;">
+                                                                                    <td style="vertical-align: top; text-align: justify;">
                                                                                         when all trades to which the Member is a counterparty have been delivered,
                                                                                         settled and/or cleared on the agreed settlement dates; and
                                                                                     </td>
@@ -1035,7 +1033,7 @@
                                                                             <table>
                                                                                 <tr>
                                                                                     <td style="width: 10px; vertical-align: top;">6.1.1.3.</td>
-                                                                                    <td style="vertical-align: top;">
+                                                                                    <td style="vertical-align: top; text-align: justify;">
                                                                                         when all fees and such other payments due and payable to FMDQ Exchange
                                                                                         have been delivered and settled.
                                                                                     </td>
@@ -1052,7 +1050,7 @@
                                                         <table>
                                                             <tr>
                                                                 <td style="width: 10px; vertical-align: top;">6.1.2.</td>
-                                                                <td style="vertical-align: top;">
+                                                                <td style="vertical-align: top; text-align: justify;">
                                                                     defaults under this Agreement.
                                                                 </td>
                                                             </tr>
@@ -1062,7 +1060,7 @@
                                                         <table>
                                                             <tr>
                                                                 <td style="width: 10px; vertical-align: top;">6.1.3.</td>
-                                                                <td style="vertical-align: top;">
+                                                                <td style="vertical-align: top; text-align: justify;">
                                                                     violates any provisions of the Rules.
                                                                 </td>
                                                             </tr>
@@ -1072,7 +1070,7 @@
                                                         <table>
                                                             <tr>
                                                                 <td style="width: 10px; vertical-align: top;">6.1.4.</td>
-                                                                <td style="vertical-align: top;">
+                                                                <td style="vertical-align: top; text-align: justify;">
                                                                     fails to meet the capacity requirements, minimum capital requirements and such other
                                                                     market standards as may be advised by FMDQ Exchange from time to time having been given
                                                                     reasonable time to remedy such deficiencies.
@@ -1093,7 +1091,7 @@
                                     <table>
                                         <tr>
                                             <td style="width: 10px; vertical-align: top;">6.2.</td>
-                                            <td style="vertical-align: top;">
+                                            <td style="vertical-align: top; text-align: justify;">
                                                 All applicable disciplinary actions to be taken against the Members for violations of this
                                                 Agreement and the Rules shall be as prescribed in the Rules.
                                             </td>
@@ -1110,7 +1108,7 @@
                                     <table>
                                         <tr>
                                             <td style="width: 10px; vertical-align: top;">7.1.</td>
-                                            <td style="vertical-align: top;">
+                                            <td style="vertical-align: top; text-align: justify;">
                                                 The Member hereby agrees to assign to FMDQ Exchange all rights to the trade data acquired
                                                 during the performance of its Trading Activities and other transactions with Dealing Member
                                                 (Banks), other Dealing Member (Specialists) and clients.
@@ -1127,7 +1125,7 @@
                                     <table>
                                         <tr>
                                             <td style="width: 10px; vertical-align: top;">8.1.</td>
-                                            <td style="vertical-align: top;">
+                                            <td style="vertical-align: top; text-align: justify;">
                                                 In no event will FMDQ Exchange have any obligation or liability (whether in tort, contract,
                                                 warranty or otherwise and notwithstanding any fault, negligence, product liability, or strict
                                                 liability), for any indirect, incidental, special, or consequential damages, including but not
@@ -1145,7 +1143,7 @@
                                     <table>
                                         <tr>
                                             <td style="width: 10px; vertical-align: top;">9.1.</td>
-                                            <td style="vertical-align: top;">
+                                            <td style="vertical-align: top; text-align: justify;">
                                                 For the purpose of this provision, notices shall be conveyed via letters, emails, electronic
                                                 broadcasts and/or via the market bulletin segment on the FMDQ Exchange website.
 
@@ -1160,7 +1158,7 @@
                                     <table>
                                         <tr>
                                             <td style="width: 10px; vertical-align: top;">10.1.</td>
-                                            <td style="vertical-align: top;">
+                                            <td style="vertical-align: top; text-align: justify;">
                                                 Notwithstanding any contrary agreement, both Parties agrees that this Agreement constitutes a
                                                 legal, valid, and binding agreement which shall be enforceable against it in accordance with its
                                                 terms.
@@ -1177,7 +1175,7 @@
                                     <table>
                                         <tr>
                                             <td style="width: 10px; vertical-align: top;">11.1.</td>
-                                            <td style="vertical-align: top;">
+                                            <td style="vertical-align: top; text-align: justify;">
                                                 No failure or delay by FMDQ Exchange to exercise any right, power or privilege hereunder
                                                 shall operate as a waiver thereof nor shall any single or partial exercise of any right, power or
                                                 privilege preclude any other or further exercise thereof, or the exercise of any other rights,
@@ -1197,7 +1195,7 @@
                                     <table>
                                         <tr>
                                             <td style="width: 10px; vertical-align: top;">12.1.</td>
-                                            <td style="vertical-align: top;">
+                                            <td style="vertical-align: top; text-align: justify;">
                                                 If any provision of this Agreement is declared by any judicial or other competent authority to
                                                 be void or otherwise unenforceable, that provision shall be severed from this Agreement and
                                                 the remaining provisions shall remain in force and effect. Provided that the Parties shall
@@ -1215,7 +1213,7 @@
                                     <table>
                                         <tr>
                                             <td style="width: 10px; vertical-align: top;">13.1.</td>
-                                            <td style="vertical-align: top;">
+                                            <td style="vertical-align: top; text-align: justify;">
                                                 This Agreement shall be governed by Nigerian law.
 
 
@@ -1230,7 +1228,7 @@
                                     <table>
                                         <tr>
                                             <td style="width: 10px; vertical-align: top;">14.1.</td>
-                                            <td style="vertical-align: top;">
+                                            <td style="vertical-align: top; text-align: justify;">
                                                 In the event of any dispute arising out of or under this Agreement, the Parties shall within five
                                                 (5) Business Days from the date the dispute arose, engage in an amicable settlement of the dispute
                                                 by mutual negotiation.
@@ -1244,7 +1242,7 @@
                                     <table>
                                         <tr>
                                             <td style="width: 10px; vertical-align: top;">14.2.</td>
-                                            <td style="vertical-align: top;">
+                                            <td style="vertical-align: top; text-align: justify;">
                                                 Where the dispute is not resolved by mutual negotiation, the Parties shall in compliance with
                                                 the provisions of the Investment and Securities Act 2007, refer the matter to the Investment and
                                                 Securities Tribunal for resolution.

@@ -135,7 +135,7 @@
             <table class="p2Table">
                 <tr>
                     <td>
-                        <p>
+                        <p style="text-align: justify;">
                             <strong>
                                 We/I {{ $details->name }} (“Affiliate Member (Fixed Income)”) on the {{ formatDate($details->updated_at) }}
                                 hereby agree to be an FX Trading Corporate on FMDQ Securities Exchange Limited (“FMDQ Exchange” or the
@@ -151,24 +151,24 @@
                         <p><strong>AS AN FX TRADING CORPORATE OF FMDQ WE UNDERTAKE TO:</strong></p>
 
                         <ol style="margin-left: -15px;">
-                            <li>Abide by all the FMDQ Exchange Rules, Guidelines, Bulletins and such other regulation as FMDQ Exchange
+                            <li  style="text-align: justify;">Abide by all the FMDQ Exchange Rules, Guidelines, Bulletins and such other regulation as FMDQ Exchange
                                 may introduce to the market from time to time.</li><br>
 
-                            <li>Abide by the provisions of the Foreign Exchange (Monitoring and Miscellaneous Provisions) Act 2004 and
+                            <li  style="text-align: justify;">Abide by the provisions of the Foreign Exchange (Monitoring and Miscellaneous Provisions) Act 2004 and
                                 all Circulars issued by the Central Bank of Nigeria (CBN) from time to time.</li><br>
-                            <li>Use the FMDQ Thomson Reuters FX Trading System strictly for the purpose of engaging in FX trading
+                            <li  style="text-align: justify;">Use the FMDQ Thomson Reuters FX Trading System strictly for the purpose of engaging in FX trading
                                 activities with CBN FX Authorised Dealers;.</li><br>
 
-                            <li>Ensure that all our Authorised Representatives2 act in good faith in respect of all our affairs with the
+                            <li  style="text-align: justify;">Ensure that all our Authorised Representatives2 act in good faith in respect of all our affairs with the
                                 Exchange and in relation to all activities as a Member on FMDQ Exchange.</li><br>
 
-                            <li>Notify FMDQ Exchange immediately in writing of any material changes to the information submitted
+                            <li  style="text-align: justify;">Notify FMDQ Exchange immediately in writing of any material changes to the information submitted
                                 during the course of our membership application.</li><br>
 
-                            <li>Notify FMDQ Exchange of any facts or circumstances which may affect the legal form of our organisation
+                            <li  style="text-align: justify;">Notify FMDQ Exchange of any facts or circumstances which may affect the legal form of our organisation
                                 and any such occurrences that may affect our FX Trading Corporate membership status on the Exchange.</li><br>
 
-                            <li>Promptly pay the annual subscription fee and other charges, where applicable, as may be prescribed by
+                            <li  style="text-align: justify;">Promptly pay the annual subscription fee and other charges, where applicable, as may be prescribed by
                                 the Exchange.</li><br>
 
                         </ol>
@@ -180,15 +180,15 @@
                         <p><strong>WE UNDERSTAND THAT:</strong></p>
 
                         <ol style="margin-left: -15px;" start="8">
-                            <li>This membership category of FMDQ Exchange only grants the FX market Authorised participants access
+                            <li  style="text-align: justify;">This membership category of FMDQ Exchange only grants the FX market Authorised participants access
                                 to the FMDQ Thomson Reuters FX Trading System strictly for the purpose of engaging in FX trading
                                 activities with CBN FX Authorised Dealers.</li><br>
 
 
-                            <li>This membership category does not confer upon us participatory rights as a full Member of the Exchange,
+                            <li  style="text-align: justify;">This membership category does not confer upon us participatory rights as a full Member of the Exchange,
                                 but only allows us to engage in FX trading as outlined above.</li><br>
 
-                            <li> In accessing the data and information provided via this portal, we agree that we will not, without the prior
+                            <li  style="text-align: justify;"> In accessing the data and information provided via this portal, we agree that we will not, without the prior
                                 written consent of the Exchange, sell, licence, sub-licence, distribute, lease or otherwise transfer or allow
                                 the transfer of the data or information, or any backup copy, to third parties, or use the; data and
                                 information in any manner inconsistent with the rights granted by way of the aforesaid access. Where the data or information is disseminated, or used in a manner that is prohibited, FMDQ Exchange reserves the
@@ -196,7 +196,7 @@
 
 
 
-                            <li>Payment of the annual subscription fee supports Affiliate Membership on the Exchange. Therefore, FMDQ
+                            <li  style="text-align: justify;">Payment of the annual subscription fee supports Affiliate Membership on the Exchange. Therefore, FMDQ
                                 Exchange shall send a reminder via email, not less than thirty (30) days before the end of the subscription
                                 period to confirm and validate renewal of membership towards a new susbscription period. In the event
                                 that no payment in respect of the annual subscription fee is made and received by the end of the current
@@ -214,11 +214,11 @@
                     <td class="agreedTerm" style="">
                         <div class="nonAgency">
 
-                            <h4>The Parties have caused their Authorised Signatories to execute this Agreement in the manner below, the
+                            <h4 style="text-align: justify;">The Parties have caused their Authorised Signatories to execute this Agreement in the manner below, the
                                 day and year first above written. </h4><br>
 
 
-                            <h4>Signed for and on behalf of the within-named <br>
+                            <h4 style="text-align: justify;">Signed for and on behalf of the within-named <br>
                                 FMDQ SECURITIES EXCHANGE LIMITED:</h4>
 
                             <table>

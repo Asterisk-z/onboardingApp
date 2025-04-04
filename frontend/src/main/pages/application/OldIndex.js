@@ -1604,7 +1604,7 @@ const Form = () => {
                                     </>} */}
                                 </ModalBody>
                                 <ModalFooter className="bg-light">
-                                    <span className="sub-text">View Institutions</span>
+                                    <span className="sub-text"> </span>
                                 </ModalFooter>
                             </Modal>
 

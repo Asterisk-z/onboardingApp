@@ -345,6 +345,19 @@ class MailContents
     }
 
 
+
+    public static function noUpdateSubject(): string
+    {
+        return "Authorised Representative - No Update";
+    }
+
+    public static function noUpdateMail($companyName): string
+    {
+        $url = config("app.front_end_url");
+        return "<p>Kindly be informed that {$companyName}  has clicked the no update button.</p>
+        <p>Kindly log on to <a href=$url>MROIS Portal</a> to proceed with the Application.</p>";
+    }
+
     public static function applicantUploadAgreementSubject(): string
     {
         return "MROIS Agreement Upload Notification";

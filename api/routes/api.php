@@ -390,6 +390,7 @@ Route::middleware(['auth', 'activeAuth'])->group(function () {
             Route::post('/conversion-request', [ApplicationProcessController::class, 'conversionRequest']);
             Route::post('/addition-request', [ApplicationProcessController::class, 'additionRequest']);
             Route::post('/no-ar-update', [MembershipApplicationController::class, 'noArUpdate']);
+            Route::post('/no-updates', [MembershipApplicationController::class, 'noUpdates']);
         });
     });
     //

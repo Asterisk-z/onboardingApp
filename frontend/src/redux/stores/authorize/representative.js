@@ -92,22 +92,22 @@ export const userCreateUserAR = createAsyncThunk(
 export const cancelMailNotication = createAsyncThunk(
   "arUsers/cancelMailNotication",
   async (values) => {
-    //   try {
-    //     const { data } = await axios({
-    //       method: "post",
-    //       headers: {
-    //         Accept: "application/json",
-    //         // "Content-Type": "application/json;charset=UTF-8",
-    //         "Content-Type": "multipart/form-data",
-    //       },
-    //       url: `ar/add`,
-    //       data: values,
-    //     });
-    return successHandler([], "Success");
-    // return successHandler(data, data.message);
-    //   } catch (error) {
-    //     return errorHandler(error, true);
-    //   }
+    try {
+      const { data } = await axios({
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          // "Content-Type": "application/json;charset=UTF-8",
+          "Content-Type": "multipart/form-data",
+        },
+        url: `membership/application/no-updates`,
+        data: values,
+      });
+      return successHandler([], "Success");
+      // return successHandler(data, data.message);
+    } catch (error) {
+      return errorHandler(error, true);
+    }
   }
 );
 

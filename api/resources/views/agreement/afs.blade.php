@@ -136,7 +136,7 @@
             <table class="p2Table">
                 <tr>
                     <td>
-                        <p>
+                        <p style="text-align:justify;">
                             <strong>
                                 I {{ $details->name }} (“Affiliate Member”) on the {{ formatDate($details->updated_at) }}
                                 hereby agree to be an Affiliate Member of FMDQ Securities Exchange Limited
@@ -151,11 +151,11 @@
                     <td>
                         <h4>AS AN AFFILIATE MEMBER OF FMDQ EXCHANGE, WE UNDERTAKE TO:</h4>
                         <ol style="margin-left: -15px;">
-                            <li>Abide by all the FMDQ Exchange Rules, Guidelines, Bulletins and such other regulation as FMDQ Exchange may introduce to the market from time to time.</li><br>
-                            <li>Ensure that all our Authorised Representatives1 act in good faith in respect of all our affairs with FMDQ Exchange and in relation to all activities as a Member on FMDQ Exchange. </li><br>
-                            <li>Notify FMDQ Exchange immediately in writing of any material changes to the information submitted during the course of our membership application. </li><br>
-                            <li> Notify FMDQ Exchange of any facts or circumstances which may affect the legal form of our organisation and any such occurrences that may affect our Affiliate membership status on the Exchange.</li><br>
-                            <li>Promptly pay the annual subscription fee and other charges, where applicable, as may be prescribed by the Exchange</li><br>
+                            <li style="text-align:justify;">Abide by all the FMDQ Exchange Rules, Guidelines, Bulletins and such other regulation as FMDQ Exchange may introduce to the market from time to time.</li><br>
+                            <li style="text-align:justify;">Ensure that all our Authorised Representatives1 act in good faith in respect of all our affairs with FMDQ Exchange and in relation to all activities as a Member on FMDQ Exchange. </li><br>
+                            <li style="text-align:justify;">Notify FMDQ Exchange immediately in writing of any material changes to the information submitted during the course of our membership application. </li><br>
+                            <li style="text-align:justify;"> Notify FMDQ Exchange of any facts or circumstances which may affect the legal form of our organisation and any such occurrences that may affect our Affiliate membership status on the Exchange.</li><br>
+                            <li style="text-align:justify;">Promptly pay the annual subscription fee and other charges, where applicable, as may be prescribed by the Exchange</li><br>
                         </ol><br>
                     </td>
                 </tr>
@@ -163,35 +163,35 @@
                     <td>
                         <h4>WE UNDERSTAND THAT:</h4>
                         <ol style="margin-left: -15px;" start="6">
-                            <li>
+                            <li  style="text-align:justify;">
                                 Affiliate membership is ideal for institutions and individuals with a keen interest in the FMDQ
                                 Exchange markets, and an association with the financial markets, but not in a full participatory role as
                                 a full member of the Exchange, taking advantage of FMDQ Exchange’s commitment to develop the
                                 Nigerian financial markets via capacity building through knowledge and information.
                             </li><br>
-                            <li>
+                            <li  style="text-align:justify;">
                                 Affiliate Members are granted access to online information on the Nigerian fixed income and currency
                                 markets through the FMDQ “e-Markets” Portal which contains information relating to, amongst other
                                 things, financial market news, fundamentals, tips and education, market and model prices and rates of
                                 FMDQ Exchange products, securities and instruments, contributed by various sources
                             </li><br>
-                            <li>
+                            <li  style="text-align:justify;">
                                 The information:
                                 <ol type="I">
-                                    <li>is obtained from a combination of sources including FMDQ Exchange and other third parties </li>
-                                    <li>is aggregated and disseminated by FMDQ Exchange through the “e-Markets” Portal</li>
-                                    <li>does not constitute professional, financial or investment advice</li>
-                                    <li>is provided “AS IS” and on an “AS AVAILABLE” basis</li>
+                                    <li  style="text-align:justify;">is obtained from a combination of sources including FMDQ Exchange and other third parties </li>
+                                    <li  style="text-align:justify;">is aggregated and disseminated by FMDQ Exchange through the “e-Markets” Portal</li>
+                                    <li  style="text-align:justify;">does not constitute professional, financial or investment advice</li>
+                                    <li  style="text-align:justify;">is provided “AS IS” and on an “AS AVAILABLE” basis</li>
                                 </ol>
 
                             </li><br>
-                            <li>
+                            <li  style="text-align:justify;">
                                 FMDQ Exchange does not guarantee the accuracy, timeliness, completeness, performance, or fitness
                                 for a particular purpose of any of the information, neither does FMDQ Exchange accept liability for the
                                 results of any action taken on the basis of the information
 
                             </li><br>
-                            <li>
+                            <li  style="text-align:justify;">
 
                                 In accessing the data and information provided via this portal, you acknowledge that the data and
                                 information is and shall remain the property of FMDQ Exchange and agree that you will not, without
@@ -203,12 +203,12 @@
                             </li><br>
                             <div class="page-break"></div>
 
-                            <li>
+                            <li  style="text-align:justify;">
                                 FMDQ Exchange owns all rights, title and interest to the “e-Markets” Portal and all intellectual property
                                 rights embodied in or associated with the portal, and this Agreement does not grant the Member any
                                 intellectual property rights to the portal and its contents.
                             </li><br>
-                            <li>
+                            <li  style="text-align:justify;">
                                 Payment of the annual subscription fee supports Affiliate Membership on the Exchange. Therefore,
                                 FMDQ Exchange shall send a reminder via email, not less than thirty (30) days before the end of the
                                 subscription period to confirm and validate renewal of membership towards a new subscription period.
@@ -218,12 +218,12 @@
                                 the succeeding twelve (12) month period by providing written notice to the Member not less than thirty
                                 (30) days prior to the beginning of such twelve (12) month period.
                             </li><br>
-                            <li>
+                            <li  style="text-align:justify;">
                                 The Parties will comply with the provisions of the Nigeria Data Protection Regulation, 2019 issued by
                                 the National Information Technology Development Agency and any amendments thereto in respect of
                                 any personal data received pursuant to or in connection with this Agreement.
                             </li><br>
-                            <li>
+                            <li  style="text-align:justify;">
                                 The Member agrees to hold harmless and indemnify FMDQ Exchange, its affiliates, officers, agents,
                                 and employees, from and against any loss, damages or claim arising from the Member’s breach of the
                                 terms of this Agreement.
@@ -240,11 +240,11 @@
                     <td class="agreedTerm" style="">
                         <div class="nonAgency">
 
-                            <h4>The Parties have caused their Authorised Signatories to execute this Agreement in the manner below, the
+                            <h4  style="text-align:justify;">The Parties have caused their Authorised Signatories to execute this Agreement in the manner below, the
                                 day and year first above written. </h4><br>
 
 
-                            <h4>Signed for and on behalf of the within-named <br>
+                            <h4  style="text-align:justify;">Signed for and on behalf of the within-named <br>
                                 FMDQ SECURITIES EXCHANGE LIMITED:</h4>
 
                             <table>

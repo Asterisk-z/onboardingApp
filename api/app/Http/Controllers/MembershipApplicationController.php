@@ -920,4 +920,23 @@ class MembershipApplicationController extends Controller
 
         return successResponse("No Update Notification Sent successfully");
     }
+
+    public function noUpdates(Request $request)
+    {
+        $application = Application::where('submitted_by', auth()->user()->id)->where('application_type_status', Application::typeStatus['ASC'])->first();
+
+        $MEGs = Utility::getUsersByCategory(Role::MEG);
+
+
+        $data = Application::where('applications.id', $application->id);
+        $data = Utility::applicationDetails($data);
+        $data = $data->first();
+
+        $companyName = $data->company_name;
+
+
+        Notification::send($MEGs, new InfoNotification(MailContents::noUpdateMail($companyName), MailContents::noUpdateSubject()));
+
+        return successResponse("No Update Notification Sent successfully");
+    }
 }

@@ -406,7 +406,7 @@ const Form = () => {
             </>}
           </ModalBody>
           <ModalFooter className="bg-light">
-            <span className="sub-text">View Institutions</span>
+            <span className="sub-text"> </span>
           </ModalFooter>
         </Modal>
         <Modal isOpen={uploadAgreeView} toggle={toggleUploadAgreeView} size="lg">
@@ -431,7 +431,7 @@ const Form = () => {
             </Row>
           </ModalBody>
           <ModalFooter className="bg-light">
-            <span className="sub-text">View Institutions</span>
+            <span className="sub-text"> </span>
           </ModalFooter>
         </Modal>
       </section>
