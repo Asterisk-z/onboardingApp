@@ -74,7 +74,7 @@ class UsersController extends Controller
             'user' => AuthUserResource::make($user),
         ];
 
-        logAction(auth()->user()->email, 'Successful Login', 'Login Successfull', $request->ip());
+        logAction(auth()->user()->email, 'Successful login', 'Login successfull', $request->ip());
         // logger($data);
         return successResponse('Login Successful', $data);
     }
@@ -135,7 +135,7 @@ class UsersController extends Controller
 
         $user->getRegID();
 
-        logAction($request->email, 'Successful User Registration', 'Registration Successful', $request->ip());
+        logAction($request->email, 'Successful user registration', 'Registration successful', $request->ip());
 
         $membership = MembershipCategory::find($request->input('category'));
 

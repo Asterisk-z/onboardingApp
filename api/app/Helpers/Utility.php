@@ -119,8 +119,8 @@ class Utility
         return [
             "name" => $filename,
             "path" => $path,
-            "saved_path" => config('app.url') . '/storage/' . $path,
-            // "saved_path" => config('app.url') . '/storage/app/public/' . $path,
+            // "saved_path" => config('app.url') . '/storage/' . $path,
+            "saved_path" => config('app.url') . '' . config('app.storage_path') .'' . $path,
         ];
     }
 
@@ -163,7 +163,7 @@ class Utility
         $contactEmail = $data->primary_contact_email;
 
         // Recipient email addresses
-        $toEmails = [$applicant->email, $companyEmail];
+        $toEmails = [$applicant->email];
 
         if ($companyEmail) {
             array_push($toEmails, $companyEmail);
@@ -1426,6 +1426,26 @@ class Utility
         $membershipCategory->membership_dues = $licenseCategoryItem['membership_dues'];
 
         return $membershipCategory;
+    }
+
+    public static function bankLicenseName($license)
+    {
+
+        $licenses = BankingLicense::licenses;
+
+        $licenseItem = array_filter($licenses, function ($item) use ($license) {
+            return $item['option_value'] == $license;
+        });
+
+        if (!count($licenseItem) > 0) {
+          return "-";
+        }
+
+        $licenseItem = $licenseItem[array_key_first($licenseItem)];
+        $option_name = $licenseItem['option_name'];
+
+        return $option_name;
+
     }
 
     public static function categoryNameFromWebsite($categoryName)

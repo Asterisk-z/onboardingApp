@@ -66,8 +66,8 @@ class FinalApplicationProcessingJob implements ShouldQueue
 
         $pdfMerger = PDFMerger::init();
 
-        $pdfMerger->addPDF(Utility::updatePdfVersion($application->meg_executed_membership_agreement), 'all', 'P');
         $pdfMerger->addPDF(Utility::updatePdfVersion($application->e_success_letter), 'all', 'P');
+        $pdfMerger->addPDF(Utility::updatePdfVersion($application->meg_executed_membership_agreement), 'all', 'P');
         // $pdfMerger->addPDF(Utility::updatePdfVersion(storage_path('/app/public/' .$application->meg_executed_membership_agreement)), 'all', 'P');
         // $pdfMerger->addPDF(Utility::updatePdfVersion(storage_path('/app/public/' .$application->e_success_letter)), 'all', 'P');
         // $pdfMerger->addPDF(storage_path('/app/public/' . $application->e_success_letter), 'all');
@@ -159,7 +159,7 @@ class FinalApplicationProcessingJob implements ShouldQueue
         $Msg  = Utility::getUsersByCategory(Role::MSG);
         $Meg  = Utility::getUsersEmailByCategory(Role::MEG);
         $data = [
-            "header" => ["Name", "Membership Category", "Company email address"],
+            "header" => ["Name", "Membership Category", "Applicant's email address"],
             "body"   => [
                 [$companyName, $categoryName, $companyEmail],
             ],

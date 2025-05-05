@@ -76,11 +76,7 @@ class BroadcastMessageController extends Controller
 
         $MEGs = Utility::getUsersEmailByCategory(Role::MEG);
         //
-        // logger($MEGs);
-        // logger($ars);
-        // logger(MailContents::newBroadcastMessage($request->input('title'), $request->input('content')));
-        // logger(MailContents::newBroadcastMessageSubject());
-        Notification::send($ars, new InfoNotification(MailContents::newBroadcastMessage($request->input('title'), $request->input('content')), MailContents::newBroadcastMessageSubject(), $MEGs));
+        Notification::send($ars, new InfoNotification(MailContents::newBroadcastMessage($request->input('title'), $request->input('content')), MailContents::newBroadcastMessageSubject(), $MEGs, $attachment));
 
         $logMessage = $user->email . ' created a broadcast message named : ' . $request->title;
         logAction($user->email, 'Broadcast Message Created', $logMessage, $request->ip());

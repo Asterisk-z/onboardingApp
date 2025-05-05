@@ -3934,6 +3934,18 @@ class ApplicationFieldOptionSeeder extends Seeder
                 "option_name" => "Other(s)",
                 "option_value" => "Other(s)",
             ],
+            [
+                "category" => "9",
+                "field_name" => "individualTitle",
+                "option_name" => "Mr.",
+                "option_value" => "Mr.",
+            ],
+            [
+                "category" => "9",
+                "field_name" => "individualTitle",
+                "option_name" => "Mrs",
+                "option_value" => "Mrs",
+            ],
             // [
             //     "category" => "9",
             //     "field_name" => "companyDisciplinary",
@@ -4317,6 +4329,18 @@ class ApplicationFieldOptionSeeder extends Seeder
                 "field_name" => "reasonForSeekingMembership",
                 "option_name" => "Other(s)",
                 "option_value" => "Other(s)",
+            ],
+            [
+                "category" => "13",
+                "field_name" => "individualTitle",
+                "option_name" => "Mr.",
+                "option_value" => "Mr.",
+            ],
+            [
+                "category" => "13",
+                "field_name" => "individualTitle",
+                "option_name" => "Mrs",
+                "option_value" => "Mrs",
             ],
             [
                 "category" => "13",

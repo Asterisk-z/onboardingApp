@@ -70,21 +70,27 @@ class ApplicationSubmissionListener implements ShouldQueue
 
         $name         = $user->first_name . ' ' . $user->last_name;
         $categoryName = $membershipCategory->name;
+        $categorySingularName = $membershipCategory->singular_name;
 
         $subject = $this->getSubject($application);
 
-        if ($application) {
-            $emailData = [
-                'name'    => $name,
-                'subject' => $subject,
-                'content' => "Thank you for your interest in the $categoryName category of FMDQ Securities Exchange Limited.
-                        We are currently reviewing your application and will provide feedback within three (3) business
-                        days.",
-            ];
-        }
+        $emailData = [
+            'name'    => $name,
+            'subject' => $subject,
+            'content' => "Thank you for your interest in the $categoryName category of FMDQ Securities Exchange Limited.
+                    We are currently reviewing your application and will provide feedback within three (3) business
+                    days.",
+        ];
 
         // Recipient email addresses
-        $toEmails = [$user->email, $companyEmail, $contactEmail];
+        $toEmails = [$user->email];
+
+        if($companyEmail) {
+            array_push($toEmails, $companyEmail);
+        }
+        if($contactEmail) {
+            array_push($toEmails, $contactEmail);
+        }
 
         // CC email addresses
         $Meg      = Utility::getUsersEmailByCategory(Role::MEG);
@@ -98,7 +104,7 @@ class ApplicationSubmissionListener implements ShouldQueue
         $fsd = Utility::getUsersEmailByCategory(Role::FSD);
         $tos = array_merge($Meg, $Mbg, $fsd);
 
-        $categoryNameWithPronoun = Utility::categoryNameWithPronoun($categoryName);
+        $categoryNameWithPronoun = Utility::categoryNameWithPronoun($categorySingularName);
         $applicationType         = applicationType($application);
         $applicationTypeText     = $application->application_type == Application::type['APP'] ? "" : " an application for ";
 

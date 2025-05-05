@@ -223,7 +223,7 @@ const DropdownTrans = (props) => {
                                     </tr>
                                     <tr>
                                         <td>Email</td>
-                                        <td className="text-capitalize">{`${sanction?.sanctionee?.email}`}</td>
+                                        <td className="text-lowercase">{`${sanction?.sanctionee?.email}`}</td>
                                     </tr>
                                     <tr>
                                         <td>Phone</td>

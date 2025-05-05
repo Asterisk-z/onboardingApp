@@ -140,7 +140,7 @@ class GenerateSuccessLetterJob implements ShouldQueue
         $Msg = Utility::getUsersByCategory(Role::MSG);
         $Meg = Utility::getUsersEmailByCategory(Role::MEG);
         $data = [
-            "header" => ["Name", "Membership Category", "Company email address"],
+            "header" => ["Name", "Membership Category", "Applicant's email address"],
             "body" => [
                 [$companyName, $categoryName, $companyEmail],
             ],

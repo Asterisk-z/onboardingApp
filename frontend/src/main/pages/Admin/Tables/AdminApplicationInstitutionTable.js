@@ -14,6 +14,7 @@ import { MEGUpdateMembershipAgreement, MEGUpdateMembershipESuccessLetter } from 
 import { useUser, useUserUpdate } from 'layout/provider/AuthUser';
 import Swal from "sweetalert2";
 import DatePicker from "react-datepicker"
+import Editor from 'react-simple-wysiwyg';
 
 
 const Export = ({ data }) => {
@@ -1453,7 +1454,9 @@ const UpdateAgreement = ({ updateParentParent, tabItem, positions, closeModel })
         const postValues = new Object();
         postValues.application_id = tabItem.internal.application_uuid;
         postValues.name = data.institution_name;
-        postValues.address = data.institution_address;
+        postValues.address_one = data.institution_address_one;
+        postValues.address_two = data.institution_address_two;
+        postValues.address_three = data.institution_address_three;
         postValues.rc_number = data.institution_rc_number;
         postValues.date = moment(date).format('YYYY-MM-DD');
 
@@ -1500,12 +1503,30 @@ const UpdateAgreement = ({ updateParentParent, tabItem, positions, closeModel })
                     </div>
                 </div>
                 <div className="form-group">
-                    <label className="form-label" htmlFor="institution_address">
-                        Applicant Address
+                    <label className="form-label" htmlFor="institution_address_one">
+                        Applicant Address Line One
                     </label>
                     <div className="form-control-wrap">
-                        <input type="text" id="institution_address" className="form-control" {...register('institution_address', { required: "This Field is required" })} defaultValue={tabItem?.eMemberAgreement?.registeredOfficeAddress} />
-                        {errors.institution_address && <span className="invalid">{errors.institution_address.message}</span>}
+                        <input type="text" id="institution_address_one" className="form-control" {...register('institution_address_one', { required: "This Field is required" })} defaultValue={tabItem?.eMemberAgreement?.registeredOfficeAddressOne} />
+                        {errors.institution_address_one && <span className="invalid">{errors.institution_address_one.message}</span>}
+                    </div>
+                </div>
+                <div className="form-group">
+                    <label className="form-label" htmlFor="institution_address_two">
+                        Applicant Address Line Two
+                    </label>
+                    <div className="form-control-wrap">
+                        <input type="text" id="institution_address_two" className="form-control" {...register('institution_address_two', { required: "This Field is required" })} defaultValue={tabItem?.eMemberAgreement?.registeredOfficeAddressTwo} />
+                        {errors.institution_address_two && <span className="invalid">{errors.institution_address_two.message}</span>}
+                    </div>
+                </div>
+                <div className="form-group">
+                    <label className="form-label" htmlFor="institution_address_three">
+                        Applicant Address Line Three
+                    </label>
+                    <div className="form-control-wrap">
+                        <input type="text" id="institution_address_three" className="form-control" {...register('institution_address_three', { required: "This Field is required" })} defaultValue={tabItem?.eMemberAgreement?.registeredOfficeAddressThree} />
+                        {errors.institution_address_three && <span className="invalid">{errors.institution_address_three.message}</span>}
                     </div>
                 </div>
 
@@ -1635,8 +1656,11 @@ const UpdateESuccessLetter = ({ updateParentParent, tabItem, positions, closeMod
         const postValues = new Object();
         postValues.application_id = tabItem.internal.application_uuid;
         postValues.name = data.institution_name;
-        postValues.address = data.institution_address;
-        postValues.member = data.member_name;
+        postValues.address_one = data.institution_address_one;
+        postValues.address_two = data.institution_address_two;
+        postValues.address_three = data.institution_address_three;
+        postValues.member = tabItem?.eSuccess?.applicant_name ? tabItem?.eSuccess?.applicant_name : '';
+        // postValues.member = data.member_name;
 
         try {
             setLoading(true);
@@ -1681,16 +1705,34 @@ const UpdateESuccessLetter = ({ updateParentParent, tabItem, positions, closeMod
                     </div>
                 </div>
                 <div className="form-group">
-                    <label className="form-label" htmlFor="institution_address">
-                        Applicant Address
+                    <label className="form-label" htmlFor="institution_address_one">
+                        Applicant Address Line Onw
                     </label>
                     <div className="form-control-wrap">
-                        <input type="text" id="institution_address" className="form-control" {...register('institution_address', { required: "This Field is required" })} defaultValue={tabItem?.eSuccess?.registeredOfficeAddress} />
-                        {errors.institution_address && <span className="invalid">{errors.institution_address.message}</span>}
+                        <input type="text" id="institution_address_one" className="form-control" {...register('institution_address_one', { required: "This Field is required" })} defaultValue={tabItem?.eSuccess?.registeredOfficeAddressOne} />
+                        {errors.institution_address_one && <span className="invalid">{errors.institution_address_one.message}</span>}
+                    </div>
+                </div>
+                <div className="form-group">
+                    <label className="form-label" htmlFor="institution_address_two">
+                        Applicant Address Line Two
+                    </label>
+                    <div className="form-control-wrap">
+                        <input type="text" id="institution_address_two" className="form-control" {...register('institution_address_two', { required: "This Field is required" })} defaultValue={tabItem?.eSuccess?.registeredOfficeAddressTwo} />
+                        {errors.institution_address_two && <span className="invalid">{errors.institution_address_two.message}</span>}
+                    </div>
+                </div>
+                <div className="form-group">
+                    <label className="form-label" htmlFor="institution_address_three">
+                        Applicant Address Line Three
+                    </label>
+                    <div className="form-control-wrap">
+                        <input type="text" id="institution_address_three" className="form-control" {...register('institution_address_three', { required: "This Field is required" })} defaultValue={tabItem?.eSuccess?.registeredOfficeAddressThree} />
+                        {errors.institution_address_three && <span className="invalid">{errors.institution_address_three.message}</span>}
                     </div>
                 </div>
 
-                {(tabItem?.basic_details?.rcNumber || true) && <>
+                {(tabItem?.basic_details?.rcNumber) && <>
                     <div className="form-group">
                         <label className="form-label" htmlFor="member_name">
                             Member Name

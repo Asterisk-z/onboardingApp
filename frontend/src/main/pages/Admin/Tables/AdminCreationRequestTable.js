@@ -208,7 +208,7 @@ const ActionTab = ({ updateParentParent, request }) => {
 
                     const formData = new FormData();
                     formData.append('ar_request_id', ar_request_id);
-                    formData.append('status', 'treated');
+                    formData.append('status', 'approved');
                     const resp = dispatch(msgReviewArCreationRequest(formData));
 
                     setTimeout(() => {
@@ -275,7 +275,7 @@ const ActionTab = ({ updateParentParent, request }) => {
                                             <tr key={index}>
                                                 <td>{`${++index}`}</td>
                                                 <td className="text-capitalize">{`${ar?.ar?.full_name}`}</td>
-                                                <td className="text-capitalize">{`${ar?.ar?.email}`}</td>
+                                                <td className="text-lowercase">{`${ar?.ar?.email}`}</td>
                                             </tr>
                                         )}
                                 </tbody>
@@ -291,7 +291,7 @@ const ActionTab = ({ updateParentParent, request }) => {
 
                     {(authUser.is_admin_mbg() && request.is_mbg_pending) && <>
                         <div className="float-end">
-                            <button className="btn btn-sm btn-primary m-2" onClick={(e) => askAction('mbgApprove')}>Treat</button>
+                            <button className="btn btn-sm btn-primary m-2" onClick={(e) => askAction('mbgApprove')}>Approve</button>
                             <button className="btn btn-sm btn-warning m-2" onClick={(e) => askAction('mbgReject')}>Reject</button>
                         </div>
                     </>}

@@ -44,7 +44,9 @@ class Meg2ApplicationController extends Controller
         $request->validate([
             'application_id' => 'required|exists:applications,uuid',
             'name'           => 'required',
-            'address'        => 'required',
+            'address_one'        => 'required',
+            'address_two'        => 'required',
+            'address_three'        => 'required',
             'member'         => 'required',
         ]);
 
@@ -64,7 +66,9 @@ class Meg2ApplicationController extends Controller
         $agreement = MemberESuccessLetter::updateOrCreate(["application_id" => $application->id], [
             "application_id" => $application->id,
             "companyName"    => request('name'),
-            "address"        => request('address'),
+            "address_line_one"        => request('address_one'),
+            "address_line_two"        => request('address_two'),
+            "address_line_three"        => request('address_three'),
             "designation"    => request('member'),
         ]);
 

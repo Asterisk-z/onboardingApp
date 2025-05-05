@@ -8,6 +8,11 @@
     <title>Invoice</title>
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/invoice/css/sheets-of-paper-a4.css') }}">
     <style>
+        * {
+            font-family: "Calibri" !important;
+            font-size: 11pt !important;
+        }
+
         @media print {
             body {
                 -webkit-print-color-adjust: exact;

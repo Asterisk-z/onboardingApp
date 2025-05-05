@@ -393,7 +393,7 @@ const ActionTab = (props) => {
                                     </tr>
                                     <tr>
                                         <td>Email</td>
-                                        <td className="text-capitalize">{`${ar_user.email}`}</td>
+                                        <td className="text-lowercase">{`${ar_user.email}`}</td>
                                     </tr>
                                     <tr>
                                         <td>Phone</td>
@@ -457,7 +457,7 @@ const ActionTab = (props) => {
                                     </tr>
                                     <tr>
                                         <td>Email</td>
-                                        <td className="text-capitalize">{`${(JSON.parse(ar_user.update_payload))?.email}`}</td>
+                                        <td className="text-lowercase">{`${(JSON.parse(ar_user.update_payload))?.email}`}</td>
                                     </tr>
                                     <tr>
                                         <td>Phone</td>
@@ -519,7 +519,7 @@ const ActionTab = (props) => {
                                     </tr>
                                     <tr>
                                         <td>Email</td>
-                                        <td className="text-capitalize">{`${ar_user.email}`}</td>
+                                        <td className="text-lowercase">{`${ar_user.email}`}</td>
                                     </tr>
                                     <tr>
                                         <td>Phone</td>

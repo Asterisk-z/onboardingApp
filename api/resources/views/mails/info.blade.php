@@ -6,16 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MROIS</title>
     <style>
+        * {
+            font-family: "Calibri" !important;
+            font-size: 11pt !important;
+        }
+
         body {
-            font-family: Arial, sans-serif !important;
+            /* font-family: Arial, sans-serif !important;*/
             line-height: 1.6;
             color: #000;
-            font-size: 16px !important;
+            /*font-size: 16px !important;*/
         }
 
         pre {
-            font-family: Arial, sans-serif !important;
-            font-size: 16px !important;
+            font-family: "Calibri" !important;
+            font-size: 11px !important;
         }
 
         /* Wrapper for the email content */

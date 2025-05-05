@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Helpers\Utility;
 use App\Models\Application;
 use App\Models\User;
 use App\Traits\ApplicationTraits;
@@ -36,7 +37,8 @@ class ApplicationResource extends JsonResource
                 "meg2_review_stage" => $this->meg2_review_stage,
                 "fsd_review_stage" => $this->fsd_review_stage,
                 "category_id" => $this->category_id,
-                "category_name" => $this->category_name,
+                "category_name" => $this->main_category_name,
+                "singular_category_name" => $this->category_name,
                 "completed_at" => $this->completed_at,
                 "is_meg_executed_membership_agreement" => $application->is_meg_executed_membership_agreement,
                 "is_applicant_executed_membership_agreement" => $this->is_applicant_executed_membership_agreement,
@@ -83,13 +85,17 @@ class ApplicationResource extends JsonResource
 
             'eSuccess' => [
                 "companyName" => $application->eSuccess ? $application->eSuccess->name : $this->companyName,
-                "registeredOfficeAddress" => $application->eSuccess ? $application->eSuccess->address : $this->registeredOfficeAddress,
+                "registeredOfficeAddressOne" => $application->eSuccess ? $application->eSuccess->address_line_one : $this->registeredOfficeAddress,
+                "registeredOfficeAddressTwo" => $application->eSuccess ? $application->eSuccess->address_line_two : $this->registeredOfficeAddress,
+                "registeredOfficeAddressThree" => $application->eSuccess ? $application->eSuccess->address_line_three : $this->registeredOfficeAddress,
                 "applicant_name" => $application->eSuccess ? $application->eSuccess->rc_number : $application->applicant->full_name,
             ],
 
             'eMemberAgreement' => [
                 "companyName" => $application->agreement ? $application->agreement->name : $this->companyName,
-                "registeredOfficeAddress" => $application->agreement ? $application->agreement->address : $this->registeredOfficeAddress,
+                "registeredOfficeAddressOne" => $application->agreement ? $application->agreement->address_line_one : $this->registeredOfficeAddress,
+                "registeredOfficeAddressTwo" => $application->agreement ? $application->agreement->address_line_two : $this->registeredOfficeAddress,
+                "registeredOfficeAddressThree" => $application->agreement ? $application->agreement->address_line_three : $this->registeredOfficeAddress,
                 "rcNumber" => $application->agreement ? $application->agreement->rc_number : $this->rcNumber,
                 "date" => $application->agreement ? $application->agreement->date : now(),
             ],
@@ -124,7 +130,7 @@ class ApplicationResource extends JsonResource
             ],
 
             "bank_license_details" => [
-                'bankingLicense' => $this->bankingLicense,
+                'bankingLicense' => Utility::bankLicenseName($this->bankingLicense),
             ],
 
             "disciplinary_details" => [

@@ -239,7 +239,7 @@ const ActionTab = (props) => {
                                     </tr>
                                     <tr>
                                         <td>Email</td>
-                                        <td className="text-capitalize">{`${ar_user.email}`}</td>
+                                        <td className="text-lowercase">{`${ar_user.email}`}</td>
                                     </tr>
                                     <tr>
                                         <td>Phone</td>

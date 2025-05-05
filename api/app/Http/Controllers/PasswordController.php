@@ -124,7 +124,7 @@ class PasswordController extends Controller
         $user->password = Hash::make($request->input('password'));
         $user->save();
 
-        logAction($request->input('email'), 'Reset Password successful', 'Reset Password successful', $request->ip());
+        logAction($request->input('email'), 'Reset Password successful', 'Reset password successful', $request->ip());
         return successResponse("Your password has been reset successfully.");
     }
 

@@ -17,7 +17,9 @@ class CreateMemberAgreementsTable extends Migration
             $table->id();
             $table->integer('application_id')->unique();
             $table->string('name');
-            $table->text('address')->nullable();
+            $table->text('address_line_one')->nullable();
+            $table->text('address_line_two')->nullable();
+            $table->text('address_line_three')->nullable();
             $table->string('rc_number')->nullable();
             $table->string('authorised_signatory_name_one')->nullable();
             $table->string('authorised_signatory_designation_one')->nullable();

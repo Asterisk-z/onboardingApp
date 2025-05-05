@@ -14,7 +14,9 @@ class ESuccessLetter
     protected $signature   = null;
     protected $regId       = null;
     protected $designation = null;
-    protected $address     = null;
+    protected $address_one = null;
+    protected $address_two     = null;
+    protected $address_three = null;
     protected $companyName = null;
 
     public function generate(Application $application, $preview = false)
@@ -29,7 +31,9 @@ class ESuccessLetter
         $application_data = $application_data->first();
 
         $this->designation = $application->eSuccess ? $application->eSuccess->designation : $this->designation;
-        $this->address     = $application->eSuccess ? $application->eSuccess->address : $this->address;
+        $this->address_one     = $application->eSuccess ? $application->eSuccess->address_one : $this->address_one;
+        $this->address_two     = $application->eSuccess ? $application->eSuccess->address_two : $this->address_two;
+        $this->address_three     = $application->eSuccess ? $application->eSuccess->address_three : $this->address_three;
         $this->companyName = $application->eSuccess ? $application->eSuccess->companyName : $this->companyName;
 
         if ($dohData = DohSignature::latest()->first()) {
@@ -123,20 +127,22 @@ class ESuccessLetter
     {
         $date        = formatDateLong(now());
         $designation = $this->designation;
-        $address     = $this->address;
+        $address_one     = $this->address_one;
+        $address_two     = $this->address_two;
+        $address_three     = $this->address_three;
         $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
 // <p><i><b>$designation({$this->regId})</b></i></p>
         return [
             'address' => "<p>$date</p>
-                            <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address</span></p>",
+                            <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address_one<br>$address_two<br>$address_three</span></p>",
             'title'   => "<p><b>APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED DEALING MEMBER (BANK) CATEGORY</b></p>",
             'body'    => "<p  style='text-align: justify;text-justify: inter-word;'>
                             Having reviewed your application for the Dealing Member (Bank) (DMB)
                             category of FMDQ Securities Exchange Limited (<strong>“FMDQ Exchange”</strong>),
                             we are pleased to inform you that your application is successful, and
-                            <span style='text-transform: uppercase;font-weight:bolder;'>$companyName ($companyName)</span> will now be profiled on the applicable modules on the
+                            <span style='text-transform: uppercase;font-weight:bolder;'>$companyName </span> will now be profiled on the applicable modules on the
                             'FMDQ e-Markets portal' and e-Fixings (Real Time) sub-module, under the e-Benchmarks module.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
@@ -190,18 +196,20 @@ class ESuccessLetter
 
         $date        = formatDateLong(now());
         $designation = $this->designation;
-        $address     = $this->address;
+        $address_one     = $this->address_one;
+        $address_two     = $this->address_two;
+        $address_three     = $this->address_three;
         $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
 // <p><i><b>$designation({$this->regId})</b></i></p>
         return [
             'address' => "<p>$date</p>
-                            <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address</span></p>",
+                            <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address_one<br>$address_two<br>$address_three</span></p>",
             'title'   => "<p><b>APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED DEALING MEMBER (BANK) CATEGORY</b></p>",
             'body'    => "<p  style='text-align: justify;text-justify: inter-word;'>
                             Having reviewed your application for the Dealing Member (Bank) (DMB) category of FMDQ Securities Exchange Limited ('FMDQ Exchange'),
-                            we are pleased to inform you that your application is successful, and <span style='text-transform: uppercase;font-weight:bolder;'>$companyName ($companyName)</span>
+                            we are pleased to inform you that your application is successful, and <span style='text-transform: uppercase;font-weight:bolder;'>$companyName </span>
                             will now be profiled on the applicable modules on the 'FMDQ e-Markets portal' and e-Fixings (Real Time) sub-module, under the e-Benchmarks module.
                         </p>
                         <p style='text-align: justify;text-justify: inter-word;'>
@@ -248,14 +256,16 @@ class ESuccessLetter
 
         $date        = formatDateLong(now());
         $designation = $this->designation;
-        $address     = $this->address;
+        $address_one     = $this->address_one;
+        $address_two     = $this->address_two;
+        $address_three     = $this->address_three;
         $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
 // <p><i><b>$designation({$this->regId})</b></i></p>
         return [
             'address' => "<p>$date</p>
-                            <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address</span></p>",
+                            <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address_one<br>$address_two<br>$address_three</span></p>",
             'title'   => "<p><b>
                             APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED DEALING MEMBER (SPECIALISTS) CATEGORY
                         </b></p>",
@@ -308,14 +318,16 @@ class ESuccessLetter
 
         $date        = formatDateLong(now());
         $designation = $this->designation;
-        $address     = $this->address;
+        $address_one     = $this->address_one;
+        $address_two     = $this->address_two;
+        $address_three     = $this->address_three;
         $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
 // <p><i><b>$designation({$this->regId})</b></i></p>
         return [
             'address' => "<p>$date</p>
-                            <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address</span></p>",
+                            <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address_one<br>$address_two<br>$address_three</span></p>",
             'title'   => "<p><b>
                             APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED ASSOCIATE MEMBER (CLIENTS) CATEGORY
                         </b></p>",
@@ -368,14 +380,16 @@ class ESuccessLetter
 
         $date        = formatDateLong(now());
         $designation = $this->designation;
-        $address     = $this->address;
+        $address_one     = $this->address_one;
+        $address_two     = $this->address_two;
+        $address_three     = $this->address_three;
         $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
 // <p><i><b>$designation({$this->regId})</b></i></p>
         return [
             'address' => "<p>$date</p>
-                            <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address</span></p>",
+                            <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address_one<br>$address_two<br>$address_three</span></p>",
             'title'   => "<p><b>
                            APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED ASSOCIATE MEMBER (INTER-DEALER BROKERS) CATEGORY
                         </b></p>",
@@ -429,14 +443,16 @@ class ESuccessLetter
 
         $date        = formatDateLong(now());
         $designation = $this->designation;
-        $address     = $this->address;
+        $address_one     = $this->address_one;
+        $address_two     = $this->address_two;
+        $address_three     = $this->address_three;
         $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
 // <p><i><b>$designation({$this->regId})</b></i></p>
         return [
             'address' => "<p>$date</p>
-                            <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address</span></p>",
+                            <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address_one<br>$address_two<br>$address_three</span></p>",
             'title'   => "<p><b>
                            APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED ASSOCIATE MEMBER (BROKERS) CATEGORY
                         </b></p>",
@@ -490,14 +506,16 @@ class ESuccessLetter
 
         $date        = formatDateLong(now());
         $designation = $this->designation;
-        $address     = $this->address;
+        $address_one     = $this->address_one;
+        $address_two     = $this->address_two;
+        $address_three     = $this->address_three;
         $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
         // <p><i><b>$designation({$this->regId})</b></i></p>
         return [
             'address' => "<p>$date</p>
-                            <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address</span></p>",
+                            <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address_one<br>$address_two<br>$address_three</span></p>",
             'title'   => "<p><b>
                            APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED REGISTRATION MEMBER (LISTINGS & QUOTATIONS) CATEGORY
                         </b></p>",
@@ -552,14 +570,16 @@ class ESuccessLetter
     {
         $date        = formatDateLong(now());
         $designation = $this->designation;
-        $address     = $this->address;
+        $address_one     = $this->address_one;
+        $address_two     = $this->address_two;
+        $address_three     = $this->address_three;
         $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
 // <p><i><b>$designation({$this->regId})</b></i></p>
         return [
             'address' => "<p>$date</p>
-                            <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address</span></p>",
+                            <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address_one<br>$address_two<br>$address_three</span></p>",
             'title'   => "<p><b>
                            APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED REGISTRATION MEMBER (LISTINGS) CATEGORY
                         </b></p>",
@@ -612,14 +632,16 @@ class ESuccessLetter
     {
         $date        = formatDateLong(now());
         $designation = $this->designation;
-        $address     = $this->address;
+        $address_one     = $this->address_one;
+        $address_two     = $this->address_two;
+        $address_three     = $this->address_three;
         $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
 // <p><i><b>$designation({$this->regId})</b></i></p>
         return [
             'address' => "<p>$date</p>
-                            <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address</span></p>",
+                            <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address_one<br>$address_two<br>$address_three</span></p>",
             'title'   => "<p><b>
                            APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED REGISTRATION MEMBER (QUOTATIONS) CATEGORY
                         </b></p>",
@@ -673,14 +695,16 @@ class ESuccessLetter
     {
         $date        = formatDateLong(now());
         $designation = $this->designation;
-        $address     = $this->address;
+        $address_one     = $this->address_one;
+        $address_two     = $this->address_two;
+        $address_three     = $this->address_three;
         $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
 // <p><i><b>$designation({$this->regId})</b></i></p>
         return [
             'address' => "<p>$date</p>
-                            <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address</span></p>",
+                            <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address_one<br>$address_two<br>$address_three</span></p>",
             'title'   => "<p><b>
                            APPLICATION FOR THE FMDQ SECURITIES EXCHANGE AFFILIATE MEMBER (FIXED INCOME) CATEGORY
                         </b></p>",
@@ -735,14 +759,16 @@ class ESuccessLetter
 
         $date        = formatDateLong(now());
         $designation = $this->designation;
-        $address     = $this->address;
+        $address_one     = $this->address_one;
+        $address_two     = $this->address_two;
+        $address_three     = $this->address_three;
         $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
         // <p><i><b>$designation({$this->regId})</b></i></p>
         return [
             'address' => "<p>$date</p>
-                            <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address</span></p>",
+                            <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address_one<br>$address_two<br>$address_three</span></p>",
             'title'   => "<p><b>
                            APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED AFFILIATE MEMBER (STANDARD) CATEGORY
                         </b></p>",
@@ -797,14 +823,16 @@ class ESuccessLetter
 
         $date        = formatDateLong(now());
         $designation = $this->designation;
-        $address     = $this->address;
+        $address_one     = $this->address_one;
+        $address_two     = $this->address_two;
+        $address_three     = $this->address_three;
         $companyName = $this->companyName;
 
         $url = config("app.front_end_url");
         // <p><i><b>$designation({$this->regId})</b></i></p>
         return [
             'address' => "<p>$date</p>
-                            <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address</span></p>",
+                            <p><b>The Managing Director</b><br><span style='text-transform: capitalize;'>$companyName<br>$address_one<br>$address_two<br>$address_three</span></p>",
             'title'   => "<p><b>
                             APPLICATION FOR THE FMDQ SECURITIES EXCHANGE LIMITED AFFILIATE MEMBER (STANDARD) CATEGORY
                         </b></p>",

@@ -17,7 +17,9 @@ class CreateMemberESuccessLettersTable extends Migration
             $table->id();
             $table->integer('application_id')->unique();
             $table->string('designation');
-            $table->text('address');
+            $table->text('address_line_one')->nullable();
+            $table->text('address_line_two')->nullable();
+            $table->text('address_line_three')->nullable();
             $table->string('companyName');
             $table->text('data')->nullable();
             $table->timestamps();

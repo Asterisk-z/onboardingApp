@@ -258,7 +258,7 @@ const TransferAuthRepresentative = ({ drawer }) => {
                                                                 </tr>
                                                                 <tr>
                                                                     <td>Email</td>
-                                                                    <td className="text-capitalize">{`${$user.email}`}</td>
+                                                                    <td className="text-lowercase">{`${$user.email}`}</td>
                                                                 </tr>
                                                                 <tr>
                                                                     <td>Phone</td>

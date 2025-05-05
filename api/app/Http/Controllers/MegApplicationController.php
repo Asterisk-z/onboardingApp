@@ -120,7 +120,9 @@ class MegApplicationController extends Controller
         $request->validate([
             'application_id' => 'required|exists:applications,uuid',
             'name' => 'required',
-            'address' => 'required',
+            'address_one' => 'required',
+            'address_two' => 'required',
+            'address_three' => 'required',
             'rc_number' => 'sometimes',
             'date' => 'required',
         ]);
@@ -141,7 +143,9 @@ class MegApplicationController extends Controller
         $agreement = MemberAgreement::updateOrCreate(["application_id" => $application->id], [
             "application_id" => $application->id,
             "name" => request('name'),
-            "address" => request('address'),
+            "address_line_one" => request('address'),
+            "address_line_two" => request('address'),
+            "address_line_three" => request('address'),
             "date" => Carbon::create(request('date')),
             "rc_number" => request('rc_number'),
         ]);
@@ -213,7 +217,7 @@ class MegApplicationController extends Controller
         Utility::applicationStatusHelper($application, Application::statuses['MSMA'], Application::office['MEG'], Application::office['AP']);
         Utility::applicationTimestamp($application, 'MSAA');
 
-        logAction($user->email, 'MEG Sent Agreement', "MEG Send membership agreement to applicant", $request->ip());
+        logAction($user->email, 'MEG Sent Agreement', "MEG sent Membership Agreement to applicant", $request->ip());
 
         return successResponse("Membership agreement has been sent successfully.");
     }

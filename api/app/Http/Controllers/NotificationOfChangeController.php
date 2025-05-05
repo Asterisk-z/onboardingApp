@@ -234,9 +234,9 @@ class NotificationOfChangeController extends Controller
             }
         }
 
-        logAction($user->email, 'Notification Of Change Update', $logMessage, $request->ip());
+        logAction($user->email, 'Notification of change update', $logMessage, $request->ip());
 
-        logAction(auth()->user()->email, 'Notification Of Change Update', $logMessage, $request->ip());
+        logAction(auth()->user()->email, 'Notification of change update', $logMessage, $request->ip());
 
         return successResponse('Notification Of Change status updated successfully', []);
 

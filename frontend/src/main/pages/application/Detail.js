@@ -296,7 +296,7 @@ const Form = () => {
       <section>
 
         <Row className="gy-2">
-          <p>{$user_application?.application?.status_description}</p>
+          {/* <p>{$user_application?.application?.status_description}</p> */}
           <Col md='12'>
             {$user_application?.application?.concession_stage == 1 && <>
 

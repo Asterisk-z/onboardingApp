@@ -12,8 +12,12 @@
             margin: 0px;
         }
 
+        * {
+            font-family: "Calibri" !important;
+            font-size: 11pt !important;
+        }
+
         body {
-            font-family: 'Arial', sans-serif;
             margin: 0px;
             padding: 0;
             background-color: #f0f0f0;

@@ -311,7 +311,7 @@ class MbgApplicationController extends Controller
     public function reviewArSystemCreationRequest(Request $request)
     {
         $request->validate([
-            'status' => 'required|in:treated,rejected',
+            'status' => 'required|in:approved,rejected',
             'ar_request_id' => 'required|exists:ar_creation_requests,id',
         ]);
 

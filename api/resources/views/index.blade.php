@@ -13,6 +13,11 @@
     <title>Sheets of Paper</title>
     <link rel="stylesheet" type="text/css" href="css/sheets-of-paper-a4.css">
     <style>
+        * {
+            font-family: "Calibri" !important;
+            font-size: 11px !important;
+        }
+
         .header {
             /* border: 2px solid red; */
             width: 100%;

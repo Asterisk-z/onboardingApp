@@ -262,7 +262,7 @@ class ARController extends Controller
 
             $regID = $ARUser->getRegID();
             $logMessage = "Cancelled the AR update of $ARUser->email ($regID)";
-            logAction($request->user()->email, 'Cancel AR Update', $logMessage, $request->ip());
+            logAction($request->user()->email, 'Cancel AR update', $logMessage, $request->ip());
         }
 
         return successResponse('Successful', UserResource::make($ARUser));

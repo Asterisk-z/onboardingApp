@@ -1063,7 +1063,8 @@ const Form = () => {
                                                         return (
                                                             <Col md="12" key={`${child_field.name}${index}`}>
                                                                 <div className="form-group">
-                                                                    <label className="form-label" htmlFor="company-name">{formatLabel(child_field.description)}</label>
+                                                                    <label className="form-label" htmlFor="company-name">{child_field.description}</label>
+                                                                    {/* <label className="form-label" htmlFor="company-name">{formatLabel(child_field.description)}</label> */}
                                                                     <div className="form-control-wrap">
 
                                                                         <div className="form-control-select" >
@@ -1260,7 +1261,8 @@ const Form = () => {
                                 return (
                                     <Col md="12" key={`${field.name}${index}`}>
                                         <div className="form-group">
-                                            <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label>
+                                            <label className="form-label" htmlFor="company-name">{field.description}</label>
+                                            {/* <label className="form-label" htmlFor="company-name">{formatLabel(field.description)}</label> */}
                                             <div className="form-control-wrap">
                                                 <div className="input-group">
                                                     <input type="file" accept={`${field.name == 'CompanyLogo' ? '.jpg,.jpeg,.png' : '.jpg,.jpeg,.png,.pdf'}`} id={field.name} className="form-control" onChange={(e) => onInputChange({ 'field_name': field.name, "field_value": e.target.files[0], "field_type": field.type })} style={{ display: field.field_value?.file_path ? 'none' : 'block' }} />

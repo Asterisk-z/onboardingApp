@@ -33,7 +33,7 @@ class Application extends Model
         'MDP' => 'MBG DECLINED PAYMENT',
         'MDFR' => 'FSD REVIEW DECLINED BY MBG',
         'MAFR' => 'MBG APPROVED PAYMENT',
-        'MDD' => "MEG DECLINED DOCUMENT",
+        'MDD' => "MEG DECLINED APPLICATION",
         'MDMR' => "MEG DECLINED MBG REVIEW",
         'MAMR' => "APPLICATION REPORT UPLOADED", //"MEG APPROVED MBG REVIEW",
         'M2DMR' => "MEG2 DECLINED MEG REVIEW",

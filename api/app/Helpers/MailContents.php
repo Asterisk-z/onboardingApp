@@ -30,7 +30,7 @@ class MailContents
 
     public static function complaintSubmitMail($name, $institution, $body): string
     {
-        return "<p>Please be informed that the '{$institution}' has logged a complaint. Kindly see the complaint below :</p>
+        return "<p>Please be informed that the {$institution} has logged a complaint. Kindly see the complaint below :</p>
             <p><strong>Name:</strong> {$name}</p>
             <p><strong>Institution:</strong> {$institution}</p>
             <p><strong>Body:</strong> {$body}</p>";
@@ -84,7 +84,7 @@ class MailContents
         return "<p>There is a new message from the MROIS Portal:</p>
 
         <ul>
-            <li><strong>Title:</strong> {$title}</li>
+            <li><strong>Subject:</strong> {$title}</li>
             <p><strong>{$content}</strong></p>
         </ul>";
     }
@@ -289,21 +289,21 @@ class MailContents
 
     public static function meg2EsuccessSubject(): string
     {
-        return "E-success letter generated successfully";
+        return "E-Success letter Generated successfully";
     }
 
     public static function meg2EsuccessMail($companyName): string
     {
         $url = config("app.front_end_url");
         return "<p>Please be informed that the E-Success letter has been generated for
-        {$companyName}. Kindly log on to <a href=$url>MROIS Portal</a> to approve the success letter.</p>";
+        {$companyName}. Kindly log on to <a href=$url>MROIS Portal</a> to approve the E-Success letter.</p>";
     }
 
     public static function megReportValidationMail($companyName): string
     {
         $url = config("app.front_end_url");
         return "<p>Please be informed that MEG has uploaded the Application Report for
-        {$companyName}. Kindly log on to <a href=$url>MROIS Portal</a> to approve the application report.</p>";
+        {$companyName}. Kindly log on to <a href=$url>MROIS Portal</a> to approve the Application Report.</p>";
     }
 
     public static function memberAgreementSubject(): string
@@ -315,7 +315,8 @@ class MailContents
     {
         $url = config("app.front_end_url");
 
-        return "<p>Kindly login to the <a href=$url>MROIS Portal</a> to view the latest update concerning FMDQ Membership Agreement - {$applicant} review.</p>";
+        // return "<p>Kindly login to the <a href=$url>MROIS Portal</a> to view the latest update concerning FMDQ Membership Agreement - {$applicant} review.</p>";
+        return "<p>Kindly login to the <a href=$url>MROIS Portal</a> to view the latest update concerning Agreement - {$applicant} review.</p>";
     }
 
     public static function meG2ApprovalSubject(): string
@@ -326,7 +327,7 @@ class MailContents
     public static function meG2ApprovalMail($companyName, $categoryName): string
     {
         $url = config("app.front_end_url");
-        return "<p>Kindly be informed that {$companyName} Application Report for the {$categoryName} category has been approved.</p>
+        return "<p>Kindly be informed that {$companyName}'s Application Report for the {$categoryName} category has been approved.</p>
         <p>Kindly log on to <a href=$url>MROIS Portal</a> to proceed with the Application.</p>";
     }
 
@@ -499,7 +500,7 @@ class MailContents
 
     public static function megNotificationOfChangeSubject(): string
     {
-        return "MROIS Notification of Change";
+        return "Notification of Change";
     }
 
     public static function megNotificationOfChangeMail(User $user, $institution_name): string
@@ -514,7 +515,7 @@ class MailContents
 
     public static function notificationOfChangeNewCommentSubject(): string
     {
-        return "MROIS Notification of Change New Comment";
+        return "Notification of Change New Comment";
     }
 
     public static function notificationOfChangeNewCommentMail(): string

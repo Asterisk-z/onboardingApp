@@ -17,7 +17,7 @@ class Invoice extends Model
             'id' => $this->id,
             'invoice_number' => $this->invoice_number,
             'reference' => $this->reference,
-            'date_paid' => $this->date_paid ? formatDate($this->date_paid) : '',
+            'date_paid' => $this->date_paid ? formatDate($this->date_paid) : 'Nil',
             'is_paid' => $this->is_paid,
             'contents' => $this->contents,
         ];

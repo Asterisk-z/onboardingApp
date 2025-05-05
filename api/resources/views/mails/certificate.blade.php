@@ -64,7 +64,8 @@
         }
 
         .organizer-signature {
-            max-width: 100px;
+            width: 150px !important;
+            height: 100px !important;
             margin-top: 10px;
         }
 
